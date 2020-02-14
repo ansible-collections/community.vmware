@@ -1,0 +1,75 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Configure general settings in check mode
+  vmware_vcenter_settings:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    runtime_settings:
+      unique_id: 7
+      managed_address: 192.168.1.0
+      vcenter_server_name: '{{ inventory_hostname }}'
+    user_directory:
+      timeout: 120
+      query_limit: true
+      query_limit_size: 100000
+      validation: true
+      validation_period: 1440
+    snmp_receivers:
+      snmp_receiver_1_url: localhost
+      snmp_receiver_1_enabled: true
+      snmp_receiver_1_port: 162
+      snmp_receiver_1_community: public
+    timeout_settings:
+      normal_operations: 30
+      long_operations: 120
+    logging_options: info
+    validate_certs: false
+    community.general.mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  register: all_settings_results_check_mode
+  check_mode: true
+- debug: var=all_settings_results_check_mode
+- name: Configure general settings
+  vmware_vcenter_settings:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    runtime_settings:
+      unique_id: 7
+      managed_address: 192.168.1.0
+      vcenter_server_name: '{{ inventory_hostname }}'
+    user_directory:
+      timeout: 120
+      query_limit: true
+      query_limit_size: 100000
+      validation: true
+      validation_period: 1440
+    snmp_receivers:
+      snmp_receiver_1_url: localhost
+      snmp_receiver_1_enabled: true
+      snmp_receiver_1_port: 162
+      snmp_receiver_1_community: public
+    timeout_settings:
+      normal_operations: 30
+      long_operations: 120
+    logging_options: info
+    validate_certs: false
+    community.general.mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  register: all_settings_results
+- debug: var=all_settings_results

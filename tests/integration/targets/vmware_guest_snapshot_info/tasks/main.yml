@@ -1,0 +1,20 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: Gather snapshot info about given virtual machine
+  vmware_guest_snapshot_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    folder: '{{ virtual_machines[0].folder }}'
+  register: vm_snapshot_info
+- debug: var=vm_snapshot_info
+- assert:
+    that:
+    - '"guest_snapshots" in vm_snapshot_info'

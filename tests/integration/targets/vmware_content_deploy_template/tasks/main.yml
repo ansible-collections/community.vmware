@@ -1,0 +1,30 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_datacenter: true
+- when: vcsim is not defined
+  block:
+  - vmware_content_deploy_template: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      template: '{{ test_vm_temp }}'
+      datastore: '{{ rw_datastore }}'
+      datacenter: '{{ dc1 }}'
+      folder: '{{ f0 }}'
+      host: '{{ esx1 }}'
+      name: test_content_deploy_vm
+      state: poweredon
+      validate_certs: false
+    register: template_deploy
+  - name: Check VM deployed successfully
+    assert:
+      that:
+      - template_deploy.changed
+  - vmware_content_deploy_template: *id001
+    register: template_deploy
+    name: Deploy VM from template again
+  - name: Check VM with same name is deployed
+    assert:
+      that:
+      - not template_deploy.changed

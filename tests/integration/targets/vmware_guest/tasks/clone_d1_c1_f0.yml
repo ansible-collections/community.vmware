@@ -1,0 +1,40 @@
+- name: create new linked clone without specifying snapshot_src
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm1
+    template: '{{ virtual_machines[0].name }}'
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    folder: '{{ f0 }}'
+    linked_clone: true
+  register: linked_clone_d1_c1_f0
+  ignore_errors: true
+- debug:
+    var: linked_clone_d1_c1_f0
+- name: assert that changes were not made
+  assert:
+    that:
+    - not (linked_clone_d1_c1_f0 is changed)
+- name: create new linked clone without specifying linked_clone
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm2
+    template: '{{ virtual_machines[0].name }}'
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    folder: '{{ f0 }}'
+    snapshot_src: snap_shot1
+  register: linked_clone_d1_c1_f0
+  ignore_errors: true
+- debug:
+    var: linked_clone_d1_c1_f0
+- name: assert that changes were not made
+  assert:
+    that:
+    - not (linked_clone_d1_c1_f0 is changed)

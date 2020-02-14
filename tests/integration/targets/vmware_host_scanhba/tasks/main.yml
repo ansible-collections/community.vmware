@@ -1,0 +1,22 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Recan HBA's for an entire cluster (there should be at least one host as
+      above)
+    vmware_host_scanhba:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: '{{ ccr1 }}'
+      refresh_storage: false
+    register: host_scan_results
+  - debug: msg="{{ host_scan_results }}"
+  - name: ensure a change occured (as in the scan happened) and the task didnt fail
+    assert:
+      that:
+      - host_scan_results.changed
+      - not host_scan_results.failed

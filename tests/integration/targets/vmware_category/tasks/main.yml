@@ -1,0 +1,5 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+  - include: associable_obj_types.yml

@@ -1,0 +1,20 @@
+- name: create a VM with the poweroff status
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: '{{ item.name }}'
+    state: poweredoff
+  with_items: '{{ virtual_machines }}'
+  register: poweroff_d1_c1_f0
+- debug:
+    var: poweroff_d1_c1_f0
+- name: make sure changes were made
+  assert:
+    that:
+    - poweroff_d1_c1_f0.results[0].instance.hw_power_status == "poweredOff"
+- name: make sure no changes were made (the VMs are already off)
+  assert:
+    that:
+    - poweroff_d1_c1_f0.results[0].changed|bool == false

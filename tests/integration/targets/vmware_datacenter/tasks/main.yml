@@ -1,0 +1,39 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Add datacenter
+  vmware_datacenter: &id001
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: datacenter_0001
+    state: present
+  register: dc_result
+- debug:
+    var: dc_result
+- name: Ensure datacenter is present
+  assert:
+    that:
+    - dc_result.changed
+- name: add datacenter again to check idempotent behavior
+  vmware_datacenter: *id001
+  register: dc_result
+- name: Ensure datacenter status is not changed
+  assert:
+    that:
+    - not dc_result.changed
+- when: vcsim is not defined
+  block:
+  - name: Delete datacenter
+    vmware_datacenter:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: datacenter_0001
+      state: absent
+    register: dc_result_delete
+  - name: Ensure datacenter is absent
+    assert:
+      that:
+      - dc_result_delete.changed

@@ -1,0 +1,17 @@
+- when: vcsim is not defined
+  block:
+  - name: Get information about vSphere SPBM info
+    vmware_vm_storage_policy_info: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+    register: spbm_data
+  - assert: &id002
+      that:
+      - spbm_data.spbm_profiles is defined
+  - name: Get information about vSphere SPBM info in check mode
+    vmware_vm_storage_policy_info: *id001
+    register: spbm_data
+    check_mode: true
+  - assert: *id002

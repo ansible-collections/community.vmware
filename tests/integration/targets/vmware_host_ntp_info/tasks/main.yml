@@ -1,0 +1,18 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Gather NTP info about all hosts in given host
+    vmware_host_ntp_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_ntp
+  - debug: var=host_ntp
+  - assert:
+      that:
+      - host_ntp.hosts_ntp_info is defined

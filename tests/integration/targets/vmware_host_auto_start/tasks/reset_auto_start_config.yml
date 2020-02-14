@@ -1,0 +1,29 @@
+- name: Reset powerInfo for autoStart parameters of {{ test_vm1 }}.
+  vmware_host_auto_start:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+    name: test_vm1
+    power_info:
+      start_action: none
+- name: Reset powerInfo for autoStart parameters of {{ test_vm2 }}
+  vmware_host_auto_start:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+    name: test_vm2
+    power_info:
+      start_action: none
+- name: Reset autoStart defaults parameters.
+  vmware_host_auto_start:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+    system_defaults:
+      enabled: false

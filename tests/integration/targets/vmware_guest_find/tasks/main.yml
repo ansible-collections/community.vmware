@@ -1,0 +1,46 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: find folders for each vm
+  vmware_guest_find:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: '{{ item.name }}'
+  with_items: '{{ virtual_machines }}'
+  register: folders
+- debug: var=item
+  with_items: '{{ folders.results }}'
+- assert:
+    that:
+    - '{{ ''folders'' in item }}'
+    - '{{ item[''folders'']|length == 1 }}'
+  with_items: '{{ folders.results }}'
+- name: get fact of the first VM
+  vmware_guest_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    folder: '{{ virtual_machines[0].folder }}'
+  register: guest_info_0001
+- debug: var=guest_info_0001
+- name: find folders for each vm using UUID
+  vmware_guest_find:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    uuid: '{{ guest_info_0001[''instance''][''hw_product_uuid''] }}'
+  register: folder_uuid
+- debug: var=folder_uuid
+- assert:
+    that:
+    - '{{ ''folders'' in folder_uuid }}'
+    - '{{ folder_uuid[''folders'']|length == 1 }}'

@@ -1,0 +1,90 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: Add custom attribute to the given virtual machine
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    folder: '{{ virtual_machines[0].folder }}'
+    state: present
+    attributes:
+    - name: sample_1
+      value: sample_1_value
+    - name: sample_2
+      value: sample_2_value
+    - name: sample_3
+      value: sample_3_value
+  register: guest_info_0001
+- debug: var=guest_info_0001
+- assert:
+    that:
+    - guest_info_0001 is changed
+- name: Add custom attribute to the given virtual machine again
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    folder: '{{ virtual_machines[0].folder }}'
+    state: present
+    attributes:
+    - name: sample_1
+      value: sample_1_value
+    - name: sample_2
+      value: sample_2_value
+    - name: sample_3
+      value: sample_3_value
+  register: guest_info_0002
+- debug: var=guest_info_0002
+- assert:
+    that:
+    - not (guest_info_0002 is changed)
+- name: Remove custom attribute to the given virtual machine
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    folder: '{{ virtual_machines[0].folder }}'
+    state: absent
+    attributes:
+    - name: sample_1
+    - name: sample_2
+    - name: sample_3
+  register: guest_info_0004
+- debug: msg="{{ guest_info_0004 }}"
+- assert:
+    that:
+    - guest_info_0004.changed
+- when: vcsim is not defined
+  block:
+  - name: Remove custom attribute to the given virtual machine again
+    vmware_guest_custom_attributes:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: '{{ dc1 }}'
+      name: '{{ virtual_machines[0].name }}'
+      folder: '{{ virtual_machines[0].folder }}'
+      state: absent
+      attributes:
+      - name: sample_1
+      - name: sample_2
+      - name: sample_3
+    register: guest_info_0005
+  - debug: var=guest_info_0005
+  - assert:
+      that:
+      - not (guest_info_0005 is changed)

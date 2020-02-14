@@ -1,0 +1,3 @@
+- include: tag_crud_ops.yml
+- include: tag_manager_ops.yml
+- include: tag_manager_duplicate_tag_cat.yml

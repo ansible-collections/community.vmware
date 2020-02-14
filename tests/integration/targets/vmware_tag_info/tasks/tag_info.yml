@@ -1,0 +1,18 @@
+- when: vcsim is not defined
+  block:
+  - name: Get info about tag
+    vmware_tag_info: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+    register: tag_info
+  - name: Get info about tag in check mode
+    vmware_tag_info: *id001
+    register: tag_info
+    check_mode: true
+  - name: Check if facts exists
+    assert:
+      that:
+      - tag_info['tag_facts'] is defined
+      - tag_info['tag_info'] is defined

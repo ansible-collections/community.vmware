@@ -1,0 +1,53 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Get Details about VMware vCenter Server
+  vmware_about_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  register: about
+- assert:
+    that:
+    - about.about_info["{{ item }}"] is defined
+  with_items:
+  - api_type
+  - api_version
+  - build
+  - instance_uuid
+  - license_product_name
+  - license_product_version
+  - locale_build
+  - locale_version
+  - os_type
+  - product_full_name
+  - product_line_id
+  - product_name
+  - vendor
+  - version
+- name: Get Details about VMware vCenter Server in check mode
+  vmware_about_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  register: about
+  check_mode: true
+- assert:
+    that:
+    - about.about_info["{{ item }}"] is defined
+  with_items:
+  - api_type
+  - api_version
+  - build
+  - instance_uuid
+  - license_product_name
+  - license_product_version
+  - locale_build
+  - locale_version
+  - os_type
+  - product_full_name
+  - product_line_id
+  - product_name
+  - vendor
+  - version

@@ -1,0 +1,72 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+- when: vcsim is not defined
+  block:
+  - name: Delete content library if exists
+    vmware_content_library_manager: &id003
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      library_name: Sample_Library
+      state: absent
+  - name: Create content library
+    vmware_content_library_manager: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      library_name: Sample_Library
+      library_description: Sample Description
+      datastore_name: '{{ rw_datastore }}'
+      state: present
+    register: content_lib_create_result
+  - name: Check content library is created
+    assert:
+      that:
+      - content_lib_create_result.changed
+  - name: Create content library again
+    vmware_content_library_manager: *id001
+    register: content_lib_create_result
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not content_lib_create_result.changed
+  - name: Update a content library
+    vmware_content_library_manager: &id002
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      library_name: Sample_Library
+      library_description: Update Sample Description
+      state: present
+    register: content_lib_update_result
+  - name: Check content library is updated
+    assert:
+      that:
+      - content_lib_update_result.changed
+  - name: Update a content library again
+    vmware_content_library_manager: *id002
+    register: content_lib_update_result
+  - name: Check content library is not updated
+    assert:
+      that:
+      - not content_lib_update_result.changed
+  - name: Delete content library
+    vmware_content_library_manager: *id003
+    register: content_lib_delete_result
+  - name: Check content library is deleted
+    assert:
+      that:
+      - content_lib_delete_result.changed
+  - name: Delete content library again
+    vmware_content_library_manager: *id003
+    register: content_lib_delete_result
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not content_lib_delete_result.changed

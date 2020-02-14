@@ -1,0 +1,79 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_datacenter: true
+- name: Add distributed vSwitch
+  vmware_dvswitch: &id001
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    state: present
+    switch_name: dvswitch_0001
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+  register: dvs_result_0001
+- name: Ensure distributed vswitch is present
+  assert:
+    that:
+    - dvs_result_0001.changed
+- name: Create a VM folder on given Datacenter
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    folder_name: network_folder
+    folder_type: network
+    state: present
+    validate_certs: false
+  register: network_folder_result
+- name: Add distributed vSwitch using folder
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    folder: '{{ network_folder_result.result.path }}'
+    state: present
+    switch_name: dvswitch_0002
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+  register: dvs_result_0002
+- name: Ensure distributed vswitch is present
+  assert:
+    that:
+    - dvs_result_0002.changed
+- when: vcsim is not defined
+  block:
+  - name: add distributed vSwitch again
+    vmware_dvswitch: *id001
+    register: dvs_result_0002
+  - name: ensure distributed vswitch is present
+    assert:
+      that:
+      - not dvs_result_0002.changed
+  - name: delete the distributed vSwitch
+    vmware_dvswitch:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      state: absent
+      switch_name: '{{ item }}'
+    loop:
+    - dvswitch_0001
+    - dvswitch_0002
+    register: dvswitch_delete
+  - debug: var=dvswitch_delete
+  - name: Ensure the state has changed
+    assert:
+      that:
+      - dvswitch_delete.results[0] is changed
+      - dvswitch_delete.results[1] is changed

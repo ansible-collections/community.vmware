@@ -1,0 +1,28 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+- name: Gather target info for all ESXi host from given cluster
+  vmware_target_canonical_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+  register: target_0001_results
+- assert:
+    that:
+    - not target_0001_results.changed
+    - target_0001_results.scsi_tgt_info is defined
+- name: Gather target info for ESXi host
+  vmware_target_canonical_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+  register: target_0002_results
+- assert:
+    that:
+    - not target_0002_results.changed
+    - target_0002_results.scsi_tgt_info is defined

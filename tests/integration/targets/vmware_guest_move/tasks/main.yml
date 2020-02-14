@@ -1,0 +1,54 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: Create a VM folder on given Datacenter
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    folder_name: f1
+    folder_type: vm
+    state: present
+    validate_certs: false
+  register: dest_folder
+- name: Move VM (Changed)
+  vmware_guest_move:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    dest_folder: '{{ dest_folder.result.path }}'
+  register: vm_info_0001
+- name: Move VM (OK)
+  vmware_guest_move: &id001
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    name: '{{ virtual_machines[0].name }}'
+    dest_folder: '{{ dest_folder.result.path }}'
+  register: vm_info_0002
+- debug:
+    msg: '{{ vm_info_0001 }}'
+- debug:
+    msg: '{{ vm_info_0002 }}'
+- name: Make sure changes are done
+  assert:
+    that:
+    - vm_info_0001.changed
+    - not vm_info_0002.changed
+- name: Move VM in check mode
+  vmware_guest_move: *id001
+  register: vm_move_0003
+  check_mode: true
+- name: Make sure changes are not made in check mode
+  assert:
+    that:
+    - vm_move_0003.changed

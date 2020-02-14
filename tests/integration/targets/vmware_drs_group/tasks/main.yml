@@ -1,0 +1,59 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: Create DRS VM group
+  vmware_drs_group:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: TEST_VM_01
+    vms: '{{ virtual_machines_in_cluster | map(attribute=''name'') | list }}'
+    state: present
+  register: drs_vm_group_01_results
+- debug:
+    var: drs_vm_group_01_results
+- assert:
+    that:
+    - drs_vm_group_01_results.changed
+- when: vcsim is defined or esxi_hosts | length >= 3
+  block:
+  - name: Create DRS Host group
+    vmware_drs_group:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: '{{ ccr1 }}'
+      datacenter_name: '{{ dc1 }}'
+      group_name: TEST_HOST_01
+      hosts: '{{ esxi_hosts[0:3] }}'
+      state: present
+    register: drs_host_group_01_results
+  - debug:
+      var: drs_host_group_01_results
+  - assert:
+      that:
+      - drs_host_group_01_results.changed
+  - name: Delete DRS Host group
+    vmware_drs_group:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: DC0_C0
+      datacenter_name: DC0
+      group_name: TEST_HOST_01
+      hosts: []
+      state: absent
+    register: drs_host_group_01_delete_results
+  - debug:
+      var: drs_host_group_01_delete_results
+  - assert:
+      that:
+      - drs_host_group_01_delete_results.changed

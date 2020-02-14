@@ -1,0 +1,42 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_dvswitch: true
+- when: vcsim is not defined
+  block:
+  - name: Gather info about DVS portgroup
+    vmware_dvs_portgroup_info: &id001
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: '{{ dc1 }}'
+    register: dvs_results
+  - debug:
+      var: dvs_results
+  - assert:
+      that:
+      - dvs_results.dvs_portgroup_info is defined
+  - name: Gather info about DVS portgroup in check mode
+    vmware_dvs_portgroup_info: *id001
+    register: dvs_results
+    check_mode: true
+  - debug:
+      var: dvs_results
+  - assert:
+      that:
+      - dvs_results.dvs_portgroup_info is defined
+- name: get info for a given dvswitch
+  vmware_dvs_portgroup_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    dvswitch: '{{ dvswitch1 }}'
+  register: dvs_results_0002
+- debug:
+    msg: '{{ dvs_results_0002 }}'
+- assert:
+    that:
+    - dvs_results_0002['dvs_portgroup_info']['DVS0'] is defined

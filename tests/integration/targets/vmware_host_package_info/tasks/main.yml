@@ -1,0 +1,18 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Gather info about all hosts in given cluster
+    vmware_host_package_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_packages
+  - debug: var=host_packages
+  - assert:
+      that:
+      - host_packages.hosts_package_info is defined

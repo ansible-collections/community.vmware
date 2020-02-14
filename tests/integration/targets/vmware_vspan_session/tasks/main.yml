@@ -1,0 +1,92 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+- name: add distributed vSwitch
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    state: present
+    switch_name: dvswitch_0001
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+  register: dvs_result_0001
+- debug: var=dvs_result_0001
+- name: ensure distributed vswitch is present
+  assert:
+    that:
+    - '{{ dvs_result_0001.changed == true }}'
+- name: Create vlan portgroup with all security and port policies
+  vmware_dvs_portgroup:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    portgroup_name: vlan-123-portrgoup
+    switch_name: dvswitch_0001
+    vlan_id: 123
+    num_ports: 120
+    portgroup_type: earlyBinding
+    state: present
+    network_policy:
+      promiscuous: true
+      forged_transmits: true
+      mac_changes: true
+    port_policy:
+      block_override: true
+      ipfix_override: true
+      live_port_move: true
+      network_rp_override: true
+      port_config_reset_at_disconnect: true
+      security_override: true
+      shaping_override: true
+      traffic_filter_override: true
+      uplink_teaming_override: true
+      vendor_config_override: true
+      vlan_override: true
+  register: portgroup_create_result
+- name: ensure portgroup was created
+  assert:
+    that:
+    - portgroup_create_result.changed
+- when: vcsim is not defined
+  block:
+  - name: create a session.
+    vmware_vspan_session:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      switch: dvswitch_0001
+      name: session_0001
+      state: present
+      enabled: true
+      description: basic_description
+      source_port_transmitted: 13
+      source_port_received: 13
+      destination_port: 12
+    register: vspan_session_create_result
+  - debug: var=vspan_session_create_result
+  - name: ensure session was created
+    assert:
+      that:
+      - vspan_session_create_result.changed
+  - name: delete a session.
+    vmware_vspan_session:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      switch: dvswitch_0001
+      name: session_0001
+      state: absent
+    register: vspan_session_delete_result
+  - name: ensure session was deleted
+    assert:
+      that:
+      - vspan_session_delete_result.changed

@@ -1,0 +1,16 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_dvswitch: true
+- name: get list of portgroups
+  vmware_dvs_portgroup_find:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  register: dvspg_0001
+- debug:
+    var: dvspg_0001
+- assert:
+    that:
+    - dvspg_0001.dvs_portgroups is defined

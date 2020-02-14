@@ -1,0 +1,72 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: gather info about all clusters in the given datacenter
+  vmware_cluster_info: &id001
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter: '{{ dc1 }}'
+  register: all_cluster_result
+- name: ensure info are gathered for all clusters
+  assert: &id002
+    that:
+    - all_cluster_result.clusters
+    - not all_cluster_result.changed
+- name: Gather info about all clusters in the given datacenter in check mode
+  vmware_cluster_info: *id001
+  register: all_cluster_result
+  check_mode: true
+- debug: msg=all_cluster_result
+- name: Ensure info is gathered for all clusters in check mode
+  assert: *id002
+- name: Gather info about the given cluster
+  vmware_cluster_info: &id003
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+  register: cluster_result
+- name: Ensure info are gathered for the given cluster
+  assert: &id004
+    that:
+    - cluster_result.clusters
+    - not cluster_result.changed
+- name: Gather info about the given cluster in check mode
+  vmware_cluster_info: *id003
+  register: cluster_result
+  check_mode: true
+- name: Ensure info is gathered for the given cluster in check mode
+  assert: *id004
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_category: true
+      setup_tag: true
+  - name: Apply tag to cluster
+    vmware_tag_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      tag_names:
+      - '{{ cluster_category }}:{{ cluster_tag }}'
+      state: present
+      object_name: '{{ ccr1 }}'
+      object_type: ClusterComputeResource
+  - name: Get info about cluster
+    vmware_cluster_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      show_tag: true
+      cluster_name: '{{ ccr1 }}'
+    register: cluster_info
+  - assert:
+      that:
+      - cluster_info is defined
+      - cluster_info.clusters[ccr1].tags is defined

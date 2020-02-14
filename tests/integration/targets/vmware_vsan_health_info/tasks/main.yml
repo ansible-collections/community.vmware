@@ -1,0 +1,17 @@
+- import_role: null
+  name: prepare_vmware_tests
+- when: vcsim is not defined
+  block:
+  - name: Gather health info from a vSAN's cluster
+    vmware_vsan_health_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      cluster_name: '{{ ccr1 }}'
+      validate_certs: false
+      fetch_from_cache: false
+    register: info
+  - debug: var=info
+  - assert:
+      that:
+      - info.vsan_health_info is defined

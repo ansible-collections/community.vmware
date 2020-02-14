@@ -1,0 +1,39 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_datacenter: true
+- name: add cluster
+  vmware_cluster:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    cluster_name: test_cluster_0001
+    state: present
+  register: cluster_result_0001
+- name: ensure cluster is present
+  assert: &id001
+    that:
+    - '{{ cluster_result_0001.changed == true }}'
+- when: vcsim is not defined
+  block:
+  - name: delete cluster
+    vmware_cluster: &id002
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_0001
+      state: absent
+    register: cluster_result_0001
+  - name: ensure cluster is present
+    assert: *id001
+  - name: delete cluster (again)
+    vmware_cluster: *id002
+    register: cluster_result_0001
+  - name: ensure cluster is unchanged
+    assert:
+      that:
+      - '{{ cluster_result_0001.changed == false }}'

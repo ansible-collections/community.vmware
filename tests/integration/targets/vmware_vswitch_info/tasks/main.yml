@@ -1,0 +1,29 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+- name: Gather vswitch info about all hosts in given cluster
+  vmware_vswitch_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: switch_info
+- debug: var=switch_info
+- assert:
+    that:
+    - switch_info.hosts_vswitch_info is defined
+- name: Gather vswitch info about all hosts in given cluster in check mode
+  vmware_vswitch_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: switch_info_check_mode
+  check_mode: true
+- debug: var=switch_info_check_mode
+- assert:
+    that:
+    - switch_info_check_mode.hosts_vswitch_info is defined

@@ -1,0 +1,104 @@
+- name: create new VMs with boot_firmware as 'bios'
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm1
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    hardware:
+      num_cpus: 1
+      boot_firmware: bios
+      memory_mb: 128
+    disk:
+    - size: 1gb
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    state: poweredoff
+    folder: '{{ f0 }}'
+  register: clone_d1_c1_f0
+- debug: var=clone_d1_c1_f0
+- name: assert that changes were made
+  assert:
+    that:
+    - clone_d1_c1_f0 is changed
+- when: vcsim is not defined
+  block:
+  - name: create new VMs again with boot_firmware as 'bios'
+    vmware_guest:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      name: test_vm2
+      guest_id: centos64Guest
+      datacenter: '{{ dc1 }}'
+      hardware:
+        num_cpus: 1
+        boot_firmware: bios
+        memory_mb: 128
+      disk:
+      - size: 1gb
+        type: thin
+        datastore: '{{ rw_datastore }}'
+      state: poweredoff
+      folder: '{{ f0 }}'
+    register: clone_d1_c1_f0
+  - debug: var=clone_d1_c1_f0
+  - name: assert that changes were not made
+    assert:
+      that:
+      - clone_d1_c1_f0 is changed
+- name: create new VMs with boot_firmware as 'efi'
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm3
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    hardware:
+      num_cpus: 1
+      boot_firmware: efi
+      memory_mb: 128
+    disk:
+    - size: 1gb
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    state: poweredoff
+    folder: '{{ f0 }}'
+  register: clone_d1_c1_f0
+- debug: var=clone_d1_c1_f0
+- name: assert that changes were made
+  assert:
+    that:
+    - clone_d1_c1_f0 is changed
+- when: vcsim is not defined
+  block:
+  - name: create new VMs again with boot_firmware as 'efi'
+    vmware_guest:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      name: test_vm3
+      guest_id: centos64Guest
+      datacenter: '{{ dc1 }}'
+      hardware:
+        num_cpus: 1
+        boot_firmware: efi
+        memory_mb: 128
+      disk:
+      - size: 1gb
+        type: thin
+        datastore: '{{ rw_datastore }}'
+      state: poweredoff
+      folder: '{{ f0 }}'
+    register: clone_d1_c1_f0
+  - debug: var=clone_d1_c1_f0
+  - name: assert that changes were not made
+    assert:
+      that:
+      - not (clone_d1_c1_f0 is changed)

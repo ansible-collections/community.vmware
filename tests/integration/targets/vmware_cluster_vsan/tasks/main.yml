@@ -1,0 +1,50 @@
+- import_role:
+    name: prepare_vmware_tests
+- when: vcsim is not defined
+  block:
+  - name: Create test cluster
+    vmware_cluster:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_vsan
+      state: present
+  - name: Enable vSAN
+    vmware_cluster_vsan:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_vsan
+      enable_vsan: true
+    register: cluster_vsan_result_0001
+  - name: Ensure vSAN is enabled
+    assert:
+      that:
+      - '{{ cluster_vsan_result_0001.changed == true }}'
+  - name: Disable vSAN
+    vmware_cluster_vsan:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_vsan
+      enable_vsan: false
+    register: cluster_vsan_result_0002
+  - name: Ensure vSAN is disabled
+    assert:
+      that:
+      - '{{ cluster_vsan_result_0002.changed == true }}'
+  - name: Delete test cluster
+    vmware_cluster:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_vsan
+      state: absent

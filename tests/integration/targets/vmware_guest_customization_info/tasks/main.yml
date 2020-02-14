@@ -1,0 +1,28 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_datastore: true
+      setup_virtualmachines: true
+  - name: Gather info about given customization spec
+    vmware_guest_customization_info: &id001
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+    register: vm_custom_spec_info
+  - debug:
+      var: vm_custom_spec_info
+  - assert:
+      that:
+      - not vm_custom_spec_info.changed
+  - name: Gather info about given customization spec in check module
+    vmware_guest_customization_info: *id001
+    register: vm_custom_spec_info
+  - debug:
+      var: vm_custom_spec_info
+  - assert:
+      that:
+      - not vm_custom_spec_info.changed

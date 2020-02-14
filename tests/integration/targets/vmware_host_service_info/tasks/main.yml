@@ -1,0 +1,28 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Check info about all hosts in given cluster
+    vmware_host_service_info: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_services
+  - debug:
+      var: host_services
+  - assert:
+      that:
+      - host_services.host_service_info is defined
+  - name: Check info about all hosts in given cluster in check mode
+    vmware_host_service_info: *id001
+    register: host_services
+    check_mode: true
+  - debug:
+      var: host_services
+  - assert:
+      that:
+      - host_services.host_service_info is defined

@@ -1,0 +1,81 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_datastore: true
+    setup_virtualmachines: true
+- when: vcsim is not defined
+  block:
+  - name: Get info from a given ESXi
+    vmware_vm_info:
+      validate_certs: false
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+- name: Get info about available vms
+  vmware_vm_info: &id001
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  register: vm_info
+- set_fact: &id003
+    vm_by_name: '{{ dict(vm_info.virtual_machines|map(attribute=''guest_name'')|zip(vm_info.virtual_machines))
+      }}'
+- set_fact:
+    my_vm1: '{{ vm_by_name[''DC0_H0_VM1''] }}'
+- name: Verify if VM info exist
+  assert: &id002
+    that:
+    - my_vm1.esxi_hostname is defined
+    - my_vm1.guest_fullname is defined
+    - my_vm1.ip_address is defined
+    - my_vm1.mac_address is defined
+    - my_vm1.power_state is defined
+    - my_vm1.uuid is defined
+    - my_vm1.vm_network is defined
+- name: Get info about available vms in check mode
+  vmware_vm_info: *id001
+  register: vm_info
+  check_mode: true
+- name: Verify if VM info exist in check mode
+  assert: *id002
+- name: Get folder name from VM
+  vmware_guest_find:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: '{{ virtual_machines[0].name }}'
+  register: folder_path_info
+- set_fact:
+    folder_path: '{{ folder_path_info.folders[0] }}'
+  when: folder_path_info.folders is defined
+- name: Gather info about VM using folder
+  vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    folder: '{{ folder_path }}'
+  register: vm_info
+  when: folder_path_info.folders is defined
+- debug: var=vm_info
+- set_fact: *id003
+- set_fact:
+    my_vm0: '{{ vm_by_name[''DC0_H0_VM0''] }}'
+- name: Check if info are returned for VM with folder specified
+  assert:
+    that:
+    - my_vm0.esxi_hostname is defined
+    - my_vm0.guest_fullname is defined
+    - my_vm0.ip_address is defined
+    - my_vm0.mac_address is defined
+    - my_vm0.power_state is defined
+    - my_vm0.uuid is defined
+    - my_vm0.vm_network is defined

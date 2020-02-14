@@ -1,0 +1,152 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Add NTP server to a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: present
+      ntp_servers:
+      - 0.pool.ntp.org
+      validate_certs: false
+    register: present
+  - debug: var=present
+  - name: Add another NTP server to a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: present
+      ntp_servers:
+      - 1.pool.ntp.org
+      validate_certs: false
+    register: present
+  - debug: var=present
+  - name: Remove NTP server from a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: absent
+      ntp_servers:
+      - 1.pool.ntp.org
+      validate_certs: false
+    register: absent_one
+  - debug: var=absent_one
+  - name: Remove NTP server from a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: present
+      ntp_servers:
+      - 1.pool.ntp.org
+      validate_certs: false
+    register: present
+  - debug: var=present
+  - name: Add more NTP servers to a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: present
+      ntp_servers:
+      - 2.pool.ntp.org
+      - 3.pool.ntp.org
+      - 4.pool.ntp.org
+      validate_certs: false
+    register: present
+  - debug: var=present
+  - name: Remove all NTP servers from a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: absent
+      ntp_servers:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+      - 3.pool.ntp.org
+      - 4.pool.ntp.org
+      - 6.pool.ntp.org
+      validate_certs: false
+    register: absent_all
+  - debug: var=absent_all
+  - name: Configure NTP servers for a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      ntp_servers:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+      validate_certs: false
+    register: ntp_servers
+  - debug: var=ntp_servers
+  - name: Configure NTP servers for a host
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      ntp_servers:
+      - 3.pool.ntp.org
+      - 4.pool.ntp.org
+      - 5.pool.ntp.org
+      verbose: true
+      validate_certs: false
+    register: ntp_servers
+  - debug: var=ntp_servers
+  - name: Add NTP server to a host in check mode
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: present
+      ntp_servers:
+      - 0.pool.ntp.org
+      validate_certs: false
+    register: present
+    check_mode: true
+  - debug: var=present
+  - name: Remove NTP server to a host in check mode
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      state: absent
+      ntp_servers:
+      - 0.pool.ntp.org
+      validate_certs: false
+    register: present
+    check_mode: true
+  - debug: var=present
+  - name: Configure NTP servers for a host in check mode
+    vmware_host_ntp:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      ntp_servers:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+      validate_certs: false
+    register: ntp_servers
+    check_mode: true
+  - debug: var=ntp_servers

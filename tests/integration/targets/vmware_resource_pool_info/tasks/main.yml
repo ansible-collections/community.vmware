@@ -1,0 +1,14 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Gather info about resource pool
+  vmware_resource_pool_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  register: resource_result_0001
+- name: ensure a resource pool is present
+  assert:
+    that:
+    - '{{ resource_result_0001.changed == false }}'
+    - '{{ resource_result_0001.resource_pool_info is defined }}'

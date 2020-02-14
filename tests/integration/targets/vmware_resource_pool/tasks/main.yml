@@ -1,0 +1,81 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+- name: add resource pool
+  vmware_resource_pool:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    cluster: '{{ ccr1 }}'
+    resource_pool: test_resource_0001
+    mem_shares: normal
+    mem_limit: -1
+    mem_reservation: 0
+    mem_expandable_reservations: true
+    cpu_shares: normal
+    cpu_limit: -1
+    cpu_reservation: 0
+    cpu_expandable_reservations: true
+    state: present
+  register: resource_result_0001
+- name: ensure a resource pool is present
+  assert:
+    that:
+    - '{{ resource_result_0001.changed == true }}'
+- name: add resource pool again
+  vmware_resource_pool:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    cluster: '{{ ccr1 }}'
+    resource_pool: test_resource_0001
+    mem_shares: normal
+    mem_limit: -1
+    mem_reservation: 0
+    mem_expandable_reservations: true
+    cpu_shares: normal
+    cpu_limit: -1
+    cpu_reservation: 0
+    cpu_expandable_reservations: true
+    state: present
+  register: resource_result_0002
+- name: check if nothing is changed
+  assert:
+    that:
+    - '{{ resource_result_0002.changed == false }}'
+- name: add resource pool again
+  vmware_resource_pool:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    cluster: '{{ ccr1 }}'
+    resource_pool: test_resource_0001
+    state: absent
+  register: resource_result_0003
+- name: check if resource pool is removed
+  assert:
+    that:
+    - '{{ resource_result_0003.changed == true }}'
+- name: add resource pool again
+  vmware_resource_pool:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    cluster: '{{ ccr1 }}'
+    resource_pool: test_resource_0001
+    state: absent
+  register: resource_result_0004
+- name: check if resource pool is already removed
+  assert:
+    that:
+    - '{{ resource_result_0004.changed == false }}'

@@ -1,0 +1,89 @@
+- when: vcsim is not defined
+  block:
+  - name: Create Category
+    vmware_category: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      category_name: Sample_Cat_0006
+      category_description: Sample Description
+      category_cardinality: multiple
+      state: present
+    register: category_create
+  - name: Check Category is created
+    assert:
+      that:
+      - category_create.changed
+  - name: Create category again
+    vmware_category: *id001
+    register: category_create
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not category_create.changed
+  - name: Set Cat_ID Paramter. Required for Tag creation
+    set_fact: Cat_ID={{ category_create['category_results']['category_id'] }}
+  - name: Create a tag
+    vmware_tag: &id002
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      tag_name: Sample_Tag_0001
+      category_id: '{{ Cat_ID }}'
+      tag_description: Sample Description
+      state: present
+    register: tag_creation
+  - name: Check tag is created
+    assert:
+      that:
+      - tag_creation.changed
+  - name: Create a tag again
+    vmware_tag: *id002
+    register: tag_creation
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not tag_creation.changed
+  - name: Update Tag Description
+    vmware_tag: &id003
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      tag_name: Sample_Tag_0001
+      tag_description: Some fancy description
+      state: present
+    register: update_tag_desc
+  - name: Check tag description updated
+    assert:
+      that:
+      - update_tag_desc.changed
+  - name: Update tag description again
+    vmware_tag: *id003
+    register: update_tag_desc
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not update_tag_desc.changed
+  - name: Delete Tag
+    vmware_tag: &id004
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      tag_name: Sample_Tag_0001
+      state: absent
+    register: delete_tag
+  - name: Check Tag is Deleted
+    assert:
+      that:
+      - delete_tag.changed
+  - name: Delete tag again
+    vmware_tag: *id004
+    register: delete_tag
+  - name: Check if no changes are made
+    assert:
+      that:
+      - not delete_tag.changed

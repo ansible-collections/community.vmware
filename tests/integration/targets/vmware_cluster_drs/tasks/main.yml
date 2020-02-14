@@ -1,0 +1,77 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Create test cluster
+  vmware_cluster:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    cluster_name: test_cluster_drs
+    state: present
+- name: Enable DRS
+  vmware_cluster_drs:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    cluster_name: test_cluster_drs
+    enable_drs: true
+  register: cluster_drs_result_0001
+- name: Ensure DRS is enabled
+  assert:
+    that:
+    - '{{ cluster_drs_result_0001.changed == true }}'
+- name: Disable DRS
+  vmware_cluster_drs:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    cluster_name: test_cluster_drs
+    enable_drs: false
+  register: cluster_drs_result_0002
+- name: Ensure DRS is disabled
+  assert:
+    that:
+    - '{{ cluster_drs_result_0002.changed == true }}'
+- when: vcsim is not defined
+  block:
+  - name: Change advanced setting "TryBalanceVmsPerHost" (check-mode)
+    vmware_cluster_drs: &id001
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_drs
+      advanced_settings:
+        TryBalanceVmsPerHost: '1'
+    check_mode: true
+    register: change_balance_vms_check
+  - assert:
+      that:
+      - change_balance_vms_check.changed
+  - name: Change advanced setting "TryBalanceVmsPerHost"
+    vmware_cluster_drs: *id001
+    register: change_balance_vms
+  - assert:
+      that:
+      - change_balance_vms.changed
+  - name: Change advanced setting "TryBalanceVmsPerHost" again
+    vmware_cluster_drs: *id001
+    register: change_balance_vms_again
+  - assert:
+      that:
+      - not change_balance_vms_again.changed
+  - name: Delete test cluster
+    vmware_cluster:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: test_cluster_drs
+      state: absent

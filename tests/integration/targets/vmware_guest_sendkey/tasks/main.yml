@@ -1,0 +1,48 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_datastore: true
+      setup_virtualmachines: true
+  - name: set state to poweron the first VM
+    vmware_guest_powerstate:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      name: '{{ virtual_machines[0].name }}'
+      folder: '{{ f0 }}'
+      state: powered-on
+  - name: send keys to virtual machine
+    vmware_guest_sendkey:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      name: '{{ virtual_machines[0].name }}'
+      keys_send:
+      - DOWNARROW
+      - DOWNARROW
+      - ENTER
+    register: send_key
+  - debug: var=send_key
+  - name: assert the keys were sent to VM
+    assert:
+      that:
+      - send_key.changed == true
+  - name: send string to virtual machine
+    vmware_guest_sendkey:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      name: '{{ virtual_machines[0].name }}'
+      string_send: test-user
+    register: send_string
+  - debug: var=send_string
+  - name: assert the string was sent to VM
+    assert:
+      that:
+      - send_string.changed == true

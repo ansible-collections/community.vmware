@@ -1,0 +1,142 @@
+- when: vcsim is not defined
+  block:
+  - name: Deploy VM from template
+    vmware_guest:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: '{{ dc1 }}'
+      state: poweredon
+      folder: '{{ f0 }}'
+      template: '{{ virtual_machines[0].name }}'
+      name: test_vm1
+      disk:
+      - size: 1gb
+        datastore: '{{ rw_datastore }}'
+      guest_id: rhel7_64guest
+      hardware:
+        memory_mb: 128
+        num_cpus: 1
+      networks:
+      - name: '{{ dvpg1 }}'
+    register: no_vm_result
+  - debug: var=no_vm_result
+  - assert:
+      that:
+      - no_vm_result is changed
+  - name: Deploy new VM with DVPG
+    vmware_guest:
+      esxi_hostname: '{{ esxi_hosts[0] }}'
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: '{{ dc1 }}'
+      state: poweredon
+      folder: '{{ f0 }}'
+      name: test_vm2
+      disk:
+      - size: 1gb
+        datastore: '{{ rw_datastore }}'
+      guest_id: rhel7_64guest
+      hardware:
+        memory_mb: 128
+        num_cpus: 1
+      networks:
+      - name: '{{ dvpg1 }}'
+        dvswitch_name: '{{ dvswitch1 }}'
+    register: no_vm_result
+  - debug: var=no_vm_result
+  - assert:
+      that:
+      - no_vm_result is changed
+  - name: Deploy same VM again
+    vmware_guest:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: '{{ dc1 }}'
+      state: poweredon
+      folder: '{{ f0 }}'
+      name: test_vm2
+      disk:
+      - size: 1gb
+        datastore: '{{ rw_datastore }}'
+      guest_id: rhel7_64guest
+      hardware:
+        memory_mb: 128
+        num_cpus: 1
+      networks:
+      - name: '{{ dvpg1 }}'
+    register: no_vm_result
+  - debug: var=no_vm_result
+  - assert:
+      that:
+      - not (no_vm_result is changed)
+  - name: Deploy new VM with DVPG with slash in name
+    vmware_guest:
+      esxi_hostname: '{{ esxi_hosts[0] }}'
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: '{{ dc1 }}'
+      state: poweredon
+      folder: '{{ f0 }}'
+      name: test_vm3
+      disk:
+      - size: 1gb
+        datastore: '{{ rw_datastore }}'
+      guest_id: rhel7_64guest
+      hardware:
+        memory_mb: 128
+        num_cpus: 1
+      networks:
+      - name: '{{ dvpg_with_slash }}'
+        dvswitch_name: '{{ dvswitch1 }}'
+    register: no_vm_result
+  - debug: var=no_vm_result
+  - assert:
+      that:
+      - no_vm_result is changed
+  - name: Deploy same VM again
+    vmware_guest:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: '{{ dc1 }}'
+      state: poweredon
+      folder: '{{ f0 }}'
+      name: test_vm3
+      disk:
+      - size: 1gb
+        datastore: '{{ rw_datastore }}'
+      guest_id: rhel7_64guest
+      hardware:
+        memory_mb: 128
+        num_cpus: 1
+      networks:
+      - name: '{{ dvpg_with_slash }}'
+    register: no_vm_result
+  - debug: var=no_vm_result
+  - assert:
+      that:
+      - not (no_vm_result is changed)
+  always:
+  - when: vcsim is not defined
+    name: Remove VM to free the portgroup
+    vmware_guest:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      name: '{{ item }}'
+      force: true
+      state: absent
+    with_items:
+    - test_vm1
+    - test_vm2
+    - test_vm3

@@ -1,0 +1,62 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: add distributed vSwitch
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ dc1 }}'
+    state: present
+    switch_name: dvswitch_0001
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+  register: dvs_result_0001
+- debug:
+    var: dvs_result_0001
+- name: ensure distributed vswitch is present
+  assert:
+    that:
+    - dvs_result_0001 is changed
+- when: vcsim is not defined
+  block:
+  - name: Configure Uplink portgroup in check mode
+    vmware_dvswitch_uplink_pg: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      switch: dvswitch_0001
+      name: dvswitch_0001-DVUplinks
+      advanced:
+        port_config_reset_at_disconnect: false
+        block_override: false
+        vendor_config_override: false
+        vlan_override: false
+        netflow_override: false
+        traffic_filter_override: false
+      vlan_trunk_range:
+      - 2-3967
+      - 4049-4092
+      netflow_enabled: true
+      block_all_ports: false
+      validate_certs: false
+    register: uplink_pg_result_check_mode
+    check_mode: true
+  - debug:
+      var: uplink_pg_result_check_mode
+  - name: ensure uplink portgroup was changed
+    assert:
+      that:
+      - uplink_pg_result_check_mode is changed
+  - name: Configure Uplink portgroup
+    vmware_dvswitch_uplink_pg: *id001
+    register: uplink_pg_result
+    check_mode: false
+  - debug:
+      var: uplink_pg_result
+  - name: ensure uplink portgroup was changed
+    assert:
+      that:
+      - uplink_pg_result is changed

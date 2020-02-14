@@ -1,0 +1,4 @@
+esxi_hosts: []
+infra: null
+virtual_machines: []
+virtual_machines_in_cluster: []

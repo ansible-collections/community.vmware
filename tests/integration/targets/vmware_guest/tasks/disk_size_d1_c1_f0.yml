@@ -1,0 +1,25 @@
+- name: create new VMs with invalid disk size
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm1
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    hardware:
+      num_cpus: 1
+      memory_mb: 128
+    disk:
+    - size: 0gb
+      type: eagerzeroedthick
+      datastore: '{{ rw_datastore }}'
+    state: poweredoff
+    folder: '{{ f0 }}'
+  register: disk_size_d1_c1_f0
+  ignore_errors: true
+- debug: var=disk_size_d1_c1_f0
+- name: assert that changes were made
+  assert:
+    that:
+    - not (disk_size_d1_c1_f0 is changed)

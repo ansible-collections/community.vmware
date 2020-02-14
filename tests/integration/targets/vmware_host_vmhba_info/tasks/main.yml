@@ -1,0 +1,28 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Gather vmhba info
+    vmware_host_vmhba_info: &id001
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_vmhbas
+  - debug:
+      var: host_vmhbas
+  - assert:
+      that:
+      - host_vmhbas.hosts_vmhbas_info is defined
+  - name: Gather vmhba info in check mode
+    vmware_host_vmhba_info: *id001
+    register: host_vmhbas
+    check_mode: true
+  - debug:
+      var: host_vmhbas
+  - assert:
+      that:
+      - host_vmhbas.hosts_vmhbas_info is defined

@@ -1,0 +1,30 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Gather capability info for all ESXi host from given cluster
+    vmware_host_capability_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: '{{ ccr1 }}'
+    register: capability_0001_results
+  - assert:
+      that:
+      - not (capability_0001_results is changed)
+      - capability_0001_results.hosts_capability_info is defined
+  - name: Gather capability info for ESXi host
+    vmware_host_capability_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      esxi_hostname: '{{ esxi1 }}'
+    register: capability_0002_results
+  - assert:
+      that:
+      - not (capability_0002_results is changed)
+      - capability_0002_results.hosts_capability_info is defined

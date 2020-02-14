@@ -1,0 +1,27 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_esxi_instance: true
+  - name: Gather info about users
+    vmware_local_user_info: &id001
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+    register: all_user_info
+  - name: ensure user info are gathered
+    assert:
+      that:
+      - not all_user_info.changed
+      - all_user_info.local_user_info is defined
+  - name: Gather info about users in check mode
+    vmware_local_user_info: *id001
+    register: all_user_info
+    check_mode: true
+  - name: ensure user info are gathered
+    assert:
+      that:
+      - not all_user_info.changed
+      - all_user_info.local_user_info is defined

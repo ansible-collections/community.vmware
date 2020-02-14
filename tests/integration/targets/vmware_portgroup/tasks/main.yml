@@ -1,0 +1,60 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_datacenter: true
+      setup_attach_host: true
+      setup_cluster: true
+      setup_switch: true
+  - name: Create portgroup without Portgroup and vSwitch
+    vmware_portgroup:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+    ignore_errors: true
+    register: no_pg_vs
+  - assert:
+      that:
+      - '"missing" in no_pg_vs.msg'
+  - name: Create portgroup without Portgroup
+    vmware_portgroup:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      vswitch: ''
+      validate_certs: false
+    ignore_errors: true
+    register: no_vs
+  - assert:
+      that:
+      - '"missing" in no_vs.msg'
+  - name: Create portgroup without cluster
+    vmware_portgroup:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      vswitch: '{{ switch1 }}'
+      portgroup: pg_03
+      validate_certs: false
+    ignore_errors: true
+    register: no_cluster
+  - assert:
+      that:
+      - '"cluster_name" in no_cluster.msg'
+  - name: Create portgroup
+    vmware_portgroup:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      vswitch: '{{ switch1 }}'
+      portgroup: pg_03
+      cluster_name: '{{ ccr1 }}'
+      validate_certs: false
+      state: present
+    ignore_errors: true
+    register: pg_info
+  - assert:
+      that:
+      - pg_info.changed

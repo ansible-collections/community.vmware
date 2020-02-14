@@ -1,0 +1,12 @@
+- name: set state to poweredoff on all VMs
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: '{{ item.name }}'
+    state: poweredoff
+    folder: '{{ item.folder }}'
+  with_items: '{{ virtual_machines }}'
+  register: poweroff_d1_c1_f1
+- debug: var=poweroff_d1_c1_f1

@@ -1,0 +1,60 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+- name: Gather feature capability info for all ESXi host from given cluster
+  vmware_host_feature_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+  register: capability_0001_results
+- debug: var=capability_0001_results
+- assert:
+    that:
+    - not capability_0001_results.changed
+    - capability_0001_results.hosts_feature_info is defined
+- name: Gather feature capability info for all ESXi host from given cluster in check
+    mode
+  vmware_host_feature_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+  register: capability_0001_results
+  check_mode: true
+- debug: var=capability_0001_results
+- assert:
+    that:
+    - not capability_0001_results.changed
+    - capability_0001_results.hosts_feature_info is defined
+- name: Gather feature capability info for ESXi host
+  vmware_host_feature_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+  register: capability_0002_results
+- debug: var=capability_0002_results
+- assert:
+    that:
+    - not capability_0002_results.changed
+    - capability_0002_results.hosts_feature_info is defined
+- name: Gather feature capability info for ESXi host in check mode
+  vmware_host_feature_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+  register: capability_0002_results
+  check_mode: true
+- debug: var=capability_0002_results
+- assert:
+    that:
+    - not capability_0002_results.changed
+    - capability_0002_results.hosts_feature_info is defined

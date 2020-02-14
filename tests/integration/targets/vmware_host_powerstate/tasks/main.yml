@@ -1,0 +1,20 @@
+- when: false
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Restart Host
+    vmware_host_powerstate:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      state: power-down-to-standby
+      esxi_hostname: '{{ esxi1 }}'
+      force: true
+    register: host_powerstate
+  - debug: var=host_powerstate
+  - assert:
+      that:
+      - host_powerstate.results is changed

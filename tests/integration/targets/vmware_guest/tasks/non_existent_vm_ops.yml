@@ -1,0 +1,19 @@
+- name: Perform operation on non-existent VM
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: non_existent_vm
+    datacenter: '{{ dc1 }}'
+    folder: '{{ f0 }}'
+    state: poweredoff
+  register: non_existent_vm_ops
+  ignore_errors: true
+- debug: var=non_existent_vm_ops
+- name: assert that changes were not made
+  assert:
+    that:
+    - not (non_existent_vm_ops is changed)
+    - '''msg'' in non_existent_vm_ops'
+    - '''Unable to find the datastore with given parameters.'' in non_existent_vm_ops.msg'

@@ -1,0 +1,66 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_switch: true
+  - name: create basic portgroup
+    vmware_portgroup:
+      validate_certs: false
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      switch_name: '{{ switch1 }}'
+      cluster_name: '{{ ccr1 }}'
+      portgroup_name: vMotion
+      vlan_id: 0
+      state: present
+    register: dvs_pg_result_0001
+  - debug: var=dvs_pg_result_0001
+  - name: Create VMkernel adapter with vMotion TCP/IP stack
+    vmware_vmkernel:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      vswitch: '{{ switch1 }}'
+      portgroup: vMotion
+      mtu: 9000
+      network: &id001
+        type: static
+        ip_address: 192.168.100.100
+        subnet_mask: 255.255.255.0
+        tcpip_stack: vmotion
+      state: present
+      validate_certs: false
+    register: host_vmkernel
+  - debug: var=host_vmkernel
+  - name: Create VMkernel adapter in check mode
+    vmware_vmkernel:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      vswitch: '{{ switch1 }}'
+      portgroup: vMotion
+      mtu: 9000
+      network: *id001
+      state: present
+      validate_certs: false
+    register: host_vmkernel
+    check_mode: true
+  - debug: var=host_vmkernel
+  - name: Delete VMkernel adapter
+    vmware_vmkernel:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ esxi1 }}'
+      vswitch: '{{ switch1 }}'
+      device: '{{ host_vmkernel.device }}'
+      portgroup: vMotion
+      state: absent
+      validate_certs: false
+    register: host_vmkernel
+  - debug: var=host_vmkernel

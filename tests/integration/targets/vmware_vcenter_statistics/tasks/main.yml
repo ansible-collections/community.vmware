@@ -1,0 +1,129 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: Disable all the statistics
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day:
+      enabled: false
+    interval_past_week:
+      enabled: false
+    interval_past_month:
+      enabled: false
+    interval_past_year:
+      enabled: false
+    validate_certs: false
+  register: statistics_results_check_mode
+- name: Configure statistics in check mode
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day: &id001
+      enabled: true
+      interval_minutes: 5
+      save_for_days: 3
+      level: 2
+    interval_past_week: &id002
+      enabled: true
+      interval_minutes: 30
+      save_for_weeks: 1
+      level: 2
+    interval_past_month: &id003
+      enabled: true
+      interval_hours: 2
+      save_for_months: 1
+      level: 1
+    interval_past_year: &id004
+      enabled: true
+      interval_days: 1
+      save_for_years: 1
+      level: 1
+    validate_certs: false
+  register: statistics_results_check_mode
+  check_mode: true
+- debug: var=statistics_results_check_mode
+- name: ensure statistics were configured
+  assert:
+    that:
+    - statistics_results_check_mode is changed
+  when: vcsim is not defined
+- name: Configure statistics
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day: *id001
+    interval_past_week: *id002
+    interval_past_month: *id003
+    interval_past_year: *id004
+    validate_certs: false
+  register: statistics_results
+- debug: var=statistics_results
+- name: ensure statistics were configured
+  assert:
+    that:
+    - statistics_results is changed
+  when: vcsim is not defined
+- name: Configure statistics (again)
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day: *id001
+    interval_past_week: *id002
+    interval_past_month: *id003
+    interval_past_year: *id004
+    validate_certs: false
+  register: statistics_results
+- debug: var=statistics_results
+- name: ensure statistics were configured
+  assert:
+    that:
+    - not (statistics_results is changed)
+  when: vcsim is not defined
+- name: Configure statistics intervall to level 2 for later check
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day:
+      enabled: true
+      level: 2
+    interval_past_week:
+      enabled: true
+      level: 2
+    interval_past_month:
+      enabled: true
+      level: 2
+    interval_past_year:
+      enabled: true
+      level: 2
+    validate_certs: false
+  when: vcsim is not defined
+- name: Increase daily and weekly while decrease monthly and yearly
+  vmware_vcenter_statistics:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    interval_past_day:
+      enabled: true
+      level: 3
+    interval_past_week:
+      enabled: true
+      level: 3
+    interval_past_month:
+      enabled: true
+      level: 1
+    interval_past_year:
+      enabled: true
+      level: 1
+    validate_certs: false
+  register: statistics_results_mixed_increase_decrease
+  when: vcsim is not defined
+- name: Ensure statistics were configured
+  assert:
+    that:
+    - statistics_results_mixed_increase_decrease is changed
+  when: vcsim is not defined

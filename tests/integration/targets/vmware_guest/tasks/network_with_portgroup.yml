@@ -1,0 +1,41 @@
+- name: Add portgroup
+  vmware_dvs_portgroup:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    portgroup_name: portgroup_network
+    switch_name: '{{ dvswitch1 }}'
+    vlan_id: '1'
+    num_ports: 2
+    portgroup_type: earlyBinding
+    state: present
+  register: dvsportgroup
+- debug: var=dvsportgroup
+- name: create new VMs with portgroup
+  vmware_guest:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: test_vm1
+    guest_id: centos64Guest
+    datacenter: '{{ dc1 }}'
+    disk:
+    - size: 3mb
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    networks:
+    - name: portgroup_network
+      switch_name: '{{ dvswitch1 }}'
+    hardware:
+      num_cpus: 1
+      memory_mb: 128
+    state: poweredoff
+    folder: '{{ f0 }}'
+  register: vm_with_portgroup
+  ignore_errors: false
+- debug: var=vm_with_portgroup
+- assert:
+    that:
+    - vm_with_portgroup is changed

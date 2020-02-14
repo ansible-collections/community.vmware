@@ -1,0 +1,34 @@
+- import_role:
+    name: prepare_vmware_tests
+- name: add local user
+  vmware_local_user_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    local_user_name: testuser_0003
+    local_user_password: SamplePassword!
+    state: present
+  register: user_add_0003
+  ignore_errors: true
+- name: ensure user is created
+  assert:
+    that:
+    - user_add_0003.changed == false
+    - '{{ ''Failed to get local account manager settings'' in user_add_0003.msg }}'
+- name: Delete local user
+  vmware_local_user_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    local_user_name: testuser_0003
+    state: absent
+  register: user_delete_0004
+  ignore_errors: true
+- name: ensure user is deleted
+  assert:
+    that:
+    - user_delete_0004.changed == false
+    - '{{ ''Failed to get local account manager settings'' in user_delete_0004.msg
+      }}'

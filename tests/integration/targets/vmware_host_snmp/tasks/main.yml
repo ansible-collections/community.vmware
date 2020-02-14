@@ -1,0 +1,50 @@
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Enable and configure SNMP community in check mode
+    vmware_host_snmp:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      community:
+      - test
+      state: enabled
+      validate_certs: false
+    register: snmp_enabled_check_mode
+    check_mode: true
+  - debug: var=snmp_enabled_check_mode
+  - assert:
+      that:
+      - snmp_enabled_check_mode is defined
+      - snmp_enabled_check_mode.changed
+  - name: Enable and configure SNMP community
+    vmware_host_snmp:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      community:
+      - test
+      state: enabled
+      validate_certs: false
+    register: snmp_enabled
+  - debug: var=snmp_enabled
+  - assert:
+      that:
+      - snmp_enabled is defined
+      - snmp_enabled.changed
+  - name: Disable SNMP
+    vmware_host_snmp:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      state: disabled
+      validate_certs: false
+    register: snmp_disabled
+  - debug: var=snmp_enabled
+  - assert:
+      that:
+      - snmp_enabled is defined
+      - snmp_enabled.changed

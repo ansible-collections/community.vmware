@@ -1,0 +1,60 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+- name: Gather firewall info for a given ESXi
+  vmware_host_firewall_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+  register: firewall_0004_results
+  check_mode: true
+- assert:
+    that:
+    - not firewall_0004_results.changed
+    - firewall_0004_results.hosts_firewall_info is defined
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+  - name: Gather firewall info for all ESXi host from given cluster
+    vmware_host_firewall_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: '{{ ccr1 }}'
+    register: firewall_0001_results
+  - assert:
+      that:
+      - not firewall_0001_results.changed
+      - firewall_0001_results.hosts_firewall_info is defined
+  - name: Gather firewall info for ESXi host
+    vmware_host_firewall_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      esxi_hostname: '{{ esxi1 }}'
+    register: firewall_0002_results
+  - assert:
+      that:
+      - not firewall_0002_results.changed
+      - firewall_0002_results.hosts_firewall_info is defined
+  - name: Gather firewall info for all ESXi host from given cluster in check mode
+    vmware_host_firewall_info:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      cluster_name: '{{ ccr1 }}'
+    register: firewall_0003_results
+    check_mode: true
+  - assert:
+      that:
+      - not firewall_0003_results.changed
+      - firewall_0003_results.hosts_firewall_info is defined
