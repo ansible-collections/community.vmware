@@ -1,0 +1,14 @@
+namespace: community
+name: vmware
+version: 0.1.0
+readme: README.md
+authors: null
+description: null
+license: GPL-3.0-or-later
+license_file: COPYING
+tags: null
+dependencies: {}
+repository: git@github.com:ansible-collection-migration/community.vmware.git
+documentation: https://github.com/ansible-collection-migration/community.vmware/tree/master/docs
+homepage: https://github.com/ansible-collection-migration/community.vmware
+issues: https://github.com/ansible-collection-migration/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
