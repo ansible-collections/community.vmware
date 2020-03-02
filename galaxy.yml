@@ -8,7 +8,7 @@ license: GPL-3.0-or-later
 license_file: COPYING
 tags: null
 dependencies: {}
-repository: git@github.com:ansible-collection-migration/community.vmware.git
-documentation: https://github.com/ansible-collection-migration/community.vmware/tree/master/docs
-homepage: https://github.com/ansible-collection-migration/community.vmware
-issues: https://github.com/ansible-collection-migration/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+repository: git@github.com:ansible-collections/vmware.git
+documentation: https://github.com/ansible-collections/vmware/tree/master/docs
+homepage: https://github.com/ansible-collections/vmware
+issues: https://github.com/ansible-collections/vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
