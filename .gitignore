@@ -4,6 +4,7 @@
 
 ### dotenv ###
 .env
+.DS_Store
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
