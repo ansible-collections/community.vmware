@@ -28,7 +28,35 @@ If you want to develop new content for this collection or improve what is alread
 
 ### Testing with `ansible-test`
 
-TBD
+First, Git clone collection and install it manually:
+
+```
+$ mkdir -p  ~/.ansible/collections/ansible_collections/community
+# fetch the source tree:
+$ git clone blablabla ~/.ansible/collections/ansible_collections/community/vmware
+$ cd ~/.ansible/collections/ansible_collections/community/vmware
+```
+
+Prepare your configuration file:
+
+```
+$ cat tests/integration/cloud-config-vcenter.ini
+[DEFAULT]
+vcenter_username: administrator@vsphere.local
+vcenter_password: \Q5_o\ve#}51QJ$C*(Ch
+vcenter_hostname: vcenter.test
+vmware_validate_certs: false
+esxi1_username: zuul
+esxi1_hostname: esxi1.test
+esxi1_password: vp21EQRoPO83b8t56
+```
+
+Finally, you can run `ansible-test`:
+
+```
+$ VMWARE_TEST_PLATFORM=static ansible-test integration --diff --no-temp-workdir --python 3.7 -vvvv --requirements --allow-disabled vmware_guest_network
+```
+
 
 ## Publishing New Version
 
