@@ -111,7 +111,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     validate_certs: no
     datacenter: "{{ datacenter }}"
-    folder: "/{{datacenter}}/vm"
+    folder: "/{{ datacenter }}/vm"
     name: "{{ vm_name }}"
   delegate_to: localhost
   register: vm_facts
