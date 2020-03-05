@@ -99,6 +99,27 @@
       - "guest_info_0001['instance']['vimref'] is defined"
       - "guest_info_0002b['instance']['overallStatus'] is not defined"
 
+# https://github.com/ansible-collections/vmware/issues/33
+- name: Get specific details about VM using the vsphere output schema
+  vmware_guest_info:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    uuid: "{{ vm1_uuid }}"
+    schema: vsphere
+    properties:
+      - config.hardware.device.deviceInfo.summary
+  register: guest_info_with_list
+
+- debug:
+    var: guest_info_with_list
+
+- assert:
+    that:
+      - "guest_info_with_list['instance']['config']['hardware']['device'] is defined"
+
 # Testcase 0003: Get details about virtual machines without snapshots using UUID
 - name: get empty list of snapshots from virtual machine using UUID
   vmware_guest_info:
