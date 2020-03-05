@@ -323,7 +323,7 @@ import copy
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.network import is_mac
 from ansible.module_utils._text import to_native, to_text
-from ansible.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, get_all_objs, get_parent_datacenter, find_dvs_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, get_all_objs, get_parent_datacenter, find_dvs_by_name
 
 
 class PyVmomiHelper(PyVmomi):
@@ -349,7 +349,11 @@ class PyVmomiHelper(PyVmomi):
         :return: network object
         :rtype: object
         '''
-        compute_resource = self._get_compute_resource_by_name()
+        if not self.params['esxi_hostname'] or not self.params['cluster']:
+            compute_resource = vm_obj.runtime.host
+        else:
+            compute_resource = self._get_compute_resource_by_name()
+
         pg_lookup = {}
         if network_params:
             vlan_id = network_params['vlan_id']
