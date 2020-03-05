@@ -203,7 +203,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -275,20 +275,12 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_attribute'):
                 vm_attributes = self.get_vm_attributes(vm)
 
-            vm_folder = ""
-            vm_parent = vm.parent
-            datacenter = None
-            while isinstance(vm_parent, vim.Folder):
-                vm_folder += "/{0}".format(vm_parent.name)
-                vm_parent = vm_parent.parent
-                if isinstance(vm_parent, vim.Datacenter):
-                    datacenter = vm_parent.name
-                    vm_folder = "/{0}{1}".format(vm_parent.name, vm_folder)
-
             vm_tags = list()
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
+            vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
+            datacenter = get_parent_datacenter(vm)
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
@@ -298,7 +290,7 @@ class VmwareVmInfo(PyVmomi):
                 "uuid": summary.config.uuid,
                 "vm_network": net_dict,
                 "esxi_hostname": esxi_hostname,
-                "datacenter": datacenter,
+                "datacenter": datacenter.name,
                 "cluster": cluster_name,
                 "attributes": vm_attributes,
                 "tags": vm_tags,
