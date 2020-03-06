@@ -210,10 +210,11 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_clien
 class VmwareVmInfo(PyVmomi):
     def __init__(self, module):
         super(VmwareVmInfo, self).__init__(module)
+        if self.module.params.get('show_tag'):
+            self.vmware_client = VmwareRestClient(self.module)
 
     def get_tag_info(self, vm_dynamic_obj):
-        vmware_client = VmwareRestClient(self.module)
-        return vmware_client.get_tags_for_vm(vm_mid=vm_dynamic_obj._moId)
+        return self.vmware_client.get_tags_for_vm(vm_mid=vm_dynamic_obj._moId)
 
     def get_vm_attributes(self, vm):
         return dict((x.name, v.value) for x in self.custom_field_mgr
