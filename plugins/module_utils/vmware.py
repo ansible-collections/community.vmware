@@ -1557,7 +1557,13 @@ class PyVmomi(object):
             result[remainder] = data[remainder]
             return result
         key, remainder = remainder.split('.', 1)
-        result[key] = self._extract(data[key], remainder)
+        if isinstance(data, list):
+            temp_ds = []
+            for i in range(len(data)):
+                temp_ds.append(self._extract(data[i][key], remainder))
+            result[key] = temp_ds
+        else:
+            result[key] = self._extract(data[key], remainder)
         return result
 
     def _jsonify(self, obj):
