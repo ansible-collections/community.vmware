@@ -139,7 +139,7 @@ class DVSPortgroupFindManager(PyVmomi):
         for ln in vlanlst:
             if '-' in ln:
                 arr = ln.split('-')
-                if arr[0] < self.vlan and self.vlan < arr[1]:
+                if int(arr[0]) < self.vlan and self.vlan < int(arr[1]):
                     res = True
             elif ln == str(self.vlan):
                 res = True
