@@ -2,11 +2,15 @@ namespace: community
 name: vmware
 version: 0.1.0
 readme: README.md
-authors: null
+authors:
+  - Ansible (https://github.com/ansible)
 description: null
 license: GPL-3.0-or-later
 license_file: COPYING
-tags: null
+tags:
+  - cloud
+  - vmware
+  - virtualization
 dependencies: {}
 repository: git@github.com:ansible-collections/vmware.git
 documentation: https://github.com/ansible-collections/vmware/tree/master/docs
