@@ -1,0 +1,2 @@
+minor_changes:
+- Handle exceptions raised in connect_to_vsphere_client API.
