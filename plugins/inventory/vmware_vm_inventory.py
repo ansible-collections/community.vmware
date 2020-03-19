@@ -216,7 +216,7 @@ class BaseVMwareInventory:
         Check requirements and do login
         """
         self.check_requirements()
-        _, self.content = self._login()
+        self.si, self.content = self._login()
         self.rest_content = self._login_vapi()
 
     def _login_vapi(self):
