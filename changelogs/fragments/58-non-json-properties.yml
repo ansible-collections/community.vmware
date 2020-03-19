@@ -1,0 +1,2 @@
+bugfixes:
+- In inventory plugin, serialize properties user specifies which are objects as dicts (https://github.com/ansible-collections/vmware/pull/58).

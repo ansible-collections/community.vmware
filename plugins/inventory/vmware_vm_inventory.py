@@ -168,6 +168,7 @@ EXAMPLES = r'''
 
 import ssl
 import atexit
+import json
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.utils.display import Display
 
@@ -215,7 +216,7 @@ class BaseVMwareInventory:
         Check requirements and do login
         """
         self.check_requirements()
-        _, self.content = self._login()
+        self.si, self.content = self._login()
         self.rest_content = self._login_vapi()
 
     def _login_vapi(self):
@@ -314,6 +315,43 @@ class BaseVMwareInventory:
                                "the documentation for more information.")
 
     @staticmethod
+    def _process_object_types(vobj, level=0):
+        """For an object that is not a valid JSON type, loop over its properties
+        and return them in a dictionary"""
+        try:
+            json.dumps(vobj)
+            return vobj
+        except Exception:
+            rdata = {}
+            properties = dir(vobj)
+            properties = [str(x) for x in properties if not x.startswith('_')]
+            properties = [x for x in properties if x not in ('Array', 'disabledMethod', 'declaredAlarmState')]
+            properties = sorted(properties)
+
+            for prop in properties:
+                # Attempt to get the property, skip on fail
+                try:
+                    propToSerialize = getattr(vobj, prop)
+                except Exception:
+                    continue
+
+                if callable(propToSerialize):
+                    continue
+
+                prop = prop.lower()
+                if level + 1 <= 2:
+                    try:
+                        rdata[prop] = BaseVMwareInventory._process_object_types(
+                            propToSerialize,
+                            level=(level + 1)
+                        )
+                    except vim.fault.NoPermission:
+                        pass
+
+        return rdata
+
+
+    @staticmethod
     def _get_object_prop(vm, attributes):
         """Safely get a property or return None"""
         result = vm
@@ -322,6 +360,8 @@ class BaseVMwareInventory:
                 result = getattr(result, attribute)
             except (AttributeError, IndexError):
                 return None
+            # assure that result is valid JSON data
+            result = BaseVMwareInventory._process_object_types(result)
         return result
 
 
