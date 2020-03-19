@@ -43,6 +43,7 @@ except ImportError:
     HAS_VSPHERE = False
 
 from ansible.module_utils.basic import env_fallback, missing_required_lib
+from ansible.module_utils._text import to_native
 
 
 class VmwareRestClient(object):
@@ -128,11 +129,20 @@ class VmwareRestClient(object):
             self.module.fail_json(msg="Missing one of the following : hostname, username, password."
                                       " Please read the documentation for more information.")
 
-        client = create_vsphere_client(
-            server="%s:%s" % (hostname, port),
-            username=username,
-            password=password,
-            session=session)
+        msg = "Failed to connect to vCenter or ESXi API at %s:%s" % (hostname, port)
+        try:
+            client = create_vsphere_client(
+                server="%s:%s" % (hostname, port),
+                username=username,
+                password=password,
+                session=session
+            )
+        except requests.exceptions.SSLError as ssl_exc:
+            msg += " due to SSL verification failure"
+            self.module.fail_json(msg="%s : %s" % (msg, to_native(ssl_exc)))
+        except Exception as generic_exc:
+            self.module.fail_json(msg="%s : %s" % (msg, to_native(generic_exc)))
+
         if client is None:
             self.module.fail_json(msg="Failed to login to %s" % hostname)
 
