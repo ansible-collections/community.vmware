@@ -370,7 +370,7 @@ class PyVmomiHelper(PyVmomi):
         if compute_resource:
             for network in compute_resource.network:
                 if isinstance(network, vim.dvs.DistributedVirtualPortgroup):
-                    dvs = network.ConfigInfo.distributedVirtualSwitch
+                    dvs = network.config.distributedVirtualSwitch
                     if (switch_name and dvs.config.name == switch_name) or not switch_name:
                         if network.config.defaultPortConfig.vlan.vlanId == vlan_id:
                             return network
