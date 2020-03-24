@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_host_active_directory: Fail when there are unrecoverable problems with AD membership instead of reporting a change that doesn't take place (https://github.com/ansible-collections/vmware/issues/59).

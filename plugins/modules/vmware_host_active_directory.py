@@ -162,14 +162,13 @@ class VmwareHostAdAuthentication(PyVmomi):
                         results['result'][host.name]['membership_state'] = active_directory_info.domainMembershipStatus
                         results['result'][host.name]['joined_domain'] = active_directory_info.joinedDomain
                         results['result'][host.name]['trusted_domains'] = active_directory_info.trustedDomain
-                        msg = "Host is joined to AD domain, but "
+                        msg = host.name + " is joined to AD domain, but "
                         if active_directory_info.domainMembershipStatus == 'clientTrustBroken':
                             msg += "the client side of the trust relationship is broken"
                         elif active_directory_info.domainMembershipStatus == 'inconsistentTrust':
                             msg += "unexpected domain controller responded"
                         elif active_directory_info.domainMembershipStatus == 'noServers':
-                            msg += "the host thinks it's part of a domain and " \
-                                "no domain controllers could be reached to confirm"
+                            msg += "no domain controllers could be reached to confirm"
                         elif active_directory_info.domainMembershipStatus == 'serverTrustBroken':
                             msg += "the server side of the trust relationship is broken (or bad machine password)"
                         elif active_directory_info.domainMembershipStatus == 'otherProblem':
@@ -177,6 +176,7 @@ class VmwareHostAdAuthentication(PyVmomi):
                         elif active_directory_info.domainMembershipStatus == 'unknown':
                             msg += "the Active Directory integration provider does not support domain trust checks"
                         results['result'][host.name]['msg'] = msg
+                        self.module.fail_json(msg=msg)
                 # Enable and join AD domain
                 else:
                     if self.module.check_mode:
