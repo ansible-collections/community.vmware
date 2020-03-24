@@ -690,7 +690,7 @@ def main():
             switch_version=dict(
                 choices=['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0'],
                 aliases=['version'],
-                default=None
+                default='6.5.0'
             ),
             uplink_quantity=dict(type='int'),
             uplink_prefix=dict(type='str', default='Uplink '),
