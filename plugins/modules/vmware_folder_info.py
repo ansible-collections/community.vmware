@@ -98,7 +98,7 @@ folder_info:
 
 try:
     from pyVmomi import vim
-except ImportError as import_err:
+except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule

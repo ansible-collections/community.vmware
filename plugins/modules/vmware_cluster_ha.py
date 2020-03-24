@@ -230,8 +230,14 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, TaskError, find_datacenter_by_name,
-                                         vmware_argument_spec, wait_for_task, option_diff)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    TaskError,
+    find_datacenter_by_name,
+    vmware_argument_spec,
+    wait_for_task,
+    option_diff,
+)
 from ansible.module_utils._text import to_native
 
 
@@ -246,9 +252,10 @@ class VMwareCluster(PyVmomi):
         self.host_isolation_response = getattr(vim.cluster.DasVmSettings.IsolationResponse, self.params.get('host_isolation_response'))
 
         if self.enable_ha and (
-                self.params.get('slot_based_admission_control') or
-                self.params.get('reservation_based_admission_control') or
-                self.params.get('failover_host_admission_control')):
+            self.params.get("slot_based_admission_control")
+            or self.params.get("reservation_based_admission_control")
+            or self.params.get("failover_host_admission_control")
+        ):
             self.ha_admission_control = True
         else:
             self.ha_admission_control = False
@@ -295,16 +302,24 @@ class VMwareCluster(PyVmomi):
             return True
 
         if self.enable_ha and (
-                das_config.vmMonitoring != self.params.get('ha_vm_monitoring') or
-                das_config.hostMonitoring != self.params.get('ha_host_monitoring') or
-                das_config.admissionControlEnabled != self.ha_admission_control or
-                das_config.defaultVmSettings.restartPriority != self.params.get('ha_restart_priority') or
-                das_config.defaultVmSettings.isolationResponse != self.host_isolation_response or
-                das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring != self.params.get('ha_vm_monitoring') or
-                das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval != self.params.get('ha_vm_failure_interval') or
-                das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime != self.params.get('ha_vm_min_up_time') or
-                das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures != self.params.get('ha_vm_max_failures') or
-                das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow != self.params.get('ha_vm_max_failure_window')):
+            das_config.vmMonitoring != self.params.get("ha_vm_monitoring")
+            or das_config.hostMonitoring != self.params.get("ha_host_monitoring")
+            or das_config.admissionControlEnabled != self.ha_admission_control
+            or das_config.defaultVmSettings.restartPriority
+            != self.params.get("ha_restart_priority")
+            or das_config.defaultVmSettings.isolationResponse
+            != self.host_isolation_response
+            or das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring
+            != self.params.get("ha_vm_monitoring")
+            or das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval
+            != self.params.get("ha_vm_failure_interval")
+            or das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime
+            != self.params.get("ha_vm_min_up_time")
+            or das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures
+            != self.params.get("ha_vm_max_failures")
+            or das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow
+            != self.params.get("ha_vm_max_failure_window")
+        ):
             return True
 
         if self.ha_admission_control:

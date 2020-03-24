@@ -297,8 +297,9 @@ class VMwareHostDatastore(PyVmomi):
                                                                             ds_path,
                                                                             self.vmfs_version)
                 vmfs_ds_options[0].spec.vmfs.volumeName = self.datastore_name
-                ds = ds_system.CreateVmfsDatastore(host_ds_system,
-                                                   vmfs_ds_options[0].spec)
+                ds_system.CreateVmfsDatastore(
+                    host_ds_system,
+                    vmfs_ds_options[0].spec)
             except (vim.fault.NotFound, vim.fault.DuplicateName,
                     vim.fault.HostConfigFault, vmodl.fault.InvalidArgument) as fault:
                 self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(fault.msg)))

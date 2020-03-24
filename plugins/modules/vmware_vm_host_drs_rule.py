@@ -118,9 +118,9 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, vmware_argument_spec, wait_for_task, find_cluster_by_name,
-                                         find_datacenter_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, vmware_argument_spec, wait_for_task, find_cluster_by_name,
+    find_datacenter_by_name)
 
 
 class VmwareVmHostRuleDrs(PyVmomi):
@@ -320,11 +320,16 @@ class VmwareVmHostRuleDrs(PyVmomi):
         existing_rule = self.__normalize_vm_host_rule_spec(rule_obj=rule_obj, cluster_obj=cluster_obj)
 
         # Check if anything has changed
-        if ((existing_rule['rule_enabled'] == self.__enabled) and
-            (existing_rule['rule_mandatory'] == self.__mandatory) and
-            (existing_rule['rule_vm_group_name'] == self.__vm_group_name) and
-            (existing_rule['rule_affine_host_group_name'] == self.__host_group_name or
-             existing_rule['rule_anti_affine_host_group_name'] == self.__host_group_name)):
+        if (
+            (existing_rule["rule_enabled"] == self.__enabled)
+            and (existing_rule["rule_mandatory"] == self.__mandatory)
+            and (existing_rule["rule_vm_group_name"] == self.__vm_group_name)
+            and (
+                existing_rule["rule_affine_host_group_name"] == self.__host_group_name
+                or existing_rule["rule_anti_affine_host_group_name"]
+                == self.__host_group_name
+            )
+        ):
 
             return False
         else:
@@ -389,8 +394,6 @@ class VmwareVmHostRuleDrs(PyVmomi):
         """
         Function to delete VM-Host DRS rule using name
         """
-        changed = False
-
         if rule_name is None:
             rule_name = self.__rule_name
 

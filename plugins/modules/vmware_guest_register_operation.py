@@ -151,11 +151,6 @@ EXAMPLES = '''
 RETURN = r'''
 '''
 
-try:
-    from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
-except ImportError:
-    HAS_PYVMOMI = False
 
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_resource_pool_by_name, \

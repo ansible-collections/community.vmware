@@ -115,7 +115,7 @@ class VmwareDatacenterManager(PyVmomi):
                 changed = True
                 folder.CreateDatacenter(name=self.datacenter_name)
             self.module.exit_json(changed=changed)
-        except vim.fault.DuplicateName as duplicate_name:
+        except vim.fault.DuplicateName:
             self.module.exit_json(changed=changed)
         except vim.fault.InvalidName as invalid_name:
             self.module.fail_json(msg="Specified datacenter name '%s' is an"

@@ -92,11 +92,13 @@ dvs_portgroups:
 
 try:
     from pyVmomi import vim
-except ImportError as e:
+except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, find_dvs_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    vmware_argument_spec,
+    PyVmomi)
 
 
 class DVSPortgroupFindManager(PyVmomi):

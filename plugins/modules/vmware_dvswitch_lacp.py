@@ -185,26 +185,40 @@ class VMwareDvSwitchLacp(PyVmomi):
             spec.lacpApiVersion = lacp_support_mode
 
         # Check LAGs
-        results['link_aggregation_groups'] = self.link_aggregation_groups
+        results["link_aggregation_groups"] = self.link_aggregation_groups
         if self.link_aggregation_groups and not (
-                len(self.link_aggregation_groups) == 1 and self.link_aggregation_groups[0] == ''):
+            len(self.link_aggregation_groups) == 1
+            and self.link_aggregation_groups[0] == ""
+        ):
             if self.dvs.config.lacpGroupConfig:
                 lacp_lag_list = []
                 # Check if desired LAGs are configured
                 for lag in self.link_aggregation_groups:
-                    lag_name, lag_mode, lag_uplink_number, lag_load_balancing_mode = self.get_lacp_lag_options(lag)
+                    (
+                        lag_name,
+                        lag_mode,
+                        lag_uplink_number,
+                        lag_load_balancing_mode,
+                    ) = self.get_lacp_lag_options(lag)
                     lag_found = False
                     for lacp_group in self.dvs.config.lacpGroupConfig:
                         if lacp_group.name == lag_name:
                             lag_found = True
-                            if (lag_mode != lacp_group.mode or
-                                    lag_uplink_number != lacp_group.uplinkNum or
-                                    lag_load_balancing_mode != lacp_group.loadbalanceAlgorithm):
+                            if (
+                                lag_mode != lacp_group.mode
+                                or lag_uplink_number != lacp_group.uplinkNum
+                                or lag_load_balancing_mode
+                                != lacp_group.loadbalanceAlgorithm
+                            ):
                                 changed = changed_lags = True
                                 lacp_lag_list.append(
                                     self.create_lacp_group_spec(
-                                        'edit',
-                                        lacp_group.key, lag_name, lag_uplink_number, lag_mode, lag_load_balancing_mode
+                                        "edit",
+                                        lacp_group.key,
+                                        lag_name,
+                                        lag_uplink_number,
+                                        lag_mode,
+                                        lag_load_balancing_mode,
                                     )
                                 )
                             break
