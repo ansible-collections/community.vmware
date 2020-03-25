@@ -204,9 +204,9 @@ except ImportError:
 
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, find_cluster_by_name,
-                                         find_datacenter_by_name, find_vm_by_id,
-                                         vmware_argument_spec)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, find_cluster_by_name, find_datacenter_by_name, find_vm_by_id,
+    vmware_argument_spec)
 
 
 class VMwareShellManager(PyVmomi):
@@ -362,7 +362,7 @@ def main():
         ],
     )
 
-    vm_shell_mgr = VMwareShellManager(module)
+    VMwareShellManager(module)
 
 
 if __name__ == '__main__':

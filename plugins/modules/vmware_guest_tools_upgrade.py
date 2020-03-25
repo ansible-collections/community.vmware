@@ -86,7 +86,7 @@ EXAMPLES = '''
     name: "{{ vm_name }}"
   delegate_to: localhost
   register: vm_facts
-  
+
 - name: Upgrade VMware Tools using uuid
   vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
