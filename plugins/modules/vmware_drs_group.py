@@ -148,9 +148,13 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, vmware_argument_spec,
-                                         wait_for_task, find_cluster_by_name,
-                                         find_vm_by_id, find_datacenter_by_name, find_vm_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    vmware_argument_spec,
+    wait_for_task,
+    find_cluster_by_name,
+    find_vm_by_id,
+    find_datacenter_by_name)
 
 
 class VmwareDrsGroupManager(PyVmomi):

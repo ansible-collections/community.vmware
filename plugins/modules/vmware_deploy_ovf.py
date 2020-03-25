@@ -182,8 +182,14 @@ from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (find_network_by_name, find_vm_by_name, PyVmomi,
-                                         gather_vm_facts, vmware_argument_spec, wait_for_task, wait_for_vm_ip)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    find_network_by_name,
+    find_vm_by_name,
+    PyVmomi,
+    gather_vm_facts,
+    vmware_argument_spec,
+    wait_for_task,
+    wait_for_vm_ip)
 try:
     from ansible_collections.community.vmware.plugins.module_utils.vmware import vim
     from pyVmomi import vmodl
@@ -343,7 +349,6 @@ class VMwareDeployOvf(PyVmomi):
             self.module.fail_json(msg='%(datastore)s could not be located' % self.params)
 
         if self.params['cluster']:
-            resource_pools = []
             cluster = self.find_cluster_by_name(self.params['cluster'], datacenter_name=self.datacenter)
             if cluster is None:
                 self.module.fail_json(msg="Unable to find cluster '%(cluster)s'" % self.params)

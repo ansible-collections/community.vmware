@@ -65,7 +65,7 @@ class HttpApi(HttpApiBase):
             response_value = self._get_response_value(response_data)
 
             return response.getcode(), self._response_to_json(response_value)
-        except AnsibleConnectionFailure as e:
+        except AnsibleConnectionFailure:
             return 404, 'Object not found'
         except HTTPError as e:
             return e.code, json.loads(e.read())

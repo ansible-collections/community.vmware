@@ -176,8 +176,12 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, vmware_argument_spec, get_all_objs,
-                                         find_cluster_by_name, get_parent_datacenter)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    vmware_argument_spec,
+    get_all_objs,
+    find_cluster_by_name,
+    get_parent_datacenter)
 
 
 class VMwareHostDatastore(PyVmomi):
