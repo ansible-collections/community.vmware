@@ -350,7 +350,6 @@ class BaseVMwareInventory:
 
         return rdata
 
-
     @staticmethod
     def _get_object_prop(vm, attributes):
         """Safely get a property or return None"""

@@ -467,7 +467,6 @@ class PyVmomiHelper(PyVmomi):
                     current_scsi_info[device.controllerKey] = dict(disks=dict())
                 current_scsi_info[device.controllerKey]['disks'][device.unitNumber] = device
 
-        vm_name = self.vm.name
         disk_change_list = []
         for disk in disk_data:
             disk_change = False

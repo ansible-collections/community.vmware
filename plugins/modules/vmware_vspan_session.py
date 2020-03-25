@@ -197,13 +197,14 @@ RETURN = """#
 """
 
 try:
-    from pyVmomi import vim, vmodl
-except ImportError as e:
+    from pyVmomi import vim
+except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (vmware_argument_spec, PyVmomi, find_dvs_by_name,
-                                         find_vm_by_name, wait_for_task)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    vmware_argument_spec, PyVmomi, find_dvs_by_name,
+    find_vm_by_name, wait_for_task)
 
 
 class VMwareVspanSession(PyVmomi):
@@ -230,20 +231,20 @@ class VMwareVspanSession(PyVmomi):
         self.modified_ports = dict()
         self.deleted_session = None
         if module.params['source_vm_transmitted'] is not None:
-            if (module.params['source_vm_transmitted']['name'] is None or
-                    module.params['source_vm_transmitted']['nic_label'] is None):
+            if (module.params['source_vm_transmitted']['name'] is None
+                    or module.params['source_vm_transmitted']['nic_label'] is None):
                 self.module.fail_json(msg="Please provide both VM name and NIC Label")
             self.source_vm_transmitted_name = module.params['source_vm_transmitted']['name']
             self.source_vm_transmitted_nic_label = module.params['source_vm_transmitted']['nic_label']
         if module.params['source_vm_received'] is not None:
-            if (module.params['source_vm_received']['name'] is None or
-                    module.params['source_vm_received']['nic_label'] is None):
+            if (module.params['source_vm_received']['name'] is None
+                    or module.params['source_vm_received']['nic_label'] is None):
                 self.module.fail_json(msg="Please provide both VM name and NIC Label")
             self.source_vm_received_name = module.params['source_vm_received']['name']
             self.source_vm_received_nic_label = module.params['source_vm_received']['nic_label']
         if module.params['destination_vm'] is not None:
-            if (module.params['destination_vm']['name'] is None or
-                    module.params['destination_vm']['nic_label'] is None):
+            if (module.params['destination_vm']['name'] is None
+                    or module.params['destination_vm']['nic_label'] is None):
                 self.module.fail_json(msg="Please provide both VM name and NIC Label")
             self.destination_vm_name = module.params['destination_vm']['name']
             self.destination_vm_nic_label = module.params['destination_vm']['nic_label']

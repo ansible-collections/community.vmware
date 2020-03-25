@@ -145,8 +145,9 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, vmware_argument_spec, wait_for_task,
-                                         find_vm_by_id, find_cluster_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, vmware_argument_spec, wait_for_task,
+    find_vm_by_id, find_cluster_by_name)
 
 
 class VmwareDrs(PyVmomi):
@@ -244,10 +245,10 @@ class VmwareDrs(PyVmomi):
         rule_obj = self.get_rule_key_by_name(rule_name=self.rule_name)
         if rule_obj is not None:
             existing_rule = self.normalize_rule_spec(rule_obj=rule_obj)
-            if ((sorted(existing_rule['rule_vms']) == sorted(self.vm_list)) and
-                    (existing_rule['rule_enabled'] == self.enabled) and
-                    (existing_rule['rule_mandatory'] == self.mandatory) and
-                    (existing_rule['rule_affinity'] == self.affinity_rule)):
+            if ((sorted(existing_rule['rule_vms']) == sorted(self.vm_list))
+                    and (existing_rule['rule_enabled'] == self.enabled)
+                    and (existing_rule['rule_mandatory'] == self.mandatory)
+                    and (existing_rule['rule_affinity'] == self.affinity_rule)):
                 self.module.exit_json(changed=False, result=existing_rule, msg="Rule already exists with the same configuration")
             else:
                 changed, result = self.update_rule_spec(rule_obj)

@@ -259,7 +259,6 @@ def connect_to_network(module, vdc_name, vapp_name, network_name, network_mode):
 def get_vm_details(module):
     vdc_name = module.params['vdc_name']
     vapp_name = module.params['vapp_name']
-    vm_name = module.params['vm_name']
     the_vdc = module.vca.get_vdc(vdc_name)
     the_vapp = module.vca.get_vapp(the_vdc, vapp_name)
     if the_vapp and the_vapp.name != vapp_name:
@@ -271,16 +270,14 @@ def get_vm_details(module):
 
         customization_section = (
             filter(lambda section:
-                   section.__class__.__name__ ==
-                   "GuestCustomizationSectionType",
+                   section.__class__.__name__ == "GuestCustomizationSectionType",
                    sections)[0])
         if customization_section.get_AdminPasswordEnabled():
             the_vm_details["vm_admin_password"] = customization_section.get_AdminPassword()
 
         virtual_hardware_section = (
             filter(lambda section:
-                   section.__class__.__name__ ==
-                   "VirtualHardwareSection_Type",
+                   section.__class__.__name__ == "VirtualHardwareSection_Type",
                    sections)[0])
         items = virtual_hardware_section.get_Item()
         ips = []

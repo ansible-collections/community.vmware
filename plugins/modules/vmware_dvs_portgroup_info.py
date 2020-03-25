@@ -132,7 +132,7 @@ dvs_portgroup_info:
 
 try:
     from pyVmomi import vim
-except ImportError as e:
+except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule

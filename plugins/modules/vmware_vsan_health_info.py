@@ -106,7 +106,7 @@ import json
 import traceback
 
 try:
-    from pyVmomi import vim, vmodl, VmomiSupport
+    from pyVmomi import vmodl, VmomiSupport
     HAS_PYVMOMI = True
     HAS_PYVMOMIJSON = hasattr(VmomiSupport, 'VmomiJSONEncoder')
 except ImportError:
@@ -116,7 +116,6 @@ except ImportError:
 
 try:
     import vsanapiutils
-    import vsanmgmtObjects
     HAS_VSANPYTHONSDK = True
 except ImportError:
     VSANPYTHONSDK_IMP_ERR = traceback.format_exc()
