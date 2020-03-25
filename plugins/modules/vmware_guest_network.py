@@ -241,8 +241,6 @@ class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.change_detected = False
-        self.config_spec = vim.vm.ConfigSpec()
-        self.config_spec.deviceChange = []
         self.nic_device_type = dict(
             pcnet32=vim.vm.device.VirtualPCNet32,
             vmxnet2=vim.vm.device.VirtualVmxnet2,
@@ -447,13 +445,14 @@ class PyVmomiHelper(PyVmomi):
 
     def get_network_config_spec(self, vm_obj, network_list):
         # create network adapter config spec for adding, editing, removing
+        deviceChange = []
         for network in network_list:
             # add new network adapter
             if network['state'].lower() == 'new':
                 nic_spec = self.create_network_adapter(network)
                 nic_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 self.change_detected = True
-                self.config_spec.deviceChange.append(nic_spec)
+                deviceChange.append(nic_spec)
             # reconfigure network adapter or remove network adapter
             else:
                 nic_devices = []
@@ -519,15 +518,16 @@ class PyVmomiHelper(PyVmomi):
                                     self.module.fail_json(msg='UPT is only compatible for Vmxnet3 adapter.'
                                                           + ' Clients can set this property enabled or disabled if ethernet virtual device is Vmxnet3.')
                             if self.change_detected:
-                                self.config_spec.deviceChange.append(nic_spec)
+                                deviceChange.append(nic_spec)
                         elif network['state'].lower() == 'absent':
                             nic_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
                             nic_spec.device = nic_device
                             self.change_detected = True
-                            self.config_spec.deviceChange.append(nic_spec)
+                            deviceChange.append(nic_spec)
                 else:
                     if network['state'].lower() != 'absent':
                         self.module.fail_json(msg='Unable to find the specified network adapter: %s' % network)
+        return deviceChange
 
     def reconfigure_vm_network(self, vm_obj):
         network_list = self.sanitize_network_params()
@@ -536,10 +536,16 @@ class PyVmomiHelper(PyVmomi):
             results = {'changed': False, 'failed': False, 'network_data': self.get_network_info(vm_obj)}
         # do reconfigure then gather info
         else:
-            self.get_network_config_spec(vm_obj, network_list)
+            deviceChange = self.get_network_config_spec(vm_obj, network_list)
+            task = None
             try:
-                task = vm_obj.ReconfigVM_Task(spec=self.config_spec)
-                wait_for_task(task)
+                for device in deviceChange:
+                    config_spec = vim.vm.ConfigSpec()
+                    config_spec.deviceChange = [device]
+                    task = vm_obj.ReconfigVM_Task(spec=config_spec)
+                    wait_for_task(task)
+                    if task.info.state == 'error':
+                        break
             except vim.fault.InvalidDeviceSpec as e:
                 self.module.fail_json(msg="Failed to configure network adapter on given virtual machine due to invalid"
                                           " device spec : %s" % to_native(e.msg),
@@ -547,7 +553,7 @@ class PyVmomiHelper(PyVmomi):
             except vim.fault.RestrictedVersion as e:
                 self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
                                           " product versioning restrictions: %s" % to_native(e.msg))
-            if task.info.state == 'error':
+            if task and task.info.state == 'error':
                 results = {'changed': self.change_detected, 'failed': True, 'msg': task.info.error.msg}
             else:
                 network_info = self.get_network_info(vm_obj)
