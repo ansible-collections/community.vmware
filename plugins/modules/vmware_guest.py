@@ -1651,6 +1651,21 @@ class PyVmomiHelper(PyVmomi):
                     self.configspec.deviceChange.append(nic)
                 self.change_detected = True
 
+    def set_vapp_properties(self, property_spec):
+        # Sets the values in property_info
+        property_info = vim.vApp.PropertyInfo()
+        property_info.classId = property_spec.get('classId')
+        property_info.instanceId = property_spec.get('instanceId')
+        property_info.id = property_spec.get('id')
+        property_info.category = property_spec.get('category')
+        property_info.label = property_spec.get('label')
+        property_info.type = property_spec.get('type', 'string')
+        property_info.userConfigurable = property_spec.get('userConfigurable', True)
+        property_info.defaultValue = property_spec.get('defaultValue')
+        property_info.value = property_spec.get('value', '')
+        property_info.description = property_spec.get('description')
+        return property_info
+
     def configure_vapp_properties(self, vm_obj):
         if len(self.params['vapp_properties']) == 0:
             return
@@ -1711,17 +1726,8 @@ class PyVmomiHelper(PyVmomi):
                     # this is add new property branch
                     new_vapp_property_spec.operation = 'add'
 
-                    property_info = vim.vApp.PropertyInfo()
-                    property_info.classId = property_spec.get('classId')
-                    property_info.instanceId = property_spec.get('instanceId')
-                    property_info.id = property_spec.get('id')
-                    property_info.category = property_spec.get('category')
-                    property_info.label = property_spec.get('label')
-                    property_info.type = property_spec.get('type', 'string')
-                    property_info.userConfigurable = property_spec.get('userConfigurable', True)
-                    property_info.defaultValue = property_spec.get('defaultValue')
-                    property_info.value = property_spec.get('value', '')
-                    property_info.description = property_spec.get('description')
+                    # Configure the values in property_value
+                    property_info = self.set_vapp_properties(property_spec)
 
                     new_vapp_property_spec.info = property_info
                     new_vapp_property_spec.info.key = new_property_index
@@ -1742,17 +1748,8 @@ class PyVmomiHelper(PyVmomi):
                 # this is add new property branch
                 new_vapp_property_spec.operation = 'add'
 
-                property_info = vim.vApp.PropertyInfo()
-                property_info.classId = property_spec.get('classId')
-                property_info.instanceId = property_spec.get('instanceId')
-                property_info.id = property_spec.get('id')
-                property_info.category = property_spec.get('category')
-                property_info.label = property_spec.get('label')
-                property_info.type = property_spec.get('type', 'string')
-                property_info.userConfigurable = property_spec.get('userConfigurable', True)
-                property_info.defaultValue = property_spec.get('defaultValue')
-                property_info.value = property_spec.get('value', '')
-                property_info.description = property_spec.get('description')
+                # Configure the values in property_value
+                property_info = self.set_vapp_properties(property_spec)
 
                 new_vapp_property_spec.info = property_info
                 new_vapp_property_spec.info.key = new_property_index
