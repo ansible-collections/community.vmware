@@ -69,7 +69,7 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
-            - Set value to 'all' to query all properties
+            - Set value to 'all' to query all properties.
             - For all properties refer following URL
             - See U(https://github.com/monkey-mas/lab/blob/master/pyvmomi/docs/vim/VirtualMachine.rst#attributes).
             type: list
@@ -93,14 +93,14 @@ DOCUMENTATION = r'''
         with_path:
             description:
             - Include virtual machines path.
-            - Set this option to a string value to replace root name from I('Datacenters')
+            - Set this option to a string value to replace root name from I('Datacenters').
             default: False
-            type: boolean
+            type: bool
             version_added: "2.10"
         hostnames:
             description:
                 - A list of templates in order of precedence to compose inventory_hostname.
-                - Ignores template if it resulted in empty string or None value
+                - Ignores template if it resulted in an empty string or None value.
                 - You can use property specified in I(properties) as variables in template.
             type: list
             default: ['config.name + "_" + config.uuid']
@@ -113,8 +113,8 @@ DOCUMENTATION = r'''
             version_added: "2.10"
         with_sanitized_property_name:
             description:
-                - This option allows you use property name sanitization to create safe property names for use in Ansible.
-                - Also transform property name to snake case
+                - This option allows property name sanitization to create safe property names for use in Ansible.
+                - Also, transforms property name to snake case.
             type: bool
             default: False
             version_added: "2.10"
