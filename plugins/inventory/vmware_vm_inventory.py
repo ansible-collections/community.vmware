@@ -242,9 +242,9 @@ class BaseVMwareInventory:
         """
         session = requests.Session()
         session.verify = self.validate_certs
-        # if not self.validate_certs:
-        #     # Disable warning shown at stdout
-        #     requests.packages.urllib3.disable_warnings()
+        if not self.validate_certs:
+            # Disable warning shown at stdout
+            requests.packages.urllib3.disable_warnings()
 
         server = self.hostname
         if self.port:
