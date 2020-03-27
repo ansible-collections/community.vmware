@@ -1,6 +1,7 @@
 ---
 - name: Install dependencies
   hosts: localhost
+  connection: local
   gather_facts: no
   tasks:
     - pip:
