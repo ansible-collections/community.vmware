@@ -1,0 +1,7 @@
+---
+- name: Prepare VMware folders for testing dynamic inventory folder support
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  roles:
+    - role: ../prepare_vmware_tests
