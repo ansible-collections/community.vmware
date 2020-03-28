@@ -3,4 +3,4 @@ strict: False
 validate_certs: False
 
 cache: True
-properties: ALL
+properties: [all]
