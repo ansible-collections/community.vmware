@@ -13,6 +13,5 @@ tags:
   - virtualization
 dependencies: {}
 repository: git@github.com:ansible-collections/vmware.git
-documentation: https://github.com/ansible-collections/vmware/tree/master/docs
 homepage: https://github.com/ansible-collections/vmware
 issues: https://github.com/ansible-collections/vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
