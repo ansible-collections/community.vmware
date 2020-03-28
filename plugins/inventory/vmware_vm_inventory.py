@@ -69,7 +69,9 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
-            - Set value to 'all' to query all properties.
+            - In addition to VM properties, the following are special values:
+            - Use C(customValue) to populate VM's custom attributes 
+            - Use C(all) to populate all VM properties
             - For all properties refer following URL
             - See U(https://github.com/monkey-mas/lab/blob/master/pyvmomi/docs/vim/VirtualMachine.rst#attributes).
             type: list
@@ -417,12 +419,7 @@ class BaseVMwareInventory:
             obj=self.content.viewManager.CreateContainerView(r, [vim_type], True),
             selectSet=[TraversalSpec(path='view', skip=False, type=vim.view.ContainerView)]) for r in containers]
 
-        is_all = False
-        if properties is None:
-            properties = ['name']
-        elif isinstance(properties, text_type) and properties.lower() == 'all':
-            is_all = True
-            properties = None
+        is_all = False if properties else True
 
         # Create Property Spec
         property_spec = PropertySpec(
@@ -438,7 +435,11 @@ class BaseVMwareInventory:
             reportMissingObjectsInResults=False
         )
 
-        return self.content.propertyCollector.RetrieveContents([filter_spec])
+        try:
+            return self.content.propertyCollector.RetrieveContents([filter_spec])
+        except vmodl.query.InvalidProperty as err:
+            _handle_error("Invalid property name %s" % err.name)
+        return []
 
     @staticmethod
     def _get_object_prop(vm, attributes):
@@ -547,8 +548,15 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         """
         hostvars = {}
         vm_properties = self.get_option('properties')
-        if isinstance(vm_properties, text_type):
-            query_props = vm_properties
+        if not isinstance(vm_properties, list):
+            vm_properties = [vm_properties]
+
+        if len(vm_properties) == 0:
+            vm_properties = ['name']
+
+        if 'all' in vm_properties:
+            query_props = None
+            vm_properties.remove('all')
         else:
             query_props = [x for x in vm_properties if x != "customValue"]
 

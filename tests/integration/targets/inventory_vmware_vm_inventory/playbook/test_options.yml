@@ -31,7 +31,7 @@
           - test_host.key == (test_host.value['config.name'] + "_" + test_host.value['runtime.powerState'])
 
 
-    - name: Inventory with 'ALL' properties
+    - name: Inventory with 'all' properties
       include_tasks: build_inventory.yml
       vars:
         content: |-
@@ -39,9 +39,9 @@
           strict: False
           validate_certs: False
           with_nested_properties: False
-          properties: ALL
+          properties: ['all']
    
-    - name: Test properties(ALL) option are populate  
+    - name: Test properties(all) option are populate  
       assert:
         that:
           - "'name' in test_host.value"
