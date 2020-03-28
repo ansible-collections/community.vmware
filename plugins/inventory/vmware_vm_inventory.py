@@ -70,8 +70,8 @@ DOCUMENTATION = r'''
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
             - In addition to VM properties, the following are special values:
-            - Use C(customValue) to populate VM's custom attributes 
-            - Use C(all) to populate all VM properties
+            - Use C(customValue) to populate VM's custom attributes.
+            - Use C(all) to populate all VM properties.
             - For all properties refer following URL
             - See U(https://github.com/monkey-mas/lab/blob/master/pyvmomi/docs/vim/VirtualMachine.rst#attributes).
             type: list
