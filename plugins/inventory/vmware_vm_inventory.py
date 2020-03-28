@@ -177,12 +177,11 @@ EXAMPLES = r'''
 
 import ssl
 import atexit
-import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.utils.display import Display
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict, dict_merge
-from ansible.module_utils.common.dict_transformations import _snake_to_camel, _camel_to_snake
+from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.module_utils.six import text_type
 
 
@@ -251,13 +250,15 @@ class BaseVMwareInventory:
         server = self.hostname
         if self.port:
             server += ":" + str(self.port)
+
+        client = None
         try:
             client = create_vsphere_client(server=server,
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except Exception:
-            client = None
+        except: # pylint: disable=bare-except
+            pass
 
         if client is None:
             raise AnsibleError("Failed to login to %s using %s" % (server, self.username))
@@ -335,7 +336,7 @@ class BaseVMwareInventory:
             raise AnsibleError("Missing one of the following : hostname, username, password. Please read "
                                "the documentation for more information.")
 
-    def _get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):
+    def get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):
         """
         Look up a Managed Object Reference in vCenter / ESXi Environment
         :param vim_type: Type of vim object e.g, for datacenter - vim.Datacenter
@@ -493,7 +494,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
 
-        self.pyv = BaseVMwareInventory(
+        self.pyv = BaseVMwareInventory(  # pylint: disable=attribute-defined-outside-init
             hostname=self.get_option('hostname'),
             username=username,
             password=password,
@@ -534,7 +535,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         for preference in hostnames:
             try:
                 hostname = self._compose(preference, properties)
-            except Exception as e:
+            except Exception as e:  # pylint: disable=broad-except
                 if strict:
                     raise AnsibleError("Could not compose %s as hostnames %s" % (preference, to_native(e)))
 
@@ -560,7 +561,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         else:
             query_props = [x for x in vm_properties if x != "customValue"]
 
-        objects = self.pyv._get_managed_objects_properties(
+        objects = self.pyv.get_managed_objects_properties(
             vim_type=vim.VirtualMachine,
             properties=query_props,
             resources=self.get_option('resources'),
@@ -598,7 +599,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             # Tags
             if tags_info:
                 # Add virtual machine to appropriate tag group
-                vm_mo_id = vm_obj.obj._GetMoId()
+                vm_mo_id = vm_obj.obj._GetMoId() # pylint: disable=protected-access
                 vm_dynamic_id = DynamicID(type='VirtualMachine', id=vm_mo_id)
                 attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
                 properties['tags'] = attached_tags
@@ -638,11 +639,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
 
-        # group by parents
-        # TODO: This should be a feature of Constractable:
-        #   keyed_groups:
-        #       - parent_group: '{{ path.split("/") }}'
-        #
         if with_path:
             parents = host_properties['path'].split('/')
             if parents:
@@ -674,17 +670,15 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             self.inventory.set_variable(host, k, v)
 
 
-def parse_vim_property(vim_prop, key=""):
-    # For '--yaml' sake!
-    #   Unexpected Exception, this is probably a bug: ('cannot represent an object', <data>
+def parse_vim_property(vim_prop):
     prop_type = type(vim_prop).__name__
     if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
         if isinstance(vim_prop, DataObject):
             r = {}
-            for prop in vim_prop._GetPropertyList():
+            for prop in vim_prop._GetPropertyList(): # pylint: disable=protected-access
                 if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
                     sub_prop = getattr(vim_prop, prop.name)
-                    r[prop.name] = parse_vim_property(sub_prop, prop.name)
+                    r[prop.name] = parse_vim_property(sub_prop)
             return r
 
         elif isinstance(vim_prop, list):
@@ -716,7 +710,7 @@ def to_nested_dict(vm_properties):
 
     for vm_prop_name, vm_prop_val in vm_properties.items():
         prop_parents = reversed(vm_prop_name.split("."))
-        prop_dict = parse_vim_property(vm_prop_val, vm_prop_name)
+        prop_dict = parse_vim_property(vm_prop_val)
 
         for k in prop_parents:
             prop_dict = {k: prop_dict}
