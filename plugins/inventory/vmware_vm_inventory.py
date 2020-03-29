@@ -257,7 +257,7 @@ class BaseVMwareInventory:
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except: # pylint: disable=bare-except
+        except Exception:  # pylint: disable=bare-except
             pass
 
         if client is None:
@@ -599,7 +599,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             # Tags
             if tags_info:
                 # Add virtual machine to appropriate tag group
-                vm_mo_id = vm_obj.obj._GetMoId() # pylint: disable=protected-access
+                vm_mo_id = vm_obj.obj._GetMoId()  # pylint: disable=protected-access
                 vm_dynamic_id = DynamicID(type='VirtualMachine', id=vm_mo_id)
                 attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
                 properties['tags'] = attached_tags
@@ -675,7 +675,7 @@ def parse_vim_property(vim_prop):
     if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
         if isinstance(vim_prop, DataObject):
             r = {}
-            for prop in vim_prop._GetPropertyList(): # pylint: disable=protected-access
+            for prop in vim_prop._GetPropertyList():  # pylint: disable=protected-access
                 if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
                     sub_prop = getattr(vim_prop, prop.name)
                     r[prop.name] = parse_vim_property(sub_prop)
