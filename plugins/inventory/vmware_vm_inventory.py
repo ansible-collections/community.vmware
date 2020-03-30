@@ -72,8 +72,6 @@ DOCUMENTATION = r'''
             - In addition to VM properties, the following are special values:
             - Use C(customValue) to populate VM's custom attributes.
             - Use C(all) to populate all VM properties.
-            - For all properties refer following URL
-            - See U(https://github.com/monkey-mas/lab/blob/master/pyvmomi/docs/vim/VirtualMachine.rst#attributes).
             type: list
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
