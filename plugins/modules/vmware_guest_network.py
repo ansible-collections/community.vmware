@@ -680,12 +680,13 @@ class PyVmomiHelper(PyVmomi):
                 diff['after'].update({nic.get('mac_address'): copy.copy(nic)})
             return diff, False, nic_info
 
-        if not network_obj:
+        if not network_obj and (network_name or vlan_id):
             self.module.fail_json(
                 msg='unable to find specified network_name/vlan_id ({0}), check parameters'.format(
                     network_name or vlan_id
                 )
             )
+
         for nic in nic_info:
             diff['before'].update({nic.get('mac_address'): copy.copy(nic)})
 
