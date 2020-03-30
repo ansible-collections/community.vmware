@@ -701,13 +701,14 @@ class PyVmomiHelper(PyVmomi):
                     nic_mac = nic.get('mac_address')
                     if nic_mac == mac_address:
                         diff['after'][nic_mac] = copy.deepcopy(nic)
-                        diff['after'][nic_mac].update(
-                            {
-                                'vlan_id': self._get_vlanid_from_network(network_obj),
-                                'network_name': network_obj.name,
-                                'switch': switch or nic['switch']
-                            }
-                        )
+                        diff['after'][nic_mac].update({'switch': switch or nic['switch']})
+                        if network_obj:
+                            diff['after'][nic_mac].update(
+                                {
+                                    'vlan_id': self._get_vlanid_from_network(network_obj),
+                                    'network_name': network_obj.name
+                                }
+                            )
                     else:
                         diff['after'].update({nic_mac: copy.deepcopy(nic)})
 
