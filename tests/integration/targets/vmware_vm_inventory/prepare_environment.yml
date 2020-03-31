@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  module_defaults:
+    group/vmware:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      port: "{{ vcenter_port|default('443') }}"
+      validate_certs: "{{ vmware_validate_certs|default('no') }}"
+  tasks:
+    - import_role:
+        name: prepare_vmware_tests
+      vars:
+        setup_attach_host: true
+        setup_datastore: true
+        setup_virtualmachines: true
+    - name: set state to poweron the first VM
+      vmware_guest_powerstate:
+        name: "{{ item.name }}"
+        folder: '{{ f0 }}'
+        state: powered-on
+      with_items: '{{ virtual_machines }}'
+    - copy:
+        dest: vmware.yaml
+        content: |
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          hostname: {{ vcenter_hostname }}
+          username: {{ vcenter_username }}
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          with_tags: True
