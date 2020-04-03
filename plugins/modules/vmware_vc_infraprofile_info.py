@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2019, Ansible Project
-# Copyright: (c) 2019, Naveenkumar G P <ngp@vmware.com>
+# Copyright: (c) 2019-2020, Ansible Project
+# Copyright: (c) 2019-2020, Naveenkumar G P <ngp@vmware.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -154,8 +154,10 @@ RETURN = r'''
     }
 '''
 
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 import json
-import os
 import time
 
 
@@ -164,7 +166,6 @@ class VcVersionChecker(PyVmomi):
         super(VcVersionChecker, self).__init__(module)
 
     def check_vc_version(self):
-        version = self.content.about.version
         from distutils.version import LooseVersion
         if LooseVersion(self.content.about.version) < LooseVersion('7'):
             self.module.fail_json(msg="vCenter version is less than 7.0.0 Please specify vCenter with version greater than or equal to 7.0.0")
@@ -255,34 +256,34 @@ def main():
     vmware_vc_version = VcVersionChecker(module)
     vmware_vc_version.check_vc_version()
 
-    if module.params['api'] == "list".lower():
+    if module.params['api'].lower() == "list":
         if module.check_mode:
             result.update(
-                    changed=False, desired_operation='list_vc_profile_configs',)
+                changed=False, desired_operation='list_vc_profile_configs',)
             module.exit_json(**result)
         vmware_vc_infra_profile.list_vc_infraprofile_configs()
-    if module.params['api'] == "export".lower():
+    if module.params['api'].lower() == "export":
         if module.check_mode:
             result.update(
-                    changed=False,
-                    desired_operation='export_vc_profile_configs',)
+                changed=False,
+                desired_operation='export_vc_profile_configs',)
             module.exit_json(**result)
         vmware_vc_infra_profile.vc_export_profile_task()
 
-    if module.params['api'] == "import".lower():
+    if module.params['api'].lower() == "import":
         if module.check_mode:
             result.update(
-                    changed=True,
-                    desired_operation='import_vc_profile_configs',
+                changed=True,
+                desired_operation='import_vc_profile_configs',
             )
             module.exit_json(**result)
         vmware_vc_infra_profile.vc_import_profile_task()
 
-    if module.params['api'] == "validate".lower():
+    if module.params['api'].lower() == "validate":
         if module.check_mode:
             result.update(
-                    changed=True,
-                    desired_operation='import_vc_profile_configs',
+                changed=True,
+                desired_operation='import_vc_profile_configs',
             )
             module.exit_json(**result)
         vmware_vc_infra_profile.vc_validate_profile_task()
