@@ -12,6 +12,7 @@ DOCUMENTATION = r'''
     name: vmware_vm_inventory
     plugin_type: inventory
     short_description: VMware Guest inventory source
+    version_added: "2.7"
     author:
       - Abhijeet Kasurde (@Akasurde)
     description:
@@ -24,8 +25,8 @@ DOCUMENTATION = r'''
       - "Python >= 2.7"
       - "PyVmomi"
       - "requests >= 2.3"
-      - "vSphere Automation SDK - For tag feature"
-      - "vCloud Suite SDK - For tag feature"
+      - "vSphere Automation SDK"
+      - "vCloud Suite SDK"
     options:
         hostname:
             description: Name of vCenter or ESXi server.
