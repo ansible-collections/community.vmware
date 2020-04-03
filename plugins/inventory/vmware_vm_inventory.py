@@ -11,6 +11,7 @@ DOCUMENTATION = r'''
     name: vmware_vm_inventory
     plugin_type: inventory
     short_description: VMware Guest inventory source
+    version_added: "2.7"
     author:
       - Abhijeet Kasurde (@Akasurde)
     description:
@@ -23,8 +24,8 @@ DOCUMENTATION = r'''
       - "Python >= 2.7"
       - "PyVmomi"
       - "requests >= 2.3"
-      - "vSphere Automation SDK - For tag feature"
-      - "vCloud Suite SDK - For tag feature"
+      - "vSphere Automation SDK"
+      - "vCloud Suite SDK"
     options:
         hostname:
             description: Name of vCenter or ESXi server.
@@ -182,6 +183,7 @@ from ansible.module_utils.common.dict_transformations import camel_dict_to_snake
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.module_utils.six import text_type
 
+display = Display()
 
 try:
     # requests is required for exception handling of the ConnectionError
