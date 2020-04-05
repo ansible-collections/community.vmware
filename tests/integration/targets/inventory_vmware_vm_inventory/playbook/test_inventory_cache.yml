@@ -1,18 +1,21 @@
 ---
 - name: Test inventory cache
   hosts: localhost
-  connection: local
   gather_facts: no
   tasks:
     - find: 
-        paths: "inventory_cache"
-        patterns: "vmware_vm_inventory_*"
+        paths: "{{ inventory_cache }}"
+        patterns: "community.vmware.vmware_vm_inventory*"
       register: result
 
     - name: Cache directory exist
       fail:
-        msg:  not found. Please debug.
-      when: result.matched|int != 0
+        msg:  Cache not found. Please debug.
+      when: result.matched|int == 0
+      ignore_errors: yes
+
+    - when: result.matched|int == 0
+      meta: end_play
 
     - set_fact:
         cached_groups: "{{groups}}"

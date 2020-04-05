@@ -6,16 +6,10 @@
 - name: Test VMware Guest Dynamic Inventroy Plugin
   hosts: localhost
   tasks:
-    - name: store the vcenter container ip
-      set_fact:
-        vcsim: "{{ lookup('env', 'VCENTER_HOSTNAME') }}"
-
-    - name: Check that there are 'all' and 'otherGuest' groups present in inventory
+    - name: Check that there is 'all' group present in inventory
       assert:
         that:
           - "'all' in groups"
-          - "'otherGuest' in groups"
-
 
     - name: Check if Hostname and other details are populated in hostvars
       assert:
