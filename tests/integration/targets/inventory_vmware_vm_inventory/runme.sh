@@ -2,22 +2,16 @@
 
 [[ -n "$DEBUG" || -n "$ANSIBLE_DEBUG" ]] && set -x
 
-set -euo pipefail
+set -euxo pipefail
 
 # Required to differentiate between Python 2 and 3 environ
 export ANSIBLE_PYTHON_INTERPRETER=${ANSIBLE_TEST_PYTHON_INTERPRETER:-$(which python)}
-
+export PYTHON=${ANSIBLE_PYTHON_INTERPRETER}
 export ANSIBLE_INVENTORY_ENABLED="community.vmware.vmware_vm_inventory,host_list,ini"
 
 # Cache setting
-export ANSIBLE_CACHE_PLUGIN_CONNECTION="inventory_cache"
+export ANSIBLE_CACHE_PLUGIN_CONNECTION="${PWD}/inventory_cache"
 export ANSIBLE_CACHE_PLUGIN="community.general.jsonfile"
-
-# prepare_vmware_test envs!
-export VMWARE_HOST="${VCENTER_HOSTNAME}"
-export VMWARE_USER="${VCENTER_USERNAME}"
-export VMWARE_PASSWORD="${VCENTER_PASSWORD}"
-export VMWARE_VALIDATE_CERTS="no" # Note: Should be set by ansible-test
 
 INVENTORY_DIR="${PWD}/_test/hosts"
 mkdir -p "${INVENTORY_DIR}" 2>/dev/null
@@ -47,32 +41,26 @@ set_inventory(){
 }
 
 
-# Install dependencies
-ansible-playbook -i 'localhost,' playbook/install_dependencies.yml "$@"
-
 # Prepare tests
 ansible-playbook -i 'localhost,' playbook/prepare_vmware.yml "$@"
 
+# Set inventory path
+set_inventory "${INVENTORY_DIR}"
 
-set_inventory "inventory/defaults_with_cache.vmware.yml"
-# Get inventory
+# Test Cache
+ansible-playbook -i 'localhost,' playbook/build_inventory_with_cache.yml "$@"
 ansible-inventory --list 1>/dev/null
+ansible-playbook playbook/test_inventory_cache.yml -e inventory_cache="${ANSIBLE_CACHE_PLUGIN_CONNECTION}" "$@"
 
-# Check if cache is working for inventory plugin
-ansible-playbook playbook/test_inventory_cache.yml "$@"
-
-# Get inventory using YAML
+# Test YAML and TOME
+ansible-playbook -i 'localhost,' playbook/build_inventory_without_cache.yml "$@"
 ansible-inventory --list --yaml 1>/dev/null
+if ${PYTHON} -m pip list 2>/dev/null | grep toml >/dev/null 2>&1; then
+    ansible-inventory --list --toml 1>/dev/null
+fi
 
-# Get inventory using TOML
-ansible-inventory --list --toml 1>/dev/null
-
-
-set_inventory "inventory/defaults.vmware.yml"
 # # Test playbook with given inventory
 ansible-playbook playbook/test_vmware_vm_inventory.yml "$@"
 
-
 # Test options
-set_inventory "${INVENTORY_DIR}"
 ansible-playbook playbook/test_options.yml "$@"

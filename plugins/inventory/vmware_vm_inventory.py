@@ -70,9 +70,9 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
-            - In addition to VM properties, the following are special values:
-            - Use C(customValue) to populate VM's custom attributes.
-            - Use C(all) to populate all VM properties.
+            - In addition to VM properties, the following are special values
+            - Use 'customValue' to populate VM's custom attributes.
+            - Use 'all' to populate all VM properties.
             type: list
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
@@ -160,18 +160,18 @@ EXAMPLES = r'''
     validate_certs: False
     with_tags: True
     resources:
-    - datacenter:
-      - Asia-Datacenter1
-      - Asia-Datacenter2
-      resources:
-      - compute_resource:
-        - Asia-Cluster1
+      - datacenter:
+        - Asia-Datacenter1
+        - Asia-Datacenter2
+        resources:
+        - compute_resource:
+          - Asia-Cluster1
           resources:
           - host_system:
             - Asia-ESXI4
-      - folder:
-        - dev
-        - prod
+        - folder:
+          - dev
+          - prod
 '''
 
 import ssl
@@ -257,8 +257,8 @@ class BaseVMwareInventory:
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except Exception:  # pylint: disable=bare-except
-            pass
+        except Exception as e:  # pylint: disable=bare-except
+            display.warning(to_native(e))
 
         if client is None:
             raise AnsibleError("Failed to login to %s using %s" % (server, self.username))
@@ -394,27 +394,30 @@ class BaseVMwareInventory:
             return containers
 
         def build_containers(containers, vim_type, names, filters):
+            filters = filters or []
             if vim_type:
                 containers = filter_containers(containers, vim_type, names)
 
             new_containers = []
-            for fil in filters or []:
-                filters = None
+            for fil in filters:
+                new_filters = None
                 for k, v in fil.items():
                     if k == "resources":
-                        filters = v
+                        new_filters = v
                     else:
                         vim_type = getattr(vim, _snake_to_camel(k, True))
                         names = v
                         type_to_name_map[vim_type] = k.replace("_", " ")
 
-                new_containers.extend(build_containers(containers, vim_type, names, filters))
+                new_containers.extend(build_containers(containers, vim_type, names, new_filters))
 
-            if len(new_containers) > 0:
+            if len(filters) > 0:
                 return new_containers
             return containers
 
         containers = build_containers([self.content.rootFolder], None, None, resource_filters)
+        if len(containers) == 0:
+            return []
 
         objs_list = [ObjectSpec(
             obj=self.content.viewManager.CreateContainerView(r, [vim_type], True),

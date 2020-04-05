@@ -9,7 +9,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_nested_properties: False
           properties:
             - config.name
@@ -37,7 +36,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_nested_properties: False
           properties: ['all']
    
@@ -54,7 +52,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_nested_properties: False
           properties:
             - config
@@ -72,7 +69,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_path: True
    
     - name: Test path option
@@ -86,7 +82,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_path: my_center
 
     - name: Test path option with rooted path
@@ -102,7 +97,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           properties:
             - config.name
             - config.uuid
@@ -121,7 +115,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           properties:
             - config.name
             - config.uuid
@@ -142,7 +135,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_nested_properties: True
           properties:
             - config.name
@@ -180,7 +172,6 @@
         content: |-
           plugin: community.vmware.vmware_vm_inventory
           strict: False
-          validate_certs: False
           with_nested_properties: False
           hostnames:
             - config.name
@@ -191,33 +182,105 @@
                 - DC0
               resources:
                 - compute_resource:
-                    - DC0_H0
+                    - DC0_C0
 
     - name: Test 'resources' options
       assert:
         that:
-          - "'DC0_H0_VM0' in hostvars"
-          - "'DC0_C0_RP0_VM0' not in hostvars"
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0
+                    - DC0_C0_NOT_EXIST
+
+    - name: Test 'resources' options with 'DC0_C0' and 'DC0_C0_NOT_EXIST'
+      assert:
+        that:
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0_NOT_EXIST
+
+    - name: Test 'resources' options with 'DC0_C0' and 'DC0_C0_NOT_EXIST' using two 'datacenter'
+      assert:
+        that:
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0_NOT_EXIST
+
+    - name: Test 'resources' options with 'DC0_C0_NOT_EXIST'
+      assert:
+        that:
+          - hostvars | length == 0
 
 
-    - when: vcsim is not defined 
-      block:
-        - name: Inventory 'with_tag' option
-          include_tasks: build_inventory.yml
-          vars:
-            content: |-
-              plugin: community.vmware.vmware_vm_inventory
-              strict: False
-              validate_certs: False
-              with_nested_properties: True
-              with_tags: True
-              properties:
-                - config.name
-                - config.uuid
-                - config.guestId
-                - runtime.powerState
+    - name: Inventory 'with_tag' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          with_tags: True
+          properties:
+            - config.name
+            - config.uuid
+            - config.guestId
+            - runtime.powerState
 
-        - name: Test 'with_tags' options
-          assert:
-            that:
-              - "'tags' in test_host.value"
+    - name: Test 'with_tags' options
+      assert:
+        that:
+          - "'tags' in test_host.value"
+      ignore_errors: yes # for vcsim 
