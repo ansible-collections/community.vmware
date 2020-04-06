@@ -124,7 +124,7 @@ EXAMPLES = '''
 RETURN = '''
 distributed_virtual_switches:
     description: list of dictionary of dvswitch and their information
-    returned: success
+    returned: always
     type: list
     sample:
       [
@@ -207,14 +207,11 @@ class VMwareDvSwitchInfoManager(PyVmomi):
         else:
             self.switch_objs = find_obj(self.content, [vim.DistributedVirtualSwitch], '', first=False)
 
-        if not self.switch_objs:
-            if self.switch_name:
-                self.module.fail_json(msg="Distributed Virtual Switch %s not found" % self.switch_name)
-            else:
-                self.module.fail_json(msg="Distributed Virtual Switch not found")
-
     def all_info(self):
         distributed_virtual_switches = []
+        if not self.switch_objs:
+            self.module.exit_json(changed=False, distributed_virtual_switches=distributed_virtual_switches)
+
         for switch_obj in self.switch_objs:
             pvlans = []
             if switch_obj.config.pvlanConfig:

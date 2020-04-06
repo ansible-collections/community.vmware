@@ -161,3 +161,16 @@
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.name is defined
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.summary.numPorts is defined
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.config.maxMtu is defined
+
+- name: get list of when not exist the dvswitch
+  vmware_dvswitch_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    switch_name: "not_exist_the_dvswitch"
+  register: info_dvswitches_result
+
+- assert:
+    that:
+      - info_dvswitches_result.distributed_virtual_switches | length == 0
