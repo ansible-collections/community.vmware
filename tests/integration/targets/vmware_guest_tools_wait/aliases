@@ -2,5 +2,3 @@ shippable/vcenter/group1
 cloud/vcenter
 needs/target/prepare_vmware_tests
 zuul/vmware/vcenter_1esxi_with_nested
-# the test fails randomly in the CI
-disabled
