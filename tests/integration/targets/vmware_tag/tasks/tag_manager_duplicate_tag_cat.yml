@@ -103,7 +103,7 @@
           - tag_two_create.changed
 
     - name: Get VM Facts
-      vmware_vm_facts:
+      vmware_vm_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
