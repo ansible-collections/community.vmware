@@ -531,8 +531,10 @@ class PyVmomiHelper(PyVmomi):
         rv = None
         if isinstance(network_obj, vim.dvs.DistributedVirtualPortgroup):
             rv = vim.VirtualEthernetCardDistributedVirtualPortBackingInfo(
-                portgroupKey=network_obj.key,
-                switchUuid=network_obj.config.distributedVirtualSwitch.uuid
+                port=vim.DistributedVirtualSwitchPortConnection(
+                    portgroupKey=network_obj.key,
+                    switchUuid=network_obj.config.distributedVirtualSwitch.uuid
+                )
             )
         if isinstance(network_obj, vim.OpaqueNetwork):
             rv = vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo(
