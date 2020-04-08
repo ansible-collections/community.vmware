@@ -1,7 +1,7 @@
 cloud/vcenter
 shippable/vcenter/group1
 needs/target/prepare_vmware_tests
-zuul/vmware/vcenter_1esxi
+zuul/vmware/vcenter_1esxi_with_nested
 # until we figure out why vmware_guest_tools_wait fails in the CI
 disabled
 zuul/vmware/govcsim
