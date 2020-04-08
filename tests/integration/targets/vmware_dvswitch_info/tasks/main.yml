@@ -44,6 +44,23 @@
       - info_dvswitches_result.distributed_virtual_switches.0.configure.hosts is defined
       - info_dvswitches_result.distributed_virtual_switches.0.configure.settings is defined
 
+- name: get list of info about all dvswitches
+  vmware_dvswitch_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+  register: info_dvswitches_result
+
+- debug: var=info_dvswitches_result
+
+- assert:
+    that:
+      - info_dvswitches_result.distributed_virtual_switches | length == 1
+      - info_dvswitches_result.distributed_virtual_switches.0.configure.folder is defined
+      - info_dvswitches_result.distributed_virtual_switches.0.configure.hosts is defined
+      - info_dvswitches_result.distributed_virtual_switches.0.configure.settings is defined
+
 - name: get list of info about dvswitches
   vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"
@@ -161,6 +178,33 @@
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.name is defined
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.summary.numPorts is defined
       - info_dvswitches_with_properties_result.distributed_virtual_switches.0.config.maxMtu is defined
+
+- name: delete distributed vSwitch
+  vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter_name: "{{ dc1 }}"
+    switch_name: "{{ dvswitch1 }}"
+    state: absent
+  register: delete_distributed_vswitch_result
+
+- assert:
+    that:
+      - delete_distributed_vswitch_result.changed
+
+- name: get list of info about all dvswitches
+  vmware_dvswitch_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+  register: info_dvswitches_result
+
+- assert:
+    that:
+      - info_dvswitches_result.distributed_virtual_switches | length == 0
 
 - name: get list of when not exist the dvswitch
   vmware_dvswitch_info:
