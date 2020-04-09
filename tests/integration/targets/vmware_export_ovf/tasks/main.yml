@@ -18,15 +18,6 @@
       setup_datastore: true
       setup_virtualmachines: true
 
-  - name: set state to poweroff on the tested VM
-    vmware_guest:
-      validate_certs: False
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      name: "{{ virtual_machines_in_cluster[0].name }}"
-      state: poweredoff
-
   - name: export VM to ovf template
     vmware_export_ovf:
       validate_certs: False

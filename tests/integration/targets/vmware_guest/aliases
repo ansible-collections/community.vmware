@@ -2,4 +2,5 @@ shippable/vcenter/group1
 cloud/vcenter
 needs/target/prepare_vmware_tests
 zuul/vmware/vcenter_1esxi
+zuul/vmware/vcenter_1esxi_with_nested
 zuul/vmware/govcsim
