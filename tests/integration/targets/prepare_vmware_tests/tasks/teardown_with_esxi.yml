@@ -56,6 +56,26 @@
     - dvswitch_0002
   ignore_errors: yes
 
+- name: Clean up the VM Network portgroup
+  vmware_portgroup:
+    esxi_hostname: '{{ esxi_hosts }}'
+    switch: isolated_vSwitch
+    portgroup: VM Network
+    state: absent
+  ignore_errors: true
+  with_items:
+  - isolated_vSwitch
+  - vSwitch0
+
+- name: Remove any potential existing "VM Network" on vSwitch0
+  vmware_portgroup:
+    esxi_hostname: '{{ esxi_hosts }}'
+    switch: vSwitch0
+    portgroup: VM Network
+    validate_certs: no
+    state: absent
+  ignore_errors: yes
+
 - name: Remove the vSwitches
   vmware_vswitch:
     hostname: '{{ item }}'
