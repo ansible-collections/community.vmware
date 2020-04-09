@@ -1,7 +1,7 @@
 ---
   - name: Set inventory content
     copy:
-      dest: "{{ lookup('env', 'ANSIBLE_INVENTORY') }}/tmp.vmware.yml"
+      dest: "{{ lookup('env', 'INVENTORY_DIR') }}/tmp.vmware.yml"
       content: |
         {{ content }}
         hostname: '{{ vcenter_hostname }}'
@@ -9,6 +9,8 @@
         password: '{{ vcenter_password }}'
         port: '{{ vcenter_port|default('443') }}'
         validate_certs: {{ vmware_validate_certs|default('no') }}
+    changed_when: false
+    check_mode: false
 
   - meta: refresh_inventory
 

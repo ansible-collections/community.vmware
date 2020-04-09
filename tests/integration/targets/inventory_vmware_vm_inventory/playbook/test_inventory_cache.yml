@@ -4,7 +4,7 @@
   gather_facts: no
   tasks:
     - find: 
-        paths: "{{ inventory_cache }}"
+        paths: "{{ lookup('env', 'ANSIBLE_CACHE_PLUGIN_CONNECTION') }}"
         patterns: "community.vmware.vmware_vm_inventory*"
       register: result
 
