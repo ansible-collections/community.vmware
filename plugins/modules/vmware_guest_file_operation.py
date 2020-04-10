@@ -179,8 +179,9 @@ import os
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils import urls
 from ansible.module_utils._text import to_bytes, to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, find_cluster_by_name, find_datacenter_by_name,
-                                         find_vm_by_id, vmware_argument_spec)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, find_cluster_by_name, find_datacenter_by_name,
+    find_vm_by_id, vmware_argument_spec)
 
 
 class VmwareGuestFileManager(PyVmomi):
@@ -453,7 +454,7 @@ def main():
     if module.params['vm_id_type'] == 'inventory_path' and not module.params['folder']:
         module.fail_json(msg='Folder is required parameter when vm_id_type is inventory_path')
 
-    vmware_guest_file_manager = VmwareGuestFileManager(module)
+    VmwareGuestFileManager(module)
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 try:
-    from pyVmomi import vim, pbm
+    from pyVmomi import pbm
     from pyVim.connect import SoapStubAdapter
 except ImportError:
     pass

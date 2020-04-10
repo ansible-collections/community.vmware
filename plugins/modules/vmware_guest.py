@@ -614,7 +614,7 @@ import string
 
 HAS_PYVMOMI = False
 try:
-    from pyVmomi import vim, vmodl, VmomiSupport
+    from pyVmomi import vim, vmodl
     HAS_PYVMOMI = True
 except ImportError:
     pass
@@ -623,11 +623,20 @@ from random import randint
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.network import is_mac
 from ansible.module_utils._text import to_text, to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (find_obj, gather_vm_facts, get_all_objs,
-                                         compile_folder_path_for_object, serialize_spec,
-                                         vmware_argument_spec, set_vm_power_state, PyVmomi,
-                                         find_dvs_by_name, find_dvspg_by_name, wait_for_vm_ip,
-                                         wait_for_task, TaskError, quote_obj_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    find_obj,
+    gather_vm_facts,
+    get_all_objs,
+    compile_folder_path_for_object,
+    serialize_spec,
+    vmware_argument_spec,
+    set_vm_power_state,
+    PyVmomi,
+    find_dvs_by_name,
+    find_dvspg_by_name,
+    wait_for_vm_ip,
+    quote_obj_name,
+)
 
 
 def list_or_dict(value):
@@ -702,21 +711,44 @@ class PyVmomiDeviceHelper(object):
     @staticmethod
     def is_equal_cdrom(vm_obj, cdrom_device, cdrom_type, iso_path):
         if cdrom_type == "none":
-            return (isinstance(cdrom_device.backing, vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo) and
-                    cdrom_device.connectable.allowGuestControl and
-                    not cdrom_device.connectable.startConnected and
-                    (vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn or not cdrom_device.connectable.connected))
+            return (
+                isinstance(
+                    cdrom_device.backing,
+                    vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo,
+                )
+                and cdrom_device.connectable.allowGuestControl
+                and not cdrom_device.connectable.startConnected
+                and (
+                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
+                    or not cdrom_device.connectable.connected
+                )
+            )
         elif cdrom_type == "client":
-            return (isinstance(cdrom_device.backing, vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo) and
-                    cdrom_device.connectable.allowGuestControl and
-                    cdrom_device.connectable.startConnected and
-                    (vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn or cdrom_device.connectable.connected))
+            return (
+                isinstance(
+                    cdrom_device.backing,
+                    vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo,
+                )
+                and cdrom_device.connectable.allowGuestControl
+                and cdrom_device.connectable.startConnected
+                and (
+                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
+                    or cdrom_device.connectable.connected
+                )
+            )
         elif cdrom_type == "iso":
-            return (isinstance(cdrom_device.backing, vim.vm.device.VirtualCdrom.IsoBackingInfo) and
-                    cdrom_device.backing.fileName == iso_path and
-                    cdrom_device.connectable.allowGuestControl and
-                    cdrom_device.connectable.startConnected and
-                    (vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn or cdrom_device.connectable.connected))
+            return (
+                isinstance(
+                    cdrom_device.backing, vim.vm.device.VirtualCdrom.IsoBackingInfo
+                )
+                and cdrom_device.backing.fileName == iso_path
+                and cdrom_device.connectable.allowGuestControl
+                and cdrom_device.connectable.startConnected
+                and (
+                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
+                    or cdrom_device.connectable.connected
+                )
+            )
 
     @staticmethod
     def update_cdrom_config(vm_obj, cdrom_spec, cdrom_device, iso_path=None):
@@ -1300,7 +1332,7 @@ class PyVmomiHelper(PyVmomi):
 
                     if hw_version_check_failed:
                         self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
-                                              " values range from 3 (ESX 2.x) to 14 (ESXi 6.5 and greater)." % temp_version)
+                                              " values range from 3 (ESX 2.x) to 15 (ESXi 6.7U2 and greater)." % temp_version)
                     # Hardware version is denoted as "vmx-10"
                     version = "vmx-%02d" % temp_version
                     self.configspec.version = version
@@ -1484,17 +1516,34 @@ class PyVmomiHelper(PyVmomi):
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
 
                 nic.device = current_net_devices[key]
-                if ('wake_on_lan' in network_devices[key] and
-                        nic.device.wakeOnLanEnabled != network_devices[key].get('wake_on_lan')):
-                    nic.device.wakeOnLanEnabled = network_devices[key].get('wake_on_lan')
+                if "wake_on_lan" in network_devices[
+                    key
+                ] and nic.device.wakeOnLanEnabled != network_devices[key].get(
+                    "wake_on_lan"
+                ):
+                    nic.device.wakeOnLanEnabled = network_devices[key].get(
+                        "wake_on_lan"
+                    )
                     nic_change_detected = True
-                if ('start_connected' in network_devices[key] and
-                        nic.device.connectable.startConnected != network_devices[key].get('start_connected')):
-                    nic.device.connectable.startConnected = network_devices[key].get('start_connected')
+                if "start_connected" in network_devices[
+                    key
+                ] and nic.device.connectable.startConnected != network_devices[key].get(
+                    "start_connected"
+                ):
+                    nic.device.connectable.startConnected = network_devices[key].get(
+                        "start_connected"
+                    )
                     nic_change_detected = True
-                if ('allow_guest_control' in network_devices[key] and
-                        nic.device.connectable.allowGuestControl != network_devices[key].get('allow_guest_control')):
-                    nic.device.connectable.allowGuestControl = network_devices[key].get('allow_guest_control')
+                if "allow_guest_control" in network_devices[
+                    key
+                ] and nic.device.connectable.allowGuestControl != network_devices[
+                    key
+                ].get(
+                    "allow_guest_control"
+                ):
+                    nic.device.connectable.allowGuestControl = network_devices[key].get(
+                        "allow_guest_control"
+                    )
                     nic_change_detected = True
 
                 if nic.device.deviceInfo.summary != network_name:
@@ -1538,14 +1587,21 @@ class PyVmomiHelper(PyVmomi):
                 # TODO: (akasurde) There is no way to find association between resource pool and distributed virtual portgroup
                 # For now, check if we are able to find distributed virtual switch
                 if not pg_obj.config.distributedVirtualSwitch:
-                    self.module.fail_json(msg="Failed to find distributed virtual switch which is associated with"
-                                              " distributed virtual portgroup '%s'. Make sure hostsystem is associated with"
-                                              " the given distributed virtual portgroup. Also, check if user has correct"
-                                              " permission to access distributed virtual switch in the given portgroup." % pg_obj.name)
-                if (nic.device.backing and
-                    (not hasattr(nic.device.backing, 'port') or
-                     (nic.device.backing.port.portgroupKey != pg_obj.key or
-                      nic.device.backing.port.switchUuid != pg_obj.config.distributedVirtualSwitch.uuid))):
+                    self.module.fail_json(
+                        msg="Failed to find distributed virtual switch which is associated with"
+                        " distributed virtual portgroup '%s'. Make sure hostsystem is associated with"
+                        " the given distributed virtual portgroup. Also, check if user has correct"
+                        " permission to access distributed virtual switch in the given portgroup."
+                        % pg_obj.name
+                    )
+                if nic.device.backing and (
+                    not hasattr(nic.device.backing, "port")
+                    or (
+                        nic.device.backing.port.portgroupKey != pg_obj.key
+                        or nic.device.backing.port.switchUuid
+                        != pg_obj.config.distributedVirtualSwitch.uuid
+                    )
+                ):
                     nic_change_detected = True
 
                 dvs_port_connection = vim.dvs.PortConnection()
@@ -1594,6 +1650,21 @@ class PyVmomiHelper(PyVmomi):
                 else:
                     self.configspec.deviceChange.append(nic)
                 self.change_detected = True
+
+    def set_vapp_properties(self, property_spec):
+        # Sets the values in property_info
+        property_info = vim.vApp.PropertyInfo()
+        property_info.classId = property_spec.get('classId')
+        property_info.instanceId = property_spec.get('instanceId')
+        property_info.id = property_spec.get('id')
+        property_info.category = property_spec.get('category')
+        property_info.label = property_spec.get('label')
+        property_info.type = property_spec.get('type', 'string')
+        property_info.userConfigurable = property_spec.get('userConfigurable', True)
+        property_info.defaultValue = property_spec.get('defaultValue')
+        property_info.value = property_spec.get('value', '')
+        property_info.description = property_spec.get('description')
+        return property_info
 
     def configure_vapp_properties(self, vm_obj):
         if len(self.params['vapp_properties']) == 0:
@@ -1655,17 +1726,8 @@ class PyVmomiHelper(PyVmomi):
                     # this is add new property branch
                     new_vapp_property_spec.operation = 'add'
 
-                    property_info = vim.vApp.PropertyInfo()
-                    property_info.classId = property_spec.get('classId')
-                    property_info.instanceId = property_spec.get('instanceId')
-                    property_info.id = property_spec.get('id')
-                    property_info.category = property_spec.get('category')
-                    property_info.label = property_spec.get('label')
-                    property_info.type = property_spec.get('type', 'string')
-                    property_info.userConfigurable = property_spec.get('userConfigurable', True)
-                    property_info.defaultValue = property_spec.get('defaultValue')
-                    property_info.value = property_spec.get('value', '')
-                    property_info.description = property_spec.get('description')
+                    # Configure the values in property_value
+                    property_info = self.set_vapp_properties(property_spec)
 
                     new_vapp_property_spec.info = property_info
                     new_vapp_property_spec.info.key = new_property_index
@@ -1686,17 +1748,8 @@ class PyVmomiHelper(PyVmomi):
                 # this is add new property branch
                 new_vapp_property_spec.operation = 'add'
 
-                property_info = vim.vApp.PropertyInfo()
-                property_info.classId = property_spec.get('classId')
-                property_info.instanceId = property_spec.get('instanceId')
-                property_info.id = property_spec.get('id')
-                property_info.category = property_spec.get('category')
-                property_info.label = property_spec.get('label')
-                property_info.type = property_spec.get('type', 'string')
-                property_info.userConfigurable = property_spec.get('userConfigurable', True)
-                property_info.defaultValue = property_spec.get('defaultValue')
-                property_info.value = property_spec.get('value', '')
-                property_info.description = property_spec.get('description')
+                # Configure the values in property_value
+                property_info = self.set_vapp_properties(property_spec)
 
                 new_vapp_property_spec.info = property_info
                 new_vapp_property_spec.info.key = new_property_index
@@ -2325,15 +2378,16 @@ class PyVmomiHelper(PyVmomi):
             dcpath += '/'
 
         # Check for full path first in case it was already supplied
-        if (self.folder.startswith(dcpath + self.params['datacenter'] + '/vm') or
-                self.folder.startswith(dcpath + '/' + self.params['datacenter'] + '/vm')):
+        if self.folder.startswith(
+            dcpath + self.params["datacenter"] + "/vm"
+        ) or self.folder.startswith(dcpath + "/" + self.params["datacenter"] + "/vm"):
             fullpath = self.folder
-        elif self.folder.startswith('/vm/') or self.folder == '/vm':
-            fullpath = "%s%s%s" % (dcpath, self.params['datacenter'], self.folder)
-        elif self.folder.startswith('/'):
-            fullpath = "%s%s/vm%s" % (dcpath, self.params['datacenter'], self.folder)
+        elif self.folder.startswith("/vm/") or self.folder == "/vm":
+            fullpath = "%s%s%s" % (dcpath, self.params["datacenter"], self.folder)
+        elif self.folder.startswith("/"):
+            fullpath = "%s%s/vm%s" % (dcpath, self.params["datacenter"], self.folder)
         else:
-            fullpath = "%s%s/vm/%s" % (dcpath, self.params['datacenter'], self.folder)
+            fullpath = "%s%s/vm/%s" % (dcpath, self.params["datacenter"], self.folder)
 
         f_obj = self.content.searchIndex.FindByInventoryPath(fullpath)
 

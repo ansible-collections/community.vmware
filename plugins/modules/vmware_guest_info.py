@@ -236,7 +236,7 @@ from ansible.module_utils._text import to_text
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 try:
-    from com.vmware.vapi.std_client import DynamicID
+    from com.vmware.vapi.std_client import DynamicID  # noqa: F401
     HAS_VSPHERE = True
 except ImportError:
     HAS_VSPHERE = False

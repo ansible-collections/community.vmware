@@ -1,14 +1,21 @@
+---
 namespace: community
 name: vmware
-version: 0.1.0
+# the version key is generated during the release by Zuul
+# https://github.com/ansible-network/releases/tree/master/ansible_releases/cmd
+# A script based on https://pypi.org/project/pbr/ will generate the version
+# key. The version value depends on the tag or the last git tag.
 readme: README.md
-authors: null
-description: null
+authors:
+  - Ansible (https://github.com/ansible)
+description:
 license: GPL-3.0-or-later
 license_file: COPYING
-tags: null
+tags:
+  - cloud
+  - vmware
+  - virtualization
 dependencies: {}
-repository: git@github.com:ansible-collections/vmware.git
-documentation: https://github.com/ansible-collections/vmware/tree/master/docs
+repository: https://github.com/ansible-collections/vmware.git
 homepage: https://github.com/ansible-collections/vmware
 issues: https://github.com/ansible-collections/vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc

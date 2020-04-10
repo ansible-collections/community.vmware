@@ -7,7 +7,7 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
     name: vmware_vm_inventory
     plugin_type: inventory
     short_description: VMware Guest inventory source
@@ -33,13 +33,13 @@ DOCUMENTATION = '''
               - name: VMWARE_HOST
               - name: VMWARE_SERVER
         username:
-            description: Name of vSphere admin user.
+            description: Name of vSphere user.
             required: True
             env:
               - name: VMWARE_USER
               - name: VMWARE_USERNAME
         password:
-            description: Password of vSphere admin user.
+            description: Password of vSphere user.
             required: True
             env:
               - name: VMWARE_PASSWORD
@@ -50,9 +50,10 @@ DOCUMENTATION = '''
               - name: VMWARE_PORT
         validate_certs:
             description:
-            - Allows connection when SSL certificates are not valid. Set to C(false) when certificates are not trusted.
+            - Allows connection when SSL certificates are not valid.
+            - Set to C(false) when certificates are not trusted.
             default: True
-            type: boolean
+            type: bool
             env:
               - name: VMWARE_VALIDATE_CERTS
         with_tags:
@@ -60,9 +61,9 @@ DOCUMENTATION = '''
             - Include tags and associated virtual machines.
             - Requires 'vSphere Automation SDK' library to be installed on the given controller machine.
             - Please refer following URLs for installation steps
-            - 'https://code.vmware.com/web/sdk/65/vsphere-automation-python'
+            - U(https://code.vmware.com/web/sdk/65/vsphere-automation-python)
             default: False
-            type: boolean
+            type: bool
         properties:
             description:
             - Specify the list of VMware schema properties associated with the VM.
@@ -77,7 +78,7 @@ DOCUMENTATION = '''
                        ]
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 # Sample configuration file for VMware Guest dynamic inventory
     plugin: vmware_vm_inventory
     strict: False
@@ -102,7 +103,9 @@ EXAMPLES = '''
 
 import ssl
 import atexit
+import json
 from ansible.errors import AnsibleError, AnsibleParserError
+
 
 try:
     # requests is required for exception handling of the ConnectionError
@@ -145,7 +148,7 @@ class BaseVMwareInventory:
         Check requirements and do login
         """
         self.check_requirements()
-        self.content = self._login()
+        self.si, self.content = self._login()
         if self.with_tags:
             self.rest_content = self._login_vapi()
 
@@ -210,10 +213,10 @@ class BaseVMwareInventory:
             raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s" % (self.hostname, self.port))
 
         atexit.register(connect.Disconnect, service_instance)
-        return service_instance.RetrieveContent()
+        return service_instance, service_instance.RetrieveContent()
 
     def check_requirements(self):
-        """ Check all requirements for this inventory are satisified"""
+        """ Check all requirements for this inventory are satisfied"""
         if not HAS_REQUESTS:
             raise AnsibleParserError('Please install "requests" Python module as this is required'
                                      ' for VMware Guest dynamic inventory plugin.')
@@ -292,6 +295,42 @@ class BaseVMwareInventory:
         return self.content.propertyCollector.RetrieveContents([filter_spec])
 
     @staticmethod
+    def _process_object_types(vobj, level=0):
+        """For an object that is not a valid JSON type, loop over its properties
+        and return them in a dictionary"""
+        try:
+            json.dumps(vobj)
+            return vobj
+        except Exception:
+            rdata = {}
+            properties = dir(vobj)
+            properties = [str(x) for x in properties if not x.startswith('_')]
+            properties = [x for x in properties if x not in ('Array', 'disabledMethod', 'declaredAlarmState')]
+            properties = sorted(properties)
+
+            for prop in properties:
+                # Attempt to get the property, skip on fail
+                try:
+                    propToSerialize = getattr(vobj, prop)
+                except Exception:
+                    continue
+
+                if callable(propToSerialize):
+                    continue
+
+                prop = prop.lower()
+                if level + 1 <= 2:
+                    try:
+                        rdata[prop] = BaseVMwareInventory._process_object_types(
+                            propToSerialize,
+                            level=(level + 1)
+                        )
+                    except vim.fault.NoPermission:
+                        pass
+
+        return rdata
+
+    @staticmethod
     def _get_object_prop(vm, attributes):
         """Safely get a property or return None"""
         result = vm
@@ -300,6 +339,8 @@ class BaseVMwareInventory:
                 result = getattr(result, attribute)
             except (AttributeError, IndexError):
                 return None
+            # assure that result is valid JSON data
+            result = BaseVMwareInventory._process_object_types(result)
         return result
 
 

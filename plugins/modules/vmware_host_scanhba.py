@@ -94,14 +94,8 @@ result:
     }
 '''
 
-try:
-    from pyVmomi import vim
-except ImportError:
-    pass
-
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, find_obj
-from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
 
 
 class VmwareHbaScan(PyVmomi):

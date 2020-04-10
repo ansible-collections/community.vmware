@@ -328,8 +328,6 @@ class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.change_detected = False
-        self.config_spec = vim.vm.ConfigSpec()
-        self.config_spec.deviceChange = []
         self.nic_device_type = dict(
             pcnet32=vim.vm.device.VirtualPCNet32,
             vmxnet2=vim.vm.device.VirtualVmxnet2,

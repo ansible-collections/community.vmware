@@ -94,7 +94,6 @@ EXAMPLES = r'''
     host: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
-    src: /other/local/file
     datacenter: DC2 Someplace
     datastore: datastore2
     path: other/remote/file
@@ -173,7 +172,6 @@ def main():
     host = module.params.get('host')
     username = module.params.get('username')
     password = module.params.get('password')
-    src = module.params.get('src')
     datacenter = module.params.get('datacenter')
     datastore = module.params.get('datastore')
     path = module.params.get('path')

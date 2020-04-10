@@ -391,8 +391,12 @@ def gather_vm_facts(content, vm):
         else:
             mac_addr = mac_addr_dash = None
 
-        if (hasattr(entry, 'backing') and hasattr(entry.backing, 'port') and
-                hasattr(entry.backing.port, 'portKey') and hasattr(entry.backing.port, 'portgroupKey')):
+        if (
+            hasattr(entry, "backing")
+            and hasattr(entry.backing, "port")
+            and hasattr(entry.backing.port, "portKey")
+            and hasattr(entry.backing.port, "portgroupKey")
+        ):
             port_group_key = entry.backing.port.portgroupKey
             port_key = entry.backing.port.portKey
         else:
@@ -613,8 +617,7 @@ def run_command_in_guest(content, vm, username, password, program_path, program_
     result = {'failed': False}
 
     tools_status = vm.guest.toolsStatus
-    if (tools_status == 'toolsNotInstalled' or
-            tools_status == 'toolsNotRunning'):
+    if (tools_status == 'toolsNotInstalled' or tools_status == 'toolsNotRunning'):
         result['failed'] = True
         result['msg'] = "VMwareTools is not installed or is not running in the guest"
         return result
@@ -1004,8 +1007,9 @@ class PyVmomi(object):
 
             for temp_vm_object in objects:
                 if (
-                        len(temp_vm_object.propSet) == 1 and
-                        temp_vm_object.propSet[0].val == self.params['name']):
+                    len(temp_vm_object.propSet) == 1
+                    and temp_vm_object.propSet[0].val == self.params["name"]
+                ):
                     vms.append(temp_vm_object.obj)
 
             # get_managed_objects_properties may return multiple virtual machine,
@@ -1557,7 +1561,13 @@ class PyVmomi(object):
             result[remainder] = data[remainder]
             return result
         key, remainder = remainder.split('.', 1)
-        result[key] = self._extract(data[key], remainder)
+        if isinstance(data, list):
+            temp_ds = []
+            for i in range(len(data)):
+                temp_ds.append(self._extract(data[i][key], remainder))
+            result[key] = temp_ds
+        else:
+            result[key] = self._extract(data[key], remainder)
         return result
 
     def _jsonify(self, obj):

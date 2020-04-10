@@ -162,8 +162,10 @@ virtual_machines:
   sample: [
     {
         "guest_name": "ubuntu_t",
+        "datacenter": "Datacenter-1",
         "cluster": null,
         "esxi_hostname": "10.76.33.226",
+        "folder": "/Datacenter-1/vm",
         "guest_fullname": "Ubuntu Linux (64-bit)",
         "ip_address": "",
         "mac_address": [
@@ -201,17 +203,18 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
 class VmwareVmInfo(PyVmomi):
     def __init__(self, module):
         super(VmwareVmInfo, self).__init__(module)
+        if self.module.params.get('show_tag'):
+            self.vmware_client = VmwareRestClient(self.module)
 
     def get_tag_info(self, vm_dynamic_obj):
-        vmware_client = VmwareRestClient(self.module)
-        return vmware_client.get_tags_for_vm(vm_mid=vm_dynamic_obj._moId)
+        return self.vmware_client.get_tags_for_vm(vm_mid=vm_dynamic_obj._moId)
 
     def get_vm_attributes(self, vm):
         return dict((x.name, v.value) for x in self.custom_field_mgr
@@ -277,6 +280,8 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
+            vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
+            datacenter = get_parent_datacenter(vm)
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
@@ -286,9 +291,11 @@ class VmwareVmInfo(PyVmomi):
                 "uuid": summary.config.uuid,
                 "vm_network": net_dict,
                 "esxi_hostname": esxi_hostname,
+                "datacenter": datacenter.name,
                 "cluster": cluster_name,
                 "attributes": vm_attributes,
-                "tags": vm_tags
+                "tags": vm_tags,
+                "folder": vm_folder,
             }
 
             vm_type = self.module.params.get('vm_type')

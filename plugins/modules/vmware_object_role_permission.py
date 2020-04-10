@@ -216,7 +216,7 @@ class VMwareObjectRolePermission(PyVmomi):
             self.current_obj = self.content.rootFolder
             return
         try:
-            object_type = getattr(vim, self.params['object_type'])
+            getattr(vim, self.params['object_type'])
         except AttributeError:
             self.module.fail_json(msg="Object type %s is not valid." % self.params['object_type'])
         self.current_obj = find_obj(content=self.content,
