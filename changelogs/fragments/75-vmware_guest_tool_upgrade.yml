@@ -1,0 +1,2 @@
+minor_changes:
+- Add a flag 'force_upgrade' to force VMware tools upgrade installation (https://github.com/ansible-collections/vmware/issues/75).
