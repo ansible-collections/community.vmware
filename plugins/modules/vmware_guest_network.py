@@ -655,12 +655,14 @@ class PyVmomiHelper(PyVmomi):
         # has been removed
         if network_params:
             force = network_params['force']
+            label = network_params['label']
             mac_address = network_params['mac_address']
             network_name = network_params['network_name']
             switch = network_params['switch']
             vlan_id = network_params['vlan_id']
         else:
             force = self.params['force']
+            label = self.params['label']
             mac_address = self.params['mac_address']
             network_name = self.params['network_name']
             switch = self.params['switch']
@@ -669,6 +671,7 @@ class PyVmomiHelper(PyVmomi):
         vm_obj = self.get_vm()
         network_obj = self._get_network_object(vm_obj, network_params)
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
+        label_lst = [d.get('label') for d in nic_info]
         mac_addr_lst = [d.get('mac_address') for d in nic_info]
         vlan_id_lst = [d.get('vlan_id') for d in nic_info]
         network_name_lst = [d.get('network_name') for d in nic_info]
@@ -690,10 +693,15 @@ class PyVmomiHelper(PyVmomi):
         for nic in nic_info:
             diff['before'].update({nic.get('mac_address'): copy.copy(nic)})
 
-        if mac_address and mac_address in mac_addr_lst:
+        if (mac_address and mac_address in mac_addr_lst) or (label and label in label_lst):
             for nic_obj in nic_obj_lst:
-                if nic_obj.macAddress == mac_address:
+                if mac_address and nic_obj.macAddress == mac_address:
                     device_spec = self._new_nic_spec(vm_obj, nic_obj, network_params)
+
+                if not mac_address and label:
+                    if hasattr(nic_obj, 'deviceInfo'):
+                        if nic_obj.deviceInfo.label == label:
+                            device_spec = self._new_nic_spec(vm_obj, nic_obj, network_params)
 
             # fabricate diff for check_mode
             if self.module.check_mode:
@@ -721,12 +729,14 @@ class PyVmomiHelper(PyVmomi):
                 nic_mac = mac_address
                 if not nic_mac:
                     nic_mac = 'AA:BB:CC:DD:EE:FF'
+                if not label:
+                    label = 'check_mode_adapter'
                 diff['after'].update(
                     {
                         nic_mac: {
                             'vlan_id': self._get_vlanid_from_network(network_obj),
                             'network_name': network_obj.name,
-                            'label': 'check_mode adapter',
+                            'label': label,
                             'mac_address': nic_mac,
                             'unit_number': 40000
                         }
