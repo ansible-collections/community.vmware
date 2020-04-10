@@ -151,7 +151,6 @@ except ImportError:
 
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.urls import Request
 from ansible.module_utils.urls import fetch_url
 import xml.etree.ElementTree as ET
 
