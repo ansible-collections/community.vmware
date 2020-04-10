@@ -395,9 +395,11 @@ class PyVmomiHelper(PyVmomi):
             vlan_id = network.config.defaultPortConfig.vlan.vlanId
 
         if isinstance(network, vim.Network) and hasattr(network, 'host'):
-            for pg in network.host[0].config.network.portgroup:
-                if pg.spec.name == network.name:
-                    vlan_id = pg.spec.vlanId
+            for host in network.host:
+                for pg in host.config.network.portgroup:
+                    if pg.spec.name == network.name:
+                        vlan_id = pg.spec.vlanId
+                        return vlan_id
 
         return vlan_id
 
