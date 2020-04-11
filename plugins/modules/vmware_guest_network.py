@@ -720,7 +720,7 @@ class PyVmomiHelper(PyVmomi):
                     else:
                         diff['after'].update({nic_mac: copy.deepcopy(nic)})
 
-        if (not mac_address or mac_address not in mac_addr_lst) or (not label or label not in label_lst):
+        if (not mac_address or mac_address not in mac_addr_lst) and (not label or label not in label_lst):
             device_spec = self._new_nic_spec(vm_obj, None, network_params)
             device_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
             if self.module.check_mode:
