@@ -23,6 +23,7 @@
 - assert:
     that:
       - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
 
 - name: exists check logbundle archive file
   stat:
@@ -56,6 +57,7 @@
 - assert:
     that:
       - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
 
 - name: exists check logbundle archive file
   stat:
@@ -92,6 +94,7 @@
 - assert:
     that:
       - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
 
 - name: exists check logbundle archive file
   stat:
@@ -128,6 +131,81 @@
 - assert:
     that:
       - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
+
+- name: exists check logbundle archive file
+  stat:
+    path: "{{ logbundle_archive_file_path }}"
+  register: exists_check_logbundle_result
+
+- assert:
+    that:
+      - exists_check_logbundle_result.stat.exists
+
+- name: delete logbundle archive file
+  file:
+    path: "{{ logbundle_archive_file_path }}"
+    state: absent
+  register: delete_logbundle_result
+
+- assert:
+    that:
+      - delete_logbundle_result.changed
+
+- name: fetch logbundle archive file from ESXi use performance_data param - connect to vCenter
+  vmware_host_logbundle:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    dest: "{{ logbundle_archive_file_path }}"
+    performance_data:
+      duration: 10
+      interval: 5
+  register: fetch_logbundle_result
+
+- assert:
+    that:
+      - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
+
+- name: exists check logbundle archive file
+  stat:
+    path: "{{ logbundle_archive_file_path }}"
+  register: exists_check_logbundle_result
+
+- assert:
+    that:
+      - exists_check_logbundle_result.stat.exists
+
+- name: delete logbundle archive file
+  file:
+    path: "{{ logbundle_archive_file_path }}"
+    state: absent
+  register: delete_logbundle_result
+
+- assert:
+    that:
+      - delete_logbundle_result.changed
+
+- name: fetch logbundle archive file from ESXi use performance_data param - connect to ESXi
+  vmware_host_logbundle:
+    hostname: "{{ esxi1 }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    dest: "{{ logbundle_archive_file_path }}"
+    performance_data:
+      duration: 10
+      interval: 5
+  register: fetch_logbundle_result
+
+- assert:
+    that:
+      - fetch_logbundle_result.changed
+      - fetch_logbundle_result.dest is defined
 
 - name: exists check logbundle archive file
   stat:

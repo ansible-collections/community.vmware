@@ -97,6 +97,22 @@ options:
       type: list
       elements: str
       required: False
+    performance_data:
+      description:
+        - Gather performance data for ESXi.
+      type: dict
+      required: False
+      suboptions:
+        duration:
+          description:
+            - Duration for which performance data is gathered.
+          type: int
+          default: 300
+        interval:
+          description:
+            - Interval for which performance data is gathered.
+          type: int
+          default: 5
 extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''
@@ -161,6 +177,7 @@ class VMwareHostLogbundle(PyVmomi):
         self.esxi_hostname = self.params['esxi_hostname']
         self.dest = self.params['dest']
         self.manifests = self.params['manifests']
+        self.performance_data = self.params['performance_data']
 
         if not self.dest.endswith('.tgz'):
             self.dest = self.dest + '.tgz'
@@ -199,6 +216,12 @@ class VMwareHostLogbundle(PyVmomi):
     def get_logbundle(self):
         self.validate_manifests()
         url = 'https://' + self.esxi_hostname + '/cgi-bin/vm-support.cgi?manifests=' + '&'.join(self.manifests)
+
+        if self.performance_data:
+            duration = self.performance_data.get('duration')
+            interval = self.performance_data.get('interval')
+            url = url + '&performance=true&duration=%s&interval=%s' % (duration, interval)
+
         headers = self.generate_req_headers(url)
 
         try:
@@ -233,6 +256,11 @@ def main():
                                 'FileSystem:VMFSDiskDump', 'FileSystem:base', 'ActiveDirectory:base', 'CIM:base',
                                 'Hardware:base', 'Hardware:usb', 'Installer:base', 'Network:base', 'Network:dvs',
                                 'Network:lacp', 'Network:nscd', 'Network:tcpip', 'IntegrityChecks:md5sums']),
+        performance_data=dict(type='dict', required=False,
+                              options=dict(
+                                  duration=dict(type='int', default=300),
+                                  interval=dict(type='int', default=5)
+                              ))
     )
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
