@@ -500,16 +500,26 @@ class PyVmomiHelper(PyVmomi):
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 device=device_obj()
             )
+            if mac_address:
+                nic_spec.device.addressType = 'manual'
+                nic_spec.device.macAddress = mac_address
+
+            if label:
+                nic_spec.device.deviceInfo = vim.Description(
+                    label=label
+                )
         else:
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 operation=vim.vm.device.VirtualDeviceSpec.Operation.edit,
                 device=nic_obj
             )
-
-        if label:
-            nic_spec.device.deviceInfo = vim.Description(
-                label=label
-            )
+            if label and label != nic_obj.deviceInfo.label:
+                nic_spec.device.deviceInfo = vim.Description(
+                    label=label
+                )
+            if mac_address and mac_address != nic_obj.macAddress:
+                nic_spec.device.addressType = 'manual'
+                nic_spec.device.macAddress = mac_address
 
         nic_spec.device.backing = self._nic_backing_from_obj(network)
         nic_spec.device.connectable = vim.vm.device.VirtualDevice.ConnectInfo(
@@ -518,10 +528,6 @@ class PyVmomiHelper(PyVmomi):
             connected=connected
         )
         nic_spec.device.wakeOnLanEnabled = wake_onlan
-
-        if mac_address:
-            nic_spec.device.addressType = 'manual'
-            nic_spec.device.macAddress = mac_address
 
         if directpath_io and isinstance(nic_spec.device, vim.vm.device.VirtualVmxnet3):
             nic_spec.device.uptCompatibilityEnabled = True
@@ -695,19 +701,15 @@ class PyVmomiHelper(PyVmomi):
 
         if (mac_address and mac_address in mac_addr_lst) or (label and label in label_lst):
             for nic_obj in nic_obj_lst:
-                if mac_address and nic_obj.macAddress == mac_address:
+                if (mac_address and nic_obj.macAddress == mac_address) or (label and label == nic_obj.deviceInfo.label):
                     device_spec = self._new_nic_spec(vm_obj, nic_obj, network_params)
-
-                if not mac_address and label:
-                    if hasattr(nic_obj, 'deviceInfo'):
-                        if nic_obj.deviceInfo.label == label:
-                            device_spec = self._new_nic_spec(vm_obj, nic_obj, network_params)
 
             # fabricate diff for check_mode
             if self.module.check_mode:
                 for nic in nic_info:
                     nic_mac = nic.get('mac_address')
-                    if nic_mac == mac_address:
+                    nic_label = nic.get('label')
+                    if nic_mac == mac_address or nic_label == label:
                         diff['after'][nic_mac] = copy.deepcopy(nic)
                         diff['after'][nic_mac].update({'switch': switch or nic['switch']})
                         if network_obj:
