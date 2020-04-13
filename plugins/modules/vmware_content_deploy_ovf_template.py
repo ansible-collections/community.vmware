@@ -18,11 +18,10 @@ module: vmware_content_deploy_ovf_template
 short_description: Deploy Virtual Machine from ovf template stored in content library.
 description:
 - Module to deploy virtual machine from ovf template in content library.
-- Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
 version_added: '2.9'
 author:
-- Lev Goncharv (@ultralisc)
+- Lev Goncharv (@ultral)
 notes:
 - Tested on vSphere 6.7
 requirements:
@@ -32,7 +31,7 @@ requirements:
 options:
     ovf_template:
       description:
-      - The name of ovf template from which VM to be deployed.
+      - The name of OVF template from which VM to be deployed.
       type: str
       required: True
       aliases: ['ovf','template_src']
@@ -76,21 +75,7 @@ extends_documentation_fragment: vmware_rest_client.documentation
 '''
 
 EXAMPLES = r'''
-- name: Deploy Virtual Machine from ovf template in content library
-  vmware_content_deploy_ovf_template:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    ovf_template: rhel_test_template
-    datastore: Shared_NFS_Volume
-    folder: vm
-    datacenter: Sample_DC_1
-    name: Sample_VM
-    resource_pool: test_rp
-    validate_certs: False
-  delegate_to: localhost
-
-- name: Deploy Virtual Machine from ovf template in content library with PowerOFF State
+- name: Deploy Virtual Machine from OVF template in content library
   vmware_content_deploy_ovf_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -126,7 +111,6 @@ try:
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
-
 
 class VmwareContentDeployOvfTemplate(VmwareRestClient):
     def __init__(self, module):
