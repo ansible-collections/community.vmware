@@ -116,15 +116,12 @@ vm_deploy_info:
     }
 '''
 
-import uuid
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.vmware_rest_client import VmwareRestClient
 from ansible.module_utils.vmware import PyVmomi
-from ansible.module_utils._text import to_native
 
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
-    from com.vmware.content.library_client import Item
     from com.vmware.vcenter.ovf_client import LibraryItem
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
@@ -200,11 +197,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
             additional_parameters=None,
             default_datastore_id=None)
 
-        result = self.api_client.vcenter.ovf.LibraryItem.deploy(
-                    self.library_item_id,
-                    deployment_target,
-                    self.deploy_spec
-                )
+        result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
 
         if result.succeeded:
             self.module.exit_json(
@@ -221,7 +214,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        ovf_template=dict(type='str', aliases=['template_src','ovf'], required=True),
+        ovf_template=dict(type='str', aliases=['template_src', 'ovf'], required=True),
         name=dict(type='str', required=True, aliases=['vm_name']),
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
