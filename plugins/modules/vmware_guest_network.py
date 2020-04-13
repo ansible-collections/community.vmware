@@ -682,12 +682,16 @@ class PyVmomiHelper(PyVmomi):
         vlan_id_lst = [d.get('vlan_id') for d in nic_info]
         network_name_lst = [d.get('network_name') for d in nic_info]
 
-        if ((vlan_id in vlan_id_lst or network_name in network_name_lst) and not
-                mac_address and not force):
+        # TODO: make checks below less inelegant
+        if ((vlan_id in vlan_id_lst or network_name in network_name_lst)
+                and not mac_address
+                and not label
+                and not force
+            ):
             for nic in nic_info:
                 diff['before'].update({nic.get('mac_address'): copy.copy(nic)})
                 diff['after'].update({nic.get('mac_address'): copy.copy(nic)})
-            return diff, False, nic_info
+            return diff, changed, nic_info
 
         if not network_obj and (network_name or vlan_id):
             self.module.fail_json(
