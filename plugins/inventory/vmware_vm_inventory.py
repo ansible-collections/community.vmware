@@ -24,8 +24,8 @@ DOCUMENTATION = r'''
       - "Python >= 2.7"
       - "PyVmomi"
       - "requests >= 2.3"
-      - "vSphere Automation SDK"
-      - "vCloud Suite SDK"
+      - "vSphere Automation SDK - For tag feature"
+      - "vCloud Suite SDK - For tag feature"
     options:
         hostname:
             description: Name of vCenter or ESXi server.
