@@ -112,6 +112,7 @@ try:
 except ImportError:
     pass
 
+
 class VmwareContentDeployOvfTemplate(VmwareRestClient):
     def __init__(self, module):
         """Constructor."""
@@ -229,6 +230,7 @@ def main():
         )
         module.exit_json(**result)
     vmware_contentlib_create.deploy_vm_from_ovf_template()
+
 
 if __name__ == '__main__':
     main()
