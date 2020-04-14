@@ -18,7 +18,7 @@ DOCUMENTATION = '''
 module: vmware_host_logbundle_info
 short_description: Gathers manifest info for logbundle
 description:
-    - This module can be used to gather manifest infomation for logbundle.
+    - This module can be used to gather manifest information for logbundle from ESXi.
 author:
     - sky-joker (@sky-joker)
 requirements:
@@ -43,8 +43,6 @@ EXAMPLES = '''
     validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
   register: fetch_manifests_result
-
-- debug: var=fetch_manifests_result
 '''
 
 RETURN = '''
