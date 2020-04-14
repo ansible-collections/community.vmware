@@ -383,7 +383,7 @@
   - name: check that nic_info includes network_info
     assert:
       that:
-        - "{{ nic_info.network_info | bool }}"
+        - nic_info.network_info is defined
 
   - name: Remove all network interfaces with loop
     vmware_guest_network:
@@ -411,14 +411,18 @@
       that:
         - "{{ nic_info2.network_info | length | int }} == 0"
 
-  - name: add new adapters
+  - name: add new adapter(s)
     vmware_guest_network:
       validate_certs: False
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       name: test_vm1
-      network_name: "{{ item.network_name }}"
+      network_name: "VM Network"
       state: present
-    loop:
-      - "VM Network"
+    register: new_nic
+
+  - name: check that nic was created
+    assert:
+      that:
+        - "{{ new_nic.network_info | length | int }} > 0"
