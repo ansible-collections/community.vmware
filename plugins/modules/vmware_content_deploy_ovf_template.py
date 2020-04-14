@@ -33,7 +33,7 @@ options:
       - The name of OVF template from which VM to be deployed.
       type: str
       required: True
-      aliases: ['ovf','template_src']
+      aliases: ['ovf', 'template_src']
     name:
       description:
       - The name of the VM to be deployed.
