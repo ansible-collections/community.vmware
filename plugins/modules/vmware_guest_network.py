@@ -274,7 +274,7 @@ network_info:
             "wake_onlan": true
         }
     ]
-network_date:
+network_data:
   description: For backwards compatibility, metadata about the virtual machine network adapters
   returned: when using gather_network_info or networks parameters
   type: dict
