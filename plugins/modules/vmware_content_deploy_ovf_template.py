@@ -19,7 +19,6 @@ short_description: Deploy Virtual Machine from ovf template stored in content li
 description:
 - Module to deploy virtual machine from ovf template in content library.
 - All variables and VMware object names are case sensitive.
-version_added: '2.9'
 author:
 - Lev Goncharv (@ultral)
 notes:
