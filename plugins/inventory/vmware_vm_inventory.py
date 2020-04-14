@@ -195,7 +195,7 @@ except ImportError:
 try:
     from pyVim import connect
     from pyVmomi import vim, vmodl
-    from pyVmomi.VmomiSupport import DataObject, UnknownWsdlTypeError
+    from pyVmomi.VmomiSupport import DataObject
     from pyVmomi import Iso8601
     HAS_PYVMOMI = True
 except ImportError:
@@ -443,8 +443,8 @@ class BaseVMwareInventory:
             return self.content.propertyCollector.RetrieveContents([filter_spec])
         except vmodl.query.InvalidProperty as err:
             _handle_error("Invalid property name: %s" % err.name)
-        except UnknownWsdlTypeError as err:
-            _handle_error("Unknown Wsdl Type Error: %s" % err)
+        except Exception as err:  # pylint: disable=broad-except
+            _handle_error("Couldn't retrieve contents from host: %s" % to_native(err))
         return []
 
     @staticmethod

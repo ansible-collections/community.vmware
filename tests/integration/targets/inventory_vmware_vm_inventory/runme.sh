@@ -34,15 +34,15 @@ cleanup() {
 trap cleanup INT TERM EXIT
 
 # Prepare tests
-ansible-playbook        -i 'localhost,' playbook/prepare_vmware.yml "$@"
+ansible-playbook        playbook/prepare_vmware.yml "$@"
 
 # Test Cache
-ansible-playbook        -i 'localhost,' playbook/build_inventory_with_cache.yml "$@"
+ansible-playbook        playbook/build_inventory_with_cache.yml "$@"
 ansible-inventory       -i "${INVENTORY_DIR}" --list 1>/dev/null
 ansible-playbook        -i "${INVENTORY_DIR}" playbook/test_inventory_cache.yml "$@"
 
 # Test YAML and TOME
-ansible-playbook        -i 'localhost,' playbook/build_inventory_without_cache.yml "$@"
+ansible-playbook        playbook/build_inventory_without_cache.yml "$@"
 ansible-inventory       -i "${INVENTORY_DIR}" --list --yaml 1>/dev/null
 if ${ANSIBLE_PYTHON_INTERPRETER} -m pip list 2>/dev/null | grep toml >/dev/null 2>&1; then
     ansible-inventory   -i "${INVENTORY_DIR}" --list --toml 1>/dev/null
@@ -52,4 +52,4 @@ fi
 ansible-playbook        -i "${INVENTORY_DIR}" playbook/test_vmware_vm_inventory.yml "$@"
 
 # Test options
-exec ansible-playbook   -i "${INVENTORY_DIR}" playbook/test_options.yml "$@"
+ansible-playbook   -i "${INVENTORY_DIR}" playbook/test_options.yml "$@"
