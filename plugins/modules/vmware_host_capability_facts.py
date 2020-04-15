@@ -136,7 +136,6 @@ class CapabilityFactsManager(PyVmomi):
                 recordReplaySupported=hc.recordReplaySupported,
                 ftSupported=hc.ftSupported,
                 replayUnsupportedReason=hc.replayUnsupportedReason,
-                checkpointFtSupported=hc.checkpointFtSupported,
                 smpFtSupported=hc.smpFtSupported,
                 maxVcpusPerFtVm=hc.maxVcpusPerFtVm,
                 loginBySSLThumbprintSupported=hc.loginBySSLThumbprintSupported,
@@ -196,10 +195,16 @@ class CapabilityFactsManager(PyVmomi):
                 supportedVmfsMajorVersion=[version for version in hc.supportedVmfsMajorVersion],
                 vmDirectPathGen2UnsupportedReason=[reason for reason in hc.vmDirectPathGen2UnsupportedReason],
                 ftCompatibilityIssues=[issue for issue in hc.ftCompatibilityIssues],
-                checkpointFtCompatibilityIssues=[issue for issue in hc.checkpointFtCompatibilityIssues],
                 smpFtCompatibilityIssues=[issue for issue in hc.smpFtCompatibilityIssues],
                 replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
             )
+
+            if hasattr(hc, 'checkpointFtSupported'):
+                hosts_capability_facts[host.name]['checkpointFtSupported'] = hc.checkpointFtSupported
+
+            if hasattr(hc, 'checkpointFtCompatibilityIssues'):
+                hosts_capability_facts[host.name]['checkpointFtCompatibilityIssues'] = [issue for issue in hc.checkpointFtCompatibilityIssues],
+
         return hosts_capability_facts
 
 
