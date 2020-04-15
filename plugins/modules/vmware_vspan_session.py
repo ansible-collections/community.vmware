@@ -485,11 +485,18 @@ class VMwareVspanSession(PyVmomi):
             session.sourcePortTransmitted = port
 
     def check_source_port_received(self, session):
-        if self.source_port_received is not None:
-            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
-            if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
-            session.sourcePortReceived = port
+        if self.session_type == 'remoteMirrorDest':
+                if self.source_port_received is not None:
+                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(vlans=[int(self.source_port_received)])
+                    if int(self.source_port_received) not in self.dv_switch.QueryUsedVlanIdInDvs():
+                        self.module.fail_json(msg="Couldn't find vlan: {0:s}".format(self.source_port_received))
+                    session.sourcePortReceived = port
+        else:
+            if self.source_port_received is not None:
+                port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
+                if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                    self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
+                session.sourcePortReceived = port
 
     def check_destination_port(self, session):
         if self.session_type == 'encapsulatedRemoteMirrorSource':
