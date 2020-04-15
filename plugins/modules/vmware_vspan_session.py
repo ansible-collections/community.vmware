@@ -491,6 +491,30 @@ class VMwareVspanSession(PyVmomi):
                 self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
             session.sourcePortReceived = port
 
+    def check_destination_port(self, session):
+        if self.session_type == 'encapsulatedRemoteMirrorSource':
+            if self.destination_port is not None:
+                port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(ipAddress=str(self.destination_port))
+                session.destinationPort = port
+                return
+        if self.session_type == 'remoteMirrorSource':
+            if self.destination_port is not None:
+                port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(uplinkPortName=str(self.destination_port))
+                session.destinationPort = port
+                return
+        if self.session_type == 'remoteMirrorDest':
+            if self.destination_port is not None:
+                port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
+                if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                    self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
+                session.destinationPort = port
+        if self.session_type == 'dvPortMirror':
+            if self.destination_port is not None:
+                port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
+                if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                    self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
+                session.destinationPort = port
+
     def check_self_properties(self, session):
         if self.description is not None:
             session.description = self.description
@@ -517,30 +541,18 @@ class VMwareVspanSession(PyVmomi):
             if self.session_type == 'encapsulatedRemoteMirrorSource':
                 self.check_source_port_received(session)
                 self.check_source_port_transmitted(session)
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(ipAddress=str(self.destination_port))
-                    session.destinationPort = port
+                self.check_destination_port(session)
             if self.session_type == 'remoteMirrorSource':
                 self.check_source_port_received(session)
                 self.check_source_port_transmitted(session)
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(uplinkPortName=str(self.destination_port))
-                    session.destinationPort = port
+                self.check_destination_port(session)
             if self.session_type == 'remoteMirrorDest':
                 self.check_source_port_received(session)
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
-                    session.destinationPort = port
+                self.check_destination_port(session)
             if self.session_type == 'dvPortMirror':
                 self.check_source_port_received(session)
                 self.check_source_port_transmitted(session)
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
-                    session.destinationPort = port
+                self.check_destination_port(session)
 
         self.check_self_properties(session)
 
