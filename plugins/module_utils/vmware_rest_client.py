@@ -18,8 +18,8 @@ except ImportError:
 
 PYVMOMI_IMP_ERR = None
 try:
-    from pyVim import connect
-    from pyVmomi import vim, vmodl
+    from pyVim import connect  # noqa: F401
+    from pyVmomi import vim  # noqa: F401
     HAS_PYVMOMI = True
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
@@ -170,7 +170,6 @@ class VmwareRestClient(object):
             tag_assoc_svc = self.api_client.tagging.TagAssociation
 
         tag_ids = tag_assoc_svc.list_attached_tags(dobj)
-
         for tag_id in tag_ids:
             tags.append(tag_service.get(tag_id))
 
@@ -189,7 +188,7 @@ class VmwareRestClient(object):
         if dobj is None:
             return tags
 
-        temp_tags_model = self.get_tags_for_object(dobj)
+        temp_tags_model = self.get_tags_for_object(dobj=dobj)
 
         category_service = self.api_client.tagging.Category
 
@@ -204,6 +203,18 @@ class VmwareRestClient(object):
 
         return tags
 
+    def get_tags_for_datacenter(self, datacenter_mid=None):
+        """
+        Return list of tag object associated with datacenter
+        Args:
+            datacenter_mid: Dynamic object for datacenter
+
+        Returns: List of tag object associated with the given datacenter
+
+        """
+        dobj = DynamicID(type='Datacenter', id=datacenter_mid)
+        return self.get_tags_for_dynamic_obj(dobj=dobj)
+
     def get_tags_for_cluster(self, cluster_mid=None):
         """
         Return list of tag object associated with cluster
@@ -214,7 +225,7 @@ class VmwareRestClient(object):
 
         """
         dobj = DynamicID(type='cluster', id=cluster_mid)
-        return self.get_tags_for_dynamic_obj(dobj)
+        return self.get_tags_for_dynamic_obj(dobj=dobj)
 
     def get_tags_for_hostsystem(self, hostsystem_mid=None):
         """
@@ -226,7 +237,7 @@ class VmwareRestClient(object):
 
         """
         dobj = DynamicID(type='HostSystem', id=hostsystem_mid)
-        return self.get_tags_for_dynamic_obj(dobj)
+        return self.get_tags_for_dynamic_obj(dobj=dobj)
 
     def get_tags_for_vm(self, vm_mid=None):
         """
@@ -238,7 +249,7 @@ class VmwareRestClient(object):
 
         """
         dobj = DynamicID(type='VirtualMachine', id=vm_mid)
-        return self.get_tags_for_dynamic_obj(dobj)
+        return self.get_tags_for_dynamic_obj(dobj=dobj)
 
     def get_vm_tags(self, tag_service=None, tag_association_svc=None, vm_mid=None):
         """

@@ -16,7 +16,7 @@ VMWARE_CONFIG=test-config.vmware.yaml
 inventory_cache="$(pwd)/inventory_cache"
 
 cat > "$VMWARE_CONFIG" <<VMWARE_YAML
-plugin: vmware_vm_inventory
+plugin: community.vmware.vmware_vm_inventory
 strict: False
 validate_certs: False
 with_tags: False

@@ -139,15 +139,16 @@ class VMwareConfigurationBackup(PyVmomi):
         url = url.replace('*', self.host.name)
         # find manually the url if there is a redirect because urllib2 -per RFC- doesn't do automatic redirects for PUT requests
         try:
-            request = open_url(url=url, method='HEAD', validate_certs=self.validate_certs)
+            open_url(url=url, method='HEAD', validate_certs=self.validate_certs)
         except HTTPError as e:
             url = e.geturl()
 
         try:
             with open(self.src, 'rb') as file:
                 data = file.read()
-            request = open_url(url=url, data=data, method='PUT', validate_certs=self.validate_certs,
-                               url_username=self.username, url_password=self.password, force_basic_auth=True)
+            open_url(
+                url=url, data=data, method='PUT', validate_certs=self.validate_certs,
+                url_username=self.username, url_password=self.password, force_basic_auth=True)
         except Exception as e:
             self.module.fail_json(msg=to_native(e))
 

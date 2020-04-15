@@ -143,8 +143,8 @@ class ChangeHelper:
         self.new = new
 
     def __eq__(self, other):
-        return ((self.key, self.new.enabled, self.new.level) ==
-                (other.key, other.new.enabled, other.new.level))
+        return ((self.key, self.new.enabled, self.new.level)
+                == (other.key, other.new.enabled, other.new.level))
 
     def __gt__(self, other):
         if self.key < other.key:

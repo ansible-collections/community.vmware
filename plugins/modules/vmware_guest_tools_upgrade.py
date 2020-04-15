@@ -68,6 +68,16 @@ options:
             - Destination datacenter where the virtual machine exists.
         required: True
         type: str
+    force_upgrade:
+        description:
+            - This flag overrides the guest operating system detection and forcibly upgrade
+              VMware tools or open-vm-tools.
+            - This is useful when VMware tools is too old and unable to detect the 'guestFamily' value.
+            - Using this flag may sometime give unexpected results since module will override the default
+              behaviour of 'guestFamily' detection.
+        default: False
+        type: bool
+        required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -86,7 +96,7 @@ EXAMPLES = '''
     name: "{{ vm_name }}"
   delegate_to: localhost
   register: vm_facts
-  
+
 - name: Upgrade VMware Tools using uuid
   vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
@@ -148,7 +158,8 @@ class PyVmomiHelper(PyVmomi):
         # Upgrade tools on Linux and Windows guests
         elif vm.guest.toolsStatus == "toolsOld":
             try:
-                if vm.guest.guestFamily in ["linuxGuest", "windowsGuest"]:
+                force = self.module.params.get('force_upgrade')
+                if force or vm.guest.guestFamily in ["linuxGuest", "windowsGuest"]:
                     task = vm.UpgradeTools()
                     changed, err_msg = wait_for_task(task)
                     result.update(changed=changed, msg=to_native(err_msg))
@@ -178,6 +189,7 @@ def main():
         moid=dict(type='str'),
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
+        force_upgrade=dict(type='bool', default=False),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,

@@ -1,0 +1,74 @@
+# Test code for the vmware_datacenter_info module.
+# Copyright: (c) 2020, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+- name: Gather information about all datacenter
+  vmware_datacenter_info:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+  register: dc_result
+
+- debug:
+    var: dc_result
+
+- name: Ensure datacenter is present
+  assert:
+    that:
+        - dc_result.datacenter_info
+
+- name: Gather information about all datacenter in check mode
+  vmware_datacenter_info:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+  register: dc_result
+  check_mode: yes
+
+- debug:
+    var: dc_result
+
+- name: Ensure datacenter is present
+  assert:
+    that:
+        - dc_result.datacenter_info
+
+- name: Gather information about particular datacenter
+  vmware_datacenter_info:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_result.datacenter_info[0]['name'] }}"
+  register: dc_result
+
+- debug:
+    var: dc_result
+
+- name: Ensure datacenter is present
+  assert:
+    that:
+        - dc_result.datacenter_info
+
+- name: Gather information about particular datacenter in check mode
+  vmware_datacenter_info:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_result.datacenter_info[0]['name'] }}"
+  register: dc_result
+  check_mode: yes
+
+- debug:
+    var: dc_result
+
+- name: Ensure datacenter is present
+  assert:
+    that:
+        - dc_result.datacenter_info
