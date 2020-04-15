@@ -1,0 +1,2 @@
+minor_changes:
+- add vmware_content_deploy_ovf_template module for creating VMs from OVF templates
