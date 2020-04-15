@@ -4,7 +4,6 @@ This repo hosts the `community.vmware` Ansible Collection.
 
 The collection includes the VMware modules and plugins supported by Ansible VMware community to help the management of VMware infrastructure.
 
-
 ## Installation and Usage
 
 ### Installing the Collection from Ansible Galaxy
