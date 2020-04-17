@@ -23,6 +23,8 @@
       that:
         - not (capability_0001_results is changed)
         - capability_0001_results.hosts_capability_info is defined
+        - capability_0001_results.hosts_capability_info[esxi1].checkpointFtSupported is defined
+        - capability_0001_results.hosts_capability_info[esxi1].checkpointFtCompatibilityIssues is defined
 
   - name: Gather capability info for ESXi host
     vmware_host_capability_info:
@@ -36,3 +38,5 @@
       that:
         - not (capability_0002_results is changed)
         - capability_0002_results.hosts_capability_info is defined
+        - capability_0002_results.hosts_capability_info[esxi1].checkpointFtSupported is defined
+        - capability_0002_results.hosts_capability_info[esxi1].checkpointFtCompatibilityIssues is defined
