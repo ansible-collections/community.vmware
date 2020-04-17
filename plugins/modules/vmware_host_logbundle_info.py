@@ -36,7 +36,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: fetch the manifests for logbundle from ESXi
-  vmware_host_logbundle_info:
+  community.vmware.vmware_host_logbundle_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
