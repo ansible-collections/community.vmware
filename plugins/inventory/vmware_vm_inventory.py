@@ -64,6 +64,13 @@ DOCUMENTATION = r'''
             - U(https://code.vmware.com/web/sdk/65/vsphere-automation-python)
             default: False
             type: bool
+        host_filters:
+            description:
+            - Client-side filtering of hosts with jinja2 templating.
+            - When server-side filtering is introduced, it should be preferred over this.
+            type: list
+            elements: str
+            default: []
         properties:
             description:
             - Specify the list of VMware schema properties associated with the VM.
@@ -105,6 +112,7 @@ import ssl
 import atexit
 import json
 from ansible.errors import AnsibleError, AnsibleParserError
+from ansible.module_utils._text import to_native
 
 
 try:
@@ -129,7 +137,7 @@ except ImportError:
     HAS_VSPHERE = False
 
 
-from ansible.plugins.inventory import BaseInventoryPlugin, Cacheable
+from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 
 
 class BaseVMwareInventory:
@@ -344,7 +352,7 @@ class BaseVMwareInventory:
         return result
 
 
-class InventoryModule(BaseInventoryPlugin, Cacheable):
+class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
     NAME = 'community.vmware.vmware_vm_inventory'
 
@@ -493,11 +501,32 @@ class InventoryModule(BaseInventoryPlugin, Cacheable):
                     cacheable_results[vm_guest_id]['hosts'].append(current_host)
                     self.inventory.add_child(vm_guest_id, current_host)
 
+        host_filters = self.get_option('host_filters')
+
         for host in hostvars:
             h = self.inventory.get_host(host)
-            cacheable_results['_meta']['hostvars'][h.name] = h.vars
+
+            # TODO: hook into strict option if introduced
+            if not self._can_add_host(host_filters, h.vars, h, True):
+                self.inventory.remove_host(h)
+            else:
+                cacheable_results['_meta']['hostvars'][h.name] = h.vars
 
         return cacheable_results
+
+    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+        for host_filter in host_filters:
+            try:
+                can_add_host = self._compose(host_filter, host_properties)
+                if not can_add_host:
+                    return False
+            except Exception as e:
+                if strict:
+                    raise AnsibleError("Could not evaluate %s as host_filter for %s, error: %s" % (
+                        host_filter, host.name, to_native(e)))
+                return False
+
+        return True
 
     def _populate_host_properties(self, vm_obj, current_host):
         # Load VM properties in host_vars
