@@ -123,10 +123,7 @@ import ssl
 import atexit
 import json
 from ansible.errors import AnsibleError, AnsibleParserError
-from ansible.utils.display import Display
 from ansible.module_utils._text import to_text, to_native
-
-display = Display()
 
 try:
     # requests is required for exception handling of the ConnectionError
