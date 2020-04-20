@@ -132,7 +132,6 @@ class CapabilityInfoManager(PyVmomi):
                 recordReplaySupported=hc.recordReplaySupported,
                 ftSupported=hc.ftSupported,
                 replayUnsupportedReason=hc.replayUnsupportedReason,
-                checkpointFtSupported=hc.checkpointFtSupported,
                 smpFtSupported=hc.smpFtSupported,
                 maxVcpusPerFtVm=hc.maxVcpusPerFtVm,
                 loginBySSLThumbprintSupported=hc.loginBySSLThumbprintSupported,
@@ -192,10 +191,19 @@ class CapabilityInfoManager(PyVmomi):
                 supportedVmfsMajorVersion=[version for version in hc.supportedVmfsMajorVersion],
                 vmDirectPathGen2UnsupportedReason=[reason for reason in hc.vmDirectPathGen2UnsupportedReason],
                 ftCompatibilityIssues=[issue for issue in hc.ftCompatibilityIssues],
-                checkpointFtCompatibilityIssues=[issue for issue in hc.checkpointFtCompatibilityIssues],
                 smpFtCompatibilityIssues=[issue for issue in hc.smpFtCompatibilityIssues],
                 replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
             )
+
+            # The `checkpointFtSupported` and `checkpointFtCompatibilityIssues` properties have been removed from pyvmomi 7.0.
+            # The parameters can be substituted as follows.
+            #   checkpointFtSupported => smpFtSupported
+            #   checkpointFtSupported => smpFtCompatibilityIssues.
+            # So add `checkpointFtSupported` and `checkpointFtCompatibilityIssues` keys for compatibility with previous versions.
+            # https://github.com/ansible-collections/vmware/pull/118
+            hosts_capability_info[host.name]['checkpointFtSupported'] = hosts_capability_info[host.name]['smpFtSupported']
+            hosts_capability_info[host.name]['checkpointFtCompatibilityIssues'] = hosts_capability_info[host.name]['smpFtCompatibilityIssues']
+
         return hosts_capability_info
 
 
