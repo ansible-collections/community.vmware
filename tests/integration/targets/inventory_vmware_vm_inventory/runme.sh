@@ -1,83 +1,57 @@
 #!/usr/bin/env bash
+set -eux
 
-[[ -n "$DEBUG" || -n "$ANSIBLE_DEBUG" ]] && set -x
+# Envs
+export ANSIBLE_PYTHON_INTERPRETER=${ANSIBLE_TEST_PYTHON_INTERPRETER:-$(which python)}
+export ANSIBLE_INVENTORY_ENABLED="community.vmware.vmware_vm_inventory,host_list,ini"
+export ANSIBLE_CACHE_PLUGIN_CONNECTION="${PWD}/inventory_cache"
+export ANSIBLE_CACHE_PLUGIN="community.general.jsonfile"
 
-set -euo pipefail
-
-# Required to differentiate between Python 2 and 3 environ
-PYTHON=${ANSIBLE_TEST_PYTHON_INTERPRETER:-python}
-
-export ANSIBLE_CONFIG=ansible.cfg
-export VMWARE_SERVER="${VCENTER_HOSTNAME}"
-export VMWARE_USERNAME="${VCENTER_USERNAME}"
-export VMWARE_PASSWORD="${VCENTER_PASSWORD}"
-port=5000
-VMWARE_CONFIG=test-config.vmware.yaml
-inventory_cache="$(pwd)/inventory_cache"
-
-cat > "$VMWARE_CONFIG" <<VMWARE_YAML
-plugin: community.vmware.vmware_vm_inventory
-strict: False
-validate_certs: False
-with_tags: False
-VMWARE_YAML
+export INVENTORY_DIR="${PWD}/_test/hosts"
+mkdir -p "${INVENTORY_DIR}" 2>/dev/null
+touch "${INVENTORY_DIR}/empty.vmware.yml"
 
 cleanup() {
+    ec=$?
     echo "Cleanup"
-    if [ -f "${VMWARE_CONFIG}" ]; then
-        rm -f "${VMWARE_CONFIG}"
+    if [ -d "${ANSIBLE_CACHE_PLUGIN_CONNECTION}" ]; then
+        echo "Removing ${ANSIBLE_CACHE_PLUGIN_CONNECTION}"
+        rm -rf "${ANSIBLE_CACHE_PLUGIN_CONNECTION}"
     fi
-    if [ -d "${inventory_cache}" ]; then
-        echo "Removing ${inventory_cache}"
-        rm -rf "${inventory_cache}"
+
+    if [ -d "${INVENTORY_DIR}" ]; then
+        echo "Removing ${INVENTORY_DIR}"
+        rm -rf "${INVENTORY_DIR}"
     fi
+
+    unset ANSIBLE_INVENTORY_ENABLED
+    unset ANSIBLE_CACHE_PLUGIN ANSIBLE_CACHE_PLUGIN_CONNECTION
+    unset INVENTORY_DIR
+
     echo "Done"
-    exit 0
+    exit $ec
 }
 
 trap cleanup INT TERM EXIT
 
-echo "DEBUG: Using ${VCENTER_HOSTNAME} with username ${VCENTER_USERNAME} and password ${VCENTER_PASSWORD}"
+# Prepare tests
+ansible-playbook playbook/prepare_vmware.yml "$@"
 
-echo "Kill all previous instances"
-curl "http://${VCENTER_HOSTNAME}:${port}/killall" > /dev/null 2>&1
+# Test Cache
+# Cache requires community.general.jsonfile
+# ansible-playbook playbook/build_inventory_with_cache.yml "$@"
+# ansible-inventory -i "${INVENTORY_DIR}" --list 1>/dev/null
+# ansible-playbook -i "${INVENTORY_DIR}" playbook/test_inventory_cache.yml "$@"
 
-echo "Start new VCSIM server"
-curl "http://${VCENTER_HOSTNAME}:${port}/spawn?datacenter=1&cluster=1&folder=0" > /dev/null 2>&1
-
-echo "Debugging new instances"
-curl "http://${VCENTER_HOSTNAME}:${port}/govc_find"
-
-# Get inventory
-ansible-inventory -i ${VMWARE_CONFIG} --list
-
-echo "Check if cache is working for inventory plugin"
-if [ ! -n "$(find "${inventory_cache}" -maxdepth 1 -name 'vmware_vm_inventory_*' -print -quit)" ]; then
-    echo "Cache directory not found. Please debug"
-    exit 1
-fi
-echo "Cache is working"
-
-# Get inventory using YAML
-ansible-inventory -i ${VMWARE_CONFIG} --list --yaml
-
-# Install TOML for --toml
-${PYTHON} -m pip freeze | grep toml > /dev/null 2>&1
-TOML_TEST_RESULT=$?
-if [ $TOML_TEST_RESULT -ne 0 ]; then
-    echo "Installing TOML package"
-    ${PYTHON} -m pip install toml
-else
-    echo "TOML package already exists, skipping installation"
+# Test YAML and TOML
+ansible-playbook playbook/build_inventory_without_cache.yml "$@"
+ansible-inventory -i "${INVENTORY_DIR}" --list --yaml 1>/dev/null
+if ${ANSIBLE_PYTHON_INTERPRETER} -m pip list 2>/dev/null | grep toml >/dev/null 2>&1; then
+    ansible-inventory -i "${INVENTORY_DIR}" --list --toml 1>/dev/null
 fi
 
-# Get inventory using TOML
-ansible-inventory -i ${VMWARE_CONFIG} --list --toml
-TOML_INVENTORY_LIST_RESULT=$?
-if [ $TOML_INVENTORY_LIST_RESULT -ne 0 ]; then
-    echo "Inventory plugin failed to list inventory host using --toml, please debug"
-    exit 1
-fi
+# # Test playbook with the given inventory
+ansible-playbook -i "${INVENTORY_DIR}" playbook/test_vmware_vm_inventory.yml "$@"
 
-# Test playbook with given inventory
-ansible-playbook -i ${VMWARE_CONFIG} test_vmware_vm_inventory.yml --connection=local "$@"
+# Test options
+ansible-playbook -i "${INVENTORY_DIR}" playbook/test_options.yml "$@"
