@@ -77,10 +77,14 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
+            - C(config.name), C(config.uuid) are required properties if C(hostnames) is set to default.
+            - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
             - In addition to VM properties, the following are special values
             - Use C(customValue) to populate virtual machine's custom attributes.
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
+            - Please refer more VMware guest attributes which can be used as properties
+              U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
             type: list
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
@@ -93,7 +97,14 @@ DOCUMENTATION = r'''
             - This option transform flatten properties name to nested dictionary.
             type: bool
             default: False
-
+        keyed_groups:
+            description:
+            - Add hosts to group based on the values of a variable.
+            type: list
+            default: [
+                {key: 'config.guestId', separator: ''},
+                {key: 'summary.runtime.powerState', separator: ''},
+            ]
 '''
 
 EXAMPLES = r'''
@@ -117,6 +128,27 @@ EXAMPLES = r'''
     properties:
     - 'name'
     - 'guest.ipAddress'
+
+# Create Groups based upon VMware Tools status
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.toolsStatus'
+    - 'guest.toolsRunningStatus'
+    hostnames:
+    - config.name
+    keyed_groups:
+    - key: guest.toolsStatus
+      separator: ''
+    - key: guest.toolsRunningStatus
+      separator: ''
 '''
 
 import ssl
@@ -627,6 +659,11 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
     def _populate_host_properties(self, host_properties, host):
         # Load VM properties in host_vars
         self.inventory.add_host(host)
+
+        # Use constructed if applicable
+        strict = self.get_option('strict')
+        # Create groups based on variable values and add the corresponding hosts to it
+        self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
 
         with_nested_properties = self.get_option('with_nested_properties')
         if with_nested_properties:

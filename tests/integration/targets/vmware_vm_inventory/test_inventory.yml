@@ -6,7 +6,6 @@
   tasks:
     - assert:
         that:
-            # TODO: Commenting temporarily once keyed_groups added uncomment following
-            # - "{{ groups['debian8_64Guest'] | length }} == 4"
+            - "{{ groups['debian8_64Guest'] | length }} == 4"
             - hostvars['DC0_H0_VM0'] is defined
 
