@@ -70,6 +70,11 @@ options:
       - Name of the cluster in datacenter in which to place deployed VM.
       type: str
       required: False
+    storage_provisioning:
+      description:
+      - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.
+      type: str
+      choices: [ thin, thick, eagerZeroedThick ]
 extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
 '''
 
@@ -86,6 +91,21 @@ EXAMPLES = r'''
     name: Sample_VM
     resource_pool: test_rp
     validate_certs: False
+  delegate_to: localhost
+
+- name: Deploy Virtual Machine from OVF template in content library with thin storage
+  vmware_content_deploy_ovf_template:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    ovf_template: rhel_test_template
+    datastore: Shared_NFS_Volume
+    folder: vm
+    datacenter: Sample_DC_1
+    name: Sample_VM
+    resource_pool: test_rp
+    validate_certs: False
+    storage_provisioning: thin
   delegate_to: localhost
 '''
 
@@ -124,6 +144,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         self.resourcepool = self.params.get('resource_pool')
         self.cluster = self.params.get('cluster')
         self.host = self.params.get('host')
+        self.storage_provisioning = self.params.get('storage_provisioning')
 
     def deploy_vm_from_ovf_template(self):
         # Find the datacenter by the given datacenter name
@@ -174,7 +195,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
             accept_all_eula=True,
             network_mappings=None,
             storage_mappings=None,
-            storage_provisioning=None,
+            storage_provisioning=self.storage_provisioning,
             storage_profile_id=None,
             locale=None,
             flags=None,
@@ -206,6 +227,10 @@ def main():
         host=dict(type='str', required=True),
         resource_pool=dict(type='str', required=False),
         cluster=dict(type='str', required=False),
+        storage_provisioning=dict(type='str',
+                                  required=False,
+                                  choices=['thin', 'thick', 'eagerZeroedThick'],
+                                  default=None),
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
