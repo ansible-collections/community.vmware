@@ -93,7 +93,7 @@ EXAMPLES = r'''
     validate_certs: False
   delegate_to: localhost
 
-- name: Deploy Virtual Machine from OVF template in content library with thin storage
+- name: Deploy Virtual Machine from OVF template in content library with eagerZeroedThick storage
   vmware_content_deploy_ovf_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -105,7 +105,7 @@ EXAMPLES = r'''
     name: Sample_VM
     resource_pool: test_rp
     validate_certs: False
-    storage_provisioning: thin
+    storage_provisioning: eagerZeroedThick
   delegate_to: localhost
 '''
 
