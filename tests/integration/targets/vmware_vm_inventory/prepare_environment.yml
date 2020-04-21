@@ -14,12 +14,14 @@
         setup_attach_host: true
         setup_datastore: true
         setup_virtualmachines: true
+
     - name: set state to poweron the first VM
       vmware_guest_powerstate:
         name: "{{ item.name }}"
         folder: '{{ f0 }}'
         state: powered-on
       with_items: '{{ virtual_machines }}'
+
     - copy:
         dest: vmware.yaml
         content: |
@@ -30,3 +32,5 @@
           password: "{{ vcenter_password }}"
           validate_certs: False
           with_tags: True
+          hostnames:
+            - config.name
