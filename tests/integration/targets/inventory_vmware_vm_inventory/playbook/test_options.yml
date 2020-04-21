@@ -151,6 +151,27 @@
         that:
           - "'poweredOff' in test_host.value.group_names"
 
+
+    - name: Inventory filters options
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.name
+            - runtime.powerState
+          filters:
+            - runtime.powerState == "poweredOff"
+          hostnames:
+            - config.name
+
+    - name: Test filters options
+      assert:
+        that:
+          - "'DC0_H0_VM0' in test_host.value.groups.all"
+
     - name: Inventory 'with_tag' option
       include_tasks: build_inventory.yml
       vars:
