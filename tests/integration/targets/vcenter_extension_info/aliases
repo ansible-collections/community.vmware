@@ -1,0 +1,4 @@
+shippable/vcenter/group1
+cloud/vcenter
+zuul/vmware/vcenter_only
+zuul/vmware/govcsim
