@@ -169,4 +169,4 @@
       assert:
         that:
           - "'tags' in test_host.value"
-      ignore_errors: yes # for vcsim
+      when: not (vcsim is defined)
