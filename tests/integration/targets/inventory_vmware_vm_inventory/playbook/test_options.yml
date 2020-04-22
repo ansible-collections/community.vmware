@@ -172,6 +172,40 @@
         that:
           - "'DC0_H0_VM0' in test_host.value.groups.all"
 
+
+    - name: Inventory 'Constructable' options - compose, groups
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.uuid
+            - config.guestId
+            - runtime.powerState
+            - config.name
+          compose:
+            ansible_host: 'config.name'
+            composed_var: 'config.name'
+          groups:
+            VMs: true
+          keyed_groups:
+            - key: 'config.guestId'
+              separator: ''
+            - key: 'runtime.powerState'
+              separator: ''
+
+    - name: Test 'Constructable' options - compose, groups
+      assert:
+        that:
+          - "'VMs' in test_host.value.group_names"
+          - "'poweredOff' in test_host.value.group_names"
+          - "'ansible_host' in test_host.value"
+          - "'composed_var' in test_host.value"
+          - test_host.value.ansible_host == test_host.value.config.name
+          - test_host.value.composed_var == test_host.value.config.name
+
     - name: Inventory 'with_tag' option
       include_tasks: build_inventory.yml
       vars:
