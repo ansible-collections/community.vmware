@@ -224,7 +224,7 @@ class BaseVMwareInventory:
         server = self.hostname
         if self.port:
             server += ":" + str(self.port)
-        err = None
+        client = None
         try:
             client = create_vsphere_client(server=server,
                                            username=self.username,
@@ -235,8 +235,6 @@ class BaseVMwareInventory:
 
         if client is None:
             msg = "Failed to login to %s using %s" % (server, self.username)
-            if err:
-                msg += " due to %s" % to_native(err)
             raise AnsibleError(msg)
         return client
 
