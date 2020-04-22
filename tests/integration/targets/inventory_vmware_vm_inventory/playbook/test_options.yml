@@ -149,7 +149,6 @@
     - name: Test 'Constructable' options - keyed_groups
       assert:
         that:
-          - "'VMs' in test_host.value.group_names"
           - "'poweredOff' in test_host.value.group_names"
 
     - name: Inventory 'with_tag' option
