@@ -166,8 +166,33 @@ EXAMPLES = r'''
     validate_certs: False
     properties:
     - runtime.powerState
+    - config.name
     filters:
     - runtime.powerState == "poweredOn"
+    hostnames:
+    - config.name
+
+# Using compose and groups
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.ipAddress'
+    compose:
+      # This will populate the IP address of virtual machine if available
+      # and will be used while communicating to the given virtual machine
+      ansible_host: 'guest.ipAddress'
+      composed_var: 'config.name'
+    groups:
+      VMs: True
+    hostnames:
+    - config.name
 '''
 
 import ssl
@@ -696,6 +721,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
         # Use constructed if applicable
         strict = self.get_option('strict')
+
+        # Composed variables
+        compose = self.get_option('compose')
+        if not compose:
+            compose['ansible_host'] = 'guest.ipAddress'
+
+        if not compose.get('ansible_host', None):
+            raise AnsibleError('"ansible_host" not found in "compose". '
+                               'Without this inventory will be useless.')
+        self._set_composite_vars(compose, host_properties, host, strict=strict)
+        # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
+        self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
 
