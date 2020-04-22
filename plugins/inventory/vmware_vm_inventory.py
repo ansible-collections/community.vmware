@@ -79,6 +79,7 @@ DOCUMENTATION = r'''
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
             - C(config.name), C(config.uuid) are required properties if C(hostnames) is set to default.
             - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
+            - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to VM properties, the following are special values
             - Use C(customValue) to populate virtual machine's custom attributes.
             - Use C(all) to populate all the properties of the virtual machine.
@@ -105,6 +106,13 @@ DOCUMENTATION = r'''
                 {key: 'config.guestId', separator: ''},
                 {key: 'summary.runtime.powerState', separator: ''},
             ]
+        filters:
+            description:
+            - This option allows client-side filtering hosts with jinja templating.
+            - When server-side filtering is introduced, it should be preferred over this.
+            type: list
+            elements: str
+            default: []
 '''
 
 EXAMPLES = r'''
@@ -124,7 +132,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'guest.ipAddress'
@@ -149,6 +156,18 @@ EXAMPLES = r'''
       separator: ''
     - key: guest.toolsRunningStatus
       separator: ''
+
+# Filter VMs based upon condition
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - runtime.powerState
+    filters:
+    - runtime.powerState == "poweredOn"
 '''
 
 import ssl
@@ -224,17 +243,20 @@ class BaseVMwareInventory:
         server = self.hostname
         if self.port:
             server += ":" + str(self.port)
-        client = None
+
+        client, err = None, None
         try:
             client = create_vsphere_client(server=server,
                                            username=self.username,
                                            password=self.password,
                                            session=session)
         except Exception as err:
-            display.warning(to_native(err))
+            err = err
 
         if client is None:
             msg = "Failed to login to %s using %s" % (server, self.username)
+            if err:
+                msg += " due to : %s" % to_native(err)
             raise AnsibleError(msg)
         return client
 
@@ -575,6 +597,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
         """
         hostvars = {}
+        strict = self.get_option('strict')
 
         vm_properties = self.get_option('properties')
         if not isinstance(vm_properties, list):
@@ -593,7 +616,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             vim_type=vim.VirtualMachine,
             properties=query_props,
             # resources=self.get_option('resources'),
-            strict=self.get_option('strict')
+            strict=strict,
         )
 
         tags_info = dict()
@@ -632,16 +655,17 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties['tags'] = attached_tags
 
             host_properties = to_nested_dict(properties)
-            host = self._get_hostname(host_properties, hostnames)
+            host = self._get_hostname(host_properties, hostnames, strict=strict)
 
-            if host not in hostvars:
+            host_filters = self.get_option('filters')
+
+            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
         return hostvars
 
-    def _get_hostname(self, properties, hostnames):
-        strict = self.get_option('strict')
+    def _get_hostname(self, properties, hostnames, strict=False):
         hostname = None
 
         for preference in hostnames:
@@ -650,9 +674,21 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             except Exception as e:  # pylint: disable=broad-except
                 if strict:
                     raise AnsibleError("Could not compose %s as hostnames - %s" % (preference, to_native(e)))
-
             if hostname:
                 return to_text(hostname)
+
+    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+        can_add_host = True
+        for host_filter in host_filters:
+            try:
+                can_add_host = self._compose(host_filter, host_properties)
+            except Exception as e:  # pylint: disable=broad-except
+                if strict:
+                    raise AnsibleError("Could not evaluate %s as host filters - %s" % (host_filter, to_native(e)))
+
+            if not can_add_host:
+                return False
+        return True
 
     def _populate_host_properties(self, host_properties, host):
         # Load VM properties in host_vars
