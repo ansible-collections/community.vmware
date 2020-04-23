@@ -7,7 +7,15 @@
   vars:
     setup_attach_host: true
     setup_datastore: true
-    
+
+- name: Get the version number of vcenter
+  vmware_about_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+  register: about
+
 - name: Get List of infraprofile configs
   vmware_vc_infraprofile_info:
     hostname: "{{vcenter_hostname}}"
@@ -16,6 +24,7 @@
     validate_certs: no
     api: "list"
   register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
 - debug: var=infraprofile_config_info
 
 - name: export Vcenter appliance infra profile config
@@ -27,6 +36,7 @@
     api: "export"
     profiles: "ApplianceManagement"
   register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
 - debug: var=infraprofile_config_info
 
 - name: validate infra profile config json
@@ -39,6 +49,7 @@
     profiles: "ApplianceManagement"
     config_path: "export.json"
   register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
 - debug: var=infraprofile_config_info
 
 - name: import Vcenter appliance infra profile config
@@ -51,9 +62,11 @@
     profiles: "ApplianceManagement"
     config_path: "export.json"
   register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
 - debug: var=infraprofile_config_info
 
 - name: Check infraprofile configs details
   assert:
     that:
         - infraprofile_config_info is changed
+  when: infraprofile_config_info == true

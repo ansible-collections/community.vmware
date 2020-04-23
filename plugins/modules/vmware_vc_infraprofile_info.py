@@ -16,7 +16,7 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 module: vmware_vc_infraprofile_info
-short_description: List, Export, Validate and import VMware Vcenter infra profile configs.
+short_description: List and Export VMware Vcenter infra profile configs.
 description:
 - Module to manage VMware Vcenter infra profile configs.
 - Vcenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
@@ -27,7 +27,7 @@ author:
 notes:
 - Tested on vSphere 7.0
 requirements:
-- python >= 2.6
+- python >= 2.7
 - PyVmomi
 - vSphere Automation SDK
 options:
