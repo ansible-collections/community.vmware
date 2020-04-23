@@ -113,6 +113,15 @@ DOCUMENTATION = r'''
             type: list
             elements: str
             default: []
+        resources:
+            description:
+            - A list of resources to limit search scope.
+            - 'Each resource item is represented by exactly one C(vim_type_snake_case):C(list of resource names) pair and optional nested I(resources).'
+            - 'Key name is based on snake case of a VIM type name; For example - C(host_system) correspond to C(vim.HostSystem).'
+            - All resource names are case-sensitive.
+            - See L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html).
+            type: list
+            default: []
 '''
 
 EXAMPLES = r'''
@@ -193,6 +202,34 @@ EXAMPLES = r'''
       VMs: True
     hostnames:
     - config.name
+
+# Using resources to filter VM based upon datacenter, cluster and folder values
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.ipAddress'
+    hostnames:
+    - config.name
+    resources:
+      - datacenter:
+        - Asia-Datacenter1
+        - Asia-Datacenter2
+        resources:
+        - compute_resource:
+          - Asia-Cluster1
+          resources:
+          - host_system:
+            - Asia-ESXI4
+        - folder:
+          - dev
+          - prod
 '''
 
 import ssl
@@ -640,7 +677,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         objects = self.pyv.get_managed_objects_properties(
             vim_type=vim.VirtualMachine,
             properties=query_props,
-            # resources=self.get_option('resources'),
+            resources=self.get_option('resources'),
             strict=strict,
         )
 
@@ -684,7 +721,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_filters = self.get_option('filters')
 
-            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
+            if host and host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
