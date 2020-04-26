@@ -119,7 +119,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: fetch logbundle file from ESXi
-  vmware_host_logbundle:
+  community.vmware.vmware_host_logbundle:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -128,7 +128,7 @@ EXAMPLES = '''
     dest: ./esxi-log.tgz
 
 - name: fetch logbundle file from ESXi with manifests
-  vmware_host_logbundle:
+  community.vmware.vmware_host_logbundle:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
