@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - add support for create and reconfigure CDROMs attaching to SATA (https://github.com/ansible/ansible/issues/42995)
