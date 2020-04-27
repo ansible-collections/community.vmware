@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_vmkernel - Remove duplicate checks.

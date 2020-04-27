@@ -1024,11 +1024,7 @@ class PyVmomiHelper(PyVmomi):
             net_stack_instance = 'default'
         elif tcpip_stack == 'vSphereProvisioning':
             net_stack_instance = 'provisioning'
-        # vmotion and vxlan stay the same
-        elif tcpip_stack == 'vmotion':
-            net_stack_instance = 'vmotion'
-        elif tcpip_stack == 'vxlan':
-            net_stack_instance = 'vxlan'
+
         return net_stack_instance
 
 
