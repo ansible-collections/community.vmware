@@ -1327,12 +1327,12 @@ class PyVmomiHelper(PyVmomi):
                     except ValueError:
                         hw_version_check_failed = True
 
-                    if temp_version not in range(3, 16):
+                    if temp_version not in range(3, 18):
                         hw_version_check_failed = True
 
                     if hw_version_check_failed:
                         self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
-                                              " values range from 3 (ESX 2.x) to 15 (ESXi 6.7U2 and greater)." % temp_version)
+                                              " values range from 3 (ESX 2.x) to 17 (ESXi 7.0)." % temp_version)
                     # Hardware version is denoted as "vmx-10"
                     version = "vmx-%02d" % temp_version
                     self.configspec.version = version
