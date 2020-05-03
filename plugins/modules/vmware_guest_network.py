@@ -70,7 +70,7 @@ options:
   mac_address:
     description:
       - mac address of the nic that should be altered, if a mac address isn't supplied a new nic will be created
-      - Required when state = absent
+      - Required when I(state=absent)
     type: str
     version_added: '2.10'
   vlan_id:
@@ -86,7 +86,8 @@ options:
   device_type:
     default: vmxnet3
     description:
-      - device type for new network interfaces, available types are e1000, e1000e, pcnet32, vmxnet2, vmxnet3 and  sriov
+      - C(device_type) (string): Valid virtual network device types are:
+        C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).
     type: str
     version_added: '2.10'
   label:
@@ -126,7 +127,7 @@ options:
   directpath_io:
     default: True
     description:
-      - Enable Universal Pass-through (UPT)
+      - Enable Universal Pass-through (UPT). Only compatible with the vmxnet3 device type
     type: bool
     version_added: '2.10'
   state:
@@ -136,7 +137,8 @@ options:
       - absent
     description:
       - Nic state.
-      - When state = absent, the mac_address parameter has to be set
+      - When C(state=present), a nic will be added if a mac address or label doesn't previously exists or is unset
+      - When C(state=absent), the I(mac_address) parameter has to be set
     type: str
     version_added: '2.10'
   force:
@@ -529,6 +531,9 @@ class PyVmomiHelper(PyVmomi):
         )
         nic_spec.device.wakeOnLanEnabled = wake_onlan
 
+        if directpath_io and not isinstance(nic_spec.device, vim.vm.device.VirtualVmxnet3):
+            self.module.fail_json(msg='directpath_io can only be used with the vmxnet3 device type')
+
         if directpath_io and isinstance(nic_spec.device, vim.vm.device.VirtualVmxnet3):
             nic_spec.device.uptCompatibilityEnabled = True
         return nic_spec
@@ -564,6 +569,8 @@ class PyVmomiHelper(PyVmomi):
 
         device_spec = None
         vm_obj = self.get_vm()
+        if not vm_obj:
+            self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
 
         for nic in nic_info:
@@ -675,6 +682,9 @@ class PyVmomiHelper(PyVmomi):
             vlan_id = self.params['vlan_id']
 
         vm_obj = self.get_vm()
+        if not vm_obj:
+            self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
+
         network_obj = self._get_network_object(vm_obj, network_params)
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
         label_lst = [d.get('label') for d in nic_info]
@@ -809,7 +819,8 @@ def main():
             ['vlan_id', 'network_name']
         ],
         required_one_of=[
-            ['name', 'uuid', 'moid']
+            ['name', 'uuid', 'moid'],
+            ['cluster', 'esxi_hostname']
         ],
         supports_check_mode=True
     )
@@ -830,7 +841,7 @@ def main():
     if module.params['networks']:
         network_data = {}
         module.deprecate(
-            'The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple intefaces',
+            'The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple interfaces',
             '2.11'
         )
         diff, changed, network_info = pyv._deprectated_list_config()
