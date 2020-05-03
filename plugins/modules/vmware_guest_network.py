@@ -55,12 +55,10 @@ options:
   cluster:
     description:
       - Name of cluster where vm is run
-      - required if esxi_hostname isn't set
     type: str
   esxi_hostname:
     description:
       - The hostname of the esxi host where the vm is run
-      - required if cluster is not set
     type: str
   datacenter:
     default: ha-datacenter
@@ -819,8 +817,7 @@ def main():
             ['vlan_id', 'network_name']
         ],
         required_one_of=[
-            ['name', 'uuid', 'moid'],
-            ['cluster', 'esxi_hostname']
+            ['name', 'uuid', 'moid']
         ],
         supports_check_mode=True
     )
