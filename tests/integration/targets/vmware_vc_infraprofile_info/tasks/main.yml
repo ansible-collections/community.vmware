@@ -1,0 +1,72 @@
+# Test code for the vmware_vc_infraprofile_info.
+# Copyright: (c) 2019, Naveenkumar G P <ngp@vmware.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+
+- name: Get the version number of vcenter
+  vmware_about_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+  register: about
+
+- name: Get List of infraprofile configs
+  vmware_vc_infraprofile_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+    api: "list"
+  register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
+- debug: var=infraprofile_config_info
+
+- name: export Vcenter appliance infra profile config
+  vmware_vc_infraprofile_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+    api: "export"
+    profiles: "ApplianceManagement"
+  register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
+- debug: var=infraprofile_config_info
+
+- name: validate infra profile config json
+  vmware_vc_infraprofile_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+    api: "validate"
+    profiles: "ApplianceManagement"
+    config_path: "export.json"
+  register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
+- debug: var=infraprofile_config_info
+
+- name: import Vcenter appliance infra profile config
+  vmware_vc_infraprofile_info:
+    hostname: "{{vcenter_hostname}}"
+    username: "{{vcenter_username}}"
+    password: "{{vcenter_password}}"
+    validate_certs: no
+    api: "import"
+    profiles: "ApplianceManagement"
+    config_path: "export.json"
+  register: infraprofile_config_info
+  when: about.about_info.version | int >= 7
+- debug: var=infraprofile_config_info
+
+- name: Check infraprofile configs details
+  assert:
+    that:
+        - infraprofile_config_info is changed
+  when: infraprofile_config_info == true
