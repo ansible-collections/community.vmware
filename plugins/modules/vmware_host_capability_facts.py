@@ -199,11 +199,14 @@ class CapabilityFactsManager(PyVmomi):
                 replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
             )
 
-            if hasattr(hc, 'checkpointFtSupported'):
-                hosts_capability_facts[host.name]['checkpointFtSupported'] = hc.checkpointFtSupported
-
-            if hasattr(hc, 'checkpointFtCompatibilityIssues'):
-                hosts_capability_facts[host.name]['checkpointFtCompatibilityIssues'] = [issue for issue in hc.checkpointFtCompatibilityIssues],
+            # The `checkpointFtSupported` and `checkpointFtCompatibilityIssues` properties have been removed from pyvmomi 7.0.
+            # The parameters can be substituted as follows.
+            #   checkpointFtSupported => smpFtSupported
+            #   checkpointFtSupported => smpFtCompatibilityIssues.
+            # So add `checkpointFtSupported` and `checkpointFtCompatibilityIssues` keys for compatibility with previous versions.
+            # https://github.com/ansible-collections/vmware/pull/118
+            hosts_capability_facts[host.name]['checkpointFtSupported'] = hosts_capability_facts[host.name]['smpFtSupported']
+            hosts_capability_facts[host.name]['checkpointFtCompatibilityIssues'] = hosts_capability_facts[host.name]['smpFtCompatibilityIssues']
 
         return hosts_capability_facts
 

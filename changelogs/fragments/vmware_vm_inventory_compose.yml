@@ -1,0 +1,2 @@
+bugfixes:
+- Added 'compose' and 'groups' feature in vmware_vm_inventory plugin.
