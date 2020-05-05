@@ -123,7 +123,7 @@ options:
     type: bool
     version_added: '2.10'
   directpath_io:
-    default: True
+    default: False
     description:
       - Enable Universal Pass-through (UPT). Only compatible with the vmxnet3 device type
     type: bool
@@ -803,7 +803,7 @@ def main():
         connected=dict(type='bool', default=True),
         start_connected=dict(type='bool', default=True),
         wake_onlan=dict(type='bool', default=False),
-        directpath_io=dict(type='bool', default=True),
+        directpath_io=dict(type='bool', default=False),
         force=dict(type='bool', default=False),
         gather_network_info=dict(type='bool', default=False, aliases=['gather_network_facts']),
         networks=dict(type='list', default=[]),
