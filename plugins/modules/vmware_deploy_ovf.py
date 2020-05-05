@@ -479,6 +479,11 @@ class VMwareDeployOvf(PyVmomi):
 
         return urlunparse(url_parts.as_list())
 
+    def vm_existence_check(self):
+        vm_obj = self.get_vm()
+        if vm_obj:
+            self.module.exit_json(changed=False, instance=gather_vm_facts(self.content, vm_obj))
+
     def upload(self):
         if self.params['ovf'] is None:
             self.module.fail_json(msg="OVF path is required for upload operation.")
@@ -697,6 +702,7 @@ def main():
     )
 
     deploy_ovf = VMwareDeployOvf(module)
+    deploy_ovf.vm_existence_check()
     deploy_ovf.upload()
     deploy_ovf.complete()
     facts = deploy_ovf.deploy()
