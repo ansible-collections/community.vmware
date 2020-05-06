@@ -93,7 +93,7 @@ author:
 EXAMPLES = '''
 # Create serial ports
 - name: Create multiple serial ports with Backing type - network, pipe, device and file
-  vmware_guest_serial_port:
+  community.vmware.vmware_guest_serial_port:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -116,7 +116,7 @@ EXAMPLES = '''
 
 # Modify existing serial port
 - name: Modify Network backing type
-  vmware_guest_serial_port:
+  community.vmware.vmware_guest_serial_port:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -130,7 +130,7 @@ EXAMPLES = '''
 
 # Remove serial port
 - name: Remove pipe backing type
-  vmware_guest_serial_port:
+  community.vmware.vmware_guest_serial_port:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

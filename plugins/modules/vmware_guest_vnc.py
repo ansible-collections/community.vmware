@@ -96,7 +96,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enable VNC remote display on the VM
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -111,7 +111,7 @@ EXAMPLES = '''
   register: vnc_result
 
 - name: Disable VNC remote display on the VM
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -123,7 +123,7 @@ EXAMPLES = '''
   register: vnc_result
 
 - name: Disable VNC remote display on the VM using MoID
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

@@ -36,7 +36,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get SPBM info
-  vmware_vm_storage_policy_info:
+  community.vmware.vmware_vm_storage_policy_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

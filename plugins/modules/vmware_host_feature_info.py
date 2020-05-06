@@ -43,7 +43,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather feature capability info about all ESXi Hosts in given Cluster
-  vmware_host_feature_info:
+  community.vmware.vmware_host_feature_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -52,7 +52,7 @@ EXAMPLES = r'''
   register: all_cluster_hosts_info
 
 - name: Check if ESXi is vulnerable for Speculative Store Bypass Disable (SSBD) vulnerability
-  vmware_host_feature_info:
+  community.vmware.vmware_host_feature_info:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"

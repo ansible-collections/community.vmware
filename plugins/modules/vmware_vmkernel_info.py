@@ -46,7 +46,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather VMKernel info about all ESXi Host in given Cluster
-  vmware_vmkernel_info:
+  community.vmware.vmware_vmkernel_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -55,7 +55,7 @@ EXAMPLES = r'''
   register: cluster_host_vmks
 
 - name: Gather VMKernel info about ESXi Host
-  vmware_vmkernel_info:
+  community.vmware.vmware_vmkernel_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

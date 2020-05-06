@@ -83,7 +83,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add virtual machine custom attributes
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -96,7 +96,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Add multiple virtual machine custom attributes
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -111,7 +111,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Remove virtual machine Attribute
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -123,7 +123,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Remove virtual machine Attribute using Virtual Machine MoID
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

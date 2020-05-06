@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enter VSAN-Compliant Maintenance Mode
-  vmware_maintenancemode:
+  community.vmware.vmware_maintenancemode:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

@@ -38,7 +38,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Provide information about vCenter
-  vmware_about_facts:
+  community.vmware.vmware_about_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -46,7 +46,7 @@ EXAMPLES = r'''
   register: vcenter_about_info
 
 - name: Provide information about a standalone ESXi server
-  vmware_about_facts:
+  community.vmware.vmware_about_facts:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

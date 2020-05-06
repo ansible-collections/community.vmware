@@ -189,7 +189,7 @@ extends_documentation_fragment: vmware.documentation
 
 EXAMPLES = '''
 - name: change network for 00:50:56:11:22:33 on vm01.domain.fake
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -201,7 +201,7 @@ EXAMPLES = '''
     state: present
 
 - name: add a nic on network with vlan id 2001 for 422d000d-2000-ffff-0000-b00000000000
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -211,7 +211,7 @@ EXAMPLES = '''
     vlan_id: 2001
 
 - name: remove nic with mac 00:50:56:11:22:33 from vm01.domain.fake
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -222,7 +222,7 @@ EXAMPLES = '''
     state: absent
 
 - name: add multiple nics to vm01.domain.fake
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

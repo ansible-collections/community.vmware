@@ -134,7 +134,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- vmware_deploy_ovf:
+- community.vmware.vmware_deploy_ovf:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -143,7 +143,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 # Deploys a new VM named 'NewVM' in specific datacenter/cluster, with network mapping taken from variable and using ova template from an absolute path
-- vmware_deploy_ovf:
+- community.vmware.vmware_deploy_ovf:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

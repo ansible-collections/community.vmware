@@ -59,7 +59,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enter host system into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -68,7 +68,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Exit host systems from lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -77,7 +77,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enter host systems into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -88,7 +88,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Exit host systems from lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -99,7 +99,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enter all host system from cluster into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

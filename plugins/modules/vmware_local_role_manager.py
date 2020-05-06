@@ -71,7 +71,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add local role to ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -80,7 +80,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add local role with privileges to ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -90,7 +90,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove local role from ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -99,7 +99,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -109,7 +109,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -119,7 +119,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Set a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

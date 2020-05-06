@@ -73,7 +73,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure vCenter statistics
-  vmware_vcenter_statistics:
+  community.vmware.vmware_vcenter_statistics:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

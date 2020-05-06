@@ -61,7 +61,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create PVLANs on a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -82,7 +82,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create primary PVLAN and secondary promiscuous PVLAN on a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -92,7 +92,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove all PVLANs from a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

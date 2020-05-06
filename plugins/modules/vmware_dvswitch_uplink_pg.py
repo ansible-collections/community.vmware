@@ -100,7 +100,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Configure Uplink portgroup
-  vmware_dvswitch_uplink_pg:
+  community.vmware.vmware_dvswitch_uplink_pg:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcsa_username }}'
     password: '{{ vcsa_password }}'
@@ -120,7 +120,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enabled LACP on Uplink portgroup
-  vmware_dvswitch_uplink_pg:
+  community.vmware.vmware_dvswitch_uplink_pg:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcsa_username }}'
     password: '{{ vcsa_password }}'

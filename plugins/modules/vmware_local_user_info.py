@@ -38,7 +38,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about all Users on given ESXi host system
-  vmware_local_user_info:
+  community.vmware.vmware_local_user_info:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

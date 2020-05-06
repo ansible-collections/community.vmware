@@ -70,7 +70,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Set the state of a host system to reboot
-  vmware_host_powerstate:
+  community.vmware.vmware_host_powerstate:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -81,7 +81,7 @@ EXAMPLES = r'''
   register: reboot_host
 
 - name: Set the state of a host system to power down to standby
-  vmware_host_powerstate:
+  community.vmware.vmware_host_powerstate:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -92,7 +92,7 @@ EXAMPLES = r'''
   register: power_down
 
 - name: Set the state of all host systems from cluster to reboot
-  vmware_host_powerstate:
+  community.vmware.vmware_host_powerstate:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

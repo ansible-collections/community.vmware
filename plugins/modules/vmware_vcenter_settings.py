@@ -146,7 +146,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure vCenter general settings
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

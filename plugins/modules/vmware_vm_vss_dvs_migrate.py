@@ -42,7 +42,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Migrate VCSA to vDS
-  vmware_vm_vss_dvs_migrate:
+  community.vmware.vmware_vm_vss_dvs_migrate:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

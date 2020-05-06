@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather capability facts about all ESXi Host in given Cluster
-  vmware_host_capability_facts:
+  community.vmware.vmware_host_capability_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -57,7 +57,7 @@ EXAMPLES = r'''
   register: all_cluster_hosts_facts
 
 - name: Gather capability facts about ESXi Host
-  vmware_host_capability_facts:
+  community.vmware.vmware_host_capability_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -166,7 +166,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create dvSwitch
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -181,7 +181,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create dvSwitch with all options
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -203,7 +203,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Delete dvSwitch
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -68,7 +68,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a tag
-  vmware_tag:
+  community.vmware.vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -80,7 +80,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Update tag description
-  vmware_tag:
+  community.vmware.vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -90,7 +90,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete tag
-  vmware_tag:
+  community.vmware.vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

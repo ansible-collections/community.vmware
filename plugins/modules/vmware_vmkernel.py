@@ -144,7 +144,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 -  name: Add Management vmkernel port using static network type
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -160,7 +160,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add Management vmkernel port using DHCP network type
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -174,7 +174,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Change IP allocation from static to dhcp
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -189,7 +189,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Delete VMkernel port
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -200,7 +200,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add Management vmkernel port to Distributed Switch
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -216,7 +216,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add vMotion vmkernel port with vMotion TCP/IP stack
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

@@ -55,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather cluster info from given datacenter
-  vmware_cluster_info:
+  community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -65,7 +65,7 @@ EXAMPLES = '''
   register: cluster_info
 
 - name: Gather info from datacenter about specific cluster
-  vmware_cluster_info:
+  community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -74,7 +74,7 @@ EXAMPLES = '''
   register: cluster_info
 
 - name: Gather info from datacenter about specific cluster with tags
-  vmware_cluster_info:
+  community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

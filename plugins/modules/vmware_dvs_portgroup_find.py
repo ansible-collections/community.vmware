@@ -56,7 +56,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get all portgroups in dvswitch vDS
-  vmware_dvs_portgroup_find:
+  community.vmware.vmware_dvs_portgroup_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -65,7 +65,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Confirm if vlan 15 is present
-  vmware_dvs_portgroup_find:
+  community.vmware.vmware_dvs_portgroup_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

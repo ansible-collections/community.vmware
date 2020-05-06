@@ -66,7 +66,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Join an AD domain
-  vmware_host_active_directory:
+  community.vmware.vmware_host_active_directory:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -79,7 +79,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Leave AD domain
-  vmware_host_active_directory:
+  community.vmware.vmware_host_active_directory:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

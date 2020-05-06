@@ -145,7 +145,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create vlan portgroup
-  vmware_dvs_portgroup:
+  community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -158,7 +158,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create vlan trunk portgroup
-  vmware_dvs_portgroup:
+  community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -172,7 +172,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create no-vlan portgroup
-  vmware_dvs_portgroup:
+  community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -185,7 +185,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create vlan portgroup with all security and port policies
-  vmware_dvs_portgroup:
+  community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

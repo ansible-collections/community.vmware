@@ -67,7 +67,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about vmnics of all ESXi Host in the given Cluster
-  vmware_host_vmnic_info:
+  community.vmware.vmware_host_vmnic_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -76,7 +76,7 @@ EXAMPLES = r'''
   register: cluster_host_vmnics
 
 - name: Gather info about vmnics of an ESXi Host
-  vmware_host_vmnic_info:
+  community.vmware.vmware_host_vmnic_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

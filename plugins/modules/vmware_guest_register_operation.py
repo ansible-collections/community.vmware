@@ -95,7 +95,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Register VM to inventory
-  vmware_guest_register_operation:
+  community.vmware.vmware_guest_register_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -109,7 +109,7 @@ EXAMPLES = '''
     state: present
 
 - name: Register VM in resource pool
-  vmware_guest_register_operation:
+  community.vmware.vmware_guest_register_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -123,7 +123,7 @@ EXAMPLES = '''
     state: present
 
 - name: Register VM in Cluster
-  vmware_guest_register_operation:
+  community.vmware.vmware_guest_register_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -137,7 +137,7 @@ EXAMPLES = '''
     state: present
 
 - name: UnRegister VM from inventory
-  vmware_guest_register_operation:
+  community.vmware.vmware_guest_register_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

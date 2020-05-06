@@ -53,7 +53,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Manage Log level setting for all ESXi hosts in given Cluster
-  vmware_host_config_manager:
+  community.vmware.vmware_host_config_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -63,7 +63,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage Log level setting for an ESXi host
-  vmware_host_config_manager:
+  community.vmware.vmware_host_config_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -73,7 +73,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage multiple settings for an ESXi host
-  vmware_host_config_manager:
+  community.vmware.vmware_host_config_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

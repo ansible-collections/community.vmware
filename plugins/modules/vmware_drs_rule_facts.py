@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DRS facts about given Cluster
-  vmware_drs_rule_facts:
+  community.vmware.vmware_drs_rule_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -60,7 +60,7 @@ EXAMPLES = r'''
   register: cluster_drs_facts
 
 - name: Gather DRS facts about all Clusters in given datacenter
-  vmware_drs_rule_facts:
+  community.vmware.vmware_drs_rule_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

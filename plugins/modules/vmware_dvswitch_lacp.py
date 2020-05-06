@@ -83,7 +83,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enable enhanced mode on a Distributed Switch
-  vmware_dvswitch_lacp:
+  community.vmware.vmware_dvswitch_lacp:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -96,7 +96,7 @@ EXAMPLES = '''
   with_items: "{{ vcenter_distributed_switches }}"
 
 - name: Enable enhanced mode and create two LAGs on a Distributed Switch
-  vmware_dvswitch_lacp:
+  community.vmware.vmware_dvswitch_lacp:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

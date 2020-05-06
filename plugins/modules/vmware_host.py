@@ -137,7 +137,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add ESXi Host to vCenter
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -150,7 +150,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add ESXi Host to vCenter under a specific folder
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -164,7 +164,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Reconnect ESXi Host (with username/password set)
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -177,7 +177,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Reconnect ESXi Host (with default username/password)
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -188,7 +188,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add ESXi Host with SSL Thumbprint to vCenter
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
