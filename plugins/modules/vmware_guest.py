@@ -1644,8 +1644,9 @@ class PyVmomiHelper(PyVmomi):
             if nic_change_detected:
                 # Change to fix the issue found while configuring opaque network
                 # VMs cloned from a template with opaque network will get disconnected
+                # Only for existing network devices
                 # Replacing deprecated config parameter with relocation Spec
-                if isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
+                if key < len(current_net_devices) and isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
                     self.relospec.deviceChange.append(nic)
                 else:
                     self.configspec.deviceChange.append(nic)
