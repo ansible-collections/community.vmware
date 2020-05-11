@@ -1,0 +1,251 @@
+# this is used to test create and configure VM with multiple CDROMs
+# attached to IDE or SATA
+- name: Create VM with multiple CDROMs attached to IDE
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm1
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: Resources
+    guest_id: centos64Guest
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+    disk:
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      type: iso
+      iso_path: "[{{ ro_datastore }}] centos.iso"
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 1
+      type: client
+    - controller_number: 1
+      unit_number: 0
+      type: none
+    - controller_number: 1
+      unit_number: 1
+      type: client
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was created
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Remove the last 2 CDROMs and update the first 2 for the new VM
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm1
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      type: client
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 1
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 0
+      state: absent
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 1
+      state: absent
+    state: present
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Create VM with multiple CDROMs attached to SATA
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm2
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: Resources
+    guest_id: centos64Guest
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+    disk:
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    cdrom:
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      type: iso
+      iso_path: "[{{ ro_datastore }}] centos.iso"
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 1
+      type: client
+    - controller_type: sata
+      controller_number: 2
+      unit_number: 0
+      type: none
+    - controller_type: sata
+      controller_number: 3
+      unit_number: 1
+      type: client
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was created
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Remove the first 2 CDROMs and update the last 2 for the new VM
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm2
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      state: absent
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 1
+      state: absent
+    - controller_type: sata
+      controller_number: 2
+      unit_number: 0
+      type: client
+    - controller_type: sata
+      controller_number: 3
+      unit_number: 1
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    state: present
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Create VM with multiple CDROMs attached to IDE and SATA
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm3
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: Resources
+    guest_id: centos64Guest
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+    disk:
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      type: iso
+      iso_path: "[{{ ro_datastore }}] centos.iso"
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      type: client
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 0
+      type: none
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 0
+      type: client
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was created
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Remove the 2 CDROMs and update the other 2 for the new VM
+  vmware_guest:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm3
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      state: absent
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 0
+      type: client
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 0
+      state: absent
+    state: present
+  register: cdrom_vm
+
+- debug: var=cdrom_vm
+
+- name: assert the VM was changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
