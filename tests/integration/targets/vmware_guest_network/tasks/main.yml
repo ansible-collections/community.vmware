@@ -369,3 +369,60 @@
     assert:
       that:
         - create_netaddr_pg.changed is sameas true
+
+  - name: gather network adapters' facts of the virtual machine
+    vmware_guest_network:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: test_vm1
+      gather_network_info: true
+    register: nic_info
+
+  - name: check that nic_info includes network_info
+    assert:
+      that:
+        - nic_info.network_info is defined
+
+  - name: Remove all network interfaces with loop
+    vmware_guest_network:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: test_vm1
+      mac_address: "{{ item.mac_address }}"
+      state: absent
+    loop: "{{ nic_info.network_info }}"
+
+  - name: gather network adapters' facts of the virtual machine
+    vmware_guest_network:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: test_vm1
+      gather_network_info: true
+    register: nic_info2
+
+  - name: check that there's no adapters left
+    assert:
+      that:
+        - "{{ nic_info2.network_info | length | int }} == 0"
+
+  - name: add new adapter(s)
+    vmware_guest_network:
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: test_vm1
+      network_name: "VM Network"
+      state: present
+    register: new_nic
+
+  - name: check that nic was created
+    assert:
+      that:
+        - "{{ new_nic.network_info | length | int }} > 0"
