@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_host_logbundle_info - new code module for a new feature for getting manifests  for ESXi support log bundle
