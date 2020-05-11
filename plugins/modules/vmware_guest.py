@@ -811,8 +811,9 @@ class PyVmomiDeviceHelper(object):
             self.module.fail_json(msg='Invalid device_type "%s"'
                                       ' for network "%s"' % (device_type, name))
 
-    def create_nic(self, device_type, device_label, device_infos):
+    def create_nic(self, device_type, device_label, device_infos, key):
         nic = vim.vm.device.VirtualDeviceSpec()
+        nic.device.key = key
         nic.device = self.get_device(device_type, device_infos['name'])
         nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
         nic.device.deviceInfo = vim.Description()
@@ -1506,6 +1507,7 @@ class PyVmomiHelper(PyVmomi):
                                       "Removing interfaces is not allowed"
                                       % (len(network_devices), len(current_net_devices)))
 
+        add_key = len(network_devices)
         for key in range(0, len(network_devices)):
             nic_change_detected = False
             network_name = network_devices[key]['name']
@@ -1563,8 +1565,9 @@ class PyVmomiHelper(PyVmomi):
             else:
                 # Default device type is vmxnet3, VMware best practice
                 device_type = network_devices[key].get('device_type', 'vmxnet3')
+                add_key = add_key + 1
                 nic = self.device_helper.create_nic(device_type,
-                                                    'Network Adapter %s' % (key + 1),
+                                                    'Network Adapter %s' % (add_key),
                                                     network_devices[key])
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 nic_change_detected = True
