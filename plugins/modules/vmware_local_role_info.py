@@ -45,16 +45,16 @@ EXAMPLES = '''
   delegate_to: localhost
 - name: Get Admin privileges
   set_fact:
-    admin_priv: "{{ fact_details.local_role_info['Admin']['privileges'] }}"
+    admin_priv: "{{ fact_details.local_role_info | selectattr('role_name', 'equalto', 'Admin') | map(attribute='privileges') | first  }}"
 - debug:
     msg: "{{ admin_priv }}"
 '''
 
 RETURN = r'''
 local_role_info:
-    description: Info about role present on ESXi host
+    description: A list of dict about role information present on ESXi host
     returned: always
-    type: dict
+    type: list of dict
     sample: [
         {
             "privileges": [
