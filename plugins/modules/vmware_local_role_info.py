@@ -52,7 +52,7 @@ EXAMPLES = '''
 
 RETURN = r'''
 local_role_info:
-    description: Info about role present on ESXi host
+    description: A list of dict about role information present on ESXi host
     returned: always
     type: list of dict
     sample: [
