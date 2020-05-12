@@ -34,7 +34,7 @@ options:
       - datacenter_name
     description:
       - "Datacenter to search for DRS VM/Host groups."
-    required: true
+    required: false
     type: str
 requirements:
   - "python >= 2.6"
@@ -51,7 +51,6 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
     cluster_name: "{{ cluster_name }}"
-    datacenter: "{{ datacenter }}"
   delegate_to: localhost
 
 - name: "Gather DRS group info about all clusters in given datacenter"

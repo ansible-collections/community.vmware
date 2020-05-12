@@ -61,14 +61,24 @@ options:
    datacenter:
      description:
      - Datacenter name where the virtual machine is located in.
-     required: True
      type: str
    attributes:
      description:
      - A list of name and value of custom attributes that needs to be manage.
      - Value of custom attribute is not required and will be ignored, if C(state) is set to C(absent).
+     suboptions:
+        name:
+          description:
+          - Name of the attribute.
+          type: str
+          required: True
+        value:
+          description:
+          - Value of the attribute.
+          type: str
      default: []
      type: list
+     elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -207,6 +217,7 @@ def main():
         attributes=dict(
             type='list',
             default=[],
+            elements='dict',
             options=dict(
                 name=dict(type='str', required=True),
                 value=dict(type='str'),

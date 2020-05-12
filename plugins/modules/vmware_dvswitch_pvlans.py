@@ -39,6 +39,7 @@ options:
             - Please see examples for more information.
         type: list
         default: []
+        elements: dict
     secondary_pvlans:
         description:
             - A list of VLAN IDs that should be configured as Secondary PVLANs.
@@ -49,6 +50,7 @@ options:
             - Please see examples for more information.
         type: list
         default: []
+        elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -511,8 +513,8 @@ def main():
     argument_spec.update(
         dict(
             switch=dict(required=True, aliases=['dvswitch']),
-            primary_pvlans=dict(type='list', default=list(), required=False),
-            secondary_pvlans=dict(type='list', default=list(), required=False),
+            primary_pvlans=dict(type='list', default=list(), elements='dict'),
+            secondary_pvlans=dict(type='list', default=list(), elements='dict'),
         )
     )
 

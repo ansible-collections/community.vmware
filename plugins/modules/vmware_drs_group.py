@@ -45,6 +45,7 @@ options:
       - "Required only if C(vms) is not set."
     required: false
     type: list
+    elements: str
   state:
     choices:
       - present
@@ -53,7 +54,6 @@ options:
     description:
       - "If set to C(present) and the group doesn't exists then the group will be created."
       - "If set to C(absent) and the group exists then the group will be deleted."
-    required: true
     type: str
   vms:
     description:
@@ -61,6 +61,7 @@ options:
       - "Required only if C(hosts) is not set."
     required: false
     type: list
+    elements: str
 requirements:
   - "python >= 2.6"
   - PyVmomi
@@ -532,8 +533,8 @@ def main():
         datacenter=dict(type='str', required=False, aliases=['datacenter_name']),
         cluster_name=dict(type='str', required=True),
         group_name=dict(type='str', required=True),
-        vms=dict(type='list'),
-        hosts=dict(type='list')
+        vms=dict(type='list', elements='str'),
+        hosts=dict(type='list', elements='str')
     )
 
     required_if = [

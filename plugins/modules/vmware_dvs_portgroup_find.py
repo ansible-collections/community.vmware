@@ -197,7 +197,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['show_uplink', 'True', 'vlanid']
+            ['show_uplink', 'True', ['vlanid']]
         ]
     )
 

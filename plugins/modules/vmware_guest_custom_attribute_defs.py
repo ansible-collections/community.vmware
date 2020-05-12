@@ -39,7 +39,6 @@ options:
      - If set to C(absent) and definition is absent, then no action taken.
      default: 'present'
      choices: ['present', 'absent']
-     required: True
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

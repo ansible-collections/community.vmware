@@ -106,9 +106,13 @@ options:
     contact:
         description:
             - Dictionary which configures administrator contact name and description for the Distributed Switch.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Administrator name.'
-            - '- C(description) (str): Description or other details.'
+        suboptions:
+            name:
+                type: str
+                description: Administrator name.
+            description:
+                type: str
+                description: Description or other details.
         type: dict
     description:
         description:
@@ -117,13 +121,27 @@ options:
     health_check:
         description:
             - Dictionary which configures Health Check for the Distributed Switch.
-            - 'Valid attributes are:'
-            - '- C(vlan_mtu) (bool): VLAN and MTU health check. (default: False)'
-            - '- C(teaming_failover) (bool): Teaming and failover health check. (default: False)'
-            - '- C(vlan_mtu_interval) (int): VLAN and MTU health check interval (minutes). (default: 0)'
-            - '- The default for C(vlan_mtu_interval) is 1 in the vSphere Client if the VLAN and MTU health check is enabled.'
-            - '- C(teaming_failover_interval) (int): Teaming and failover health check interval (minutes). (default: 0)'
-            - '- The default for C(teaming_failover_interval) is 1 in the vSphere Client if the Teaming and failover health check is enabled.'
+        suboptions:
+            vlan_mtu:
+                type: bool
+                description: VLAN and MTU health check.
+                default: False
+            teaming_failover:
+                type: bool
+                description: Teaming and failover health check.
+                default: False
+            vlan_mtu_interval:
+                type: int
+                description:
+                - VLAN and MTU health check interval (minutes).
+                - The default value is 1 in the vSphere Client if the VLAN and MTU health check is enabled.
+                default: 0
+            teaming_failover_interval:
+                type: int
+                description:
+                - Teaming and failover health check interval (minutes).
+                - The default value is 1 in the vSphere Client if the Teaming and failover health check is enabled.
+                default: 0
         type: dict
         default: {
             vlan_mtu: False,
@@ -133,8 +151,8 @@ options:
         }
     state:
         description:
-            - If set to C(present) and the Distributed Switch doesn't exists then the Distributed Switch will be created.
-            - If set to C(absent) and the Distributed Switch exists then the Distributed Switch will be deleted.
+            - If set to C(present) and the Distributed Switch does not exist, the Distributed Switch will be created.
+            - If set to C(absent) and the Distributed Switch exists, the Distributed Switch will be deleted.
         default: 'present'
         choices: ['present', 'absent']
         type: str

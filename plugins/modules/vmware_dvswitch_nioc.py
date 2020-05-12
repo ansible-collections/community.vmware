@@ -46,22 +46,45 @@ options:
         type: str
     resources:
         description:
-        - 'List of dicts containing
-           { name: Resource name is one of the following: "faultTolerance", "hbr", "iSCSI", "management", "nfs", "vdp",
-                   "virtualMachine", "vmotion", "vsan"
-             limit: The maximum allowed usage for a traffic class belonging to this resource pool per host physical NIC.
-                    reservation: (Ignored if NIOC version is set to version2) Amount of bandwidth resource that is
-                    guaranteed available to the host infrastructure traffic class. If the utilization is less than the
-                    reservation, the extra bandwidth is used for other host infrastructure traffic class types.
-                    Reservation is not allowed to exceed the value of limit, if limit is set. Unit is Mbits/sec.
-             shares_level: The allocation level ("low", "normal", "high", "custom"). The level is a simplified view
-                           of shares. Levels map to a pre-determined set of numeric values for shares.
-             shares: Ignored unless shares_level is "custom".  The number of shares allocated.
-             reservation: Ignored unless version is "version3". Amount of bandwidth resource that is guaranteed
-                          available to the host infrastructure traffic class.
-           }'
+        - List of dicts containing.
+        suboptions:
+            name:
+                description:
+                - Resource name.
+                choices: ["faultTolerance", "hbr", "iSCSI", "management", "nfs", "vdp", "virtualMachine", "vmotion", "vsan"]
+                required: True
+                type: str
+            limit:
+                description:
+                - The maximum allowed usage for a traffic class belonging to this resource pool per host physical NIC.
+                default: -1
+                type: int
+            reservation:
+                description:
+                - Ignored if NIOC version is set to version2
+                - Amount of bandwidth resource that is guaranteed available to the host infrastructure traffic class.
+                - If the utilization is less than the reservation, the extra bandwidth is used for other host infrastructure traffic class types.
+                - Reservation is not allowed to exceed the value of limit, if limit is set.
+                - Unit is Mbits/sec.
+                - Ignored unless version is "version3".
+                - Amount of bandwidth resource that is guaranteed available to the host infrastructure traffic class.
+                type: int
+
+            shares_level:
+                description:
+                - The allocation level
+                - The level is a simplified view of shares.
+                - Levels map to a pre-determined set of numeric values for shares.
+                choices: [ "low", "normal", "high", "custom" ]
+                type: str
+            shares:
+                description:
+                - The number of shares allocated.
+                - Ignored unless C(shares_level) is "custom".
+                type: int
         required: False
         type: list
+        elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

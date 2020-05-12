@@ -83,6 +83,7 @@ options:
      - Only valid when C(schema) is C(vsphere).
      type: list
      required: False
+     elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -310,7 +311,7 @@ def main():
         gather_nfs_mount_info=dict(type='bool', default=False),
         gather_vmfs_mount_info=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True
