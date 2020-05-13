@@ -44,6 +44,7 @@ options:
     - Please see examples for more information.
     default: []
     type: list
+    elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -368,7 +369,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        rules=dict(type='list', default=list(), required=False),
+        rules=dict(type='list', default=list(), required=False, elements='dict'),
     )
 
     module = AnsibleModule(

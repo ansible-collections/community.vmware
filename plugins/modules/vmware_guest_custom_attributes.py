@@ -76,6 +76,7 @@ options:
           description:
           - Value of the attribute.
           type: str
+          default: ''
      default: []
      type: list
      elements: dict
@@ -220,7 +221,7 @@ def main():
             elements='dict',
             options=dict(
                 name=dict(type='str', required=True),
-                value=dict(type='str'),
+                value=dict(type='str', default=''),
             )
         ),
     )

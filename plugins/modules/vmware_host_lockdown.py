@@ -37,6 +37,7 @@ options:
     - Required parameter, if C(cluster_name) is not set.
     - See examples for specifications.
     type: list
+    elements: str
   state:
     description:
     - State of hosts system
@@ -192,7 +193,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
-        esxi_hostname=dict(type='list', required=False),
+        esxi_hostname=dict(type='list', required=False, elements='str'),
         state=dict(type='str', default='present', choices=['present', 'absent'], required=False),
     )
 
