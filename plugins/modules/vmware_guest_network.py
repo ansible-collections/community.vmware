@@ -25,158 +25,178 @@ options:
   name:
     description:
       - Name of virtual machine
-      - Required if uuid or moid is not supplied
+      - Required if C(uuid) or C(moid) is not supplied.
     type: str
   uuid:
     description:
       - vm uuid
-      - Required if name or moid is not supplied
+      - Required if C(name) or C(moid) is not supplied.
     type: str
   use_instance_uuid:
     description:
       - Whether to use the VMware instance UUID rather than the BIOS UUID.
     default: False
     type: bool
-    version_added: '2.10'
   moid:
     description:
-      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance
-      - Required if uuid or name is not supplied
+      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
+      - Required if C(uuid) or C(name) is not supplied.
     type: str
   folder:
     description:
-      - Folder location of given vm, this is only required when there's multiple vm's with the same name
-    type: str
-  cluster:
-    description:
-      - Name of cluster where vm is run
-    type: str
-  esxi_hostname:
-    description:
-      - The hostname of the esxi host where the vm is run
+      - Folder location of given VM, this is only required when there's multiple VM's with the same name.
     type: str
   datacenter:
     default: ha-datacenter
     description:
-      - Datacenter the vm belongs to
+      - Datacenter the VM belongs to.
+    type: str
+  cluster:
+    description:
+      - Name of cluster where VM belongs to.
+    type: str
+  esxi_hostname:
+    description:
+      - The hostname of the ESXi host where the VM belongs to.
     type: str
   mac_address:
     description:
-      - mac address of the nic that should be altered, if a mac address isn't supplied a new nic will be created
-      - Required when I(state=absent)
+      - MAC address of the NIC that should be altered, if a MAC address is not supplied a new nic will be created.
+      - Required when I(state=absent).
     type: str
-    version_added: '2.10'
   vlan_id:
     description:
-      - Vlan id associated with the network
+      - VLAN id associated with the network.
     type: int
-    version_added: '2.10'
   network_name:
     description:
-      - Name of network in vsphere
+      - Name of network in vSphere.
     type: str
-    version_added: '2.10'
   device_type:
     default: vmxnet3
-    description: Valid virtual network device is one of the following C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).
+    description:
+      - Type of virtual network device.
+      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).'
     type: str
-    version_added: '2.10'
   label:
     description:
-      - Alter the name of the network adapter
+      - Alter the name of the network adapter.
     type: str
-    version_added: '2.10'
   switch:
     description:
-      - Name of the (dv)switch for destination network, this is only required for dvswitches
+      - Name of the (dv)switch for destination network, this is only required for dvswitches.
     type: str
-    version_added: '2.10'
-  connected:
-    default: True
-    description:
-      - If nic should be connected to the network
-    type: bool
-    version_added: '2.10'
-  start_connected:
-    default: True
-    description:
-      - If nic should be connected to network on startup
-    type: bool
-    version_added: '2.10'
-  wake_onlan:
-    default: False
-    description:
-      - Enable wake on lan
-    type: bool
-    version_added: '2.10'
   guest_control:
     default: true
     description:
       - Enables guest control over whether the connectable device is connected.
     type: bool
-    version_added: '2.10'
+  state:
+    default: present
+    choices: [ 'present', 'absent' ]
+    description:
+      - NIC state.
+      - When C(state=present), a nic will be added if a mac address or label does not previously exists or is unset.
+      - When C(state=absent), the I(mac_address) parameter has to be set.
+    type: str
+  start_connected:
+    default: True
+    description:
+      - If NIC should be connected to network on startup.
+    type: bool
+  wake_onlan:
+    default: False
+    description:
+      - Enable wake on LAN.
+    type: bool
+  connected:
+    default: True
+    description:
+      - If NIC should be connected to the network.
+    type: bool
   directpath_io:
     default: False
     description:
-      - Enable Universal Pass-through (UPT). Only compatible with the vmxnet3 device type
+      - Enable Universal Pass-through (UPT).
+      - Only compatible with the C(vmxnet3) device type.
     type: bool
-    version_added: '2.10'
-  state:
-    default: present
-    choices:
-      - present
-      - absent
-    description:
-      - Nic state.
-      - When C(state=present), a nic will be added if a mac address or label doesn't previously exists or is unset
-      - When C(state=absent), the I(mac_address) parameter has to be set
-    type: str
-    version_added: '2.10'
   force:
     default: false
     description:
-      - Force adapter creation even if an existing adapter is attached to the same network
+      - Force adapter creation even if an existing adapter is attached to the same network.
     type: bool
-    version_added: '2.10'
   gather_network_info:
     aliases:
       - gather_network_facts
     default: False
     description:
-      - Return information about current guest network adapters
+      - Return information about current guest network adapters.
     type: bool
   networks:
     type: list
+    elements: dict
     description:
-      - This method will be deprecated, use loops in your playbook for multiple interfaces instead
-      - A list of network adapters
+      - This method will be deprecated, use loops in your playbook for multiple interfaces instead.
+      - A list of network adapters.
       - C(mac) or C(label) or C(device_type) is required to reconfigure or remove an existing network adapter.
       - 'If there are multiple network adapters with the same C(device_type), you should set C(label) or C(mac) to match
          one of them, or will apply changes on all network adapters with the C(device_type) specified.'
       - 'C(mac), C(label), C(device_type) is the order of precedence from greatest to least if all set.'
-      - 'Valid attributes are:'
-      - ' - C(mac) (string): MAC address of the existing network adapter to be reconfigured or removed.'
-      - ' - C(label) (string): Label of the existing network adapter to be reconfigured or removed, e.g., "Network adapter 1".'
-      - ' - C(device_type) (string): Valid virtual network device types are:
-            C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).
-            Used to add new network adapter, reconfigure or remove the existing network adapter with this type.
-            If C(mac) and C(label) not specified or not find network adapter by C(mac) or C(label) will use this parameter.'
-      - ' - C(name) (string): Name of the portgroup or distributed virtual portgroup for this interface.
-          When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.'
-      - ' - C(vlan) (integer): VLAN number for this interface.'
-      - ' - C(dvswitch_name) (string): Name of the distributed vSwitch.
-            This value is required if multiple distributed portgroups exists with the same name.'
-      - ' - C(state) (string): State of the network adapter.'
-      - '   If set to C(present), then will do reconfiguration for the specified network adapter.'
-      - '   If set to C(new), then will add the specified network adapter.'
-      - '   If set to C(absent), then will remove this network adapter.'
-      - ' - C(manual_mac) (string): Manual specified MAC address of the network adapter when creating, or reconfiguring.
-            If not specified when creating new network adapter, mac address will be generated automatically.
-            When reconfigure MAC address, VM should be in powered off state.'
-      - ' - C(connected) (bool): Indicates that virtual network adapter connects to the associated virtual machine.'
-      - ' - C(start_connected) (bool): Indicates that virtual network adapter starts with associated virtual machine powers on.'
-      - ' - C(directpath_io) (bool): If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
-            UPT is only compatible for Vmxnet3 adapter.'
+    suboptions:
+      mac:
+        type: str
+        description:
+        - MAC address of the existing network adapter to be reconfigured or removed.
+      label:
+        type: str
+        description:
+        - Label of the existing network adapter to be reconfigured or removed, e.g., "Network adapter 1".
+      device_type:
+        type: str
+        description:
+        - 'Valid virtual network device types are C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).'
+        - Used to add new network adapter, reconfigure or remove the existing network adapter with this type.
+        - If C(mac) and C(label) not specified or not find network adapter by C(mac) or C(label) will use this parameter.
+      name:
+        type: str
+        description:
+        - Name of the portgroup or distributed virtual portgroup for this interface.
+        - When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.
+      vlan:
+        type: int
+        description:
+        - VLAN number for this interface.
+      dvswitch_name:
+        type: str
+        description:
+        - Name of the distributed vSwitch.
+        - This value is required if multiple distributed portgroups exists with the same name.
+      state:
+        type: str
+        description:
+        - State of the network adapter.
+        - If set to C(present), then will do reconfiguration for the specified network adapter.
+        - If set to C(new), then will add the specified network adapter.
+        - If set to C(absent), then will remove this network adapter.
+      manual_mac:
+        type: str
+        description:
+        - Manual specified MAC address of the network adapter when creating, or reconfiguring.
+        - If not specified when creating new network adapter, mac address will be generated automatically.
+        - When reconfigure MAC address, VM should be in powered off state.
+      connected:
+        type: bool
+        description:
+        - Indicates that virtual network adapter connects to the associated virtual machine.
+      start_connected:
+        type: bool
+        description:
+        - Indicates that virtual network adapter starts with associated virtual machine powers on.
+      directpath_io:
+        type: bool
+        description:
+        - If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
+        - UPT is only compatible for Vmxnet3 adapter.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -799,7 +819,7 @@ def main():
         directpath_io=dict(type='bool', default=False),
         force=dict(type='bool', default=False),
         gather_network_info=dict(type='bool', default=False, aliases=['gather_network_facts']),
-        networks=dict(type='list', default=[]),
+        networks=dict(type='list', default=[], elements='dict'),
         guest_control=dict(type='bool', default=True),
         state=dict(type='str', default='present', choices=['absent', 'present'])
     )

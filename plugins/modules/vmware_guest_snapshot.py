@@ -34,7 +34,6 @@ options:
      - If set to C(revert) and snapshot absent, then no changes are made.
      - If set to C(remove_all) and snapshot(s) present, then all snapshot(s) will be removed.
      - If set to C(remove_all) and snapshot(s) absent, then no changes are made.
-     required: True
      choices: ['present', 'absent', 'revert', 'remove_all']
      default: 'present'
      type: str

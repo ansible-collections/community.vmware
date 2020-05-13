@@ -102,6 +102,7 @@ options:
      - '   ]'
      - Only valid when C(schema) is C(vsphere).
      type: list
+     elements: str
      required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -254,7 +255,7 @@ def main():
         datacenter=dict(type='str', required=True),
         tags=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            required_one_of=[['name', 'uuid', 'moid']],

@@ -11,13 +11,9 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: vmware_guest_serial_port
-
 short_description: Manage serial ports on an existing VM
-
-
 description:
   - "This module can be used to manage serial ports on an existing VM"
-
 options:
   name:
     description:
@@ -41,6 +37,7 @@ options:
     type: bool
   backings:
     type: list
+    elements: dict
     description:
       - A list of backings for serial ports.
       - 'C(backing_type) (str): is required to add or reconfigure or remove an existing serial port.'
@@ -78,11 +75,8 @@ options:
       - ' - C(device_name) (str): Required when I(backing_type=device).'
       - ' - C(file_path) (str): Required when I(backing_type=file).
             File path for the host file used in this backing. Fully qualified path is required, like <datastore_name>/<file_name>'
-
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
-
 author:
   - Anusha Hegde (@anusha94)
 '''
@@ -425,7 +419,7 @@ def main():
         uuid=dict(type='str'),
         moid=dict(type='str'),
         use_instance_uuid=dict(type='bool', default=False),
-        backings=dict(type='list', default=[])
+        backings=dict(type='list', default=[], elements='dict')
     )
 
     module = AnsibleModule(
