@@ -83,7 +83,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable and configure SNMP community
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -93,7 +93,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure SNMP traps and filters
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -113,7 +113,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable SNMP
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

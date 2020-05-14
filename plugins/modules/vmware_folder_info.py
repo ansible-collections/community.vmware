@@ -41,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Provide information about vCenter folders
-  vmware_folder_info:
+  community.vmware.vmware_folder_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

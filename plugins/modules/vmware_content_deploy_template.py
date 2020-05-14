@@ -92,7 +92,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Deploy Virtual Machine from template in content library
-  vmware_content_deploy_template:
+  community.vmware.vmware_content_deploy_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -107,7 +107,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy Virtual Machine from template in content library with PowerON State
-  vmware_content_deploy_template:
+  community.vmware.vmware_content_deploy_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

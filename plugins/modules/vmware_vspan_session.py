@@ -153,7 +153,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create distributed mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -168,7 +168,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create remote destination mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -183,7 +183,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create remote destination mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

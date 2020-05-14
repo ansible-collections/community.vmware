@@ -78,7 +78,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather snapshot information about the virtual machine in the given vCenter
-  vmware_guest_snapshot_info:
+  community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -88,7 +88,7 @@ EXAMPLES = '''
   register: snapshot_info
 
 - name: Gather snapshot information about the virtual machine using MoID
-  vmware_guest_snapshot_info:
+  community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

@@ -40,7 +40,7 @@ EXAMPLES = '''
 - hosts: localhost
   connection: local
   tasks:
-   - vca_nat:
+   - community.vmware.vca_nat:
        instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
        vdc_name: 'benz_ansible'
        state: 'present'
@@ -53,7 +53,7 @@ EXAMPLES = '''
 - hosts: localhost
   connection: local
   tasks:
-   - vca_nat:
+   - community.vmware.vca_nat:
        instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
        vdc_name: 'benz_ansible'
        state: 'present'

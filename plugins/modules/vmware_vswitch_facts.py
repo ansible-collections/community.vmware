@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather vswitch facts about all ESXi Host in given Cluster
-  vmware_vswitch_facts:
+  community.vmware.vmware_vswitch_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -60,7 +60,7 @@ EXAMPLES = r'''
   register: all_hosts_vswitch_facts
 
 - name: Gather firewall facts about ESXi Host
-  vmware_vswitch_facts:
+  community.vmware.vmware_vswitch_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

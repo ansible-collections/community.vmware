@@ -50,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about all ESXi Host in given Cluster
-  vmware_host_package_facts:
+  community.vmware.vmware_host_package_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -59,7 +59,7 @@ EXAMPLES = r'''
   register: cluster_host_packages
 
 - name: Gather facts about ESXi Host
-  vmware_host_package_facts:
+  community.vmware.vmware_host_package_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

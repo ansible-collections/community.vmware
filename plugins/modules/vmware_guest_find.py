@@ -49,7 +49,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Find Guest's Folder using name
-  vmware_guest_find:
+  community.vmware.vmware_guest_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -59,7 +59,7 @@ EXAMPLES = r'''
   register: vm_folder
 
 - name: Find Guest's Folder using UUID
-  vmware_guest_find:
+  community.vmware.vmware_guest_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

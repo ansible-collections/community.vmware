@@ -87,7 +87,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure DNS for an ESXi host
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -104,7 +104,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure DNS for all ESXi hosts of a cluster
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -120,7 +120,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure DNS via DHCP for an ESXi host
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

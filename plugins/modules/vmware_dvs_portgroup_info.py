@@ -66,7 +66,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get info about DVPG
-  vmware_dvs_portgroup_info:
+  community.vmware.vmware_dvs_portgroup_info:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"

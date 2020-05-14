@@ -67,7 +67,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add tags to a virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -81,7 +81,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Specify tag and category as dict
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -97,7 +97,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a tag from a virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -110,7 +110,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add tags to a distributed virtual switch
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -123,7 +123,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add tags to a distributed virtual portgroup
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

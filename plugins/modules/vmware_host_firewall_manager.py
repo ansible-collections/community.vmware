@@ -56,7 +56,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable vvold rule set for all ESXi Host in given Cluster
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -67,7 +67,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enable vvold rule set for an ESXi Host
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -78,7 +78,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage multiple rule set for an ESXi Host
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +91,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage IP and network based firewall permissions for ESXi
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

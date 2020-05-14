@@ -81,7 +81,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Enable DRS
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +91,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,7 +103,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable DRS and set default VM behavior to partially automated
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

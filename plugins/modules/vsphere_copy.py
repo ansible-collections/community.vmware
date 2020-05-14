@@ -64,7 +64,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Copy file to datastore using delegate_to
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -75,7 +75,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Copy file to datastore when datacenter is inside folder called devel
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -86,7 +86,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Copy file to datastore using other_system
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

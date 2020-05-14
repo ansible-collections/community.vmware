@@ -95,7 +95,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -105,7 +105,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Rename category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -114,7 +114,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Update category description
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -123,7 +123,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Delete category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -131,7 +131,7 @@ EXAMPLES = r'''
     state: absent
 
 - name: Create category with 2 associable object types
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

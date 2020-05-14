@@ -50,7 +50,7 @@ EXAMPLES = '''
 # Example command from Ansible Playbook
 
 - name: Configure IP address on ESX host
-  vmware_vmkernel_ip_config:
+  community.vmware.vmware_vmkernel_ip_config:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

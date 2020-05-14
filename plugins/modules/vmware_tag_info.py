@@ -41,14 +41,14 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get info about tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
 
 - name: Get category id from the given tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -59,7 +59,7 @@ EXAMPLES = r'''
     msg: "{{ tag_details.tag_facts['fedora_machines']['tag_category_id'] }}"
 
 - name: Gather tag id from the given tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

@@ -114,7 +114,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Run command inside a virtual machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -133,7 +133,7 @@ EXAMPLES = r'''
   register: shell_command_output
 
 - name: Run command inside a virtual machine with wait and timeout
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -150,7 +150,7 @@ EXAMPLES = r'''
   register: shell_command_with_wait_timeout
 
 - name: Change user password in the guest machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -164,7 +164,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Change hostname of guest machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

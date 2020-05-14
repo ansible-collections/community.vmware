@@ -98,7 +98,7 @@ EXAMPLES = '''
   register: vm_facts
 
 - name: Upgrade VMware Tools using uuid
-  vmware_guest_tools_upgrade:
+  community.vmware.vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -107,7 +107,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Upgrade VMware Tools using MoID
-  vmware_guest_tools_upgrade:
+  community.vmware.vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

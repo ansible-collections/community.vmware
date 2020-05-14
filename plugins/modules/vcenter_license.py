@@ -67,7 +67,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add a new vCenter license
-  vcenter_license:
+  community.vmware.vcenter_license:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -76,7 +76,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove an (unused) vCenter license
-  vcenter_license:
+  community.vmware.vcenter_license:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -85,7 +85,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add ESXi license and assign to the ESXi host
-  vcenter_license:
+  community.vmware.vcenter_license:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -95,7 +95,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add vSAN license and assign to the given cluster
-  vcenter_license:
+  community.vmware.vcenter_license:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

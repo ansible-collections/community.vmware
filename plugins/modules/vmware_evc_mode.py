@@ -54,7 +54,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
     - name: Enable EVC Mode
-      vmware_evc_mode:
+      community.vmware.vmware_evc_mode:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"
@@ -66,7 +66,7 @@ EXAMPLES = '''
       register: enable_evc
 
     - name: Disable EVC Mode
-      vmware_evc_mode:
+      community.vmware.vmware_evc_mode:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"

@@ -60,7 +60,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add local user to ESXi
-  vmware_local_user_manager:
+  community.vmware.vmware_local_user_manager:
     hostname: esxi_hostname
     username: root
     password: vmware

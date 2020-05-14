@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather firewall facts about all ESXi Host in given Cluster
-  vmware_host_firewall_facts:
+  community.vmware.vmware_host_firewall_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +56,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather firewall facts about ESXi Host
-  vmware_host_firewall_facts:
+  community.vmware.vmware_host_firewall_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

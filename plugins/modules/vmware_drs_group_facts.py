@@ -55,7 +55,7 @@ EXAMPLES = r'''
 ---
 - name: "Gather DRS facts about given Cluster"
   register: cluster_drs_group_facts
-  vmware_drs_group_facts:
+  community.vmware.vmware_drs_group_facts:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
@@ -65,7 +65,7 @@ EXAMPLES = r'''
 
 - name: "Gather DRS group facts about all clusters in given datacenter"
   register: cluster_drs_group_facts
-  vmware_drs_group_facts:
+  community.vmware.vmware_drs_group_facts:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"

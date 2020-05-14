@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -85,7 +85,7 @@ EXAMPLES = r'''
     var: vminfo.virtual_machines
 
 - name: Gather only registered virtual machine templates
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -97,7 +97,7 @@ EXAMPLES = r'''
     var: template_info.virtual_machines
 
 - name: Gather only registered virtual machines
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -111,7 +111,7 @@ EXAMPLES = r'''
 - name: Get UUID from given VM Name
   block:
     - name: Get virtual machine info
-      vmware_vm_info:
+      community.vmware.vmware_vm_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
@@ -129,7 +129,7 @@ EXAMPLES = r'''
 - name: Get Tags from given VM Name
   block:
     - name: Get virtual machine info
-      vmware_vm_info:
+      community.vmware.vmware_vm_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
@@ -145,7 +145,7 @@ EXAMPLES = r'''
         query: "[?guest_name=='DC0_H0_VM0']"
 
 - name: Gather all VMs from a specific folder
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

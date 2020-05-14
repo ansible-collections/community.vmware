@@ -73,7 +73,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add a VMware vSwitch
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -83,7 +83,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch without any physical NIC attached
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -92,7 +92,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch with multiple NICs
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -104,7 +104,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch to a specific host system
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

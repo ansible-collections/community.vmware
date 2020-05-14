@@ -80,7 +80,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather disk info from virtual machine using UUID
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -91,7 +91,7 @@ EXAMPLES = '''
   register: disk_info
 
 - name: Gather disk info from virtual machine using name
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -102,7 +102,7 @@ EXAMPLES = '''
   register: disk_info
 
 - name: Gather disk info from virtual machine using moid
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

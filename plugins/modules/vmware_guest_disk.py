@@ -155,7 +155,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add disks to virtual machine using UUID
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -192,7 +192,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Add disks with specified shares to the virtual machine
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -213,7 +213,7 @@ EXAMPLES = '''
   register: test_custom_shares
 
 - name: create new disk with custom IO limits and shares in IO Limits
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -236,7 +236,7 @@ EXAMPLES = '''
   register: test_custom_IoLimit_shares
 
 - name: Remove disks from virtual machine using name
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -251,7 +251,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Remove disk from virtual machine using moid
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -266,7 +266,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Remove disk from virtual machine but keep the VMDK file on the datastore
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
