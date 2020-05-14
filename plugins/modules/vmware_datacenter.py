@@ -47,7 +47,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create Datacenter
-  vmware_datacenter:
+  community.vmware.vmware_datacenter:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +56,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Delete Datacenter
-  vmware_datacenter:
+  community.vmware.vmware_datacenter:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -136,7 +136,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
   - name: Create a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -149,7 +149,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -161,7 +161,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Revert to a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -173,7 +173,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove all snapshots of a VM
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -184,7 +184,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove all snapshots of a VM using MoID
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -195,7 +195,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Take snapshot of a VM using quiesce and memory flag on
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -209,7 +209,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove a snapshot and snapshot subtree
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -222,7 +222,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Rename a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

@@ -80,7 +80,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -93,7 +93,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Update Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -104,7 +104,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

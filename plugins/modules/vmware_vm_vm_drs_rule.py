@@ -77,7 +77,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create DRS Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -93,7 +93,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create DRS Anti-Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -109,7 +109,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete DRS Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"

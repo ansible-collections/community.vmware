@@ -52,7 +52,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Set the Power Management Policy of a host system to high-performance
-  vmware_host_powermgmt_policy:
+  community.vmware.vmware_host_powermgmt_policy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -62,7 +62,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set the Power Management Policy of all host systems from cluster to high-performance
-  vmware_host_powermgmt_policy:
+  community.vmware.vmware_host_powermgmt_policy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

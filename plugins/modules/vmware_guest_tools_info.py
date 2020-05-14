@@ -81,7 +81,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather VMware tools info installed in VM specified by uuid
-  vmware_guest_tools_info:
+  community.vmware.vmware_guest_tools_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -91,7 +91,7 @@ EXAMPLES = '''
   register: vmtools_info
 
 - name: Gather VMware tools info installed in VM specified by name
-  vmware_guest_tools_info:
+  community.vmware.vmware_guest_tools_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

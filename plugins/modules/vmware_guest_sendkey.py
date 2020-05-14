@@ -94,7 +94,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Send list of keys to virtual machine
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -110,7 +110,7 @@ EXAMPLES = '''
   register: keys_num_sent
 
 - name: Send list of keys to virtual machine using MoID
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -124,7 +124,7 @@ EXAMPLES = '''
   register: ctrl_alt_del_sent
 
 - name: Send a string to virtual machine
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"

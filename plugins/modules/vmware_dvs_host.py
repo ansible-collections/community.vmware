@@ -69,7 +69,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add Host to dVS
-  vmware_dvs_host:
+  community.vmware.vmware_dvs_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -82,7 +82,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add Host to dVS/enable learnswitch (https://labs.vmware.com/flings/learnswitch)
-  vmware_dvs_host:
+  community.vmware.vmware_dvs_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

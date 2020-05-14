@@ -58,7 +58,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Enable vSAN
-  vmware_cluster_vsan:
+  community.vmware.vmware_cluster_vsan:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -68,7 +68,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable vSAN and claim storage automatically
-  vmware_cluster_vsan:
+  community.vmware.vmware_cluster_vsan:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

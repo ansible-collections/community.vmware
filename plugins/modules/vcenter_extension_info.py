@@ -33,7 +33,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about vCenter Extensions
-  vcenter_extension_info:
+  community.vmware.vcenter_extension_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

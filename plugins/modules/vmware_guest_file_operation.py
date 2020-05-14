@@ -122,7 +122,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create directory inside a vm
-  vmware_guest_file_operation:
+  community.vmware.vmware_guest_file_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -138,7 +138,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: copy file to vm
-  vmware_guest_file_operation:
+  community.vmware.vmware_guest_file_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -153,7 +153,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: fetch file from vm
-  vmware_guest_file_operation:
+  community.vmware.vmware_guest_file_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

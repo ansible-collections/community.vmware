@@ -219,7 +219,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Create Cluster
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -231,7 +231,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Create Cluster with additional changes
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -247,7 +247,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Delete Cluster
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"

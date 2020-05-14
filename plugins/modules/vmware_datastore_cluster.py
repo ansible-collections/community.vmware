@@ -103,7 +103,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create datastore cluster and enable SDRS
-  vmware_datastore_cluster:
+  community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -114,7 +114,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create datastore cluster using folder
-  vmware_datastore_cluster:
+  community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -124,7 +124,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Delete datastore cluster
-  vmware_datastore_cluster:
+  community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

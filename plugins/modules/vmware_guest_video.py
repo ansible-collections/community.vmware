@@ -108,7 +108,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Change video card settings of virtual machine
-  vmware_guest_video:
+  community.vmware.vmware_guest_video:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -126,7 +126,7 @@ EXAMPLES = '''
   register: video_facts
 
 - name: Change video card settings of virtual machine using MoID
-  vmware_guest_video:
+  community.vmware.vmware_guest_video:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

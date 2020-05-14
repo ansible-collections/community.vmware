@@ -37,7 +37,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info about local role from an ESXi
-  vmware_local_role_info:
+  community.vmware.vmware_local_role_info:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

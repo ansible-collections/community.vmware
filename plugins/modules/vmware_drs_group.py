@@ -76,7 +76,7 @@ EXAMPLES = r'''
 ---
 - name: "Create DRS VM group"
   delegate_to: localhost
-  vmware_drs_group:
+  community.vmware.vmware_drs_group:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
@@ -90,7 +90,7 @@ EXAMPLES = r'''
 
 - name: "Create DRS Host group"
   delegate_to: localhost
-  vmware_drs_group:
+  community.vmware.vmware_drs_group:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
@@ -105,7 +105,7 @@ EXAMPLES = r'''
 
 - name: "Delete DRS Host group"
   delegate_to: localhost
-  vmware_drs_group:
+  community.vmware.vmware_drs_group:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"

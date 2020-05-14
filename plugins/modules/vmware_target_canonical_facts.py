@@ -57,7 +57,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Get Canonical name of particular target on particular ESXi host system
-  vmware_target_canonical_facts:
+  community.vmware.vmware_target_canonical_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -66,7 +66,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Get Canonical name of all target on particular ESXi host system
-  vmware_target_canonical_facts:
+  community.vmware.vmware_target_canonical_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -74,7 +74,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Get Canonical name of all ESXi hostname on particular Cluster
-  vmware_target_canonical_facts:
+  community.vmware.vmware_target_canonical_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

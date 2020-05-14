@@ -107,7 +107,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add resource pool to vCenter
-  vmware_resource_pool:
+  community.vmware.vmware_resource_pool:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

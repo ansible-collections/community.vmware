@@ -62,7 +62,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enter datastore into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -71,7 +71,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enter all datastores under cluster into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -80,7 +80,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enter all datastores under datastore cluster into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -89,7 +89,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Exit datastore into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

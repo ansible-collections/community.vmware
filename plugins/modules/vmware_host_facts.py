@@ -75,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather vmware host facts
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -83,7 +83,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather vmware host facts from vCenter
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -92,7 +92,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather vmware host facts from vCenter with tag information
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -102,7 +102,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Get VSAN Cluster UUID from host facts
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -111,7 +111,7 @@ EXAMPLES = r'''
     cluster_uuid: "{{ host_facts['ansible_facts']['vsan_cluster_uuid'] }}"
 
 - name: Gather some info from a host using the vSphere API output schema
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -127,7 +127,7 @@ EXAMPLES = r'''
 - name: How to retrieve Product, Version, Build, Update info for ESXi from vCenter
   block:
     - name: Gather product version info for ESXi from vCenter
-      vmware_host_facts:
+      community.vmware.vmware_host_facts:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"

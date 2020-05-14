@@ -117,7 +117,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -128,7 +128,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some info from a guest using the vSphere API output schema
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -141,7 +141,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some information about a guest using MoID
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -154,7 +154,7 @@ EXAMPLES = '''
   register: vm_moid_info
 
 - name: Gather Managed object ID (moid) from a guest using the vSphere API output schema for REST Calls
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

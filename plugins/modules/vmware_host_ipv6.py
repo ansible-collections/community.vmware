@@ -54,7 +54,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable IPv6 for an host system
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -64,7 +64,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable IPv6 for an host system
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -74,7 +74,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable IPv6 for all host systems from cluster
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

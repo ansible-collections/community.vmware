@@ -75,7 +75,7 @@ extends_documentation_fragment: vmware_rest_client.documentation
 
 EXAMPLES = r'''
 - name: Deploy Virtual Machine from OVF template in content library
-  vmware_content_deploy_ovf_template:
+  community.vmware.vmware_content_deploy_ovf_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

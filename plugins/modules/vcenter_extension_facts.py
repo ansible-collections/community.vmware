@@ -37,7 +37,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about vCenter Extensions
-  vcenter_extension_facts:
+  community.vmware.vcenter_extension_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

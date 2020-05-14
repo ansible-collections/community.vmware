@@ -49,7 +49,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about vmhbas of all ESXi Host in the given Cluster
-  vmware_host_vmhba_info:
+  community.vmware.vmware_host_vmhba_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -58,7 +58,7 @@ EXAMPLES = r'''
   register: cluster_host_vmhbas
 
 - name: Gather info about vmhbas of an ESXi Host
-  vmware_host_vmhba_info:
+  community.vmware.vmware_host_vmhba_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

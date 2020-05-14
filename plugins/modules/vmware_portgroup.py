@@ -125,7 +125,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add Management Network VM Portgroup
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ esxi_hostname }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -135,7 +135,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add Portgroup with Promiscuous Mode Enabled
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ esxi_hostname }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -146,7 +146,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add Management Network VM Portgroup to specific hosts
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -157,7 +157,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add Management Network VM Portgroup to all hosts in a cluster
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -168,7 +168,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove Management Network VM Portgroup to all hosts in a cluster
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -180,7 +180,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add Portgroup with all settings defined
-  vmware_portgroup:
+  community.vmware.vmware_portgroup:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

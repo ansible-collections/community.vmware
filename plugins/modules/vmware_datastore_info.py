@@ -95,7 +95,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -105,7 +105,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather info from datacenter about specific datastore
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -115,7 +115,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some info from a datastore using the vSphere API output schema
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Configure ESXi hostname and DNS servers
-  vmware_dns_config:
+  community.vmware.vmware_dns_config:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

@@ -184,7 +184,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Enable HA without admission control
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -194,7 +194,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable HA and VM monitoring without admission control
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -206,7 +206,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable HA with admission control reserving 50% of resources for HA
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

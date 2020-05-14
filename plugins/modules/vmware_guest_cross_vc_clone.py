@@ -121,7 +121,7 @@ author:
 EXAMPLES = '''
 # Clone template
 - name: clone a template across VC
-  vmware_guest_cross_vc_clone:
+  community.vmware.vmware_guest_cross_vc_clone:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -140,7 +140,7 @@ EXAMPLES = '''
   register: cross_vc_clone_from_template
 
 - name: clone a VM across VC
-  vmware_guest_cross_vc_clone:
+  community.vmware.vmware_guest_cross_vc_clone:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
@@ -157,7 +157,7 @@ EXAMPLES = '''
   register: cross_vc_clone_from_vm
 
 - name: check_mode support
-  vmware_guest_cross_vc_clone:
+  community.vmware.vmware_guest_cross_vc_clone:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"

@@ -94,7 +94,7 @@ short_description: "Creates vm/host group in a given cluster"
 EXAMPLES = r'''
 ---
 - name: "Create mandatory DRS Affinity rule for VM/Host"
-  vmware_vm_host_drs_rule:
+  community.vmware.vmware_vm_host_drs_rule:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"

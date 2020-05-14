@@ -59,7 +59,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure IPv6 to be off via tcpip4 kernel module
-  vmware_host_kernel_manager:
+  community.vmware.vmware_host_kernel_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -68,7 +68,7 @@ EXAMPLES = r'''
     kernel_module_option: "ipv6=0"
 
 - name: Using cluster_name, configure vmw_psp_rr options
-  vmware_host_kernel_manager:
+  community.vmware.vmware_host_kernel_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

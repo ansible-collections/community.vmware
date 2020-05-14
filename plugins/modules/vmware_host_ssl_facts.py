@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather SSL thumbprint information about all ESXi Hosts in given Cluster
-  vmware_host_ssl_facts:
+  community.vmware.vmware_host_ssl_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -60,7 +60,7 @@ EXAMPLES = r'''
   register: all_host_ssl_facts
 
 - name: Get SSL Thumbprint info about "{{ esxi_hostname }}"
-  vmware_host_ssl_facts:
+  community.vmware.vmware_host_ssl_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"

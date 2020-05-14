@@ -135,7 +135,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add disk and USB 3.0 controllers for virtual machine located by name
-  vmware_guest_controller:
+  community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -153,7 +153,7 @@ EXAMPLES = '''
   register: disk_controller_facts
 
 - name: Remove disk controllers and USB 2.0 from virtual machine located by moid
-  vmware_guest_controller:
+  community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

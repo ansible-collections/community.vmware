@@ -56,7 +56,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable Hyperthreading for an host system
-  vmware_host_hyperthreading:
+  community.vmware.vmware_host_hyperthreading:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -66,7 +66,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable Hyperthreading for an host system
-  vmware_host_hyperthreading:
+  community.vmware.vmware_host_hyperthreading:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -76,7 +76,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable Hyperthreading for all host systems from cluster
-  vmware_host_hyperthreading:
+  community.vmware.vmware_host_hyperthreading:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

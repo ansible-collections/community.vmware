@@ -55,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Recan HBA's for a given ESXi host and refresh storage system objects
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -64,7 +64,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Rescan HBA's for a given cluster - all found hosts will be scanned
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -73,7 +73,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Recan HBA's for a given ESXi host and don't refresh storage system objects
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

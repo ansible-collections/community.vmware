@@ -32,7 +32,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather resource pool info about all resource pools available
-  vmware_resource_pool_info:
+  community.vmware.vmware_resource_pool_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -68,7 +68,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: vcenter01.example.local
     username: administrator@vsphere.local
     password: SuperSecretPassword
@@ -79,7 +79,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set NTP servers for all ESXi Host in given Cluster
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +91,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,7 +103,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

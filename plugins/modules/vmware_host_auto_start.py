@@ -139,7 +139,7 @@ extends_documentation_fragment:
 EXAMPLES = '''
 ---
 - name: Update for system defaults config.
-  vmware_host_auto_start:
+  community.vmware.vmware_host_auto_start:
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
@@ -151,7 +151,7 @@ EXAMPLES = '''
       stop_action: guestShutdown
 
 - name: Update for powerInfo config of virtual machine.
-  vmware_host_auto_start:
+  community.vmware.vmware_host_auto_start:
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"

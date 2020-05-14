@@ -66,7 +66,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about virtual machine's boot order and related parameters
-  vmware_guest_boot_facts:
+  community.vmware.vmware_guest_boot_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -75,7 +75,7 @@ EXAMPLES = r'''
   register: vm_boot_order_facts
 
 - name: Gather facts about virtual machine's boot order using MoID
-  vmware_guest_boot_facts:
+  community.vmware.vmware_guest_boot_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

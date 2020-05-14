@@ -42,7 +42,7 @@ EXAMPLES = '''
     - vsan
   tasks:
     - name: Configure VSAN on first host
-      vmware_vsan_cluster:
+      community.vmware.vmware_vsan_cluster:
          hostname: "{{ groups['esxi'][0] }}"
          username: "{{ esxi_username }}"
          password: "{{ site_password }}"
@@ -50,7 +50,7 @@ EXAMPLES = '''
       register: vsan_cluster
 
     - name: Configure VSAN on remaining hosts
-      vmware_vsan_cluster:
+      community.vmware.vmware_vsan_cluster:
          hostname: "{{ item }}"
          username: "{{ esxi_username }}"
          password: "{{ site_password }}"

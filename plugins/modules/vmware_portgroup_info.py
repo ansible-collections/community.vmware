@@ -53,7 +53,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather portgroup info about all ESXi Host in given Cluster
-  vmware_portgroup_info:
+  community.vmware.vmware_portgroup_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -61,7 +61,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather portgroup info about ESXi Host system
-  vmware_portgroup_info:
+  community.vmware.vmware_portgroup_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

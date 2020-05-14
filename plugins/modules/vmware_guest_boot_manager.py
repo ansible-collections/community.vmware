@@ -100,7 +100,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Change virtual machine's boot order and related parameters
-  vmware_guest_boot_manager:
+  community.vmware.vmware_guest_boot_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -120,7 +120,7 @@ EXAMPLES = r'''
   register: vm_boot_order
 
 - name: Change virtual machine's boot order using Virtual Machine MoID
-  vmware_guest_boot_manager:
+  community.vmware.vmware_guest_boot_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

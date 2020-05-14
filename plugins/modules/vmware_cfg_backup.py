@@ -57,7 +57,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Save the ESXi configuration locally by authenticating directly against the ESXi host
-  vmware_cfg_backup:
+  community.vmware.vmware_cfg_backup:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -66,7 +66,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Save the ESXi configuration locally by authenticating against the vCenter and selecting the ESXi host
-  vmware_cfg_backup:
+  community.vmware.vmware_cfg_backup:
     hostname: '{{ vcenter_hostname }}'
     esxi_hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'

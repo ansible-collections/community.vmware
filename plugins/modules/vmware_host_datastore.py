@@ -98,7 +98,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Mount VMFS datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -111,7 +111,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Mount NFS datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -128,7 +128,7 @@ EXAMPLES = r'''
       - { 'name': 'NasDS_vol02', 'server': 'nas01', 'path': '/mnt/vol02', 'type': 'nfs'}
 
 - name: Mount NFS v4.1 datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -145,7 +145,7 @@ EXAMPLES = r'''
       - { 'name': 'NasDS_vol04', 'server': 'nas01,nas02', 'path': '/mnt/vol02', 'type': 'nfs41'}
 
 - name: Remove/Umount Datastores from a ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'

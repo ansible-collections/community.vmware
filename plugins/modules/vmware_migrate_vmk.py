@@ -63,7 +63,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Migrate Management vmk
-  vmware_migrate_vmk:
+  community.vmware.vmware_migrate_vmk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

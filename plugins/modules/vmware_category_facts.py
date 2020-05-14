@@ -42,7 +42,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about tag categories
-  vmware_category_facts:
+  community.vmware.vmware_category_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -50,7 +50,7 @@ EXAMPLES = r'''
   register: all_tag_category_facts
 
 - name: Gather category id from given tag category
-  vmware_category_facts:
+  community.vmware.vmware_category_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

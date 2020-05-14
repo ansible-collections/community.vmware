@@ -106,7 +106,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Creates a new vApp in a VCA instance
-  vca_vapp:
+  community.vmware.vca_vapp:
     vapp_name: tower
     state: present
     template_name: 'Ubuntu Server 12.04 LTS (amd64 20150127)'

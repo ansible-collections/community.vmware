@@ -88,7 +88,7 @@ resources_changed:
 
 EXAMPLES = '''
 - name: Enable NIOC
-  vmware_dvswitch_nioc:
+  community.vmware.vmware_dvswitch_nioc:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -108,7 +108,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Disable NIOC
-  vmware_dvswitch_nioc:
+  community.vmware.vmware_dvswitch_nioc:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

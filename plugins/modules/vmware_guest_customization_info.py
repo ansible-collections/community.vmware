@@ -41,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info about all customization specification
-  vmware_guest_customization_info:
+  community.vmware.vmware_guest_customization_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -50,7 +50,7 @@ EXAMPLES = '''
   register: all_custom_spec_info
 
 - name: Gather info about customization specification with the given name
-  vmware_guest_customization_info:
+  community.vmware.vmware_guest_customization_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

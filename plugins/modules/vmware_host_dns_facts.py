@@ -50,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DNS facts about all ESXi Hosts in given Cluster
-  vmware_host_dns_facts:
+  community.vmware.vmware_host_dns_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -58,7 +58,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather DNS facts about ESXi Host
-  vmware_host_dns_facts:
+  community.vmware.vmware_host_dns_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
