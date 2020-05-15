@@ -184,6 +184,7 @@ instance:
     returned: always
     type: dict
     sample: {
+        "advanced_settings": {},
         "annotation": "",
         "current_snapshot": null,
         "customvalues": {},

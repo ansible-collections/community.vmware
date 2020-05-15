@@ -317,6 +317,7 @@ def gather_vm_facts(content, vm):
         'vnc': {},
         'moid': vm._moId,
         'vimref': "vim.VirtualMachine:%s" % vm._moId,
+        'advanced_settings': {},
     }
 
     # facts that may or may not exist
@@ -371,6 +372,10 @@ def gather_vm_facts(content, vm):
                     break
 
         facts['customvalues'][kn] = value_obj.value
+
+    # Resolve advanced settings
+    for advanced_setting in vm.config.extraConfig:
+        facts['advanced_settings'][advanced_setting.key] = advanced_setting.value
 
     net_dict = {}
     vmnet = _get_vm_prop(vm, ('guest', 'net'))
