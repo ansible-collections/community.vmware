@@ -45,7 +45,7 @@ options:
     vmnics:
         description:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
-        required: True
+        required: False
         type: list
     state:
         description:
