@@ -18,7 +18,8 @@
   - name: Configure Uplink portgroup
     vmware_dvswitch_uplink_pg:
       switch: 'dvs_host_test_switch'
-      name: 'dvs_host_test_portgroup'
+      name: 'dvs_host_test_ul_portgroup'
+    when: vcsim not defined
      
   - name: Create distributed portgroups
     vmware_dvs_portgroup:
@@ -49,14 +50,7 @@
       state: absent
     with_items: "{{ esxi_hosts }}"
 
-  - name: Configure Uplink portgroup
-    vmware_dvswitch_uplink_pg:
-      datacenter_name: '{{ dc1 }}'
-      switch: 'dvs_host_test_switch'
-      name: 'dvs_host_test_portgroup'
-      state: absent
-     
-  - name: Create distributed portgroups
+  - name: Deleting distributed portgroup
     vmware_dvs_portgroup:
       portgroup_name: 'dvs_host_test_portgroup'
       switch_name: 'dvs_host_test_switch'
