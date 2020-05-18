@@ -1,4 +1,8 @@
 ---
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_datacenter: true
 - name: 'Attach the hosts to the DVSwitch without specifying any vnics (Issue #185)'
   block:
   - name: Create the DVSwitch
