@@ -10,11 +10,25 @@
       datacenter_name: '{{ dc1 }}'
       switch_name: 'dvs_host_test_switch'
       switch_version: 6.5.0
-      mtu: 9000
-      uplink_quantity: 0
+      uplink_quantity: 2
       discovery_proto: lldp
       discovery_operation: both
       state: present
+
+  - name: Configure Uplink portgroup
+    vmware_dvswitch_uplink_pg:
+      datacenter_name: '{{ dc1 }}'
+      switch: 'dvs_host_test_switch'
+      name: 'dvs_host_test_portgroup'
+     
+  - name: Create distributed portgroups
+    vmware_dvs_portgroup:
+      portgroup_name: 'dvs_host_test_portgroup'
+      switch_name: 'dvs_host_test_switch'
+      portgroup_type: earlyBinding
+      state: 'present'
+      num_ports: 12
+
   - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
     vmware_dvs_host:
       esxi_hostname: "{{ item }}"
@@ -26,6 +40,8 @@
       that:
         - host_dvs_attachment[0] is changed
         - host_dvs_attachment[1] is changed
+
+# Cleanup
   always:
   - name: 'Cleanup: detaching hosts from dvs'
     vmware_dvs_host:
@@ -33,6 +49,21 @@
       switch_name: 'dvs_host_test_switch'
       state: absent
     with_items: "{{ esxi_hosts }}"
+
+  - name: Configure Uplink portgroup
+    vmware_dvswitch_uplink_pg:
+      datacenter_name: '{{ dc1 }}'
+      switch: 'dvs_host_test_switch'
+      name: 'dvs_host_test_portgroup'
+      state: absent
+     
+  - name: Create distributed portgroups
+    vmware_dvs_portgroup:
+      portgroup_name: 'dvs_host_test_portgroup'
+      switch_name: 'dvs_host_test_switch'
+      portgroup_type: earlyBinding
+      state: 'absent'
+
 
   - name: 'Cleanup: Deleting DVSwitch'
     vmware_dvswitch:
