@@ -17,7 +17,6 @@
 
   - name: Configure Uplink portgroup
     vmware_dvswitch_uplink_pg:
-      datacenter_name: '{{ dc1 }}'
       switch: 'dvs_host_test_switch'
       name: 'dvs_host_test_portgroup'
      
