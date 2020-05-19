@@ -19,7 +19,7 @@
     vmware_dvswitch_uplink_pg:
       switch: 'dvs_host_test_switch'
       name: 'dvs_host_test_ul_portgroup'
-    when: vcsim not defined
+    when: vcsim is not defined
      
   - name: Create distributed portgroups
     vmware_dvs_portgroup:
