@@ -21,13 +21,14 @@
       name: 'dvs_host_test_ul_portgroup'
     when: vcsim is not defined
      
-  - name: Create distributed portgroups
+  - name: Create distributed portgroup
     vmware_dvs_portgroup:
       portgroup_name: 'dvs_host_test_portgroup'
       switch_name: 'dvs_host_test_switch'
       portgroup_type: earlyBinding
       state: 'present'
       num_ports: 12
+      vlan_id: 777
 
   - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
     vmware_dvs_host:
