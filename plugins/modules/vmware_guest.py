@@ -186,8 +186,11 @@ options:
     - '     - C(independent_persistent): Same as persistent, but not affected by snapshots.'
     - '     - C(independent_nonpersistent): Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.'
     - ' - C(controller_type) (string): Type of disk controller. Valid values are C(buslogic), C(lsilogic),
-          C(lsilogicsas), C(paravirtual), C(sata) and C(nvme). Type C(nvme) support starts from hardware C(version) 13
-          and ESXi version 6.5.'
+          C(lsilogicsas), C(paravirtual), C(sata) and C(nvme). When set to C(sata), please make sure C(unit_number) is
+          correct and not used by SATA CDROMs.'
+    - '   C(nvme) support starts from hardware C(version) 13 and ESXi version 6.5.'
+    - '   If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when
+          C(cdrom) also set to C(sata) type.'
     - ' - C(controller_number) (integer): Disk controller bus number. The maximum number of same type controller is 4
           per VM. Valid value range from 0 to 3.'
     - ' - C(unit_number) (integer): Disk Unit Number.'
@@ -195,7 +198,8 @@ options:
     - '   Valid value range from 0 to 14 for NVME controller.'
     - '   Valid value range from 0 to 29 for SATA controller.'
     - '   C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
-          with multiple types of disk controllers and disks.' 
+          with multiple types of disk controllers and disks. When creating new VM, the first configured disk in the
+          C(disk) list will be "Hard Disk 1".'
   cdrom:
     description:
     - A CD-ROM configuration for the virtual machine.
@@ -208,6 +212,7 @@ options:
     - ' - C(iso_path) (string): The datastore path to the ISO file to use, in the form of C([datastore1] path/to/file.iso).
           Required if type is set C(iso).'
     - ' - C(controller_type) (string): Valid options are C(ide) and C(sata). Default value is C(ide).'
+    - '   When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.'
     - ' - C(controller_number) (int): For C(ide) controller, valid value is 0 or 1. For C(sata) controller, valid value is 0 to 3.'
     - ' - C(unit_number) (int): For CD-ROM device attach to C(ide) controller, valid value is 0 or 1, attach to C(sata)
           controller, valid value is 0 to 29. C(controller_number) and C(unit_number) are mandatory attributes.'
@@ -385,7 +390,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a virtual machine on given ESXi hostname
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -416,7 +421,7 @@ EXAMPLES = r'''
   register: deploy_vm
 
 - name: Create a virtual machine from a template
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -458,7 +463,7 @@ EXAMPLES = r'''
   register: deploy
 
 - name: Clone a virtual machine from Windows template and customize
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -491,7 +496,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name:  Clone a virtual machine from Linux template and customize
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -518,7 +523,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Rename a virtual machine (requires the virtual machine's uuid)
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -529,7 +534,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine by uuid
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -539,7 +544,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine from inventory
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -550,7 +555,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manipulate vApp properties
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -568,7 +573,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set powerstate of a virtual machine to poweroff by using UUID
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -578,7 +583,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy a virtual machine in a datastore different from the datastore of the template
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -594,7 +599,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a diskless VM
-  community.vmware.vmware_guest:
+  vmware_guest:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -2211,7 +2216,7 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="Configured hardware version '%d' not support nvme controller."
                                               % self.params['hardware']['version'])
                 elif self.params['esxi_hostname'] is not None:
-                    if not self.host_version_at_least(verison=(6, 5, 0), host_name=self.params['esxi_hostname']):
+                    if not self.host_version_at_least(version=(6, 5, 0), host_name=self.params['esxi_hostname']):
                         self.module.fail_json(msg="ESXi host '%s' version < 6.5.0, not support nvme controller."
                                                   % self.params['esxi_hostname'])
                 elif vm_obj is not None:
@@ -2226,8 +2231,8 @@ class PyVmomiHelper(PyVmomi):
                 for ctl in controllers:
                     if ctl['type'] in self.device_helper.scsi_device_type.keys() and ctl_type in self.device_helper.scsi_device_type.keys():
                         if ctl['type'] != ctl_type and ctl['num'] == ctl_num:
-                            self.module.fail_json(msg="Specified SCSI controller %s and %s have the same bus number %s"
-                                                      % (ctl['type'], ctl_type, ctl_num))
+                            self.module.fail_json(msg="Specified SCSI controller '%s' and '%s' have the same bus number"
+                                                      ": '%s'" % (ctl['type'], ctl_type, ctl_num))
 
                     if ctl['type'] == ctl_type and ctl['num'] == ctl_num:
                         for i in range(0, len(ctl['disk'])):
@@ -2245,35 +2250,43 @@ class PyVmomiHelper(PyVmomi):
         return controllers
 
     def set_disk_parameters(self, disk_spec, expected_disk_spec, reconfigure=False):
+        disk_modified = False
         if 'disk_mode' in expected_disk_spec:
             disk_mode = expected_disk_spec.get('disk_mode', 'persistent').lower()
             valid_disk_mode = ['persistent', 'independent_persistent', 'independent_nonpersistent']
             if disk_mode not in valid_disk_mode:
                 self.module.fail_json(msg="disk_mode specified is not valid."
                                           " Should be one of ['%s']" % "', '".join(valid_disk_mode))
-
-            if disk_spec.device.backing.diskMode != disk_mode:
+            if reconfigure:
+                if disk_spec.device.backing.diskMode != disk_mode:
+                    disk_spec.device.backing.diskMode = disk_mode
+                    disk_modified = True
+            else:
                 disk_spec.device.backing.diskMode = disk_mode
         # default is persistent for new deployed VM
         elif 'disk_mode' not in expected_disk_spec and not reconfigure:
             disk_spec.device.backing.diskMode = "persistent"
 
         if not reconfigure:
-            if 'type' in expected_disk_spec:
-                disk_type = expected_disk_spec.get('type', '').lower()
-                if disk_type == 'thin':
-                    disk_spec.device.backing.thinProvisioned = True
-                elif disk_type == 'eagerzeroedthick':
-                    disk_spec.device.backing.eagerlyScrub = True
-            else:
+            disk_type = expected_disk_spec.get('type', 'thin').lower()
+            if disk_type == 'thin':
                 disk_spec.device.backing.thinProvisioned = True
+            elif disk_type == 'eagerzeroedthick':
+                disk_spec.device.backing.eagerlyScrub = True
 
         kb = self.get_configured_disk_size(expected_disk_spec)
         if reconfigure:
             if disk_spec.device.capacityInKB > kb:
                 self.module.fail_json(msg="Given disk size is smaller than found (%d < %d)."
                                           "Reducing disks is not allowed." % (kb, disk_spec.device.capacityInKB))
-        disk_spec.device.capacityInKB = kb
+            if disk_spec.device.capacityInKB != kb:
+                disk_spec.device.capacityInKB = kb
+                disk_modified = True
+        else:
+            disk_spec.device.capacityInKB = kb
+            disk_modified = True
+
+        return disk_modified
 
     def configure_multiple_controllers_disks(self, vm_obj):
         ctls = self.sanitize_disk_parameters(vm_obj)
@@ -2301,6 +2314,7 @@ class PyVmomiHelper(PyVmomi):
             for j in range(0, len(ctl['disk'])):
                 hard_disk = None
                 hard_disk_exist = False
+                disk_modified = False
                 disk_unit_number = ctl['disk'][j]['unit_number']
                 # from attached disk list find the specified one
                 if len(disk_list) != 0:
@@ -2312,16 +2326,18 @@ class PyVmomiHelper(PyVmomi):
                 # if find the disk do reconfigure
                 if hard_disk_exist:
                     hard_disk_spec = vim.vm.device.VirtualDeviceSpec()
-                    hard_disk_spec.device = hard_disk
-                    self.set_disk_parameters(hard_disk_spec, ctl['disk'][j], reconfigure=True)
                     hard_disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                    hard_disk_spec.device = hard_disk
+                    disk_modified = self.set_disk_parameters(hard_disk_spec, ctl['disk'][j], reconfigure=True)
                     self.configspec.deviceChange.append(hard_disk_spec)
                 # if no disk or the specified one not exist do create new disk
                 if len(disk_list) == 0 or not hard_disk_exist:
                     hard_disk = self.device_helper.create_hard_disk(disk_ctl_spec, disk_unit_number)
-                    self.set_disk_parameters(hard_disk, ctl['disk'][j])
                     hard_disk.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+                    disk_modified = self.set_disk_parameters(hard_disk, ctl['disk'][j])
                     self.configspec.deviceChange.append(hard_disk)
+                if disk_modified:
+                    self.change_detected = True
 
     def configure_disks(self, vm_obj):
         # Ignore empty disk list, this permits to keep disks when deploying a template/cloning a VM
