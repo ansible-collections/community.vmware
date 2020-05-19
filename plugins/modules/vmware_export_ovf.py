@@ -48,9 +48,9 @@ options:
   folder:
     description:
     - Destination folder, absolute path to find the specified guest.
-    - The folder should include the datacenter. ESX's datacenter is ha-datacenter.
+    - The folder should include the datacenter. ESX datacenter is ha-datacenter.
     - This parameter is case sensitive.
-    - 'If multiple machines are found with same name, this parameter is used to identify
+    - 'If multiple machines are found with same name, this parameter is used to identify'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'

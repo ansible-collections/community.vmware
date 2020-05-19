@@ -106,9 +106,9 @@ options:
   folder:
     description:
     - Destination folder, absolute path to find an existing guest or create the new guest.
-    - The folder should include the datacenter. ESX's datacenter is ha-datacenter.
+    - "The folder should include the datacenter. ESX's datacenter is ha-datacenter."
     - This parameter is case sensitive.
-    - 'If multiple machines are found with same name, this parameter is used to identify
+    - 'If multiple machines are found with same name, this parameter is used to identify'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
@@ -121,41 +121,39 @@ options:
     - '   folder: /folder1/datacenter1/vm/folder2'
   hardware:
     description:
-    - Manage virtual machine's hardware attributes.
+    - "Manage virtual machine's hardware attributes."
     - All parameters case sensitive.
     - 'Valid attributes are:'
     - ' - C(hotadd_cpu) (boolean): Allow virtual CPUs to be added while the virtual machine is running.'
-    - ' - C(hotremove_cpu) (boolean): Allow virtual CPUs to be removed while the virtual machine is running.
+    - ' - C(hotremove_cpu) (boolean): Allow virtual CPUs to be removed while the virtual machine is running.'
     - ' - C(hotadd_memory) (boolean): Allow memory to be added while the virtual machine is running.'
     - ' - C(memory_mb) (integer): Amount of memory in MB.'
-    - ' - C(num_cpus) (integer): Number of CPUs.'
+    - ' - C(num_cpus) (integer): Number of CPUs. C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).'
+    - '    For example to create a VM with 2 sockets of 4 cores, specify C(num_cpus): 8 and C(num_cpu_cores_per_socket): 4'
     - ' - C(num_cpu_cores_per_socket) (integer): Number of Cores Per Socket.'
-    - " C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).
-        For example to create a VM with 2 sockets of 4 cores, specify C(num_cpus): 8 and C(num_cpu_cores_per_socket): 4"
     - ' - C(scsi) (string): Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual) (default).'
-    - " - C(memory_reservation_lock) (boolean): If set true, memory resource reservation for the virtual machine
-    - ' - C(max_connections) (integer): Maximum number of active remote display connections for the virtual machines.
-    - ' - C(mem_limit) (integer): The memory utilization of a virtual machine will not exceed this limit. Unit is MB.
-    - ' - C(mem_reservation) (integer): The amount of memory resource that is guaranteed available to the virtual
-    - ' - C(cpu_limit) (integer): The CPU utilization of a virtual machine will not exceed this limit. Unit is MHz.
-    - ' - C(cpu_reservation) (integer): The amount of CPU resource that is guaranteed available to the virtual machine.
-    - ' - C(version) (integer): The Virtual machine hardware versions. Default is 10 (ESXi 5.5 and onwards).
-          If value specified as C(latest), version is set to the most current virtual hardware supported on the host.
-          C(latest) is added in version 2.10.
-          Please check VMware documentation for correct virtual machine hardware version.
-          Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given
-    - ' - C(boot_firmware) (string): Choose which firmware should be used to boot the virtual machine.
-    - ' - C(virt_based_security) (bool): Enable Virtualization Based Security feature for Windows 10.
-          (Support from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016)'
+    - ' - C(memory_reservation_lock) (boolean): If set true, memory resource reservation for the virtual machine'
+    - ' - C(max_connections) (integer): Maximum number of active remote display connections for the virtual machines.'
+    - ' - C(mem_limit) (integer): The memory utilization of a virtual machine will not exceed this limit. Unit is MB.'
+    - ' - C(mem_reservation) (integer): The amount of memory resource that is guaranteed available to the virtual'
+    - ' - C(cpu_limit) (integer): The CPU utilization of a virtual machine will not exceed this limit. Unit is MHz.'
+    - ' - C(cpu_reservation) (integer): The amount of CPU resource that is guaranteed available to the virtual machine.'
+    - ' - C(version) (integer): The Virtual machine hardware versions. Default is 10 (ESXi 5.5 and onwards).'
+    - '      If value specified as C(latest), version is set to the most current virtual hardware supported on the host.'
+    - '      C(latest) is added in version 2.10.'
+    - '      Please check VMware documentation for correct virtual machine hardware version.'
+    - '      Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given'
+    - ' - C(boot_firmware) (string): Choose which firmware should be used to boot the virtual machine.'
+    - ' - C(virt_based_security) (bool): Enable Virtualization Based Security feature for Windows 10.'
+    - '    (Support from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016)'
 
   guest_id:
     description:
     - Set the guest ID.
-    - This parameter is case sensitive.
-    - 'Examples:'
-    - "  virtual machine with RHEL7 64 bit, will be 'rhel7_64Guest'"
-    - "  virtual machine with CentOS 64 bit, will be 'centos64Guest'"
-    - "  virtual machine with Ubuntu 64 bit, will be 'ubuntu64Guest'"
+    - "This parameter is case sensitive. For instance:"
+    - " - virtual machine with RHEL7 64 bit, will be 'rhel7_64Guest'"
+    - " - virtual machine with CentOS 64 bit, will be 'centos64Guest'"
+    - " - virtual machine with Ubuntu 64 bit, will be 'ubuntu64Guest'"
     - This field is required when creating a virtual machine, not required when creating from the template.
     - >
          Valid values are referenced here:
@@ -299,7 +297,7 @@ options:
     - 'Optional parameters per entry (used for virtual hardware):'
     - ' - C(device_type) (string): Virtual network device (one of C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov)).'
     - ' - C(mac) (string): Customize MAC address.'
-    - ' - C(dvswitch_name) (string): Name of the distributed vSwitch.
+    - ' - C(dvswitch_name) (string): Name of the distributed vSwitch.'
     - 'Optional parameters per entry (used for OS customization):'
     - ' - C(type) (string): Type of IP assignment (either C(dhcp) or C(static)). C(dhcp) is default.'
     - ' - C(ip) (string): Static IP address (implies C(type: static)).'
@@ -316,15 +314,15 @@ options:
     - All parameters and VMware object names are case sensitive.
     - Linux based OSes requires Perl package to be installed for OS customizations.
     - 'Common parameters (Linux/Windows):'
-    - ' - C(existing_vm) (bool): If set to C(True), do OS customization on the specified virtual machine directly.
+    - ' - C(existing_vm) (bool): If set to C(True), do OS customization on the specified virtual machine directly.'
     - ' - C(dns_servers) (list): List of DNS servers to configure.'
     - ' - C(dns_suffix) (list): List of domain suffixes, also known as DNS search path (default: C(domain) parameter).'
     - ' - C(domain) (string): DNS domain name to use.'
     - ' - C(hostname) (string): Computer hostname (default: shorted C(name) parameter). Allowed characters are alphanumeric (uppercase and lowercase)
           and minus, rest of the characters are dropped as per RFC 952.'
     - 'Parameters related to Linux customization:'
-    - ' - C(timezone) (string): Timezone (See List of supported time zones for different vSphere versions in Linux/Unix
-    - ' - C(hwclockUTC) (bool): Specifies whether the hardware clock is in UTC or local time.
+    - ' - C(timezone) (string): Timezone (See List of supported time zones for different vSphere versions in Linux/Unix'
+    - ' - C(hwclockUTC) (bool): Specifies whether the hardware clock is in UTC or local time.'
     - 'Parameters related to Windows customization:'
     - ' - C(autologon) (bool): Auto logon after virtual machine customization (default: False).'
     - ' - C(autologoncount) (int): Number of autologon after reboot (default: 1).'
