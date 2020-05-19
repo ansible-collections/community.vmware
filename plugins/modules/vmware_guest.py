@@ -390,7 +390,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a virtual machine on given ESXi hostname
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -421,7 +421,7 @@ EXAMPLES = r'''
   register: deploy_vm
 
 - name: Create a virtual machine from a template
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -463,7 +463,7 @@ EXAMPLES = r'''
   register: deploy
 
 - name: Clone a virtual machine from Windows template and customize
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -496,7 +496,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name:  Clone a virtual machine from Linux template and customize
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -523,7 +523,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Rename a virtual machine (requires the virtual machine's uuid)
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -534,7 +534,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine by uuid
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -544,7 +544,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine from inventory
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -555,7 +555,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manipulate vApp properties
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -573,7 +573,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set powerstate of a virtual machine to poweroff by using UUID
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -583,7 +583,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy a virtual machine in a datastore different from the datastore of the template
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -599,7 +599,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a diskless VM
-  community.vmware.vmware_guest:
+  vmware_guest:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -617,7 +617,7 @@ EXAMPLES = r'''
         num_cpu_cores_per_socket: 1
 
 - name: Create a VM with multiple disks of different disk controller types
-  community.vmware.vmware_guest:
+  vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -730,7 +730,8 @@ class PyVmomiDeviceHelper(object):
     def is_scsi_controller(self, device):
         return isinstance(device, tuple(self.scsi_device_type.values()))
 
-    def create_sata_controller(self, bus_number):
+    @staticmethod
+    def create_sata_controller(bus_number):
         sata_ctl = vim.vm.device.VirtualDeviceSpec()
         sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         sata_ctl.device = vim.vm.device.VirtualAHCIController()
@@ -739,10 +740,12 @@ class PyVmomiDeviceHelper(object):
 
         return sata_ctl
 
-    def is_sata_controller(self, device):
+    @staticmethod
+    def is_sata_controller(device):
         return isinstance(device, vim.vm.device.VirtualAHCIController)
 
-    def create_nvme_controller(self, bus_number):
+    @staticmethod
+    def create_nvme_controller(bus_number):
         nvme_ctl = vim.vm.device.VirtualDeviceSpec()
         nvme_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         nvme_ctl.device = vim.vm.device.VirtualNVMEController()
@@ -752,7 +755,8 @@ class PyVmomiDeviceHelper(object):
 
         return nvme_ctl
 
-    def is_nvme_controller(self, device):
+    @staticmethod
+    def is_nvme_controller(device):
         return isinstance(device, vim.vm.device.VirtualNVMEController)
 
     def create_disk_controller(self, ctl_type, ctl_number):
@@ -800,17 +804,6 @@ class PyVmomiDeviceHelper(object):
         ide_ctl.device.busNumber = bus_number
 
         return ide_ctl
-
-    @staticmethod
-    def create_sata_controller(bus_number=0):
-        sata_ctl = vim.vm.device.VirtualDeviceSpec()
-        sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        sata_ctl.device = vim.vm.device.VirtualAHCIController()
-        sata_ctl.device.deviceInfo = vim.Description()
-        sata_ctl.device.key = -randint(15000, 15999)
-        sata_ctl.device.busNumber = bus_number
-
-        return sata_ctl
 
     @staticmethod
     def create_cdrom(ctl_device, cdrom_type, iso_path=None, unit_number=0):
