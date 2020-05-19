@@ -9,7 +9,6 @@ readme: README.md
 authors:
   - Ansible (https://github.com/ansible)
 description:
-license: GPL-3.0-or-later
 license_file: COPYING
 tags:
   - cloud
