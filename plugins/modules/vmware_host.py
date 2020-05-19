@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -228,6 +223,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareHost(PyVmomi):
     """Class to manage vCenter connection"""
+
     def __init__(self, module):
         super(VMwareHost, self).__init__(module)
         self.vcenter = module.params['hostname']

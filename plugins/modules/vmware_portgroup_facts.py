@@ -119,6 +119,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class PortgroupFactsManager(PyVmomi):
     """Class to manage Port Group facts"""
+
     def __init__(self, module):
         super(PortgroupFactsManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)

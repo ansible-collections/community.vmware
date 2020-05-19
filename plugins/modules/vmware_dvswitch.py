@@ -11,11 +11,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -256,6 +251,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareDvSwitch(PyVmomi):
     """Class to manage a Distributed Virtual Switch"""
+
     def __init__(self, module):
         super(VMwareDvSwitch, self).__init__(module)
         self.dvs = None
