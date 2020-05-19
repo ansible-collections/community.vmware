@@ -390,7 +390,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a virtual machine on given ESXi hostname
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -421,7 +421,7 @@ EXAMPLES = r'''
   register: deploy_vm
 
 - name: Create a virtual machine from a template
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -463,7 +463,7 @@ EXAMPLES = r'''
   register: deploy
 
 - name: Clone a virtual machine from Windows template and customize
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -496,7 +496,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name:  Clone a virtual machine from Linux template and customize
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -523,7 +523,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Rename a virtual machine (requires the virtual machine's uuid)
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -534,7 +534,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine by uuid
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -544,7 +544,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a virtual machine from inventory
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -555,7 +555,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manipulate vApp properties
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -573,7 +573,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set powerstate of a virtual machine to poweroff by using UUID
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -583,7 +583,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy a virtual machine in a datastore different from the datastore of the template
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -599,7 +599,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a diskless VM
-  vmware_guest:
+  community.vmware.vmware_guest:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -617,7 +617,7 @@ EXAMPLES = r'''
         num_cpu_cores_per_socket: 1
 
 - name: Create a VM with multiple disks of different disk controller types
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
