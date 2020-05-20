@@ -83,9 +83,7 @@ options:
     version_added: '2.10'
   device_type:
     default: vmxnet3
-    description:
-      - C(device_type) (string): Valid virtual network device types are:
-        C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).
+    description: Valid virtual network device is one of the following C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).
     type: str
     version_added: '2.10'
   label:
@@ -184,7 +182,8 @@ options:
       - ' - C(start_connected) (bool): Indicates that virtual network adapter starts with associated virtual machine powers on.'
       - ' - C(directpath_io) (bool): If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
             UPT is only compatible for Vmxnet3 adapter.'
-extends_documentation_fragment: vmware.documentation
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = '''
