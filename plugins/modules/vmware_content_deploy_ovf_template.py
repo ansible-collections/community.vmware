@@ -70,7 +70,7 @@ options:
       - Name of the cluster in datacenter in which to place deployed VM.
       type: str
       required: False
-extends_documentation_fragment: vmware_rest_client.documentation
+extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
 '''
 
 EXAMPLES = r'''
