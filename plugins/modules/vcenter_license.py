@@ -60,6 +60,8 @@ notes:
   when unused.
 - If C(esxi_hostname) is specified, then will assign the C(license) key to
   the ESXi host.
+- If C(esxi_hostname) is not specified, then will just register the C(license) key to
+  vCenter inventory without assigning it to an ESXi host.
 extends_documentation_fragment:
 - community.vmware.vmware.vcenter_documentation
 
