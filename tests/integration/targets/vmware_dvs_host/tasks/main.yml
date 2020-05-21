@@ -4,6 +4,7 @@
   vars:
     setup_datacenter: true
 - name: 'Attach the hosts to the DVSwitch without specifying any vnics (Issue #185)'
+  when: vcsim is not defined
   block:
   - name: Create the DVSwitch
     vmware_dvswitch:
@@ -19,7 +20,6 @@
     vmware_dvswitch_uplink_pg:
       switch: 'dvs_host_test_switch'
       name: 'dvs_host_test_ul_portgroup'
-      #    when: vcsim is not defined
      
   - name: Create distributed portgroup
     vmware_dvs_portgroup:
