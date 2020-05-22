@@ -12,7 +12,6 @@ mkdir -p "${INVENTORY_DIR}" 2>/dev/null
 touch "${INVENTORY_DIR}/empty.vmware.yml"
 
 cleanup() {
-    ec=$?
     echo "Cleanup"
     if [ -d "${ANSIBLE_CACHE_PLUGIN_CONNECTION}" ]; then
         echo "Removing ${ANSIBLE_CACHE_PLUGIN_CONNECTION}"
@@ -29,7 +28,6 @@ cleanup() {
     unset INVENTORY_DIR
 
     echo "Done"
-    exit $ec
 }
 
 trap cleanup INT TERM EXIT
