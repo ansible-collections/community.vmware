@@ -233,7 +233,7 @@ def main():
             # backward compatibility - check if it's is a vCenter licence key
             elif pyv.content.about.name in key.name:
                 entityId = pyv.content.about.instanceUuid
-        
+
         # if we have found a cluster, an esxi or a vCenter object we try to assign the licence
             if entityId:
                 try:
