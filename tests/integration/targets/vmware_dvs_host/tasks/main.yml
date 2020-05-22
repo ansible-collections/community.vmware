@@ -2,7 +2,7 @@
 - import_role:
     name: prepare_vmware_tests
   vars:
-    setup_datacenter: true
+    setup_attach_host: true
 - name: 'Attach the hosts to the DVSwitch without specifying any vnics (Issue #185)'
   when: vcsim is not defined
   block:
@@ -16,41 +16,39 @@
       discovery_operation: both
       state: present
 
-  - name: Configure Uplink portgroup
-    vmware_dvswitch_uplink_pg:
-      switch: 'dvs_host_test_switch'
-      name: 'dvs_host_test_ul_portgroup'
-     
-  - name: Create distributed portgroup
-    vmware_dvs_portgroup:
-      portgroup_name: 'dvs_host_test_portgroup'
-      switch_name: 'dvs_host_test_switch'
-      portgroup_type: earlyBinding
-      state: 'present'
-      num_ports: 12
-      vlan_id: 777
-
+      #  - name: Configure Uplink portgroup
+      #    vmware_dvswitch_uplink_pg:
+      #      switch: 'dvs_host_test_switch'
+      #      name: 'dvs_host_test_ul_portgroup'
+      #     
+      #  - name: Create distributed portgroup
+      #    vmware_dvs_portgroup:
+      #      portgroup_name: 'dvs_host_test_portgroup'
+      #      switch_name: 'dvs_host_test_switch'
+      #      portgroup_type: earlyBinding
+      #      state: 'present'
+      #      num_ports: 12
+      #      vlan_id: 777
+      #
   - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
     vmware_dvs_host:
-      esxi_hostname: "{{ item }}"
+      esxi_hostname:: '{{ esxi1 }}'
       switch_name: 'dvs_host_test_switch'
       state: present
-    with_items: 
-      - "esxi1"
-    register: host_dvs_attachments
+    register: host_dvs_attachment
   - assert:
       that:
-        - host_dvs_attachments.results[0] is changed
+        - host_dvs_attachment is changed
 
 # Cleanup
   always:
-  - name: 'Cleanup: detaching hosts from dvs'
-    vmware_dvs_host:
-      esxi_hostname: "{{ item }}"
-      switch_name: 'dvs_host_test_switch'
-      state: absent
-    with_items: "{{ esxi_hosts }}"
-
+    #  - name: 'Cleanup: detaching hosts from dvs'
+    #    vmware_dvs_host:
+    #      esxi_hostname: "{{ item }}"
+    #      switch_name: 'dvs_host_test_switch'
+    #      state: absent
+    #    with_items: "{{ esxi_hosts }}"
+    #
   - name: Deleting distributed portgroup
     vmware_dvs_portgroup:
       portgroup_name: 'dvs_host_test_portgroup'
