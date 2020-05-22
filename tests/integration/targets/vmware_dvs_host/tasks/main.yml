@@ -35,12 +35,12 @@
       esxi_hostname: "{{ item }}"
       switch_name: 'dvs_host_test_switch'
       state: present
-    with_items: "{{ esxi_hosts }}"
-    register: host_dvs_attachment
+    with_items: 
+      - "esxi1"
+    register: host_dvs_attachments
   - assert:
       that:
-        - host_dvs_attachment[0] is changed
-        - host_dvs_attachment[1] is changed
+        - host_dvs_attachments.results[0] is changed
 
 # Cleanup
   always:
