@@ -225,3 +225,24 @@
         that:
           - "'tags' in test_host.value"
       when: not (vcsim is defined)
+
+    - name: Inventory with binary values (https://github.com/ansible/awx/issues/7052)
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.vmxConfigChecksum
+            - config.name
+            - summary.runtime.powerState
+          hostnames:
+            - config.name
+
+    - name: Test filters options
+      assert:
+        that:
+          - "'DC0_H0_VM0' in test_host.value.groups.all"
+          - test_host.value.config.name is defined
+          - test_host.value.config.vmxConfigChecksum is defined

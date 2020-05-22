@@ -197,6 +197,7 @@ EXAMPLES = r'''
 
 import ssl
 import atexit
+import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import dict_merge
@@ -540,6 +541,9 @@ def parse_vim_property(vim_prop):
     elif prop_type in ['bool', 'int', 'NoneType']:
         return vim_prop
 
+    elif prop_type in ['binary']:
+        return to_text(base64.b64encode(vim_prop))
+
     return to_text(vim_prop)
 
 
@@ -680,6 +684,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties['tags'] = attached_tags
 
             host_properties = to_nested_dict(properties)
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
             host_filters = self.get_option('filters')
