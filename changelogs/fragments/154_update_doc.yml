@@ -1,0 +1,2 @@
+minor_changes:
+- Update README.md for installing any third party required Python libraries using pip (https://github.com/ansible-collections/vmware/issues/154).

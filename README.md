@@ -20,6 +20,23 @@ collections:
 - name: community.vmware
 ```
 
+### Required Python libraries
+
+VMware community collection depends upon following third party libraries:
+
+* [`Pyvmomi`](https://github.com/vmware/pyvmomi)
+* [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
+
+### Installing required libraries and SDK
+
+Installing collection does not install any required third party Python libraries or SDKs. You need to install the required Python libraries using following command:
+
+    pip install -r ~/.ansible/collections/ansible_collections/community/vmware/requirements.txt
+
+If you are working on developing and/or testing VMware community collection, you may want to install additional requirements using following command:
+
+    pip install -r ~/.ansible/collections/ansible_collections/community/vmware/test-requirements.txt
+
 ## Testing and Development
 
 If you want to develop new content for this collection or improve what is already here, the easiest way to work on the collection is to clone it into one of the configured [`COLLECTIONS_PATHS`](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths), and work on it there.
