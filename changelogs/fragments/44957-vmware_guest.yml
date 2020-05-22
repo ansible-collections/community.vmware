@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - add support VM creation and reconfiguration with multiple types of disk controllers and disks 
