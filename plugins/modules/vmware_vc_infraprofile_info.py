@@ -147,11 +147,11 @@ RETURN = r'''
     import_profile:
         description: A message about import on import_profile spec
         returned: On success with API set as "import"
-    "sample": {
-        "changed": true,
-        "failed": false,
-        "status": "0.0"
-    }
+        "sample": {
+            "changed": true,
+            "failed": false,
+            "status": "0.0"
+        }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
