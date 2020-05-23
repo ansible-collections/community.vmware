@@ -32,7 +32,7 @@
       #
   - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
     vmware_dvs_host:
-      esxi_hostname:: '{{ esxi1 }}'
+      esxi_hostname: '{{ esxi1 }}'
       switch_name: 'dvs_host_test_switch'
       state: present
     register: host_dvs_attachment
