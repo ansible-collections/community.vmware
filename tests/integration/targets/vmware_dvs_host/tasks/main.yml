@@ -20,7 +20,7 @@
     vmware_dvswitch_uplink_pg:
       switch: 'dvs_host_test_switch'
       name: 'dvs_host_test_ul_portgroup'
-     
+
   - name: Create distributed portgroup
     vmware_dvs_portgroup:
       portgroup_name: 'dvs_host_test_portgroup'
@@ -29,7 +29,7 @@
       state: 'present'
       num_ports: 12
       vlan_id: 777
-      
+
   - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
     vmware_dvs_host:
       esxi_hostname: '{{ esxi1 }}'
@@ -47,12 +47,14 @@
         esxi_hostname: "{{ esxi1 }}"
         switch_name: 'dvs_host_test_switch'
         state: absent
-    
+
     - name: Deleting distributed portgroup
       vmware_dvs_portgroup:
         portgroup_name: 'dvs_host_test_portgroup'
         switch_name: 'dvs_host_test_switch'
         portgroup_type: earlyBinding
+        vlan_id: 777
+        num_ports: 12
         state: 'absent'
 
 
