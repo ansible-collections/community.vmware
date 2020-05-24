@@ -48,17 +48,17 @@
         switch_name: 'dvs_host_test_switch'
         state: absent
     
-  - name: Deleting distributed portgroup
-    vmware_dvs_portgroup:
-      portgroup_name: 'dvs_host_test_portgroup'
-      switch_name: 'dvs_host_test_switch'
-      portgroup_type: earlyBinding
-      state: 'absent'
+    - name: Deleting distributed portgroup
+      vmware_dvs_portgroup:
+        portgroup_name: 'dvs_host_test_portgroup'
+        switch_name: 'dvs_host_test_switch'
+        portgroup_type: earlyBinding
+        state: 'absent'
 
 
-  - name: 'Cleanup: Deleting DVSwitch'
-    vmware_dvswitch:
-      datacenter_name: '{{ dc1 }}'
-      switch_name: 'dvs_host_test_switch'
-      state: absent
+    - name: 'Cleanup: Deleting DVSwitch'
+      vmware_dvswitch:
+        datacenter_name: '{{ dc1 }}'
+        switch_name: 'dvs_host_test_switch'
+        state: absent
 
