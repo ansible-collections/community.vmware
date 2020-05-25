@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -186,6 +181,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareHostDatastore(PyVmomi):
     """ This class populates the datastore list """
+
     def __init__(self, module):
         super(VMwareHostDatastore, self).__init__(module)
         self.gather_nfs_mount_info = self.module.params['gather_nfs_mount_info']
@@ -259,6 +255,7 @@ class VMwareHostDatastore(PyVmomi):
 
 class PyVmomiCache(object):
     """ This class caches references to objects which are requested multiples times but not modified """
+
     def __init__(self, content, dc_name=None):
         self.content = content
         self.dc_name = dc_name
@@ -284,6 +281,7 @@ class PyVmomiCache(object):
 
 class PyVmomiHelper(PyVmomi):
     """ This class gets datastores """
+
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.cache = PyVmomiCache(self.content, dc_name=self.params['datacenter'])

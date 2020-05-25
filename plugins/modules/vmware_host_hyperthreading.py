@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_hyperthreading
@@ -112,6 +106,7 @@ from ansible.module_utils._text import to_native
 
 class VmwareHostHyperthreading(PyVmomi):
     """Manage Hyperthreading for an ESXi host system"""
+
     def __init__(self, module):
         super(VmwareHostHyperthreading, self).__init__(module)
         cluster_name = self.params.get('cluster_name')

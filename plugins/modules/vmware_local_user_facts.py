@@ -94,6 +94,7 @@ from ansible.module_utils._text import to_native
 
 class VMwareUserFactsManager(PyVmomi):
     """Class to manage local user facts"""
+
     def __init__(self, module):
         super(VMwareUserFactsManager, self).__init__(module)
 

@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_vmhba_info
@@ -132,6 +126,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class HostVmhbaMgr(PyVmomi):
     """Class to manage vmhba info"""
+
     def __init__(self, module):
         super(HostVmhbaMgr, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)

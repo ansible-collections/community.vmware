@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_powermgmt_policy
@@ -105,6 +99,7 @@ class VmwareHostPowerManagement(PyVmomi):
     """
     Class to manage power management policy of an ESXi host system
     """
+
     def __init__(self, module):
         super(VmwareHostPowerManagement, self).__init__(module)
         cluster_name = self.params.get('cluster_name')

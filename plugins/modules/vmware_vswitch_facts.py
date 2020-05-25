@@ -101,6 +101,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class VswitchFactsManager(PyVmomi):
     """Class to gather vSwitch facts"""
+
     def __init__(self, module):
         super(VswitchFactsManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)
