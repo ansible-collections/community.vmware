@@ -101,6 +101,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 
 class VMwareLocalRoleFacts(PyVmomi):
     """Class to manage local role facts"""
+
     def __init__(self, module):
         super(VMwareLocalRoleFacts, self).__init__(module)
         self.module = module

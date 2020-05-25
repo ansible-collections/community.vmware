@@ -162,6 +162,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class HostVmnicMgr(PyVmomi):
     """Class to manage vmnic facts"""
+
     def __init__(self, module):
         super(HostVmnicMgr, self).__init__(module)
         self.capabilities = self.params.get('capabilities')

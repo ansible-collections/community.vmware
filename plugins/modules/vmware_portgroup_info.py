@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_portgroup_info
@@ -112,6 +106,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class PortgroupInfoManager(PyVmomi):
     """Class to manage Port Group info"""
+
     def __init__(self, module):
         super(PortgroupInfoManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)
