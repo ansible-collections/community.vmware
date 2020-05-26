@@ -273,14 +273,20 @@ class VMwareHostFactManager(PyVmomi):
 
     def get_vsan_facts(self):
         config_mgr = self.host.configManager.vsanSystem
-        if config_mgr is None:
-            return {
-                'vsan_cluster_uuid': None,
-                'vsan_node_uuid': None,
-                'vsan_health': "unknown",
-            }
+        ret = {
+            'vsan_cluster_uuid': None,
+            'vsan_node_uuid': None,
+            'vsan_health': "unknown",
+        }
 
-        status = config_mgr.QueryHostStatus()
+        if config_mgr is None:
+            return ret
+
+        try:
+            status = config_mgr.QueryHostStatus()
+        except Exception:
+            return ret
+
         return {
             'vsan_cluster_uuid': status.uuid,
             'vsan_node_uuid': status.nodeUuid,
@@ -296,9 +302,14 @@ class VMwareHostFactManager(PyVmomi):
         }
 
     def get_memory_facts(self):
+        memory_size = self.host.hardware.memorySize
+        overall_memory = 0
+        if self.host.summary.quickStats.overallMemoryUsage:
+            overall_memory = self.host.summary.quickStats.overallMemoryUsage
+        memory_total = memory_size // 1024 // 1024
         return {
-            'ansible_memfree_mb': self.host.hardware.memorySize // 1024 // 1024 - self.host.summary.quickStats.overallMemoryUsage,
-            'ansible_memtotal_mb': self.host.hardware.memorySize // 1024 // 1024,
+            'ansible_memfree_mb': memory_total - overall_memory,
+            'ansible_memtotal_mb': memory_total,
         }
 
     def get_datastore_facts(self):
