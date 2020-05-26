@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_category - fix associable datatypes (https://github.com/ansible-collections/vmware/issues/197).

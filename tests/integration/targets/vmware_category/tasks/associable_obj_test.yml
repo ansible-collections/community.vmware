@@ -1,0 +1,38 @@
+# Test code for the vmware_category Operations.
+# Copyright: (c) 2020, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Create category named {{ category_name }}
+  vmware_category:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    category_name: '{{ category_name }}'
+    category_description: '{{ category_name }}'
+    category_cardinality: 'multiple'
+    associable_object_types:
+    - '{{ category_name }}'
+
+- name: Gather category info
+  vmware_category_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+  register: tag_category_results
+
+- name: Get Category datatype for {{ category_name }}
+  set_fact:
+    category_datatype: "{{ cat_obj.category_associable_types }}"
+  loop: "{{ tag_category_results.tag_category_info | selectattr('category_name', 'equalto', category_name) | list }}"
+  loop_control:
+    loop_var: cat_obj
+
+- debug:
+    msg: "{{ category_datatype }}"
+
+- name: Check if we get correct associable datatype for {{ category_name }}
+  assert:
+    that:
+      - "'{{ expected_result }}' in {{ category_datatype }}"
