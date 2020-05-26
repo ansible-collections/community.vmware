@@ -143,6 +143,7 @@ from ansible.module_utils._text import to_native
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.vcenter.vm_template_client import LibraryItems
+    from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -217,7 +218,14 @@ class VmwareContentDeployTemplate(VmwareRestClient):
                                                    disk_storage=self.disk_storage_spec,
                                                    powered_on=power_on
                                                    )
-        vm_id = self.template_service.deploy(self.library_item_id, self.deploy_spec)
+        vm_id = ''
+        try:
+            vm_id = self.template_service.deploy(self.library_item_id, self.deploy_spec)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
+        except Exception as err:
+            self.module.fail_json(msg="%s" % to_native(err))
+
         if vm_id:
             self.module.exit_json(
                 changed=True,
@@ -227,7 +235,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
                 )
             )
         self.module.exit_json(changed=False,
-                              vm_deploy_info=dict(msg="Virtual Machine deployment failed", vm_id=''))
+                              vm_deploy_info=dict(msg="Virtual Machine deployment failed", vm_id=vm_id))
 
 
 def main():
