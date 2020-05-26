@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_host_facts - handle facts when ESXi hostsystem is poweredoff (https://github.com/ansible-collections/vmware/issues/183).
