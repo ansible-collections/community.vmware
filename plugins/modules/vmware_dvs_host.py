@@ -40,7 +40,7 @@ options:
     vmnics:
         description:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
-        required: True
+        required: False
         type: list
     state:
         description:
@@ -266,7 +266,7 @@ def main():
         dict(
             esxi_hostname=dict(required=True, type='str'),
             switch_name=dict(required=True, type='str'),
-            vmnics=dict(required=True, type='list'),
+            vmnics=dict(required=False, type='list', default=[]),
             state=dict(default='present', choices=['present', 'absent'], type='str'),
             vendor_specific_config=dict(
                 type='list',
