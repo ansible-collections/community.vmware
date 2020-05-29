@@ -1,0 +1,2 @@
+bugfixes:
+- Handle Base64 Binary while JSON serialization in vmware_vm_inventory.
