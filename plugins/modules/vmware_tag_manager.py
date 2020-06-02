@@ -47,7 +47,7 @@ options:
       description:
       - Type of object to work with.
       required: True
-      choices: [ VirtualMachine, Datacenter, ClusterComputeResource, HostSystem, DistributedVirtualSwitch, DistributedVirtualPortgroup ]
+      choices: [ VirtualMachine, Datacenter, ClusterComputeResource, HostSystem, DistributedVirtualSwitch, DistributedVirtualPortgroup, Datastore ]
       type: str
     object_name:
       description:
@@ -178,6 +178,9 @@ class VmwareTagManager(VmwareRestClient):
         if self.object_type == 'Datacenter':
             self.managed_object = self.pyv.find_datacenter_by_name(self.object_name)
 
+        if self.object_type == 'Datastore':
+            self.managed_object = self.pyv.find_datastore_by_name(self.object_name)
+
         if self.object_type == 'ClusterComputeResource':
             self.managed_object = self.pyv.find_cluster_by_name(self.object_name)
 
@@ -302,7 +305,7 @@ def main():
         object_name=dict(type='str', required=True),
         object_type=dict(type='str', required=True, choices=['VirtualMachine', 'Datacenter', 'ClusterComputeResource',
                                                              'HostSystem', 'DistributedVirtualSwitch',
-                                                             'DistributedVirtualPortgroup']),
+                                                             'DistributedVirtualPortgroup', 'Datastore']),
     )
     module = AnsibleModule(argument_spec=argument_spec)
 
