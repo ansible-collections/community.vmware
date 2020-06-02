@@ -124,6 +124,17 @@ EXAMPLES = r'''
       - overallStatus
   register: host_facts
 
+- name: Gather information about powerstate and connection state
+  community.vmware.vmware_host_facts:
+    hostname: "{{ vcenter_server }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    esxi_hostname: "{{ esxi_hostname }}"
+    schema: vsphere
+    properties:
+      - runtime.connectionState
+      - runtime.powerState
+
 - name: How to retrieve Product, Version, Build, Update info for ESXi from vCenter
   block:
     - name: Gather product version info for ESXi from vCenter
@@ -219,6 +230,7 @@ ansible_facts:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
 from ansible.module_utils.common.text.formatters import bytes_to_human
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
 
@@ -284,8 +296,8 @@ class VMwareHostFactManager(PyVmomi):
 
         try:
             status = config_mgr.QueryHostStatus()
-        except Exception:
-            return ret
+        except Exception as err:
+            self.module.fail_json(msg="Unable to query VSAN status due to %s" % to_native(err))
 
         return {
             'vsan_cluster_uuid': status.uuid,
