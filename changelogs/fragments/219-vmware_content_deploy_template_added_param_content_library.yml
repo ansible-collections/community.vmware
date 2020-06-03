@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_content_deploy_template - Added param content_library to the main function
