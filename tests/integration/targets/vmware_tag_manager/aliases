@@ -2,5 +2,3 @@ cloud/vcenter
 unsupported
 zuul/vmware/vcenter_only
 zuul/vmware/govcsim
-# Temporarily disabled
-disabled
