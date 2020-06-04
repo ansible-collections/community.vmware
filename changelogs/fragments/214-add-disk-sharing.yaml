@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_disk - add support for setting the sharing/multi-writer mode of virtual disks (https://github.com/ansible-collections/vmware/issues/212)
