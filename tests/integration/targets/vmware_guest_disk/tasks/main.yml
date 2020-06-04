@@ -86,7 +86,7 @@
     datacenter: "{{ dc1 }}"
     validate_certs: no
     name: "{{ virtual_machines[0].name }}"
-    disk: 
+    disk:
         - size_gb: 1
           type: eagerzeroedthick
           datastore: "{{ rw_datastore }}"
@@ -106,7 +106,7 @@
   assert:
      that:
          - test_custom_shares is changed
- 
+
 - name: create new disk with custom IO limits and shares in IO Limits
   vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
@@ -115,7 +115,7 @@
     datacenter: "{{ dc1 }}"
     validate_certs: no
     name: "{{ virtual_machines[0].name }}"
-    disk: 
+    disk:
         - size_gb: 1
           type: eagerzeroedthick
           datastore: "{{ rw_datastore }}"
@@ -146,7 +146,7 @@
     datacenter: "{{ dc1 }}"
     validate_certs: no
     name: "{{ virtual_machines[0].name }}"
-    disk: 
+    disk:
         - size_gb: 2
           type: eagerzeroedthick
           datastore: "{{ rw_datastore }}"
@@ -177,7 +177,7 @@
     datacenter: "{{ dc1 }}"
     validate_certs: no
     name: "{{ virtual_machines[0].name }}"
-    disk: 
+    disk:
         - size_gb: 3
           type: eagerzeroedthick
           datastore: "{{ rw_datastore }}"
@@ -208,7 +208,7 @@
     datacenter: "{{ dc1 }}"
     validate_certs: no
     name: "{{ virtual_machines[0].name }}"
-    disk: 
+    disk:
         - size_gb: 4
           type: eagerzeroedthick
           datastore: "{{ rw_datastore }}"
@@ -280,3 +280,60 @@
   assert:
     that:
         - test_recreate_disk is changed
+
+- name: create new disk with sharing (multi-writer) mode
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - datastore: "{{ rw_datastore }}"
+          disk_mode: "independent_persistent"
+          scsi_controller: 0
+          scsi_type: 'paravirtual'
+          size_gb: 1
+          state: present
+          type: eagerzeroedthick
+          sharing: True
+          unit_number: 6
+  register: test_create_disk_sharing
+
+- debug:
+    msg: "{{ test_create_disk_sharing }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_create_disk_sharing is changed
+
+- name: create new disk with invalid disk type for sharing (multi-writer) mode
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - datastore: "{{ rw_datastore }}"
+          disk_mode: "independent_persistent"
+          scsi_controller: 0
+          scsi_type: 'paravirtual'
+          size_gb: 1
+          state: present
+          type: thin
+          unit_number: 5
+          sharing: True
+  register: test_create_disk_sharing_invalid
+  ignore_errors: True
+
+- debug:
+    msg: "{{ test_create_disk_sharing_invalid }}"
+
+- name: assert that changes were not made
+  assert:
+    that:
+        - not(test_create_disk_sharing_invalid is changed)
