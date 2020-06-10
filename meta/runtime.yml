@@ -127,7 +127,3 @@ action_groups:
   - vmware_vswitch_info
   - vsphere_copy
   - vsphere_file
-
-action_groups_redirection:
-  vmware:
-    redirect: vmware
