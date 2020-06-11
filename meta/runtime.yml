@@ -1,3 +1,6 @@
+---
+requires_ansible: '>=2.9.10'
+
 action_groups:
   vmware:
   - vmware_dns_config
