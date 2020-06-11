@@ -341,7 +341,7 @@ def main():
                 'Host Network', 'Opaque Network', 'Resource Pool', 'vApp',
                 'Virtual Machine',
             ],
-            elements=str,
+            elements='str',
         ),
     )
     module = AnsibleModule(argument_spec=argument_spec)
