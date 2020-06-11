@@ -238,6 +238,7 @@ class DVSPortgroupInfoManager(PyVmomi):
                     port_policy=port_policy,
                     network_policy=network_policy,
                     vlan_info=vlan_info,
+                    key=dvs_pg.key,
                 )
                 result[dvs.name].append(dvpg_details)
 

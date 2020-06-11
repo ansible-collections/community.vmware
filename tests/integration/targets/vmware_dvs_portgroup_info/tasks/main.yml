@@ -54,3 +54,4 @@
 - assert:
     that:
       - "dvs_results_0002['dvs_portgroup_info']['DVS0'] is defined"
+      - dvs_results_0002['dvs_portgroup_info']['DVS0'][0].key
