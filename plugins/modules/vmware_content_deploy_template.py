@@ -236,6 +236,8 @@ def main():
         state=dict(type='str', default='present',
                    choices=['present', 'poweredon']),
         template=dict(type='str', aliases=['template_src'], required=True),
+        content_library=dict(type='str', aliases=[
+                             'content_library_src'], required=False),
         name=dict(type='str', required=True, aliases=['vm_name']),
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
