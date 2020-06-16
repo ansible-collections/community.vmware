@@ -396,6 +396,7 @@ class VMwareDvSwitch(PyVmomi):
             # Set Health Check config
             results['health_check_vlan'] = self.health_check_vlan
             results['health_check_teaming'] = self.health_check_teaming
+            results['uuid'] = self.dvs.uuid
             result = self.check_health_check_config(self.dvs.config.healthCheckConfig)
             changed_health_check = result[1]
             if changed_health_check:
@@ -667,6 +668,7 @@ class VMwareDvSwitch(PyVmomi):
                         self.module.fail_json(msg="Failed to update DVS version : %s" % to_native(invalid_argument))
         else:
             message = "DVS already configured properly"
+        results['uuid'] = self.dvs.uuid
         results['changed'] = changed
         results['result'] = message
 
