@@ -286,7 +286,7 @@ class VmwareStoragePolicyManager(SPBM):
     def remove_storage_policy(self, policy, pbm_client, results):
         pbm_client.PbmDelete(profileId=[policy.profileId])
 
-        self.format_results_and_exit(results, policy, true)
+        self.format_results_and_exit(results, policy, True)
 
     def create_storage_policy(self, policy, pbm_client, results):
         profile_ids = pbm_client.PbmCreate(
