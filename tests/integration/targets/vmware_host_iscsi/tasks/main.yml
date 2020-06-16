@@ -55,5 +55,16 @@
     - "'device' in item"
     - "'isSoftwareBased' in item and item.isSoftwareBased is sameas true"
 
-- include_tasks: connect_to_vcenter_tasks.yml
-- include_tasks: connect_to_esxi_tasks.yml
+- name: vmware_host_iscsi module test - connect to vCenter
+  include_tasks: iscsi_module_test_tasks.yml
+  vars:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+
+- name: vmware_host_iscsi module test - connect to ESXi
+  include_tasks: iscsi_module_test_tasks.yml
+  vars:
+    hostname: "{{ esxi1 }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"

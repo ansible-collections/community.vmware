@@ -2,11 +2,11 @@
 # Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: enable iSCSI of ESXi with check_mode - connect to ESXi
+- name: enable iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
@@ -17,11 +17,11 @@
     that:
       - enable_iscsi_check_mode_result.changed is sameas true
 
-- name: enable iSCSI of ESXi - connect to ESXi
+- name: enable iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
@@ -32,11 +32,11 @@
       - enable_iscsi_result.changed is sameas true
       - enable_iscsi_result.iscsi_properties.iscsi_enabled is sameas true
 
-- name: enable iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: enable iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
@@ -46,11 +46,11 @@
     that:
       - enable_iscsi_idempotency_check_result.changed is sameas false
 
-- name: Update an alias for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Update an alias for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -64,11 +64,11 @@
     that:
       - update_alias_check_mode_result.changed is sameas true
 
-- name: Update an alias for iSCSI of ESXi - connect to ESXi
+- name: Update an alias for iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -82,11 +82,11 @@
       - update_alias_result.changed is sameas true
       - update_alias_result.iscsi_properties.iscsi_alias == 'example'
 
-- name: Update an alias for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Update an alias for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -99,11 +99,11 @@
     that:
       - update_alias_idempotency_check_result.changed is sameas false
 
-- name: Update CHAP authentication for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Update CHAP authentication for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -122,11 +122,11 @@
     that:
       - update_chap_authentication_check_mode_result.changed is sameas true
 
-- name: Update CHAP authentication for iSCSI of ESXi - connect to ESXi
+- name: Update CHAP authentication for iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -147,11 +147,11 @@
       - update_chap_authentication_result.iscsi_properties.iscsi_authentication_properties.chapAuthenticationType == 'chapPreferred'
       - update_chap_authentication_result.iscsi_properties.iscsi_authentication_properties.chapName == 'chap_name'
 
-- name: Update CHAP authentication for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Update CHAP authentication for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -169,11 +169,11 @@
     that:
       - update_chap_authentication_idempotency_check_result.changed is sameas false
 
-- name: Update Mutual-CHAP authentication for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Update Mutual-CHAP authentication for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -195,11 +195,11 @@
     that:
       - update_mutual_chap_authentication_check_mode_result.changed is sameas true
 
-- name: Update Mutual-CHAP authentication for iSCSI of ESXi - connect to ESXi
+- name: Update Mutual-CHAP authentication for iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -225,11 +225,11 @@
       - update_mutual_chap_authentication_result.iscsi_properties.iscsi_authentication_properties.mutualChapAuthenticationType == 'chapRequired'
       - update_mutual_chap_authentication_result.iscsi_properties.iscsi_authentication_properties.mutualChapName == 'mutual_chap_name'
 
-- name: Update Mutual-CHAP authentication for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Update Mutual-CHAP authentication for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -250,11 +250,11 @@
     that:
       - update_mutual_chap_authentication_idempotency_checkresult.changed is sameas false
 
-- name: Update a port bind for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Update a port bind for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -270,12 +270,12 @@
     that:
       - update_port_bind_check_mode_result.changed is sameas true
 
-- name: Update a port bind for iSCSI of ESXi - connect to ESXi
+- name: Update a port bind for iSCSI of ESXi
 
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -291,11 +291,11 @@
       - update_port_bind_result.changed is sameas true
       - update_port_bind_result.iscsi_properties.port_bind.0 == 'vmk0'
 
-- name: Update a port bind for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Update a port bind for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -310,11 +310,11 @@
     that:
       - update_port_bind_idempotency_check_result.changed is sameas false
 
-- name: Add a dynamic target to iSCSI config of ESXi with check_mode - connect to ESXi
+- name: Add a dynamic target to iSCSI config of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -332,11 +332,11 @@
     that:
       - add_dynamic_target_check_mode_result.changed is sameas true
 
-- name: Add a dynamic target to iSCSI config of ESXi - connect to ESXi
+- name: Add a dynamic target to iSCSI config of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -355,11 +355,11 @@
       - add_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.address == '100.64.0.1'
       - add_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.port == 3260
 
-- name: Add a dynamic target to iSCSI config of ESXi - connect to ESXi (idempotency check)
+- name: Add a dynamic target to iSCSI config of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -376,11 +376,11 @@
     that:
       - add_dynamic_target_idempotency_check_result.changed is sameas false
 
-- name: Update CHAP authenticatoin of a dynamic target  with check_mode - connect to ESXi
+- name: Update CHAP authenticatoin of a dynamic target  with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -404,11 +404,11 @@
     that:
       - update_chap_authentication_dynamic_target_check_mode_result.changed is sameas true
 
-- name: Update CHAP authenticatoin of a dynamic target - connect to ESXi
+- name: Update CHAP authenticatoin of a dynamic target
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -437,11 +437,11 @@
       - update_chap_authentication_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.authenticationProperties.chapInherited is sameas false
       - update_chap_authentication_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.authenticationProperties.chapName == 'chap_name'
 
-- name: Update CHAP authenticatoin of a dynamic target - connect to ESXi (idempotency check)
+- name: Update CHAP authenticatoin of a dynamic target (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -464,11 +464,11 @@
     that:
       - update_chap_authentication_dynamic_target_idempotency_check_result.changed is sameas false
 
-- name: Update Mutual-CHAP authenticatoin of a dynamic target  with check_mode - connect to ESXi
+- name: Update Mutual-CHAP authenticatoin of a dynamic target  with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -496,11 +496,11 @@
     that:
       - update_chap_authentication_dynamic_target_check_mode_result.changed is sameas true
 
-- name: Update Mutual-CHAP authenticatoin of a dynamic target - connect to ESXi
+- name: Update Mutual-CHAP authenticatoin of a dynamic target
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -536,11 +536,11 @@
       - update_mutual_chap_authentication_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.authenticationProperties.mutualChapInherited is sameas false
       - update_mutual_chap_authentication_dynamic_target_result.iscsi_properties.iscsi_send_targets.0.authenticationProperties.mutualChapName == 'mutual_chap_name'
 
-- name: Update Mutual-CHAP authenticatoin of a dynamic target - connect to ESXi (idempotency check)
+- name: Update Mutual-CHAP authenticatoin of a dynamic target (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -567,11 +567,11 @@
     that:
       - update_mutual_mutual_chap_authentication_dynamic_target_idempotency_check_result.changed is sameas false
 
-- name: Add a static target to iSCSI config of ESXi with check_mode - connect to ESXi
+- name: Add a static target to iSCSI config of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -590,11 +590,11 @@
     that:
       - add_static_target_check_mode_result.changed is sameas true
 
-- name: Add a static target to iSCSI config of ESXi - connect to ESXi
+- name: Add a static target to iSCSI config of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -618,11 +618,11 @@
       - add_static_target_result.iscsi_properties.iscsi_static_targets.0.address == '100.64.0.2'
       - add_static_target_result.iscsi_properties.iscsi_static_targets.0.port == 3260
 
-- name: Add a static target to iSCSI config of ESXi - connect to ESXi (idempotency check)
+- name: Add a static target to iSCSI config of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -640,11 +640,11 @@
     that:
       - add_static_target_idempotency_check_result.changed is sameas false
 
-- name: Update CHAP authenticatoin of a static target  with check_mode - connect to ESXi
+- name: Update CHAP authenticatoin of a static target  with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -669,11 +669,11 @@
     that:
       - update_chap_authentication_static_target_check_mode_result.changed is sameas true
 
-- name: Update CHAP authenticatoin of a static target - connect to ESXi
+- name: Update CHAP authenticatoin of a static target
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -703,11 +703,11 @@
       - update_chap_authentication_static_target_result.iscsi_properties.iscsi_static_targets.0.authenticationProperties.chapInherited is sameas false
       - update_chap_authentication_static_target_result.iscsi_properties.iscsi_static_targets.0.authenticationProperties.chapName == 'chap_name'
 
-- name: Update CHAP authenticatoin of a static target - connect to ESXi (idempotency check)
+- name: Update CHAP authenticatoin of a static target (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -731,11 +731,11 @@
     that:
       - update_chap_authentication_static_target_idempotency_check_result.changed is sameas false
 
-- name: Update Mutual-CHAP authenticatoin of a static target  with check_mode - connect to ESXi
+- name: Update Mutual-CHAP authenticatoin of a static target  with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -764,11 +764,11 @@
     that:
       - update_mutual_chap_authentication_static_target_check_mode_result.changed is sameas true
 
-- name: Update Mutual-CHAP authenticatoin of a static target - connect to ESXi
+- name: Update Mutual-CHAP authenticatoin of a static target
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -805,11 +805,11 @@
       - update_mutual_chap_authentication_static_target_result.iscsi_properties.iscsi_static_targets.0.authenticationProperties.mutualChapInherited is sameas false
       - update_mutual_chap_authentication_static_target_result.iscsi_properties.iscsi_static_targets.0.authenticationProperties.mutualChapName == 'mutual_chap_name'
 
-- name: Update Mutual-CHAP authenticatoin of a static target - connect to ESXi (idempotency check)
+- name: Update Mutual-CHAP authenticatoin of a static target (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -837,11 +837,11 @@
     that:
       - update_mutual_mutual_chap_authentication_static_target_idempotency_check_result.changed is sameas false
 
-- name: Update an alias to blank for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Update an alias to blank for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -855,11 +855,11 @@
     that:
       - update_alias_blank_check_mode_result.changed is sameas true
 
-- name: Update an alias to blank for iSCSI of ESXi - connect to ESXi
+- name: Update an alias to blank for iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -873,11 +873,11 @@
       - update_alias_blank_result.changed is sameas true
       - update_alias_blank_result.iscsi_properties.iscsi_alias == ''
 
-- name: Update an alias to blank for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Update an alias to blank for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -890,11 +890,11 @@
     that:
       - update_alias_blank_idempotency_check_result.changed is sameas false
 
-- name: Remove a port bind for iSCSI of ESXi with check_mode - connect to ESXi
+- name: Remove a port bind for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -909,11 +909,11 @@
     that:
       - remove_port_bind_check_mode_result.changed is sameas true
 
-- name: Remove a port bind for iSCSI of ESXi - connect to ESXi
+- name: Remove a port bind for iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -928,11 +928,11 @@
       - remove_port_bind_result.changed is sameas true
       - remove_port_bind_result.iscsi_properties.port_bind | length == 0
 
-- name: Remove a port bind for iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: Remove a port bind for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -946,11 +946,11 @@
     that:
       - remove_port_bind_idempotency_check_result.changed is sameas false
 
-- name: Remove a dynamic target from iSCSI config of ESXi with check_mode - connect to ESXi
+- name: Remove a dynamic target from iSCSI config of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -965,11 +965,11 @@
     that:
       - remove_dynamic_target_check_mode_result.changed is sameas true
 
-- name: Remove a dynamic target from iSCSI config of ESXi - connect to ESXi
+- name: Remove a dynamic target from iSCSI config of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -984,11 +984,11 @@
       - remove_dynamic_target_result.changed is sameas true
       - remove_dynamic_target_result.iscsi_properties.iscsi_send_targets | length == 0
 
-- name: Remove a dynamic target from iSCSI config of ESXi - connect to ESXi (idempotency check)
+- name: Remove a dynamic target from iSCSI config of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -1002,11 +1002,11 @@
     that:
       - remove_dynamic_target_idempotency_check_result.changed is sameas false
 
-- name: Remove a static target from iSCSI config of ESXi with check_mode - connect to ESXi
+- name: Remove a static target from iSCSI config of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -1022,11 +1022,11 @@
     that:
       - remove_dynamic_target_check_mode_result.changed is sameas true
 
-- name: Remove a static target from iSCSI config of ESXi - connect to ESXi
+- name: Remove a static target from iSCSI config of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -1042,11 +1042,11 @@
       - remove_static_target_result.changed is sameas true
       - remove_static_target_result.iscsi_properties.iscsi_static_targets | length == 0
 
-- name: Remove a dynamic target from iSCSI config of ESXi - connect to ESXi (idempotency check)
+- name: Remove a dynamic target from iSCSI config of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
@@ -1060,11 +1060,11 @@
     that:
       - remove_dynamic_target_idempotency_check_result.changed is sameas false
 
-- name: disable iSCSI of ESXi with check_mode - connect to ESXi
+- name: disable iSCSI of ESXi with check_mode
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
@@ -1075,11 +1075,11 @@
     that:
       - disable_iscsi_check_mode_result.changed is sameas true
 
-- name: disable iSCSI of ESXi - connect to ESXi
+- name: disable iSCSI of ESXi
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
@@ -1090,11 +1090,11 @@
       - disable_iscsi_result.changed is sameas true
       - disable_iscsi_result.iscsi_properties.iscsi_enabled is sameas false
 
-- name: disable iSCSI of ESXi - connect to ESXi (idempotency check)
+- name: disable iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
-    hostname: "{{ esxi1 }}"
-    username: "{{ esxi_user }}"
-    password: "{{ esxi_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
