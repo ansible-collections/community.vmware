@@ -1,4 +1,4 @@
-# Test code for the vmware_host_logbundle module.
+# Test code for the vmware_host_iscsi module.
 # Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -837,6 +837,59 @@
     that:
       - update_mutual_mutual_chap_authentication_static_target_idempotency_check_result.changed is sameas false
 
+- name: Update an alias to blank for iSCSI of ESXi with check_mode - connect to vCenter
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    iscsi_config:
+      alias: ''
+      vmhba_name: "{{ vmhba_name }}"
+    state: present
+  check_mode: yes
+  register: update_alias_blank_check_mode_result
+
+- assert:
+    that:
+      - update_alias_blank_check_mode_result.changed is sameas true
+
+- name: Update an alias to blank for iSCSI of ESXi - connect to vCenter
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    iscsi_config:
+      alias: ''
+      vmhba_name: "{{ vmhba_name }}"
+    state: present
+  register: update_alias_blank_result
+
+- assert:
+    that:
+      - update_alias_blank_result.changed is sameas true
+      - update_alias_blank_result.iscsi_properties.iscsi_alias == ''
+
+- name: Update an alias to blank for iSCSI of ESXi - connect to vCenter (idempotency check)
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    iscsi_config:
+      alias: ''
+      vmhba_name: "{{ vmhba_name }}"
+    state: present
+  register: update_alias_blank_idempotency_check_result
+
+- assert:
+    that:
+      - update_alias_blank_idempotency_check_result.changed is sameas false
+
 - name: Remove a port bind for iSCSI of ESXi with check_mode - connect to vCenter
   vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
@@ -1006,3 +1059,48 @@
 - assert:
     that:
       - remove_dynamic_target_idempotency_check_result.changed is sameas false
+
+- name: disable iSCSI of ESXi with check_mode - connect to vCenter
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    state: disabled
+  check_mode: yes
+  register: disable_iscsi_check_mode_result
+
+- assert:
+    that:
+      - disable_iscsi_check_mode_result.changed is sameas true
+
+- name: disable iSCSI of ESXi - connect to vCenter
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    state: disabled
+  register: disable_iscsi_result
+
+- assert:
+    that:
+      - disable_iscsi_result.changed is sameas true
+      - disable_iscsi_result.iscsi_properties.iscsi_enabled is sameas false
+
+- name: disable iSCSI of ESXi - connect to vCenter (idempotency check)
+  vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    esxi_hostname: "{{ esxi1 }}"
+    state: disabled
+  register: disable_iscsi_idempotency_check_result
+
+- assert:
+    that:
+      - disable_iscsi_idempotency_check_result.changed is sameas false
+

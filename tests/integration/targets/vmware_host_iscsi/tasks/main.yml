@@ -1,4 +1,4 @@
-# Test code for the vmware_host_logbundle module.
+# Test code for the vmware_host_iscsi module.
 # Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -16,6 +16,11 @@
         validate_certs: no
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
+      register: prepare_iscsi_enabled_result
+
+    - assert:
+        that:
+          - prepare_iscsi_enabled_result.changed is sameas true
 
     - vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
@@ -24,6 +29,11 @@
         validate_certs: no
         esxi_hostname: "{{ esxi1 }}"
         state: disabled
+      register: prepare_iscsi_disabled_result
+
+    - assert:
+        that:
+          - prepare_iscsi_disabled_result.changed is sameas true
 
 - name: Gather facts for host bus adapters
   vmware_host_facts:
@@ -46,5 +56,4 @@
     - "'isSoftwareBased' in item and item.isSoftwareBased is sameas true"
 
 - include_tasks: connect_to_vcenter_tasks.yml
-- include_tasks: reset_iscsi_config_tasks.yml
 - include_tasks: connect_to_esxi_tasks.yml

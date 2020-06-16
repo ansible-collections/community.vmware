@@ -1,2 +1,2 @@
 minor_changes:
-  - vmware_host_iscsi - new code module for a new feature for manage the iSCSI configuration of ESXi host
+  - vmware_host_iscsi - a new module for the ESXi hosts that is dedicated to the management of the iSCSI configuration
