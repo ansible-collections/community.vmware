@@ -39,21 +39,28 @@ options:
   description:
     description:
     - Description of the storage policy to create or update.
+    - This parameter is ignored, when `state' is set to `absent'.
     type: str
+    required: False
   tag_category:
     description:
     - Name of the pre-existing tag category to assign to the storage policy.
-    required: True
+    - This parameter is ignored, when `state' is set to `absent'.
+    - This parameter is required when `state' is set to `present'.
+    required: False
     type: str
   tag_name:
     description:
     - Name of the pre-existing tag to assign to the storage policy.
-    required: True
+    - This parameter is ignored, when `state' is set to `absent'.
+    - This parameter is required when `state' is set to `present'.
+    required: False
     type: str
   tag_affinity:
     description:
     - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement..
     - If set to C(false), the storage policy enforces that virtual machines require the absence of a tag for datastore placement.
+    - This parameter is ignored, when `state' is set to `absent'.
     required: False
     type: bool
     default: True
@@ -311,6 +318,12 @@ class VmwareStoragePolicyManager(SPBM):
         results = dict(changed=False, vmware_vm_storage_policy={})
 
         if self.params.get('state') == 'present':
+            if self.params.get('tag_category') == None:
+                self.module.fail_json(msg="tag_category is required when 'state' is 'present'")
+
+            if self.params.get('tag_name') == None:
+                self.module.fail_json(msg="tag_name is required when 'state' is 'present'")
+
             # loop through and update the first match
             for policy in policies:
                 if policy.name == policy_name:
@@ -333,9 +346,9 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         name=dict(type='str', required=True),
-        description=dict(type='str', required=True),
-        tag_name=dict(type='str', required=True),
-        tag_category=dict(type='str', required=True),
+        description=dict(type='str', required=False),
+        tag_name=dict(type='str', required=False),
+        tag_category=dict(type='str', required=False),
         tag_affinity=dict(type='bool', default=True),
         state=dict(type='str', choices=['absent', 'present'], default='present')
     )
