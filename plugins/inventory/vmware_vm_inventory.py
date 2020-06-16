@@ -62,7 +62,7 @@ DOCUMENTATION = r'''
             - Include tags and associated virtual machines.
             - Requires 'vSphere Automation SDK' library to be installed on the given controller machine.
             - Please refer following URLs for installation steps
-            - U(https://code.vmware.com/web/sdk/65/vsphere-automation-python)
+            - U(https://code.vmware.com/web/sdk/7.0/vsphere-automation-python)
             default: False
             type: bool
         hostnames:
@@ -352,7 +352,7 @@ class BaseVMwareInventory:
         if not HAS_VSPHERE and self.with_tags:
             raise AnsibleError("Unable to find 'vSphere Automation SDK' Python library which is required."
                                " Please refer this URL for installation steps"
-                               " - https://code.vmware.com/web/sdk/65/vsphere-automation-python")
+                               " - https://code.vmware.com/web/sdk/7.0/vsphere-automation-python")
 
         if not all([self.hostname, self.username, self.password]):
             raise AnsibleError("Missing one of the following : hostname, username, password. Please read "
