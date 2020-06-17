@@ -87,7 +87,7 @@ class VmwareRestClient(object):
         if not HAS_VSPHERE:
             self.module.fail_json(
                 msg=missing_required_lib('vSphere Automation SDK',
-                                         url='https://code.vmware.com/web/sdk/65/vsphere-automation-python'),
+                                         url='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'),
                 exception=VSPHERE_IMP_ERR)
 
     @staticmethod
