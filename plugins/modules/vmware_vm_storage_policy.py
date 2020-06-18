@@ -17,18 +17,18 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 module: vmware_vm_storage_policy
-short_description: Create vSphere storage profiles.
+short_description: Create vSphere storage profiles
 description:
 - A vSphere storage policy defines metadata that describes storage requirements
   for virtual machines and storage capabilities of storage providers.
 - Currently, only tag-based storage policy creation is supported.
-version_added: '2.9'
+version_added: '2.10'
 author:
 - Dustin Scott (@scottd018)
 notes:
 - Tested on vSphere 6.5
 requirements:
-- python >= 2.6
+- python >= 2.7
 - PyVmomi
 options:
   name:
@@ -39,26 +39,26 @@ options:
   description:
     description:
     - Description of the storage policy to create or update.
-    - This parameter is ignored, when `state' is set to `absent'.
+    - This parameter is ignored, when C(state=absent).
     type: str
     required: False
   tag_category:
     description:
     - Name of the pre-existing tag category to assign to the storage policy.
-    - This parameter is ignored, when `state' is set to `absent'.
-    - This parameter is required when `state' is set to `present'.
+    - This parameter is ignored, when C(state=absent).
+    - This parameter is required when C(state=present).
     required: False
     type: str
   tag_name:
     description:
     - Name of the pre-existing tag to assign to the storage policy.
-    - This parameter is ignored, when `state' is set to `absent'.
+    - This parameter is ignored, when C(state=absent).
     - This parameter is required when `state' is set to `present'.
     required: False
     type: str
   tag_affinity:
     description:
-    - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement..
+    - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement.
     - If set to C(false), the storage policy enforces that virtual machines require the absence of a tag for datastore placement.
     - This parameter is ignored, when `state' is set to `absent'.
     required: False
@@ -70,7 +70,7 @@ options:
     - If set to C(present), the storage policy is created.
     - If set to C(absent), the storage policy is deleted.
     default: present
-    choices: [ present, absent ]
+    choices: [ absent, present ]
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -318,10 +318,10 @@ class VmwareStoragePolicyManager(SPBM):
         results = dict(changed=False, vmware_vm_storage_policy={})
 
         if self.params.get('state') == 'present':
-            if self.params.get('tag_category') == None:
+            if self.params.get('tag_category') is None:
                 self.module.fail_json(msg="tag_category is required when 'state' is 'present'")
 
-            if self.params.get('tag_name') == None:
+            if self.params.get('tag_name') is None:
                 self.module.fail_json(msg="tag_name is required when 'state' is 'present'")
 
             # loop through and update the first match
