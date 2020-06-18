@@ -11,7 +11,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vm_storage_policy
-short_description: Create vSphere storage profiles
+short_description: Create vSphere storage policies
 description:
 - A vSphere storage policy defines metadata that describes storage requirements
   for virtual machines and storage capabilities of storage providers.
