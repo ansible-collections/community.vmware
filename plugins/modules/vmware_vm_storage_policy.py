@@ -113,13 +113,13 @@ vmware_vm_storage_policy:
 
 try:
     from pyVmomi import pbm
-    import sys
 except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+
 
 class VmwareStoragePolicyManager(SPBM):
     def __init__(self, module):
@@ -130,7 +130,7 @@ class VmwareStoragePolicyManager(SPBM):
     #
     # These will generate the individual items with the following expected structure (see
     # https://github.com/vmware/pyvmomi/blob/master/pyVmomi/PbmObjects.py):
-    # 
+    #
     # PbmProfile: array
     #   - name:        string
     #     description: string
@@ -143,8 +143,8 @@ class VmwareStoragePolicyManager(SPBM):
     #                 value: anyType
     #                   values: arrayOfStrings
     #                     - tags
-    #               
-    #       
+    #
+    #
     def create_mob_tag_values(self, tags):
         return pbm.capability.types.DiscreteSet(values=tags)
 
@@ -182,6 +182,7 @@ class VmwareStoragePolicyManager(SPBM):
         return pbm.profile.SubProfileCapabilityConstraints(
             subProfiles=[self.create_mob_capability_constraints_subprofile(tag_id, tag_operator, tags, tag_category)]
         )
+
     def create_mob_pbm_update_spec(self, tag_id, tag_operator, tags, tag_category, description):
         return pbm.profile.CapabilityBasedProfileUpdateSpec(
             description=description,
@@ -219,7 +220,6 @@ class VmwareStoragePolicyManager(SPBM):
         return self.spbm_content.profileManager
 
     def get_storage_policies(self, profile_manager):
-        results = []
         profile_ids = profile_manager.PbmQueryProfile(
             resourceType=pbm.profile.ResourceType(resourceType="STORAGE"),
             profileCategory="REQUIREMENT"
@@ -275,13 +275,13 @@ class VmwareStoragePolicyManager(SPBM):
                     needs_change = True
         else:
             needs_change = True
-                    
+
         if needs_change:
             pbm_client.PbmUpdate(
                 profileId=policy.profileId,
                 updateSpec=self.create_mob_pbm_update_spec(expected_tag_id, expected_operator, expected_tags, expected_tag_category, expected_description)
             )
-       
+
         self.format_results_and_exit(results, policy, needs_change)
 
     def remove_storage_policy(self, policy, pbm_client, results):
@@ -292,8 +292,8 @@ class VmwareStoragePolicyManager(SPBM):
     def create_storage_policy(self, policy, pbm_client, results):
         profile_ids = pbm_client.PbmCreate(
             createSpec=self.create_mob_pbm_create_spec(
-                self.format_tag_mob_id(self.params.get('tag_category')), 
-                None, 
+                self.format_tag_mob_id(self.params.get('tag_category')),
+                None,
                 [self.params.get('tag_name')],
                 self.params.get('tag_category'),
                 self.params.get('description'),
@@ -351,6 +351,7 @@ def main():
     manager = VmwareStoragePolicyManager(module)
 
     manager.ensure_state()
+
 
 if __name__ == '__main__':
     main()
