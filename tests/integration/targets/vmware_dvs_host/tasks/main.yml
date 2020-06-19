@@ -39,4 +39,3 @@
         datacenter_name: '{{ dc1 }}'
         switch_name: 'dvs_host_test_switch'
         state: absent
-

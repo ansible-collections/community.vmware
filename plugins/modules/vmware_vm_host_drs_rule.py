@@ -291,13 +291,14 @@ class VmwareVmHostRuleDrs(PyVmomi):
             return obj_name_list
 
         for group in cluster_obj.configurationEx.group:
-            if group.name == group_name:
-                if not host_group and isinstance(group, vim.cluster.VmGroup):
-                    obj_name_list = [vm.name for vm in group.vm]
-                    break
-                elif host_group and isinstance(group, vim.cluster.HostGroup):
-                    obj_name_list = [host.name for host in group.host]
-                    break
+            if group.name != group_name:
+                continue
+            if not host_group and isinstance(group, vim.cluster.VmGroup):
+                obj_name_list = [vm.name for vm in group.vm]
+                break
+            if host_group and isinstance(group, vim.cluster.HostGroup):
+                obj_name_list = [host.name for host in group.host]
+                break
 
         return obj_name_list
 

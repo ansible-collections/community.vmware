@@ -124,15 +124,19 @@ options:
       - Number of host failures that should be tolerated, still guaranteeing sufficient resources to
         restart virtual machines on available hosts.
       - Accepts integer values only.
-      - Use C(slot_based_admission_control), C(reservation_based_admission_control) or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha) instead.
+      - Use C(slot_based_admission_control), C(reservation_based_admission_control)
+        or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 2
       type: int
     ha_admission_control_enabled:
       description:
       - Determines if strict admission control is enabled.
-      - It is recommended to set this parameter to C(True), please refer documentation for more details.
-      - Use C(slot_based_admission_control), C(reservation_based_admission_control) or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha) instead.
+      - It is recommended to set this parameter to C(True), please refer documentation
+        for more details.
+      - Use C(slot_based_admission_control), C(reservation_based_admission_control)
+        or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha)
+        instead.
       - Deprecated option, will be removed in version 2.12.
       default: True
       type: bool
