@@ -71,7 +71,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather all registered dvswitch
-  community.vmware.community.vmware.vmware_dvswitch_info:
+  community.vmware.vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -80,7 +80,7 @@ EXAMPLES = '''
   register: dvswitch_info
 
 - name: Gather info about specific dvswitch
-  community.vmware.community.vmware.vmware_dvswitch_info:
+  community.vmware.vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -90,7 +90,7 @@ EXAMPLES = '''
   register: dvswitch_info
 
 - name: Gather info from folder about specific dvswitch
-  community.vmware.community.vmware.vmware_dvswitch_info:
+  community.vmware.vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -101,7 +101,7 @@ EXAMPLES = '''
   register: dvswitch_info
 
 - name: Gather some info from a dvswitch using the vSphere API output schema
-  community.vmware.community.vmware.vmware_dvswitch_info:
+  community.vmware.vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
