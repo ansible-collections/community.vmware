@@ -81,3 +81,16 @@
   register: all_settings_results
 
 - debug: var=all_settings_results
+
+- name: Configure settings with out runtime_settings parameter
+  vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  register: without_runtime_settings_results
+
+- debug: var=without_runtime_settings_results
