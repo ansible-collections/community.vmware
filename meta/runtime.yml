@@ -116,6 +116,7 @@ action_groups:
   - vmware_vm_host_drs_rule
   - vmware_vm_info
   - vmware_vm_shell
+  - vmware_vm_storage_policy
   - vmware_vm_storage_policy_info
   - vmware_vm_vm_drs_rule
   - vmware_vm_vss_dvs_migrate
