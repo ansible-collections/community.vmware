@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_snapshot_info - Document that `folder` is required if the VM `name` is defined (https://github.com/ansible-collections/vmware/issues/243)

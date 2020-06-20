@@ -48,7 +48,7 @@ options:
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required only, if multiple virtual machines with same name are found on given vCenter.
+     - This is required parameter, if C(name) is supplied.
      - The folder should include the datacenter. ESX's datacenter is ha-datacenter
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -78,6 +78,7 @@ EXAMPLES = '''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
+    folder: "/{{ datacenter_name }}/vm/"
     name: "{{ guest_name }}"
   delegate_to: localhost
   register: snapshot_info
