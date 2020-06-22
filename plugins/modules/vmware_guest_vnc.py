@@ -151,7 +151,9 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, get_vnc_extraconfig, wait_for_task, gather_vm_facts, TaskError
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, vmware_argument_spec, get_vnc_extraconfig, wait_for_task,
+    gather_vm_facts, TaskError)
 from ansible.module_utils._text import to_native
 
 
