@@ -11,6 +11,9 @@
 #   * more jq examples
 #   * optional folder hierarchy
 
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+
 """
 $ jq '._meta.hostvars[].config' data.json | head
 {
@@ -25,7 +28,6 @@ $ jq '._meta.hostvars[].config' data.json | head
   "firmware": "bios",
 """
 
-from __future__ import print_function
 
 import atexit
 import datetime

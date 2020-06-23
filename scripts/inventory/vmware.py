@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+
 '''
 VMware Inventory Script
 =======================
@@ -27,8 +32,6 @@ Host and authentication parameters may be specified via the `VMWARE_HOST`,
 take precedence over options present in the INI file.  An INI file is not
 required if these options are specified using environment variables.
 '''
-
-from __future__ import print_function
 
 import json
 import logging
