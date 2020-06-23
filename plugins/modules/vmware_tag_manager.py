@@ -47,7 +47,17 @@ options:
       description:
       - Type of object to work with.
       required: True
-      choices: [ VirtualMachine, Datacenter, ClusterComputeResource, HostSystem, DistributedVirtualSwitch, DistributedVirtualPortgroup, Datastore, DatastoreCluster, ResourcePool, Folder ]
+      choices:
+        - VirtualMachine
+        - Datacenter
+        - ClusterComputeResource
+        - HostSystem
+        - DistributedVirtualSwitch
+        - DistributedVirtualPortgroup
+        - Datastore
+        - DatastoreCluster
+        - ResourcePool
+        - Folder
       type: str
     object_name:
       description:
