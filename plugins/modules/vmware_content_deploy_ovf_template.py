@@ -116,8 +116,8 @@ vm_deploy_info:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.vmware_rest_client import VmwareRestClient
-from ansible.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
