@@ -697,6 +697,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
     def _get_hostname(self, properties, hostnames, strict=False):
         hostname = None
+        errors = []
 
         for preference in hostnames:
             try:
@@ -704,8 +705,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             except Exception as e:  # pylint: disable=broad-except
                 if strict:
                     raise AnsibleError("Could not compose %s as hostnames - %s" % (preference, to_native(e)))
+                else:
+                    errors.append(
+                        (preference, str(e))
+                    )
             if hostname:
                 return to_text(hostname)
+
+        raise AnsibleError(
+            'Could not template any hostname for host, errors for each preference: %s' % (
+                ', '.join(['%s: %s' % (pref, err) for pref, err in errors])
+            )
+        )
 
     def _can_add_host(self, host_filters, host_properties, host, strict=False):
         can_add_host = True
