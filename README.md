@@ -229,11 +229,11 @@ TBD
 
 ## Publishing New Version
 
-TBD
-
-## More Information
-
-TBD
+- Ensure the `.rst` files are up to date, see: https://github.com/ansible-network/collection_prep
+- Refresh the changelog: `antsibull-changelog release --verbose --version 1.0.0`
+- Clean up the changelog fragments.
+- Tag the release: `git tag -s 1.0.0`
+- Push the tag: `git push origin 1.0.`
 
 ## Communication
 
