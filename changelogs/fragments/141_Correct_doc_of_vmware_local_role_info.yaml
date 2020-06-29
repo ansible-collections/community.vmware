@@ -1,2 +1,0 @@
-minor_changes:
-- Correct example from doc of `vmware_local_role_info.py` to match the change of returned structure.
