@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_dvs_portgroup_info - Include the value of the Portgroup ``key`` in the result

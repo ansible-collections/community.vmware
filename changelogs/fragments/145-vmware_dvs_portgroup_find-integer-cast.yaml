@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_dvs_portgroup_find - Cast variable to integer for comparison.

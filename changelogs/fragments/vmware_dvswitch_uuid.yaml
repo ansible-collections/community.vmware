@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_dvswitch now returns the UUID of the switch
-  - vmware_dvswitch_info also returns the switch UUID

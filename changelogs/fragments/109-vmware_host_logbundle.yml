@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_host_logbundle - new code module for a new feature for ESXi support log bundle download operation
