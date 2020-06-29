@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_host_capability_info - Fixed vSphere API legacy version errors occur in pyvmomi 7.0 and later

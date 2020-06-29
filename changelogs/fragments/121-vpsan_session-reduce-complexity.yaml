@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_vspan_session - Extract repeated code and reduce complexity of function.

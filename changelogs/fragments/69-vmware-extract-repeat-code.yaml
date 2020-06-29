@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest - Extracts repeated code from configure_vapp_properties() to set_vapp_properties() in vmware_guest.py.

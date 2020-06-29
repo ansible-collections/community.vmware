@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - Fixed ova deploy error occur if vm exists

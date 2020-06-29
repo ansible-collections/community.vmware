@@ -1,2 +1,0 @@
-bugfixes:
-- Handle list items in vSphere schema while handling facts using to_json API (https://github.com/ansible-collections/vmware/issues/33).
