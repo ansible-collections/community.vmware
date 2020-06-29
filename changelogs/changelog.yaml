@@ -214,7 +214,7 @@ releases:
     - 66877-vmware_host_dns.yaml
     - 66922-vmware_guest_network.yml
     - 67221-vmware-guest-disk-storage-drs-fix.yml
-    - 67282-remove_options_from_some_vmware_modules_that_aren't_used_in_the_code.yml
+    - 67282-remove_options_from_some_vmware_modules_that_are_not_used_in_the_code.yml
     - 67303-vmware_host_firewall_manager-fix_ip_specific_firewall_rules_for_python2.yml
     - 67615-vmware_host_service_info_fix.yml
     - 69-vmware-extract-repeat-code.yaml
