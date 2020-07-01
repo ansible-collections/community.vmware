@@ -19,7 +19,8 @@ DOCUMENTATION = r'''
 module: vmware_host_ssl_facts
 deprecated:
   removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(vmware_host_ssl_info) module.
   alternative: Use M(vmware_host_ssl_info) instead.
 short_description: Gather facts of ESXi host system about SSL
 description:
