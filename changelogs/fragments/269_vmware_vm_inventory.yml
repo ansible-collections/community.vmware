@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_vm_inventory - CustomFieldManager is not present in ESXi, handle this condition (https://github.com/ansible-collections/vmware/issues/269).
