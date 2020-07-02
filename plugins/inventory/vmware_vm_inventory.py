@@ -81,7 +81,7 @@ DOCUMENTATION = r'''
             - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
             - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to VM properties, the following are special values
-            - Use C(customValue) to populate virtual machine's custom attributes.
+            - Use C(customValue) to populate virtual machine's custom attributes. C(customValue) is only supported by vCenter and not by ESXi.
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
             - Please refer more VMware guest attributes which can be used as properties
@@ -671,7 +671,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             # Custom values
             if 'customValue' in vm_properties:
-                field_mgr = self.pyv.content.customFieldsManager.field
+                field_mgr = []
+                if self.pyv.content.customFieldsManager:  # not an ESXi
+                    field_mgr = self.pyv.content.customFieldsManager.field
                 for cust_value in vm_obj.obj.customValue:
                     properties[[y.name for y in field_mgr if y.key == cust_value.key][0]] = cust_value.value
 
