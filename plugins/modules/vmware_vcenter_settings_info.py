@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_vcenter_settings_info
 short_description: Gather info vCenter settings
 description:
@@ -22,9 +22,9 @@ extends_documentation_fragment:
   - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: "Gather info about vCenter settings"
-  vmware_vcenter_settings_info:
+  community.vmware.vmware_vcenter_settings_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -32,8 +32,8 @@ EXAMPLES = '''
   register: vcenter_settings_info
 '''
 
-RETURN = '''
-result:
+RETURN = r'''
+vcenter_config_info:
   description: dict of vCenter settings
   returned: success
   type: dict
@@ -208,7 +208,7 @@ class VmwareVcenterSettingsInfo(PyVmomi):
             if setting.key == 'log.level':
                 result['logging_options_previous'] = setting.value
 
-        self.module.exit_json(changed=False, result=result)
+        self.module.exit_json(changed=False, vcenter_config_info=result)
 
 
 def main():
