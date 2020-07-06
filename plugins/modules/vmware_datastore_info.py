@@ -8,6 +8,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+from ansible_module.turbo.module import AnsibleTurboModule
+
 
 DOCUMENTATION = '''
 ---
@@ -312,7 +314,7 @@ def main():
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
         properties=dict(type='list')
     )
-    module = AnsibleModule(argument_spec=argument_spec,
+    module = AnsibleTurboModule(argument_spec=argument_spec,
                            supports_check_mode=True
                            )
     if module._name == 'vmware_datastore_facts':

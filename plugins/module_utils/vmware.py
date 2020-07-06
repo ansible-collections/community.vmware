@@ -9,6 +9,7 @@ __metaclass__ = type
 
 import atexit
 import ansible.module_utils.common._collections_compat as collections_compat
+import functools
 import json
 import os
 import re
@@ -512,6 +513,45 @@ def vmware_argument_spec():
     )
 
 
+@functools.lru_cache(maxsize=6)
+def _open_session(validate_certs=None, **connect_args):
+    import q
+    q(connect_args)
+
+    if validate_certs and not hasattr(ssl, 'SSLContext'):
+        raise Exception(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
+                            'python or use validate_certs=false.')
+
+    elif validate_certs:
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        ssl_context.verify_mode = ssl.CERT_REQUIRED
+        ssl_context.check_hostname = True
+        ssl_context.load_default_certs()
+    elif hasattr(ssl, 'SSLContext'):
+        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+        ssl_context.verify_mode = ssl.CERT_NONE
+        ssl_context.check_hostname = False
+    else:  # Python < 2.7.9 or RHEL/Centos < 7.4
+        ssl_context = None
+
+    if ssl_context:
+        connect_args.update(sslContext=ssl_context)
+
+    import q
+    q(id(_open_session))
+    q(_open_session.cache_info())
+    if connect_args.get("proxy_host"):
+        smart_stub = connect.SmartStubAdapter(**connect_args)
+        session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(
+            connect_args["username"], connect_args["password"]))
+        return vim.ServiceInstance('ServiceInstance', session_stub)
+    else:
+        q(connect_args)
+        connect_args.update(user=connect_args["username"], pwd=connect_args["password"])
+        del(connect_args["username"])
+        del(connect_args["password"])
+        return connect.SmartConnect(**connect_args)
+
 def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None):
     hostname = hostname if hostname else module.params['hostname']
     username = username if username else module.params['username']
@@ -537,40 +577,27 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
     if validate_certs and not hasattr(ssl, 'SSLContext'):
         module.fail_json(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
                              'python or use validate_certs=false.')
-    elif validate_certs:
-        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        ssl_context.verify_mode = ssl.CERT_REQUIRED
-        ssl_context.check_hostname = True
-        ssl_context.load_default_certs()
-    elif hasattr(ssl, 'SSLContext'):
-        ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-        ssl_context.verify_mode = ssl.CERT_NONE
-        ssl_context.check_hostname = False
-    else:  # Python < 2.7.9 or RHEL/Centos < 7.4
-        ssl_context = None
+
 
     service_instance = None
-    proxy_host = module.params.get('proxy_host')
-    proxy_port = module.params.get('proxy_port')
-
     connect_args = dict(
         host=hostname,
         port=port,
+        username=username,
+        password=password,
+        validate_certs=validate_certs,
     )
-    if ssl_context:
-        connect_args.update(sslContext=ssl_context)
 
-    msg_suffix = ''
+
+    msg_suffix = ""
+    if module.params.get('proxy_host'):
+        proxy_host = module.params.get('proxy_host')
+        proxy_port = module.params.get('proxy_port')
+        connect_args.update(httpProxyHost=proxy_host, httpProxyPort=proxy_port)
+        msg_suffix = " [proxy: %s:%d]" % (proxy_host, proxy_port)
+
     try:
-        if proxy_host:
-            msg_suffix = " [proxy: %s:%d]" % (proxy_host, proxy_port)
-            connect_args.update(httpProxyHost=proxy_host, httpProxyPort=proxy_port)
-            smart_stub = connect.SmartStubAdapter(**connect_args)
-            session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(username, password))
-            service_instance = vim.ServiceInstance('ServiceInstance', session_stub)
-        else:
-            connect_args.update(user=username, pwd=password)
-            service_instance = connect.SmartConnect(**connect_args)
+        service_instance = _open_session(**connect_args)
     except vim.fault.InvalidLogin as invalid_login:
         msg = "Unable to log on to vCenter or ESXi API at %s:%s " % (hostname, port)
         module.fail_json(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
