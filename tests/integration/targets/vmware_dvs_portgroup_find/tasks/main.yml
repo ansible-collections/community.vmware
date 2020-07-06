@@ -6,6 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_dvswitch: true
+    setup_dvs_portgroup: true
 
 - name: get list of portgroups
   vmware_dvs_portgroup_find:
