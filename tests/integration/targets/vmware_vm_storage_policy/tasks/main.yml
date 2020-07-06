@@ -85,6 +85,8 @@
       that:
         - not policy_delete.changed
 
+  always:
+
   - name: Delete Tags
     vmware_tag:
       hostname: '{{ vcenter_hostname }}'
