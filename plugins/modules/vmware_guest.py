@@ -1568,7 +1568,8 @@ class PyVmomiHelper(PyVmomi):
                 add_key = add_key + 1
                 nic = self.device_helper.create_nic(device_type,
                                                     'Network Adapter %s' % (add_key),
-                                                    network_devices[key])
+                                                    network_devices[key],
+                                                    add_key)
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 nic_change_detected = True
 
