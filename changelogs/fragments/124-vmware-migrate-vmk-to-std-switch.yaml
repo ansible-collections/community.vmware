@@ -1,2 +1,2 @@
 minor_changes:
-- to also allow migration from a VMware vSphere Distrubuted Switch to a ESXi Standard Switch
+- vmware_migrate_vmk - allow migration from a VMware vSphere Distrubuted Switch to a ESXi Standard Switch
