@@ -1,7 +1,6 @@
 ---
 - hosts: localhost
   tasks:
-
     - name: Inventory with 'cache' option
       include_tasks: build_inventory.yml
       vars:

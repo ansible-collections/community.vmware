@@ -12,7 +12,6 @@ DOCUMENTATION = r'''
     name: vmware_vm_inventory
     plugin_type: inventory
     short_description: VMware Guest inventory source
-    version_added: "2.7"
     author:
       - Abhijeet Kasurde (@Akasurde)
     description:
@@ -78,17 +77,42 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
+            - C(config.name), C(config.uuid) are required properties if C(hostnames) is set to default.
+            - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
+            - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to VM properties, the following are special values
-            - Use 'customValue' to populate VM's custom attributes.
-            - Use 'all' to populate all VM properties.
+            - Use C(customValue) to populate virtual machine's custom attributes. C(customValue) is only supported by vCenter and not by ESXi.
+            - Use C(all) to populate all the properties of the virtual machine.
+              The value C(all) is time consuming operation, do not use unless required absolutely.
+            - Please refer more VMware guest attributes which can be used as properties
+              U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
             type: list
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
-                       'config.name', 'config.uuid' ,'guest.hostName', 'guest.ipAddress',
+                       'config.name', 'config.uuid', 'guest.hostName', 'guest.ipAddress',
                        'guest.guestId', 'guest.guestState', 'runtime.maxMemoryUsage',
-                       'customValue', 'summary.runtime.powerState', 'config.guestId'
+                       'customValue', 'summary.runtime.powerState', 'config.guestId',
                        ]
-            version_added: "2.9"
+        with_nested_properties:
+            description:
+            - This option transform flatten properties name to nested dictionary.
+            type: bool
+            default: False
+        keyed_groups:
+            description:
+            - Add hosts to group based on the values of a variable.
+            type: list
+            default: [
+                {key: 'config.guestId', separator: ''},
+                {key: 'summary.runtime.powerState', separator: ''},
+            ]
+        filters:
+            description:
+            - This option allows client-side filtering hosts with jinja templating.
+            - When server-side filtering is introduced, it should be preferred over this.
+            type: list
+            elements: str
+            default: []
         resources:
             description:
             - A list of resources to limit search scope.
@@ -105,36 +129,12 @@ DOCUMENTATION = r'''
             - Set this option to a string value to replace root name from I('Datacenters').
             default: False
             type: bool
-            version_added: "2.10"
-        hostnames:
-            description:
-                - A list of templates in order of precedence to compose inventory_hostname.
-                - Ignores template if it resulted in an empty string or None value.
-                - You can use property specified in I(properties) as variables in template.
-            type: list
-            default: ['config.name + "_" + config.uuid']
-            version_added: "2.10"
-        with_nested_properties:
-            description:
-                - This option transform flatten properties name to nested dictionary.
-            type: bool
-            default: False
-            version_added: "2.10"
         with_sanitized_property_name:
             description:
                 - This option allows property name sanitization to create safe property names for use in Ansible.
                 - Also, transforms property name to snake case.
             type: bool
             default: False
-            version_added: "2.10"
-        keyed_groups:
-            description: Add hosts to group based on the values of a variable.
-            type: list
-            default: [
-                {key: 'config.guestId', separator: ''},
-                {key: 'summary.runtime.powerState', separator: ''},
-            ]
-            version_added: "2.10"
 '''
 
 EXAMPLES = r'''
@@ -154,11 +154,67 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: True
+    properties:
+    - 'name'
+    - 'guest.ipAddress'
+
+# Create Groups based upon VMware Tools status
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.toolsStatus'
+    - 'guest.toolsRunningStatus'
+    hostnames:
+    - config.name
+    keyed_groups:
+    - key: guest.toolsStatus
+      separator: ''
+    - key: guest.toolsRunningStatus
+      separator: ''
+
+# Filter VMs based upon condition
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - runtime.powerState
+    - config.name
+    filters:
+    - runtime.powerState == "poweredOn"
+    hostnames:
+    - config.name
+
+# Using compose and groups
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
     properties:
     - 'name'
     - 'config.name'
     - 'guest.ipAddress'
+    compose:
+      # This will populate the IP address of virtual machine if available
+      # and will be used while communicating to the given virtual machine
+      ansible_host: 'guest.ipAddress'
+      composed_var: 'config.name'
+    groups:
+      VMs: True
+    hostnames:
+    - config.name
 
 # Use Datacenter, Cluster and Folder value to list VMs
     plugin: community.vmware.vmware_vm_inventory
@@ -185,11 +241,13 @@ EXAMPLES = r'''
 
 import ssl
 import atexit
+import base64
 from ansible.errors import AnsibleError, AnsibleParserError
-from ansible.utils.display import Display
 from ansible.module_utils._text import to_text, to_native
-from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict, dict_merge
+from ansible.module_utils.common.dict_transformations import dict_merge
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
+from ansible.utils.display import Display
 from ansible.module_utils.six import text_type
 
 display = Display()
@@ -233,14 +291,12 @@ class BaseVMwareInventory:
         self.content = None
         self.rest_content = None
 
-        self.check_requirements()
-
     def do_login(self):
         """
         Check requirements and do login
         """
         self.check_requirements()
-        self.content = self._login()
+        self.si, self.content = self._login()
         if self.with_tags:
             self.rest_content = self._login_vapi()
 
@@ -260,14 +316,14 @@ class BaseVMwareInventory:
         if self.port:
             server += ":" + str(self.port)
 
-        client = None
+        client, err = None, None
         try:
             client = create_vsphere_client(server=server,
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except Exception as e:  # pylint: disable=bare-except
-            display.warning(to_native(e))
+        except Exception as err:
+            err = err
 
         if client is None:
             msg = "Failed to login to %s using %s" % (server, self.username)
@@ -314,10 +370,10 @@ class BaseVMwareInventory:
             raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s" % (self.hostname, self.port))
 
         atexit.register(connect.Disconnect, service_instance)
-        return service_instance.RetrieveContent()
+        return service_instance, service_instance.RetrieveContent()
 
     def check_requirements(self):
-        """ Check all requirements for this inventory are satisified"""
+        """ Check all requirements for this inventory are satisfied"""
         if not HAS_REQUESTS:
             raise AnsibleParserError('Please install "requests" Python module as this is required'
                                      ' for VMware Guest dynamic inventory plugin.')
@@ -461,20 +517,81 @@ class BaseVMwareInventory:
             _handle_error("Couldn't retrieve contents from host: %s" % to_native(err))
         return []
 
-    @staticmethod
-    def _get_object_prop(vm, attributes):
-        """Safely get a property or return None"""
-        result = vm
-        for attribute in attributes:
-            try:
-                result = getattr(result, attribute)
-            except (AttributeError, IndexError):
-                return None
-        return result
+
+def to_nested_dict(vm_properties):
+    """
+    Parse properties from dot notation to dict
+
+    """
+
+    host_properties = {}
 
     for vm_prop_name, vm_prop_val in vm_properties.items():
         prop_parents = reversed(vm_prop_name.split("."))
         prop_dict = parse_vim_property(vm_prop_val)
+
+        for k in prop_parents:
+            prop_dict = {k: prop_dict}
+        host_properties = dict_merge(host_properties, prop_dict)
+
+    return host_properties
+
+
+def to_flatten_dict(d, parent_key='', sep='.'):
+    """
+    Parse properties dict to dot notation
+
+    """
+    items = []
+    for k, v in d.items():
+        new_key = parent_key + sep + k if parent_key else k
+        if v and isinstance(v, dict):
+            items.extend(to_flatten_dict(v, new_key, sep=sep).items())
+        else:
+            items.append((new_key, v))
+    return dict(items)
+
+
+def parse_vim_property(vim_prop):
+    """
+    Helper method to parse VIM properties of virtual machine
+    """
+    prop_type = type(vim_prop).__name__
+    if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
+        if isinstance(vim_prop, DataObject):
+            r = {}
+            for prop in vim_prop._GetPropertyList():  # pylint: disable=protected-access
+                if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
+                    sub_prop = getattr(vim_prop, prop.name)
+                    r[prop.name] = parse_vim_property(sub_prop)
+            return r
+
+        elif isinstance(vim_prop, list):
+            r = []
+            for prop in vim_prop:
+                r.append(parse_vim_property(prop))
+            return r
+        return vim_prop.__str__()
+
+    elif prop_type == "datetime":
+        return Iso8601.ISO8601Format(vim_prop)
+
+    elif prop_type == "long":
+        return int(vim_prop)
+    elif prop_type == "long[]":
+        return [int(x) for x in vim_prop]
+
+    elif isinstance(vim_prop, list):
+        return [parse_vim_property(x) for x in vim_prop]
+
+    elif prop_type in ['bool', 'int', 'NoneType']:
+        return vim_prop
+
+    elif prop_type in ['binary']:
+        return to_text(base64.b64encode(vim_prop))
+
+    return to_text(vim_prop)
+
 
 class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
@@ -507,18 +624,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # set _options from config data
         self._consume_options(config_data)
 
-        username = self.get_option('username')
         password = self.get_option('password')
-
-        if isinstance(username, AnsibleVaultEncryptedUnicode):
-            username = username.data
 
         if isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
 
-        self.pyv = BaseVMwareInventory(  # pylint: disable=attribute-defined-outside-init
+        self.pyv = BaseVMwareInventory(
             hostname=self.get_option('hostname'),
-            username=username,
+            username=self.get_option('username'),
             password=password,
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
@@ -546,32 +659,21 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             self._cache[cache_key] = cacheable_results
 
     def _populate_from_cache(self, cache_data):
-        """ Populate cache using source data """
-        for host, host_properties in cache_data.items():
-            self._populate_host_properties(host_properties, host)
+        """
+        Populate cache using source data
 
-    def _get_hostname(self, properties, hostnames):
-        strict = self.get_option('strict')
-        hostname = None
-
-        for preference in hostnames:
-            try:
-                hostname = self._compose(preference, properties)
-            except Exception as e:  # pylint: disable=broad-except
-                if strict:
-                    raise AnsibleError("Could not compose %s as hostnames %s" % (preference, to_native(e)))
-
-            if hostname:
-                return to_text(hostname)
-
-    def _populate_from_source(self):
         """
         for host, host_properties in cache_data.items():
             self._populate_host_properties(host_properties, host)
 
     def _populate_from_source(self):
+        """
+        Populate inventory data from direct source
+
         """
         hostvars = {}
+        strict = self.get_option('strict')
+
         vm_properties = self.get_option('properties')
         if not isinstance(vm_properties, list):
             vm_properties = [vm_properties]
@@ -589,20 +691,19 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             vim_type=vim.VirtualMachine,
             properties=query_props,
             resources=self.get_option('resources'),
-            strict=self.get_option('strict')
+            strict=strict,
         )
 
-        tags_info = None
-        if self.pyv.rest_content:
+        tags_info = dict()
+        if self.pyv.with_tags:
             tag_svc = self.pyv.rest_content.tagging.Tag
             tag_association = self.pyv.rest_content.tagging.TagAssociation
-            tags_info = dict()
+
             tags = tag_svc.list()
             for tag in tags:
                 tag_obj = tag_svc.get(tag)
                 tags_info[tag_obj.id] = tag_obj.name
 
-        with_path = self.get_option('with_path')
         hostnames = self.get_option('hostnames')
 
         for vm_obj in objects:
@@ -610,13 +711,15 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 # Sometime orphaned VMs return no configurations
                 continue
 
-            properties = {}
+            properties = dict()
             for vm_obj_property in vm_obj.propSet:
                 properties[vm_obj_property.name] = vm_obj_property.val
 
             # Custom values
             if 'customValue' in vm_properties:
-                field_mgr = self.pyv.content.customFieldsManager.field
+                field_mgr = []
+                if self.pyv.content.customFieldsManager:  # not an ESXi
+                    field_mgr = self.pyv.content.customFieldsManager.field
                 for cust_value in vm_obj.obj.customValue:
                     properties[[y.name for y in field_mgr if y.key == cust_value.key][0]] = cust_value.value
 
@@ -628,7 +731,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
                 properties['tags'] = attached_tags
 
-            # Build path
+            # Path
+            with_path = self.get_option('with_path')
             if with_path:
                 path = []
                 parent = vm_obj.obj.parent
@@ -639,30 +743,75 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties['path'] = "/".join(path)
 
             host_properties = to_nested_dict(properties)
-            host = self._get_hostname(host_properties, hostnames)
 
-            if host not in hostvars:
+            host = self._get_hostname(host_properties, hostnames, strict=strict)
+
+            host_filters = self.get_option('filters')
+
+            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
         return hostvars
 
+    def _get_hostname(self, properties, hostnames, strict=False):
+        hostname = None
+        errors = []
+
+        for preference in hostnames:
+            try:
+                hostname = self._compose(preference, properties)
+            except Exception as e:  # pylint: disable=broad-except
+                if strict:
+                    raise AnsibleError("Could not compose %s as hostnames - %s" % (preference, to_native(e)))
+                else:
+                    errors.append(
+                        (preference, str(e))
+                    )
+            if hostname:
+                return to_text(hostname)
+
+        raise AnsibleError(
+            'Could not template any hostname for host, errors for each preference: %s' % (
+                ', '.join(['%s: %s' % (pref, err) for pref, err in errors])
+            )
+        )
+
+    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+        can_add_host = True
+        for host_filter in host_filters:
+            try:
+                can_add_host = self._compose(host_filter, host_properties)
+            except Exception as e:  # pylint: disable=broad-except
+                if strict:
+                    raise AnsibleError("Could not evaluate %s as host filters - %s" % (host_filter, to_native(e)))
+
+            if not can_add_host:
+                return False
+        return True
+
     def _populate_host_properties(self, host_properties, host):
         # Load VM properties in host_vars
-        with_path = self.get_option('with_path')
-        with_nested_properties = self.get_option('with_nested_properties')
-
         self.inventory.add_host(host)
 
         # Use constructed if applicable
         strict = self.get_option('strict')
+
         # Composed variables
-        self._set_composite_vars(self.get_option('compose'), host_properties, host, strict=strict)
+        compose = self.get_option('compose')
+        if not compose:
+            compose['ansible_host'] = 'guest.ipAddress'
+
+        if not compose.get('ansible_host', None):
+            raise AnsibleError('"ansible_host" not found in "compose". '
+                               'Without this inventory will be useless.')
+        self._set_composite_vars(compose, host_properties, host, strict=strict)
         # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
         self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
 
+        with_path = self.get_option('with_path')
         if with_path:
             parents = host_properties['path'].split('/')
             if parents:
@@ -682,73 +831,20 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                     c_group = p_group
                     parents.pop()
 
-        # Hostvars formats manipulation
-        host_properties = host_properties if with_nested_properties else to_flatten_dict(host_properties)
+        can_sanitize = self.get_option('with_sanitized_property_name')
 
-        if self.get_option('with_sanitized_property_name'):
+        # Sanitize host properties: to snake case
+        if can_sanitize:  # to snake case
             host_properties = camel_dict_to_snake_dict(host_properties)
 
-        can_sanitize = self.get_option('with_sanitized_property_name')
+        with_nested_properties = self.get_option('with_nested_properties')
+        if with_nested_properties:
+            for k, v in host_properties.items():
+                k = self._sanitize_group_name(k) if can_sanitize else k
+                self.inventory.set_variable(host, k, v)
+
+        # For backward compatability
+        host_properties = to_flatten_dict(host_properties)
         for k, v in host_properties.items():
             k = self._sanitize_group_name(k) if can_sanitize else k
             self.inventory.set_variable(host, k, v)
-
-
-def parse_vim_property(vim_prop):
-    prop_type = type(vim_prop).__name__
-    if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
-        if isinstance(vim_prop, DataObject):
-            r = {}
-            for prop in vim_prop._GetPropertyList():  # pylint: disable=protected-access
-                if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
-                    sub_prop = getattr(vim_prop, prop.name)
-                    r[prop.name] = parse_vim_property(sub_prop)
-            return r
-
-        elif isinstance(vim_prop, list):
-            r = []
-            for prop in vim_prop:
-                r.append(parse_vim_property(prop))
-            return r
-        return vim_prop.__str__()
-
-    elif prop_type == "datetime":
-        return Iso8601.ISO8601Format(vim_prop)
-
-    elif prop_type == "long":
-        return int(vim_prop)
-    elif prop_type == "long[]":
-        return [int(x) for x in vim_prop]
-
-    elif isinstance(vim_prop, list):
-        return [parse_vim_property(x) for x in vim_prop]
-
-    elif prop_type in ['bool', 'int', 'NoneType']:
-        return vim_prop
-
-    return to_text(vim_prop)
-
-
-def to_nested_dict(vm_properties):
-    host_properties = {}
-
-    for vm_prop_name, vm_prop_val in vm_properties.items():
-        prop_parents = reversed(vm_prop_name.split("."))
-        prop_dict = parse_vim_property(vm_prop_val)
-
-        for k in prop_parents:
-            prop_dict = {k: prop_dict}
-        host_properties = dict_merge(host_properties, prop_dict)
-
-    return host_properties
-
-
-def to_flatten_dict(d, parent_key='', sep='.'):
-    items = []
-    for k, v in d.items():
-        new_key = parent_key + sep + k if parent_key else k
-        if v and isinstance(v, dict):
-            items.extend(to_flatten_dict(v, new_key, sep=sep).items())
-        else:
-            items.append((new_key, v))
-    return dict(items)
