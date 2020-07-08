@@ -813,8 +813,8 @@ class PyVmomiDeviceHelper(object):
 
     def create_nic(self, device_type, device_label, device_infos, key):
         nic = vim.vm.device.VirtualDeviceSpec()
-        nic.device.key = key
         nic.device = self.get_device(device_type, device_infos['name'])
+        nic.device.key = key
         nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
         nic.device.deviceInfo = vim.Description()
         nic.device.deviceInfo.label = device_label
