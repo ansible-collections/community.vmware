@@ -25,11 +25,9 @@ plugins/modules/vca_vapp.py validate-modules:invalid-ansiblemodule-schema
 plugins/modules/vca_vapp.py validate-modules:undocumented-parameter
 plugins/modules/vmware_category.py validate-modules:doc-elements-mismatch
 plugins/modules/vmware_category.py validate-modules:invalid-ansiblemodule-schema
-plugins/modules/vmware_cfg_backup.py validate-modules:doc-required-mismatch
 plugins/modules/vmware_cluster.py validate-modules:invalid-ansiblemodule-schema
 plugins/modules/vmware_cluster.py validate-modules:parameter-type-not-in-doc
 plugins/modules/vmware_cluster_drs.py validate-modules:invalid-ansiblemodule-schema
-plugins/modules/vmware_cluster_ha.py validate-modules:doc-elements-mismatch
 plugins/modules/vmware_content_library_manager.py validate-modules:doc-required-mismatch
 plugins/modules/vmware_datastore_info.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_deploy_ovf.py use-argspec-type-path

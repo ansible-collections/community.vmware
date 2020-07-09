@@ -119,6 +119,7 @@ options:
             - List of dedicated failover hosts.
           type: list
           required: true
+          elements: str
       type: dict
     ha_vm_failure_interval:
       description:
