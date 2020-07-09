@@ -113,6 +113,28 @@ DOCUMENTATION = r'''
             type: list
             elements: str
             default: []
+        resources:
+            description:
+            - A list of resources to limit search scope.
+            - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
+            - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
+            - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
+            version_added: "2.10"
+            required: False
+            type: list
+            default: []
+        with_path:
+            description:
+            - Include virtual machines path.
+            - Set this option to a string value to replace root name from I('Datacenters').
+            default: False
+            type: bool
+        with_sanitized_property_name:
+            description:
+                - This option allows property name sanitization to create safe property names for use in Ansible.
+                - Also, transforms property name to snake case.
+            type: bool
+            default: False
 '''
 
 EXAMPLES = r'''
@@ -193,6 +215,28 @@ EXAMPLES = r'''
       VMs: True
     hostnames:
     - config.name
+
+# Use Datacenter, Cluster and Folder value to list VMs
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.200.241
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: True
+    resources:
+      - datacenter:
+        - Asia-Datacenter1
+        - Asia-Datacenter2
+        resources:
+        - compute_resource:
+          - Asia-Cluster1
+          resources:
+          - host_system:
+            - Asia-ESXI4
+        - folder:
+          - dev
+          - prod
 '''
 
 import ssl
@@ -201,8 +245,10 @@ import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import dict_merge
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
+from ansible.module_utils.six import text_type
 
 display = Display()
 
@@ -644,7 +690,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         objects = self.pyv.get_managed_objects_properties(
             vim_type=vim.VirtualMachine,
             properties=query_props,
-            # resources=self.get_option('resources'),
+            resources=self.get_option('resources'),
             strict=strict,
         )
 
@@ -684,6 +730,17 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 vm_dynamic_id = DynamicID(type='VirtualMachine', id=vm_mo_id)
                 attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
                 properties['tags'] = attached_tags
+
+            # Path
+            with_path = self.get_option('with_path')
+            if with_path:
+                path = []
+                parent = vm_obj.obj.parent
+                while parent:
+                    path.append(parent.name)
+                    parent = parent.parent
+                path.reverse()
+                properties['path'] = "/".join(path)
 
             host_properties = to_nested_dict(properties)
 
@@ -754,12 +811,40 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
 
+        with_path = self.get_option('with_path')
+        if with_path:
+            parents = host_properties['path'].split('/')
+            if parents:
+                if isinstance(with_path, text_type):
+                    parents = [with_path] + parents
+
+                c_name = self._sanitize_group_name('/'.join(parents))
+                c_group = self.inventory.add_group(c_name)
+                self.inventory.add_host(host, c_group)
+                parents.pop()
+
+                while len(parents) > 0:
+                    p_name = self._sanitize_group_name('/'.join(parents))
+                    p_group = self.inventory.add_group(p_name)
+
+                    self.inventory.add_child(p_group, c_group)
+                    c_group = p_group
+                    parents.pop()
+
+        can_sanitize = self.get_option('with_sanitized_property_name')
+
+        # Sanitize host properties: to snake case
+        if can_sanitize:  # to snake case
+            host_properties = camel_dict_to_snake_dict(host_properties)
+
         with_nested_properties = self.get_option('with_nested_properties')
         if with_nested_properties:
             for k, v in host_properties.items():
+                k = self._sanitize_group_name(k) if can_sanitize else k
                 self.inventory.set_variable(host, k, v)
 
         # For backward compatability
         host_properties = to_flatten_dict(host_properties)
         for k, v in host_properties.items():
+            k = self._sanitize_group_name(k) if can_sanitize else k
             self.inventory.set_variable(host, k, v)
