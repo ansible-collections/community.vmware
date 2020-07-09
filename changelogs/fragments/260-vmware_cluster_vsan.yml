@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_cluster_vsan - Implement advanced VSAN options (https://github.com/ansible-collections/vmware/issues/260)
+  - vmware_cluster_vsan now requires the vSAN Management SDK, which needs to be downloaded from VMware and installed manually.

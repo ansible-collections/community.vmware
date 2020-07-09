@@ -35,7 +35,62 @@
         that:
         - "{{ cluster_vsan_result_0001.changed == true }}"
 
-    # Testcase 0002: Disable vSAN
+    # Testcase 0002: Enable vSAN again (check for idempotency)
+    - name: Enable vSAN again (check for idempotency)
+      vmware_cluster_vsan:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        cluster_name: test_cluster_vsan
+        enable_vsan: yes
+      register: cluster_vsan_result_0002
+
+    - name: Ensure vSAN is not enabled again
+      assert:
+        that:
+        - "{{ cluster_vsan_result_0002.changed == false }}"
+
+    # Testcase 0003: Change object repair timer
+    - name: Change object repair timer
+      vmware_cluster_vsan:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        cluster_name: test_cluster_vsan
+        enable_vsan: yes
+        advanced_options:
+          object_repair_timer: 67
+      register: cluster_vsan_result_0003
+
+    - name: Ensure object repair timer is changed
+      assert:
+        that:
+        - "{{ cluster_vsan_result_0003.changed == true }}"
+
+    # Testcase 0004: Change object repair timer again (check for idempotency)
+    - name: Change object repair timer again (check for idempotency)
+      vmware_cluster_vsan:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        cluster_name: test_cluster_vsan
+        enable_vsan: yes
+        advanced_options:
+          object_repair_timer: 67
+      register: cluster_vsan_result_0004
+
+    - name: Ensure object repair timer is not changed again
+      assert:
+        that:
+        - "{{ cluster_vsan_result_0004.changed == false }}"
+
+    # Testcase 0005: Disable vSAN
     - name: Disable vSAN
       vmware_cluster_vsan:
         validate_certs: False
@@ -45,12 +100,29 @@
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
         enable_vsan: no
-      register: cluster_vsan_result_0002
+      register: cluster_vsan_result_0005
 
     - name: Ensure vSAN is disabled
       assert:
         that:
-            - "{{ cluster_vsan_result_0002.changed == true }}"
+            - "{{ cluster_vsan_result_0005.changed == true }}"
+
+    # Testcase 0006: Disable vSAN again (check for idempotency)
+    - name: Disable vSAN again (check for idempotency)
+      vmware_cluster_vsan:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        cluster_name: test_cluster_vsan
+        enable_vsan: no
+      register: cluster_vsan_result_0006
+
+    - name: Ensure vSAN is not disabled again
+      assert:
+        that:
+            - "{{ cluster_vsan_result_0006.changed == false }}"
 
     # Delete test cluster
     - name: Delete test cluster
