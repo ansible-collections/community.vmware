@@ -195,7 +195,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
             locale=None,
             flags=None,
             additional_parameters=None,
-            default_datastore_id=None)
+            default_datastore_id=self.datastore_id)
 
         result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
 
