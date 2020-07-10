@@ -508,3 +508,14 @@
       assert:
         that:
             - dvs_pg_result_0021.changed
+  always:
+    - name: delete distributed vSwitch
+      vmware_dvswitch:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        state: absent
+        switch_name: dvswitch_0001
+      register: dvs_result_0001
