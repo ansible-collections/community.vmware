@@ -19,7 +19,8 @@ DOCUMENTATION = r'''
 module: vmware_host_dns_facts
 deprecated:
   removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(vmware_host_dns_info) module.
   alternative: Use M(vmware_host_dns_info) instead.
 short_description: Gathers facts about an ESXi host's DNS configuration information
 description:

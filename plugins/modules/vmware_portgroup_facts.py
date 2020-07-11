@@ -19,7 +19,8 @@ DOCUMENTATION = r'''
 module: vmware_portgroup_facts
 deprecated:
   removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(vmware_portgroup_info) module.
   alternative: Use M(vmware_portgroup_info) instead.
 short_description: Gathers facts about an ESXi host's Port Group configuration
 description:

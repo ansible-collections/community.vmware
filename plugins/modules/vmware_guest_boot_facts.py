@@ -20,7 +20,8 @@ DOCUMENTATION = '''
 module: vmware_guest_boot_facts
 deprecated:
   removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(vmware_guest_boot_info) module.
   alternative: Use M(vmware_guest_boot_info) instead.
 short_description: Gather facts about boot options for the given virtual machine
 description:
