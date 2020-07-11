@@ -1,0 +1,40 @@
+# Test code for the vmware_vcenter_settings_info module.
+# Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: "Gather info about vCenter settings"
+  vmware_vcenter_settings_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+  register: gather_info_about_vcenter_settings_result
+
+- assert:
+    that:
+      - gather_info_about_vcenter_settings_result.vcenter_config_info is defined
+      - gather_info_about_vcenter_settings_result.vcenter_config_info | length == 34
+
+- name: "Get a list of information about vCenter settings by specifying the properties"
+  vmware_vcenter_settings_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    schema: vsphere
+    properties:
+      - config.workflow.port
+      - config.log.level
+      - vpxd.locale
+    validate_certs: no
+  register: get_list_of_info_about_vcenter_settings_result
+
+- assert:
+    that:
+      - get_list_of_info_about_vcenter_settings_result.vcenter_config_info['config.workflow.port'] is defined
+      - get_list_of_info_about_vcenter_settings_result.vcenter_config_info['config.log.level'] is defined
+      - get_list_of_info_about_vcenter_settings_result.vcenter_config_info['vpxd.locale'] is defined
