@@ -25,7 +25,7 @@ requirements:
 - python >= 2.6
 - PyVmomi
 notes:
-    - Please make sure that the user used for M(vmware_guest) has the correct level of privileges.
+    - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
     - For example, following is the list of minimum privileges required by users to create virtual machines.
     - "   DataStore > Allocate Space"
     - "   Virtual Machine > Configuration > Add New Disk"

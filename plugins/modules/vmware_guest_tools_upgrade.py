@@ -18,7 +18,8 @@ requirements:
     - "python >= 2.6"
     - PyVmomi
 notes:
-    - "In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module M(vmware_guest_powerstate)."
+    - "In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or
+      using module M(community.vmware.vmware_guest_powerstate)."
 options:
    name:
         description:

@@ -21,8 +21,8 @@ module: vmware_category_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_category_info) module.
-  alternative: Use M(vmware_category_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_category_info) module.
+  alternative: Use M(community.vmware.vmware_category_info) instead.
 short_description: Gather facts about VMware tag categories
 description:
 - This module can be used to gather facts about VMware tag categories.

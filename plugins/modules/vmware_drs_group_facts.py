@@ -19,8 +19,8 @@ DOCUMENTATION = r'''
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_drs_group_info) module.
-  alternative: Use M(vmware_drs_group_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_drs_group_info) module.
+  alternative: Use M(community.vmware.vmware_drs_group_info) instead.
 author:
   - "Karsten Kaj Jakobsen (@karstenjakobsen)"
 description:

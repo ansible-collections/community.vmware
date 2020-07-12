@@ -20,8 +20,8 @@ module: vmware_portgroup_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_portgroup_info) module.
-  alternative: Use M(vmware_portgroup_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_portgroup_info) module.
+  alternative: Use M(community.vmware.vmware_portgroup_info) instead.
 short_description: Gathers facts about an ESXi host's Port Group configuration
 description:
 - This module can be used to gather facts about an ESXi host's Port Group configuration when ESXi hostname or Cluster name is given.

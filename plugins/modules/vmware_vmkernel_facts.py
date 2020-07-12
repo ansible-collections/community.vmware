@@ -19,8 +19,8 @@ module: vmware_vmkernel_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_vmkernel_info) module.
-  alternative: Use M(vmware_vmkernel_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_vmkernel_info) module.
+  alternative: Use M(community.vmware.vmware_vmkernel_info) instead.
 short_description: Gathers VMKernel facts about an ESXi host
 description:
 - This module can be used to gather VMKernel facts about an ESXi host from given ESXi hostname or cluster name.
