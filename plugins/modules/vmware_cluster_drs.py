@@ -221,7 +221,7 @@ def main():
                                      choices=['fullyAutomated', 'manual', 'partiallyAutomated'],
                                      default='fullyAutomated'),
         drs_vmotion_rate=dict(type='int',
-                              choices=range(1, 6),
+                              choices=[1, 2, 3, 4, 5],
                               default=3),
         advanced_settings=dict(type='dict', default=dict(), required=False),
     ))

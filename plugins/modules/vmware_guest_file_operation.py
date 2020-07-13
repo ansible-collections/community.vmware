@@ -83,30 +83,71 @@ options:
             - Create or delete a directory.
             - Can be used to create temp directory inside guest using mktemp operation.
             - mktemp sets variable C(dir) in the result with the name of the new directory.
-            - mktemp operation option is added in version 2.8
-            - 'Valid attributes are:'
-            - '  operation (str): Valid values are: create, delete, mktemp'
-            - '  path (str): directory path (required for create or remove)'
-            - '  prefix (str): temporary directory prefix (required for mktemp)'
-            - '  suffix (str): temporary directory suffix (required for mktemp)'
-            - '  recurse (boolean): Not required, default (false)'
+            - mktemp operation option is added in version 2.8.
+        suboptions:
+            operation:
+                description:
+                - Operation to perform.
+                type: str
+                required: True
+                choices: [ 'create', 'delete', 'mktemp' ]
+            path:
+                type: str
+                description:
+                - Directory path.
+                - Required for C(create) or C(remove).
+            prefix:
+                description:
+                - Temporary directory prefix.
+                - Required for C(mktemp).
+                type: str
+            suffix:
+                type: str
+                description:
+                - Temporary directory suffix.
+                - Required for C(mktemp).
+            recurse:
+                type: bool
+                description:
+                - Not required.
+                default: False
         required: False
         type: dict
     copy:
         description:
             - Copy file to vm without requiring network.
-            - 'Valid attributes are:'
-            - '  src: file source absolute or relative'
-            - '  dest: file destination, path must be exist'
-            - '  overwrite: False or True (not required, default False)'
+        suboptions:
+            src:
+                description:
+                - File source absolute or relative.
+                required: True
+                type: str
+            dest:
+                description:
+                - File destination, path must be exist.
+                required: True
+                type: str
+            overwrite:
+                description:
+                - Overwrite or not.
+                type: bool
         required: False
         type: dict
     fetch:
         description:
             - Get file from virtual machine without requiring network.
-            - 'Valid attributes are:'
-            - '  src: The file on the remote system to fetch. This I(must) be a file, not a directory'
-            - '  dest: file destination on localhost, path must be exist'
+        suboptions:
+            src:
+                description:
+                - The file on the remote system to fetch.
+                - This I(must) be a file, not a directory.
+                required: True
+                type: str
+            dest:
+                description:
+                - File destination on localhost, path must be exist.
+                required: True
+                type: str
         required: False
         type: dict
 
@@ -418,10 +459,11 @@ def main():
         copy=dict(
             type='dict',
             default=None,
-            options=dict(src=dict(required=True, type='str'),
-                         dest=dict(required=True, type='str'),
-                         overwrite=dict(required=False, type='bool', default=False)
-                         )
+            options=dict(
+                src=dict(required=True, type='str'),
+                dest=dict(required=True, type='str'),
+                overwrite=dict(required=False, type='bool', default=False)
+            )
         ),
         fetch=dict(
             type='dict',

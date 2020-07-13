@@ -109,6 +109,7 @@ options:
            - present
            - absent
      type: list
+     elements: dict
    gather_disk_controller_facts:
      description:
      - Whether to collect existing disk and USB controllers facts only.

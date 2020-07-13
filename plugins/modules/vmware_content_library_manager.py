@@ -269,7 +269,7 @@ class VmwareContentLibCreate(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        library_name=dict(type='str', required=False),
+        library_name=dict(type='str', required=True),
         library_description=dict(type='str', required=False),
         library_type=dict(type='str', required=False, choices=['local', 'subscribed'], default='local'),
         datastore_name=dict(type='str', required=False, aliases=['datastore']),

@@ -67,6 +67,7 @@ options:
       - '   ]'
       - Only valid when C(schema) is C(vsphere).
     type: list
+    elements: str
     required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -396,7 +397,7 @@ def main():
         esxi_hostname=dict(type='str', required=False),
         show_tag=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)

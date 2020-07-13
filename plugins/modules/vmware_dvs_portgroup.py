@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
-# Copyright: (c) 2017-2018, Ansible Project
+# Copyright: (c) 2017, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -19,8 +19,7 @@ author:
     - Joseph Callen (@jcpowermac)
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 notes:
-    - Tested on vSphere 5.5
-    - Tested on vSphere 6.5
+    - Tested on vSphere 5.5, 6.5
 requirements:
     - "python >= 2.6"
     - PyVmomi
@@ -73,10 +72,19 @@ options:
     network_policy:
         description:
             - Dictionary which configures the different security values for portgroup.
-            - 'Valid attributes are:'
-            - '- C(promiscuous) (bool): indicates whether promiscuous mode is allowed. (default: false)'
-            - '- C(forged_transmits) (bool): indicates whether forged transmits are allowed. (default: false)'
-            - '- C(mac_changes) (bool): indicates whether mac changes are allowed. (default: false)'
+        suboptions:
+            promiscuous:
+                type: bool
+                description: Indicates whether promiscuous mode is allowed.
+                default: False
+            forged_transmits:
+                type: bool
+                description: Indicates whether forged transmits are allowed.
+                default: False
+            mac_changes:
+                type: bool
+                description: Indicates whether mac changes are allowed.
+                default: False
         required: False
         default: {
             promiscuous: False,
@@ -87,14 +95,34 @@ options:
     teaming_policy:
         description:
             - Dictionary which configures the different teaming values for portgroup.
-            - 'Valid attributes are:'
-            - '- C(load_balance_policy) (string): Network adapter teaming policy. (default: loadbalance_srcid)'
-            - '   - choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, loadbalance_loadbased, failover_explicit]'
-            - '   - "loadbalance_loadbased" is available from version 2.6 and onwards'
-            - '- C(inbound_policy) (bool): Indicate whether or not the teaming policy is applied to inbound frames as well. (default: False)'
-            - '- C(notify_switches) (bool): Indicate whether or not to notify the physical switch if a link fails. (default: True)'
-            - '- C(rolling_order) (bool): Indicate whether or not to use a rolling policy when restoring links. (default: False)'
-        required: False
+        suboptions:
+            load_balance_policy:
+                description:
+                - Network adapter teaming policy.
+                - C(loadbalance_loadbased) is available from version 2.6 and onwards.
+                default: 'loadbalance_srcid'
+                type: str
+                choices:
+                - loadbalance_ip
+                - loadbalance_srcmac
+                - loadbalance_srcid
+                - loadbalance_loadbased
+                - failover_explicit
+            notify_switches:
+                description:
+                - Indicate whether or not to notify the physical switch if a link fails.
+                default: True
+                type: bool
+            inbound_policy:
+                description:
+                - Indicate whether or not the teaming policy is applied to inbound frames as well.
+                type: bool
+                default: False
+            rolling_order:
+                description:
+                - Indicate whether or not to use a rolling policy when restoring links.
+                default: False
+                type: bool
         default: {
             'notify_switches': True,
             'load_balance_policy': 'loadbalance_srcid',
@@ -104,20 +132,64 @@ options:
         type: dict
     port_policy:
         description:
-            - Dictionary which configures the advanced policy settings for the portgroup.
-            - 'Valid attributes are:'
-            - '- C(block_override) (bool): indicates if the block policy can be changed per port. (default: true)'
-            - '- C(ipfix_override) (bool): indicates if the ipfix policy can be changed per port. (default: false)'
-            - '- C(live_port_move) (bool): indicates if a live port can be moved in or out of the portgroup. (default: false)'
-            - '- C(network_rp_override) (bool): indicates if the network resource pool can be changed per port. (default: false)'
-            - '- C(port_config_reset_at_disconnect) (bool): indicates if the configuration of a port is reset automatically after disconnect. (default: true)'
-            - '- C(security_override) (bool): indicates if the security policy can be changed per port. (default: false)'
-            - '- C(shaping_override) (bool): indicates if the shaping policy can be changed per port. (default: false)'
-            - '- C(traffic_filter_override) (bool): indicates if the traffic filter can be changed per port. (default: false)'
-            - '- C(uplink_teaming_override) (bool): indicates if the uplink teaming policy can be changed per port. (default: false)'
-            - '- C(vendor_config_override) (bool): indicates if the vendor config can be changed per port. (default: false)'
-            - '- C(vlan_override) (bool): indicates if the vlan can be changed per port. (default: false)'
-        required: False
+        - Dictionary which configures the advanced policy settings for the portgroup.
+        suboptions:
+            block_override:
+                description:
+                - Indicates if the block policy can be changed per port.
+                default: True
+                type: bool
+            port_config_reset_at_disconnect:
+                description:
+                - Indicates if the configuration of a port is reset automatically after disconnect.
+                default: True
+                type: bool
+                required: False
+            ipfix_override:
+                description:
+                - Indicates if the ipfix policy can be changed per port.
+                default: False
+                type: bool
+            live_port_move:
+                description:
+                - Indicates if a live port can be moved in or out of the portgroup.
+                default: False
+                type: bool
+            network_rp_override:
+                description:
+                - Indicates if the network resource pool can be changed per port.
+                default: False
+                type: bool
+            security_override:
+                description:
+                - Indicates if the security policy can be changed per port.
+                default: False
+                type: bool
+            shaping_override:
+                description:
+                - Indicates if the shaping policy can be changed per port.
+                default: False
+                type: bool
+            traffic_filter_override:
+                description:
+                - Indicates if the traffic filter can be changed per port.
+                default: False
+                type: bool
+            uplink_teaming_override:
+                description:
+                - Indicates if the uplink teaming policy can be changed per port.
+                default: False
+                type: bool
+            vendor_config_override:
+                description:
+                - Indicates if the vendor config can be changed per port.
+                type: bool
+                default: False
+            vlan_override:
+                description:
+                - Indicates if the vlan can be changed per port.
+                type: bool
+                default: False
         default: {
             'traffic_filter_override': False,
             'network_rp_override': False,
@@ -132,7 +204,6 @@ options:
             'ipfix_override': False
         }
         type: dict
-
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

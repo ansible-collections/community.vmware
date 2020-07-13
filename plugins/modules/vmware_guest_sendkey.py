@@ -82,6 +82,7 @@ options:
         C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      type: list
+     elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -356,7 +357,7 @@ def main():
         datacenter=dict(type='str'),
         esxi_hostname=dict(type='str'),
         cluster=dict(type='str'),
-        keys_send=dict(type='list', default=[]),
+        keys_send=dict(type='list', default=[], elements='str'),
         string_send=dict(type='str')
     )
 

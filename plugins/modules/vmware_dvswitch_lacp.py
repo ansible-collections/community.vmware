@@ -41,35 +41,48 @@ options:
     link_aggregation_groups:
         description:
             - Can only be used if C(lacp_support) is set to C(enhanced).
-            - 'The following parameters are required:'
-            - '- C(name) (string): Name of the LAG.'
-            - '- C(uplink_number) (int): Number of uplinks. Can 1 to 30.'
-            - '- C(mode) (string): The negotiating state of the uplinks/ports.'
-            - '   - choices: [ active, passive ]'
-            - '- C(load_balancing_mode) (string): Load balancing algorithm.'
-            - '   - Valid attributes are:'
-            - '   - srcTcpUdpPort: Source TCP/UDP port number.'
-            - '   - srcDestIpTcpUdpPortVlan: Source and destination IP, source and destination TCP/UDP port number and VLAN.'
-            - '   - srcIpVlan: Source IP and VLAN.'
-            - '   - srcDestTcpUdpPort: Source and destination TCP/UDP port number.'
-            - '   - srcMac: Source MAC address.'
-            - '   - destIp: Destination IP.'
-            - '   - destMac: Destination MAC address.'
-            - '   - vlan: VLAN only.'
-            - '   - srcDestIp: Source and Destination IP.'
-            - '   - srcIpTcpUdpPortVlan: Source IP, TCP/UDP port number and VLAN.'
-            - '   - srcDestIpTcpUdpPort: Source and destination IP and TCP/UDP port number.'
-            - '   - srcDestMac: Source and destination MAC address.'
-            - '   - destIpTcpUdpPort: Destination IP and TCP/UDP port number.'
-            - '   - srcPortId: Source Virtual Port Id.'
-            - '   - srcIp: Source IP.'
-            - '   - srcIpTcpUdpPort: Source IP and TCP/UDP port number.'
-            - '   - destIpTcpUdpPortVlan: Destination IP, TCP/UDP port number and VLAN.'
-            - '   - destTcpUdpPort: Destination TCP/UDP port number.'
-            - '   - destIpVlan: Destination IP and VLAN.'
-            - '   - srcDestIpVlan: Source and destination IP and VLAN.'
-            - '   - The default load balancing mode in the vSphere Client is srcDestIpTcpUdpPortVlan.'
-            - Please see examples for more information.
+        suboptions:
+            name:
+                type: str
+                description: Name of the LAG.
+            uplink_number:
+                type: int
+                description:
+                - Number of uplinks.
+                - Can 1 to 30.
+            mode:
+                type: str
+                description:
+                - The negotiating state of the uplinks/ports.
+                choices: [ active, passive ]
+            load_balancing_mode:
+                type: str
+                description:
+                - Load balancing algorithm.
+                - Valid values are as follows
+                - '- srcTcpUdpPort: Source TCP/UDP port number.'
+                - '- srcDestIpTcpUdpPortVlan: Source and destination IP, source and destination TCP/UDP port number and VLAN.'
+                - '- srcIpVlan: Source IP and VLAN.'
+                - '- srcDestTcpUdpPort: Source and destination TCP/UDP port number.'
+                - '- srcMac: Source MAC address.'
+                - '- destIp: Destination IP.'
+                - '- destMac: Destination MAC address.'
+                - '- vlan: VLAN only.'
+                - '- srcDestIp: Source and Destination IP.'
+                - '- srcIpTcpUdpPortVlan: Source IP, TCP/UDP port number and VLAN.'
+                - '- srcDestIpTcpUdpPort: Source and destination IP and TCP/UDP port number.'
+                - '- srcDestMac: Source and destination MAC address.'
+                - '- destIpTcpUdpPort: Destination IP and TCP/UDP port number.'
+                - '- srcPortId: Source Virtual Port Id.'
+                - '- srcIp: Source IP.'
+                - '- srcIpTcpUdpPort: Source IP and TCP/UDP port number.'
+                - '- destIpTcpUdpPortVlan: Destination IP, TCP/UDP port number and VLAN.'
+                - '- destTcpUdpPort: Destination TCP/UDP port number.'
+                - '- destIpVlan: Destination IP and VLAN.'
+                - '- srcDestIpVlan: Source and destination IP and VLAN.'
+                - Please see examples for more information.
+                default: 'srcDestIpTcpUdpPortVlan'
+        elements: dict
         type: list
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -398,7 +411,7 @@ def main():
         dict(
             switch=dict(required=True, aliases=['dvswitch']),
             support_mode=dict(default='basic', choices=['basic', 'enhanced']),
-            link_aggregation_groups=dict(default=[], type='list'),
+            link_aggregation_groups=dict(default=[], type='list', elements='dict'),
         )
     )
 

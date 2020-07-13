@@ -49,6 +49,7 @@ options:
      - List of the boot devices.
      default: []
      type: list
+     elements: str
    name_match:
      description:
      - If multiple virtual machines matching the name, use the first or last found.
@@ -361,6 +362,7 @@ def main():
         boot_order=dict(
             type='list',
             default=[],
+            elements='str',
         ),
         name_match=dict(
             choices=['first', 'last'],

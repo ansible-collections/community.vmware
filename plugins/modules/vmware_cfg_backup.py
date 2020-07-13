@@ -47,6 +47,7 @@ options:
             - If C(loaded), the backup file in I(src) will be loaded to the ESXi host rewriting the hosts settings.
         choices: [saved, absent, loaded]
         type: str
+        required: True
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

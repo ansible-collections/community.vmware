@@ -42,6 +42,7 @@ options:
     - This accepts a list of NTP servers. For multiple servers, please look at the examples.
     type: list
     required: True
+    elements: str
   state:
     description:
     - "present: Add NTP server(s), if specified server(s) are absent else do nothing."
@@ -365,7 +366,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        ntp_servers=dict(type='list', required=True),
+        ntp_servers=dict(type='list', required=True, elements='str'),
         state=dict(type='str', choices=['absent', 'present']),
         verbose=dict(type='bool', default=False, required=False)
     )
