@@ -17,7 +17,6 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(vmware_drs_group_info) module.
   alternative: Use M(vmware_drs_group_info) instead.
@@ -44,7 +43,6 @@ options:
       - datacenter_name
     description:
       - "Datacenter to search for DRS VM/Host groups."
-    required: true
     type: str
 requirements:
   - "python >= 2.6"

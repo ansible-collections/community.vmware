@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vswitch
 short_description: Manage a VMware Standard Switch to an ESXi host.
@@ -39,6 +39,7 @@ options:
     aliases: [ nic_name ]
     default: []
     type: list
+    elements: str
   number_of_ports:
     description:
     - Number of port to configure on vSwitch.
@@ -65,7 +66,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add a VMware vSwitch
   community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
@@ -109,7 +110,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r"""
 result:
     description: information about performed operation
     returned: always
@@ -389,7 +390,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
         switch=dict(type='str', required=True, aliases=['switch_name']),
-        nics=dict(type='list', aliases=['nic_name'], default=[]),
+        nics=dict(type='list', aliases=['nic_name'], default=[], elements='str'),
         number_of_ports=dict(type='int', default=128),
         mtu=dict(type='int', default=1500),
         state=dict(type='str', default='present', choices=['absent', 'present'])),

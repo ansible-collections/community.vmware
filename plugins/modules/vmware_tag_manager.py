@@ -35,6 +35,7 @@ options:
       - User can skip category name if you have unique tag names.
       required: True
       type: list
+      elements: raw
     state:
       description:
       - If C(state) is set to C(add) or C(present) will add the tags to the existing tag list of the given object.
@@ -320,7 +321,7 @@ class VmwareTagManager(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        tag_names=dict(type='list', required=True),
+        tag_names=dict(type='list', required=True, elements='raw'),
         state=dict(type='str', choices=['absent', 'add', 'present', 'remove', 'set'], default='add'),
         object_name=dict(type='str', required=True),
         object_type=dict(type='str', required=True, choices=['VirtualMachine', 'Datacenter', 'ClusterComputeResource',

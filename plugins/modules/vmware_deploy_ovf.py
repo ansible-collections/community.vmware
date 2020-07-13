@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 author: 'Matt Martz (@sivel)'
 short_description: 'Deploys a VMware virtual machine from an OVF or OVA file'
 description:
@@ -96,6 +96,7 @@ options:
         - 'Path to OVF or OVA file to deploy.'
         aliases:
             - ova
+        type: path
     power_on:
         default: true
         description:
@@ -646,7 +647,7 @@ def main():
             'type': 'dict',
         },
         'ovf': {
-            'type': path_exists,
+            'type': 'path',
             'aliases': ['ova'],
         },
         'disk_provisioning': {
