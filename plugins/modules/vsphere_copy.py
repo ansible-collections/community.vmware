@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vsphere_copy
 short_description: Copy a file to a VMware datastore
@@ -26,6 +26,7 @@ options:
       - The file to push to vCenter.
     required: true
     type: str
+    aliases: [ name ]
   datacenter:
     description:
       - The datacenter on the vCenter server that holds the datastore.
@@ -41,6 +42,7 @@ options:
       - The file to push to the datastore.
     required: true
     type: str
+    aliases: [ dest ]
   timeout:
     description:
       - The timeout in seconds for the upload to the datastore.
