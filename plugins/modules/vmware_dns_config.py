@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dns_config
 short_description: Manage VMware ESXi DNS Configuration
@@ -22,9 +22,9 @@ requirements:
     - "python >= 2.6"
     - PyVmomi
 deprecated:
-    removed_in: '2.14'
-    why: Will be replaced with new module vmware_host_dns.
-    alternative: Use M(vmware_host_dns) instead.
+    removed_at_date: '2022-06-01'
+    why: Will be replaced with new module M(community.vmware.vmware_host_dns).
+    alternative: Use M(community.vmware.vmware_host_dns) instead.
 options:
     change_hostname_to:
         description:
@@ -41,12 +41,13 @@ options:
             - The DNS servers that the host should be configured to use.
         required: True
         type: list
+        elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Configure ESXi hostname and DNS servers
   community.vmware.vmware_dns_config:
     hostname: '{{ esxi_hostname }}'
@@ -59,6 +60,7 @@ EXAMPLES = '''
         - 8.8.4.4
   delegate_to: localhost
 '''
+
 try:
     from pyVmomi import vim, vmodl
     HAS_PYVMOMI = True
@@ -98,7 +100,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(change_hostname_to=dict(required=True, type='str'),
                               domainname=dict(required=True, type='str'),
-                              dns_servers=dict(required=True, type='list')))
+                              dns_servers=dict(required=True, type='list', elements='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
 
