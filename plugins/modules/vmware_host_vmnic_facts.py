@@ -21,8 +21,8 @@ module: vmware_host_vmnic_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_host_vmnic_info) module.
-  alternative: Use M(vmware_host_vmnic_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_host_vmnic_info) module.
+  alternative: Use M(community.vmware.vmware_host_vmnic_info) instead.
 short_description: Gathers facts about vmnics available on the given ESXi host
 description:
 - This module can be used to gather facts about vmnics available on the given ESXi host.

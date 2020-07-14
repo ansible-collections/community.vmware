@@ -33,7 +33,7 @@ options:
     manifests:
       description:
         - Logs to include in the logbundle file.
-        - Refer to the id key of the M(vmware_host_logbundle_info) module for values that can be specified in the manifest.
+        - Refer to the id key of the M(community.vmware.vmware_host_logbundle_info) module for values that can be specified in the manifest.
       default:
         - System:Base
         - System:CoreDumps

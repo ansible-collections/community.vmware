@@ -19,8 +19,8 @@ module: vmware_target_canonical_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_target_canonical_info) module.
-  alternative: Use M(vmware_target_canonical_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_target_canonical_info) module.
+  alternative: Use M(community.vmware.vmware_target_canonical_info) instead.
 short_description: Return canonical (NAA) from an ESXi host system
 description:
     - This module can be used to gather facts about canonical (NAA) from an ESXi host based on SCSI target ID.

@@ -21,8 +21,8 @@ module: vmware_local_user_facts
 deprecated:
   removed_in: '2.13'
   removed_at_date: '2021-12-01'
-  why: Deprecated in favour of M(vmware_local_user_info) module.
-  alternative: Use M(vmware_local_user_info) instead.
+  why: Deprecated in favour of M(community.vmware.vmware_local_user_info) module.
+  alternative: Use M(community.vmware.vmware_local_user_info) instead.
 short_description: Gather facts about users on the given ESXi host
 description:
     - This module can be used to gather facts about users present on the given ESXi host system in VMware infrastructure.
