@@ -55,4 +55,3 @@ plugins/modules/vmware_vspan_session.py validate-modules:missing-suboption-docs
 plugins/modules/vmware_vspan_session.py validate-modules:parameter-type-not-in-doc
 plugins/modules/vmware_vspan_session.py validate-modules:undocumented-parameter
 plugins/modules/vmware_vswitch.py validate-modules:parameter-list-no-elements
-plugins/modules/vsphere_copy.py validate-modules:undocumented-parameter
