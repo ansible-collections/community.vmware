@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vspan_session
 short_description: Create or remove a Port Mirroring session.
@@ -52,14 +52,14 @@ options:
             - 'dvPortMirror'
         description:
             - Select the mirroring type.
-            - '- C(encapsulatedRemoteMirrorSource) (str): In encapsulatedRemoteMirrorSource session, Distributed Ports
-            can be used as source entities, and Ip address can be used as destination entities.'
-            - '- C(remoteMirrorDest) (str): In remoteMirrorDest session, vlan Ids can be used as source entities, and
-            Distributed Ports can be used as destination entities.'
-            - '- C(remoteMirrorSource) (str): In remoteMirrorSource session, Distributed Ports can be used as source
-            entities, and uplink ports name can be used as destination entities.'
-            - '- C(dvPortMirror) (str): In dvPortMirror session, Distributed Ports can be used as both source and
-            destination entities.'
+            - In C(encapsulatedRemoteMirrorSource) session, Distributed Ports can be used as source entities,
+              and IP address can be used as destination entities.
+            - In C(remoteMirrorDest) session, VLAN IDs can be used as source entities, and
+              Distributed Ports can be used as destination entities.
+            - In C(remoteMirrorSource) session, Distributed Ports can be used as source
+              entities, and uplink ports name can be used as destination entities.
+            - In C(dvPortMirror) session, Distributed Ports can be used as both source and
+              destination entities.
         required: False
         type: str
     enabled:
@@ -84,8 +84,9 @@ options:
         type: str
     destination_port:
         description:
-            - Destination port that received the mirrored packets. Also any port designated in the value of this
-             property can not match the source port in any of the Distributed Port Mirroring session.
+            - Destination port that received the mirrored packets.
+            - Also any port designated in the value of this
+              property can not match the source port in any of the Distributed Port Mirroring session.
         required: False
         type: str
     encapsulation_vlan_id:
@@ -95,50 +96,71 @@ options:
         type: int
     strip_original_vlan:
         description:
-            - Whether to strip the original VLAN tag. if false, the original VLAN tag will be preserved on the mirrored
-             traffic. If encapsulationVlanId has been set and this property is false, the frames will be double tagged
-             with the original VLAN ID as the inner tag.
+            - Whether to strip the original VLAN tag.
+            - If false, the original VLAN tag will be preserved on the mirrored traffic.
+            - If C(encapsulationVlanId) has been set and this property is false, the frames will be double tagged
+              with the original VLAN ID as the inner tag.
         type: bool
         required: False
     mirrored_packet_length:
         description:
-            - An integer that describes how much of each frame to mirror. If unset, all of the frame would be mirrored.
-             Setting this property to a smaller value is useful when the consumer will look only at the headers.
-             The value cannot be less than 60.
+            - An integer that describes how much of each frame to mirror.
+            - If unset, all of the frame would be mirrored.
+            - Setting this property to a smaller value is useful when the consumer will look only at the headers.
+            - The value cannot be less than 60.
         required: False
         type: int
     normal_traffic_allowed:
         description:
-            - Whether or not destination ports can send and receive "normal" traffic. Setting this to false will make
-             mirror ports be used solely for mirroring and not double as normal access ports.
+            - Whether or not destination ports can send and receive "normal" traffic.
+            - Setting this to false will make mirror ports be used solely for mirroring and not double as normal access ports.
         type: bool
         required: False
     sampling_rate:
         description:
-            - Sampling rate of the session. If its value is n, one of every n packets is mirrored.
-             Valid values are between 1 to 65535, and default value is 1.
+            - Sampling rate of the session.
+            - If its value is n, one of every n packets is mirrored.
+            - Valid values are between 1 to 65535.
         type: int
         required: False
     source_vm_transmitted:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         type: dict
     source_vm_received:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         type: dict
     destination_vm:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         required: False
         type: dict
 extends_documentation_fragment:
@@ -146,7 +168,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create distributed mirroring session.
   community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
@@ -188,7 +210,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """#
+RETURN = r"""#
 """
 
 try:
@@ -600,10 +622,16 @@ def main():
         switch=dict(type='str', required=True, aliases=['switch_name']),
         name=dict(type='str', required=True),
         state=dict(type='str', required=True, choices=['present', 'absent']),
-        session_type=dict(type='str', default='dvPortMirror', choices=['dvPortMirror',
-                                                                       'encapsulatedRemoteMirrorSource',
-                                                                       'remoteMirrorDest',
-                                                                       'remoteMirrorSource']),
+        session_type=dict(
+            type='str',
+            default='dvPortMirror',
+            choices=[
+                'dvPortMirror',
+                'encapsulatedRemoteMirrorSource',
+                'remoteMirrorDest',
+                'remoteMirrorSource'
+            ]
+        ),
         enabled=dict(type='bool', default=True),
         description=dict(type='str'),
         source_port_transmitted=dict(type='str'),
@@ -614,18 +642,27 @@ def main():
         mirrored_packet_length=dict(type='int'),
         normal_traffic_allowed=dict(type='bool'),
         sampling_rate=dict(type='int'),
-        source_vm_transmitted=dict(type='dict',
-                                   options=dict(
-                                       name=dict(type='str'),
-                                       nic_label=dict(type='str'))),
-        source_vm_received=dict(type='dict',
-                                options=dict(
-                                    name=dict(type='str'),
-                                    nic_label=dict(type='str'))),
-        destination_vm=dict(type='dict',
-                            options=dict(
-                                name=dict(type='str'),
-                                nic_label=dict(type='str'))),
+        source_vm_transmitted=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
+        source_vm_received=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
+        destination_vm=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
     ))
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
     session = VMwareVspanSession(module)

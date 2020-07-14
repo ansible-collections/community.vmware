@@ -79,6 +79,7 @@ options:
       - Use C(drs_default_vm_behavior) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       default: fullyAutomated
+      type: str
       choices: [ fullyAutomated, manual, partiallyAutomated ]
     drs_vmotion_rate:
       description:
@@ -87,6 +88,7 @@ options:
       - Deprecated option, will be removed in version 2.12.
       default: 3
       choices: [ 1, 2, 3, 4, 5 ]
+      type: int
     enable_ha:
       description:
       - If set to C(yes) will enable HA when the cluster is created.
@@ -104,6 +106,7 @@ options:
       - Deprecated option, will be removed in version 2.12.
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
+      type: str
     ha_vm_monitoring:
       description:
       - Indicates the state of virtual machine health monitoring service.
@@ -115,6 +118,7 @@ options:
       - Deprecated option, will be removed in version 2.12.
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'
+      type: str
     ha_failover_level:
       description:
       - Number of host failures that should be tolerated, still guaranteeing sufficient resources to
@@ -123,6 +127,7 @@ options:
       - Use C(slot_based_admission_control), C(reservation_based_admission_control) or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 2
+      type: int
     ha_admission_control_enabled:
       description:
       - Determines if strict admission control is enabled.
@@ -140,6 +145,7 @@ options:
       - Use C(ha_vm_failure_interval) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 30
+      type: int
     ha_vm_min_up_time:
       description:
       - The number of seconds for the virtual machine's heartbeats to stabilize after
@@ -149,6 +155,7 @@ options:
       - Use C(ha_vm_min_up_time) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 120
+      type: int
     ha_vm_max_failures:
       description:
       - Maximum number of failures and automated resets allowed during the time
@@ -157,6 +164,7 @@ options:
       - Use C(ha_vm_max_failures) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 3
+      type: int
     ha_vm_max_failure_window:
       description:
       - The number of seconds for the window during which up to C(ha_vm_max_failures) resets
@@ -167,6 +175,7 @@ options:
       - Use C(ha_vm_max_failure_window) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: -1
+      type: int
     ha_restart_priority:
       description:
       - Determines the preference that HA gives to a virtual machine if sufficient capacity is not available
@@ -183,6 +192,7 @@ options:
       - Deprecated option, will be removed in version 2.12.
       default: 'medium'
       choices: [ 'disabled', 'high', 'low', 'medium' ]
+      type: str
     enable_vsan:
       description:
       - If set to C(yes) will enable vSAN when the cluster is created.
@@ -203,6 +213,7 @@ options:
       - Create C(present) or remove C(absent) a VMware vSphere cluster.
       choices: [ absent, present ]
       default: present
+      type: str
 seealso:
 - module: community.vmware.vmware_cluster_drs
 - module: community.vmware.vmware_cluster_ha
@@ -563,38 +574,38 @@ def main():
                    choices=['absent', 'present']),
         # DRS
         ignore_drs=dict(type='bool', default=False),
-        enable_drs=dict(type='bool', default=False),
-        drs_enable_vm_behavior_overrides=dict(type='bool', default=True),
-        drs_default_vm_behavior=dict(type='str',
+        enable_drs=dict(type='bool', removed_from_collection='ansible.builtin', removed_in_version='2.12', default=False),
+        drs_enable_vm_behavior_overrides=dict(type='bool', removed_from_collection='ansible.builtin', removed_in_version='2.12', default=True),
+        drs_default_vm_behavior=dict(type='str', removed_from_collection='ansible.builtin', removed_in_version='2.12',
                                      choices=['fullyAutomated', 'manual', 'partiallyAutomated'],
                                      default='fullyAutomated'),
-        drs_vmotion_rate=dict(type='int',
+        drs_vmotion_rate=dict(type='int', removed_from_collection='ansible.builtin', removed_in_version='2.12',
                               choices=[1, 2, 3, 4, 5],
                               default=3),
         # HA
         ignore_ha=dict(type='bool', default=False),
-        enable_ha=dict(type='bool', default=False),
-        ha_failover_level=dict(type='int', default=2),
-        ha_host_monitoring=dict(type='str',
+        enable_ha=dict(type='bool', default=False, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_failover_level=dict(type='int', default=2, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_host_monitoring=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                                 default='enabled',
                                 choices=['enabled', 'disabled']),
         # HA VM Monitoring related parameters
-        ha_vm_monitoring=dict(type='str',
+        ha_vm_monitoring=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                               choices=['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled'],
                               default='vmMonitoringDisabled'),
-        ha_vm_failure_interval=dict(type='int', default=30),
-        ha_vm_min_up_time=dict(type='int', default=120),
-        ha_vm_max_failures=dict(type='int', default=3),
-        ha_vm_max_failure_window=dict(type='int', default=-1),
+        ha_vm_failure_interval=dict(type='int', default=30, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_min_up_time=dict(type='int', default=120, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_max_failures=dict(type='int', default=3, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_max_failure_window=dict(type='int', default=-1, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
 
-        ha_restart_priority=dict(type='str',
+        ha_restart_priority=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                                  choices=['high', 'low', 'medium', 'disabled'],
                                  default='medium'),
-        ha_admission_control_enabled=dict(type='bool', default=True),
+        ha_admission_control_enabled=dict(type='bool', default=True, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
         # VSAN
         ignore_vsan=dict(type='bool', default=False),
-        enable_vsan=dict(type='bool', default=False),
-        vsan_auto_claim_storage=dict(type='bool', default=False),
+        enable_vsan=dict(type='bool', default=False, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
+        vsan_auto_claim_storage=dict(type='bool', default=False, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
     ))
 
     module = AnsibleModule(

@@ -55,7 +55,6 @@ options:
     description:
       - "Name of Host group to use with rule."
       - "Effective only if C(state) is set to C(present)."
-    required: true
     type: str
   mandatory:
     default: false
@@ -69,15 +68,13 @@ options:
       - absent
     default: present
     description:
-      - "If set to C(present) and the rule doesn't exists then the rule will be created."
+      - "If set to C(present) and the rule does not exist then the rule will be created."
       - "If set to C(absent) and the rule exists then the rule will be deleted."
-    required: true
     type: str
   vm_group_name:
     description:
       - "Name of VM group to use with rule."
       - "Effective only if C(state) is set to C(present)."
-    required: true
     type: str
 requirements:
   - "python >= 2.6"
@@ -419,8 +416,8 @@ def main():
 
     argument_spec.update(dict(
         state=dict(type='str', default='present', choices=['absent', 'present']),
-        vm_group_name=dict(type='str', required=True),
-        host_group_name=dict(type='str', required=True),
+        vm_group_name=dict(type='str'),
+        host_group_name=dict(type='str'),
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=False, aliases=['datacenter_name']),
         drs_rule_name=dict(type='str', required=True),
@@ -430,7 +427,7 @@ def main():
     )
 
     required_if = [
-        ['state', 'present', ['vm_group_name'], ['host_group_name']],
+        ['state', 'present', ['vm_group_name', 'host_group_name']],
     ]
 
     module = AnsibleModule(argument_spec=argument_spec,

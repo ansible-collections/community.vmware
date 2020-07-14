@@ -87,6 +87,7 @@ options:
       description:
       - Comma separated list of environment variable, specified in the guest OS notation.
       type: list
+      elements: str
     vm_shell_cwd:
       description:
       - The current working directory of the application from which it will be run.
@@ -342,7 +343,7 @@ def main():
             vm_password=dict(type='str', no_log=True, required=True),
             vm_shell=dict(type='str', required=True),
             vm_shell_args=dict(default=" ", type='str'),
-            vm_shell_env=dict(type='list'),
+            vm_shell_env=dict(type='list', elements='str'),
             vm_shell_cwd=dict(type='str'),
             wait_for_process=dict(type='bool', default=False),
             timeout=dict(type='int', default=3600),
