@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vcenter_statistics
 short_description: Configures statistics on a vCenter server
@@ -27,38 +27,98 @@ options:
     interval_past_day:
         description:
             - Settings for vCenter server past day statistic collection.
-            - 'Valid attributes are:'
-            - '- C(enabled) (bool): Past day statistics collection enabled. (default: True)'
-            - '- C(interval_minutes) (int): Interval duration (minutes). (choices: [1, 2, 3, 4, 5]) (default: 5)'
-            - '- C(save_for_days) (int): Save for (days). (choices: [1, 2, 3, 4, 5]) (default: 1)'
-            - '- C(level) (int): Statistics level. (choices: [1, 2, 3, 4]) (default: 1)'
+        suboptions:
+            enabled:
+                type: bool
+                description: Past day statistics collection enabled.
+                default: True
+            interval_minutes:
+                type: int
+                description: Interval duration in minutes.
+                choices: [ 1, 2, 3, 4, 5 ]
+                default: 5
+            save_for_days:
+                type: int
+                description: Save for value in days.
+                choices: [ 1, 2, 3, 4, 5 ]
+                default: 1
+            level:
+                type: int
+                description: Statistics level.
+                choices: [ 1, 2, 3, 4 ]
+                default: 1
         type: dict
     interval_past_week:
         description:
             - Settings for vCenter server past week statistic collection.
-            - 'Valid attributes are:'
-            - '- C(enabled) (bool): Past week statistics collection enabled. (default: True)'
-            - '- C(interval_minutes) (int): Interval duration (minutes). (choices: [30]) (default: 30)'
-            - '- C(save_for_weeks) (int): Save for (weeks). (choices: [1]) (default: 1)'
-            - '- C(level) (int): Statistics level. (choices: [1, 2, 3, 4]) (default: 1)'
+        suboptions:
+            enabled:
+                type: bool
+                description: Past week statistics collection enabled.
+                default: True
+            interval_minutes:
+                type: int
+                description: Interval duration in minutes.
+                choices: [ 30 ]
+                default: 30
+            save_for_weeks:
+                type: int
+                description: Save for value in weeks.
+                choices: [ 1 ]
+                default: 1
+            level:
+                type: int
+                description: Statistics level.
+                choices: [ 1, 2, 3, 4 ]
+                default: 1
         type: dict
     interval_past_month:
         description:
             - Settings for vCenter server past month statistic collection.
-            - 'Valid attributes are:'
-            - '- C(enabled) (bool): Past month statistics collection enabled. (default: True)'
-            - '- C(interval_hours) (int): Interval duration (hours). (choices: [2]) (default: 2)'
-            - '- C(save_for_months) (int): Save for (months). (choices: [1]) (default: 1)'
-            - '- C(level) (int): Statistics level. (choices: [1, 2, 3, 4]) (default: 1)'
+        suboptions:
+            enabled:
+                type: bool
+                description: Past month statistics collection enabled.
+                default: True
+            interval_hours:
+                type: int
+                description: Interval duration in hours.
+                choices: [ 2 ]
+                default: 2
+            save_for_months:
+                type: int
+                description: Save for value in months.
+                choices: [ 1 ]
+                default: 1
+            level:
+                type: int
+                description: Statistics level.
+                choices: [ 1, 2, 3, 4 ]
+                default: 1
         type: dict
     interval_past_year:
         description:
             - Settings for vCenter server past month statistic collection.
-            - 'Valid attributes are:'
-            - '- C(enabled) (bool): Past month statistics collection enabled. (default: True)'
-            - '- C(interval_days) (int): Interval duration (days). (choices: [1]) (default: 1)'
-            - '- C(save_for_years) (int): Save for (years). (choices: [1, 2, 3, 4, 5]) (default: 1)'
-            - '- C(level) (int): Statistics level. (choices: [1, 2, 3, 4]) (default: 1)'
+        suboptions:
+            enabled:
+                type: bool
+                description: Past month statistics collection enabled.
+                default: True
+            interval_days:
+                type: int
+                description: Interval duration in days.
+                choices: [ 1 ]
+                default: 1
+            save_for_years:
+                type: int
+                description: Save for value in years.
+                choices: [ 1, 2, 3, 4, 5 ]
+                default: 1
+            level:
+                type: int
+                description: Statistics level.
+                choices: [ 1, 2, 3, 4 ]
+                default: 1
         type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
