@@ -155,6 +155,10 @@ plugin_routing:
       deprecation:
         removal_date: 2021-12-01
         warning_text: see plugin documentation for details
+    vmware_dns_config:
+      deprecation:
+        removal_date: 2022-06-01
+        warning_text: see plugin documentation for details
     vmware_drs_group_facts:
       deprecation:
         removal_date: 2021-12-01
