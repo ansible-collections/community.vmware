@@ -11,7 +11,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel
 short_description: Manages a VMware VMkernel Adapter of an ESXi host.
@@ -57,15 +57,32 @@ options:
     network:
       description:
       - A dictionary of network details.
-      - 'The following parameter is required:'
-      - ' - C(type) (string): Type of IP assignment (either C(dhcp) or C(static)).'
-      - 'The following parameters are required in case of C(type) is set to C(static):'
-      - ' - C(ip_address) (string): Static IP address (implies C(type: static)).'
-      - ' - C(subnet_mask) (string): Static netmask required for C(ip_address).'
-      - 'The following parameter is optional in case of C(type) is set to C(static):'
-      - ' - C(default_gateway) (string): Default gateway (Override default gateway for this adapter).'
-      - 'The following parameter is optional:'
-      - ' - C(tcpip_stack) (string): The TCP/IP stack for the VMKernel interface. Can be default, provisioning, vmotion, or vxlan. (default: default)'
+      suboptions:
+        type:
+            type: str
+            description:
+            - Type of IP assignment.
+            choices: [ 'static', 'dhcp' ]
+            default: 'static'
+        ip_address:
+            type: str
+            description:
+            - Static IP address.
+            - Required if C(type) is set to C(static).
+        subnet_mask:
+            type: str
+            description:
+            - Static netmask required.
+            - Required if C(type) is set to C(static).
+        default_gateway:
+            type: str
+            description: Default gateway (Override default gateway for this adapter).
+        tcpip_stack:
+            type: str
+            description:
+            - The TCP/IP stack for the VMKernel interface.
+            choices: [ 'default', 'provisioning', 'vmotion', 'vxlan' ]
+            default: 'default'
       type: dict
       default: {
           type: 'static',
@@ -137,7 +154,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 -  name: Add Management vmkernel port using static network type
    community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
@@ -1064,13 +1081,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            mutually_exclusive=[
                                ['vswitch_name', 'dvswitch_name'],
-                               ['tcpip_stack', 'enable_vsan'],
-                               ['tcpip_stack', 'enable_vmotion'],
-                               ['tcpip_stack', 'enable_mgmt'],
-                               ['tcpip_stack', 'enable_ft'],
-                               ['tcpip_stack', 'enable_provisioning'],
-                               ['tcpip_stack', 'enable_replication'],
-                               ['tcpip_stack', 'enable_replication_nfc'],
                            ],
                            required_one_of=[
                                ['vswitch_name', 'dvswitch_name'],
