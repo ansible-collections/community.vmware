@@ -1285,18 +1285,28 @@ class PyVmomiHelper(PyVmomi):
                     if cdrom_spec['type'] == 'iso' and not cdrom_spec.get('iso_path'):
                         self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
 
-                if cdrom_spec['controller_type'] == 'ide' and \
-                        (cdrom_spec.get('controller_number') not in [0, 1] or cdrom_spec.get('unit_number') not in [0, 1]):
+                if 'controller_number' not in cdrom_spec or 'unit_number' not in cdrom_spec:
+                    self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' are required"
+                                              " parameters when configure CDROM list.")
+                try:
+                    cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
+                    cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
+                except ValueError:
+                    self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' attributes should be "
+                                              "integer values.")
+
+                if cdrom_spec['controller_type'] == 'ide' and (cdrom_ctl_num not in [0, 1] or cdrom_ctl_unit_num not in [0, 1]):
                     self.module.fail_json(msg="Invalid cdrom.controller_number: %s or cdrom.unit_number: %s, valid"
                                               " values are 0 or 1 for IDE controller."
                                               % (cdrom_spec.get('controller_number'), cdrom_spec.get('unit_number')))
 
-                if cdrom_spec['controller_type'] == 'sata' and \
-                        (cdrom_spec.get('controller_number') not in range(0, 4) or cdrom_spec.get('unit_number') not in range(0, 30)):
+                if cdrom_spec['controller_type'] == 'sata' and (cdrom_ctl_num not in range(0, 4) or cdrom_ctl_unit_num not in range(0, 30)):
                     self.module.fail_json(msg="Invalid cdrom.controller_number: %s or cdrom.unit_number: %s,"
                                               " valid controller_number value is 0-3, valid unit_number is 0-29"
                                               " for SATA controller." % (cdrom_spec.get('controller_number'),
                                                                          cdrom_spec.get('unit_number')))
+                cdrom_spec['controller_number'] = cdrom_ctl_num
+                cdrom_spec['unit_number'] = cdrom_ctl_unit_num
 
                 ctl_exist = False
                 for exist_spec in cdrom_specs:
@@ -2191,8 +2201,11 @@ class PyVmomiHelper(PyVmomi):
                                           " mandatory parameters when configure multiple disk controllers and disks.")
             try:
                 ctl_num = int(disk_spec['controller_number'])
+                ctl_unit_num = int(disk_spec['unit_number'])
             except ValueError:
-                self.module.fail_json(msg="Failed to parse 'disk.controller_number' value, valid type is integer.")
+                self.module.fail_json(msg="'disk.controller_number' and 'disk.unit_number' attributes should be integer"
+                                          " values.")
+            disk_spec['unit_number'] = ctl_unit_num
             ctl_type = disk_spec['controller_type'].lower()
             # max number of same type disk controller is 4
             if ctl_num > 3:

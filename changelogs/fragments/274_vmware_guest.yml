@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_guest - cdrom.controller_number, cdrom.unit_number are handled as integer. (https://github.com/ansible-collections/vmware/issues/274).
