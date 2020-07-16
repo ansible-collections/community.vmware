@@ -44,44 +44,45 @@ options:
   state:
     description:
     - Specify the state the virtual machine should be in.
-    - 'If C(state) is set to C(present) and virtual machine exists, ensure the virtual machine
-       configurations conforms to task arguments.'
-    - 'If C(state) is set to C(absent) and virtual machine exists, then the specified virtual machine
-      is removed with its associated components.'
-    - 'If C(state) is set to one of the following C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
-      C(present), C(restarted), C(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.'
-    - 'If C(state) is set to C(poweredon) or C(powered-on) and virtual machine exists with powerstate other than powered on,
-      then the specified virtual machine is powered on.'
-    - 'If C(state) is set to C(poweredoff) or C(powered-off) and virtual machine exists with powerstate other than powered off,
-      then the specified virtual machine is powered off.'
-    - 'If C(state) is set to C(restarted) and virtual machine exists, then the virtual machine is restarted.'
-    - 'If C(state) is set to C(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.'
-    - 'If C(state) is set to C(shutdownguest) or C(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.'
-    - 'If C(state) is set to C(rebootguest) or C(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.'
-    - 'Powerstate C(powered-on) and C(powered-off) is added in version 2.10.'
+    - If C(state) is set to C(present) and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.
+    - If C(state) is set to C(absent) and virtual machine exists, then the specified virtual machine is removed with it's associated components.
+    - If C(state) is set to one of the following C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
+      C(present), C(restarted), C(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.
+    - If C(state) is set to C(poweredon) or C(powered-on) and virtual machine exists with powerstate other than powered on,
+      then the specified virtual machine is powered on.
+    - If C(state) is set to C(poweredoff) or C(powered-off) and virtual machine exists with powerstate other than powered off,
+      then the specified virtual machine is powered off.
+    - If C(state) is set to C(restarted) and virtual machine exists, then the virtual machine is restarted.
+    - If C(state) is set to C(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.
+    - If C(state) is set to C(shutdownguest) or C(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.
+    - If C(state) is set to C(rebootguest) or C(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.
+    - Powerstate C(powered-on) and C(powered-off) is added in version 2.10.
     default: present
+    type: str
     choices: [ absent, poweredon, powered-on, poweredoff, powered-off, present, rebootguest, reboot-guest, restarted, suspended, shutdownguest, shutdown-guest]
   name:
     description:
     - Name of the virtual machine to work with.
     - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see C(name_match).
-    - 'If multiple virtual machines with same name exists, then C(folder) is required parameter to
-       identify uniqueness of the virtual machine.'
+    - If multiple virtual machines with same name exists, then C(folder) is required parameter to
+      identify uniqueness of the virtual machine.
     - This parameter is required, if C(state) is set to C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
       C(present), C(restarted), C(suspended) and virtual machine does not exists.
     - This parameter is case sensitive.
-    required: yes
+    type: str
   name_match:
     description:
     - If multiple virtual machines matching the name, use the first or last found.
     default: 'first'
     choices: [ first, last ]
+    type: str
   uuid:
     description:
     - UUID of the virtual machine to manage if known, this is VMware's unique identifier.
     - This is required if C(name) is not supplied.
     - If virtual machine does not exists, then this parameter is ignored.
     - Please note that a supplied UUID will be ignored on virtual machine creation, as VMware creates the UUID internally.
+    type: str
   use_instance_uuid:
     description:
     - Whether to use the VMware instance UUID rather than the BIOS UUID.
@@ -95,6 +96,7 @@ options:
     - This parameter is case sensitive.
     - From version 2.8 onwards, absolute path to virtual machine or template can be used.
     aliases: [ 'template_src' ]
+    type: str
   is_template:
     description:
     - Flag the instance as a template.
@@ -104,7 +106,7 @@ options:
   folder:
     description:
     - Destination folder, absolute path to find an existing guest or create the new guest.
-    - "The folder should include the datacenter. ESX's datacenter is ha-datacenter."
+    - "The folder should include the datacenter. ESXi's datacenter is ha-datacenter."
     - This parameter is case sensitive.
     - 'If multiple machines are found with same name, this parameter is used to identify'
     - 'Examples:'
@@ -117,41 +119,88 @@ options:
     - '   folder: /folder1/datacenter1/vm'
     - '   folder: folder1/datacenter1/vm'
     - '   folder: /folder1/datacenter1/vm/folder2'
+    type: str
   hardware:
+    type: dict
     description:
     - "Manage virtual machine's hardware attributes."
     - All parameters case sensitive.
-    - 'Valid attributes are:'
-    - ' - C(hotadd_cpu) (boolean): Allow virtual CPUs to be added while the virtual machine is running.'
-    - ' - C(hotremove_cpu) (boolean): Allow virtual CPUs to be removed while the virtual machine is running.'
-    - ' - C(hotadd_memory) (boolean): Allow memory to be added while the virtual machine is running.'
-    - ' - C(memory_mb) (integer): Amount of memory in MB.'
-    - ' - C(num_cpus) (integer): Number of CPUs. C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).'
-    - '    For example to create a VM with 2 sockets of 4 cores, specify C(num_cpus): 8 and C(num_cpu_cores_per_socket): 4'
-    - ' - C(num_cpu_cores_per_socket) (integer): Number of Cores Per Socket.'
-    - ' - C(scsi) (string): Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual) (default).'
-    - ' - C(memory_reservation_lock) (boolean): If set true, memory resource reservation for the virtual machine'
-    - ' - C(max_connections) (integer): Maximum number of active remote display connections for the virtual machines.'
-    - ' - C(mem_limit) (integer): The memory utilization of a virtual machine will not exceed this limit. Unit is MB.'
-    - ' - C(mem_reservation) (integer): The amount of memory resource that is guaranteed available to the virtual'
-    - ' - C(cpu_limit) (integer): The CPU utilization of a virtual machine will not exceed this limit. Unit is MHz.'
-    - ' - C(cpu_reservation) (integer): The amount of CPU resource that is guaranteed available to the virtual machine.'
-    - ' - C(version) (integer): The Virtual machine hardware versions. Default is 10 (ESXi 5.5 and onwards).'
-    - '      If value specified as C(latest), version is set to the most current virtual hardware supported on the host.'
-    - '      C(latest) is added in version 2.10.'
-    - '      Please check VMware documentation for correct virtual machine hardware version.'
-    - '      Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given'
-    - ' - C(boot_firmware) (string): Choose which firmware should be used to boot the virtual machine.'
-    - ' - C(virt_based_security) (bool): Enable Virtualization Based Security feature for Windows 10.'
-    - '    (Support from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016)'
-
+    suboptions:
+        hotadd_cpu:
+            type: bool
+            description: Allow virtual CPUs to be added while the virtual machine is running.
+        hotremove_cpu:
+            type: bool
+            description: Allow virtual CPUs to be removed while the virtual machine is running.
+        hotadd_memory:
+            type: bool
+            description: Allow memory to be added while the virtual machine is running.
+        memory_mb:
+            type: int
+            description: Amount of memory in MB.
+        num_cpus:
+            type: int
+            description:
+            - Number of CPUs.
+            - C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).
+            - For example, to create a VM with 2 sockets of 4 cores, specify C(num_cpus) as 8 and C(num_cpu_cores_per_socket) as 4.
+        num_cpu_cores_per_socket:
+            type: int
+            description: Number of Cores Per Socket.
+        scsi:
+            type: str
+            description:
+            - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
+            - C(paravirtual) is default.
+        memory_reservation_lock:
+            type: bool
+            description:
+            - If set C(true), memory resource reservation for the virtual machine.
+        max_connections:
+            type: int
+            description:
+            - Maximum number of active remote display connections for the virtual machines.
+        mem_limit:
+            type: int
+            description:
+            - The memory utilization of a virtual machine will not exceed this limit.
+            - Unit is MB.
+        mem_reservation:
+            type: int
+            description: The amount of memory resource that is guaranteed available to the virtual machine.
+        cpu_limit:
+            type: int
+            description:
+            - The CPU utilization of a virtual machine will not exceed this limit.
+            - Unit is MHz.
+        cpu_reservation:
+            type: int
+            description: The amount of CPU resource that is guaranteed available to the virtual machine.
+        version:
+            type: int
+            description:
+            - The Virtual machine hardware versions.
+            - Default is 10 (ESXi 5.5 and onwards).
+            - If value specified as C(latest), version is set to the most current virtual hardware supported on the host.
+            - C(latest) is added in Ansible 2.10.
+            - Please check VMware documentation for correct virtual machine hardware version.
+            - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
+        boot_firmware:
+            type: str
+            description: Choose which firmware should be used to boot the virtual machine.
+        virt_based_security:
+            type: bool
+            description:
+            - Enable Virtualization Based Security feature for Windows 10.
+            - Supported from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016.
   guest_id:
+    type: str
     description:
     - Set the guest ID.
-    - "This parameter is case sensitive. For instance:"
-    - " - virtual machine with RHEL7 64 bit, will be 'rhel7_64Guest'"
-    - " - virtual machine with CentOS 64 bit, will be 'centos64Guest'"
-    - " - virtual machine with Ubuntu 64 bit, will be 'ubuntu64Guest'"
+    - This parameter is case sensitive.
+    - C(rhel7_64Guest) for virtual machine with RHEL7 64 bit.
+    - C(centos64Guest) for virtual machine with CentOS 64 bit.
+    - C(ubuntu64Guest) for virtual machine with Ubuntu 64 bit.
     - This field is required when creating a virtual machine, not required when creating from the template.
     - >
          Valid values are referenced here:
@@ -163,62 +212,132 @@ options:
     - Shrinking disks is not supported.
     - Removing existing disks of the virtual machine is not supported.
     - 'Attributes C(controller_type), C(controller_number), C(unit_number) are used to configure multiple types of disk
-      controllers and disks for creating or reconfiguring virtual machine. Added in version 2.10'
-    - 'Valid attributes are:'
-    - ' - C(size_[tb,gb,mb,kb]) (integer): Disk storage size in specified unit.'
-    - ' - C(type) (string): Valid values are:'
-    - '     - C(thin) thin disk'
-    - '     - C(eagerzeroedthick) eagerzeroedthick disk, added in version 2.5'
-    - '     Default: C(None) thick disk, no eagerzero.'
-    - ' - C(datastore) (string): The name of datastore which will be used for the disk. If C(autoselect_datastore) is set to True,
-          then will select the less used datastore whose name contains this "disk.datastore" string.'
-    - ' - C(filename) (string): Existing disk image to be used. Filename must already exist on the datastore.'
-    - '   Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in version 2.8.'
-    - ' - C(autoselect_datastore) (bool): select the less used datastore. "disk.datastore" and "disk.autoselect_datastore"
-          will not be used if C(datastore) is specified outside this C(disk) configuration.'
-    - ' - C(disk_mode) (string): Type of disk mode. Added in version 2.6'
-    - '     - Available options are :'
-    - '     - C(persistent): Changes are immediately and permanently written to the virtual disk. This is default.'
-    - '     - C(independent_persistent): Same as persistent, but not affected by snapshots.'
-    - '     - C(independent_nonpersistent): Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.'
-    - ' - C(controller_type) (string): Type of disk controller. Valid values are C(buslogic), C(lsilogic),
-          C(lsilogicsas), C(paravirtual), C(sata) and C(nvme). When set to C(sata), please make sure C(unit_number) is
-          correct and not used by SATA CDROMs.'
-    - '   C(nvme) support starts from hardware C(version) 13 and ESXi version 6.5.'
-    - '   If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when
-          C(cdrom) also set to C(sata) type.'
-    - ' - C(controller_number) (integer): Disk controller bus number. The maximum number of same type controller is 4
-          per VM. Valid value range from 0 to 3.'
-    - ' - C(unit_number) (integer): Disk Unit Number.'
-    - '   Valid value range from 0 to 15 for SCSI controller, except 7.'
-    - '   Valid value range from 0 to 14 for NVME controller.'
-    - '   Valid value range from 0 to 29 for SATA controller.'
-    - '   C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
-          with multiple types of disk controllers and disks. When creating new VM, the first configured disk in the
-          C(disk) list will be "Hard Disk 1".'
+      controllers and disks for creating or reconfiguring virtual machine. Added in Ansible 2.10.'
+    type: list
+    elements: dict
+    suboptions:
+        size:
+            description:
+            - Disk storage size.
+            - Please specify storage unit like [kb, mb, gb, tb].
+            type: int
+        size_kb:
+            description: Disk storage size in kb.
+            type: int
+        size_mb:
+            description: Disk storage size in mb.
+            type: int
+        size_gb:
+            description: Disk storage size in gb.
+            type: int
+        size_tb:
+            description: Disk storage size in tb.
+            type: int
+        type:
+            description:
+            - Type of disk.
+            - If C(thin) specified, disk type is set to thin disk.
+            - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
+            - If not specified, disk type is thick disk, no eagerzero.
+            type: str
+        datastore:
+            type: str
+            description:
+            - The name of datastore which will be used for the disk.
+            - If C(autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
+        filename:
+            type: str
+            description:
+            - Existing disk image to be used.
+            - Filename must already exist on the datastore.
+            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in Ansible 2.8.
+        autoselect_datastore:
+            type: bool
+            description:
+            - Select the less used datastore.
+            - C(disk.datastore) and C(disk.autoselect_datastore) will not be used if C(datastore) is specified outside this C(disk) configuration.
+        disk_mode:
+            type: str
+            description:
+            - Type of disk mode.
+            - Added in Ansible 2.6.
+            - If C(persistent) specified, changes are immediately and permanently written to the virtual disk. This is default.
+            - If C(independent_persistent) specified, same as persistent, but not affected by snapshots.
+            - If C(independent_nonpersistent) specified, changes to virtual disk are made to a redo log and discarded at power off,
+              but not affected by snapshots.
+        controller_type:
+            type: str
+            description:
+            - Type of disk controller.
+            - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas), C(paravirtual), C(sata) and C(nvme).
+            - C(nvme) support starts from hardware C(version) 13 and ESXi version 6.5.
+            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA CDROMs.
+            - If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when C(cdrom) also set to C(sata) type.
+        controller_number:
+            type: int
+            description:
+            - Disk controller bus number.
+            - The maximum number of same type controller is 4 per VM.
+            - Valid value range from 0 to 3.
+        unit_number:
+            type: int
+            description:
+            - Disk Unit Number.
+            - Valid value range from 0 to 15 for SCSI controller, except 7.
+            - Valid value range from 0 to 14 for NVME controller.
+            - Valid value range from 0 to 29 for SATA controller.
+            - C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
+              with multiple types of disk controllers and disks.
+            - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
   cdrom:
     description:
     - A CD-ROM configuration for the virtual machine.
     - Or a list of CD-ROMs configuration for the virtual machine. Added in version 2.9.
     - 'Parameters C(controller_type), C(controller_number), C(unit_number), C(state) are added for a list of CD-ROMs
       configuration support.'
-    - 'Valid attributes are:'
-    - ' - C(type) (string): The type of CD-ROM, valid options are C(none), C(client) or C(iso). With C(none) the CD-ROM
-          will be disconnected but present. The default value is C(client).'
-    - ' - C(iso_path) (string): The datastore path to the ISO file to use, in the form of C([datastore1] path/to/file.iso).
-          Required if type is set C(iso).'
-    - ' - C(controller_type) (string): Valid options are C(ide) and C(sata). Default value is C(ide).'
-    - '   When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.'
-    - ' - C(controller_number) (int): For C(ide) controller, valid value is 0 or 1. For C(sata) controller, valid value is 0 to 3.'
-    - ' - C(unit_number) (int): For CD-ROM device attach to C(ide) controller, valid value is 0 or 1, attach to C(sata)
-          controller, valid value is 0 to 29. C(controller_number) and C(unit_number) are mandatory attributes.'
-    - ' - C(state) (string): Valid value is C(present) or C(absent). Default is C(present). If set to C(absent), then
-          the specified CD-ROM will be removed. For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.'
+    - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
+    type: raw
+    suboptions:
+        type:
+            type: str
+            description:
+            - The type of CD-ROM, valid options are C(none), C(client) or C(iso).
+            - With C(none) the CD-ROM will be disconnected but present.
+            - The default value is C(client).
+        iso_path:
+            type: str
+            description:
+            - The datastore path to the ISO file to use, in the form of C([datastore1] path/to/file.iso).
+            - Required if type is set C(iso).
+        controller_type:
+            type: str
+            description:
+            - Valid options are C(ide) and C(sata).
+            - Default value is C(ide).
+            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
+        controller_number:
+            type: int
+            description:
+            - For C(ide) controller, valid value is 0 or 1.
+            - For C(sata) controller, valid value is 0 to 3.
+        unit_number:
+            type: int
+            description:
+            - For CD-ROM device attach to C(ide) controller, valid value is 0 or 1.
+            - For CD-ROM device attach to C(sata) controller, valid value is 0 to 29.
+            - C(controller_number) and C(unit_number) are mandatory attributes.
+        state:
+            type: str
+            description:
+            - Valid value is C(present) or C(absent).
+            - Default is C(present).
+            - If set to C(absent), then the specified CD-ROM will be removed.
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
     - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
+    type: str
   wait_for_ip_address:
     description:
     - Wait until vCenter detects an IP address for the virtual machine.
@@ -251,11 +370,13 @@ options:
     - If this argument is set to a positive integer, the module will instead wait for the virtual machine to reach the poweredoff state.
     - The value sets a timeout in seconds for the module to wait for the state change.
     default: 0
+    type: int
   snapshot_src:
     description:
     - Name of the existing snapshot to use to create a clone of a virtual machine.
     - This parameter is case sensitive.
     - While creating linked clone using C(linked_clone) parameter, this parameter is required.
+    type: str
   linked_clone:
     description:
     - Whether to create a linked clone from the snapshot specified.
@@ -281,46 +402,110 @@ options:
     - Destination datacenter for the deploy operation.
     - This parameter is case sensitive.
     default: ha-datacenter
+    type: str
   cluster:
     description:
     - The cluster name where the virtual machine will run.
     - This is a required parameter, if C(esxi_hostname) is not set.
     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
     - This parameter is case sensitive.
+    type: str
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
     - This is a required parameter, if C(cluster) is not set.
     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
     - This parameter is case sensitive.
+    type: str
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
+    type: str
+    aliases: [ 'notes' ]
   customvalues:
     description:
     - Define a list of custom values to set on virtual machine.
     - A custom value object takes two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
+    elements: dict
+    type: list
   networks:
     description:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - All parameters and VMware object names are case sensitive.
-    - 'One of the below parameters is required per entry:'
-    - ' - C(name) (string): Name of the portgroup or distributed virtual portgroup for this interface.
-          When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.'
-    - ' - C(vlan) (integer): VLAN number for this interface.'
-    - 'Optional parameters per entry (used for virtual hardware):'
-    - ' - C(device_type) (string): Virtual network device (one of C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov)).'
-    - ' - C(mac) (string): Customize MAC address.'
-    - ' - C(dvswitch_name) (string): Name of the distributed vSwitch.'
-    - 'Optional parameters per entry (used for OS customization):'
-    - ' - C(type) (string): Type of IP assignment (either C(dhcp) or C(static)). C(dhcp) is default.'
-    - ' - C(ip) (string): Static IP address (implies C(type: static)).'
-    - ' - C(netmask) (string): Static netmask required for C(ip).'
-    - ' - C(gateway) (string): Static gateway.'
-    - ' - C(dns_servers) (string): DNS servers for this network interface (Windows).'
-    - ' - C(domain) (string): Domain name for this network interface (Windows).'
+    type: list
+    elements: dict
+    suboptions:
+        name:
+            type: str
+            description:
+            - Name of the portgroup or distributed virtual portgroup for this interface.
+            - Required per entry.
+            - When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.
+        vlan:
+            type: int
+            description:
+            - VLAN number for this interface.
+            - Required per entry.
+        device_type:
+            type: str
+            description:
+            - Virtual network device.
+            - Valid value can be one of C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3), C(sriov).
+            - C(vmxnet3) is default.
+            - Optional per entry.
+            - Used for virtual hardware.
+        mac:
+            type: str
+            description:
+            - Customize MAC address.
+            - Optional per entry.
+            - Used for virtual hardware.
+        dvswitch_name:
+            type: str
+            description:
+            - Name of the distributed vSwitch.
+            - Optional per entry.
+            - Used for virtual hardware.
+        type:
+            type: str
+            description:
+            - Type of IP assignment.
+            - Valid values are one of C(dhcp), C(static).
+            - C(dhcp) is default.
+            - Optional per entry.
+            - Used for OS customization.
+        ip:
+            type: str
+            description:
+            - Static IP address. Implies C(type=static).
+            - Optional per entry.
+            - Used for OS customization.
+        netmask:
+            type: str
+            description:
+            - Static netmask required for C(ip).
+            - Optional per entry.
+            - Used for OS customization.
+        gateway:
+            type: str
+            description:
+            - Static gateway.
+            - Optional per entry.
+            - Used for OS customization.
+        dns_servers:
+            type: str
+            description:
+            - DNS servers for this network interface (Windows).
+            - Optional per entry.
+            - Used for OS customization.
+        domain:
+            type: str
+            description:
+            - Domain name for this network interface (Windows).
+            - Optional per entry.
+            - Used for OS customization.
   customization:
     description:
     - Parameters for OS customization when cloning from the template or the virtual machine, or apply to the existing virtual machine directly.
@@ -329,56 +514,160 @@ options:
     - For supported customization operating system matrix, (see U(http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf))
     - All parameters and VMware object names are case sensitive.
     - Linux based OSes requires Perl package to be installed for OS customizations.
-    - 'Common parameters (Linux/Windows):'
-    - ' - C(existing_vm) (bool): If set to C(True), do OS customization on the specified virtual machine directly.'
-    - ' - C(dns_servers) (list): List of DNS servers to configure.'
-    - ' - C(dns_suffix) (list): List of domain suffixes, also known as DNS search path (default: C(domain) parameter).'
-    - ' - C(domain) (string): DNS domain name to use.'
-    - ' - C(hostname) (string): Computer hostname (default: shorted C(name) parameter). Allowed characters are alphanumeric (uppercase and lowercase)
-          and minus, rest of the characters are dropped as per RFC 952.'
-    - 'Parameters related to Linux customization:'
-    - ' - C(timezone) (string): Timezone (See List of supported time zones for different vSphere versions in Linux/Unix'
-    - ' - C(hwclockUTC) (bool): Specifies whether the hardware clock is in UTC or local time.'
-    - 'Parameters related to Windows customization:'
-    - ' - C(autologon) (bool): Auto logon after virtual machine customization (default: False).'
-    - ' - C(autologoncount) (int): Number of autologon after reboot (default: 1).'
-    - ' - C(domainadmin) (string): User used to join in AD domain (mandatory with C(joindomain)).'
-    - ' - C(domainadminpassword) (string): Password used to join in AD domain (mandatory with C(joindomain)).'
-    - ' - C(fullname) (string): Server owner name (default: Administrator).'
-    - ' - C(joindomain) (string): AD domain to join (Not compatible with C(joinworkgroup)).'
-    - ' - C(joinworkgroup) (string): Workgroup to join (Not compatible with C(joindomain), default: WORKGROUP).'
-    - ' - C(orgname) (string): Organisation name (default: ACME).'
-    - ' - C(password) (string): Local administrator password.'
-    - ' - C(productid) (string): Product ID.'
-    - ' - C(runonce) (list): List of commands to run at first user logon.'
-    - ' - C(timezone) (int): Timezone (See U(https://msdn.microsoft.com/en-us/library/ms912391.aspx)).'
+    suboptions:
+        existing_vm:
+            type: bool
+            description:
+            - If set to C(True), do OS customization on the specified virtual machine directly.
+            - Common for Linux and Windows customization.
+        dns_servers:
+            type: list
+            elements: str
+            description:
+            - List of DNS servers to configure.
+            - Common for Linux and Windows customization.
+        dns_suffix:
+            type: list
+            elements: str
+            description:
+            - List of domain suffixes, also known as DNS search path.
+            - Default C(domain) parameter.
+            - Common for Linux and Windows customization.
+        domain:
+            type: str
+            description:
+            - DNS domain name to use.
+            - Common for Linux and Windows customization.
+        hostname:
+            type: str
+            description:
+            - Computer hostname.
+            - Default is shortened C(name) parameter.
+            - Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.
+            - Common for Linux and Windows customization.
+        timezone:
+            type: str
+            description:
+            - Timezone.
+            - See List of supported time zones for different vSphere versions in Linux/Unix.
+            - Common for Linux and Windows customization.
+            - L(Windows, https://msdn.microsoft.com/en-us/library/ms912391.aspx).
+        hwclockUTC:
+            type: bool
+            description:
+            - Specifies whether the hardware clock is in UTC or local time.
+            - Specific to Linux customization.
+        autologon:
+            type: bool
+            description:
+            - Auto logon after virtual machine customization.
+            - Specific to Windows customization.
+            default: False
+        autologoncount:
+            type: int
+            description:
+            - Number of autologon after reboot.
+            - Specific to Windows customization.
+            default: 1
+        domainadmin:
+            type: str
+            description:
+            - User used to join in AD domain.
+            - Required if C(joindomain) specified.
+            - Specific to Windows customization.
+        domainadminpassword:
+            type: str
+            description:
+            - Password used to join in AD domain.
+            - Required if C(joindomain) specified.
+            - Specific to Windows customization.
+        fullname:
+            type: str
+            description:
+            - Server owner name.
+            - Specific to Windows customization.
+            default: Administrator
+        joindomain:
+            type: str
+            description:
+            - AD domain to join.
+            - Not compatible with C(joinworkgroup).
+            - Specific to Windows customization.
+        joinworkgroup:
+            type: str
+            description:
+            - Workgroup to join.
+            - Not compatible with C(joindomain).
+            - Specific to Windows customization.
+            default: WORKGROUP
+        orgname:
+            type: str
+            description:
+            - Organisation name.
+            - Specific to Windows customization.
+            default: ACME
+        password:
+            type: str
+            description:
+            - Local administrator password.
+            - Specific to Windows customization.
+        productid:
+            type: str
+            description:
+            - Product ID.
+            - Specific to Windows customization.
+        runonce:
+            type: list
+            elements: str
+            description:
+            - List of commands to run at first user logon.
+            - Specific to Windows customization.
+    type: dict
   vapp_properties:
     description:
     - A list of vApp properties.
     - 'For full list of attributes and types refer to:'
     - 'U(https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/
       fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vApp.PropertyInfo.html)'
-    - 'Basic attributes are:'
-    - ' - C(id) (string): Property id - required.'
-    - ' - C(value) (string): Property value.'
-    - ' - C(type) (string): Value type, string type by default.'
-    - ' - C(operation): C(remove): This attribute is required only when removing properties.'
+    type: list
+    elements: dict
+    suboptions:
+        id:
+            type: str
+            description:
+            - Property ID.
+            - Required per entry.
+        value:
+            type: str
+            description:
+            - Property value.
+        type:
+            type: str
+            description:
+            - Value type, string type by default.
+        operation:
+            type: str
+            description:
+            - The C(remove) attribute is required only when removing properties.
   customization_spec:
     description:
     - Unique name identifying the requested customization specification.
     - This parameter is case sensitive.
     - If set, then overrides C(customization) parameter values.
+    type: str
   datastore:
     description:
     - Specify datastore or datastore cluster to provision virtual machine.
-    - 'This parameter takes precedence over "disk.datastore" parameter.'
-    - 'This parameter can be used to override datastore or datastore cluster setting of the virtual machine when deployed
-      from the template.'
+    - This parameter takes precedence over C(disk.datastore) parameter.
+    - This parameter can be used to override datastore or datastore cluster setting
+      of the virtual machine when deployed from the template.
     - Please see example for more usage.
+    type: str
   convert:
     description:
     - Specify convert disk type while cloning template or virtual machine.
     choices: [ thin, thick, eagerzeroedthick ]
+    type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -684,13 +973,6 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_vm_ip,
     quote_obj_name,
 )
-
-
-def list_or_dict(value):
-    if isinstance(value, list) or isinstance(value, dict):
-        return value
-    else:
-        raise ValueError("'%s' is not valid, valid type is 'list' or 'dict'." % value)
 
 
 class PyVmomiDeviceHelper(object):
@@ -3152,15 +3434,15 @@ def main():
         template=dict(type='str', aliases=['template_src']),
         is_template=dict(type='bool', default=False),
         annotation=dict(type='str', aliases=['notes']),
-        customvalues=dict(type='list', default=[]),
+        customvalues=dict(type='list', default=[], elements='dict'),
         name=dict(type='str'),
         name_match=dict(type='str', choices=['first', 'last'], default='first'),
         uuid=dict(type='str'),
         use_instance_uuid=dict(type='bool', default=False),
         folder=dict(type='str'),
         guest_id=dict(type='str'),
-        disk=dict(type='list', default=[]),
-        cdrom=dict(type=list_or_dict, default=[]),
+        disk=dict(type='list', default=[], elements='dict'),
+        cdrom=dict(type='raw', default=[]),
         hardware=dict(type='dict', default={}),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
@@ -3171,13 +3453,13 @@ def main():
         state_change_timeout=dict(type='int', default=0),
         snapshot_src=dict(type='str'),
         linked_clone=dict(type='bool', default=False),
-        networks=dict(type='list', default=[]),
+        networks=dict(type='list', default=[], elements='dict'),
         resource_pool=dict(type='str'),
         customization=dict(type='dict', default={}, no_log=True),
         customization_spec=dict(type='str', default=None),
         wait_for_customization=dict(type='bool', default=False),
         wait_for_customization_timeout=dict(type='int', default=3600),
-        vapp_properties=dict(type='list', default=[]),
+        vapp_properties=dict(type='list', default=[], elements='dict'),
         datastore=dict(type='str'),
         convert=dict(type='str', choices=['thin', 'thick', 'eagerzeroedthick']),
         delete_from_inventory=dict(type='bool', default=False),
