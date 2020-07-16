@@ -26,8 +26,3 @@ plugins/modules/vmware_portgroup.py validate-modules:missing-suboption-docs
 plugins/modules/vmware_portgroup.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_portgroup.py validate-modules:parameter-type-not-in-doc
 plugins/modules/vmware_portgroup.py validate-modules:undocumented-parameter
-plugins/modules/vmware_vcenter_statistics.py validate-modules:doc-choices-do-not-match-spec
-plugins/modules/vmware_vcenter_statistics.py validate-modules:doc-default-does-not-match-spec
-plugins/modules/vmware_vcenter_statistics.py validate-modules:missing-suboption-docs
-plugins/modules/vmware_vcenter_statistics.py validate-modules:parameter-type-not-in-doc
-plugins/modules/vmware_vcenter_statistics.py validate-modules:undocumented-parameter
