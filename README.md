@@ -24,7 +24,7 @@ collections:
 
 VMware community collection depends upon following third party libraries:
 
-* [`Pyvmomi`](https://github.com/vmware/pyvmomi)
+* [`Pyvmomi`](https://github.com/vmware/pyvmomi) >= 6.7.1.2018.12
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
 
 ### Installing required libraries and SDK
