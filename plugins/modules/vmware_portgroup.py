@@ -11,7 +11,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_portgroup
 short_description: Create a VMware portgroup
@@ -25,8 +25,8 @@ author:
 notes:
     - Tested on vSphere 5.5 and 6.5
     - Complete configuration only tested on vSphere 6.5
-    - 'C(inbound_policy) and C(rolling_order) are deprecated and will be removed in 2.11'
-    - Those two options are only used during portgroup creation. Updating isn't supported with those options.
+    - 'C(inbound_policy) and C(rolling_order) are removed in 2.11.'
+    - Those two options are only used during portgroup creation. Updating is not supported with those options.
 requirements:
     - "python >= 2.6"
     - PyVmomi
@@ -57,39 +57,70 @@ options:
               portgroup such as promiscuous mode, where guest adapter listens
               to all the packets, MAC address changes and forged transmits.
             - Dict which configures the different security values for portgroup.
-            - 'Valid attributes are:'
-            - '- C(promiscuous_mode) (bool): indicates whether promiscuous mode is allowed. (default: None)'
-            - '- C(forged_transmits) (bool): indicates whether forged transmits are allowed. (default: None)'
-            - '- C(mac_changes) (bool): indicates whether mac changes are allowed. (default: None)'
+        suboptions:
+            promiscuous_mode:
+                type: bool
+                description: Indicates whether promiscuous mode is allowed.
+            forged_transmits:
+                type: bool
+                description: Indicates whether forged transmits are allowed.
+            mac_changes:
+                type: bool
+                description: Indicates whether mac changes are allowed.
         required: False
         aliases: [ 'security_policy', 'network_policy' ]
         type: dict
     teaming:
         description:
             - Dictionary which configures the different teaming values for portgroup.
-            - 'Valid attributes are:'
-            - '- C(load_balancing) (string): Network adapter teaming policy. C(load_balance_policy) is also alias to this option. (default: loadbalance_srcid)'
-            - '   - choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, failover_explicit ]'
-            - '- C(network_failure_detection) (string): Network failure detection. (default: link_status_only)'
-            - '   - choices: [ link_status_only, beacon_probing ]'
-            - '- C(notify_switches) (bool): Indicate whether or not to notify the physical switch if a link fails. (default: None)'
-            - '- C(failback) (bool): Indicate whether or not to use a failback when restoring links. (default: None)'
-            - '- C(active_adapters) (list): List of active adapters used for load balancing.'
-            - '- C(standby_adapters) (list): List of standby adapters used for failover.'
-            - '- All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.'
-            - '- C(inbound_policy) (bool): Indicate whether or not the teaming policy is applied to inbound frames as well. Deprecated. (default: False)'
-            - '- C(rolling_order) (bool): Indicate whether or not to use a rolling policy when restoring links. Deprecated. (default: False)'
+        suboptions:
+            load_balancing:
+                type: str
+                description:
+                - Network adapter teaming policy.
+                choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, failover_explicit, None ]
+                aliases: [ 'load_balance_policy' ]
+            network_failure_detection:
+                type: str
+                description: Network failure detection.
+                choices: [ link_status_only, beacon_probing ]
+            notify_switches:
+                type: bool
+                description: Indicate whether or not to notify the physical switch if a link fails.
+            failback:
+                type: bool
+                description: Indicate whether or not to use a failback when restoring links.
+            active_adapters:
+                type: list
+                description:
+                - List of active adapters used for load balancing.
+                - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+                elements: str
+            standby_adapters:
+                type: list
+                description:
+                - List of standby adapters used for failover.
+                - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+                elements: str
         required: False
         aliases: [ 'teaming_policy' ]
         type: dict
     traffic_shaping:
         description:
             - Dictionary which configures traffic shaping for the switch.
-            - 'Valid attributes are:'
-            - '- C(enabled) (bool): Status of Traffic Shaping Policy. (default: None)'
-            - '- C(average_bandwidth) (int): Average bandwidth (kbit/s). (default: None)'
-            - '- C(peak_bandwidth) (int): Peak bandwidth (kbit/s). (default: None)'
-            - '- C(burst_size) (int): Burst size (KB). (default: None)'
+        suboptions:
+            enabled:
+                type: bool
+                description: Status of Traffic Shaping Policy.
+            average_bandwidth:
+                type: int
+                description: Average bandwidth (kbit/s).
+            peak_bandwidth:
+                type: int
+                description: Peak bandwidth (kbit/s).
+            burst_size:
+                type: int
+                description: Burst size (KB).
         required: False
         type: dict
     cluster_name:
@@ -105,6 +136,7 @@ options:
             - This option is required if C(cluster_name) is not specified.
         aliases: [ esxi_hostname ]
         type: list
+        elements: str
     state:
         description:
             - Determines if the portgroup should be present or not.
@@ -286,9 +318,6 @@ class VMwareHostPortGroup(PyVmomi):
                 self.teaming_failover_order_active = []
             if self.teaming_failover_order_standby is None:
                 self.teaming_failover_order_standby = []
-            # NOTE: the following options are deprecated and should be removed in 2.11
-            self.teaming_inbound_policy = self.module.params['teaming']['inbound_policy']
-            self.teaming_rolling_order = self.module.params['teaming']['rolling_order']
         else:
             self.teaming_load_balancing = None
             self.teaming_failure_detection = None
@@ -296,9 +325,6 @@ class VMwareHostPortGroup(PyVmomi):
             self.teaming_failback = None
             self.teaming_failover_order_active = None
             self.teaming_failover_order_standby = None
-            # NOTE: the following options are deprecated and should be removed in 2.11
-            self.teaming_inbound_policy = None
-            self.teaming_rolling_order = None
         self.state = self.params['state']
 
         self.hosts = self.get_all_host_objs(cluster_name=cluster, esxi_host_name=hosts)
@@ -894,23 +920,12 @@ class VMwareHostPortGroup(PyVmomi):
                                                  self.teaming_failover_order_standby]):
             teaming_policy = vim.host.NetworkPolicy.NicTeamingPolicy()
             teaming_policy.policy = self.teaming_load_balancing
-            # NOTE: 'teaming_inbound_policy' is deprecated and the following if statement should be removed in 2.11
-            if self.teaming_inbound_policy:
-                teaming_policy.reversePolicy = self.teaming_inbound_policy
-            else:
-                # Deprecated since VI API 5.1. The system default (true) will be used
-                teaming_policy.reversePolicy = True
+            teaming_policy.reversePolicy = True
             teaming_policy.notifySwitches = self.teaming_notify_switches
-            # NOTE: 'teaming_rolling_order' is deprecated and the following if statement should be removed in 2.11
-            if self.teaming_rolling_order:
-                teaming_policy.rollingOrder = self.teaming_rolling_order
+            if self.teaming_failback is None:
+                teaming_policy.rollingOrder = None
             else:
-                # this option is called 'failback' in the vSphere Client
-                # rollingOrder also uses the opposite value displayed in the client
-                if self.teaming_failback is None:
-                    teaming_policy.rollingOrder = None
-                else:
-                    teaming_policy.rollingOrder = not self.teaming_failback
+                teaming_policy.rollingOrder = not self.teaming_failback
             if self.teaming_failover_order_active is None and self.teaming_failover_order_standby is None:
                 teaming_policy.nicOrder = None
             else:
@@ -971,7 +986,7 @@ def main():
         portgroup=dict(type='str', required=True, aliases=['portgroup_name']),
         switch=dict(type='str', required=True, aliases=['switch_name', 'vswitch']),
         vlan_id=dict(type='int', required=False, default=0, aliases=['vlan']),
-        hosts=dict(type='list', aliases=['esxi_hostname']),
+        hosts=dict(type='list', aliases=['esxi_hostname'], elements='str'),
         cluster_name=dict(type='str', aliases=['cluster']),
         state=dict(type='str', choices=['present', 'absent'], default='present'),
         security=dict(
@@ -1012,11 +1027,8 @@ def main():
                 ),
                 notify_switches=dict(type='bool'),
                 failback=dict(type='bool'),
-                active_adapters=dict(type='list'),
-                standby_adapters=dict(type='list'),
-                # NOTE: Deprecated from 2.11 onwards
-                inbound_policy=dict(type='bool'),
-                rolling_order=dict(type='bool'),
+                active_adapters=dict(type='list', elements='str'),
+                standby_adapters=dict(type='list', elements='str'),
             ),
             aliases=['teaming_policy']
         ),
