@@ -116,7 +116,6 @@ plugins/modules/vmware_local_role_facts.py validate-modules:invalid-documentatio
 plugins/modules/vmware_local_role_facts.py validate-modules:invalid-module-deprecation-version
 plugins/modules/vmware_local_role_info.py pylint!skip
 plugins/modules/vmware_local_role_info.py validate-modules:return-syntax-error
-plugins/modules/vmware_local_role_manager.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_local_user_facts.py validate-modules:deprecation-mismatch
 plugins/modules/vmware_local_user_facts.py validate-modules:invalid-documentation
 plugins/modules/vmware_local_user_facts.py validate-modules:invalid-module-deprecation-version
