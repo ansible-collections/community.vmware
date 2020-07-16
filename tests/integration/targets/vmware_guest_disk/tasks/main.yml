@@ -338,7 +338,7 @@
     that:
         - not(test_create_disk_sharing_invalid is changed)
 
-- name: remove disk with destroy file
+name: remove disk with destroy file
   vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -349,11 +349,11 @@
     disk:
         - state: "absent"
           scsi_controller: 0
-          unit_number: 3
+          unit_number: 4
           destroy: true
         - state: "absent"
           scsi_controller: 0
-          unit_number: 4
+          unit_number: 5
   register: test_remove_with_destroy
 
 - debug:
@@ -363,3 +363,142 @@
   assert:
     that:
         - test_remove_with_destroy is changed
+
+- name: create new disk with SATA controller
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - datastore: "{{ rw_datastore }}"
+          disk_mode: "independent_persistent"
+          controller_type: 'sata'
+          controller_number: 1
+          unit_number: 3
+          size_gb: 1
+          state: present
+          type: thin
+  register: test_create_sata_disk
+
+- debug:
+    msg: "{{ test_create_sata_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_create_sata_disk is changed
+
+- name: re-configure SATA disk
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - disk_mode: "independent_nonpersistent"
+          controller_type: 'sata'
+          controller_number: 1
+          unit_number: 3
+          state: present
+          shares:
+            level: custom
+            level_value: 1200
+  register: test_reconfig_sata_disk
+
+- debug:
+    msg: "{{ test_reconfig_sata_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_reconfig_sata_disk is changed
+
+- name: create new disk with NVMe controller
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - datastore: "{{ rw_datastore }}"
+          disk_mode: "independent_persistent"
+          controller_type: 'nvme'
+          controller_number: 0
+          unit_number: 1
+          size_gb: 1
+          state: present
+          type: thin
+  register: test_create_nvme_disk
+
+- debug:
+    msg: "{{ test_create_nvme_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_create_nvme_disk is changed
+
+- name: re-configure NVMe disk
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - controller_type: 'nvme'
+          controller_number: 0
+          unit_number: 1
+          size_gb: 2
+          state: present
+          iolimit:
+            limit: 1507
+            shares:
+              level: custom
+              level_value: 1000
+  register: test_reconfig_nvme_disk
+
+- debug:
+    msg: "{{ test_reconfig_nvme_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_reconfig_nvme_disk is changed
+
+- name: remove SATA and NVMe disks
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - state: "absent"
+          controller_type: 'sata'
+          controller_number: 1
+          unit_number: 3
+          destroy: false
+        - state: "absent"
+          controller_type: 'nvme'
+          controller_number: 0
+          unit_number: 1
+          destroy: true
+  register: test_remove_sata_nvme_disk
+
+- debug:
+    msg: "{{ test_remove_sata_nvme_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_remove_sata_nvme_disk is changed
