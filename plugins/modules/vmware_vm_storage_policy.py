@@ -68,7 +68,6 @@ options:
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-extends_documentation_fragment: vmware.documentation
 '''
 
 EXAMPLES = r'''

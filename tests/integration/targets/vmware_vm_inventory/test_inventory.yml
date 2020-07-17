@@ -8,4 +8,3 @@
         that:
             - "{{ groups['debian8_64Guest'] | length }} == 4"
             - hostvars['DC0_H0_VM0'] is defined
-

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -eux
+tmp_file=/tmp/_sorted_file$$
+
+clean_up () {
+    ARG=$?
+    rm ${tmp_file}
+    exit $ARG
+} 
+trap clean_up EXIT
+
+
+for i in $(find tests/sanity -name 'ignore-*.txt'); do
+    sort -u ${i} > ${tmp_file}
+    diff -s ${i} ${tmp_file}
+done

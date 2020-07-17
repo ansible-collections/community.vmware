@@ -996,8 +996,7 @@ class PyVmomiHelper(PyVmomi):
 
         if not query.selectedVnic:
             return vmks_list
-        selected_vnics = [vnic for vnic in query.selectedVnic]
-        vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in selected_vnics]
+        vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in query.selectedVnic]
         return vnics_with_service_type
 
     def create_enabled_services_string(self):
