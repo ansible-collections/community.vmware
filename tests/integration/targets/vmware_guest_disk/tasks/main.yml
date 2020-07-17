@@ -337,3 +337,29 @@
   assert:
     that:
         - not(test_create_disk_sharing_invalid is changed)
+
+- name: remove disk with destroy file
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: no
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+        - state: "absent"
+          scsi_controller: 0
+          unit_number: 3
+          destroy: true
+        - state: "absent"
+          scsi_controller: 0
+          unit_number: 4
+  register: test_remove_with_destroy
+
+- debug:
+    msg: "{{ test_remove_with_destroy }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+        - test_remove_with_destroy is changed
