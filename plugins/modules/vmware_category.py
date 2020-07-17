@@ -204,7 +204,7 @@ class VmwareCategory(VmwareRestClient):
                 if lower_obj_type == 'all objects':
                     obj_types_set = []
                     break
-                elif lower_obj_type == 'cluster':
+                if lower_obj_type == 'cluster':
                     obj_types_set.append('ClusterComputeResource')
                 elif lower_obj_type == 'content library':
                     obj_types_set.append('com.vmware.content.Library')

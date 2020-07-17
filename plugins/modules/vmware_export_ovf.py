@@ -272,10 +272,10 @@ class VMwareExportVmOvf(PyVmomi):
                             ovf_file.size = current_bytes_written
                             ovf_files.append(ovf_file)
                     break
-                elif http_nfc_lease.state == vim.HttpNfcLease.State.initializing:
+                if http_nfc_lease.state == vim.HttpNfcLease.State.initializing:
                     sleep(2)
                     continue
-                elif http_nfc_lease.state == vim.HttpNfcLease.State.error:
+                if http_nfc_lease.state == vim.HttpNfcLease.State.error:
                     lease_updater.stop()
                     self.module.fail_json(msg='Get HTTP NFC lease error %s.' % http_nfc_lease.state.error[0].fault)
 

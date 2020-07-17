@@ -110,7 +110,7 @@ class VMwareLocalRoleInfo(PyVmomi):
                 dict(
                     role_name=role.name,
                     role_id=role.roleId,
-                    privileges=[priv_name for priv_name in role.privilege],
+                    privileges=list(role.privilege),
                     role_system=role.system,
                     role_info_label=role.info.label,
                     role_info_summary=role.info.summary,

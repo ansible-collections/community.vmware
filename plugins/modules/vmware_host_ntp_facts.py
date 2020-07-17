@@ -111,7 +111,7 @@ class VmwareNtpFactManager(PyVmomi):
                         time_zone_name=host_date_time_manager.dateTimeInfo.timeZone.name,
                         time_zone_description=host_date_time_manager.dateTimeInfo.timeZone.description,
                         time_zone_gmt_offset=host_date_time_manager.dateTimeInfo.timeZone.gmtOffset,
-                        ntp_servers=[ntp_server for ntp_server in host_date_time_manager.dateTimeInfo.ntpConfig.server]
+                        ntp_servers=list(host_date_time_manager.dateTimeInfo.ntpConfig.server)
                     )
                 )
             hosts_facts[host.name] = host_ntp_facts

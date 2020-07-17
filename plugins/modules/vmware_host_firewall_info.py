@@ -120,7 +120,7 @@ class FirewallInfoManager(PyVmomi):
 
         allowed_host = rule_obj.allowedHosts
         rule_allow_host = dict()
-        rule_allow_host['ip_address'] = [ip for ip in allowed_host.ipAddress]
+        rule_allow_host['ip_address'] = list(allowed_host.ipAddress)
         rule_allow_host['ip_network'] = [ip.network + "/" + str(ip.prefixLength) for ip in allowed_host.ipNetwork]
         rule_allow_host['all_ip'] = allowed_host.allIp
         rule_dict['allowed_hosts'] = rule_allow_host

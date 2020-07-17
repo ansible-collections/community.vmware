@@ -322,8 +322,8 @@ class BaseVMwareInventory:
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except Exception as err:
-            err = err
+        except Exception as error:
+            err = error
 
         if client is None:
             msg = "Failed to login to %s using %s" % (server, self.username)

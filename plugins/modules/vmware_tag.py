@@ -235,8 +235,6 @@ class VmwareTag(VmwareRestClient):
                         ret = 'present'
                         self.tag_obj = tag
                         break
-                    else:
-                        continue
                 else:
                     ret = 'present'
                     self.tag_obj = tag

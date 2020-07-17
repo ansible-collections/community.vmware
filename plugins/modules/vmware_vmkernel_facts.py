@@ -153,7 +153,7 @@ class VmkernelFactsManager(PyVmomi):
 
         if not query.selectedVnic:
             return vmks_list
-        selected_vnics = [vnic for vnic in query.selectedVnic]
+        selected_vnics = list(query.selectedVnic)
         vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in selected_vnics]
         return vnics_with_service_type
 
