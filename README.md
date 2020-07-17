@@ -33,7 +33,7 @@ First, Git clone collection and install it manually:
 ```
 $ mkdir -p  ~/.ansible/collections/ansible_collections/community
 # fetch the source tree:
-$ git clone blablabla ~/.ansible/collections/ansible_collections/community/vmware
+$ git clone https://github.com/ansible-collections/vmware ~/.ansible/collections/ansible_collections/community/vmware
 $ cd ~/.ansible/collections/ansible_collections/community/vmware
 ```
 
