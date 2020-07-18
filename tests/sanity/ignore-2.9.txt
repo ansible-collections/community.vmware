@@ -99,7 +99,6 @@ plugins/modules/vmware_host_firewall_manager.py validate-modules:parameter-list-
 plugins/modules/vmware_host_lockdown.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_host_ntp.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_host_snmp.py validate-modules:parameter-list-no-elements
-plugins/modules/vmware_local_role_manager.py validate-modules:parameter-list-no-elements
 plugins/modules/vmware_portgroup.py validate-modules:doc-choices-do-not-match-spec
 plugins/modules/vmware_portgroup.py validate-modules:missing-suboption-docs
 plugins/modules/vmware_portgroup.py validate-modules:parameter-list-no-elements
