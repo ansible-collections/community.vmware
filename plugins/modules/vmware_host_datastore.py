@@ -28,13 +28,6 @@ requirements:
 - python >= 2.6
 - PyVmomi
 options:
-  datacenter_name:
-    description:
-    - Name of the datacenter to add the datastore.
-    - The datacenter isn't used by the API to create a datastore.
-    - Will be removed in 2.11.
-    required: false
-    type: str
   datastore_name:
     description:
     - Name of the datastore to add/remove.
@@ -165,8 +158,6 @@ class VMwareHostDatastore(PyVmomi):
     def __init__(self, module):
         super(VMwareHostDatastore, self).__init__(module)
 
-        # NOTE: The below parameter is deprecated starting from Ansible v2.11
-        self.datacenter_name = module.params['datacenter_name']
         self.datastore_name = module.params['datastore_name']
         self.datastore_type = module.params['datastore_type']
         self.nfs_server = module.params['nfs_server']
@@ -305,7 +296,6 @@ class VMwareHostDatastore(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        datacenter_name=dict(type='str', required=False, removed_in_version=2.11),
         datastore_name=dict(type='str', required=True),
         datastore_type=dict(type='str', choices=['nfs', 'nfs41', 'vmfs']),
         nfs_server=dict(type='str'),

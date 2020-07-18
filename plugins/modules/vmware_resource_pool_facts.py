@@ -16,7 +16,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_resource_pool_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_resource_pool_info) module.
   alternative: Use M(community.vmware.vmware_resource_pool_info) instead.
@@ -137,6 +136,10 @@ class ResourcePoolFactsManager(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+
+    if module._name in ('vmware_resource_pool_facts', 'community.vmware.vmware_resource_pool_facts'):
+        module.deprecate("The 'vmware_resource_pool_facts' module has been renamed to 'vmware_resource_pool_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_rp_mgr = ResourcePoolFactsManager(module)
     module.exit_json(changed=False, resource_pool_facts=vmware_rp_mgr.gather_rp_facts())

@@ -17,7 +17,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_vmkernel_info) module.
   alternative: Use M(community.vmware.vmware_vmkernel_info) instead.
@@ -200,6 +199,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_vmkernel_facts', 'community.vmware.vmware_vmkernel_facts'):
+        module.deprecate("The 'vmware_vmkernel_facts' module has been renamed to 'vmware_vmkernel_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vmk_config = VmkernelFactsManager(module)
     module.exit_json(changed=False, host_vmk_facts=vmware_vmk_config.gather_host_vmk_facts())

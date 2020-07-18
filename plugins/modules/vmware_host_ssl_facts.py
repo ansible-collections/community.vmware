@@ -18,7 +18,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_ssl_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_host_ssl_info) module.
   alternative: Use M(community.vmware.vmware_host_ssl_info) instead.

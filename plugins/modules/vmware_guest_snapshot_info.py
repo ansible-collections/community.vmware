@@ -162,8 +162,10 @@ def main():
         ],
         supports_check_mode=True,
     )
-    if module._name == 'vmware_guest_snapshot_facts':
-        module.deprecate("The 'vmware_guest_snapshot_facts' module has been renamed to 'vmware_guest_snapshot_info'", version='2.13')
+
+    if module._name in ('vmware_guest_snapshot_facts', 'community.vmware.vmware_guest_snapshot_facts'):
+        module.deprecate(msg="The 'vmware_guest_snapshot_facts' module has been renamed to 'vmware_guest_snapshot_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     if module.params['folder']:
         # FindByInventoryPath() does not require an absolute path

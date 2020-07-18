@@ -317,7 +317,11 @@ def main():
                            supports_check_mode=True
                            )
     if module._name == 'vmware_datastore_facts':
-        module.deprecate("The 'vmware_datastore_facts' module has been renamed to 'vmware_datastore_info'", version='2.13')
+        module.deprecate(
+            msg="The 'vmware_datastore_facts' module has been renamed to 'vmware_datastore_info'",
+            version='3.0.0',  # was Ansible 2.13
+            collection_name='community.vmware'
+        )
 
     result = dict(changed=False)
 

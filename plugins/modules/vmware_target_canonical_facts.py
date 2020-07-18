@@ -17,7 +17,6 @@ DOCUMENTATION = '''
 ---
 module: vmware_target_canonical_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_target_canonical_info) module.
   alternative: Use M(community.vmware.vmware_target_canonical_info) instead.
@@ -180,6 +179,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_target_canonical_facts', 'community.vmware.vmware_target_canonical_facts'):
+        module.deprecate("The 'vmware_target_canonical_facts' module has been renamed to 'vmware_target_canonical_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     scsi_tgt_manager = ScsiTargetFactsManager(module)
     scsi_tgt_manager.gather_scsi_device_facts()

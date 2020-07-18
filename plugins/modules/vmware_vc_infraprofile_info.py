@@ -105,48 +105,52 @@ EXAMPLES = r'''
   '''
 
 RETURN = r'''
-    "list_infra":
-        description: A list of infra configs,
-        returned: on success with API as "list"
-        "sample": [
-            {
-                "info": "ApplianceManagement",
-                "name": "ApplianceManagement"
-            },
-            {
-                "info": "ApplianceNetwork",
-                "name": "ApplianceNetwork"
-            },
-            {
-                "info": "Authentication & Authorization Management",
-                "name": "AuthManagement"
-            }
-        ]
-
-    "export_infra":
-        description: A message about the exported file
-        returned: On success with API set as "export"
-        sample: {
-        "export_config_json":"json exported to file"
+list_infra:
+    description: A list of infra configs,
+    returned: on success with API as "list"
+    type: list
+    "sample": [
+        {
+            "info": "ApplianceManagement",
+            "name": "ApplianceManagement"
+        },
+        {
+            "info": "ApplianceNetwork",
+            "name": "ApplianceNetwork"
+        },
+        {
+            "info": "Authentication & Authorization Management",
+            "name": "AuthManagement"
         }
+    ]
 
-    validate_infra:
-        description: A message about validate on exported file
-        returned: On success with API set as "validate"
-        "sample": {
+export_infra:
+    description: A message about the exported file
+    returned: On success with API set as "export"
+    type: dict
+    sample: {
+        "export_config_json":"json exported to file"
+    }
+
+validate_infra:
+    description: A message about validate on exported file
+    returned: On success with API set as "validate"
+    type: dict
+    "sample": {
         "changed": false,
         "failed": false,
         "status": "VALID"
-        }
+    }
 
-    import_profile:
-        description: A message about import on import_profile spec
-        returned: On success with API set as "import"
-        "sample": {
-            "changed": true,
-            "failed": false,
-            "status": "0.0"
-        }
+import_profile:
+    description: A message about import on import_profile spec
+    returned: On success with API set as "import"
+    type: dict
+    "sample": {
+        "changed": true,
+        "failed": false,
+        "status": "0.0"
+    }
 '''
 
 from distutils.version import LooseVersion

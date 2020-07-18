@@ -260,8 +260,12 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            required_one_of=[['name', 'uuid', 'moid']],
                            supports_check_mode=True)
-    if module._name == 'vmware_guest_facts':
-        module.deprecate("The 'vmware_guest_facts' module has been renamed to 'vmware_guest_info'", version='2.13')
+    if module._name in ('vmware_guest_facts', 'community.vmware.vmware_guest_facts'):
+        module.deprecate(
+            msg="The 'vmware_guest_facts' module has been renamed to 'vmware_guest_info'",
+            version='3.0.0',
+            collection_name='community.vmware'
+        )
 
     if module.params.get('folder'):
         # FindByInventoryPath() does not require an absolute path

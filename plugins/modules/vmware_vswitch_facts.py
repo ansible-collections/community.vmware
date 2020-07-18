@@ -16,7 +16,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vswitch_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_vswitch_info) module.
   alternative: Use M(community.vmware.vmware_vswitch_info) instead.
@@ -155,6 +154,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_vswitch_facts', 'community.vmware.vmware_vswitch_facts'):
+        module.deprecate("The 'vmware_vswitch_facts' module has been renamed to 'vmware_vswitch_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vswitch_mgr = VswitchFactsManager(module)
     module.exit_json(changed=False, hosts_vswitch_facts=vmware_vswitch_mgr.gather_vswitch_facts())

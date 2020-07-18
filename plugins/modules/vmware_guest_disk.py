@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_disk
 short_description: Manage disks related to virtual machine in given vCenter infrastructure
@@ -144,12 +144,13 @@ options:
          elements: dict
      default: []
      type: list
+     elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add disks to virtual machine using UUID
   community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
@@ -278,7 +279,7 @@ EXAMPLES = '''
   register: disk_facts
 '''
 
-RETURN = """
+RETURN = r"""
 disk_status:
     description: metadata about the virtual machine's disks after managing them
     returned: always
@@ -866,7 +867,7 @@ def main():
         moid=dict(type='str'),
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
-        disk=dict(type='list', default=[]),
+        disk=dict(type='list', default=[], elements='dict'),
         use_instance_uuid=dict(type='bool', default=False),
     )
     module = AnsibleModule(
