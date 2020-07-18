@@ -135,6 +135,18 @@ action_groups:
 
 plugin_routing:
   modules:
+    vca_fw:
+      deprecation:
+        removal_date: 2022-06-01
+        warning_text: see plugin documentation for details
+    vca_nat:
+      deprecation:
+        removal_date: 2022-06-01
+        warning_text: see plugin documentation for details
+    vca_vapp:
+      deprecation:
+        removal_date: 2022-06-01
+        warning_text: see plugin documentation for details
     vcenter_extension_facts:
       deprecation:
         removal_date: 2021-12-01

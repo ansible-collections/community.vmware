@@ -1,0 +1,2 @@
+deprecated_features:
+- vca - vca_fw, vca_nat, vca_app are deprecated since these modules rely on deprecated part of Pyvcloud library.
