@@ -156,7 +156,7 @@ class VmwareDrsInfoManager(PyVmomi):
                 if not hostgroup and isinstance(group, vim.cluster.VmGroup):
                     obj_name_list = [vm.name for vm in group.vm]
                     break
-                elif hostgroup and isinstance(group, vim.cluster.HostGroup):
+                if hostgroup and isinstance(group, vim.cluster.HostGroup):
                     obj_name_list = [host.name for host in group.host]
                     break
 

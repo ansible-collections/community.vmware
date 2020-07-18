@@ -132,8 +132,8 @@ class VmwareCustomSpecManger(PyVmomi):
                     mac_address=nic.macAddress,
                     ip_address=nic.adapter.ip.ipAddress,
                     subnet_mask=nic.adapter.subnetMask,
-                    gateway=[gw for gw in nic.adapter.gateway],
-                    nic_dns_server_list=[ndsl for ndsl in nic.adapter.dnsServerList],
+                    gateway=list(nic.adapter.gateway),
+                    nic_dns_server_list=list(nic.adapter.dnsServerList),
                     dns_domain=nic.adapter.dnsDomain,
                     primary_wins=nic.adapter.primaryWINS,
                     secondry_wins=nic.adapter.secondaryWINS,
@@ -160,8 +160,8 @@ class VmwareCustomSpecManger(PyVmomi):
                 time_zone=current_spec.spec.identity.timeZone,
                 hw_clock_utc=current_spec.spec.identity.hwClockUTC,
                 # global IP Settings
-                dns_suffix_list=[i for i in current_spec.spec.globalIPSettings.dnsSuffixList],
-                dns_server_list=[i for i in current_spec.spec.globalIPSettings.dnsServerList],
+                dns_suffix_list=list(current_spec.spec.globalIPSettings.dnsSuffixList),
+                dns_server_list=list(current_spec.spec.globalIPSettings.dnsServerList),
                 # NIC setting map
                 nic_setting_map=adapter_mapping_list,
             )

@@ -552,7 +552,7 @@ class VMWareInventory(object):
                 self.debugl(e)
             if not newkey:
                 continue
-            elif dtype == 'integer':
+            if dtype == 'integer':
                 newkey = int(newkey)
             elif dtype == 'boolean':
                 if newkey.lower() == 'false':

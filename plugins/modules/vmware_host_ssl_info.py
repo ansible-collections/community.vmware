@@ -116,7 +116,7 @@ class VMwareHostSslManager(PyVmomi):
             if host_ssl_info_mgr:
                 self.hosts_info[host.name]['principal'] = host_ssl_info_mgr.principal
                 self.hosts_info[host.name]['owner_tag'] = host_ssl_info_mgr.ownerTag
-                self.hosts_info[host.name]['ssl_thumbprints'] = [i for i in host_ssl_info_mgr.sslThumbprints]
+                self.hosts_info[host.name]['ssl_thumbprints'] = list(host_ssl_info_mgr.sslThumbprints)
 
         self.module.exit_json(changed=False, host_ssl_info=self.hosts_info)
 

@@ -356,17 +356,17 @@ def get_serial_port(vm_obj, backing):
                     if device.backing.serviceURI == backing['service_uri']:
                         serial_port = device
                     break
-                elif 'pipe_name' in valid_params:
+                if 'pipe_name' in valid_params:
                     # named pipe backing type
                     if device.backing.pipeName == backing['pipe_name']:
                         serial_port = device
                     break
-                elif 'device_name' in valid_params:
+                if 'device_name' in valid_params:
                     # physical serial device backing type
                     if device.backing.deviceName == backing['device_name']:
                         serial_port = device
                     break
-                elif 'file_path' in valid_params:
+                if 'file_path' in valid_params:
                     # file backing type
                     if device.backing.fileName == backing['file_path']:
                         serial_port = device

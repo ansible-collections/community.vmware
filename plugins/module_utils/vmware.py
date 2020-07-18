@@ -15,8 +15,9 @@ import re
 import ssl
 import time
 import traceback
-from random import randint
+from collections import OrderedDict
 from distutils.version import StrictVersion
+from random import randint
 
 REQUESTS_IMP_ERR = None
 try:
@@ -885,7 +886,6 @@ def quote_obj_name(object_name=None):
     if not object_name:
         return None
 
-    from collections import OrderedDict
     SPECIAL_CHARS = OrderedDict({
         '%': '%25',
         '/': '%2f',
@@ -1183,7 +1183,7 @@ class PyVmomi(object):
         """
         cluster_obj = self.find_cluster_by_name(cluster_name=cluster_name)
         if cluster_obj:
-            return [host for host in cluster_obj.host]
+            return list(cluster_obj.host)
         else:
             return []
 
@@ -1219,7 +1219,7 @@ class PyVmomi(object):
             if cluster_name:
                 cluster_obj = self.find_cluster_by_name(cluster_name=cluster_name)
                 if cluster_obj:
-                    host_obj_list = [host for host in cluster_obj.host]
+                    host_obj_list = list(cluster_obj.host)
                 else:
                     self.module.fail_json(changed=False, msg="Cluster '%s' not found" % cluster_name)
             elif esxi_host_name:

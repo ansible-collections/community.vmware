@@ -151,7 +151,7 @@ class VmwareDatastoreMaintenanceMgr(PyVmomi):
             if self.state == 'present' and datastore.summary.maintenanceMode != 'normal':
                 datastore_results[datastore.name] = "Datastore '%s' is already in maintenance mode." % datastore.name
                 break
-            elif self.state == 'absent' and datastore.summary.maintenanceMode == 'normal':
+            if self.state == 'absent' and datastore.summary.maintenanceMode == 'normal':
                 datastore_results[datastore.name] = "Datastore '%s' is not in maintenance mode." % datastore.name
                 break
 

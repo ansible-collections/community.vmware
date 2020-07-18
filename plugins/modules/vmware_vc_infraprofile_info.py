@@ -149,6 +149,7 @@ RETURN = r'''
         }
 '''
 
+from distutils.version import LooseVersion
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
@@ -161,7 +162,6 @@ class VcVersionChecker(PyVmomi):
         super(VcVersionChecker, self).__init__(module)
 
     def check_vc_version(self):
-        from distutils.version import LooseVersion
         if LooseVersion(self.content.about.version) < LooseVersion('7'):
             self.module.fail_json(msg="vCenter version is less than 7.0.0 Please specify vCenter with version greater than or equal to 7.0.0")
 

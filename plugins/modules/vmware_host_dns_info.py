@@ -97,8 +97,8 @@ class VmwareDnsInfoManager(PyVmomi):
             host_info['virtual_nic_device'] = dns_config.virtualNicDevice
             host_info['host_name'] = dns_config.hostName
             host_info['domain_name'] = dns_config.domainName
-            host_info['ip_address'] = [ip for ip in dns_config.address]
-            host_info['search_domain'] = [domain for domain in dns_config.searchDomain]
+            host_info['ip_address'] = list(dns_config.address)
+            host_info['search_domain'] = list(dns_config.searchDomain)
             hosts_info[host.name] = host_info
         return hosts_info
 

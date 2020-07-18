@@ -183,11 +183,11 @@ class CapabilityInfoManager(PyVmomi):
                 encryptionVFlashSupported=hc.encryptionVFlashSupported,
                 encryptionCBRCSupported=hc.encryptionCBRCSupported,
                 encryptionHBRSupported=hc.encryptionHBRSupported,
-                supportedVmfsMajorVersion=[version for version in hc.supportedVmfsMajorVersion],
-                vmDirectPathGen2UnsupportedReason=[reason for reason in hc.vmDirectPathGen2UnsupportedReason],
-                ftCompatibilityIssues=[issue for issue in hc.ftCompatibilityIssues],
-                smpFtCompatibilityIssues=[issue for issue in hc.smpFtCompatibilityIssues],
-                replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
+                supportedVmfsMajorVersion=list(hc.supportedVmfsMajorVersion),
+                vmDirectPathGen2UnsupportedReason=list(hc.vmDirectPathGen2UnsupportedReason),
+                ftCompatibilityIssues=list(hc.ftCompatibilityIssues),
+                smpFtCompatibilityIssues=list(hc.smpFtCompatibilityIssues),
+                replayCompatibilityIssues=list(hc.replayCompatibilityIssues),
             )
 
             # The `checkpointFtSupported` and `checkpointFtCompatibilityIssues` properties have been removed from pyvmomi 7.0.
