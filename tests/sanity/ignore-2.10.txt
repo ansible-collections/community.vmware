@@ -1,20 +1,20 @@
-plugins/modules/vca_fw.py validate-modules:doc-default-does-not-match-spec
-plugins/modules/vca_fw.py validate-modules:doc-missing-type
-plugins/modules/vca_fw.py validate-modules:doc-required-mismatch
-plugins/modules/vca_fw.py validate-modules:parameter-list-no-elements
-plugins/modules/vca_fw.py validate-modules:parameter-type-not-in-doc
-plugins/modules/vca_fw.py validate-modules:undocumented-parameter
-plugins/modules/vca_nat.py validate-modules:doc-default-does-not-match-spec
-plugins/modules/vca_nat.py validate-modules:doc-missing-type
-plugins/modules/vca_nat.py validate-modules:doc-required-mismatch
-plugins/modules/vca_nat.py validate-modules:parameter-list-no-elements
-plugins/modules/vca_nat.py validate-modules:parameter-type-not-in-doc
-plugins/modules/vca_nat.py validate-modules:undocumented-parameter
-plugins/modules/vca_vapp.py validate-modules:doc-default-does-not-match-spec
-plugins/modules/vca_vapp.py validate-modules:doc-missing-type
-plugins/modules/vca_vapp.py validate-modules:doc-required-mismatch
-plugins/modules/vca_vapp.py validate-modules:invalid-ansiblemodule-schema
-plugins/modules/vca_vapp.py validate-modules:undocumented-parameter
+plugins/modules/vca_fw.py validate-modules:doc-default-does-not-match-spec # deprecated
+plugins/modules/vca_fw.py validate-modules:doc-missing-type # deprecated
+plugins/modules/vca_fw.py validate-modules:doc-required-mismatch # deprecated
+plugins/modules/vca_fw.py validate-modules:parameter-list-no-elements # deprecated
+plugins/modules/vca_fw.py validate-modules:parameter-type-not-in-doc # deprecated
+plugins/modules/vca_fw.py validate-modules:undocumented-parameter # deprecated
+plugins/modules/vca_nat.py validate-modules:doc-default-does-not-match-spec # deprecated
+plugins/modules/vca_nat.py validate-modules:doc-missing-type # deprecated
+plugins/modules/vca_nat.py validate-modules:doc-required-mismatch # deprecated
+plugins/modules/vca_nat.py validate-modules:parameter-list-no-elements # deprecated
+plugins/modules/vca_nat.py validate-modules:parameter-type-not-in-doc # deprecated
+plugins/modules/vca_nat.py validate-modules:undocumented-parameter # deprecated
+plugins/modules/vca_vapp.py validate-modules:doc-default-does-not-match-spec # deprecated
+plugins/modules/vca_vapp.py validate-modules:doc-missing-type # deprecated
+plugins/modules/vca_vapp.py validate-modules:doc-required-mismatch # deprecated
+plugins/modules/vca_vapp.py validate-modules:invalid-ansiblemodule-schema # deprecated
+plugins/modules/vca_vapp.py validate-modules:undocumented-parameter # deprecated
 plugins/modules/vcenter_extension_facts.py validate-modules:deprecation-mismatch
 plugins/modules/vcenter_extension_facts.py validate-modules:invalid-documentation
 plugins/modules/vcenter_extension_facts.py validate-modules:invalid-module-deprecation-version

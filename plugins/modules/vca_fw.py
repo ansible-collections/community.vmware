@@ -10,6 +10,10 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: vca_fw
+deprecated:
+  removed_at_date: '2022-06-01'
+  why: Module depends upon deprecated version of Pyvcloud library.
+  alternative: Use U(https://github.com/vmware/ansible-module-vcloud-director) instead.
 short_description: add remove firewall rules in a gateway  in a vca
 description:
   - Adds or removes firewall rules from a gateway in a vca environment
@@ -168,6 +172,11 @@ def main():
 
     module = AnsibleModule(argument_spec, supports_check_mode=True)
 
+    module.deprecate(
+        msg="The 'vca_fw' module is deprecated, Please use https://github.com/vmware/ansible-module-vcloud-director instead",
+        date="2022-06-01",
+        collection_name="community.vmware"
+    )
     fw_rules = module.params.get('fw_rules')
     gateway_name = module.params.get('gateway_name')
     vdc_name = module.params['vdc_name']

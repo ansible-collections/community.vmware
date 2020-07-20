@@ -10,6 +10,10 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: vca_nat
+deprecated:
+  removed_at_date: '2022-06-01'
+  why: Module depends upon deprecated version of Pyvcloud library.
+  alternative: Use U(https://github.com/vmware/ansible-module-vcloud-director) instead.
 short_description: add remove nat rules in a gateway  in a vca
 description:
   - Adds or removes nat rules from a gateway in a vca environment
@@ -128,7 +132,11 @@ def main():
     )
 
     module = AnsibleModule(argument_spec, supports_check_mode=True)
-
+    module.deprecate(
+        msg="The 'vca_nat' module is deprecated, Please use https://github.com/vmware/ansible-module-vcloud-director instead",
+        date="2022-06-01",
+        collection_name="community.vmware"
+    )
     vdc_name = module.params.get('vdc_name')
     nat_rules = module.params['nat_rules']
     gateway_name = module.params['gateway_name']

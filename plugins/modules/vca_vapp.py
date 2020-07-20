@@ -9,6 +9,10 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 module: vca_vapp
+deprecated:
+  removed_at_date: '2022-06-01'
+  why: Module depends upon deprecated version of Pyvcloud library.
+  alternative: Use U(https://github.com/vmware/ansible-module-vcloud-director) instead.
 short_description: Manages vCloud Air vApp instances.
 description:
   - This module will actively managed vCloud Air vApp instances.  Instances
@@ -307,6 +311,12 @@ def main():
 
     module = VcaAnsibleModule(argument_spec=argument_spec,
                               supports_check_mode=True)
+
+    module.deprecate(
+        msg="The 'vca_fw' module is deprecated, Please use https://github.com/vmware/ansible-module-vcloud-director instead",
+        date="2022-06-01",
+        collection_name="community.vmware"
+    )
 
     state = module.params['state']
     operation = module.params['operation']
