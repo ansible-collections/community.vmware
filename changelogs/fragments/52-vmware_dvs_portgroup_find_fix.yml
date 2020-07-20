@@ -1,0 +1,2 @@
+bugfixes:
+- Fix comparison between str and int on method vlan_match (https://github.com/ansible-collections/vmware/pull/52).

@@ -6,6 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_dvswitch: true
+    setup_dvs_portgroup: true
 
 - name: get list of portgroups
   vmware_dvs_portgroup_find:
@@ -21,3 +22,21 @@
 - assert:
     that:
       - dvspg_0001.dvs_portgroups is defined
+
+- name: get portgroups by vlanid
+  vmware_dvs_portgroup_find:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    vlanid: "0"
+  register: dvspgvlid_0001
+
+- debug:
+    var: dvspgvlid_0001
+
+- assert:
+    that:
+      - dvspgvlid_0001.dvs_portgroups is defined
+      - dvspgvlid_0001.dvs_portgroups[1] is defined
+      - dvspgvlid_0001.dvs_portgroups[1].vlan_id == "0"
