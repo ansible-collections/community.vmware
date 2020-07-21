@@ -1,2 +1,2 @@
 bugfixes:
-- Fix comparison between str and int on method vlan_match (https://github.com/ansible-collections/vmware/pull/52).
+- vmware_dvs_portgroup_find - Fix comparison between str and int on method vlan_match (https://github.com/ansible-collections/vmware/pull/52).
