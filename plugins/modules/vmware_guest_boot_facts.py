@@ -19,7 +19,6 @@ DOCUMENTATION = '''
 ---
 module: vmware_guest_boot_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_guest_boot_info) module.
   alternative: Use M(community.vmware.vmware_guest_boot_info) instead.
@@ -211,6 +210,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_guest_boot_facts', 'community.vmware.vmware_guest_boot_facts'):
+        module.deprecate("The 'vmware_guest_boot_facts' module has been renamed to 'vmware_guest_boot_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     pyv = VmBootFactsManager(module)
     pyv.ensure()

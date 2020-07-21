@@ -17,7 +17,6 @@ DOCUMENTATION = r'''
 ---
 module: vcenter_extension_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vcenter_extension_info) module.
   alternative: Use M(community.vmware.vcenter_extension_info) instead.
@@ -112,6 +111,10 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
     )
+
+    if module._name in ('vcenter_extension_facts', 'community.vmware.vcenter_extension_facts'):
+        module.deprecate("The 'vcenter_extension_facts' module has been renamed to 'vcenter_extension_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vcenter_extension_facts_mgr = VmwareExtManager(module)
     vcenter_extension_facts_mgr.gather_plugin_facts()

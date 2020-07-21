@@ -851,8 +851,9 @@ def main():
     if module.params['networks']:
         network_data = {}
         module.deprecate(
-            'The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple interfaces',
-            '2.11'
+            msg='The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple interfaces',
+            version='2.0.0',
+            collection_name='community.vmware'
         )
         diff, changed, network_info = pyv._deprectated_list_config()
         nd = copy.deepcopy(network_info)

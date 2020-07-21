@@ -328,9 +328,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster DAS configuration spec
 
         """
-        msg = 'Configuring HA using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring HA using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_ha module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         das_config = vim.cluster.DasConfigInfo()
         das_config.enabled = self.enable_ha
@@ -367,9 +367,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster DRS configuration spec
 
         """
-        msg = 'Configuring DRS using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring DRS using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_drs module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         drs_config = vim.cluster.DrsConfigInfo()
 
@@ -386,9 +386,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster VSAN configuration spec
 
         """
-        msg = 'Configuring VSAN using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring VSAN using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_vsan module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         vsan_config = vim.vsan.cluster.ConfigInfo()
         vsan_config.enabled = self.enable_vsan

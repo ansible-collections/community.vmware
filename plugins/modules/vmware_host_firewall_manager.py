@@ -386,7 +386,11 @@ def main():
                 if len(rule_option['allowed_hosts']) == 1:
                     allowed_hosts = rule_option['allowed_hosts'][0]
                     rule_option['allowed_hosts'] = allowed_hosts
-                    module.deprecate('allowed_hosts should be a dict, not a list', '2.13')
+                    module.deprecate(
+                        msg='allowed_hosts should be a dict, not a list',
+                        version='3.0.0',
+                        collection_name='community.vmware'
+                    )
 
     vmware_firewall_manager = VmwareFirewallManager(module)
     vmware_firewall_manager.check_params()

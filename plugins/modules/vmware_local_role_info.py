@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_role_info
 short_description: Gather info about local roles on an ESXi host
@@ -28,7 +28,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather info about local role from an ESXi
   community.vmware.vmware_local_role_info:
     hostname: '{{ esxi_hostname }}'
@@ -47,7 +47,7 @@ RETURN = r'''
 local_role_info:
     description: A list of dict about role information present on ESXi host
     returned: always
-    type: list of dict
+    type: list
     sample: [
         {
             "privileges": [

@@ -275,7 +275,10 @@ def main():
         supports_check_mode=True,
     )
     if module._name == 'vmware_cluster_facts':
-        module.deprecate("The 'vmware_cluster_facts' module has been renamed to 'vmware_cluster_info'", version='2.13')
+        module.deprecate(
+            msg="The 'vmware_cluster_facts' module has been renamed to 'vmware_cluster_info'",
+            version='3.0.0',  # was Ansible 2.13
+            collection_name='community.vmware')
 
     pyv = VmwreClusterInfoManager(module)
     pyv.gather_cluster_info()

@@ -18,7 +18,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_vmhba_facts
 deprecated:
-  removed_in: '2.13'
   removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_host_vmhba_info) module.
   alternative: Use M(community.vmware.vmware_host_vmhba_info) instead.
@@ -216,6 +215,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_host_vmhba_facts', 'community.vmware.vmware_host_vmhba_facts'):
+        module.deprecate("The 'vmware_host_vmhba_facts' module has been renamed to 'vmware_host_vmhba_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     host_vmhba_mgr = HostVmhbaMgr(module)
     module.exit_json(changed=False, hosts_vmhbas_facts=host_vmhba_mgr.gather_host_vmhba_facts())

@@ -317,8 +317,9 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    if module._name == 'vmware_vm_facts':
-        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'", version='2.13')
+    if module._name in ('vmware_vm_facts', 'community.vmware.vmware_vm_facts'):
+        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vm_info = VmwareVmInfo(module)
     _virtual_machines = vmware_vm_info.get_all_virtual_machines()
