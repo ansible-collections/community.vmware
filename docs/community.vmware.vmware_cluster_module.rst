@@ -79,7 +79,7 @@ Parameters
                     <b>drs_default_vm_behavior</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -94,7 +94,7 @@ Parameters
                                             <div>If set to <code>partiallyAutomated</code>, then vCenter generate recommendations for virtual machine migration and for the placement with a host. vCenter automatically implement placement at power on.</div>
                                             <div>If set to <code>manual</code>, then vCenter generate recommendations for virtual machine migration and for the placement with a host. vCenter should not implement the recommendations automatically.</div>
                                             <div>If set to <code>fullyAutomated</code>, then vCenter should automate both the migration of virtual machines and their placement with a host at power on.</div>
-                                            <div>Use <code>drs_default_vm_behavior</code> of <span class='module'>vmware_cluster_drs</span> instead.</div>
+                                            <div>Use <code>drs_default_vm_behavior</code> of <span class='module'>community.vmware.vmware_cluster_drs</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -116,7 +116,7 @@ Parameters
                                                                 <td>
                                             <div>Determines whether DRS Behavior overrides for individual virtual machines are enabled.</div>
                                             <div>If set to <code>True</code>, overrides <code>drs_default_vm_behavior</code>.</div>
-                                            <div>Use <code>drs_enable_vm_behavior_overrides</code> of <span class='module'>vmware_cluster_drs</span> instead.</div>
+                                            <div>Use <code>drs_enable_vm_behavior_overrides</code> of <span class='module'>community.vmware.vmware_cluster_drs</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -126,7 +126,7 @@ Parameters
                     <b>drs_vmotion_rate</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -140,7 +140,7 @@ Parameters
                                                                             </td>
                                                                 <td>
                                             <div>Threshold for generated ClusterRecommendations.</div>
-                                            <div>Use <code>drs_vmotion_rate</code> of <span class='module'>vmware_cluster_drs</span> instead.</div>
+                                            <div>Use <code>drs_vmotion_rate</code> of <span class='module'>community.vmware.vmware_cluster_drs</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -161,7 +161,7 @@ Parameters
                                                                             </td>
                                                                 <td>
                                             <div>If set to <code>yes</code>, will enable DRS when the cluster is created.</div>
-                                            <div>Use <code>enable_drs</code> of <span class='module'>vmware_cluster_drs</span> instead.</div>
+                                            <div>Use <code>enable_drs</code> of <span class='module'>community.vmware.vmware_cluster_drs</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -182,7 +182,7 @@ Parameters
                                                                             </td>
                                                                 <td>
                                             <div>If set to <code>yes</code> will enable HA when the cluster is created.</div>
-                                            <div>Use <code>enable_ha</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>enable_ha</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -203,7 +203,7 @@ Parameters
                                                                             </td>
                                                                 <td>
                                             <div>If set to <code>yes</code> will enable vSAN when the cluster is created.</div>
-                                            <div>Use <code>enable_vsan</code> of <span class='module'>vmware_cluster_vsan</span> instead.</div>
+                                            <div>Use <code>enable_vsan</code> of <span class='module'>community.vmware.vmware_cluster_vsan</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -225,7 +225,7 @@ Parameters
                                                                 <td>
                                             <div>Determines if strict admission control is enabled.</div>
                                             <div>It is recommended to set this parameter to <code>True</code>, please refer documentation for more details.</div>
-                                            <div>Use <code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> or <code>failover_host_admission_control</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> or <code>failover_host_admission_control</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -235,7 +235,7 @@ Parameters
                     <b>ha_failover_level</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -244,7 +244,7 @@ Parameters
                                                                 <td>
                                             <div>Number of host failures that should be tolerated, still guaranteeing sufficient resources to restart virtual machines on available hosts.</div>
                                             <div>Accepts integer values only.</div>
-                                            <div>Use <code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> or <code>failover_host_admission_control</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> or <code>failover_host_admission_control</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -254,7 +254,7 @@ Parameters
                     <b>ha_host_monitoring</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -268,7 +268,7 @@ Parameters
                                             <div>If set to <code>enabled</code>, HA restarts virtual machines after a host fails.</div>
                                             <div>If set to <code>disabled</code>, HA does not restart virtual machines after a host fails.</div>
                                             <div>If <code>enable_ha</code> is set to <code>no</code>, then this value is ignored.</div>
-                                            <div>Use <code>ha_host_monitoring</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_host_monitoring</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -278,7 +278,7 @@ Parameters
                     <b>ha_restart_priority</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -296,7 +296,7 @@ Parameters
                                             <div>If set to <code>high</code>, then virtual machine with this priority have a higher chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
                                             <div>If set to <code>medium</code>, then virtual machine with this priority have an intermediate chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
                                             <div>If set to <code>low</code>, then virtual machine with this priority have a lower chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
-                                            <div>Use <code>ha_restart_priority</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_restart_priority</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -306,7 +306,7 @@ Parameters
                     <b>ha_vm_failure_interval</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -316,7 +316,7 @@ Parameters
                                             <div>The number of seconds after which virtual machine is declared as failed if no heartbeat has been received.</div>
                                             <div>This setting is only valid if <code>ha_vm_monitoring</code> is set to, either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
                                             <div>Unit is seconds.</div>
-                                            <div>Use <code>ha_vm_failure_interval</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_vm_failure_interval</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -326,7 +326,7 @@ Parameters
                     <b>ha_vm_max_failure_window</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -337,7 +337,7 @@ Parameters
                                             <div>This setting is only valid if <code>ha_vm_monitoring</code> is set to, either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
                                             <div>Unit is seconds.</div>
                                             <div>Default specifies no failure window.</div>
-                                            <div>Use <code>ha_vm_max_failure_window</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_vm_max_failure_window</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -347,7 +347,7 @@ Parameters
                     <b>ha_vm_max_failures</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -356,7 +356,7 @@ Parameters
                                                                 <td>
                                             <div>Maximum number of failures and automated resets allowed during the time that <code>ha_vm_max_failure_window</code> specifies.</div>
                                             <div>This setting is only valid if <code>ha_vm_monitoring</code> is set to, either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                                            <div>Use <code>ha_vm_max_failures</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_vm_max_failures</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -366,7 +366,7 @@ Parameters
                     <b>ha_vm_min_up_time</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -376,7 +376,7 @@ Parameters
                                             <div>The number of seconds for the virtual machine&#x27;s heartbeats to stabilize after the virtual machine has been powered on.</div>
                                             <div>This setting is only valid if <code>ha_vm_monitoring</code> is set to, either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
                                             <div>Unit is seconds.</div>
-                                            <div>Use <code>ha_vm_min_up_time</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_vm_min_up_time</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -386,7 +386,7 @@ Parameters
                     <b>ha_vm_monitoring</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -402,7 +402,7 @@ Parameters
                                             <div>If set to <code>vmMonitoringDisabled</code>, virtual machine health monitoring is disabled.</div>
                                             <div>If set to <code>vmMonitoringOnly</code>, HA response to virtual machine heartbeat failure.</div>
                                             <div>If <code>enable_ha</code> is set to <code>no</code>, then this value is ignored.</div>
-                                            <div>Use <code>ha_vm_monitoring</code> of <span class='module'>vmware_cluster_ha</span> instead.</div>
+                                            <div>Use <code>ha_vm_monitoring</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -556,7 +556,7 @@ Parameters
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -626,7 +626,7 @@ Parameters
                                                                             </td>
                                                                 <td>
                                             <div>Determines whether the VSAN service is configured to automatically claim local storage on VSAN-enabled hosts in the cluster.</div>
-                                            <div>Use <code>vsan_auto_claim_storage</code> of <span class='module'>vmware_cluster_vsan</span> instead.</div>
+                                            <div>Use <code>vsan_auto_claim_storage</code> of <span class='module'>community.vmware.vmware_cluster_vsan</span> instead.</div>
                                             <div>Deprecated option, will be removed in version 2.12.</div>
                                                         </td>
             </tr>
@@ -640,12 +640,12 @@ See Also
 
 .. seealso::
 
-   :ref:`vmware_cluster_drs_module`
-      The official documentation on the **vmware_cluster_drs** module.
-   :ref:`vmware_cluster_ha_module`
-      The official documentation on the **vmware_cluster_ha** module.
-   :ref:`vmware_cluster_vsan_module`
-      The official documentation on the **vmware_cluster_vsan** module.
+   :ref:`community.vmware.vmware_cluster_drs_module`
+      The official documentation on the **community.vmware.vmware_cluster_drs** module.
+   :ref:`community.vmware.vmware_cluster_ha_module`
+      The official documentation on the **community.vmware.vmware_cluster_ha** module.
+   :ref:`community.vmware.vmware_cluster_vsan_module`
+      The official documentation on the **community.vmware.vmware_cluster_vsan** module.
 
 
 Examples

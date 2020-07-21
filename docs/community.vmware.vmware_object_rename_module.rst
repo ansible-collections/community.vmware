@@ -1,11 +1,11 @@
-.. _community.vmware.vsphere_copy_module:
+.. _community.vmware.vmware_object_rename_module:
 
 
-*****************************
-community.vmware.vsphere_copy
-*****************************
+*************************************
+community.vmware.vmware_object_rename
+*************************************
 
-**Copy a file to a VMware datastore**
+**Renames VMware objects**
 
 
 
@@ -16,9 +16,19 @@ community.vmware.vsphere_copy
 
 Synopsis
 --------
-- Upload files to a VMware datastore through a vCenter REST API.
+- This module can be used to rename VMware objects.
+- All variables and VMware object names are case sensitive.
+- Renaming Host and Network is not supported by VMware APIs.
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- python >= 2.7
+- PyVmomi
+- vSphere Automation SDK
 
 
 Parameters
@@ -35,36 +45,6 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The datacenter on the vCenter server that holds the datastore.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datastore</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The datastore to push files to.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -74,11 +54,73 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
+                                            <div>The hostname or IP address of the vSphere vCenter server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                                            <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: host</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>new_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                 / <span style="color: red">required</span>                    </div>
                                     </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>New name for VMware object.</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: object_new_name</div>
+                                    </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>object_moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Managed object id of the VMware object to work with.</div>
+                                            <div>Mutually exclusive with <code>object_name</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>object_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the object to work with.</div>
+                                            <div>Mutually exclusive with <code>object_moid</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>object_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Type of object to work with.</div>
+                                            <div>Valid options are Cluster, ClusterComputeResource, Datacenter, Datastore, Folder, ResourcePool, VM or VirtualMachine.</div>
+                                                        </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
@@ -92,26 +134,9 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>The password of the vSphere vCenter or ESXi server.</div>
+                                            <div>The password of the vSphere vCenter server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                                            <div>Environment variable support added in Ansible 2.6.</div>
                                                                 <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The file to push to the datastore.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: dest</div>
                                     </td>
             </tr>
                                 <tr>
@@ -127,75 +152,27 @@ Parameters
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">443</div>
                                     </td>
                                                                 <td>
-                                            <div>The port number of the vSphere vCenter or ESXi server.</div>
+                                            <div>The port number of the vSphere vCenter.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                                            <div>Environment variable support added in Ansible 2.6.</div>
                                                         </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
+                    <b>protocol</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
-                                                                                                                                                            </td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>http</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>https</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
                                                                 <td>
-                                            <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                                            <div>The format is a hostname or a IP.</div>
-                                            <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                                            <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                                            <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>src</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The file to push to vCenter.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: name</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">10</div>
-                                    </td>
-                                                                <td>
-                                            <div>The timeout in seconds for the upload to the datastore.</div>
+                                            <div>The connection to protocol.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -210,10 +187,9 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>The username of the vSphere vCenter or ESXi server.</div>
+                                            <div>The username of the vSphere vCenter server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                                            <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: login</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
                                     </td>
             </tr>
                                 <tr>
@@ -232,10 +208,9 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                            <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                                            <div>Allows connection when SSL certificates are not valid.</div>
+                                            <div>Set to <code>no</code> when certificates are not trusted.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                                            <div>Environment variable support added in Ansible 2.6.</div>
-                                            <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                                                         </td>
             </tr>
                         </table>
@@ -246,8 +221,7 @@ Notes
 -----
 
 .. note::
-   - This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using ``transport: local`` or using ``delegate_to``.
-   - Tested on vSphere 5.5 and ESXi 6.7
+   - Tested on vSphere 6.5
 
 
 
@@ -257,41 +231,95 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Copy file to datastore using delegate_to
-      community.vmware.vsphere_copy:
+    - name: Rename a virtual machine
+      community.vmware.vmware_object_rename:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: DC1 Someplace
-        datastore: datastore1
-        path: some/remote/file
+        validate_certs: no
+        new_name: Fedora_31
+        object_name: Fedora_VM
+        object_type: VirtualMachine
       delegate_to: localhost
 
-    - name: Copy file to datastore when datacenter is inside folder called devel
-      community.vmware.vsphere_copy:
+    - name: Rename a virtual machine using moid
+      community.vmware.vmware_object_rename:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: devel/DC1
-        datastore: datastore1
-        path: some/remote/file
+        validate_certs: no
+        new_name: Fedora_31
+        object_moid: vm-14
+        object_type: VirtualMachine
       delegate_to: localhost
 
-    - name: Copy file to datastore using other_system
-      community.vmware.vsphere_copy:
+    - name: Rename a datacenter
+      community.vmware.vmware_object_rename:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        src: /other/local/file
-        datacenter: DC2 Someplace
-        datastore: datastore2
-        path: other/remote/file
-      delegate_to: other_system
+        validate_certs: no
+        new_name: Asia_Datacenter
+        object_name: dc1
+        object_type: Datacenter
+      delegate_to: localhost
+
+    - name: Rename a folder with moid
+      community.vmware.vmware_object_rename:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: no
+        new_name: backup
+        object_moid: group-v46
+        object_type: Folder
+      delegate_to: localhost
+
+    - name: Rename a cluster with moid
+      community.vmware.vmware_object_rename:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: no
+        new_name: CCR_1
+        object_moid: domain-c33
+        object_type: Cluster
+      delegate_to: localhost
 
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+                    <tr>
+                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rename_status</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                                          </div>
+                                    </td>
+                <td>on success</td>
+                <td>
+                                                                        <div>metadata about VMware object rename operation</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;current_name&#x27;: &#x27;Fedora_31&#x27;, &#x27;desired_name&#x27;: &#x27;Fedora_31&#x27;, &#x27;previous_name&#x27;: &#x27;Fedora_VM&#x27;}</div>
+                                    </td>
+            </tr>
+                        </table>
+    <br/><br/>
 
 
 Status
@@ -301,6 +329,6 @@ Status
 Authors
 ~~~~~~~
 
-- Dag Wieers (@dagwieers)
+- Abhijeet Kasurde (@Akasurde)
 
 

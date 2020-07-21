@@ -16,8 +16,8 @@ community.vmware.vmware_local_user_facts
 DEPRECATED
 ----------
 :Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`vmware_local_user_info <vmware_local_user_info_module>` module.
-:Alternative: Use :ref:`vmware_local_user_info <vmware_local_user_info_module>` instead.
+:Why: Deprecated in favour of :ref:`community.vmware.vmware_local_user_info <community.vmware.vmware_local_user_info_module>` module.
+:Alternative: Use :ref:`community.vmware.vmware_local_user_info <community.vmware.vmware_local_user_info_module>` instead.
 
 
 
@@ -242,7 +242,7 @@ Status
 ------
 
 
-- This module will be removed in version 2.13. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

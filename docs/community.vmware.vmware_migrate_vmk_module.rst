@@ -264,7 +264,7 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 5.5
+   - Tested on vSphere 6.7
 
 
 

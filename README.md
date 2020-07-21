@@ -153,6 +153,7 @@ Name | Description
 [community.vmware.vmware_host_firewall_manager](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_firewall_manager_module.rst)|Manage firewall configurations about an ESXi host
 [community.vmware.vmware_host_hyperthreading](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_hyperthreading_module.rst)|Enables/Disables Hyperthreading optimization for an ESXi host system
 [community.vmware.vmware_host_ipv6](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_ipv6_module.rst)|Enables/Disables IPv6 support for an ESXi host system
+[community.vmware.vmware_host_iscsi](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_iscsi_module.rst)|Manage the iSCSI configuration of ESXi host
 [community.vmware.vmware_host_kernel_manager](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_kernel_manager_module.rst)|Manage kernel module options on ESXi hosts
 [community.vmware.vmware_host_lockdown](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_lockdown_module.rst)|Manage administrator permission for the local administrative account for the ESXi host
 [community.vmware.vmware_host_logbundle](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_host_logbundle_module.rst)|Fetch logbundle file from ESXi
@@ -184,6 +185,7 @@ Name | Description
 [community.vmware.vmware_local_user_manager](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_local_user_manager_module.rst)|Manage local users on an ESXi host
 [community.vmware.vmware_maintenancemode](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_maintenancemode_module.rst)|Place a host into maintenance mode
 [community.vmware.vmware_migrate_vmk](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_migrate_vmk_module.rst)|Migrate a VMK interface from VSS to VDS
+[community.vmware.vmware_object_rename](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_object_rename_module.rst)|Renames VMware objects
 [community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
 [community.vmware.vmware_portgroup_facts](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_portgroup_facts_module.rst)|Gathers facts about an ESXi host's Port Group configuration
@@ -196,12 +198,14 @@ Name | Description
 [community.vmware.vmware_tag_manager](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_tag_manager_module.rst)|Manage association of VMware tags with VMware objects
 [community.vmware.vmware_target_canonical_facts](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_target_canonical_facts_module.rst)|Return canonical (NAA) from an ESXi host system
 [community.vmware.vmware_target_canonical_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_target_canonical_info_module.rst)|Return canonical (NAA) from an ESXi host system
-[community.vmware.vmware_vc_infraprofile_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vc_infraprofile_info_module.rst)|List and Export VMware Vcenter infra profile configs.
+[community.vmware.vmware_vc_infraprofile_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vc_infraprofile_info_module.rst)|List and Export VMware vCenter infra profile configs.
 [community.vmware.vmware_vcenter_settings](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vcenter_settings_module.rst)|Configures general settings on a vCenter server
+[community.vmware.vmware_vcenter_settings_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vcenter_settings_info_module.rst)|Gather info vCenter settings
 [community.vmware.vmware_vcenter_statistics](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vcenter_statistics_module.rst)|Configures statistics on a vCenter server
 [community.vmware.vmware_vm_host_drs_rule](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_host_drs_rule_module.rst)|Creates vm/host group in a given cluster
 [community.vmware.vmware_vm_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_info_module.rst)|Return basic info pertaining to a VMware machine guest
 [community.vmware.vmware_vm_shell](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_shell_module.rst)|Run commands in a VMware guest operating system
+[community.vmware.vmware_vm_storage_policy](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_storage_policy_module.rst)|Create vSphere storage policies
 [community.vmware.vmware_vm_storage_policy_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_storage_policy_info_module.rst)|Gather information about vSphere storage profile defined storage policy information.
 [community.vmware.vmware_vm_vm_drs_rule](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_vm_drs_rule_module.rst)|Configure VMware DRS Affinity rule for virtual machine in given cluster
 [community.vmware.vmware_vm_vss_dvs_migrate](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_vss_dvs_migrate_module.rst)|Migrates a virtual machine from a standard vswitch to distributed
@@ -218,6 +222,11 @@ Name | Description
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
+
+### Inventory plugins
+Name | Description
+--- | ---
+[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/vmware/blob/master/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 <!--end collection content-->
 

@@ -36,32 +36,33 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
                         <th width="100%">Comments</th>
         </tr>
                     <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>annotation</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>A note or annotation to include in the virtual machine.</div>
-                                                        </td>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: notes</div>
+                                    </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cdrom</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">raw</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -70,23 +71,123 @@ Parameters
                                             <div>A CD-ROM configuration for the virtual machine.</div>
                                             <div>Or a list of CD-ROMs configuration for the virtual machine. Added in version 2.9.</div>
                                             <div>Parameters <code>controller_type</code>, <code>controller_number</code>, <code>unit_number</code>, <code>state</code> are added for a list of CD-ROMs configuration support.</div>
-                                            <div>Valid attributes are:</div>
-                                            <div>- <code>type</code> (string): The type of CD-ROM, valid options are <code>none</code>, <code>client</code> or <code>iso</code>. With <code>none</code> the CD-ROM will be disconnected but present. The default value is <code>client</code>.</div>
-                                            <div>- <code>iso_path</code> (string): The datastore path to the ISO file to use, in the form of <code>[datastore1] path/to/file.iso</code>. Required if type is set <code>iso</code>.</div>
-                                            <div>- <code>controller_type</code> (string): Valid options are <code>ide</code> and <code>sata</code>. Default value is <code>ide</code>.</div>
-                                            <div>When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA disks.</div>
-                                            <div>- <code>controller_number</code> (int): For <code>ide</code> controller, valid value is 0 or 1. For <code>sata</code> controller, valid value is 0 to 3.</div>
-                                            <div>- <code>unit_number</code> (int): For CD-ROM device attach to <code>ide</code> controller, valid value is 0 or 1, attach to <code>sata</code> controller, valid value is 0 to 29. <code>controller_number</code> and <code>unit_number</code> are mandatory attributes.</div>
-                                            <div>- <code>state</code> (string): Valid value is <code>present</code> or <code>absent</code>. Default is <code>present</code>. If set to <code>absent</code>, then the specified CD-ROM will be removed. For <code>ide</code> controller, hot-add or hot-remove CD-ROM is not supported.</div>
+                                            <div>For <code>ide</code> controller, hot-add or hot-remove CD-ROM is not supported.</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>For <code>ide</code> controller, valid value is 0 or 1.</div>
+                                            <div>For <code>sata</code> controller, valid value is 0 to 3.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Valid options are <code>ide</code> and <code>sata</code>.</div>
+                                            <div>Default value is <code>ide</code>.</div>
+                                            <div>When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA disks.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>iso_path</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The datastore path to the ISO file to use, in the form of <code>[datastore1] path/to/file.iso</code>.</div>
+                                            <div>Required if type is set <code>iso</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Valid value is <code>present</code> or <code>absent</code>.</div>
+                                            <div>Default is <code>present</code>.</div>
+                                            <div>If set to <code>absent</code>, then the specified CD-ROM will be removed.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The type of CD-ROM, valid options are <code>none</code>, <code>client</code> or <code>iso</code>.</div>
+                                            <div>With <code>none</code> the CD-ROM will be disconnected but present.</div>
+                                            <div>The default value is <code>client</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>unit_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>For CD-ROM device attach to <code>ide</code> controller, valid value is 0 or 1.</div>
+                                            <div>For CD-ROM device attach to <code>sata</code> controller, valid value is 0 to 29.</div>
+                                            <div><code>controller_number</code> and <code>unit_number</code> are mandatory attributes.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cluster</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -99,12 +200,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>convert</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -119,12 +220,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>customization</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">dictionary</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -135,37 +236,347 @@ Parameters
                                             <div>For supported customization operating system matrix, (see <a href='http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf'>http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf</a>)</div>
                                             <div>All parameters and VMware object names are case sensitive.</div>
                                             <div>Linux based OSes requires Perl package to be installed for OS customizations.</div>
-                                            <div>Common parameters (Linux/Windows):</div>
-                                            <div>- <code>existing_vm</code> (bool): If set to <code>True</code>, do OS customization on the specified virtual machine directly.</div>
-                                            <div>- <code>dns_servers</code> (list): List of DNS servers to configure.</div>
-                                            <div>- <code>dns_suffix</code> (list): List of domain suffixes, also known as DNS search path (default: <code>domain</code> parameter).</div>
-                                            <div>- <code>domain</code> (string): DNS domain name to use.</div>
-                                            <div>- <code>hostname</code> (string): Computer hostname (default: shorted <code>name</code> parameter). Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.</div>
-                                            <div>Parameters related to Linux customization:</div>
-                                            <div>- <code>timezone</code> (string): Timezone (See List of supported time zones for different vSphere versions in Linux/Unix</div>
-                                            <div>- <code>hwclockUTC</code> (bool): Specifies whether the hardware clock is in UTC or local time.</div>
-                                            <div>Parameters related to Windows customization:</div>
-                                            <div>- <code>autologon</code> (bool): Auto logon after virtual machine customization (default: False).</div>
-                                            <div>- <code>autologoncount</code> (int): Number of autologon after reboot (default: 1).</div>
-                                            <div>- <code>domainadmin</code> (string): User used to join in AD domain (mandatory with <code>joindomain</code>).</div>
-                                            <div>- <code>domainadminpassword</code> (string): Password used to join in AD domain (mandatory with <code>joindomain</code>).</div>
-                                            <div>- <code>fullname</code> (string): Server owner name (default: Administrator).</div>
-                                            <div>- <code>joindomain</code> (string): AD domain to join (Not compatible with <code>joinworkgroup</code>).</div>
-                                            <div>- <code>joinworkgroup</code> (string): Workgroup to join (Not compatible with <code>joindomain</code>, default: WORKGROUP).</div>
-                                            <div>- <code>orgname</code> (string): Organisation name (default: ACME).</div>
-                                            <div>- <code>password</code> (string): Local administrator password.</div>
-                                            <div>- <code>productid</code> (string): Product ID.</div>
-                                            <div>- <code>runonce</code> (list): List of commands to run at first user logon.</div>
-                                            <div>- <code>timezone</code> (int): Timezone (See <a href='https://msdn.microsoft.com/en-us/library/ms912391.aspx'>https://msdn.microsoft.com/en-us/library/ms912391.aspx</a>).</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>autologon</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Auto logon after virtual machine customization.</div>
+                                            <div>Specific to Windows customization.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>autologoncount</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">1</div>
+                                    </td>
+                                                                <td>
+                                            <div>Number of autologon after reboot.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>dns_servers</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>List of DNS servers to configure.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>dns_suffix</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>List of domain suffixes, also known as DNS search path.</div>
+                                            <div>Default <code>domain</code> parameter.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>domain</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>DNS domain name to use.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>domainadmin</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>User used to join in AD domain.</div>
+                                            <div>Required if <code>joindomain</code> specified.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>domainadminpassword</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Password used to join in AD domain.</div>
+                                            <div>Required if <code>joindomain</code> specified.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>existing_vm</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If set to <code>True</code>, do OS customization on the specified virtual machine directly.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>fullname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"Administrator"</div>
+                                    </td>
+                                                                <td>
+                                            <div>Server owner name.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Computer hostname.</div>
+                                            <div>Default is shortened <code>name</code> parameter.</div>
+                                            <div>Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hwclockUTC</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Specifies whether the hardware clock is in UTC or local time.</div>
+                                            <div>Specific to Linux customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>joindomain</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>AD domain to join.</div>
+                                            <div>Not compatible with <code>joinworkgroup</code>.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>joinworkgroup</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"WORKGROUP"</div>
+                                    </td>
+                                                                <td>
+                                            <div>Workgroup to join.</div>
+                                            <div>Not compatible with <code>joindomain</code>.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>orgname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"ACME"</div>
+                                    </td>
+                                                                <td>
+                                            <div>Organisation name.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Local administrator password.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>productid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Product ID.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>runonce</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>List of commands to run at first user logon.</div>
+                                            <div>Specific to Windows customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timezone</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Timezone.</div>
+                                            <div>See List of supported time zones for different vSphere versions in Linux/Unix.</div>
+                                            <div>Common for Linux and Windows customization.</div>
+                                            <div><a href='https://msdn.microsoft.com/en-us/library/ms912391.aspx'>Windows</a>.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>customization_spec</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -177,13 +588,13 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>customvalues</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                                                                    </div>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>                                            </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -194,12 +605,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -211,25 +622,25 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datastore</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Specify datastore or datastore cluster to provision virtual machine.</div>
-                                            <div>This parameter takes precedence over &quot;disk.datastore&quot; parameter.</div>
+                                            <div>This parameter takes precedence over <code>disk.datastore</code> parameter.</div>
                                             <div>This parameter can be used to override datastore or datastore cluster setting of the virtual machine when deployed from the template.</div>
                                             <div>Please see example for more usage.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>delete_from_inventory</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -248,13 +659,13 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>disk</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                                                                    </div>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>                                            </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -263,40 +674,252 @@ Parameters
                                             <div>This parameter is case sensitive.</div>
                                             <div>Shrinking disks is not supported.</div>
                                             <div>Removing existing disks of the virtual machine is not supported.</div>
-                                            <div>Attributes <code>controller_type</code>, <code>controller_number</code>, <code>unit_number</code> are used to configure multiple types of disk controllers and disks for creating or reconfiguring virtual machine. Added in version 2.10</div>
-                                            <div>Valid attributes are:</div>
-                                            <div>- <code>size_[tb,gb,mb,kb]</code> (integer): Disk storage size in specified unit.</div>
-                                            <div>- <code>type</code> (string): Valid values are:</div>
-                                            <div>- <code>thin</code> thin disk</div>
-                                            <div>- <code>eagerzeroedthick</code> eagerzeroedthick disk, added in version 2.5</div>
-                                            <div>Default: <code>None</code> thick disk, no eagerzero.</div>
-                                            <div>- <code>datastore</code> (string): The name of datastore which will be used for the disk. If <code>autoselect_datastore</code> is set to True, then will select the less used datastore whose name contains this &quot;disk.datastore&quot; string.</div>
-                                            <div>- <code>filename</code> (string): Existing disk image to be used. Filename must already exist on the datastore.</div>
-                                            <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in version 2.8.</div>
-                                            <div>- <code>autoselect_datastore</code> (bool): select the less used datastore. &quot;disk.datastore&quot; and &quot;disk.autoselect_datastore&quot; will not be used if <code>datastore</code> is specified outside this <code>disk</code> configuration.</div>
-                                            <div>- <code>disk_mode</code> (string): Type of disk mode. Added in version 2.6</div>
-                                            <div>- Available options are :</div>
-                                            <div>- <code>persistent</code>: Changes are immediately and permanently written to the virtual disk. This is default.</div>
-                                            <div>- <code>independent_persistent</code>: Same as persistent, but not affected by snapshots.</div>
-                                            <div>- <code>independent_nonpersistent</code>: Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
-                                            <div>- <code>controller_type</code> (string): Type of disk controller. Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code>, <code>paravirtual</code>, <code>sata</code> and <code>nvme</code>. When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA CDROMs.</div>
-                                            <div><code>nvme</code> support starts from hardware <code>version</code> 13 and ESXi version 6.5.</div>
-                                            <div>If set to <code>sata</code> type, please make sure <code>controller_number</code> and <code>unit_number</code> are set correctly when <code>cdrom</code> also set to <code>sata</code> type.</div>
-                                            <div>- <code>controller_number</code> (integer): Disk controller bus number. The maximum number of same type controller is 4 per VM. Valid value range from 0 to 3.</div>
-                                            <div>- <code>unit_number</code> (integer): Disk Unit Number.</div>
-                                            <div>Valid value range from 0 to 15 for SCSI controller, except 7.</div>
-                                            <div>Valid value range from 0 to 14 for NVME controller.</div>
-                                            <div>Valid value range from 0 to 29 for SATA controller.</div>
-                                            <div><code>controller_type</code>, <code>controller_number</code> and <code>unit_number</code> are required when creating or reconfiguring VMs with multiple types of disk controllers and disks. When creating new VM, the first configured disk in the <code>disk</code> list will be &quot;Hard Disk 1&quot;.</div>
+                                            <div>Attributes <code>controller_type</code>, <code>controller_number</code>, <code>unit_number</code> are used to configure multiple types of disk controllers and disks for creating or reconfiguring virtual machine. Added in Ansible 2.10.</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>autoselect_datastore</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Select the less used datastore.</div>
+                                            <div><code>disk.datastore</code> and <code>disk.autoselect_datastore</code> will not be used if <code>datastore</code> is specified outside this <code>disk</code> configuration.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk controller bus number.</div>
+                                            <div>The maximum number of same type controller is 4 per VM.</div>
+                                            <div>Valid value range from 0 to 3.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Type of disk controller.</div>
+                                            <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code>, <code>paravirtual</code>, <code>sata</code> and <code>nvme</code>.</div>
+                                            <div><code>nvme</code> support starts from hardware <code>version</code> 13 and ESXi version 6.5.</div>
+                                            <div>When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA CDROMs.</div>
+                                            <div>If set to <code>sata</code> type, please make sure <code>controller_number</code> and <code>unit_number</code> are set correctly when <code>cdrom</code> also set to <code>sata</code> type.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datastore</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The name of datastore which will be used for the disk.</div>
+                                            <div>If <code>autoselect_datastore</code> is set to True, will select the less used datastore whose name contains this &quot;disk.datastore&quot; string.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>disk_mode</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Type of disk mode.</div>
+                                            <div>Added in Ansible 2.6.</div>
+                                            <div>If <code>persistent</code> specified, changes are immediately and permanently written to the virtual disk. This is default.</div>
+                                            <div>If <code>independent_persistent</code> specified, same as persistent, but not affected by snapshots.</div>
+                                            <div>If <code>independent_nonpersistent</code> specified, changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>filename</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Existing disk image to be used.</div>
+                                            <div>Filename must already exist on the datastore.</div>
+                                            <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in Ansible 2.8.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk storage size.</div>
+                                            <div>Please specify storage unit like [kb, mb, gb, tb].</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size_gb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk storage size in gb.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size_kb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk storage size in kb.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size_mb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk storage size in mb.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size_tb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk storage size in tb.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Type of disk.</div>
+                                            <div>If <code>thin</code> specified, disk type is set to thin disk.</div>
+                                            <div>If <code>eagerzeroedthick</code> specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.</div>
+                                            <div>If not specified, disk type is thick disk, no eagerzero.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>unit_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Disk Unit Number.</div>
+                                            <div>Valid value range from 0 to 15 for SCSI controller, except 7.</div>
+                                            <div>Valid value range from 0 to 14 for NVME controller.</div>
+                                            <div>Valid value range from 0 to 29 for SATA controller.</div>
+                                            <div><code>controller_type</code>, <code>controller_number</code> and <code>unit_number</code> are required when creating or reconfiguring VMs with multiple types of disk controllers and disks.</div>
+                                            <div>When creating new VM, the first configured disk in the <code>disk</code> list will be &quot;Hard Disk 1&quot;.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>esxi_hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -309,19 +932,19 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Destination folder, absolute path to find an existing guest or create the new guest.</div>
-                                            <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter.</div>
+                                            <div>The folder should include the datacenter. ESXi&#x27;s datacenter is ha-datacenter.</div>
                                             <div>This parameter is case sensitive.</div>
                                             <div>If multiple machines are found with same name, this parameter is used to identify</div>
                                             <div>Examples:</div>
@@ -337,7 +960,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>force</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -358,33 +981,33 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>guest_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Set the guest ID.</div>
-                                            <div>This parameter is case sensitive. For instance:</div>
-                                            <div>- virtual machine with RHEL7 64 bit, will be &#x27;rhel7_64Guest&#x27;</div>
-                                            <div>- virtual machine with CentOS 64 bit, will be &#x27;centos64Guest&#x27;</div>
-                                            <div>- virtual machine with Ubuntu 64 bit, will be &#x27;ubuntu64Guest&#x27;</div>
+                                            <div>This parameter is case sensitive.</div>
+                                            <div><code>rhel7_64Guest</code> for virtual machine with RHEL7 64 bit.</div>
+                                            <div><code>centos64Guest</code> for virtual machine with CentOS 64 bit.</div>
+                                            <div><code>ubuntu64Guest</code> for virtual machine with Ubuntu 64 bit.</div>
                                             <div>This field is required when creating a virtual machine, not required when creating from the template.</div>
                                             <div>Valid values are referenced here: <a href='https://code.vmware.com/apis/358/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html'>https://code.vmware.com/apis/358/doc/vim.vm.GuestOsDescriptor.GuestOsIdentifier.html</a></div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hardware</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">dictionary</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -392,33 +1015,298 @@ Parameters
                                                                 <td>
                                             <div>Manage virtual machine&#x27;s hardware attributes.</div>
                                             <div>All parameters case sensitive.</div>
-                                            <div>Valid attributes are:</div>
-                                            <div>- <code>hotadd_cpu</code> (boolean): Allow virtual CPUs to be added while the virtual machine is running.</div>
-                                            <div>- <code>hotremove_cpu</code> (boolean): Allow virtual CPUs to be removed while the virtual machine is running.</div>
-                                            <div>- <code>hotadd_memory</code> (boolean): Allow memory to be added while the virtual machine is running.</div>
-                                            <div>- <code>memory_mb</code> (integer): Amount of memory in MB.</div>
-                                            <div>- <code>num_cpus</code> (integer): Number of CPUs. <code>num_cpus</code> must be a multiple of <code>num_cpu_cores_per_socket</code>.</div>
-                                            <div>For example to create a VM with 2 sockets of 4 cores, specify <code>num_cpus</code>: 8 and <code>num_cpu_cores_per_socket</code>: 4</div>
-                                            <div>- <code>num_cpu_cores_per_socket</code> (integer): Number of Cores Per Socket.</div>
-                                            <div>- <code>scsi</code> (string): Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code> and <code>paravirtual</code> (default).</div>
-                                            <div>- <code>memory_reservation_lock</code> (boolean): If set true, memory resource reservation for the virtual machine</div>
-                                            <div>- <code>max_connections</code> (integer): Maximum number of active remote display connections for the virtual machines.</div>
-                                            <div>- <code>mem_limit</code> (integer): The memory utilization of a virtual machine will not exceed this limit. Unit is MB.</div>
-                                            <div>- <code>mem_reservation</code> (integer): The amount of memory resource that is guaranteed available to the virtual</div>
-                                            <div>- <code>cpu_limit</code> (integer): The CPU utilization of a virtual machine will not exceed this limit. Unit is MHz.</div>
-                                            <div>- <code>cpu_reservation</code> (integer): The amount of CPU resource that is guaranteed available to the virtual machine.</div>
-                                            <div>- <code>version</code> (integer): The Virtual machine hardware versions. Default is 10 (ESXi 5.5 and onwards).</div>
-                                            <div>If value specified as <code>latest</code>, version is set to the most current virtual hardware supported on the host.</div>
-                                            <div><code>latest</code> is added in version 2.10.</div>
-                                            <div>Please check VMware documentation for correct virtual machine hardware version.</div>
-                                            <div>Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given</div>
-                                            <div>- <code>boot_firmware</code> (string): Choose which firmware should be used to boot the virtual machine.</div>
-                                            <div>- <code>virt_based_security</code> (bool): Enable Virtualization Based Security feature for Windows 10.</div>
-                                            <div>(Support from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016)</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>boot_firmware</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Choose which firmware should be used to boot the virtual machine.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cpu_limit</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The CPU utilization of a virtual machine will not exceed this limit.</div>
+                                            <div>Unit is MHz.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cpu_reservation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The amount of CPU resource that is guaranteed available to the virtual machine.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hotadd_cpu</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Allow virtual CPUs to be added while the virtual machine is running.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hotadd_memory</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Allow memory to be added while the virtual machine is running.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hotremove_cpu</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Allow virtual CPUs to be removed while the virtual machine is running.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>max_connections</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Maximum number of active remote display connections for the virtual machines.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mem_limit</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The memory utilization of a virtual machine will not exceed this limit.</div>
+                                            <div>Unit is MB.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mem_reservation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The amount of memory resource that is guaranteed available to the virtual machine.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>memory_mb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Amount of memory in MB.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>memory_reservation_lock</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If set <code>true</code>, memory resource reservation for the virtual machine.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>num_cpu_cores_per_socket</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Number of Cores Per Socket.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>num_cpus</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Number of CPUs.</div>
+                                            <div><code>num_cpus</code> must be a multiple of <code>num_cpu_cores_per_socket</code>.</div>
+                                            <div>For example, to create a VM with 2 sockets of 4 cores, specify <code>num_cpus</code> as 8 and <code>num_cpu_cores_per_socket</code> as 4.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>scsi</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code> and <code>paravirtual</code>.</div>
+                                            <div><code>paravirtual</code> is default.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>version</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The Virtual machine hardware versions.</div>
+                                            <div>Default is 10 (ESXi 5.5 and onwards).</div>
+                                            <div>If value specified as <code>latest</code>, version is set to the most current virtual hardware supported on the host.</div>
+                                            <div><code>latest</code> is added in Ansible 2.10.</div>
+                                            <div>Please check VMware documentation for correct virtual machine hardware version.</div>
+                                            <div>Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>virt_based_security</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Enable Virtualization Based Security feature for Windows 10.</div>
+                                            <div>Supported from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -435,7 +1323,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>is_template</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -455,7 +1343,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>linked_clone</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -475,13 +1363,13 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                        <span style="color: purple">string</span>
+                                                                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -494,12 +1382,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name_match</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -513,13 +1401,13 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>networks</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                                                                    </div>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>                                            </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -527,24 +1415,212 @@ Parameters
                                             <div>A list of networks (in the order of the NICs).</div>
                                             <div>Removing NICs is not allowed, while reconfiguring the virtual machine.</div>
                                             <div>All parameters and VMware object names are case sensitive.</div>
-                                            <div>One of the below parameters is required per entry:</div>
-                                            <div>- <code>name</code> (string): Name of the portgroup or distributed virtual portgroup for this interface. When specifying distributed virtual portgroup make sure given <code>esxi_hostname</code> or <code>cluster</code> is associated with it.</div>
-                                            <div>- <code>vlan</code> (integer): VLAN number for this interface.</div>
-                                            <div>Optional parameters per entry (used for virtual hardware):</div>
-                                            <div>- <code>device_type</code> (string): Virtual network device (one of <code>e1000</code>, <code>e1000e</code>, <code>pcnet32</code>, <code>vmxnet2</code>, <code>vmxnet3</code> (default), <code>sriov</code>).</div>
-                                            <div>- <code>mac</code> (string): Customize MAC address.</div>
-                                            <div>- <code>dvswitch_name</code> (string): Name of the distributed vSwitch.</div>
-                                            <div>Optional parameters per entry (used for OS customization):</div>
-                                            <div>- <code>type</code> (string): Type of IP assignment (either <code>dhcp</code> or <code>static</code>). <code>dhcp</code> is default.</div>
-                                            <div>- <code>ip</code> (string): Static IP address (implies <code>type: static</code>).</div>
-                                            <div>- <code>netmask</code> (string): Static netmask required for <code>ip</code>.</div>
-                                            <div>- <code>gateway</code> (string): Static gateway.</div>
-                                            <div>- <code>dns_servers</code> (string): DNS servers for this network interface (Windows).</div>
-                                            <div>- <code>domain</code> (string): Domain name for this network interface (Windows).</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>device_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Virtual network device.</div>
+                                            <div>Valid value can be one of <code>e1000</code>, <code>e1000e</code>, <code>pcnet32</code>, <code>vmxnet2</code>, <code>vmxnet3</code>, <code>sriov</code>.</div>
+                                            <div><code>vmxnet3</code> is default.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for virtual hardware.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>dns_servers</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>DNS servers for this network interface (Windows).</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>domain</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Domain name for this network interface (Windows).</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>dvswitch_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the distributed vSwitch.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for virtual hardware.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>gateway</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Static gateway.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ip</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Static IP address. Implies <code>type=static</code>.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Customize MAC address.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for virtual hardware.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the portgroup or distributed virtual portgroup for this interface.</div>
+                                            <div>Required per entry.</div>
+                                            <div>When specifying distributed virtual portgroup make sure given <code>esxi_hostname</code> or <code>cluster</code> is associated with it.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>netmask</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Static netmask required for <code>ip</code>.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Type of IP assignment.</div>
+                                            <div>Valid values are one of <code>dhcp</code>, <code>static</code>.</div>
+                                            <div><code>dhcp</code> is default.</div>
+                                            <div>Optional per entry.</div>
+                                            <div>Used for OS customization.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vlan</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>VLAN number for this interface.</div>
+                                            <div>Required per entry.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -562,7 +1638,7 @@ Parameters
                                     </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -580,7 +1656,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -598,7 +1674,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -614,12 +1690,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>resource_pool</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -631,12 +1707,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>snapshot_src</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -648,12 +1724,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -675,7 +1751,7 @@ Parameters
                                                                 <td>
                                             <div>Specify the state the virtual machine should be in.</div>
                                             <div>If <code>state</code> is set to <code>present</code> and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.</div>
-                                            <div>If <code>state</code> is set to <code>absent</code> and virtual machine exists, then the specified virtual machine is removed with its associated components.</div>
+                                            <div>If <code>state</code> is set to <code>absent</code> and virtual machine exists, then the specified virtual machine is removed with it&#x27;s associated components.</div>
                                             <div>If <code>state</code> is set to one of the following <code>poweredon</code>, <code>powered-on</code>, <code>poweredoff</code>, <code>powered-off</code>, <code>present</code>, <code>restarted</code>, <code>suspended</code> and virtual machine does not exists, virtual machine is deployed with the given parameters.</div>
                                             <div>If <code>state</code> is set to <code>poweredon</code> or <code>powered-on</code> and virtual machine exists with powerstate other than powered on, then the specified virtual machine is powered on.</div>
                                             <div>If <code>state</code> is set to <code>poweredoff</code> or <code>powered-off</code> and virtual machine exists with powerstate other than powered off, then the specified virtual machine is powered off.</div>
@@ -687,12 +1763,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state_change_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -705,12 +1781,12 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>template</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -725,7 +1801,7 @@ Parameters
                                     </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>use_instance_uuid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -744,7 +1820,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -762,12 +1838,12 @@ Parameters
                                     </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>uuid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">string</span>
                                                                     </div>
                                     </td>
                                 <td>
@@ -780,7 +1856,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -802,13 +1878,13 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vapp_properties</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                                                                    </div>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>                                            </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -816,15 +1892,76 @@ Parameters
                                             <div>A list of vApp properties.</div>
                                             <div>For full list of attributes and types refer to:</div>
                                             <div><a href='https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/ fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vApp.PropertyInfo.html'>https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/ fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vApp.PropertyInfo.html</a></div>
-                                            <div>Basic attributes are:</div>
-                                            <div>- <code>id</code> (string): Property id - required.</div>
-                                            <div>- <code>value</code> (string): Property value.</div>
-                                            <div>- <code>type</code> (string): Value type, string type by default.</div>
-                                            <div>- <code>operation</code>: <code>remove</code>: This attribute is required only when removing properties.</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Property ID.</div>
+                                            <div>Required per entry.</div>
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>operation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The <code>remove</code> attribute is required only when removing properties.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Value type, string type by default.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>value</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Property value.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>wait_for_customization</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -845,7 +1982,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>wait_for_customization_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -862,7 +1999,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>wait_for_ip_address</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -883,7 +2020,7 @@ Parameters
                                                         </td>
             </tr>
                                 <tr>
-                                                                <td colspan="1">
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>wait_for_ip_address_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -906,7 +2043,7 @@ Notes
 -----
 
 .. note::
-   - Please make sure that the user used for :ref:`vmware_guest <vmware_guest_module>` has the correct level of privileges.
+   - Please make sure that the user used for :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` has the correct level of privileges.
    - For example, following is the list of minimum privileges required by users to create virtual machines.
    -    DataStore > Allocate Space
    -    Virtual Machine > Configuration > Add New Disk

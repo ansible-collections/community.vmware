@@ -15,9 +15,9 @@ community.vmware.vmware_dns_config
 
 DEPRECATED
 ----------
-:Removed in collection release after 
-:Why: Will be replaced with new module vmware_host_dns.
-:Alternative: Use :ref:`vmware_host_dns <vmware_host_dns_module>` instead.
+:Removed in collection release after 2022-06-01
+:Why: Will be replaced with new module :ref:`community.vmware.vmware_host_dns <community.vmware.vmware_host_dns_module>`.
+:Alternative: Use :ref:`community.vmware.vmware_host_dns <community.vmware.vmware_host_dns_module>` instead.
 
 
 
@@ -68,7 +68,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                         / <span style="color: purple">elements=string</span>                         / <span style="color: red">required</span>                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -256,7 +256,7 @@ Status
 ------
 
 
-- This module will be removed in version 2.14. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

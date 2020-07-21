@@ -20,7 +20,7 @@ Synopsis
 - All connected ESXi hosts in scope will be configured when specified.
 - If a host is not connected at time of configuration, it will be marked as such in the output.
 - Kernel module options may require a reboot to take effect which is not covered here.
-- You can use :ref:`reboot <reboot_module>` or :ref:`vmware_host_powerstate <vmware_host_powerstate_module>` module to reboot all ESXi host systems.
+- You can use :ref:`community.vmware.reboot <community.vmware.reboot_module>` or :ref:`community.vmware.vmware_host_powerstate <community.vmware.vmware_host_powerstate_module>` module to reboot all ESXi host systems.
 
 
 

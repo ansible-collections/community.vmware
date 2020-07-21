@@ -5,10 +5,10 @@
 community.vmware.vmware_vc_infraprofile_info
 ********************************************
 
-**List and Export VMware Vcenter infra profile configs.**
+**List and Export VMware vCenter infra profile configs.**
 
 
-Version added: 2.10
+Version added: 1.0.0
 
 .. contents::
    :local:
@@ -17,8 +17,8 @@ Version added: 2.10
 
 Synopsis
 --------
-- Module to manage VMware Vcenter infra profile configs.
-- Vcenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
+- Module to manage VMware vCenter infra profile configs.
+- vCenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
 
 
@@ -274,7 +274,7 @@ Examples
         validate_certs: False
       delegate_to: localhost
 
-    - name: export Vcenter appliance infra profile config
+    - name: export vCenter appliance infra profile config
       vmware_vc_infraprofile_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
@@ -284,7 +284,7 @@ Examples
         profiles: "ApplianceManagement"
       delegate_to: localhost
 
-    - name: validate Vcenter appliance infra profile config
+    - name: validate vCenter appliance infra profile config
       vmware_vc_infraprofile_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
@@ -294,7 +294,7 @@ Examples
         profiles: "ApplianceManagement"
         config_path: "export.json"
 
-    - name: import Vcenter appliance infra profile config
+    - name: import vCenter appliance infra profile config
       vmware_vc_infraprofile_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
@@ -326,7 +326,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>export_infra</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">dictionary</span>
                                           </div>
                                     </td>
                 <td>On success with API set as &quot;export&quot;</td>
@@ -343,7 +343,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>import_profile</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">dictionary</span>
                                           </div>
                                     </td>
                 <td>On success with API set as &quot;import&quot;</td>
@@ -360,7 +360,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>list_infra</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">list</span>
                                           </div>
                                     </td>
                 <td>on success with API as &quot;list&quot;</td>
@@ -377,7 +377,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>validate_infra</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">dictionary</span>
                                           </div>
                                     </td>
                 <td>On success with API set as &quot;validate&quot;</td>

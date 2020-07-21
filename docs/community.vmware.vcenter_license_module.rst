@@ -272,6 +272,7 @@ Notes
    - This module will also auto-assign the current vCenter to the license key if the product matches the license key, and vCenter us currently assigned an evaluation license only.
    - The evaluation license (00000-00000-00000-00000-00000) is not listed when unused.
    - If ``esxi_hostname`` is specified, then will assign the ``license`` key to the ESXi host.
+   - If ``esxi_hostname`` is not specified, then will just register the ``license`` key to vCenter inventory without assigning it to an ESXi host.
 
 
 
