@@ -30,6 +30,33 @@
             | regex_replace('(.*)', 'vmk\1')
           }}
 
+    - name: "Gather vSwitch info"
+      vmware_vswitch_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        esxi_hostname: "{{ esxi1 }}"
+      register: gather_vswitch_info_result
+
+    - name: "Create a new vSwitch block"
+      when:
+        - "not '{{ switch1 }}' in gather_vswitch_info_result.hosts_vswitch_info[esxi1]"
+      block:
+        - name: "Create a new vSwitch"
+          vmware_vswitch:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: no
+            esxi_hostname: "{{ esxi1 }}"
+            switch: "{{ switch1 }}"
+          register: create_new_vswitch_result
+
+        - assert:
+            that:
+              - create_new_vswitch_result.changed is sameas true
+
     - name: "Create a new port group of vSwitch"
       vmware_portgroup:
         hostname: "{{ vcenter_hostname }}"
@@ -154,4 +181,3 @@
 - assert:
     that:
       - migrate_management_vmk_dvswitch_to_vswitch_idempotency_check_result.changed is sameas false
-
