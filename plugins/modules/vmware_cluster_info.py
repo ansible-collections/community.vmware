@@ -156,6 +156,16 @@ clusters:
                     "folder": "/DC0/host/DC0_C0",
                 },
             ],
+            "resource_summary": {
+                "cpuCapacityMHz": 4224,
+                "cpuUsedMHz": 87,
+                "memCapacityMB": 6139,
+                "memUsedMB": 1254,
+                "pMemAvailableMB": 0,
+                "pMemCapacityMB": 0,
+                "storageCapacityMB": 33280,
+                "storageUsedMB": 19953
+            },
             "tags": [
                 {
                     "category_id": "urn:vmomi:InventoryServiceCategory:9fbf83de-7903-442e-8004-70fd3940297c:GLOBAL",
@@ -274,6 +284,10 @@ class VmwreClusterInfoManager(PyVmomi):
                     vmware_client = VmwareRestClient(self.module)
                     tag_info = vmware_client.get_tags_for_cluster(cluster_mid=cluster._moId)
 
+                resource_summary = self.to_json(cluster.GetResourceUsage())
+                if '_vimtype' in resource_summary:
+                    del resource_summary['_vimtype']
+
                 results['clusters'][cluster.name] = dict(
                     hosts=hosts,
                     enable_ha=das_config.enabled,
@@ -294,6 +308,7 @@ class VmwreClusterInfoManager(PyVmomi):
                     enabled_vsan=enabled_vsan,
                     vsan_auto_claim_storage=vsan_auto_claim_storage,
                     tags=tag_info,
+                    resource_summary=resource_summary
                 )
         else:
             for cluster in self.cluster_objs:
