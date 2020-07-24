@@ -55,6 +55,54 @@
 - <<: *ensure_vc_cluster_data
   name: Ensure info is gathered for the given cluster in check mode
 
+- name: Gather info about all clusters in the given datacenter with properties
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    datacenter: "{{ dc1 }}"
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
+  register: all_cluster_result
+
+- name: Ensure info are gathered for all clusters with properteis
+  assert:
+    that:
+      - all_cluster_result.clusters
+      - all_cluster_result.clusters[item].name
+      - all_cluster_result.clusters[item].configuration.dasConfig.enabled is defined
+      - all_cluster_result.clusters[item].summary.totalCpu
+      - not all_cluster_result.changed
+  loop: "{{ all_cluster_result.clusters.keys() }}"
+
+- name: Gather info about the given cluster with properties
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    cluster_name: "{{ ccr1 }}"
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
+  register: cluster_result
+
+- name: Ensure info are gathered for the given cluster with properties
+  assert:
+    that:
+      - cluster_result.clusters
+      - cluster_result.clusters[item].name
+      - cluster_result.clusters[item].configuration.dasConfig.enabled is defined
+      - cluster_result.clusters[item].summary.totalCpu
+      - not cluster_result.changed
+  loop: "{{ cluster_result.clusters.keys() }}"
+
 # Disabled until we get a fix for https://github.com/ansible-collections/vmware/issues/301
 #- when: vcsim is not defined
 #  block:
