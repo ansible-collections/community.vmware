@@ -73,9 +73,9 @@
   assert:
     that:
       - all_cluster_result.clusters
-      - all_cluster_result.clusters[item].name
+      - all_cluster_result.clusters[item].name == item
       - all_cluster_result.clusters[item].configuration.dasConfig.enabled is defined
-      - all_cluster_result.clusters[item].summary.totalCpu
+      - all_cluster_result.clusters[item].summary.totalCpu is defined
       - not all_cluster_result.changed
   loop: "{{ all_cluster_result.clusters.keys() }}"
 
@@ -97,9 +97,9 @@
   assert:
     that:
       - cluster_result.clusters
-      - cluster_result.clusters[item].name
+      - cluster_result.clusters[item].name == item
       - cluster_result.clusters[item].configuration.dasConfig.enabled is defined
-      - cluster_result.clusters[item].summary.totalCpu
+      - cluster_result.clusters[item].summary.totalCpu is defined
       - not cluster_result.changed
   loop: "{{ cluster_result.clusters.keys() }}"
 
