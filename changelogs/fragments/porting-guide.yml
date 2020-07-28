@@ -1,0 +1,12 @@
+breaking_changes:
+  - vmware_guest_find - the ``datacenter`` option has been removed.
+  - vmware_vmkernel - the options ``ip_address`` and ``subnet_mask`` have been removed; use the suboptions ``ip_address`` and ``subnet_mask`` of the ``network`` option instead.
+  - vmware_datastore_maintenancemode - now returns ``datastore_status`` instead of Ansible internal key ``results``.
+  - vmware_host_kernel_manager - now returns ``host_kernel_status`` instead of Ansible internal key ``results``.
+  - vmware_host_ntp - now returns ``host_ntp_status`` instead of Ansible internal key ``results``.
+  - vmware_host_service_manager - now returns ``host_service_status`` instead of Ansible internal key ``results``.
+  - vmware_tag - now returns ``tag_status`` instead of Ansible internal key ``results``.
+  - vmware_guest_custom_attributes - does not require VM name which was a required parameter for releases prior to Ansible 2.10.
+deprecated_features:
+  - The vmware_dns_config module has been deprecated and will be removed in a later release; use vmware_host_dns instead.
+  - vmware_tag_info - in a later release, the module will not return ``tag_facts`` since it does not return multiple tags with the same name and different category id. To maintain the existing behavior use ``tag_info`` which is a list of tag metadata.
