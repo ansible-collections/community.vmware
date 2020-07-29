@@ -32,7 +32,7 @@ options:
       - Specify the properties to retrieve.
       - 'Example:'
       - '   properties: ['
-      - '      "config.workflow.port'
+      - '      "config.workflow.port"'
       - '   ]'
       - Only valid when C(schema) is C(vsphere).
     type: list
@@ -49,6 +49,17 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     validate_certs: no
   register: vcenter_settings_info
+
+- name: "Gather some info from vCenter using the vSphere API output schema"
+  community.vmware.vmware_vcenter_settings_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    schema: vsphere
+    properties:
+      - config.workflow.port
+  register: vcenter_settings_info_vsphere_api
 '''
 
 RETURN = r'''
