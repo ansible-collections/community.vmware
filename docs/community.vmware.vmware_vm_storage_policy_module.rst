@@ -1,13 +1,14 @@
-.. _community.vmware.vsphere_copy_module:
+.. _community.vmware.vmware_vm_storage_policy_module:
 
 
-*****************************
-community.vmware.vsphere_copy
-*****************************
+*****************************************
+community.vmware.vmware_vm_storage_policy
+*****************************************
 
-**Copy a file to a VMware datastore**
+**Create vSphere storage policies**
 
 
+Version added: 1.0.0
 
 .. contents::
    :local:
@@ -16,9 +17,17 @@ community.vmware.vsphere_copy
 
 Synopsis
 --------
-- Upload files to a VMware datastore through a vCenter REST API.
+- A vSphere storage policy defines metadata that describes storage requirements for virtual machines and storage capabilities of storage providers.
+- Currently, only tag-based storage policy creation is supported.
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- python >= 2.7
+- PyVmomi
 
 
 Parameters
@@ -35,7 +44,7 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
+                    <b>description</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -44,22 +53,8 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>The datacenter on the vCenter server that holds the datastore.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datastore</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The datastore to push files to.</div>
+                                            <div>Description of the storage policy to create or update.</div>
+                                            <div>This parameter is ignored when <code>state=absent</code>.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -77,8 +72,22 @@ Parameters
                                             <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: host</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                 / <span style="color: red">required</span>                    </div>
                                     </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the storage policy to create, update, or delete.</div>
+                                                        </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
@@ -96,22 +105,6 @@ Parameters
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
                                                                 <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The file to push to the datastore.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: dest</div>
                                     </td>
             </tr>
                                 <tr>
@@ -169,33 +162,77 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>src</b>
+                    <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                     </td>
                                 <td>
-                                                                                                                                                            </td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>absent</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
                                                                 <td>
-                                            <div>The file to push to vCenter.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: name</div>
-                                    </td>
+                                            <div>State of storage policy.</div>
+                                            <div>If set to <code>present</code>, the storage policy is created.</div>
+                                            <div>If set to <code>absent</code>, the storage policy is deleted.</div>
+                                                        </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
+                    <b>tag_affinity</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
+                        <span style="color: purple">boolean</span>
                                                                     </div>
                                     </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">10</div>
-                                    </td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
                                                                 <td>
-                                            <div>The timeout in seconds for the upload to the datastore.</div>
+                                            <div>If set to <code>true</code>, the storage policy enforces that virtual machines require the existence of a tag for datastore placement.</div>
+                                            <div>If set to <code>false</code>, the storage policy enforces that virtual machines require the absence of a tag for datastore placement.</div>
+                                            <div>This parameter is ignored when <code>state=absent</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>tag_category</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the pre-existing tag category to assign to the storage policy.</div>
+                                            <div>This parameter is ignored when <code>state=absent</code>.</div>
+                                            <div>This parameter is required when <code>state=present</code>.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>tag_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Name of the pre-existing tag to assign to the storage policy.</div>
+                                            <div>This parameter is ignored when <code>state=absent</code>.</div>
+                                            <div>This parameter is required when <code>state=present</code>.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -213,7 +250,7 @@ Parameters
                                             <div>The username of the vSphere vCenter or ESXi server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: login</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
                                     </td>
             </tr>
                                 <tr>
@@ -246,8 +283,7 @@ Notes
 -----
 
 .. note::
-   - This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using ``transport: local`` or using ``delegate_to``.
-   - Tested on vSphere 5.5 and ESXi 6.7
+   - Tested on vSphere 6.5
 
 
 
@@ -257,41 +293,64 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Copy file to datastore using delegate_to
-      community.vmware.vsphere_copy:
+    - name: Create or update a vSphere tag-based storage policy
+      community.vmware.vmware_vm_storage_policy:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: DC1 Someplace
-        datastore: datastore1
-        path: some/remote/file
+        validate_certs: no
+        name: "vSphere storage policy"
+        description: "vSphere storage performance policy"
+        tag_category: "performance_tier"
+        tag_name: "gold"
+        tag_affinity: true
+        state: "present"
       delegate_to: localhost
 
-    - name: Copy file to datastore when datacenter is inside folder called devel
-      community.vmware.vsphere_copy:
+    - name: Remove a vSphere tag-based storage policy
+      community.vmware.vmware_vm_storage_policy:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: devel/DC1
-        datastore: datastore1
-        path: some/remote/file
+        validate_certs: no
+        name: "vSphere storage policy"
+        state: "absent"
       delegate_to: localhost
 
-    - name: Copy file to datastore using other_system
-      community.vmware.vsphere_copy:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        src: /other/local/file
-        datacenter: DC2 Someplace
-        datastore: datastore2
-        path: other/remote/file
-      delegate_to: other_system
 
 
 
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+                    <tr>
+                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>vmware_vm_storage_policy</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                                          </div>
+                                    </td>
+                <td>success</td>
+                <td>
+                                                                        <div>dictionary of information for the storage policy</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vmware_vm_storage_policy&#x27;: {&#x27;description&#x27;: &#x27;Storage policy for gold-tier storage&#x27;, &#x27;id&#x27;: &#x27;aa6d5a82-1c88-45da-85d3-3d74b91a5bad&#x27;, &#x27;name&#x27;: &#x27;gold&#x27;}}</div>
+                                    </td>
+            </tr>
+                        </table>
+    <br/><br/>
 
 
 Status
@@ -301,6 +360,6 @@ Status
 Authors
 ~~~~~~~
 
-- Dag Wieers (@dagwieers)
+- Dustin Scott (@scottd018)
 
 

@@ -63,7 +63,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -225,7 +225,6 @@ Examples
         password: "{{ vcenter_password }}"
         username: "{{ vcenter_username }}"
         cluster_name: "{{ cluster_name }}"
-        datacenter: "{{ datacenter }}"
       delegate_to: localhost
 
     - name: "Gather DRS group info about all clusters in given datacenter"

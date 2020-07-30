@@ -6,13 +6,13 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_network
 short_description: Manage network adapters of specified virtual machine in given vCenter infrastructure
 description:
   - This module is used to add, reconfigure, remove network adapter of given virtual machine.
-version_added: '2.9'
+version_added: '1.0.0'
 requirements:
   - "python >= 2.7"
   - "PyVmomi"

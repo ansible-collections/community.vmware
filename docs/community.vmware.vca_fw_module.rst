@@ -13,6 +13,13 @@ community.vmware.vca_fw
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2022-06-01
+:Why: Module depends upon deprecated version of Pyvcloud library.
+:Alternative: Use https://github.com/vmware/ansible-module-vcloud-director instead.
+
+
 
 Synopsis
 --------
@@ -275,6 +282,10 @@ Examples
 
 Status
 ------
+
+
+- This module will be removed in version . *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

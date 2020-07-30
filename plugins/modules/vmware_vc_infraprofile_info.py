@@ -11,12 +11,12 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vc_infraprofile_info
-short_description: List and Export VMware Vcenter infra profile configs.
+short_description: List and Export VMware vCenter infra profile configs.
 description:
-- Module to manage VMware Vcenter infra profile configs.
-- Vcenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
+- Module to manage VMware vCenter infra profile configs.
+- vCenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
-version_added: '2.10'
+version_added: '1.0.0'
 author:
 - Naveenkumar G P (@ngp)
 notes:
@@ -72,7 +72,7 @@ EXAMPLES = r'''
     validate_certs: False
   delegate_to: localhost
 
-- name: export Vcenter appliance infra profile config
+- name: export vCenter appliance infra profile config
   vmware_vc_infraprofile_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -82,7 +82,7 @@ EXAMPLES = r'''
     profiles: "ApplianceManagement"
   delegate_to: localhost
 
-- name: validate Vcenter appliance infra profile config
+- name: validate vCenter appliance infra profile config
   vmware_vc_infraprofile_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -92,7 +92,7 @@ EXAMPLES = r'''
     profiles: "ApplianceManagement"
     config_path: "export.json"
 
-- name: import Vcenter appliance infra profile config
+- name: import vCenter appliance infra profile config
   vmware_vc_infraprofile_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'

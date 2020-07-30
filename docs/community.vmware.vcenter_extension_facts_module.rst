@@ -16,8 +16,8 @@ community.vmware.vcenter_extension_facts
 DEPRECATED
 ----------
 :Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`vcenter_extension_info <vcenter_extension_info_module>` module.
-:Alternative: Use :ref:`vcenter_extension_info <vcenter_extension_info_module>` instead.
+:Why: Deprecated in favour of :ref:`community.vmware.vcenter_extension_info <community.vmware.vcenter_extension_info_module>` module.
+:Alternative: Use :ref:`community.vmware.vcenter_extension_info <community.vmware.vcenter_extension_info_module>` instead.
 
 
 
@@ -239,7 +239,7 @@ Status
 ------
 
 
-- This module will be removed in version 2.13. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

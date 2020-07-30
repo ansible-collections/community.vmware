@@ -305,7 +305,7 @@ Notes
 -----
 
 .. note::
-   - In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module :ref:`vmware_guest_powerstate <vmware_guest_powerstate_module>`.
+   - In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module :ref:`community.vmware.vmware_guest_powerstate <community.vmware.vmware_guest_powerstate_module>`.
 
 
 

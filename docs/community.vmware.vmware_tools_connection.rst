@@ -24,7 +24,7 @@ Synopsis
 
 Requirements
 ------------
-The below requirements are needed on the local master node that executes this connection.
+The below requirements are needed on the local Ansible controller node that executes this connection.
 
 - pyvmomi (Python library)
 - requests (Python library)
@@ -166,7 +166,7 @@ Parameters
                                             <div>VM path absolute to the connection.</div>
                                             <div>vCenter Example: <code>Datacenter/vm/Discovered virtual machine/testVM</code>.</div>
                                             <div>ESXi Host Example: <code>ha-datacenter/vm/testVM</code>.</div>
-                                            <div>Must include VM name, appended to &#x27;folder&#x27; as would be passed to <span class='module'>vmware_guest</span>.</div>
+                                            <div>Must include VM name, appended to &#x27;folder&#x27; as would be passed to <span class='module'>community.vmware.vmware_guest</span>.</div>
                                             <div>Needs to include <em>vm</em> between the Datacenter and the rest of the VM path.</div>
                                             <div>Datacenter default value for ESXi server is <code>ha-datacenter</code>.</div>
                                             <div>Folder <em>vm</em> is not visible in the vSphere Web Client but necessary for VMware API to work.</div>

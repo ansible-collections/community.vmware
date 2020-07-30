@@ -100,7 +100,7 @@ Parameters
                                     </td>
                                                                 <td>
                                             <div>Logs to include in the logbundle file.</div>
-                                            <div>Refer to the id key of the <span class='module'>vmware_host_logbundle_info</span> module for values that can be specified in the manifest.</div>
+                                            <div>Refer to the id key of the <span class='module'>community.vmware.vmware_host_logbundle_info</span> module for values that can be specified in the manifest.</div>
                                                         </td>
             </tr>
                                 <tr>

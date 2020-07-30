@@ -17,7 +17,7 @@ community.vmware.vmware_host_scanhba
 Synopsis
 --------
 - This module can force a rescan of the hosts HBA subsystem which is needed when wanting to mount a new datastore.
-- You could use this before using :ref:`vmware_host_datastore <vmware_host_datastore_module>` to mount a new datastore to ensure your device/volume is ready.
+- You could use this before using :ref:`community.vmware.vmware_host_datastore <community.vmware.vmware_host_datastore_module>` to mount a new datastore to ensure your device/volume is ready.
 - You can also optionally force a Refresh of the Storage System in vCenter/ESXi Web Client.
 - All parameters and VMware object names are case sensitive.
 - You can supply an esxi_hostname or a cluster_name

@@ -16,8 +16,8 @@ community.vmware.vmware_drs_group_facts
 DEPRECATED
 ----------
 :Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`vmware_drs_group_info <vmware_drs_group_info_module>` module.
-:Alternative: Use :ref:`vmware_drs_group_info <vmware_drs_group_info_module>` instead.
+:Why: Deprecated in favour of :ref:`community.vmware.vmware_drs_group_info <community.vmware.vmware_drs_group_info_module>` module.
+:Alternative: Use :ref:`community.vmware.vmware_drs_group_info <community.vmware.vmware_drs_group_info_module>` instead.
 
 
 
@@ -70,7 +70,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -284,7 +284,7 @@ Status
 ------
 
 
-- This module will be removed in version 2.13. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

@@ -16,8 +16,8 @@ community.vmware.vmware_host_feature_facts
 DEPRECATED
 ----------
 :Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`vmware_host_feature_info <vmware_host_feature_info_module>` module.
-:Alternative: Use :ref:`vmware_host_feature_info <vmware_host_feature_info_module>` instead.
+:Why: Deprecated in favour of :ref:`community.vmware.vmware_host_feature_info <community.vmware.vmware_host_feature_info_module>` module.
+:Alternative: Use :ref:`community.vmware.vmware_host_feature_info <community.vmware.vmware_host_feature_info_module>` instead.
 
 
 
@@ -290,7 +290,7 @@ Status
 ------
 
 
-- This module will be removed in version 2.13. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

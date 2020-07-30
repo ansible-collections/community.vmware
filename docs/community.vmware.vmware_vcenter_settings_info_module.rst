@@ -1,11 +1,11 @@
-.. _community.vmware.vsphere_copy_module:
+.. _community.vmware.vmware_vcenter_settings_info_module:
 
 
-*****************************
-community.vmware.vsphere_copy
-*****************************
+*********************************************
+community.vmware.vmware_vcenter_settings_info
+*********************************************
 
-**Copy a file to a VMware datastore**
+**Gather info vCenter settings**
 
 
 
@@ -16,9 +16,16 @@ community.vmware.vsphere_copy
 
 Synopsis
 --------
-- Upload files to a VMware datastore through a vCenter REST API.
+- This module can be used to gather information about vCenter settings.
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- python >= 2.7
+- PyVmomi
 
 
 Parameters
@@ -35,36 +42,6 @@ Parameters
                     <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The datacenter on the vCenter server that holds the datastore.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datastore</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The datastore to push files to.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -77,8 +54,7 @@ Parameters
                                             <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: host</div>
-                                    </td>
+                                                        </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
@@ -101,22 +77,6 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The file to push to the datastore.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: dest</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -130,6 +90,26 @@ Parameters
                                             <div>The port number of the vSphere vCenter or ESXi server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>properties</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>                                            </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Specify the properties to retrieve.</div>
+                                            <div>Example:</div>
+                                            <div>properties: [</div>
+                                            <div>&quot;config.workflow.port</div>
+                                            <div>]</div>
+                                            <div>Only valid when <code>schema</code> is <code>vsphere</code>.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -169,33 +149,22 @@ Parameters
                                 <tr>
                                                                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>src</b>
+                    <b>schema</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The file to push to vCenter.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: name</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
                                                                     </div>
                                     </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">10</div>
-                                    </td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>summary</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>vsphere</li>
+                                                                                    </ul>
+                                                                            </td>
                                                                 <td>
-                                            <div>The timeout in seconds for the upload to the datastore.</div>
+                                            <div>Specify the output schema desired.</div>
+                                            <div>The &#x27;summary&#x27; output schema is the legacy output from the module.</div>
+                                            <div>The &#x27;vsphere&#x27; output schema is the vSphere API class definition which requires pyvmomi&gt;6.7.1.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -213,7 +182,7 @@ Parameters
                                             <div>The username of the vSphere vCenter or ESXi server.</div>
                                             <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                                             <div>Environment variable support added in Ansible 2.6.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: login</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
                                     </td>
             </tr>
                                 <tr>
@@ -242,13 +211,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-   - This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using ``transport: local`` or using ``delegate_to``.
-   - Tested on vSphere 5.5 and ESXi 6.7
-
 
 
 Examples
@@ -257,41 +219,83 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Copy file to datastore using delegate_to
-      community.vmware.vsphere_copy:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: DC1 Someplace
-        datastore: datastore1
-        path: some/remote/file
-      delegate_to: localhost
-
-    - name: Copy file to datastore when datacenter is inside folder called devel
-      community.vmware.vsphere_copy:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        src: /some/local/file
-        datacenter: devel/DC1
-        datastore: datastore1
-        path: some/remote/file
-      delegate_to: localhost
-
-    - name: Copy file to datastore using other_system
-      community.vmware.vsphere_copy:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        src: /other/local/file
-        datacenter: DC2 Someplace
-        datastore: datastore2
-        path: other/remote/file
-      delegate_to: other_system
+    - name: "Gather info about vCenter settings"
+      community.vmware.vmware_vcenter_settings_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+      register: vcenter_settings_info
 
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+                    <tr>
+                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>vcenter_config_info</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                                          </div>
+                                    </td>
+                <td>success</td>
+                <td>
+                                                                        <div>dict of vCenter settings</div>
+                                                                <br/>
+                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+        &quot;db_event_cleanup_previous&quot;: true,
+        &quot;db_event_retention_previous&quot;: 30,
+        &quot;db_max_connections_previous&quot;: 50,
+        &quot;db_task_cleanup_previous&quot;: true,
+        &quot;db_task_retention_previous&quot;: 30,
+        &quot;directory_query_limit_previous&quot;: true,
+        &quot;directory_query_limit_size_previous&quot;: 5000,
+        &quot;directory_timeout_previous&quot;: 60,
+        &quot;directory_validation_period_previous&quot;: 1440,
+        &quot;directory_validation_previous&quot;: true,
+        &quot;logging_options_previous&quot;: &quot;info&quot;,
+        &quot;mail_sender_previous&quot;: &quot;&quot;,
+        &quot;mail_server_previous&quot;: &quot;&quot;,
+        &quot;runtime_managed_address_previous&quot;: &quot;&quot;,
+        &quot;runtime_server_name_previous&quot;: &quot;vcenter.local&quot;,
+        &quot;runtime_unique_id_previous&quot;: 48,
+        &quot;snmp_1_community_previous&quot;: &quot;public&quot;,
+        &quot;snmp_1_enabled_previous&quot;: true,
+        &quot;snmp_1_url_previous&quot;: &quot;localhost&quot;,
+        &quot;snmp_2_community_previous&quot;: &quot;&quot;,
+        &quot;snmp_2_enabled_previous&quot;: false,
+        &quot;snmp_2_url_previous&quot;: &quot;&quot;,
+        &quot;snmp_3_community_previous&quot;: &quot;&quot;,
+        &quot;snmp_3_enabled_previous&quot;: false,
+        &quot;snmp_3_url_previous&quot;: &quot;&quot;,
+        &quot;snmp_4_community_previous&quot;: &quot;&quot;,
+        &quot;snmp_4_enabled_previous&quot;: false,
+        &quot;snmp_4_url_previous&quot;: &quot;&quot;,
+        &quot;snmp_receiver_1_port_previous&quot;: 162,
+        &quot;snmp_receiver_2_port_previous&quot;: 162,
+        &quot;snmp_receiver_3_port_previous&quot;: 162,
+        &quot;snmp_receiver_4_port_previous&quot;: 162,
+        &quot;timeout_long_operations_previous&quot;: 120,
+        &quot;timeout_normal_operations_previous&quot;: 30
+    }</div>
+                                    </td>
+            </tr>
+                        </table>
+    <br/><br/>
 
 
 Status
@@ -301,6 +305,6 @@ Status
 Authors
 ~~~~~~~
 
-- Dag Wieers (@dagwieers)
+- sky-joker (@sky-joker)
 
 
