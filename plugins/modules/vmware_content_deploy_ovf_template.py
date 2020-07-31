@@ -116,12 +116,14 @@ vm_deploy_info:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.vcenter.ovf_client import LibraryItem
+    from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -197,7 +199,15 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
             additional_parameters=None,
             default_datastore_id=self.datastore_id)
 
-        result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
+        result = {
+            'succeeded': False
+        }
+        try:
+            result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
+        except Exception as err:
+            self.module.fail_json(msg="%s" % to_native(err))
 
         if result.succeeded:
             self.module.exit_json(
