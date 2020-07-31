@@ -43,6 +43,28 @@ options:
     - Tags related to cluster are shown if set to C(True).
     default: False
     type: bool
+   schema:
+     description:
+       - Specify the output schema desired.
+       - The 'summary' output schema is the legacy output from the module.
+       - The 'vsphere' output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
+     choices: ['summary', 'vsphere']
+     default: 'summary'
+     type: str
+     version_added: "1.0.0"
+   properties:
+     description:
+       - Specify the properties to retrieve.
+       - 'Example:'
+       - '   properties: ['
+       - '      "name",'
+       - '      "configuration.dasConfig.enabled",'
+       - '      "summary.totalCpu"'
+       - '   ]'
+       - Only valid when C(schema) is C(vsphere).
+     type: list
+     elements: str
+     version_added: "1.0.0"
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -75,6 +97,21 @@ EXAMPLES = '''
     password: '{{ vcenter_password }}'
     cluster_name: DC0_C0
     show_tag: True
+  delegate_to: localhost
+  register: cluster_info
+
+- name: Gather some info from a cluster using the vSphere API output schema
+  vmware_cluster_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    cluster_name: DC0_C0
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
   delegate_to: localhost
   register: cluster_info
 '''
@@ -121,6 +158,16 @@ clusters:
                     "folder": "/DC0/host/DC0_C0",
                 },
             ],
+            "resource_summary": {
+                "cpuCapacityMHz": 4224,
+                "cpuUsedMHz": 87,
+                "memCapacityMB": 6139,
+                "memUsedMB": 1254,
+                "pMemAvailableMB": 0,
+                "pMemCapacityMB": 0,
+                "storageCapacityMB": 33280,
+                "storageUsedMB": 19953
+            },
             "tags": [
                 {
                     "category_id": "urn:vmomi:InventoryServiceCategory:9fbf83de-7903-442e-8004-70fd3940297c:GLOBAL",
@@ -149,6 +196,8 @@ class VmwreClusterInfoManager(PyVmomi):
         super(VmwreClusterInfoManager, self).__init__(module)
         datacenter = self.params.get('datacenter')
         cluster_name = self.params.get('cluster_name')
+        self.schema = self.params.get('schema')
+        self.properties = self.params.get('properties')
         self.cluster_objs = []
         if datacenter:
             datacenter_obj = find_datacenter_by_name(self.content, datacenter_name=datacenter)
@@ -189,73 +238,83 @@ class VmwreClusterInfoManager(PyVmomi):
         Gather information about cluster
         """
         results = dict(changed=False, clusters=dict())
-        for cluster in self.cluster_objs:
-            # Default values
-            ha_failover_level = None
-            ha_restart_priority = None
-            ha_vm_tools_monitoring = None
-            ha_vm_min_up_time = None
-            ha_vm_max_failures = None
-            ha_vm_max_failure_window = None
-            ha_vm_failure_interval = None
-            enabled_vsan = False
-            vsan_auto_claim_storage = False
-            hosts = []
 
-            # Hosts
-            for host in cluster.host:
-                hosts.append({
-                    'name': host.name,
-                    'folder': self.get_vm_path(self.content, host),
-                })
+        if self.schema == 'summary':
+            for cluster in self.cluster_objs:
+                # Default values
+                ha_failover_level = None
+                ha_restart_priority = None
+                ha_vm_tools_monitoring = None
+                ha_vm_min_up_time = None
+                ha_vm_max_failures = None
+                ha_vm_max_failure_window = None
+                ha_vm_failure_interval = None
+                enabled_vsan = False
+                vsan_auto_claim_storage = False
+                hosts = []
 
-            # HA
-            das_config = cluster.configurationEx.dasConfig
-            if das_config.admissionControlPolicy:
-                ha_failover_level = das_config.admissionControlPolicy.failoverLevel
-            if das_config.defaultVmSettings:
-                ha_restart_priority = das_config.defaultVmSettings.restartPriority,
-                ha_vm_tools_monitoring = das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring,
-                ha_vm_min_up_time = das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime,
-                ha_vm_max_failures = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures,
-                ha_vm_max_failure_window = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow,
-                ha_vm_failure_interval = das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval,
+                # Hosts
+                for host in cluster.host:
+                    hosts.append({
+                        'name': host.name,
+                        'folder': self.get_vm_path(self.content, host),
+                    })
 
-            # DRS
-            drs_config = cluster.configurationEx.drsConfig
+                # HA
+                das_config = cluster.configurationEx.dasConfig
+                if das_config.admissionControlPolicy:
+                    ha_failover_level = das_config.admissionControlPolicy.failoverLevel
+                if das_config.defaultVmSettings:
+                    ha_restart_priority = das_config.defaultVmSettings.restartPriority,
+                    ha_vm_tools_monitoring = das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring,
+                    ha_vm_min_up_time = das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime,
+                    ha_vm_max_failures = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures,
+                    ha_vm_max_failure_window = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow,
+                    ha_vm_failure_interval = das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval,
 
-            # VSAN
-            if hasattr(cluster.configurationEx, 'vsanConfig'):
-                vsan_config = cluster.configurationEx.vsanConfig
-                enabled_vsan = vsan_config.enabled,
-                vsan_auto_claim_storage = vsan_config.defaultConfig.autoClaimStorage,
+                # DRS
+                drs_config = cluster.configurationEx.drsConfig
 
-            tag_info = []
-            if self.params.get('show_tag'):
-                vmware_client = VmwareRestClient(self.module)
-                tag_info = vmware_client.get_tags_for_cluster(cluster_mid=cluster._moId)
+                # VSAN
+                if hasattr(cluster.configurationEx, 'vsanConfig'):
+                    vsan_config = cluster.configurationEx.vsanConfig
+                    enabled_vsan = vsan_config.enabled,
+                    vsan_auto_claim_storage = vsan_config.defaultConfig.autoClaimStorage,
 
-            results['clusters'][cluster.name] = dict(
-                hosts=hosts,
-                enable_ha=das_config.enabled,
-                ha_failover_level=ha_failover_level,
-                ha_vm_monitoring=das_config.vmMonitoring,
-                ha_host_monitoring=das_config.hostMonitoring,
-                ha_admission_control_enabled=das_config.admissionControlEnabled,
-                ha_restart_priority=ha_restart_priority,
-                ha_vm_tools_monitoring=ha_vm_tools_monitoring,
-                ha_vm_min_up_time=ha_vm_min_up_time,
-                ha_vm_max_failures=ha_vm_max_failures,
-                ha_vm_max_failure_window=ha_vm_max_failure_window,
-                ha_vm_failure_interval=ha_vm_failure_interval,
-                enabled_drs=drs_config.enabled,
-                drs_enable_vm_behavior_overrides=drs_config.enableVmBehaviorOverrides,
-                drs_default_vm_behavior=drs_config.defaultVmBehavior,
-                drs_vmotion_rate=drs_config.vmotionRate,
-                enabled_vsan=enabled_vsan,
-                vsan_auto_claim_storage=vsan_auto_claim_storage,
-                tags=tag_info,
-            )
+                tag_info = []
+                if self.params.get('show_tag'):
+                    vmware_client = VmwareRestClient(self.module)
+                    tag_info = vmware_client.get_tags_for_cluster(cluster_mid=cluster._moId)
+
+                resource_summary = self.to_json(cluster.GetResourceUsage())
+                if '_vimtype' in resource_summary:
+                    del resource_summary['_vimtype']
+
+                results['clusters'][cluster.name] = dict(
+                    hosts=hosts,
+                    enable_ha=das_config.enabled,
+                    ha_failover_level=ha_failover_level,
+                    ha_vm_monitoring=das_config.vmMonitoring,
+                    ha_host_monitoring=das_config.hostMonitoring,
+                    ha_admission_control_enabled=das_config.admissionControlEnabled,
+                    ha_restart_priority=ha_restart_priority,
+                    ha_vm_tools_monitoring=ha_vm_tools_monitoring,
+                    ha_vm_min_up_time=ha_vm_min_up_time,
+                    ha_vm_max_failures=ha_vm_max_failures,
+                    ha_vm_max_failure_window=ha_vm_max_failure_window,
+                    ha_vm_failure_interval=ha_vm_failure_interval,
+                    enabled_drs=drs_config.enabled,
+                    drs_enable_vm_behavior_overrides=drs_config.enableVmBehaviorOverrides,
+                    drs_default_vm_behavior=drs_config.defaultVmBehavior,
+                    drs_vmotion_rate=drs_config.vmotionRate,
+                    enabled_vsan=enabled_vsan,
+                    vsan_auto_claim_storage=vsan_auto_claim_storage,
+                    tags=tag_info,
+                    resource_summary=resource_summary
+                )
+        else:
+            for cluster in self.cluster_objs:
+                results['clusters'][cluster.name] = self.to_json(cluster, self.properties)
 
         self.module.exit_json(**results)
 
@@ -266,6 +325,8 @@ def main():
         datacenter=dict(type='str'),
         cluster_name=dict(type='str'),
         show_tag=dict(type='bool', default=False),
+        schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
