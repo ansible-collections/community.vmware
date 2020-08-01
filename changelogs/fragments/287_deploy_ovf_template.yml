@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_content_deploy_ovf_template - use datastore_id in deployment_spec (https://github.com/ansible-collections/vmware/pull/287).

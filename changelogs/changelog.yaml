@@ -244,3 +244,76 @@ releases:
     - vmware_vm_inventory_keyed_groups.yml
     - vmware_vm_inventory_port.yml
     release_date: '2020-06-19'
+  1.1.0:
+    changes:
+      breaking_changes:
+      - vmware_datastore_maintenancemode - now returns ``datastore_status`` instead
+        of Ansible internal key ``results``.
+      - vmware_guest_custom_attributes - does not require VM name which was a required
+        parameter for releases prior to Ansible 2.10.
+      - vmware_guest_find - the ``datacenter`` option has been removed.
+      - vmware_host_kernel_manager - now returns ``host_kernel_status`` instead of
+        Ansible internal key ``results``.
+      - vmware_host_ntp - now returns ``host_ntp_status`` instead of Ansible internal
+        key ``results``.
+      - vmware_host_service_manager - now returns ``host_service_status`` instead
+        of Ansible internal key ``results``.
+      - vmware_tag - now returns ``tag_status`` instead of Ansible internal key ``results``.
+      - vmware_vmkernel - the options ``ip_address`` and ``subnet_mask`` have been
+        removed; use the suboptions ``ip_address`` and ``subnet_mask`` of the ``network``
+        option instead.
+      bugfixes:
+      - vmware_content_deploy_ovf_template - use datastore_id in deployment_spec (https://github.com/ansible-collections/vmware/pull/287).
+      - vmware_dvs_portgroup_find - Fix comparison between str and int on method vlan_match
+        (https://github.com/ansible-collections/vmware/pull/52).
+      - vmware_guest - cdrom.controller_number, cdrom.unit_number are handled as integer.
+        (https://github.com/ansible-collections/vmware/issues/274).
+      - vmware_vm_inventory - CustomFieldManager is not present in ESXi, handle this
+        condition (https://github.com/ansible-collections/vmware/issues/269).
+      deprecated_features:
+      - The vmware_dns_config module has been deprecated and will be removed in a
+        later release; use vmware_host_dns instead.
+      - vca - vca_fw, vca_nat, vca_app are deprecated since these modules rely on
+        deprecated part of Pyvcloud library.
+      - vmware_tag_info - in a later release, the module will not return ``tag_facts``
+        since it does not return multiple tags with the same name and different category
+        id. To maintain the existing behavior use ``tag_info`` which is a list of
+        tag metadata.
+      minor_changes:
+      - Added module to be able to create, update, or delete VMware VM storage policies
+        for virtual machines.
+      - vmware_cluster_info - added ``properties`` and ``schema`` options and supported
+        the getting of clusters resource summary information.
+      - vmware_content_deploy_ovf_template - handle exception while deploying VM using
+        OVF template.
+      - vmware_content_deploy_template - handle exception while deploying VM (https://github.com/ansible-collections/vmware/issues/182).
+      - vmware_dvs_portgroup - Added support for distributed port group with private
+        VLAN.
+      - vmware_guest_snapshot_info - Document that `folder` is required if the VM
+        `name` is defined (https://github.com/ansible-collections/vmware/issues/243)
+      - vmware_host_iscsi - a new module for the ESXi hosts that is dedicated to the
+        management of the iSCSI configuration
+      - vmware_migrate_vmk - allow migration from a VMware vSphere Distrubuted Switch
+        to a ESXi Standard Switch
+      - vmware_vcenter_settings_info - a new module for gather information about vCenter
+        settings
+      removed_features:
+      - vmware_portgroup - removed 'inbound_policy', and 'rolling_order' deprecated
+        options.
+    fragments:
+    - 124-vmware-migrate-vmk-to-std-switch.yaml
+    - 182_content_library.yml
+    - 224-vmware_host_iscsi.yml
+    - 243_vmware_guest_snapshot_info.yml
+    - 269_vmware_vm_inventory.yml
+    - 274_vmware_guest.yml
+    - 275_vmware_vcenter_settings_info.yml
+    - 287_deploy_ovf_template.yml
+    - 321-vmware_cluster_info.yml
+    - 52-vmware_dvs_portgroup_find_fix.yml
+    - porting-guide.yml
+    - pvlan-config-vmware-dvs-portgroup.yml
+    - vca_deprecate.yml
+    - vmware_pg_options.yml
+    - vmware_vm_storage_policy_module.yml
+    release_date: '2020-08-01'

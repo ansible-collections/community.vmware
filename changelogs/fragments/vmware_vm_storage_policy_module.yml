@@ -1,2 +1,0 @@
-minor_changes:
-  - Added module to be able to create, update, or delete VMware VM storage policies for virtual machines.

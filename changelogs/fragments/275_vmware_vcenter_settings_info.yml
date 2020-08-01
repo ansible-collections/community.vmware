@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_vcenter_settings_info - a new module for gather information about vCenter settings

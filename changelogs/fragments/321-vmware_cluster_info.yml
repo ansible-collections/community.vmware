@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_cluster_info - added ``properties`` and ``schema`` options and supported the getting of clusters resource summary information.
