@@ -291,8 +291,9 @@ options:
             - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
   cdrom:
     description:
-    - A CD-ROM configuration for the virtual machine.
-    - Or a list of CD-ROMs configuration for the virtual machine. Added in version 2.9.
+    - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
+    - Providing CD-ROM configuration as dict is deprecated and will be removed VMware collection 4.0.0.
+      Please use a list instead.
     - 'Parameters C(controller_type), C(controller_number), C(unit_number), C(state) are added for a list of CD-ROMs
       configuration support.'
     - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
@@ -738,8 +739,11 @@ EXAMPLES = r'''
       version: 12 # Hardware version of virtual machine
       boot_firmware: "efi"
     cdrom:
-      type: iso
-      iso_path: "[datastore1] livecd.iso"
+        - controller_number: 0
+          unit_number: 0
+          state: present
+          type: iso
+          iso_path: "[datastore1] livecd.iso"
     networks:
     - name: VM Network
       mac: aa:bb:dd:aa:00:14
@@ -1621,6 +1625,11 @@ class PyVmomiHelper(PyVmomi):
                 self.configure_cdrom_list(vm_obj)
 
     def configure_cdrom_dict(self, vm_obj):
+        self.module.deprecate(
+            msg="Specifying CD-ROM configuration as dict is deprecated, Please use list to specify CD-ROM configuration.",
+            version="4.0.0",
+            collection_name="community.vmware"
+        )
         if self.params["cdrom"].get('type') not in ['none', 'client', 'iso']:
             self.module.fail_json(msg="cdrom.type is mandatory. Options are 'none', 'client', and 'iso'.")
         if self.params["cdrom"]['type'] == 'iso' and not self.params["cdrom"].get('iso_path'):
