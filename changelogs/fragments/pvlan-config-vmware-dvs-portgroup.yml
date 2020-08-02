@@ -1,3 +1,0 @@
----
-minor_changes:
-- vmware_dvs_portgroup - Added support for distributed port group with private VLAN.

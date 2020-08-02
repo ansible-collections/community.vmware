@@ -1,2 +1,0 @@
-removed_features:
-- vmware_portgroup - removed 'inbound_policy', and 'rolling_order' deprecated options.
