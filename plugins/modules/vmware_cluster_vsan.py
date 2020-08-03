@@ -72,7 +72,7 @@ options:
           type: int
         thin_swap:
           description:
-            - When enabled, swap objects won't reserve 100% space of their size on vSAN datastore.
+            - When C(enabled), swap objects would not reserve 100% space of their size on vSAN datastore.
           type: bool
       type: dict
 extends_documentation_fragment:
