@@ -68,7 +68,7 @@ options:
           type: bool
         object_repair_timer:
           description:
-            - Delay time in minutes for VSAN to wait for absent component to come back before starting to repair it.
+            - Delay time in minutes for VSAN to wait for the absent component to come back before starting to repair it.
           type: int
         thin_swap:
           description:
