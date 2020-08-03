@@ -52,7 +52,7 @@ files:
     maintainers: $team_vmware
   $module_utils/vmware:
   $module_utils/vmware_httpapi:
-  $plugins/connection/vmware_tools.py:
+  $connection/vmware_tools.py:
     support: community
     maintainers: $team_vmware
     labels:
@@ -76,6 +76,7 @@ files:
 macros:
   action: plugins/action
   callback: plugins/callback
+  connection: plugins/connection
   doc_fragments: plugins/doc_fragments
   httpapi: plugins/httpapi
   inventory: plugins/inventory
