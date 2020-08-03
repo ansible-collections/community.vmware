@@ -59,7 +59,8 @@ options:
           type: bool
         disable_site_read_locality:
           description:
-            - For vSAN streched clusters, reads to vSAN objects occur on the site the VM resides on. Setting this to True will force reads across all mirrors.
+            - For vSAN stretched clusters, reads to vSAN objects occur on the site the VM resides on.
+            - Setting to C(True) will force reads across all mirrors.
           type: bool
         large_cluster_support:
           description:
