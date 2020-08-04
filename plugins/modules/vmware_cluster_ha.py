@@ -266,7 +266,7 @@ class VMwareCluster(PyVmomi):
 
         self.advanced_settings = self.params.get('advanced_settings')
         if self.advanced_settings:
-            self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option)
+            self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option, False)
         else:
             self.changed_advanced_settings = None
 

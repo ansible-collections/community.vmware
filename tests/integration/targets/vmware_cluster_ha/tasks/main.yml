@@ -162,6 +162,39 @@
       that:
         - not change_num_heartbeat_ds_again.changed
 
+  - name: Change advanced setting "das.includeFTcomplianceChecks" (check-mode)
+    vmware_cluster_ha: &change_includeFTcomplianceChecks
+      validate_certs: False
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      cluster_name: test_cluster_ha
+      advanced_settings:
+          'das.includeFTcomplianceChecks': 'false'
+    check_mode: yes
+    register: change_includeFTcomplianceChecks_check
+
+  - assert:
+      that:
+        - change_includeFTcomplianceChecks_check.changed
+
+  - name: Change advanced setting "das.includeFTcomplianceChecks"
+    vmware_cluster_ha: *change_includeFTcomplianceChecks
+    register: change_includeFTcomplianceChecks
+
+  - assert:
+      that:
+        - change_includeFTcomplianceChecks.changed
+
+  - name: Change advanced setting "das.includeFTcomplianceChecks" again
+    vmware_cluster_ha: *change_includeFTcomplianceChecks
+    register: change_includeFTcomplianceChecks_again
+
+  - assert:
+      that:
+        - not change_includeFTcomplianceChecks_again.changed
+
   # Delete test cluster
   - name: Delete test cluster
     vmware_cluster:
