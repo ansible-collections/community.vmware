@@ -345,6 +345,29 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>property_name_format</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>snake_case</li>
+                                    <li><div style="color: blue"><b>camel_case</b>&nbsp;&larr;</div></li>
+                                    <li>lower_case</li>
+                        </ul>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>Transforms property name format.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>resources</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -541,10 +564,6 @@ Examples
     # Gather minimum set of properties for VMware guest
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         properties:
         - 'name'
         - 'guest.ipAddress'
@@ -554,11 +573,6 @@ Examples
     # Create Groups based upon VMware Tools status
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        with_tags: False
         properties:
         - 'name'
         - 'config.name'
@@ -575,10 +589,6 @@ Examples
     # Filter VMs based upon condition
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         properties:
         - 'runtime.powerState'
         - 'config.name'
@@ -590,10 +600,6 @@ Examples
     # Filter VM's based on OR conditions
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         properties:
         - 'name'
         - 'config.name'
@@ -610,10 +616,6 @@ Examples
     # Filter VM's based on regex conditions
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         properties:
         - 'config.name'
         - 'config.guestId'
@@ -625,11 +627,6 @@ Examples
     # Using compose and groups
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        with_tags: False
         properties:
         - 'name'
         - 'config.name'
@@ -647,10 +644,6 @@ Examples
     # Use Datacenter, Cluster and Folder value to list VMs
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.200.241
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         with_tags: True
         resources:
           - datacenter:
@@ -669,10 +662,6 @@ Examples
     # Use Category and it's relation with Tag
         plugin: community.vmware.vmware_vm_inventory
         strict: False
-        hostname: 10.65.201.128
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
         hostnames:
         - 'config.name'
         properties:
@@ -688,6 +677,19 @@ Examples
         with_nested_properties: True
         filters:
         - "tag_category.OS is defined and 'Linux' in tag_category.OS"
+
+    # Using property_name_format as snake case
+        plugin: community.vmware.vmware_vm_inventory
+        strict: False
+        properties:
+        - 'name'
+        - 'guest.ipAddress'
+        - 'config.name'
+        - 'config.uuid'
+        - 'summary.runtime.powerState'
+        property_name_format: snake_case
+        filters:
+        - summary.runtime.power_state == "poweredOn"
 
 
 

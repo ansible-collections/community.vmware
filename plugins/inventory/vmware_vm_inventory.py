@@ -135,6 +135,13 @@ DOCUMENTATION = r'''
                 - Also, transforms property name to snake case.
             type: bool
             default: False
+        property_name_format:
+            description:
+                - Transforms property name format.
+            type: str
+            choices: [ snake_case, camel_case, lower_case ]
+            default: 'camel_case'
+            version_added: '1.6.0'
 '''
 
 EXAMPLES = r'''
@@ -150,10 +157,6 @@ EXAMPLES = r'''
 # Gather minimum set of properties for VMware guest
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     properties:
     - 'name'
     - 'guest.ipAddress'
@@ -163,11 +166,6 @@ EXAMPLES = r'''
 # Create Groups based upon VMware Tools status
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -184,10 +182,6 @@ EXAMPLES = r'''
 # Filter VMs based upon condition
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     properties:
     - 'runtime.powerState'
     - 'config.name'
@@ -199,10 +193,6 @@ EXAMPLES = r'''
 # Filter VM's based on OR conditions
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     properties:
     - 'name'
     - 'config.name'
@@ -219,10 +209,6 @@ EXAMPLES = r'''
 # Filter VM's based on regex conditions
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     properties:
     - 'config.name'
     - 'config.guestId'
@@ -234,11 +220,6 @@ EXAMPLES = r'''
 # Using compose and groups
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.223.31
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -256,10 +237,6 @@ EXAMPLES = r'''
 # Use Datacenter, Cluster and Folder value to list VMs
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.200.241
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     with_tags: True
     resources:
       - datacenter:
@@ -278,10 +255,6 @@ EXAMPLES = r'''
 # Use Category and it's relation with Tag
     plugin: community.vmware.vmware_vm_inventory
     strict: False
-    hostname: 10.65.201.128
-    username: administrator@vsphere.local
-    password: Esxi@123$%
-    validate_certs: False
     hostnames:
     - 'config.name'
     properties:
@@ -297,6 +270,19 @@ EXAMPLES = r'''
     with_nested_properties: True
     filters:
     - "tag_category.OS is defined and 'Linux' in tag_category.OS"
+
+# Using property_name_format as snake case
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    properties:
+    - 'name'
+    - 'guest.ipAddress'
+    - 'config.name'
+    - 'config.uuid'
+    - 'summary.runtime.powerState'
+    property_name_format: snake_case
+    filters:
+    - summary.runtime.power_state == "poweredOn"
 '''
 
 import ssl
@@ -627,6 +613,24 @@ def to_flatten_dict(d, parent_key='', sep='.'):
     return dict(items)
 
 
+def rename_dict_key(item, rename_func):
+    """
+    Parse properties dict with rename_func
+
+    """
+    if isinstance(item, dict):
+        new_dict = {}
+        for k, v in item.items():
+            new_dict[rename_func(k)] = rename_dict_key(v, rename_func)
+        return new_dict
+    if isinstance(item, list):
+        new_list = []
+        for k in item:
+            new_list.append(rename_dict_key(k, rename_func))
+        return new_list
+    return item
+
+
 def parse_vim_property(vim_prop):
     """
     Helper method to parse VIM properties of virtual machine
@@ -831,6 +835,13 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_properties = to_nested_dict(properties)
 
+            # property_name_format
+            property_name_format = self.get_option('property_name_format').lower()
+            if property_name_format == 'snake_case':
+                host_properties = camel_dict_to_snake_dict(host_properties)
+            elif property_name_format == 'lower_case':
+                host_properties = rename_dict_key(host_properties, str.lower)
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
             host_filters = self.get_option('filters')
@@ -919,10 +930,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                     parents.pop()
 
         can_sanitize = self.get_option('with_sanitized_property_name')
-
-        # Sanitize host properties: to snake case
-        if can_sanitize:  # to snake case
-            host_properties = camel_dict_to_snake_dict(host_properties)
 
         with_nested_properties = self.get_option('with_nested_properties')
         if with_nested_properties:

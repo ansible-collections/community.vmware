@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_vm_inventory - allow lowercase usage in host filters (https://github.com/ansible-collections/community.vmware/issues/284).
