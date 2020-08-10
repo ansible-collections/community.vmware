@@ -20,9 +20,11 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
+- Mario Lenz (@mariolenz)
 requirements:
-    - Tested on ESXi 5.5 and 6.5.
+    - Tested on ESXi 6.7.
     - PyVmomi installed.
+    - vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 options:
     cluster_name:
       description:
@@ -46,6 +48,33 @@ options:
         on VSAN-enabled hosts in the cluster.
       type: bool
       default: False
+    advanced_options:
+      version_added: "1.1.0"
+      description:
+      - Advanced VSAN Options.
+      suboptions:
+        automatic_rebalance:
+          description:
+            - If enabled, vSAN automatically rebalances (moves the data among disks) when a capacity disk fullness hits proactive rebalance threshold.
+          type: bool
+        disable_site_read_locality:
+          description:
+            - For vSAN stretched clusters, reads to vSAN objects occur on the site the VM resides on.
+            - Setting to C(True) will force reads across all mirrors.
+          type: bool
+        large_cluster_support:
+          description:
+            - Allow > 32 VSAN hosts per cluster; if this is changed on an existing vSAN cluster, all hosts are required to reboot to apply this change.
+          type: bool
+        object_repair_timer:
+          description:
+            - Delay time in minutes for VSAN to wait for the absent component to come back before starting to repair it.
+          type: int
+        thin_swap:
+          description:
+            - When C(enabled), swap objects would not reserve 100% space of their size on vSAN datastore.
+          type: bool
+      type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -60,6 +89,18 @@ EXAMPLES = r"""
     datacenter_name: datacenter
     cluster_name: cluster
     enable_vsan: yes
+  delegate_to: localhost
+
+- name: Enable vSAN and automatic rebalancing
+  community.vmware.vmware_cluster_vsan:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: datacenter
+    cluster_name: cluster
+    enable_vsan: yes
+    advanced_options:
+      automatic_rebalance: True
   delegate_to: localhost
 
 - name: Enable vSAN and claim storage automatically
@@ -78,12 +119,21 @@ EXAMPLES = r"""
 RETURN = r"""#
 """
 
+import traceback
+
 try:
     from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
-from ansible.module_utils.basic import AnsibleModule
+try:
+    import vsanapiutils
+    HAS_VSANPYTHONSDK = True
+except ImportError:
+    VSANPYTHONSDK_IMP_ERR = traceback.format_exc()
+    HAS_VSANPYTHONSDK = False
+
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     TaskError,
@@ -101,6 +151,7 @@ class VMwareCluster(PyVmomi):
         self.enable_vsan = module.params['enable_vsan']
         self.datacenter = None
         self.cluster = None
+        self.advanced_options = None
 
         self.datacenter = find_datacenter_by_name(self.content, self.datacenter_name)
         if self.datacenter is None:
@@ -109,6 +160,14 @@ class VMwareCluster(PyVmomi):
         self.cluster = self.find_cluster_by_name(cluster_name=self.cluster_name)
         if self.cluster is None:
             self.module.fail_json(msg="Cluster %s does not exist." % self.cluster_name)
+
+        if module.params['advanced_options'] is not None:
+            self.advanced_options = module.params['advanced_options']
+            client_stub = self.si._GetStub()
+            ssl_context = client_stub.schemeArgs.get('context')
+            apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
+            vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
+            self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
 
     def check_vsan_config_diff(self):
         """
@@ -121,6 +180,25 @@ class VMwareCluster(PyVmomi):
         if vsan_config.enabled != self.enable_vsan or \
                 vsan_config.defaultConfig.autoClaimStorage != self.params.get('vsan_auto_claim_storage'):
             return True
+
+        if self.advanced_options is not None:
+            vsan_config_info = self.vsanClusterConfigSystem.GetConfigInfoEx(self.cluster).extendedConfig
+            if self.advanced_options['automatic_rebalance'] is not None and \
+                    self.advanced_options['automatic_rebalance'] != vsan_config_info.proactiveRebalanceInfo.enabled:
+                return True
+            if self.advanced_options['disable_site_read_locality'] is not None and \
+                    self.advanced_options['disable_site_read_locality'] != vsan_config_info.disableSiteReadLocality:
+                return True
+            if self.advanced_options['large_cluster_support'] is not None and \
+                    self.advanced_options['large_cluster_support'] != vsan_config_info.largeScaleClusterSupport:
+                return True
+            if self.advanced_options['object_repair_timer'] is not None and \
+                    self.advanced_options['object_repair_timer'] != vsan_config_info.objectRepairTimer:
+                return True
+            if self.advanced_options['thin_swap'] is not None and \
+                    self.advanced_options['thin_swap'] != vsan_config_info.enableCustomizedSwapObject:
+                return True
+
         return False
 
     def configure_vsan(self):
@@ -132,14 +210,32 @@ class VMwareCluster(PyVmomi):
 
         if self.check_vsan_config_diff():
             if not self.module.check_mode:
-                cluster_config_spec = vim.cluster.ConfigSpecEx()
-                cluster_config_spec.vsanConfig = vim.vsan.cluster.ConfigInfo()
-                cluster_config_spec.vsanConfig.enabled = self.enable_vsan
-                cluster_config_spec.vsanConfig.defaultConfig = vim.vsan.cluster.ConfigInfo.HostDefaultInfo()
-                cluster_config_spec.vsanConfig.defaultConfig.autoClaimStorage = self.params.get('vsan_auto_claim_storage')
+                vSanSpec = vim.vsan.ReconfigSpec(
+                    modify=True,
+                )
+                vSanSpec.vsanClusterConfig = vim.vsan.cluster.ConfigInfo(
+                    enabled=self.enable_vsan
+                )
+                vSanSpec.vsanClusterConfig.defaultConfig = vim.vsan.cluster.ConfigInfo.HostDefaultInfo(
+                    autoClaimStorage=self.params.get('vsan_auto_claim_storage')
+                )
+                if self.advanced_options is not None:
+                    vSanSpec.extendedConfig = vim.vsan.VsanExtendedConfig()
+                    if self.advanced_options['automatic_rebalance'] is not None:
+                        vSanSpec.extendedConfig.proactiveRebalanceInfo = vim.vsan.ProactiveRebalanceInfo(
+                            enabled=self.advanced_options['automatic_rebalance']
+                        )
+                    if self.advanced_options['disable_site_read_locality'] is not None:
+                        vSanSpec.extendedConfig.disableSiteReadLocality = self.advanced_options['disable_site_read_locality']
+                    if self.advanced_options['large_cluster_support'] is not None:
+                        vSanSpec.extendedConfig.largeScaleClusterSupport = self.advanced_options['large_cluster_support']
+                    if self.advanced_options['object_repair_timer'] is not None:
+                        vSanSpec.extendedConfig.objectRepairTimer = self.advanced_options['object_repair_timer']
+                    if self.advanced_options['thin_swap'] is not None:
+                        vSanSpec.extendedConfig.enableCustomizedSwapObject = self.advanced_options['thin_swap']
                 try:
-                    task = self.cluster.ReconfigureComputeResource_Task(cluster_config_spec, True)
-                    changed, result = wait_for_task(task)
+                    task = self.vsanClusterConfigSystem.VsanClusterReconfig(self.cluster, vSanSpec)
+                    changed, result = wait_for_task(vim.Task(task._moId, self.si._stub))
                 except vmodl.RuntimeFault as runtime_fault:
                     self.module.fail_json(msg=to_native(runtime_fault.msg))
                 except vmodl.MethodFault as method_fault:
@@ -163,12 +259,22 @@ def main():
         # VSAN
         enable_vsan=dict(type='bool', default=False),
         vsan_auto_claim_storage=dict(type='bool', default=False),
+        advanced_options=dict(type='dict', options=dict(
+            automatic_rebalance=dict(type='bool', required=False),
+            disable_site_read_locality=dict(type='bool', required=False),
+            large_cluster_support=dict(type='bool', required=False),
+            object_repair_timer=dict(type='int', required=False),
+            thin_swap=dict(type='bool', required=False),
+        )),
     ))
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
     )
+
+    if not HAS_VSANPYTHONSDK:
+        module.fail_json(msg=missing_required_lib('vSAN Management SDK for Python'), exception=VSANPYTHONSDK_IMP_ERR)
 
     vmware_cluster_vsan = VMwareCluster(module)
     vmware_cluster_vsan.configure_vsan()
