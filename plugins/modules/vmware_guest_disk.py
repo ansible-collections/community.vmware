@@ -73,7 +73,7 @@ options:
      - All values and parameters are case sensitive.
      suboptions:
        size:
-         description: 
+         description:
            - Disk storage size.
            - If size specified then unit must be specified. There is no space allowed in between size number and unit.
            - Only first occurrence in disk element will be considered, even if there are multiple size* parameters available.
@@ -97,9 +97,10 @@ options:
        disk_mode:
          description:
            - Type of disk mode. If not specified then use C(persistent) mode for new disk.
-           - 'persistent' mode: changes are immediately and permanently written to the virtual disk.
-           - 'independent_persistent' mode: same as persistent, but not affected by snapshots.
-           - 'independent_nonpersistent' mode: changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.
+           - If set to 'persistent' mode, changes are immediately and permanently written to the virtual disk.
+           - If set to 'independent_persistent' mode, same as persistent, but not affected by snapshots.
+           - If set to 'independent_nonpersistent' mode, changes to virtual disk are made to a redo log and discarded
+             at power off, but not affected by snapshots.
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
        sharing:
@@ -147,8 +148,8 @@ options:
        state:
          description:
            - State of disk.
-           - 'absent': disk will be removed permanently from virtual machine configuration and from VMware storage.
-           - 'present': disk will be added if not present at given Controller and Unit Number.
+           - If set to 'absent', disk will be removed permanently from virtual machine configuration and from VMware storage.
+           - If set to 'present', disk will be added if not present at given Controller and Unit Number.
            - or disk exists with different size, disk size is increased, reducing disk size is not allowed.
          type: str
          choices: ['present', 'absent']
@@ -383,7 +384,8 @@ except ImportError:
 from random import randint
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, find_obj, get_all_objs, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec,\
+    wait_for_task, find_obj, get_all_objs, get_parent_datacenter
 
 
 class PyVmomiHelper(PyVmomi):
