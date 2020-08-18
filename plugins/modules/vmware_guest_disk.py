@@ -525,30 +525,6 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.storageIOAllocation = io_disk_spec
         return disk_spec
 
-    def ioandshares_changed(self, disk_device, disk):
-        ioshares_change = False
-        if 'iolimit' in disk:
-            if 'limit' in disk['iolimit'] and disk_device.storageIOAllocation.limit != disk['iolimit']['limit']:
-                ioshares_change = True
-            if 'shares' in disk['iolimit']:
-                if 'level' in disk['iolimit']['shares']:
-                    if disk_device.storageIOAllocation.shares.level != disk['iolimit']['shares']['level']:
-                        ioshares_change = True
-                    if disk_device.storageIOAllocation.shares.level == 'custom' and disk['iolimit']['shares']['level'] == 'custom':
-                        if 'level_value' in disk['iolimit']['shares']:
-                            if disk_device.storageIOAllocation.shares.shares != disk['iolimit']['shares']['level_value']:
-                                ioshares_change = True
-        if 'shares' in disk:
-            if 'level' in disk['shares']:
-                if disk_device.storageIOAllocation.shares.level != disk['shares']['level']:
-                    ioshares_change = True
-                if disk_device.storageIOAllocation.shares.level == 'custom' and disk['shares']['level'] == 'custom':
-                    if 'level_value' in disk['shares']:
-                        if disk_device.storageIOAllocation.shares.shares != disk['shares']['level_value']:
-                            ioshares_change = True
-
-        return ioshares_change
-
     def get_sharing(self, disk, disk_type, disk_index):
         """
         Get the sharing mode of the virtual disk
@@ -646,16 +622,11 @@ class PyVmomiHelper(PyVmomi):
                                                               % (disk['disk_index'], disk['size'],
                                                                  disk_spec.device.capacityInKB))
                                 if disk['size'] != disk_spec.device.capacityInKB:
-                                    disk_spec.device.capacityInKB = disk['size']
-                                    disk_change = True
-                                if 'shares' in disk or 'iolimit' in disk:
-                                    ioshares_change = self.ioandshares_changed(disk_device, disk)
-                                    if ioshares_change:
-                                        disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
-                                        disk_change = True
-                                if disk_change:
                                     disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                                    disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                                    disk_spec.device.capacityInKB = disk['size']
                                     self.config_spec.deviceChange.append(disk_spec)
+                                    disk_change = True
                                     disk_change_list.append(disk_change)
                                     results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
                             elif disk['state'] == 'absent':
