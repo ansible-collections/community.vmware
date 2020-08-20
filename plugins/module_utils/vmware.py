@@ -855,14 +855,16 @@ def is_truthy(value):
 
 # options is the dict as defined in the module parameters, current_options is
 # the list of the currently set options as returned by the vSphere API.
-def option_diff(options, current_options):
+# When truthy_strings_as_bool is True, strings like 'true', 'off' or 'yes'
+# are converted to booleans.
+def option_diff(options, current_options, truthy_strings_as_bool=True):
     current_options_dict = {}
     for option in current_options:
         current_options_dict[option.key] = option.value
 
     change_option_list = []
     for option_key, option_value in options.items():
-        if is_boolean(option_value):
+        if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
         elif isinstance(option_value, int):
             option_value = VmomiSupport.vmodlTypes['int'](option_value)

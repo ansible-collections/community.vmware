@@ -88,3 +88,39 @@
     assert:
       that:
           - all_hosts_result_check_mode.changed
+
+  # Test that PR 332 doesn't break boolean settings for this module.
+  - name: Change a boolean setting for a given host (check-mode)
+    vmware_host_config_manager: &change_logDirUnique
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      options:
+        'Syslog.global.logDirUnique': true
+      validate_certs: no
+    check_mode: yes
+    register: change_logDirUnique_check
+
+  - name: ensure changes would be done to given host
+    assert:
+      that:
+          - change_logDirUnique_check.changed
+
+  - name: Change a boolean setting for a given host
+    vmware_host_config_manager: *change_logDirUnique
+    register: change_logDirUnique
+
+  - name: ensure changes are done to given host
+    assert:
+      that:
+          - change_logDirUnique.changed
+
+  - name: Change a boolean setting for a given host again
+    vmware_host_config_manager: *change_logDirUnique
+    register: change_logDirUnique_again
+
+  - name: ensure changes are not done to given host
+    assert:
+      that:
+          - not change_logDirUnique_again.changed
