@@ -3091,10 +3091,11 @@ class PyVmomiHelper(PyVmomi):
         clonespec = None
         clone_method = None
         try:
+            # Only select specific host when ESXi hostname is provided
+            if self.params['esxi_hostname']:
+                self.relospec.host = self.select_host()
+
             if self.params['template']:
-                # Only select specific host when ESXi hostname is provided
-                if self.params['esxi_hostname']:
-                    self.relospec.host = self.select_host()
                 self.relospec.datastore = datastore
 
                 # Convert disk present in template if is set
