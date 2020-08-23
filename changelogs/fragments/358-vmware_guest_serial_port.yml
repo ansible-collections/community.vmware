@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_serial_port - fixed to have idepomtency(https://github.com/ansible-collections/vmware/pull/358).
