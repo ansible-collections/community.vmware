@@ -234,7 +234,7 @@
         disk:
           - state: "absent"
             scsi_controller: 0
-            unit_number: 4
+            unit_number: 2
             destroy: false
       register: test_remove_without_destroy
 
