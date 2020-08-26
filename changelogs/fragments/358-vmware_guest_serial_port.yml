@@ -1,2 +1,2 @@
 minor_changes:
-  - vmware_guest_serial_port - fixed to have idepomtency(https://github.com/ansible-collections/vmware/pull/358).
+  - vmware_guest_serial_port - ensure we can run the module two times in a row without unexpected side effect(https://github.com/ansible-collections/vmware/pull/358).
