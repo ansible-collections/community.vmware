@@ -165,7 +165,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         if not self.host_id:
             self.module.fail_json(msg="Failed to find the Host %s" % self.host)
         # Find the resourcepool by the given resourcepool name
-        self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool)
+        self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
         if not self.resourcepool_id:
             self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
         # Find the Cluster by the given Cluster name
