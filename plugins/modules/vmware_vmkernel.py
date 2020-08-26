@@ -614,11 +614,11 @@ class PyVmomiHelper(PyVmomi):
                 changed_services = changed_service_prov = True
 
             if (self.enable_replication and self.vnic.device not in service_type_vmks['vSphereReplication']) or \
-                    (not self.enable_provisioning and self.vnic.device in service_type_vmks['vSphereReplication']):
+                    (not self.enable_replication and self.vnic.device in service_type_vmks['vSphereReplication']):
                 changed_services = changed_service_rep = True
 
             if (self.enable_replication_nfc and self.vnic.device not in service_type_vmks['vSphereReplicationNFC']) or \
-                    (not self.enable_provisioning and self.vnic.device in service_type_vmks['vSphereReplicationNFC']):
+                    (not self.enable_replication_nfc and self.vnic.device in service_type_vmks['vSphereReplicationNFC']):
                 changed_services = changed_service_rep_nfc = True
             if changed_services:
                 changed_list.append("services")
