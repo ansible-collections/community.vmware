@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vmkernel - fixed issue were Repl and ReplNFC services were not being identified as enabled on a vmk interface (https://github.com/ansible-collections/vmware/issues/362).
