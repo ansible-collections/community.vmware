@@ -557,6 +557,7 @@
     name: 'test_vm1'
     backings:
     - type: 'pipe'
+      pipe_name: 'serial_pipe'
       state: 'absent'
   register: remove_pipe_port
 
@@ -574,14 +575,16 @@
     name: 'test_vm1'
     backings:
       - type: network
+        service_uri: 'tcp://6000'
         state: absent
       - type: device
+        device_name: '/dev/char/serial/uart0'
         state: absent
       - type: file
+        file_path: '[{{ rw_datastore }}] file1'
         state: absent
   register: remove_all_serial_ports
 
 - assert:
     that:
       - remove_all_serial_ports.changed is sameas true
-

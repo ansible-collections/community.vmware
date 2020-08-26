@@ -131,6 +131,7 @@ plugins/modules/vmware_vswitch.py validate-modules:parameter-list-no-elements
 plugins/modules/vsphere_copy.py validate-modules:undocumented-parameter
 plugins/module_utils/vca.py future-import-boilerplate
 plugins/module_utils/vca.py metaclass-boilerplate
+plugins/modules/vmware_guest_serial_port.py validate-modules:required_if-unknown-key
 scripts/inventory/vmware_inventory.py future-import-boilerplate
 scripts/inventory/vmware_inventory.py metaclass-boilerplate
 scripts/inventory/vmware.py future-import-boilerplate

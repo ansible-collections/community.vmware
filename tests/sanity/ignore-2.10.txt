@@ -17,3 +17,4 @@ plugins/modules/vca_vapp.py validate-modules:invalid-ansiblemodule-schema # depr
 plugins/modules/vca_vapp.py validate-modules:undocumented-parameter # deprecated
 plugins/modules/vmware_deploy_ovf.py use-argspec-type-path!skip
 plugins/modules/vmware_host_acceptance.py validate-modules:parameter-state-invalid-choice
+plugins/modules/vmware_guest_serial_port.py validate-modules:required_if-unknown-key
