@@ -505,10 +505,10 @@ def main():
                           state=dict(type='str', choices=['present', 'absent'], default='present')
                       ),
                       required_if=[
-                          ['type', 'pipe', ['pipe_name', 'endpoint', 'no_rx_loss']],
-                          ['type', 'network', ['service_uri', 'direction']],
-                          ['type', 'device', ['device_name']],
-                          ['type', 'file', ['file_path']]
+                          ['backing_type', 'pipe', ['pipe_name', 'endpoint', 'no_rx_loss']],
+                          ['backing_type', 'network', ['service_uri', 'direction']],
+                          ['backing_type', 'device', ['device_name']],
+                          ['backing_type', 'file', ['file_path']]
                       ]),
     )
 
