@@ -52,14 +52,14 @@ options:
       required: True
     host:
       description:
-      - Name of the ESX Host in datacenter in which to place deployed VM.
+      - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
       type: str
       required: True
     resource_pool:
       description:
       - Name of the resourcepool in datacenter in which to place deployed VM.
       type: str
-      required: False
+      required: True
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
@@ -165,11 +165,9 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         if not self.host_id:
             self.module.fail_json(msg="Failed to find the Host %s" % self.host)
         # Find the resourcepool by the given resourcepool name
-        self.resourcepool_id = None
-        if self.resourcepool:
-            self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool)
-            if not self.resourcepool_id:
-                self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
+        self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool)
+        if not self.resourcepool_id:
+            self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
         # Find the Cluster by the given Cluster name
         self.cluster_id = None
         if self.cluster:
@@ -230,7 +228,7 @@ def main():
         datastore=dict(type='str', required=True),
         folder=dict(type='str', required=True),
         host=dict(type='str', required=True),
-        resource_pool=dict(type='str', required=False),
+        resource_pool=dict(type='str', required=True),
         cluster=dict(type='str', required=False),
         storage_provisioning=dict(type='str',
                                   required=False,
