@@ -187,6 +187,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six.moves.urllib.parse import unquote
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
@@ -290,7 +291,7 @@ class VmwreClusterInfoManager(PyVmomi):
                 if '_vimtype' in resource_summary:
                     del resource_summary['_vimtype']
 
-                results['clusters'][cluster.name] = dict(
+                results['clusters'][unquote(cluster.name)] = dict(
                     hosts=hosts,
                     enable_ha=das_config.enabled,
                     ha_failover_level=ha_failover_level,
@@ -314,7 +315,7 @@ class VmwreClusterInfoManager(PyVmomi):
                 )
         else:
             for cluster in self.cluster_objs:
-                results['clusters'][cluster.name] = self.to_json(cluster, self.properties)
+                results['clusters'][unquote(cluster.name)] = self.to_json(cluster, self.properties)
 
         self.module.exit_json(**results)
 
