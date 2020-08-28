@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_content_deploy_ovf_template - requires the resource_pool parameter.

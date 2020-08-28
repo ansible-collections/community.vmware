@@ -5,6 +5,30 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.2.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_ha - treat truthy advanced options ('true', 'false') as strings instead of booleans (https://github.com/ansible-collections/vmware/issues/286).
+- vmware_cluster_vsan - implement advanced VSAN options (https://github.com/ansible-collections/vmware/issues/260).
+- vmware_cluster_vsan - requires the vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
+- vmware_content_deploy_ovf_template - requires the resource_pool parameter.
+- vmware_guest_disk - add backing_uuid value to return (https://github.com/ansible-collections/vmware/pull/348).
+- vmware_guest_serial_port - ensure we can run the module two times in a row without unexpected side effect(https://github.com/ansible-collections/vmware/pull/358).
+
+Deprecated Features
+-------------------
+
+- vmware_guest - deprecate specifying CDROM configuration as a dict, instead use a list.
+
+Bugfixes
+--------
+
+- vmware_content_deploy_ovf_template - fixed issue where wrong resource pool identifier was returned when same resource pool name was used across clusters in the same datacenter (https://github.com/ansible-collections/vmware/pull/363)
+- vmware_vmkernel - fixed issue where Repl and ReplNFC services were not being identified as enabled on a vmk interface (https://github.com/ansible-collections/vmware/issues/362).
+
 v1.1.0
 ======
 
