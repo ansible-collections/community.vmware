@@ -1,2 +1,0 @@
-deprecated_features:
-- vmware_guest - deprecate specifying CDROM configuration as a dict, instead use a list.
