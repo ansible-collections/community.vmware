@@ -138,3 +138,33 @@
 #      that:
 #        - cluster_info is defined
 #        - cluster_info.clusters[ccr1].tags is defined
+
+- name: "Prepare a cluster name with character to be URL-encoded"
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster/\%'
+    state: present
+  register: prepare_cluster_url_encoded_result
+
+- assert:
+    that:
+      - prepare_cluster_url_encoded_result.changed is sameas true
+
+- name: "Gather information about all datacenter"
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+  register: all_cluster_result
+
+- name: "Ensure URL-encoded cluster name"
+  assert:
+    that:
+      - all_cluster_result.clusters['Cluster/\%']
+
