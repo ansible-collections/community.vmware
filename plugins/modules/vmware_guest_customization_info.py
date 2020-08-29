@@ -130,7 +130,7 @@ class VmwareCustomSpecManger(PyVmomi):
             for nic in current_spec.spec.nicSettingMap:
                 temp_data = dict(
                     mac_address=nic.macAddress,
-                    ip_address=nic.adapter.ip.ipAddress if hasattr(nic.adapter.ip, 'ipAddress') else '',
+                    ip_address=nic.adapter.ip.ipAddress if hasattr(nic.adapter.ip, 'ipAddress') else None,
                     subnet_mask=nic.adapter.subnetMask,
                     gateway=list(nic.adapter.gateway),
                     nic_dns_server_list=list(nic.adapter.dnsServerList),
