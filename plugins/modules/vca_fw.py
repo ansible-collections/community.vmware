@@ -26,7 +26,7 @@ options:
       required: True
       default: false
 extends_documentation_fragment:
-- community.vmware.vca.documentation
+- vca.documentation
 
 '''
 
