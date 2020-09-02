@@ -404,7 +404,7 @@ class BaseVMwareInventory:
             raise AnsibleError("Missing one of the following : hostname, username, password. Please read "
                                "the documentation for more information.")
 
-    def get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):
+    def get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):  # noqa  # pylint: disable=too-complex
         """
         Look up a Managed Object Reference in vCenter / ESXi Environment
         :param vim_type: Type of vim object e.g, for datacenter - vim.Datacenter
