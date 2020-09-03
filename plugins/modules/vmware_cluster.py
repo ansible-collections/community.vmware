@@ -411,9 +411,6 @@ class VMwareCluster(PyVmomi):
             if not self.module.check_mode:
                 self.datacenter.hostFolder.CreateClusterEx(self.cluster_name, cluster_config_spec)
             self.module.exit_json(changed=True)
-        except vim.fault.DuplicateName:
-            # To match other vmware_* modules
-            pass
         except vmodl.fault.InvalidArgument as invalid_args:
             self.module.fail_json(msg="Cluster configuration specification"
                                       " parameter is invalid : %s" % to_native(invalid_args.msg))
