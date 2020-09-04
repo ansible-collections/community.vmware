@@ -39,227 +39,226 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
+                    <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>api_version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"5.7"</div>
-                </td>
-                <td>
-                        <div>The API version to be used with the vca.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"5.7"</div>
+                                    </td>
+                                                                <td>
+                                            <div>The API version to be used with the vca.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>gateway_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"gateway"</div>
-                </td>
-                <td>
-                        <div>The name of the gateway of the vdc where the rule should be added.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"gateway"</div>
+                                    </td>
+                                                                <td>
+                                            <div>The name of the gateway of the vdc where the rule should be added.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The authentication host to be used when service type is vcd.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The authentication host to be used when service type is vcd.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>instance_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The instance ID in a vchs environment to be used for creating the vapp.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The instance ID in a vchs environment to be used for creating the vapp.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>nat_rules</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">-</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
-                </td>
-                <td>
-                        <div>A list of rules to be added to the gateway, Please see examples on valid entries</div>
-                </td>
+                                                 / <span style="color: red">required</span>                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"no"</div>
+                                    </td>
+                                                                <td>
+                                            <div>A list of rules to be added to the gateway, Please see examples on valid entries</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>org</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The org to login to for creating vapp.</div>
-                        <div>This option is required when the <code>service_type</code> is <em>vdc</em>.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The org to login to for creating vapp.</div>
+                                            <div>This option is required when the <code>service_type</code> is <em>vdc</em>.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The vca password, if not set the environment variable <code>VCA_PASS</code> is checked for the password.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, passwd</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The vca password, if not set the environment variable <code>VCA_PASS</code> is checked for the password.</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: pass, passwd</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>purge_rules</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If set to true, it will delete all rules in the gateway that are not given as parameter to this module.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If set to true, it will delete all rules in the gateway that are not given as parameter to this module.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>service_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>vca</b>&nbsp;&larr;</div></li>
-                                    <li>vcd</li>
-                                    <li>vchs</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The type of service we are authenticating against.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>vca</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>vcd</li>
+                                                                                                                                                                                                <li>vchs</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>The type of service we are authenticating against.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>absent</li>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether the object should be added or removed.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>absent</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Whether the object should be added or removed.</div>
+                                                        </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The vca username or email address, if not set the environment variable <code>VCA_USER</code> is checked for the username.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: user</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The vca username or email address, if not set the environment variable <code>VCA_USER</code> is checked for the username.</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: user</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If the certificates of the authentication is to be verified.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: verify_certs</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If the certificates of the authentication is to be verified.</div>
+                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_certs</div>
+                                    </td>
             </tr>
-            <tr>
-                <td colspan="1">
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vdc_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the vdc where the gateway is located.</div>
-                </td>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>The name of the vdc where the gateway is located.</div>
+                                                        </td>
             </tr>
-    </table>
+                        </table>
     <br/>
 
 
@@ -269,6 +268,8 @@ Examples
 --------
 
 .. code-block:: yaml+jinja
+
+    
 
     #An example for a source nat
 
@@ -302,6 +303,8 @@ Examples
 
 
 
+
+
 Status
 ------
 
@@ -314,3 +317,5 @@ Authors
 ~~~~~~~
 
 - Peter Sprygada (@privateip)
+
+
