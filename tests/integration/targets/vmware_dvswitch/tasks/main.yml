@@ -98,3 +98,75 @@
       that:
         - dvswitch_delete.results[0] is changed
         - dvswitch_delete.results[1] is changed
+
+  - name: Create dvSwitch with special characters
+    vmware_dvswitch:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      switch: 'dvSwitch\/%'
+      version: 6.5.0
+      mtu: 9000
+      uplink_quantity: 1
+      state: present
+    register: create_dvswitch_with_special_characters_result
+
+  - assert:
+      that:
+        - create_dvswitch_with_special_characters_result.changed is sameas true
+
+  - name: Create dvSwitch with special characters(idempotency check)
+    vmware_dvswitch:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      switch: 'dvSwitch\/%'
+      version: 6.5.0
+      mtu: 9000
+      uplink_quantity: 1
+      state: present
+    register: create_dvswitch_with_special_characters_idempotency_check_result
+
+  - assert:
+      that:
+        - create_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false
+
+  - name: Delete dvSwitch with special characters
+    vmware_dvswitch:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      switch: 'dvSwitch\/%'
+      version: 6.5.0
+      mtu: 9000
+      uplink_quantity: 1
+      state: absent
+    register: delete_dvswitch_with_special_characters_result
+
+  - assert:
+      that:
+        - delete_dvswitch_with_special_characters_result.changed is sameas true
+
+  - name: Delete dvSwitch with special characters(idempotency check)
+    vmware_dvswitch:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      switch: 'dvSwitch\/%'
+      version: 6.5.0
+      mtu: 9000
+      uplink_quantity: 1
+      state: absent
+    register: delete_dvswitch_with_special_characters_idempotency_check_result
+
+  - assert:
+      that:
+        - delete_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false

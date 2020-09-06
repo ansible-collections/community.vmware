@@ -71,3 +71,107 @@
     - assert:
         that:
           - pg_info.changed
+
+    - name: Integration test a PortGroup name with special characters
+      block:
+        - name: Create Switch with special characters
+          vmware_vswitch:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            esxi_hostname: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            state: present
+          register: create_switch_with_special_characters_result
+
+        - assert:
+            that:
+              - create_switch_with_special_characters_result.changed is sameas true
+
+        - name: Create PortGroup with special characters
+          vmware_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            hosts: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            portgroup: 'PortGroup\/%'
+            security:
+              promiscuous_mode: False
+              mac_changes: False
+              forged_transmits: False
+            state: present
+          register: create_portgroup_with_special_characters_result
+
+        - assert:
+            that:
+              - create_portgroup_with_special_characters_result.changed is sameas true
+
+        - name: Create PortGroup with special characters(idempotency check)
+          vmware_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            hosts: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            portgroup: 'PortGroup\/%'
+            security:
+              promiscuous_mode: False
+              mac_changes: False
+              forged_transmits: False
+            state: present
+          register: create_portgroup_with_special_characters_idempotency_check_result
+
+        - assert:
+            that:
+              - create_portgroup_with_special_characters_idempotency_check_result.changed is sameas false
+
+        - name: Delete PortGroup with special characters
+          vmware_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            hosts: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            portgroup: 'PortGroup\/%'
+            state: absent
+          register: delete_portgroup_with_special_characters_result
+
+        - assert:
+            that:
+              - delete_portgroup_with_special_characters_result.changed is sameas true
+
+        - name: Delete PortGroup with special characters(idempotency check)
+          vmware_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            hosts: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            portgroup: 'PortGroup\/%'
+            state: absent
+          register: delete_portgroup_with_special_characters_idempotency_check_result
+
+        - assert:
+            that:
+              - delete_portgroup_with_special_characters_idempotency_check_result.changed is sameas false
+
+        - name: Delete Switch with special characters
+          vmware_vswitch:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            esxi_hostname: "{{ esxi1 }}"
+            switch: 'Switch\/%'
+            state: absent
+          register: delete_switch_with_special_characters_result
+
+        - assert:
+            that:
+              - delete_switch_with_special_characters_result.changed is sameas true

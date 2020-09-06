@@ -48,3 +48,59 @@
     assert:
       that:
         - dc_result_delete.changed
+
+- name: Create Datacenter with special characters
+  vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: 'Datacenter\/%'
+    state: present
+  register: create_datacenter_with_special_characters_result
+
+- assert:
+    that:
+      - create_datacenter_with_special_characters_result.changed is sameas true
+
+- name: Create Datacenter with special characters(idempotency check)
+  vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: 'Datacenter\/%'
+    state: present
+  register: create_datacenter_with_special_characters_idempotency_check_result
+
+- assert:
+    that:
+      - create_datacenter_with_special_characters_idempotency_check_result.changed is sameas false
+
+- name: Delete Datacenter with special characters
+  vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: 'Datacenter\/%'
+    state: absent
+  register: delete_datacenter_with_special_characters_result
+
+- assert:
+    that:
+      - delete_datacenter_with_special_characters_result.changed is sameas true
+
+- name: Delete Datacenter with special characters(idempotency check)
+  vmware_datacenter:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: 'Datacenter\/%'
+    state: absent
+  register: delete_datacenter_with_special_characters_idempotency_check_result
+
+- assert:
+    that:
+      - delete_datacenter_with_special_characters_idempotency_check_result.changed is sameas false
