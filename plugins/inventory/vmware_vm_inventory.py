@@ -194,6 +194,25 @@ EXAMPLES = r'''
     hostnames:
     - config.name
 
+# Filter VM's based on OR conditions 
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.toolsStatus'
+    - 'guest.toolsRunningStatus'
+    - 'config.guestFullName'
+    - 'config.guestId'
+    hostnames:
+    - 'config.name'
+    filters:
+    - config.guestId == "rhel64Guest" or config.name == "rhel_20_04_empty"
+
 # Using compose and groups
     plugin: community.vmware.vmware_vm_inventory
     strict: False
