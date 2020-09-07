@@ -1,0 +1,2 @@
+minor_changes:
+  - module_utils/vmware - Ignore leading and trailing whitespace when searching for objects (https://github.com/ansible-collections/vmware/issues/335)
