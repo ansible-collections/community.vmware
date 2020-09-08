@@ -2507,7 +2507,7 @@ class PyVmomiHelper(PyVmomi):
             if ctl_type == 'nvme':
                 if vm_obj is None:
                     if 'version' in self.params['hardware'] and self.params['hardware']['version'].lower() != 'latest' and \
-                                    int(self.params['hardware']['version']) < 13:
+                            int(self.params['hardware']['version']) < 13:
                         self.module.fail_json(msg="Configured hardware version '%d' not support nvme controller."
                                                   % self.params['hardware']['version'])
                     if self.params['esxi_hostname'] is not None:
