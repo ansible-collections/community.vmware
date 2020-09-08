@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - Fixed issue of comparing latest hardware version str type with int(https://github.com/ansible-collections/vmware/issues/381)

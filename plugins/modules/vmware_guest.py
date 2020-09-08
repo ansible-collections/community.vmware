@@ -181,7 +181,7 @@ options:
             description:
             - The Virtual machine hardware versions.
             - Default is 10 (ESXi 5.5 and onwards).
-            - If value specified as C(latest), version is set to the most current virtual hardware supported on the host.
+            - If set to C(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - C(latest) is added in Ansible 2.10.
             - Please check VMware documentation for correct virtual machine hardware version.
             - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
@@ -2505,14 +2505,16 @@ class PyVmomiHelper(PyVmomi):
                 self.module.fail_json(msg="Disk controller type: '%s' is not supported or invalid." % disk_spec['controller_type'])
             # nvme support starts from hardware version 13 on ESXi 6.5
             if ctl_type == 'nvme':
-                if 'version' in self.params['hardware'] and self.params['hardware']['version'] < 13:
-                    self.module.fail_json(msg="Configured hardware version '%d' not support nvme controller."
-                                              % self.params['hardware']['version'])
-                elif self.params['esxi_hostname'] is not None:
-                    if not self.host_version_at_least(version=(6, 5, 0), host_name=self.params['esxi_hostname']):
-                        self.module.fail_json(msg="ESXi host '%s' version < 6.5.0, not support nvme controller."
-                                                  % self.params['esxi_hostname'])
-                elif vm_obj is not None:
+                if vm_obj is None:
+                    if 'version' in self.params['hardware'] and self.params['hardware']['version'].lower() != 'latest' and \
+                                    int(self.params['hardware']['version']) < 13:
+                        self.module.fail_json(msg="Configured hardware version '%d' not support nvme controller."
+                                                  % self.params['hardware']['version'])
+                    if self.params['esxi_hostname'] is not None:
+                        if not self.host_version_at_least(version=(6, 5, 0), host_name=self.params['esxi_hostname']):
+                            self.module.fail_json(msg="ESXi host '%s' version < 6.5.0, not support nvme controller."
+                                                      % self.params['esxi_hostname'])
+                else:
                     try:
                         if int(vm_obj.config.version.split('-')[1]) < 13:
                             self.module.fail_json(msg="VM hardware version < 13 not support nvme controller.")
