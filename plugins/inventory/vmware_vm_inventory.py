@@ -157,6 +157,8 @@ EXAMPLES = r'''
     properties:
     - 'name'
     - 'guest.ipAddress'
+    - 'config.name'
+    - 'config.uuid'
 
 # Create Groups based upon VMware Tools status
     plugin: community.vmware.vmware_vm_inventory
@@ -187,12 +189,32 @@ EXAMPLES = r'''
     password: Esxi@123$%
     validate_certs: False
     properties:
-    - runtime.powerState
-    - config.name
+    - 'runtime.powerState'
+    - 'config.name'
     filters:
     - runtime.powerState == "poweredOn"
     hostnames:
     - config.name
+
+# Filter VM's based on OR conditions
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.ipAddress'
+    - 'guest.toolsStatus'
+    - 'guest.toolsRunningStatus'
+    - 'config.guestFullName'
+    - 'config.guestId'
+    hostnames:
+    - 'config.name'
+    filters:
+    - config.guestId == "rhel7_64Guest" or config.name == "rhel_20_04_empty"
 
 # Using compose and groups
     plugin: community.vmware.vmware_vm_inventory
