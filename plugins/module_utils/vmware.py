@@ -42,6 +42,7 @@ except ImportError:
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import env_fallback, missing_required_lib
+from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
 class TaskError(Exception):
@@ -134,7 +135,7 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
 
     objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
     for obj in objects:
-        if obj.name == name:
+        if unquote(obj.name) == name:
             return obj
 
     return None
@@ -1012,7 +1013,7 @@ class PyVmomi(object):
             for temp_vm_object in objects:
                 if (
                     len(temp_vm_object.propSet) == 1
-                    and temp_vm_object.propSet[0].val == self.params["name"]
+                    and unquote(temp_vm_object.propSet[0].val) == self.params["name"]
                 ):
                     vms.append(temp_vm_object.obj)
 

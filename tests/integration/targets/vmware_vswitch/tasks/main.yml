@@ -84,3 +84,59 @@
       - add_vswitch_with_host_system is changed
   always:
   - include_tasks: teardown.yml
+
+  - name: Create Switch with special characters
+    vmware_vswitch:
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      validate_certs: false
+      switch: 'Switch\/%'
+      state: present
+    register: create_switch_with_special_characters_result
+
+  - assert:
+      that:
+        - create_switch_with_special_characters_result.changed is sameas true
+
+  - name: Create Switch with special characters(idempotency check)
+    vmware_vswitch:
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      validate_certs: false
+      switch: 'Switch\/%'
+      state: present
+    register: create_switch_with_special_characters_idempotency_check_result
+
+  - assert:
+      that:
+        - create_switch_with_special_characters_idempotency_check_result.changed is sameas false
+
+  - name: Delete Switch with special characters
+    vmware_vswitch:
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      validate_certs: false
+      switch: 'Switch\/%'
+      state: absent
+    register: delete_switch_with_special_characters_result
+
+  - assert:
+      that:
+        - delete_switch_with_special_characters_result.changed is sameas true
+
+  - name: Delete Switch with special characters(idempotency check)
+    vmware_vswitch:
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      validate_certs: false
+      switch: 'Switch\/%'
+      state: absent
+    register: delete_switch_with_special_characters_idempotency_check_result
+
+  - assert:
+      that:
+        - delete_switch_with_special_characters_idempotency_check_result.changed is sameas false
