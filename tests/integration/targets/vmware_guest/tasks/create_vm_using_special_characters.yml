@@ -1,0 +1,84 @@
+---
+- when: vcsim is not defined
+  block:
+    - name: Create VM with special characters
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: "{{ f0 }}"
+        name: 'test_vm\/%'
+        guest_id: rhel7_64Guest
+        hardware:
+          memory_mb: 512
+          num_cpus: 1
+          scsi: paravirtual
+        disk:
+          - size_gb: 1
+            type: thin
+            datastore: "{{ rw_datastore }}"
+        state: present
+      register: create_vm_with_special_characters_result
+
+    - assert:
+        that:
+          - create_vm_with_special_characters_result.changed is sameas true
+
+    - name: Create VM with special characters(idempotency check)
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: "{{ f0 }}"
+        name: 'test_vm\/%'
+        guest_id: rhel7_64Guest
+        hardware:
+          memory_mb: 512
+          num_cpus: 1
+          scsi: paravirtual
+        disk:
+          - size_gb: 1
+            type: thin
+            datastore: "{{ rw_datastore }}"
+        state: present
+      register: create_vm_with_special_characters_idempotency_check_result
+
+    - assert:
+        that:
+          - create_vm_with_special_characters_idempotency_check_result.changed is sameas false
+
+    - name: Delete VM with special characters
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: "/vm"
+        name: 'test_vm\/%'
+        state: absent
+      register: delete_vm_with_special_characters_result
+
+    - assert:
+        that:
+          - delete_vm_with_special_characters_result.changed is sameas true
+
+    - name: Delete VM with special characters(idempotency check)
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: "/vm"
+        name: 'test_vm\/%'
+        state: absent
+      register: delete_vm_with_special_characters_idempotency_check_result
+
+    - assert:
+        that:
+          - delete_vm_with_special_characters_idempotency_check_result.changed is sameas false
