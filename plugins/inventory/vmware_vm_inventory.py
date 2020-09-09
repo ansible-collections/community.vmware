@@ -196,7 +196,7 @@ EXAMPLES = r'''
     hostnames:
     - config.name
 
-# Filter VM's based on OR conditions 
+# Filter VM's based on OR conditions
     plugin: community.vmware.vmware_vm_inventory
     strict: False
     hostname: 10.65.223.31
