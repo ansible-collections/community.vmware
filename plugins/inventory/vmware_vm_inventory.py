@@ -215,6 +215,21 @@ EXAMPLES = r'''
     filters:
     - config.guestId == "rhel7_64Guest" or config.name == "rhel_20_04_empty"
 
+# Filter VM's based on regex conditions
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'config.name'
+    - 'config.guestId'
+    - 'guest.ipAddress'
+    - 'summary.runtime.powerState'
+    filters:
+    - guest.ipAddress is defined and guest.ipAddress is match('192.168.*') or guest.ipAddress is match('192.169.*')
+
 # Using compose and groups
     plugin: community.vmware.vmware_vm_inventory
     strict: False
