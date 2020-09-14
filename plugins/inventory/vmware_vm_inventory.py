@@ -228,7 +228,7 @@ EXAMPLES = r'''
     - 'guest.ipAddress'
     - 'summary.runtime.powerState'
     filters:
-    - guest.ipAddress is defined and guest.ipAddress is match('192.168.*') or guest.ipAddress is match('192.169.*')
+    - guest.ipAddress is defined and (guest.ipAddress is match('192.168.*') or guest.ipAddress is match('192.169.*'))
 
 # Using compose and groups
     plugin: community.vmware.vmware_vm_inventory
