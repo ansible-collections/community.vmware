@@ -131,6 +131,8 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
     if not isinstance(obj_type, list):
         obj_type = [obj_type]
 
+    name = name.strip()
+
     objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
     for obj in objects:
         if unquote(obj.name) == name:
