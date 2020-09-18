@@ -56,7 +56,7 @@
   name: Ensure facts are gathered for the given cluster in check mode
 
 
-# Disabled until we get a fix for https://github.com/ansible-collections/vmware/issues/301
+# Disabled until we get a fix for https://github.com/ansible-collections/community.vmware/issues/301
 #- when: vcsim is not defined
 #  block:
 #  - import_role:

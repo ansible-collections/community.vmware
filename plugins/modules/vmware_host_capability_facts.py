@@ -204,7 +204,7 @@ class CapabilityFactsManager(PyVmomi):
             #   checkpointFtSupported => smpFtSupported
             #   checkpointFtSupported => smpFtCompatibilityIssues.
             # So add `checkpointFtSupported` and `checkpointFtCompatibilityIssues` keys for compatibility with previous versions.
-            # https://github.com/ansible-collections/vmware/pull/118
+            # https://github.com/ansible-collections/community.vmware/pull/118
             hosts_capability_facts[host.name]['checkpointFtSupported'] = hosts_capability_facts[host.name]['smpFtSupported']
             hosts_capability_facts[host.name]['checkpointFtCompatibilityIssues'] = hosts_capability_facts[host.name]['smpFtCompatibilityIssues']
 

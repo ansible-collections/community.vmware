@@ -11,12 +11,12 @@ v1.2.0
 Minor Changes
 -------------
 
-- vmware_cluster_ha - treat truthy advanced options ('true', 'false') as strings instead of booleans (https://github.com/ansible-collections/vmware/issues/286).
-- vmware_cluster_vsan - implement advanced VSAN options (https://github.com/ansible-collections/vmware/issues/260).
+- vmware_cluster_ha - treat truthy advanced options ('true', 'false') as strings instead of booleans (https://github.com/ansible-collections/community.vmware/issues/286).
+- vmware_cluster_vsan - implement advanced VSAN options (https://github.com/ansible-collections/community.vmware/issues/260).
 - vmware_cluster_vsan - requires the vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 - vmware_content_deploy_ovf_template - requires the resource_pool parameter.
-- vmware_guest_disk - add backing_uuid value to return (https://github.com/ansible-collections/vmware/pull/348).
-- vmware_guest_serial_port - ensure we can run the module two times in a row without unexpected side effect(https://github.com/ansible-collections/vmware/pull/358).
+- vmware_guest_disk - add backing_uuid value to return (https://github.com/ansible-collections/community.vmware/pull/348).
+- vmware_guest_serial_port - ensure we can run the module two times in a row without unexpected side effect(https://github.com/ansible-collections/community.vmware/pull/358).
 
 Deprecated Features
 -------------------
@@ -26,8 +26,8 @@ Deprecated Features
 Bugfixes
 --------
 
-- vmware_content_deploy_ovf_template - fixed issue where wrong resource pool identifier was returned when same resource pool name was used across clusters in the same datacenter (https://github.com/ansible-collections/vmware/pull/363)
-- vmware_vmkernel - fixed issue where Repl and ReplNFC services were not being identified as enabled on a vmk interface (https://github.com/ansible-collections/vmware/issues/362).
+- vmware_content_deploy_ovf_template - fixed issue where wrong resource pool identifier was returned when same resource pool name was used across clusters in the same datacenter (https://github.com/ansible-collections/community.vmware/pull/363)
+- vmware_vmkernel - fixed issue where Repl and ReplNFC services were not being identified as enabled on a vmk interface (https://github.com/ansible-collections/community.vmware/issues/362).
 
 v1.1.0
 ======
@@ -38,9 +38,9 @@ Minor Changes
 - Added module to be able to create, update, or delete VMware VM storage policies for virtual machines.
 - vmware_cluster_info - added ``properties`` and ``schema`` options and supported the getting of clusters resource summary information.
 - vmware_content_deploy_ovf_template - handle exception while deploying VM using OVF template.
-- vmware_content_deploy_template - handle exception while deploying VM (https://github.com/ansible-collections/vmware/issues/182).
+- vmware_content_deploy_template - handle exception while deploying VM (https://github.com/ansible-collections/community.vmware/issues/182).
 - vmware_dvs_portgroup - Added support for distributed port group with private VLAN.
-- vmware_guest_snapshot_info - Document that `folder` is required if the VM `name` is defined (https://github.com/ansible-collections/vmware/issues/243)
+- vmware_guest_snapshot_info - Document that `folder` is required if the VM `name` is defined (https://github.com/ansible-collections/community.vmware/issues/243)
 - vmware_host_iscsi - a new module for the ESXi hosts that is dedicated to the management of the iSCSI configuration
 - vmware_migrate_vmk - allow migration from a VMware vSphere Distrubuted Switch to a ESXi Standard Switch
 - vmware_vcenter_settings_info - a new module for gather information about vCenter settings
@@ -72,10 +72,10 @@ Removed Features (previously deprecated)
 Bugfixes
 --------
 
-- vmware_content_deploy_ovf_template - use datastore_id in deployment_spec (https://github.com/ansible-collections/vmware/pull/287).
-- vmware_dvs_portgroup_find - Fix comparison between str and int on method vlan_match (https://github.com/ansible-collections/vmware/pull/52).
-- vmware_guest - cdrom.controller_number, cdrom.unit_number are handled as integer. (https://github.com/ansible-collections/vmware/issues/274).
-- vmware_vm_inventory - CustomFieldManager is not present in ESXi, handle this condition (https://github.com/ansible-collections/vmware/issues/269).
+- vmware_content_deploy_ovf_template - use datastore_id in deployment_spec (https://github.com/ansible-collections/community.vmware/pull/287).
+- vmware_dvs_portgroup_find - Fix comparison between str and int on method vlan_match (https://github.com/ansible-collections/community.vmware/pull/52).
+- vmware_guest - cdrom.controller_number, cdrom.unit_number are handled as integer. (https://github.com/ansible-collections/community.vmware/issues/274).
+- vmware_vm_inventory - CustomFieldManager is not present in ESXi, handle this condition (https://github.com/ansible-collections/community.vmware/issues/269).
 
 v1.0.0
 ======
@@ -84,7 +84,7 @@ Minor Changes
 -------------
 
 - A `vmware` module_defaults group has been added to simplify parameters for multiple VMware tasks. This group includes all VMware modules.
-- Add a flag 'force_upgrade' to force VMware tools upgrade installation (https://github.com/ansible-collections/vmware/issues/75).
+- Add a flag 'force_upgrade' to force VMware tools upgrade installation (https://github.com/ansible-collections/community.vmware/issues/75).
 - Add powerstates to match vmware_guest_powerstate module with vmware_guest (https://github.com/ansible/ansible/issues/55653).
 - Added a timeout parameter `wait_for_ip_address_timeout` for `wait_for_ip_address` for longer-running tasks in vmware_guest.
 - Added missing backing_disk_mode information about disk which was removed by mistake in vmware_guest_disk_info.
@@ -96,7 +96,7 @@ Minor Changes
 - Removed ANSIBLE_METADATA from all the modules.
 - Return additional information about hosts inside the cluster using vmware_cluster_info.
 - Update Module examples with FQCN.
-- Update README.md for installing any third party required Python libraries using pip (https://github.com/ansible-collections/vmware/issues/154).
+- Update README.md for installing any third party required Python libraries using pip (https://github.com/ansible-collections/community.vmware/issues/154).
 - add storage_provisioning type into vmware_content_deploy_ovf_template.
 - add vmware_content_deploy_ovf_template module for creating VMs from OVF templates
 - new code module for new feature for operations of VCenter infra profile config.
@@ -121,12 +121,12 @@ Minor Changes
 - vmware_guest_custom_attributes does not require VM name (https://github.com/ansible/ansible/issues/63222).
 - vmware_guest_disk - Add `destroy` option which allows to remove a disk without deleting the VMDK file.
 - vmware_guest_disk - Add `filename` option which allows to create a disk from an existing VMDK.
-- vmware_guest_disk - add support for setting the sharing/multi-writer mode of virtual disks (https://github.com/ansible-collections/vmware/issues/212)
+- vmware_guest_disk - add support for setting the sharing/multi-writer mode of virtual disks (https://github.com/ansible-collections/community.vmware/issues/212)
 - vmware_guest_network - network adapters can be configured without lists
 - vmware_guest_network - network_info returns a list of dictionaries for ease of use
 - vmware_guest_network - put deprecation warning for the networks parameter
 - vmware_guest_tools_wait now exposes a ``timeout`` parameter that allow the user to adjust the timeout (second).
-- vmware_host_active_directory - Fail when there are unrecoverable problems with AD membership instead of reporting a change that doesn't take place (https://github.com/ansible-collections/vmware/issues/59).
+- vmware_host_active_directory - Fail when there are unrecoverable problems with AD membership instead of reporting a change that doesn't take place (https://github.com/ansible-collections/community.vmware/issues/59).
 - vmware_host_dns - New module replacing vmware_dns_config with increased functionality.
 - vmware_host_dns can now set the following empty values, ``domain``, ``search_domains`` and ``dns_servers``.
 - vmware_host_facts - added ``properties`` and ``schema`` options.
@@ -162,10 +162,10 @@ Bugfixes
 - Fixed typo in vmware_guest_powerstate module (https://github.com/ansible/ansible/issues/65161).
 - Handle Base64 Binary while JSON serialization in vmware_vm_inventory.
 - Handle NoneType error when accessing service system info in vmware_host_service_info module (https://github.com/ansible/ansible/issues/67615).
-- Handle list items in vSphere schema while handling facts using to_json API (https://github.com/ansible-collections/vmware/issues/33).
+- Handle list items in vSphere schema while handling facts using to_json API (https://github.com/ansible-collections/community.vmware/issues/33).
 - Handle multiple tags name with different category id in vmware_tag module (https://github.com/ansible/ansible/issues/66340).
 - Handle slashes in VMware network name (https://github.com/ansible/ansible/issues/64399).
-- In inventory plugin, serialize properties user specifies which are objects as dicts (https://github.com/ansible-collections/vmware/pull/58).
+- In inventory plugin, serialize properties user specifies which are objects as dicts (https://github.com/ansible-collections/community.vmware/pull/58).
 - In vmware_guest_network module use appropriate network while creating or reconfiguring (https://github.com/ansible/ansible/issues/65968).
 - Made vmnics attributes optional when creating DVS as they are optional on the API and GUI as well.
 - VMware Guest Inventory plugin enhancements and features.
@@ -174,7 +174,7 @@ Bugfixes
 - `vmware_content_deploy_template`'s `cluster` argument no longer fails with an error message about resource pools.
 - return correct datastore cluster placement recommendations during when adding disk using the vmware_guest_disk module
 - vmware - Ensure we can use the modules with Python < 2.7.9 or RHEL/CentOS < 7.4, this as soon as ``validate_certs`` is disabled.
-- vmware_category - fix associable datatypes (https://github.com/ansible-collections/vmware/issues/197).
+- vmware_category - fix associable datatypes (https://github.com/ansible-collections/community.vmware/issues/197).
 - vmware_content_deploy_template - Added param content_library to the main function
 - vmware_deploy_ovf - Fixed ova deploy error occur if vm exists
 - vmware_dvs_portgroup - Implemented configuration changes on an existing Distributed vSwitch portgroup.
@@ -185,7 +185,7 @@ Bugfixes
 - vmware_guest - Updated reference link to vapp_properties property
 - vmware_host_capability_facts - Fixed vSphere API legacy version errors occur in pyvmomi 7.0 and later
 - vmware_host_capability_info - Fixed vSphere API legacy version errors occur in pyvmomi 7.0 and later
-- vmware_host_facts - handle facts when ESXi hostsystem is poweredoff (https://github.com/ansible-collections/vmware/issues/183).
+- vmware_host_facts - handle facts when ESXi hostsystem is poweredoff (https://github.com/ansible-collections/community.vmware/issues/183).
 - vmware_host_firewall_manager - Ensure we can set rule with no ``allowed_hosts`` key (https://github.com/ansible/ansible/issues/61332)
 - vmware_host_firewall_manager - Fixed creating IP specific firewall rules with Python 2 (https://github.com/ansible/ansible/issues/67303)
 - vmware_host_vmhba_info - fixed node_wwn and port_wwn for FC HBA to hexadecimal format(https://github.com/ansible/ansible/issues/63045).

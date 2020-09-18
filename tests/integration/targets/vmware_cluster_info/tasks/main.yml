@@ -103,7 +103,7 @@
       - not cluster_result.changed
   loop: "{{ cluster_result.clusters.keys() }}"
 
-# Disabled until we get a fix for https://github.com/ansible-collections/vmware/issues/301
+# Disabled until we get a fix for https://github.com/ansible-collections/community.vmware/issues/301
 #- when: vcsim is not defined
 #  block:
 #  - import_role:

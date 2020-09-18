@@ -99,7 +99,7 @@
       - "guest_info_0001['instance']['vimref'] is defined"
       - "guest_info_0002b['instance']['overallStatus'] is not defined"
 
-# https://github.com/ansible-collections/vmware/issues/33
+# https://github.com/ansible-collections/community.vmware/issues/33
 - name: Get specific details about VM using the vsphere output schema
   vmware_guest_info:
     validate_certs: False
