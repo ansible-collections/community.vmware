@@ -253,12 +253,7 @@ TBD
 ## Publishing New Version
 
 Prepare the release:
-- Refresh the README.md:
-    git clone https://github.com/ansible-network/collection_prep
-    git clone https://github.com/ansible-collections/vmware
-    # WARNING The next comment will remove ~/.ansible/collections/ansible_collections/community/vmware/ !
-    cd collection_prep
-    ./add_docs.py -p ../vmware
+- Refresh the README.md: `tox -e add_docs`
 - Refresh the changelog: `tox -e antsibull-changelog -- release --verbose --version 1.2.0`
 - Clean up the changelog fragments.
 - Commit everything and push a PR for review
