@@ -8,13 +8,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 author: 'Matt Martz (@sivel)'
 short_description: 'Deploys a VMware virtual machine from an OVF or OVA file'
 description:
@@ -101,6 +96,7 @@ options:
         - 'Path to OVF or OVA file to deploy.'
         aliases:
             - ova
+        type: path
     power_on:
         default: true
         description:
@@ -134,7 +130,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- vmware_deploy_ovf:
+- community.vmware.vmware_deploy_ovf:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -143,7 +139,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 # Deploys a new VM named 'NewVM' in specific datacenter/cluster, with network mapping taken from variable and using ova template from an absolute path
-- vmware_deploy_ovf:
+- community.vmware.vmware_deploy_ovf:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -189,7 +185,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     gather_vm_facts,
     vmware_argument_spec,
     wait_for_task,
-    wait_for_vm_ip)
+    wait_for_vm_ip,
+    set_vm_power_state)
 try:
     from ansible_collections.community.vmware.plugins.module_utils.vmware import vim
     from pyVmomi import vmodl
@@ -479,6 +476,13 @@ class VMwareDeployOvf(PyVmomi):
 
         return urlunparse(url_parts.as_list())
 
+    def vm_existence_check(self):
+        vm_obj = self.get_vm()
+        if vm_obj:
+            self.entity = vm_obj
+            facts = self.deploy()
+            self.module.exit_json(**facts)
+
     def upload(self):
         if self.params['ovf'] is None:
             self.module.fail_json(msg="OVF path is required for upload operation.")
@@ -597,18 +601,12 @@ class VMwareDeployOvf(PyVmomi):
     def deploy(self):
         facts = {}
 
-        if self.params['inject_ovf_env']:
-            self.inject_ovf_env()
-
         if self.params['power_on']:
-            task = self.entity.PowerOn()
-            if self.params['wait']:
-                wait_for_task(task)
-                if self.params['wait_for_ip_address']:
-                    _facts = wait_for_vm_ip(self.content, self.entity)
-                    if not _facts:
-                        self.module.fail_json(msg='Waiting for IP address timed out')
-                    facts.update(_facts)
+            facts = set_vm_power_state(self.content, self.entity, 'poweredon', force=False)
+            if self.params['wait_for_ip_address']:
+                _facts = wait_for_vm_ip(self.content, self.entity)
+                if not _facts:
+                    self.module.fail_json(msg='Waiting for IP address timed out')
 
         if not facts:
             facts.update(gather_vm_facts(self.content, self.entity))
@@ -649,7 +647,7 @@ def main():
             'type': 'dict',
         },
         'ovf': {
-            'type': path_exists,
+            'type': 'path',
             'aliases': ['ova'],
         },
         'disk_provisioning': {
@@ -697,11 +695,16 @@ def main():
     )
 
     deploy_ovf = VMwareDeployOvf(module)
+    deploy_ovf.vm_existence_check()
     deploy_ovf.upload()
     deploy_ovf.complete()
-    facts = deploy_ovf.deploy()
 
-    module.exit_json(instance=facts, changed=True)
+    if module.params['inject_ovf_env']:
+        deploy_ovf.inject_ovf_env()
+
+    facts = deploy_ovf.deploy()
+    facts.update(changed=True)
+    module.exit_json(**facts)
 
 
 if __name__ == '__main__':

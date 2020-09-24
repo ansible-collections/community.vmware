@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -38,6 +33,12 @@ options:
       type: str
       required: True
       aliases: ['template_src']
+    content_library:
+      description:
+      - The name of the content library from where the template resides.
+      type: str
+      required: False
+      aliases: ['content_library_src']
     name:
       description:
       - The name of the VM to be deployed.
@@ -92,7 +93,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Deploy Virtual Machine from template in content library
-  vmware_content_deploy_template:
+  community.vmware.vmware_content_deploy_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -107,11 +108,12 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy Virtual Machine from template in content library with PowerON State
-  vmware_content_deploy_template:
+  community.vmware.vmware_content_deploy_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     template: rhel_test_template
+    content_library: test_content_library
     datastore: Shared_NFS_Volume
     folder: vm
     datacenter: Sample_DC_1
@@ -141,6 +143,7 @@ from ansible.module_utils._text import to_native
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.vcenter.vm_template_client import LibraryItems
+    from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -152,6 +155,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         super(VmwareContentDeployTemplate, self).__init__(module)
         self.template_service = self.api_client.vcenter.vm_template.LibraryItems
         self.template_name = self.params.get('template')
+        self.content_library_name = self.params.get('content_library')
         self.vm_name = self.params.get('name')
         self.datacenter = self.params.get('datacenter')
         self.datastore = self.params.get('datastore')
@@ -170,9 +174,15 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         if not self.datastore_id:
             self.module.fail_json(msg="Failed to find the datastore %s" % self.datastore)
         # Find the LibraryItem (Template) by the given LibraryItem name
-        self.library_item_id = self.get_library_item_by_name(self.template_name)
-        if not self.library_item_id:
-            self.module.fail_json(msg="Failed to find the library Item %s" % self.template_name)
+        if self.content_library_name:
+            self.library_item_id = self.get_library_item_from_content_library_name(
+                self.template_name, self.content_library_name)
+            if not self.library_item_id:
+                self.module.fail_json(msg="Failed to find the library Item %s in content library %s" % (self.template_name, self.content_library_name))
+        else:
+            self.library_item_id = self.get_library_item_by_name(self.template_name)
+            if not self.library_item_id:
+                self.module.fail_json(msg="Failed to find the library Item %s" % self.template_name)
         # Find the folder by the given folder name
         self.folder_id = self.get_folder_by_name(self.datacenter, self.folder)
         if not self.folder_id:
@@ -208,7 +218,14 @@ class VmwareContentDeployTemplate(VmwareRestClient):
                                                    disk_storage=self.disk_storage_spec,
                                                    powered_on=power_on
                                                    )
-        vm_id = self.template_service.deploy(self.library_item_id, self.deploy_spec)
+        vm_id = ''
+        try:
+            vm_id = self.template_service.deploy(self.library_item_id, self.deploy_spec)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
+        except Exception as err:
+            self.module.fail_json(msg="%s" % to_native(err))
+
         if vm_id:
             self.module.exit_json(
                 changed=True,
@@ -218,7 +235,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
                 )
             )
         self.module.exit_json(changed=False,
-                              vm_deploy_info=dict(msg="Virtual Machine deployment failed", vm_id=''))
+                              vm_deploy_info=dict(msg="Virtual Machine deployment failed", vm_id=vm_id))
 
 
 def main():
@@ -227,6 +244,8 @@ def main():
         state=dict(type='str', default='present',
                    choices=['present', 'poweredon']),
         template=dict(type='str', aliases=['template_src'], required=True),
+        content_library=dict(type='str', aliases=[
+                             'content_library_src'], required=False),
         name=dict(type='str', required=True, aliases=['vm_name']),
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),

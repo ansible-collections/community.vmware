@@ -10,13 +10,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel
 short_description: Manages a VMware VMkernel Adapter of an ESXi host.
@@ -62,15 +57,32 @@ options:
     network:
       description:
       - A dictionary of network details.
-      - 'The following parameter is required:'
-      - ' - C(type) (string): Type of IP assignment (either C(dhcp) or C(static)).'
-      - 'The following parameters are required in case of C(type) is set to C(static):'
-      - ' - C(ip_address) (string): Static IP address (implies C(type: static)).'
-      - ' - C(subnet_mask) (string): Static netmask required for C(ip_address).'
-      - 'The following parameter is optional in case of C(type) is set to C(static):'
-      - ' - C(default_gateway) (string): Default gateway (Override default gateway for this adapter).'
-      - 'The following parameter is optional:'
-      - ' - C(tcpip_stack) (string): The TCP/IP stack for the VMKernel interface. Can be default, provisioning, vmotion, or vxlan. (default: default)'
+      suboptions:
+        type:
+            type: str
+            description:
+            - Type of IP assignment.
+            choices: [ 'static', 'dhcp' ]
+            default: 'static'
+        ip_address:
+            type: str
+            description:
+            - Static IP address.
+            - Required if C(type) is set to C(static).
+        subnet_mask:
+            type: str
+            description:
+            - Static netmask required.
+            - Required if C(type) is set to C(static).
+        default_gateway:
+            type: str
+            description: Default gateway (Override default gateway for this adapter).
+        tcpip_stack:
+            type: str
+            description:
+            - The TCP/IP stack for the VMKernel interface.
+            choices: [ 'default', 'provisioning', 'vmotion', 'vxlan' ]
+            default: 'default'
       type: dict
       default: {
           type: 'static',
@@ -142,9 +154,9 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 -  name: Add Management vmkernel port using static network type
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -160,7 +172,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add Management vmkernel port using DHCP network type
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -174,7 +186,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Change IP allocation from static to dhcp
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -189,7 +201,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Delete VMkernel port
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -200,7 +212,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add Management vmkernel port to Distributed Switch
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -216,7 +228,7 @@ EXAMPLES = '''
    delegate_to: localhost
 
 -  name: Add vMotion vmkernel port with vMotion TCP/IP stack
-   vmware_vmkernel:
+   community.vmware.vmware_vmkernel:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -602,11 +614,11 @@ class PyVmomiHelper(PyVmomi):
                 changed_services = changed_service_prov = True
 
             if (self.enable_replication and self.vnic.device not in service_type_vmks['vSphereReplication']) or \
-                    (not self.enable_provisioning and self.vnic.device in service_type_vmks['vSphereReplication']):
+                    (not self.enable_replication and self.vnic.device in service_type_vmks['vSphereReplication']):
                 changed_services = changed_service_rep = True
 
             if (self.enable_replication_nfc and self.vnic.device not in service_type_vmks['vSphereReplicationNFC']) or \
-                    (not self.enable_provisioning and self.vnic.device in service_type_vmks['vSphereReplicationNFC']):
+                    (not self.enable_replication_nfc and self.vnic.device in service_type_vmks['vSphereReplicationNFC']):
                 changed_services = changed_service_rep_nfc = True
             if changed_services:
                 changed_list.append("services")
@@ -984,8 +996,7 @@ class PyVmomiHelper(PyVmomi):
 
         if not query.selectedVnic:
             return vmks_list
-        selected_vnics = [vnic for vnic in query.selectedVnic]
-        vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in selected_vnics]
+        vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in query.selectedVnic]
         return vnics_with_service_type
 
     def create_enabled_services_string(self):
@@ -1024,11 +1035,7 @@ class PyVmomiHelper(PyVmomi):
             net_stack_instance = 'default'
         elif tcpip_stack == 'vSphereProvisioning':
             net_stack_instance = 'provisioning'
-        # vmotion and vxlan stay the same
-        elif tcpip_stack == 'vmotion':
-            net_stack_instance = 'vmotion'
-        elif tcpip_stack == 'vxlan':
-            net_stack_instance = 'vxlan'
+
         return net_stack_instance
 
 
@@ -1073,13 +1080,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            mutually_exclusive=[
                                ['vswitch_name', 'dvswitch_name'],
-                               ['tcpip_stack', 'enable_vsan'],
-                               ['tcpip_stack', 'enable_vmotion'],
-                               ['tcpip_stack', 'enable_mgmt'],
-                               ['tcpip_stack', 'enable_ft'],
-                               ['tcpip_stack', 'enable_provisioning'],
-                               ['tcpip_stack', 'enable_replication'],
-                               ['tcpip_stack', 'enable_replication_nfc'],
                            ],
                            required_one_of=[
                                ['vswitch_name', 'dvswitch_name'],

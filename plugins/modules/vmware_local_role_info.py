@@ -8,14 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_role_info
 short_description: Gather info about local roles on an ESXi host
@@ -35,9 +28,9 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather info about local role from an ESXi
-  vmware_local_role_info:
+  community.vmware.vmware_local_role_info:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -45,16 +38,16 @@ EXAMPLES = '''
   delegate_to: localhost
 - name: Get Admin privileges
   set_fact:
-    admin_priv: "{{ fact_details.local_role_info['Admin']['privileges'] }}"
+    admin_priv: "{{ fact_details.local_role_info | selectattr('role_name', 'equalto', 'Admin') | map(attribute='privileges') | first  }}"
 - debug:
     msg: "{{ admin_priv }}"
 '''
 
 RETURN = r'''
 local_role_info:
-    description: Info about role present on ESXi host
+    description: A list of dict about role information present on ESXi host
     returned: always
-    type: dict
+    type: list
     sample: [
         {
             "privileges": [
@@ -97,6 +90,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 
 class VMwareLocalRoleInfo(PyVmomi):
     """Class to manage local role info"""
+
     def __init__(self, module):
         super(VMwareLocalRoleInfo, self).__init__(module)
         self.module = module
@@ -116,7 +110,7 @@ class VMwareLocalRoleInfo(PyVmomi):
                 dict(
                     role_name=role.name,
                     role_id=role.roleId,
-                    privileges=[priv_name for priv_name in role.privilege],
+                    privileges=list(role.privilege),
                     role_system=role.system,
                     role_info_label=role.info.label,
                     role_info_summary=role.info.summary,

@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -43,14 +38,14 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get List of Content Libraries
-  vmware_content_library_info:
+  community.vmware.vmware_content_library_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
 
 - name: Get information about content library
-  vmware_content_library_info:
+  community.vmware.vmware_content_library_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -6,11 +6,6 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -21,7 +16,7 @@ description:
 - All connected ESXi hosts in scope will be configured when specified.
 - If a host is not connected at time of configuration, it will be marked as such in the output.
 - Kernel module options may require a reboot to take effect which is not covered here.
-- You can use M(reboot) or M(vmware_host_powerstate) module to reboot all ESXi host systems.
+- You can use M(community.vmware.reboot) or M(community.vmware.vmware_host_powerstate) module to reboot all ESXi host systems.
 author:
 - Aaron Longchamps (@alongchamps)
 notes:
@@ -59,7 +54,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure IPv6 to be off via tcpip4 kernel module
-  vmware_host_kernel_manager:
+  community.vmware.vmware_host_kernel_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -68,7 +63,7 @@ EXAMPLES = r'''
     kernel_module_option: "ipv6=0"
 
 - name: Using cluster_name, configure vmw_psp_rr options
-  vmware_host_kernel_manager:
+  community.vmware.vmware_host_kernel_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -385,3 +385,247 @@
   assert:
     that:
         - dvs_pg_result_0017.changed
+
+- name: Check fail for missing PVLAN in dvs
+  vmware_dvs_portgroup:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    portgroup_name: private-vlan-portgroup
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 10
+    vlan_private: True
+    num_ports: 12
+    portgroup_type: earlyBinding
+    state: present
+    validate_certs: false
+  register: dvs_pg_result_0018
+  ignore_errors: True
+
+- name: Ensure module fails for missing private VLAN in dvs
+  assert:
+    that:
+        - not dvs_pg_result_0018.changed
+        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == '{{ dvs_pg_result_0018.msg }}'"
+
+- when: vcsim is not defined
+  block:
+    - name: add distributed vSwitch
+      vmware_dvswitch:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        state: present
+        switch_name: dvswitch_0001
+        mtu: 9000
+        uplink_quantity: 2
+        discovery_proto: lldp
+        discovery_operation: both
+      register: dvs_result_0001
+
+    - name: ensure distributed vswitch is present
+      assert:
+        that:
+            - dvs_result_0001 is changed
+
+    - name: Configure PVLANs to test PVLAN dpg
+      vmware_dvswitch_pvlans:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch: dvswitch_0001
+        primary_pvlans:
+          - primary_pvlan_id: 1
+        secondary_pvlans:
+          - primary_pvlan_id: 1
+            secondary_pvlan_id: 2
+            pvlan_type: isolated
+        validate_certs: false
+      register: pvlans_result
+
+    - name: ensure pvlans were configured
+      assert:
+        that:
+          - pvlans_result is not failed
+
+    - name: Create private vlan portgroup
+      vmware_dvs_portgroup:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        portgroup_name: private-vlan-portgroup
+        switch_name: dvswitch_0001
+        vlan_id: 1
+        vlan_private: True
+        num_ports: 12
+        portgroup_type: earlyBinding
+        state: present
+        validate_certs: false
+      register: dvs_pg_result_0019
+
+    - name: ensure dvs portgroup with pvlan is present
+      assert:
+        that:
+            - dvs_pg_result_0019.changed
+
+    - name: Change private vlan id
+      vmware_dvs_portgroup:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        portgroup_name: private-vlan-portgroup
+        switch_name: dvswitch_0001
+        vlan_id: 2
+        vlan_private: True
+        num_ports: 12
+        portgroup_type: earlyBinding
+        state: present
+        validate_certs: false
+      register: dvs_pg_result_0020
+
+    - name: ensure dvs portgroup pvlan id is changed
+      assert:
+        that:
+            - dvs_pg_result_0020.changed
+
+    - name: Change private vlan to basic vlan portgroup
+      vmware_dvs_portgroup:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        portgroup_name: private-vlan-portgroup
+        switch_name: dvswitch_0001
+        vlan_id: 5
+        num_ports: 12
+        portgroup_type: earlyBinding
+        state: present
+        validate_certs: false
+      register: dvs_pg_result_0021
+
+    - name: ensure dvs portgroup type changed
+      assert:
+        that:
+            - dvs_pg_result_0021.changed
+  always:
+    - name: delete distributed vSwitch
+      vmware_dvswitch:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter_name: "{{ dc1 }}"
+        state: absent
+        switch_name: dvswitch_0001
+      register: dvs_result_0001
+
+    - name: Integration test a dvPortGroup name with special characters
+      block:
+        - name: Create dvSwitch with special characters
+          vmware_dvswitch:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            datacenter: "{{ dc1 }}"
+            switch: 'dvSwitch\/%'
+            version: 6.5.0
+            mtu: 9000
+            uplink_quantity: 1
+            state: present
+          register: create_dvswitch_with_special_characters_result
+
+        - assert:
+            that:
+              - create_dvswitch_with_special_characters_result.changed is sameas true
+
+        - name: Create dvPortGroup with special characters
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: 'dvSwitch\/%'
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: present
+          register: create_dvportgroup_with_special_characters_result
+
+        - assert:
+            that:
+              - create_dvportgroup_with_special_characters_result.changed is sameas true
+
+        - name: Create dvPortGroup with special characters(idempotency check)
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: 'dvSwitch\/%'
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: present
+          register: create_dvportgroup_with_special_characters_idempotency_check_result
+
+        - assert:
+            that:
+              - create_dvportgroup_with_special_characters_idempotency_check_result.changed is sameas false
+
+        - name: Delete dvPortGroup with special characters
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: 'dvSwitch\/%'
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: absent
+          register: delete_dvportgroup_with_special_characters_result
+
+        - assert:
+            that:
+              - delete_dvportgroup_with_special_characters_result.changed is sameas true
+
+        - name: Delete dvPortGroup with special characters(idempotency check)
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: 'dvSwitch\/%'
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: absent
+          register: delete_dvportgroup_with_special_characters_idempotency_check_result
+
+        - assert:
+            that:
+              - delete_dvportgroup_with_special_characters_idempotency_check_result.changed is sameas false
+
+        - name: Delete dvSwitch with special characters
+          vmware_dvswitch:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            datacenter: "{{ dc1 }}"
+            switch: 'dvSwitch\/%'
+            version: 6.5.0
+            mtu: 9000
+            uplink_quantity: 1
+            state: absent
+          register: delete_dvswitch_with_special_characters_result
+
+        - assert:
+            that:
+              - delete_dvswitch_with_special_characters_result.changed is sameas true

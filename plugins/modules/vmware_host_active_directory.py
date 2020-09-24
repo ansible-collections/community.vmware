@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_active_directory
@@ -66,7 +60,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Join an AD domain
-  vmware_host_active_directory:
+  community.vmware.vmware_host_active_directory:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -79,7 +73,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Leave AD domain
-  vmware_host_active_directory:
+  community.vmware.vmware_host_active_directory:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

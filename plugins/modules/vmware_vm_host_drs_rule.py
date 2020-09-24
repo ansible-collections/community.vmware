@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -60,7 +55,6 @@ options:
     description:
       - "Name of Host group to use with rule."
       - "Effective only if C(state) is set to C(present)."
-    required: true
     type: str
   mandatory:
     default: false
@@ -74,15 +68,13 @@ options:
       - absent
     default: present
     description:
-      - "If set to C(present) and the rule doesn't exists then the rule will be created."
+      - "If set to C(present) and the rule does not exist then the rule will be created."
       - "If set to C(absent) and the rule exists then the rule will be deleted."
-    required: true
     type: str
   vm_group_name:
     description:
       - "Name of VM group to use with rule."
       - "Effective only if C(state) is set to C(present)."
-    required: true
     type: str
 requirements:
   - "python >= 2.6"
@@ -94,7 +86,7 @@ short_description: "Creates vm/host group in a given cluster"
 EXAMPLES = r'''
 ---
 - name: "Create mandatory DRS Affinity rule for VM/Host"
-  vmware_vm_host_drs_rule:
+  community.vmware.vmware_vm_host_drs_rule:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
@@ -299,13 +291,14 @@ class VmwareVmHostRuleDrs(PyVmomi):
             return obj_name_list
 
         for group in cluster_obj.configurationEx.group:
-            if group.name == group_name:
-                if not host_group and isinstance(group, vim.cluster.VmGroup):
-                    obj_name_list = [vm.name for vm in group.vm]
-                    break
-                elif host_group and isinstance(group, vim.cluster.HostGroup):
-                    obj_name_list = [host.name for host in group.host]
-                    break
+            if group.name != group_name:
+                continue
+            if not host_group and isinstance(group, vim.cluster.VmGroup):
+                obj_name_list = [vm.name for vm in group.vm]
+                break
+            if host_group and isinstance(group, vim.cluster.HostGroup):
+                obj_name_list = [host.name for host in group.host]
+                break
 
         return obj_name_list
 
@@ -424,8 +417,8 @@ def main():
 
     argument_spec.update(dict(
         state=dict(type='str', default='present', choices=['absent', 'present']),
-        vm_group_name=dict(type='str', required=True),
-        host_group_name=dict(type='str', required=True),
+        vm_group_name=dict(type='str'),
+        host_group_name=dict(type='str'),
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=False, aliases=['datacenter_name']),
         drs_rule_name=dict(type='str', required=True),
@@ -435,7 +428,7 @@ def main():
     )
 
     required_if = [
-        ['state', 'present', ['vm_group_name'], ['host_group_name']],
+        ['state', 'present', ['vm_group_name', 'host_group_name']],
     ]
 
     module = AnsibleModule(argument_spec=argument_spec,

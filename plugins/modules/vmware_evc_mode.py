@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -54,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
     - name: Enable EVC Mode
-      vmware_evc_mode:
+      community.vmware.vmware_evc_mode:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"
@@ -66,7 +63,7 @@ EXAMPLES = '''
       register: enable_evc
 
     - name: Disable EVC Mode
-      vmware_evc_mode:
+      community.vmware.vmware_evc_mode:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"

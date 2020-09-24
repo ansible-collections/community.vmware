@@ -15,8 +15,9 @@ import re
 import ssl
 import time
 import traceback
-from random import randint
+from collections import OrderedDict
 from distutils.version import StrictVersion
+from random import randint
 
 REQUESTS_IMP_ERR = None
 try:
@@ -41,6 +42,7 @@ except ImportError:
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import env_fallback, missing_required_lib
+from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
 class TaskError(Exception):
@@ -129,9 +131,11 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
     if not isinstance(obj_type, list):
         obj_type = [obj_type]
 
+    name = name.strip()
+
     objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
     for obj in objects:
-        if obj.name == name:
+        if unquote(obj.name) == name:
             return obj
 
     return None
@@ -854,14 +858,16 @@ def is_truthy(value):
 
 # options is the dict as defined in the module parameters, current_options is
 # the list of the currently set options as returned by the vSphere API.
-def option_diff(options, current_options):
+# When truthy_strings_as_bool is True, strings like 'true', 'off' or 'yes'
+# are converted to booleans.
+def option_diff(options, current_options, truthy_strings_as_bool=True):
     current_options_dict = {}
     for option in current_options:
         current_options_dict[option.key] = option.value
 
     change_option_list = []
     for option_key, option_value in options.items():
-        if is_boolean(option_value):
+        if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
         elif isinstance(option_value, int):
             option_value = VmomiSupport.vmodlTypes['int'](option_value)
@@ -885,7 +891,6 @@ def quote_obj_name(object_name=None):
     if not object_name:
         return None
 
-    from collections import OrderedDict
     SPECIAL_CHARS = OrderedDict({
         '%': '%25',
         '/': '%2f',
@@ -1008,7 +1013,7 @@ class PyVmomi(object):
             for temp_vm_object in objects:
                 if (
                     len(temp_vm_object.propSet) == 1
-                    and temp_vm_object.propSet[0].val == self.params["name"]
+                    and unquote(temp_vm_object.propSet[0].val) == self.params["name"]
                 ):
                     vms.append(temp_vm_object.obj)
 
@@ -1183,7 +1188,7 @@ class PyVmomi(object):
         """
         cluster_obj = self.find_cluster_by_name(cluster_name=cluster_name)
         if cluster_obj:
-            return [host for host in cluster_obj.host]
+            return list(cluster_obj.host)
         else:
             return []
 
@@ -1219,7 +1224,7 @@ class PyVmomi(object):
             if cluster_name:
                 cluster_obj = self.find_cluster_by_name(cluster_name=cluster_name)
                 if cluster_obj:
-                    host_obj_list = [host for host in cluster_obj.host]
+                    host_obj_list = list(cluster_obj.host)
                 else:
                     self.module.fail_json(changed=False, msg="Cluster '%s' not found" % cluster_name)
             elif esxi_host_name:

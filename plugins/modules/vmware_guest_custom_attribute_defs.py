@@ -8,12 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 
 DOCUMENTATION = '''
 ---
@@ -45,7 +39,6 @@ options:
      - If set to C(absent) and definition is absent, then no action taken.
      default: 'present'
      choices: ['present', 'absent']
-     required: True
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -54,7 +47,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add VMware Attribute Definition
-  vmware_guest_custom_attribute_defs:
+  community.vmware.vmware_guest_custom_attribute_defs:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -64,7 +57,7 @@ EXAMPLES = '''
   register: defs
 
 - name: Remove VMware Attribute Definition
-  vmware_guest_custom_attribute_defs:
+  community.vmware.vmware_guest_custom_attribute_defs:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

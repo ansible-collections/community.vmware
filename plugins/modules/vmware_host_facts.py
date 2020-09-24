@@ -67,6 +67,7 @@ options:
       - '   ]'
       - Only valid when C(schema) is C(vsphere).
     type: list
+    elements: str
     required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -75,7 +76,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather vmware host facts
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -83,7 +84,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather vmware host facts from vCenter
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -92,7 +93,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather vmware host facts from vCenter with tag information
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -102,7 +103,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Get VSAN Cluster UUID from host facts
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -111,7 +112,7 @@ EXAMPLES = r'''
     cluster_uuid: "{{ host_facts['ansible_facts']['vsan_cluster_uuid'] }}"
 
 - name: Gather some info from a host using the vSphere API output schema
-  vmware_host_facts:
+  community.vmware.vmware_host_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -124,10 +125,21 @@ EXAMPLES = r'''
       - overallStatus
   register: host_facts
 
+- name: Gather information about powerstate and connection state
+  community.vmware.vmware_host_facts:
+    hostname: "{{ vcenter_server }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_pass }}"
+    esxi_hostname: "{{ esxi_hostname }}"
+    schema: vsphere
+    properties:
+      - runtime.connectionState
+      - runtime.powerState
+
 - name: How to retrieve Product, Version, Build, Update info for ESXi from vCenter
   block:
     - name: Gather product version info for ESXi from vCenter
-      vmware_host_facts:
+      community.vmware.vmware_host_facts:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
@@ -219,6 +231,7 @@ ansible_facts:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
 from ansible.module_utils.common.text.formatters import bytes_to_human
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
 
@@ -273,14 +286,20 @@ class VMwareHostFactManager(PyVmomi):
 
     def get_vsan_facts(self):
         config_mgr = self.host.configManager.vsanSystem
-        if config_mgr is None:
-            return {
-                'vsan_cluster_uuid': None,
-                'vsan_node_uuid': None,
-                'vsan_health': "unknown",
-            }
+        ret = {
+            'vsan_cluster_uuid': None,
+            'vsan_node_uuid': None,
+            'vsan_health': "unknown",
+        }
 
-        status = config_mgr.QueryHostStatus()
+        if config_mgr is None:
+            return ret
+
+        try:
+            status = config_mgr.QueryHostStatus()
+        except Exception as err:
+            self.module.fail_json(msg="Unable to query VSAN status due to %s" % to_native(err))
+
         return {
             'vsan_cluster_uuid': status.uuid,
             'vsan_node_uuid': status.nodeUuid,
@@ -296,9 +315,14 @@ class VMwareHostFactManager(PyVmomi):
         }
 
     def get_memory_facts(self):
+        memory_size = self.host.hardware.memorySize
+        overall_memory = 0
+        if self.host.summary.quickStats.overallMemoryUsage:
+            overall_memory = self.host.summary.quickStats.overallMemoryUsage
+        memory_total = memory_size // 1024 // 1024
         return {
-            'ansible_memfree_mb': self.host.hardware.memorySize // 1024 // 1024 - self.host.summary.quickStats.overallMemoryUsage,
-            'ansible_memtotal_mb': self.host.hardware.memorySize // 1024 // 1024,
+            'ansible_memfree_mb': memory_total - overall_memory,
+            'ansible_memtotal_mb': memory_total,
         }
 
     def get_datastore_facts(self):
@@ -373,7 +397,7 @@ def main():
         esxi_hostname=dict(type='str', required=False),
         show_tag=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)

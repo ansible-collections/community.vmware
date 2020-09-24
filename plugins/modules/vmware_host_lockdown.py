@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -42,6 +37,7 @@ options:
     - Required parameter, if C(cluster_name) is not set.
     - See examples for specifications.
     type: list
+    elements: str
   state:
     description:
     - State of hosts system
@@ -59,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enter host system into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -68,7 +64,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Exit host systems from lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -77,7 +73,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enter host systems into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -88,7 +84,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Exit host systems from lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -99,7 +95,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enter all host system from cluster into lockdown mode
-  vmware_host_lockdown:
+  community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -197,7 +193,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
-        esxi_hostname=dict(type='list', required=False),
+        esxi_hostname=dict(type='list', required=False, elements='str'),
         state=dict(type='str', default='present', choices=['present', 'absent'], required=False),
     )
 

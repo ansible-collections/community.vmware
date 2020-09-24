@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -80,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -93,7 +88,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Update Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -104,7 +99,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete Content Library
-  vmware_content_library_manager:
+  community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -274,7 +269,7 @@ class VmwareContentLibCreate(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        library_name=dict(type='str', required=False),
+        library_name=dict(type='str', required=True),
         library_description=dict(type='str', required=False),
         library_type=dict(type='str', required=False, choices=['local', 'subscribed'], default='local'),
         datastore_name=dict(type='str', required=False, aliases=['datastore']),

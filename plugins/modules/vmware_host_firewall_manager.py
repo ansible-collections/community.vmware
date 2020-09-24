@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -49,6 +44,7 @@ options:
     - Please see examples for more information.
     default: []
     type: list
+    elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -56,7 +52,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable vvold rule set for all ESXi Host in given Cluster
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -67,7 +63,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Enable vvold rule set for an ESXi Host
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -78,7 +74,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage multiple rule set for an ESXi Host
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +87,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Manage IP and network based firewall permissions for ESXi
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -373,7 +369,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        rules=dict(type='list', default=list(), required=False),
+        rules=dict(type='list', default=list(), required=False, elements='dict'),
     )
 
     module = AnsibleModule(
@@ -390,7 +386,11 @@ def main():
                 if len(rule_option['allowed_hosts']) == 1:
                     allowed_hosts = rule_option['allowed_hosts'][0]
                     rule_option['allowed_hosts'] = allowed_hosts
-                    module.deprecate('allowed_hosts should be a dict, not a list', '2.13')
+                    module.deprecate(
+                        msg='allowed_hosts should be a dict, not a list',
+                        version='3.0.0',
+                        collection_name='community.vmware'
+                    )
 
     vmware_firewall_manager = VmwareFirewallManager(module)
     vmware_firewall_manager.check_params()

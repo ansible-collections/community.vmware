@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -87,7 +84,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
     - name: Register vCenter Extension
-      vcenter_extension:
+      community.vmware.vcenter_extension:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"
@@ -104,7 +101,7 @@ EXAMPLES = '''
       register: register_extension
 
     - name: Deregister vCenter Extension
-      vcenter_extension:
+      community.vmware.vcenter_extension:
          hostname: "{{ groups['vcsa'][0] }}"
          username: "{{ vcenter_username }}"
          password: "{{ site_password }}"

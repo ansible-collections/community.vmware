@@ -1,0 +1,9 @@
+; VMWARE_TEST_PLATFORM=static ansible-test integration --diff --no-temp-workdir --python 3.8 --allow-disabled -vvv --allow-destructive zuul/vmware/govcsim/
+[DEFAULT]
+vmware_user: user
+vmware_password: pass
+vmware_host: localhost
+vmware_validate_certs: false
+vcsim: true
+vcsim_with: systemd
+DBUS_SESSION_BUS_ADDRESS: unix:path=/run/user/1000/bus

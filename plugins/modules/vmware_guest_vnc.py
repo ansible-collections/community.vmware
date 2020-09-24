@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -96,7 +91,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enable VNC remote display on the VM
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -111,7 +106,7 @@ EXAMPLES = '''
   register: vnc_result
 
 - name: Disable VNC remote display on the VM
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -123,7 +118,7 @@ EXAMPLES = '''
   register: vnc_result
 
 - name: Disable VNC remote display on the VM using MoID
-  vmware_guest_vnc:
+  community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -156,7 +151,9 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, get_vnc_extraconfig, wait_for_task, gather_vm_facts, TaskError
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, vmware_argument_spec, get_vnc_extraconfig, wait_for_task,
+    gather_vm_facts, TaskError)
 from ansible.module_utils._text import to_native
 
 

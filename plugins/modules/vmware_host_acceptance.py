@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_acceptance
@@ -67,7 +61,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Set acceptance level to community for all ESXi Host in given Cluster
-  vmware_host_acceptance:
+  community.vmware.vmware_host_acceptance:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -78,7 +72,7 @@ EXAMPLES = r'''
   register: cluster_acceptance_level
 
 - name: Set acceptance level to vmware_accepted for the given ESXi Host
-  vmware_host_acceptance:
+  community.vmware.vmware_host_acceptance:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -89,7 +83,7 @@ EXAMPLES = r'''
   register: host_acceptance_level
 
 - name: Get acceptance level from the given ESXi Host
-  vmware_host_acceptance:
+  community.vmware.vmware_host_acceptance:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

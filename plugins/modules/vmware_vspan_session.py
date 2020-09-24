@@ -9,13 +9,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vspan_session
 short_description: Create or remove a Port Mirroring session.
@@ -57,14 +52,14 @@ options:
             - 'dvPortMirror'
         description:
             - Select the mirroring type.
-            - '- C(encapsulatedRemoteMirrorSource) (str): In encapsulatedRemoteMirrorSource session, Distributed Ports
-            can be used as source entities, and Ip address can be used as destination entities.'
-            - '- C(remoteMirrorDest) (str): In remoteMirrorDest session, vlan Ids can be used as source entities, and
-            Distributed Ports can be used as destination entities.'
-            - '- C(remoteMirrorSource) (str): In remoteMirrorSource session, Distributed Ports can be used as source
-            entities, and uplink ports name can be used as destination entities.'
-            - '- C(dvPortMirror) (str): In dvPortMirror session, Distributed Ports can be used as both source and
-            destination entities.'
+            - In C(encapsulatedRemoteMirrorSource) session, Distributed Ports can be used as source entities,
+              and IP address can be used as destination entities.
+            - In C(remoteMirrorDest) session, VLAN IDs can be used as source entities, and
+              Distributed Ports can be used as destination entities.
+            - In C(remoteMirrorSource) session, Distributed Ports can be used as source
+              entities, and uplink ports name can be used as destination entities.
+            - In C(dvPortMirror) session, Distributed Ports can be used as both source and
+              destination entities.
         required: False
         type: str
     enabled:
@@ -89,8 +84,9 @@ options:
         type: str
     destination_port:
         description:
-            - Destination port that received the mirrored packets. Also any port designated in the value of this
-             property can not match the source port in any of the Distributed Port Mirroring session.
+            - Destination port that received the mirrored packets.
+            - Also any port designated in the value of this
+              property can not match the source port in any of the Distributed Port Mirroring session.
         required: False
         type: str
     encapsulation_vlan_id:
@@ -100,50 +96,71 @@ options:
         type: int
     strip_original_vlan:
         description:
-            - Whether to strip the original VLAN tag. if false, the original VLAN tag will be preserved on the mirrored
-             traffic. If encapsulationVlanId has been set and this property is false, the frames will be double tagged
-             with the original VLAN ID as the inner tag.
+            - Whether to strip the original VLAN tag.
+            - If false, the original VLAN tag will be preserved on the mirrored traffic.
+            - If C(encapsulationVlanId) has been set and this property is false, the frames will be double tagged
+              with the original VLAN ID as the inner tag.
         type: bool
         required: False
     mirrored_packet_length:
         description:
-            - An integer that describes how much of each frame to mirror. If unset, all of the frame would be mirrored.
-             Setting this property to a smaller value is useful when the consumer will look only at the headers.
-             The value cannot be less than 60.
+            - An integer that describes how much of each frame to mirror.
+            - If unset, all of the frame would be mirrored.
+            - Setting this property to a smaller value is useful when the consumer will look only at the headers.
+            - The value cannot be less than 60.
         required: False
         type: int
     normal_traffic_allowed:
         description:
-            - Whether or not destination ports can send and receive "normal" traffic. Setting this to false will make
-             mirror ports be used solely for mirroring and not double as normal access ports.
+            - Whether or not destination ports can send and receive "normal" traffic.
+            - Setting this to false will make mirror ports be used solely for mirroring and not double as normal access ports.
         type: bool
         required: False
     sampling_rate:
         description:
-            - Sampling rate of the session. If its value is n, one of every n packets is mirrored.
-             Valid values are between 1 to 65535, and default value is 1.
+            - Sampling rate of the session.
+            - If its value is n, one of every n packets is mirrored.
+            - Valid values are between 1 to 65535.
         type: int
         required: False
     source_vm_transmitted:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         type: dict
     source_vm_received:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         type: dict
     destination_vm:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Name of the VM'
-            - '- C(nic_label) (bool): Label of the Network Interface Card to use.'
+        suboptions:
+            name:
+                description:
+                - Name of the VM.
+                type: str
+            nic_label:
+                description:
+                - Label of the network interface card to use.
+                type: str
         required: False
         type: dict
 extends_documentation_fragment:
@@ -151,9 +168,9 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create distributed mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -168,7 +185,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create remote destination mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -183,7 +200,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create remote destination mirroring session.
-  vmware_vspan_session:
+  community.vmware.vmware_vspan_session:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -193,7 +210,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """#
+RETURN = r"""#
 """
 
 try:
@@ -477,70 +494,50 @@ class VMwareVspanSession(PyVmomi):
                 return False
         return True
 
-    def create_vspan_session(self):
-        """Builds up the session, adds the parameters that we specified, then creates it on the vSwitch"""
+    def check_source_port_transmitted(self, session):
+        if self.source_port_transmitted is not None:
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_transmitted))
+            if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_transmitted))
+            session.sourcePortTransmitted = port
 
-        session = vim.dvs.VmwareDistributedVirtualSwitch.VspanSession(
-            name=self.name,
-            enabled=True
-        )
-        if self.session_type is not None:
-            session.sessionType = self.session_type
-            if self.session_type == 'encapsulatedRemoteMirrorSource':
-                if self.source_port_received is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
-                    session.sourcePortReceived = port
-                if self.source_port_transmitted is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_transmitted))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_transmitted))
-                    session.sourcePortTransmitted = port
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(ipAddress=str(self.destination_port))
-                    session.destinationPort = port
-            if self.session_type == 'remoteMirrorSource':
-                if self.source_port_received is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
-                    session.sourcePortReceived = port
-                if self.source_port_transmitted is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_transmitted))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_transmitted))
-                    session.sourcePortTransmitted = port
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(uplinkPortName=str(self.destination_port))
-                    session.destinationPort = port
-            if self.session_type == 'remoteMirrorDest':
-                if self.source_port_received is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(vlans=[int(self.source_port_received)])
-                    if int(self.source_port_received) not in self.dv_switch.QueryUsedVlanIdInDvs():
-                        self.module.fail_json(msg="Couldn't find vlan: {0:s}".format(self.source_port_received))
-                    session.sourcePortReceived = port
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
-                    session.destinationPort = port
-            if self.session_type == 'dvPortMirror':
-                if self.source_port_received is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
-                    session.sourcePortReceived = port
-                if self.source_port_transmitted is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_transmitted))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_transmitted))
-                    session.sourcePortTransmitted = port
-                if self.destination_port is not None:
-                    port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
-                    if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
-                        self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
-                    session.destinationPort = port
+    def check_source_port_received(self, session):
+        if not self.source_port_received:
+            return
+
+        if self.session_type == 'remoteMirrorDest':
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(vlans=[int(self.source_port_received)])
+            if int(self.source_port_received) not in self.dv_switch.QueryUsedVlanIdInDvs():
+                self.module.fail_json(msg="Couldn't find vlan: {0:s}".format(self.source_port_received))
+            session.sourcePortReceived = port
+        else:
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.source_port_received))
+            if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.source_port_received))
+            session.sourcePortReceived = port
+
+    def check_destination_port(self, session):
+        if not self.destination_port:
+            return
+
+        if self.session_type == 'encapsulatedRemoteMirrorSource':
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(ipAddress=str(self.destination_port))
+            session.destinationPort = port
+        if self.session_type == 'remoteMirrorSource':
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(uplinkPortName=str(self.destination_port))
+            session.destinationPort = port
+        if self.session_type == 'remoteMirrorDest':
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
+            if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
+            session.destinationPort = port
+        if self.session_type == 'dvPortMirror':
+            port = vim.dvs.VmwareDistributedVirtualSwitch.VspanPorts(portKey=str(self.destination_port))
+            if not self.dv_switch.FetchDVPorts(vim.dvs.PortCriteria(portKey=port.portKey)):
+                self.module.fail_json(msg="Couldn't find port: {0:s}".format(self.destination_port))
+            session.destinationPort = port
+
+    def check_self_properties(self, session):
         if self.description is not None:
             session.description = self.description
         if self.encapsulation_vlan_id is not None:
@@ -553,6 +550,34 @@ class VMwareVspanSession(PyVmomi):
             session.normalTrafficAllowed = self.normal_traffic_allowed
         if self.sampling_rate is not None:
             session.samplingRate = self.sampling_rate
+
+    def create_vspan_session(self):
+        """Builds up the session, adds the parameters that we specified, then creates it on the vSwitch"""
+
+        session = vim.dvs.VmwareDistributedVirtualSwitch.VspanSession(
+            name=self.name,
+            enabled=True
+        )
+        if self.session_type is not None:
+            session.sessionType = self.session_type
+            if self.session_type == 'encapsulatedRemoteMirrorSource':
+                self.check_source_port_received(session)
+                self.check_source_port_transmitted(session)
+                self.check_destination_port(session)
+            if self.session_type == 'remoteMirrorSource':
+                self.check_source_port_received(session)
+                self.check_source_port_transmitted(session)
+                self.check_destination_port(session)
+            if self.session_type == 'remoteMirrorDest':
+                self.check_source_port_received(session)
+                self.check_destination_port(session)
+            if self.session_type == 'dvPortMirror':
+                self.check_source_port_received(session)
+                self.check_source_port_transmitted(session)
+                self.check_destination_port(session)
+
+        self.check_self_properties(session)
+
         config_version = self.dv_switch.config.configVersion
         s_spec = vim.dvs.VmwareDistributedVirtualSwitch.VspanConfigSpec(vspanSession=session, operation="add")
         c_spec = vim.dvs.VmwareDistributedVirtualSwitch.ConfigSpec(vspanConfigSpec=[s_spec], configVersion=config_version)
@@ -597,10 +622,16 @@ def main():
         switch=dict(type='str', required=True, aliases=['switch_name']),
         name=dict(type='str', required=True),
         state=dict(type='str', required=True, choices=['present', 'absent']),
-        session_type=dict(type='str', default='dvPortMirror', choices=['dvPortMirror',
-                                                                       'encapsulatedRemoteMirrorSource',
-                                                                       'remoteMirrorDest',
-                                                                       'remoteMirrorSource']),
+        session_type=dict(
+            type='str',
+            default='dvPortMirror',
+            choices=[
+                'dvPortMirror',
+                'encapsulatedRemoteMirrorSource',
+                'remoteMirrorDest',
+                'remoteMirrorSource'
+            ]
+        ),
         enabled=dict(type='bool', default=True),
         description=dict(type='str'),
         source_port_transmitted=dict(type='str'),
@@ -611,18 +642,27 @@ def main():
         mirrored_packet_length=dict(type='int'),
         normal_traffic_allowed=dict(type='bool'),
         sampling_rate=dict(type='int'),
-        source_vm_transmitted=dict(type='dict',
-                                   options=dict(
-                                       name=dict(type='str'),
-                                       nic_label=dict(type='str'))),
-        source_vm_received=dict(type='dict',
-                                options=dict(
-                                    name=dict(type='str'),
-                                    nic_label=dict(type='str'))),
-        destination_vm=dict(type='dict',
-                            options=dict(
-                                name=dict(type='str'),
-                                nic_label=dict(type='str'))),
+        source_vm_transmitted=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
+        source_vm_received=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
+        destination_vm=dict(
+            type='dict',
+            options=dict(
+                name=dict(type='str'),
+                nic_label=dict(type='str')
+            )
+        ),
     ))
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
     session = VMwareVspanSession(module)

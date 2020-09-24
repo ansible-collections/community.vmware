@@ -25,7 +25,6 @@ DOCUMENTATION = r'''
       - "PyVmomi"
       - "requests >= 2.3"
       - "vSphere Automation SDK - For tag feature"
-      - "vCloud Suite SDK - For tag feature"
     options:
         hostname:
             description: Name of vCenter or ESXi server.
@@ -62,7 +61,7 @@ DOCUMENTATION = r'''
             - Include tags and associated virtual machines.
             - Requires 'vSphere Automation SDK' library to be installed on the given controller machine.
             - Please refer following URLs for installation steps
-            - U(https://code.vmware.com/web/sdk/65/vsphere-automation-python)
+            - U(https://code.vmware.com/web/sdk/7.0/vsphere-automation-python)
             default: False
             type: bool
         hostnames:
@@ -79,8 +78,9 @@ DOCUMENTATION = r'''
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
             - C(config.name), C(config.uuid) are required properties if C(hostnames) is set to default.
             - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
+            - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to VM properties, the following are special values
-            - Use C(customValue) to populate virtual machine's custom attributes.
+            - Use C(customValue) to populate virtual machine's custom attributes. C(customValue) is only supported by vCenter and not by ESXi.
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
             - Please refer more VMware guest attributes which can be used as properties
@@ -105,6 +105,35 @@ DOCUMENTATION = r'''
                 {key: 'config.guestId', separator: ''},
                 {key: 'summary.runtime.powerState', separator: ''},
             ]
+        filters:
+            description:
+            - This option allows client-side filtering hosts with jinja templating.
+            - When server-side filtering is introduced, it should be preferred over this.
+            type: list
+            elements: str
+            default: []
+        resources:
+            description:
+            - A list of resources to limit search scope.
+            - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
+            - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
+            - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
+            version_added: "2.10"
+            required: False
+            type: list
+            default: []
+        with_path:
+            description:
+            - Include virtual machines path.
+            - Set this option to a string value to replace root name from I('Datacenters').
+            default: False
+            type: bool
+        with_sanitized_property_name:
+            description:
+                - This option allows property name sanitization to create safe property names for use in Ansible.
+                - Also, transforms property name to snake case.
+            type: bool
+            default: False
 '''
 
 EXAMPLES = r'''
@@ -124,10 +153,11 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'guest.ipAddress'
+    - 'config.name'
+    - 'config.uuid'
 
 # Create Groups based upon VMware Tools status
     plugin: community.vmware.vmware_vm_inventory
@@ -149,15 +179,112 @@ EXAMPLES = r'''
       separator: ''
     - key: guest.toolsRunningStatus
       separator: ''
+
+# Filter VMs based upon condition
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'runtime.powerState'
+    - 'config.name'
+    filters:
+    - runtime.powerState == "poweredOn"
+    hostnames:
+    - config.name
+
+# Filter VM's based on OR conditions
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.ipAddress'
+    - 'guest.toolsStatus'
+    - 'guest.toolsRunningStatus'
+    - 'config.guestFullName'
+    - 'config.guestId'
+    hostnames:
+    - 'config.name'
+    filters:
+    - config.guestId == "rhel7_64Guest" or config.name == "rhel_20_04_empty"
+
+# Filter VM's based on regex conditions
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - 'config.name'
+    - 'config.guestId'
+    - 'guest.ipAddress'
+    - 'summary.runtime.powerState'
+    filters:
+    - guest.ipAddress is defined and (guest.ipAddress is match('192.168.*') or guest.ipAddress is match('192.169.*'))
+
+# Using compose and groups
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: False
+    properties:
+    - 'name'
+    - 'config.name'
+    - 'guest.ipAddress'
+    compose:
+      # This will populate the IP address of virtual machine if available
+      # and will be used while communicating to the given virtual machine
+      ansible_host: 'guest.ipAddress'
+      composed_var: 'config.name'
+    groups:
+      VMs: True
+    hostnames:
+    - config.name
+
+# Use Datacenter, Cluster and Folder value to list VMs
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.200.241
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    with_tags: True
+    resources:
+      - datacenter:
+        - Asia-Datacenter1
+        - Asia-Datacenter2
+        resources:
+        - compute_resource:
+          - Asia-Cluster1
+          resources:
+          - host_system:
+            - Asia-ESXI4
+        - folder:
+          - dev
+          - prod
 '''
 
 import ssl
 import atexit
+import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import dict_merge
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
+from ansible.module_utils.six import text_type
 
 display = Display()
 
@@ -224,17 +351,20 @@ class BaseVMwareInventory:
         server = self.hostname
         if self.port:
             server += ":" + str(self.port)
-        client = None
+
+        client, err = None, None
         try:
             client = create_vsphere_client(server=server,
                                            username=self.username,
                                            password=self.password,
                                            session=session)
-        except Exception as err:
-            display.warning(to_native(err))
+        except Exception as error:
+            err = error
 
         if client is None:
             msg = "Failed to login to %s using %s" % (server, self.username)
+            if err:
+                msg += " due to : %s" % to_native(err)
             raise AnsibleError(msg)
         return client
 
@@ -304,13 +434,13 @@ class BaseVMwareInventory:
         if not HAS_VSPHERE and self.with_tags:
             raise AnsibleError("Unable to find 'vSphere Automation SDK' Python library which is required."
                                " Please refer this URL for installation steps"
-                               " - https://code.vmware.com/web/sdk/65/vsphere-automation-python")
+                               " - https://code.vmware.com/web/sdk/7.0/vsphere-automation-python")
 
         if not all([self.hostname, self.username, self.password]):
             raise AnsibleError("Missing one of the following : hostname, username, password. Please read "
                                "the documentation for more information.")
 
-    def get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):
+    def get_managed_objects_properties(self, vim_type, properties=None, resources=None, strict=False):  # noqa  # pylint: disable=too-complex
         """
         Look up a Managed Object Reference in vCenter / ESXi Environment
         :param vim_type: Type of vim object e.g, for datacenter - vim.Datacenter
@@ -493,6 +623,9 @@ def parse_vim_property(vim_prop):
     elif prop_type in ['bool', 'int', 'NoneType']:
         return vim_prop
 
+    elif prop_type in ['binary']:
+        return to_text(base64.b64encode(vim_prop))
+
     return to_text(vim_prop)
 
 
@@ -575,6 +708,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
         """
         hostvars = {}
+        strict = self.get_option('strict')
 
         vm_properties = self.get_option('properties')
         if not isinstance(vm_properties, list):
@@ -592,8 +726,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         objects = self.pyv.get_managed_objects_properties(
             vim_type=vim.VirtualMachine,
             properties=query_props,
-            # resources=self.get_option('resources'),
-            strict=self.get_option('strict')
+            resources=self.get_option('resources'),
+            strict=strict,
         )
 
         tags_info = dict()
@@ -619,7 +753,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             # Custom values
             if 'customValue' in vm_properties:
-                field_mgr = self.pyv.content.customFieldsManager.field
+                field_mgr = []
+                if self.pyv.content.customFieldsManager:  # not an ESXi
+                    field_mgr = self.pyv.content.customFieldsManager.field
                 for cust_value in vm_obj.obj.customValue:
                     properties[[y.name for y in field_mgr if y.key == cust_value.key][0]] = cust_value.value
 
@@ -631,18 +767,32 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
                 properties['tags'] = attached_tags
 
-            host_properties = to_nested_dict(properties)
-            host = self._get_hostname(host_properties, hostnames)
+            # Path
+            with_path = self.get_option('with_path')
+            if with_path:
+                path = []
+                parent = vm_obj.obj.parent
+                while parent:
+                    path.append(parent.name)
+                    parent = parent.parent
+                path.reverse()
+                properties['path'] = "/".join(path)
 
-            if host not in hostvars:
+            host_properties = to_nested_dict(properties)
+
+            host = self._get_hostname(host_properties, hostnames, strict=strict)
+
+            host_filters = self.get_option('filters')
+
+            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
         return hostvars
 
-    def _get_hostname(self, properties, hostnames):
-        strict = self.get_option('strict')
+    def _get_hostname(self, properties, hostnames, strict=False):
         hostname = None
+        errors = []
 
         for preference in hostnames:
             try:
@@ -650,9 +800,31 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             except Exception as e:  # pylint: disable=broad-except
                 if strict:
                     raise AnsibleError("Could not compose %s as hostnames - %s" % (preference, to_native(e)))
-
+                else:
+                    errors.append(
+                        (preference, str(e))
+                    )
             if hostname:
                 return to_text(hostname)
+
+        raise AnsibleError(
+            'Could not template any hostname for host, errors for each preference: %s' % (
+                ', '.join(['%s: %s' % (pref, err) for pref, err in errors])
+            )
+        )
+
+    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+        can_add_host = True
+        for host_filter in host_filters:
+            try:
+                can_add_host = self._compose(host_filter, host_properties)
+            except Exception as e:  # pylint: disable=broad-except
+                if strict:
+                    raise AnsibleError("Could not evaluate %s as host filters - %s" % (host_filter, to_native(e)))
+
+            if not can_add_host:
+                return False
+        return True
 
     def _populate_host_properties(self, host_properties, host):
         # Load VM properties in host_vars
@@ -660,15 +832,55 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
         # Use constructed if applicable
         strict = self.get_option('strict')
+
+        # Composed variables
+        compose = self.get_option('compose')
+        if not compose:
+            compose['ansible_host'] = 'guest.ipAddress'
+
+        if not compose.get('ansible_host', None):
+            raise AnsibleError('"ansible_host" not found in "compose". '
+                               'Without this inventory will be useless.')
+        self._set_composite_vars(compose, host_properties, host, strict=strict)
+        # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
+        self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
+
+        with_path = self.get_option('with_path')
+        if with_path:
+            parents = host_properties['path'].split('/')
+            if parents:
+                if isinstance(with_path, text_type):
+                    parents = [with_path] + parents
+
+                c_name = self._sanitize_group_name('/'.join(parents))
+                c_group = self.inventory.add_group(c_name)
+                self.inventory.add_host(host, c_group)
+                parents.pop()
+
+                while len(parents) > 0:
+                    p_name = self._sanitize_group_name('/'.join(parents))
+                    p_group = self.inventory.add_group(p_name)
+
+                    self.inventory.add_child(p_group, c_group)
+                    c_group = p_group
+                    parents.pop()
+
+        can_sanitize = self.get_option('with_sanitized_property_name')
+
+        # Sanitize host properties: to snake case
+        if can_sanitize:  # to snake case
+            host_properties = camel_dict_to_snake_dict(host_properties)
 
         with_nested_properties = self.get_option('with_nested_properties')
         if with_nested_properties:
             for k, v in host_properties.items():
+                k = self._sanitize_group_name(k) if can_sanitize else k
                 self.inventory.set_variable(host, k, v)
 
         # For backward compatability
         host_properties = to_flatten_dict(host_properties)
         for k, v in host_properties.items():
+            k = self._sanitize_group_name(k) if can_sanitize else k
             self.inventory.set_variable(host, k, v)

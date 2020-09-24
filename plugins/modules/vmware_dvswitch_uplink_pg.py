@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -46,13 +41,37 @@ options:
     advanced:
         description:
             - Dictionary which configures the advanced policy settings for the uplink portgroup.
-            - 'Valid attributes are:'
-            - '- C(port_config_reset_at_disconnect) (bool): indicates if the configuration of a port is reset automatically after disconnect. (default: true)'
-            - '- C(block_override) (bool): indicates if the block policy can be changed per port. (default: true)'
-            - '- C(netflow_override) (bool): indicates if the NetFlow policy can be changed per port. (default: false)'
-            - '- C(traffic_filter_override) (bool): indicates if the traffic filter can be changed per port. (default: false)'
-            - '- C(vendor_config_override) (bool): indicates if the vendor config can be changed per port. (default: false)'
-            - '- C(vlan_override) (bool): indicates if the vlan can be changed per port. (default: false)'
+        suboptions:
+            port_config_reset_at_disconnect:
+                description:
+                - Indicates if the configuration of a port is reset automatically after disconnect.
+                type: bool
+                default: True
+            block_override:
+                description:
+                - Indicates if the block policy can be changed per port.
+                type: bool
+                default: True
+            netflow_override:
+                type: bool
+                description:
+                - Indicates if the NetFlow policy can be changed per port.
+                default: False
+            traffic_filter_override:
+                description:
+                - Indicates if the traffic filter can be changed per port.
+                type: bool
+                default: False
+            vendor_config_override:
+                type: bool
+                description:
+                - Indicates if the vendor config can be changed per port.
+                default: False
+            vlan_override:
+                type: bool
+                description:
+                - Indicates if the vlan can be changed per port.
+                default: False
         required: False
         default: {
             port_config_reset_at_disconnect: True,
@@ -69,14 +88,23 @@ options:
             - The VLAN trunk range that should be configured with the uplink portgroup.
             - 'This can be a combination of multiple ranges and numbers, example: [ 2-3967, 4049-4092 ].'
         type: list
+        elements: str
         default: [ '0-4094' ]
     lacp:
         description:
             - Dictionary which configures the LACP settings for the uplink portgroup.
             - The options are only used if the LACP support mode is set to 'basic'.
-            - 'The following parameters are required:'
-            - '- C(status) (str): Indicates if LACP is enabled. (default: disabled)'
-            - '- C(mode) (str): The negotiating state of the uplinks/ports. (default: passive)'
+        suboptions:
+            status:
+                description: Indicates if LACP is enabled.
+                default: 'disabled'
+                type: str
+                choices: [ 'enabled', 'disabled' ]
+            mode:
+                description: The negotiating state of the uplinks/ports.
+                default: 'passive'
+                type: str
+                choices: [ 'active', 'passive' ]
         required: False
         default: {
             status: 'disabled',
@@ -100,7 +128,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Configure Uplink portgroup
-  vmware_dvswitch_uplink_pg:
+  community.vmware.vmware_dvswitch_uplink_pg:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcsa_username }}'
     password: '{{ vcsa_password }}'
@@ -120,7 +148,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enabled LACP on Uplink portgroup
-  vmware_dvswitch_uplink_pg:
+  community.vmware.vmware_dvswitch_uplink_pg:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcsa_username }}'
     password: '{{ vcsa_password }}'
@@ -454,15 +482,15 @@ def main():
             lacp=dict(
                 type='dict',
                 options=dict(
-                    status=dict(type='str', choices=['enabled', 'disabled'], default=['disabled']),
-                    mode=dict(type='str', choices=['active', 'passive'], default=['passive']),
+                    status=dict(type='str', choices=['enabled', 'disabled'], default='disabled'),
+                    mode=dict(type='str', choices=['active', 'passive'], default='passive'),
                 ),
                 default=dict(
                     status='disabled',
                     mode='passive',
                 ),
             ),
-            vlan_trunk_range=dict(type='list', default=['0-4094']),
+            vlan_trunk_range=dict(type='list', default=['0-4094'], elements='str'),
             netflow_enabled=dict(type='bool', default=False),
             block_all_ports=dict(type='bool', default=False),
         )

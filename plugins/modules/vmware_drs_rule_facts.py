@@ -18,9 +18,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_drs_rule_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_drs_rule_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_drs_rule_info) module.
+  alternative: Use M(community.vmware.vmware_drs_rule_info) instead.
 short_description: Gathers facts about DRS rule on the given cluster
 description:
 - 'This module can be used to gather facts about DRS VM-VM and VM-HOST rules from the given cluster.'
@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DRS facts about given Cluster
-  vmware_drs_rule_facts:
+  community.vmware.vmware_drs_rule_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -60,7 +60,7 @@ EXAMPLES = r'''
   register: cluster_drs_facts
 
 - name: Gather DRS facts about all Clusters in given datacenter
-  vmware_drs_rule_facts:
+  community.vmware.vmware_drs_rule_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -165,7 +165,7 @@ class VmwareDrsFactManager(PyVmomi):
                 if not hostgroup and isinstance(group, vim.cluster.VmGroup):
                     obj_name_list = [vm.name for vm in group.vm]
                     break
-                elif hostgroup and isinstance(group, vim.cluster.HostGroup):
+                if hostgroup and isinstance(group, vim.cluster.HostGroup):
                     obj_name_list = [host.name for host in group.host]
                     break
 
@@ -257,6 +257,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_drs_rule_facts', 'community.vmware.vmware_drs_rule_facts'):
+        module.deprecate("The 'vmware_drs_rule_facts' module has been renamed to 'vmware_drs_rule_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_drs_facts = VmwareDrsFactManager(module)
     module.exit_json(changed=False, drs_rule_facts=vmware_drs_facts.gather_drs_rule_facts())

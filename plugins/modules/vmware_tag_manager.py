@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -40,6 +35,7 @@ options:
       - User can skip category name if you have unique tag names.
       required: True
       type: list
+      elements: raw
     state:
       description:
       - If C(state) is set to C(add) or C(present) will add the tags to the existing tag list of the given object.
@@ -52,7 +48,17 @@ options:
       description:
       - Type of object to work with.
       required: True
-      choices: [ VirtualMachine, Datacenter, ClusterComputeResource, HostSystem, DistributedVirtualSwitch, DistributedVirtualPortgroup ]
+      choices:
+        - VirtualMachine
+        - Datacenter
+        - ClusterComputeResource
+        - HostSystem
+        - DistributedVirtualSwitch
+        - DistributedVirtualPortgroup
+        - Datastore
+        - DatastoreCluster
+        - ResourcePool
+        - Folder
       type: str
     object_name:
       description:
@@ -67,7 +73,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add tags to a virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -81,7 +87,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Specify tag and category as dict
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -97,7 +103,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove a tag from a virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -110,7 +116,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add tags to a distributed virtual switch
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -123,7 +129,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add tags to a distributed virtual portgroup
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -180,11 +186,24 @@ class VmwareTagManager(VmwareRestClient):
         if self.object_type == 'VirtualMachine':
             self.managed_object = self.pyv.get_vm_or_template(self.object_name)
 
+        if self.object_type == 'Folder':
+            self.managed_object = self.pyv.find_folder_by_name(self.object_name)
+
         if self.object_type == 'Datacenter':
             self.managed_object = self.pyv.find_datacenter_by_name(self.object_name)
 
+        if self.object_type == 'Datastore':
+            self.managed_object = self.pyv.find_datastore_by_name(self.object_name)
+
+        if self.object_type == 'DatastoreCluster':
+            self.managed_object = self.pyv.find_datastore_cluster_by_name(self.object_name)
+            self.object_type = 'StoragePod'
+
         if self.object_type == 'ClusterComputeResource':
             self.managed_object = self.pyv.find_cluster_by_name(self.object_name)
+
+        if self.object_type == 'ResourcePool':
+            self.managed_object = self.pyv.find_resource_pool_by_name(self.object_name)
 
         if self.object_type == 'HostSystem':
             self.managed_object = self.pyv.find_hostsystem_by_name(self.object_name)
@@ -302,12 +321,13 @@ class VmwareTagManager(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        tag_names=dict(type='list', required=True),
+        tag_names=dict(type='list', required=True, elements='raw'),
         state=dict(type='str', choices=['absent', 'add', 'present', 'remove', 'set'], default='add'),
         object_name=dict(type='str', required=True),
         object_type=dict(type='str', required=True, choices=['VirtualMachine', 'Datacenter', 'ClusterComputeResource',
                                                              'HostSystem', 'DistributedVirtualSwitch',
-                                                             'DistributedVirtualPortgroup']),
+                                                             'DistributedVirtualPortgroup', 'Datastore', 'ResourcePool',
+                                                             'Folder', 'DatastoreCluster']),
     )
     module = AnsibleModule(argument_spec=argument_spec)
 

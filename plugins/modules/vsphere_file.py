@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = r'''
 ---
@@ -79,7 +76,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create an empty file on a datastore
-  vsphere_file:
+  community.vmware.vsphere_file:
     host: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
@@ -90,7 +87,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a directory on a datastore
-  vsphere_file:
+  community.vmware.vsphere_file:
     host: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
@@ -101,7 +98,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Query a file on a datastore
-  vsphere_file:
+  community.vmware.vsphere_file:
     host: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
@@ -113,7 +110,7 @@ EXAMPLES = r'''
   ignore_errors: yes
 
 - name: Delete a file on a datastore
-  vsphere_file:
+  community.vmware.vsphere_file:
     host: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'

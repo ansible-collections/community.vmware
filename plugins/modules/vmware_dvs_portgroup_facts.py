@@ -19,9 +19,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_dvs_portgroup_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_dvs_portgroup_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_dvs_portgroup_info) module.
+  alternative: Use M(community.vmware.vmware_dvs_portgroup_info) instead.
 short_description: Gathers facts DVS portgroup configurations
 description:
 - This module can be used to gather facts about DVS portgroup configurations.
@@ -70,7 +70,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get facts about DVPG
-  vmware_dvs_portgroup_facts:
+  community.vmware.vmware_dvs_portgroup_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -267,6 +267,10 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_dvs_portgroup_facts', 'community.vmware.vmware_dvs_portgroup_facts'):
+        module.deprecate("The 'vmware_dvs_portgroup_facts' module has been renamed to 'vmware_dvs_portgroup_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     dvs_pg_mgr = DVSPortgroupFactsManager(module)
     module.exit_json(changed=False,

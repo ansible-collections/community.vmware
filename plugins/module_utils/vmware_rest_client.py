@@ -87,7 +87,7 @@ class VmwareRestClient(object):
         if not HAS_VSPHERE:
             self.module.fail_json(
                 msg=missing_required_lib('vSphere Automation SDK',
-                                         url='https://code.vmware.com/web/sdk/65/vsphere-automation-python'),
+                                         url='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'),
                 exception=VSPHERE_IMP_ERR)
 
     @staticmethod
@@ -294,6 +294,27 @@ class VmwareRestClient(object):
         item_id = item_ids[0] if item_ids else None
         return item_id
 
+    def get_library_item_from_content_library_name(self, name, content_library_name):
+        """
+        Returns the identifier of the library item with the given name in the specified
+        content library.
+        Args:
+            name (str): The name of item to look for
+            content_library_name (str): The name of the content library to search in
+        Returns:
+            str: The item ID or None if the item is not found
+        """
+        cl_find_spec = self.api_client.content.Library.FindSpec(name=content_library_name)
+        cl_item_ids = self.api_client.content.Library.find(cl_find_spec)
+        cl_item_id = cl_item_ids[0] if cl_item_ids else None
+        if cl_item_id:
+            find_spec = Item.FindSpec(name=name, library_id=cl_item_id)
+            item_ids = self.api_client.content.library.Item.find(find_spec)
+            item_id = item_ids[0] if item_ids else None
+            return item_id
+        else:
+            return None
+
     def get_datacenter_by_name(self, datacenter_name):
         """
         Returns the identifier of a datacenter
@@ -319,7 +340,7 @@ class VmwareRestClient(object):
         folder = folder_summaries[0].folder if len(folder_summaries) > 0 else None
         return folder
 
-    def get_resource_pool_by_name(self, datacenter_name, resourcepool_name):
+    def get_resource_pool_by_name(self, datacenter_name, resourcepool_name, cluster_name=None, host_name=None):
         """
         Returns the identifier of a resource pool
         with the mentioned names.
@@ -327,9 +348,20 @@ class VmwareRestClient(object):
         datacenter = self.get_datacenter_by_name(datacenter_name)
         if not datacenter:
             return None
+        clusters = None
+        if cluster_name:
+            clusters = self.get_cluster_by_name(datacenter_name, cluster_name)
+            if clusters:
+                clusters = set([clusters])
+        hosts = None
+        if host_name:
+            hosts = self.get_host_by_name(datacenter_name, host_name)
+            if hosts:
+                hosts = set([hosts])
         names = set([resourcepool_name]) if resourcepool_name else None
         filter_spec = ResourcePool.FilterSpec(datacenters=set([datacenter]),
-                                              names=names)
+                                              names=names,
+                                              clusters=clusters)
         resource_pool_summaries = self.api_client.vcenter.ResourcePool.list(filter_spec)
         resource_pool = resource_pool_summaries[0].resource_pool if len(resource_pool_summaries) > 0 else None
         return resource_pool

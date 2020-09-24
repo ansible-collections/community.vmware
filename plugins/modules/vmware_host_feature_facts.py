@@ -16,9 +16,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_feature_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_feature_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_host_feature_info) module.
+  alternative: Use M(community.vmware.vmware_host_feature_info) instead.
 short_description: Gathers facts about an ESXi host's feature capability information
 description:
 - This module can be used to gather facts about an ESXi host's feature capability information when ESXi hostname or Cluster name is given.
@@ -47,7 +47,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather feature capability facts about all ESXi Hosts in given Cluster
-  vmware_host_feature_facts:
+  community.vmware.vmware_host_feature_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +56,7 @@ EXAMPLES = r'''
   register: all_cluster_hosts_facts
 
 - name: Check if ESXi is vulnerable for Speculative Store Bypass Disable (SSBD) vulnerability
-  vmware_host_feature_facts:
+  community.vmware.vmware_host_feature_facts:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -138,6 +138,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_host_feature_facts', 'community.vmware.vmware_host_feature_facts'):
+        module.deprecate("The 'vmware_host_feature_facts' module has been renamed to 'vmware_host_feature_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     host_capability_manager = FeatureCapabilityFactsManager(module)
     module.exit_json(changed=False,

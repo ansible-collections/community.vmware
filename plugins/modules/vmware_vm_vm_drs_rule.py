@@ -7,13 +7,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vm_vm_drs_rule
 short_description: Configure VMware DRS Affinity rule for virtual machine in given cluster
@@ -37,6 +32,7 @@ options:
     - List of virtual machines name for which DRS rule needs to be applied.
     - Required if C(state) is set to C(present).
     type: list
+    elements: str
   drs_rule_name:
     description:
     - The name of the DRS rule to manage.
@@ -77,7 +73,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create DRS Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -93,7 +89,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create DRS Anti-Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -109,7 +105,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete DRS Affinity Rule for VM-VM
-  vmware_vm_vm_drs_rule:
+  community.vmware.vmware_vm_vm_drs_rule:
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
@@ -350,7 +346,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
         state=dict(type='str', default='present', choices=['absent', 'present']),
-        vms=dict(type='list'),
+        vms=dict(type='list', elements='str'),
         cluster_name=dict(type='str', required=True),
         drs_rule_name=dict(type='str', required=True),
         enabled=dict(type='bool', default=False),

@@ -10,13 +10,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_local_user_manager
@@ -60,7 +53,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add local user to ESXi
-  vmware_local_user_manager:
+  community.vmware.vmware_local_user_manager:
     hostname: esxi_hostname
     username: root
     password: vmware

@@ -1,0 +1,119 @@
+# Test code for the vmware_tag CRUD Operations.
+# Copyright: (c) 2020, Dustin Scott <sdustin@vmware.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+- block:
+  - name: Create category
+    vmware_category:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      category_name: "{{ cat_one }}"
+      category_cardinality: 'multiple'
+      state: present
+    register: category_one_create
+
+  - name: Set category one id
+    set_fact: cat_one_id={{ category_one_create['category_results']['category_id'] }}
+
+  - name: Create tag
+    vmware_tag:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      tag_name: "{{ tag_one }}"
+      category_id: "{{ cat_one_id }}"
+      state: present
+    register: tag_one_create
+
+  - name: Check tag is created
+    assert:
+      that:
+        - tag_one_create.changed
+
+  - &policy_create
+    name: Create or update a vSphere tag-based storage policy
+    community.vmware.vmware_vm_storage_policy:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      name: "{{ policy_one }}"
+      description: "{{ policy_one }}"
+      tag_category: "{{ cat_one }}"
+      tag_name: "{{ tag_one }}"
+      tag_affinity: true
+      state: "present"
+    register: policy_create
+
+  - name: Check policy is created
+    assert:
+      that:
+        - policy_create.changed
+
+  - <<: *policy_create
+    name: Create policy again
+
+  - name: Check policy is created
+    assert:
+      that:
+        - not policy_create.changed
+
+  - &policy_delete
+    name: Remove a vSphere tag-based storage policy
+    community.vmware.vmware_vm_storage_policy:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      name: "{{ policy_one }}"
+      state: "absent"
+    register: policy_delete
+
+  - name: Check policy is deleted
+    assert:
+      that:
+        - policy_delete.changed
+
+  - <<: *policy_delete
+    name: Delete policy again
+
+  - name: Check policy is deleted
+    assert:
+      that:
+        - not policy_delete.changed
+
+  always:
+
+  - name: Delete Tags
+    vmware_tag:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      tag_name: "{{ item }}"
+      state: absent
+    register: delete_tag
+    with_items:
+      - "{{ tag_one }}"
+
+  - name: Delete Categories
+    vmware_category:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      category_name: "{{ item }}"
+      state: absent
+    register: delete_categories
+    with_items:
+      - "{{ cat_one }}"
+  vars:
+    cat_one: category_1004
+    tag_one: tag_1004
+    policy_one: policy_1004

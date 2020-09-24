@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -44,7 +39,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather capability info about all ESXi Host in given Cluster
-  vmware_host_capability_info:
+  community.vmware.vmware_host_capability_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -53,7 +48,7 @@ EXAMPLES = r'''
   register: all_cluster_hosts_info
 
 - name: Gather capability info about ESXi Host
-  vmware_host_capability_info:
+  community.vmware.vmware_host_capability_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -188,11 +183,11 @@ class CapabilityInfoManager(PyVmomi):
                 encryptionVFlashSupported=hc.encryptionVFlashSupported,
                 encryptionCBRCSupported=hc.encryptionCBRCSupported,
                 encryptionHBRSupported=hc.encryptionHBRSupported,
-                supportedVmfsMajorVersion=[version for version in hc.supportedVmfsMajorVersion],
-                vmDirectPathGen2UnsupportedReason=[reason for reason in hc.vmDirectPathGen2UnsupportedReason],
-                ftCompatibilityIssues=[issue for issue in hc.ftCompatibilityIssues],
-                smpFtCompatibilityIssues=[issue for issue in hc.smpFtCompatibilityIssues],
-                replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
+                supportedVmfsMajorVersion=list(hc.supportedVmfsMajorVersion),
+                vmDirectPathGen2UnsupportedReason=list(hc.vmDirectPathGen2UnsupportedReason),
+                ftCompatibilityIssues=list(hc.ftCompatibilityIssues),
+                smpFtCompatibilityIssues=list(hc.smpFtCompatibilityIssues),
+                replayCompatibilityIssues=list(hc.replayCompatibilityIssues),
             )
 
             # The `checkpointFtSupported` and `checkpointFtCompatibilityIssues` properties have been removed from pyvmomi 7.0.

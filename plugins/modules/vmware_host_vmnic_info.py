@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_vmnic_info
@@ -67,7 +61,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about vmnics of all ESXi Host in the given Cluster
-  vmware_host_vmnic_info:
+  community.vmware.vmware_host_vmnic_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -76,7 +70,7 @@ EXAMPLES = r'''
   register: cluster_host_vmnics
 
 - name: Gather info about vmnics of an ESXi Host
-  vmware_host_vmnic_info:
+  community.vmware.vmware_host_vmnic_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -158,6 +152,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class HostVmnicMgr(PyVmomi):
     """Class to manage vmnic info"""
+
     def __init__(self, module):
         super(HostVmnicMgr, self).__init__(module)
         self.capabilities = self.params.get('capabilities')

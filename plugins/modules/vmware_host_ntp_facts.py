@@ -17,9 +17,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_ntp_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_ntp_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_host_ntp_info) module.
+  alternative: Use M(community.vmware.vmware_host_ntp_info) instead.
 short_description: Gathers facts about NTP configuration on an ESXi host
 description:
 - This module can be used to gather facts about NTP configurations on an ESXi host.
@@ -50,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather NTP facts about all ESXi Host in the given Cluster
-  vmware_host_ntp_facts:
+  community.vmware.vmware_host_ntp_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -59,7 +59,7 @@ EXAMPLES = r'''
   register: cluster_host_ntp
 
 - name: Gather NTP facts about ESXi Host
-  vmware_host_ntp_facts:
+  community.vmware.vmware_host_ntp_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -110,7 +110,7 @@ class VmwareNtpFactManager(PyVmomi):
                         time_zone_name=host_date_time_manager.dateTimeInfo.timeZone.name,
                         time_zone_description=host_date_time_manager.dateTimeInfo.timeZone.description,
                         time_zone_gmt_offset=host_date_time_manager.dateTimeInfo.timeZone.gmtOffset,
-                        ntp_servers=[ntp_server for ntp_server in host_date_time_manager.dateTimeInfo.ntpConfig.server]
+                        ntp_servers=list(host_date_time_manager.dateTimeInfo.ntpConfig.server)
                     )
                 )
             hosts_facts[host.name] = host_ntp_facts
@@ -131,6 +131,9 @@ def main():
         ],
         supports_check_mode=True,
     )
+    if module._name in ('vmware_host_ntp_facts', 'community.vmware.vmware_host_ntp_facts'):
+        module.deprecate("The 'vmware_host_ntp_facts' module has been renamed to 'vmware_host_ntp_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_host_ntp_config = VmwareNtpFactManager(module)
     module.exit_json(changed=False, hosts_ntp_facts=vmware_host_ntp_config.gather_ntp_facts())

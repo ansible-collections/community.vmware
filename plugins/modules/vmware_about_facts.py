@@ -18,9 +18,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_about_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_about_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_about_info) module.
+  alternative: Use M(community.vmware.vmware_about_info) instead.
 short_description: Provides information about VMware server to which user is connecting to
 description:
 - This module can be used to gather information about VMware server to which user is trying to connect.
@@ -38,7 +38,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Provide information about vCenter
-  vmware_about_facts:
+  community.vmware.vmware_about_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -46,7 +46,7 @@ EXAMPLES = r'''
   register: vcenter_about_info
 
 - name: Provide information about a standalone ESXi server
-  vmware_about_facts:
+  community.vmware.vmware_about_facts:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_ipv6
@@ -54,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable IPv6 for an host system
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -64,7 +58,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable IPv6 for an host system
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -74,7 +68,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable IPv6 for all host systems from cluster
-  vmware_host_ipv6:
+  community.vmware.vmware_host_ipv6:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -109,6 +103,7 @@ from ansible.module_utils._text import to_native
 
 class VmwareHostIPv6(PyVmomi):
     """Class to manage IPv6 for an ESXi host system"""
+
     def __init__(self, module):
         super(VmwareHostIPv6, self).__init__(module)
         cluster_name = self.params.get('cluster_name')

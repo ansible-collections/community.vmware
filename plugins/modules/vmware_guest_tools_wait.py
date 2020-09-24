@@ -7,11 +7,6 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -93,7 +88,7 @@ EXAMPLES = '''
   register: vm_facts
 
 - name: Get UUID from previous task and pass it to this task
-  vmware_guest_tools_wait:
+  community.vmware.vmware_guest_tools_wait:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -104,7 +99,7 @@ EXAMPLES = '''
 
 
 - name: Wait for VMware tools to become available by MoID
-  vmware_guest_tools_wait:
+  community.vmware.vmware_guest_tools_wait:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -114,7 +109,7 @@ EXAMPLES = '''
   register: facts
 
 - name: Wait for VMware tools to become available by name
-  vmware_guest_tools_wait:
+  community.vmware.vmware_guest_tools_wait:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

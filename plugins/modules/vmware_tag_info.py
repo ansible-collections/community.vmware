@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -41,14 +36,14 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get info about tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
 
 - name: Get category id from the given tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -59,7 +54,7 @@ EXAMPLES = r'''
     msg: "{{ tag_details.tag_facts['fedora_machines']['tag_category_id'] }}"
 
 - name: Gather tag id from the given tag
-  vmware_tag_info:
+  community.vmware.vmware_tag_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -170,8 +165,9 @@ def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
-    if module._name == 'vmware_tag_facts':
-        module.deprecate("The 'vmware_tag_facts' module has been renamed to 'vmware_tag_info'", version='2.13')
+    if module._name in ('vmware_tag_facts', 'community.vmware.vmware_tag_facts'):
+        module.deprecate("The 'vmware_tag_facts' module has been renamed to 'vmware_tag_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_tag_info = VmTagInfoManager(module)
     vmware_tag_info.get_all_tags()

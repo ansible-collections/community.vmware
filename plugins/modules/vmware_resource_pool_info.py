@@ -6,11 +6,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -32,7 +27,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather resource pool info about all resource pools available
-  vmware_resource_pool_info:
+  community.vmware.vmware_resource_pool_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -137,7 +132,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add ESXi Host to vCenter
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -150,7 +145,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add ESXi Host to vCenter under a specific folder
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -164,7 +159,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Reconnect ESXi Host (with username/password set)
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -177,7 +172,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Reconnect ESXi Host (with default username/password)
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -188,7 +183,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add ESXi Host with SSL Thumbprint to vCenter
-  vmware_host:
+  community.vmware.vmware_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -228,6 +223,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareHost(PyVmomi):
     """Class to manage vCenter connection"""
+
     def __init__(self, module):
         super(VMwareHost, self).__init__(module)
         self.vcenter = module.params['hostname']

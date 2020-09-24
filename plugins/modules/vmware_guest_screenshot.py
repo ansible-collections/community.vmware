@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -90,7 +85,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: take a screenshot of the virtual machine console
-  vmware_guest_screenshot:
+  community.vmware.vmware_guest_screenshot:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -103,7 +98,7 @@ EXAMPLES = '''
   register: take_screenshot
 
 - name: Take a screenshot of the virtual machine console using MoID
-  vmware_guest_screenshot:
+  community.vmware.vmware_guest_screenshot:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"

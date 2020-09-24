@@ -16,9 +16,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vswitch_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_vswitch_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_vswitch_info) module.
+  alternative: Use M(community.vmware.vmware_vswitch_info) instead.
 short_description: Gathers facts about an ESXi host's vswitch configurations
 description:
 - This module can be used to gather facts about an ESXi host's vswitch configurations when ESXi hostname or Cluster name is given.
@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather vswitch facts about all ESXi Host in given Cluster
-  vmware_vswitch_facts:
+  community.vmware.vmware_vswitch_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -60,7 +60,7 @@ EXAMPLES = r'''
   register: all_hosts_vswitch_facts
 
 - name: Gather firewall facts about ESXi Host
-  vmware_vswitch_facts:
+  community.vmware.vmware_vswitch_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -101,6 +101,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class VswitchFactsManager(PyVmomi):
     """Class to gather vSwitch facts"""
+
     def __init__(self, module):
         super(VswitchFactsManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)
@@ -153,6 +154,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_vswitch_facts', 'community.vmware.vmware_vswitch_facts'):
+        module.deprecate("The 'vmware_vswitch_facts' module has been renamed to 'vmware_vswitch_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vswitch_mgr = VswitchFactsManager(module)
     module.exit_json(changed=False, hosts_vswitch_facts=vmware_vswitch_mgr.gather_vswitch_facts())

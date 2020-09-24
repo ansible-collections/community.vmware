@@ -19,9 +19,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_local_user_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_local_user_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_local_user_info) module.
+  alternative: Use M(community.vmware.vmware_local_user_info) instead.
 short_description: Gather facts about users on the given ESXi host
 description:
     - This module can be used to gather facts about users present on the given ESXi host system in VMware infrastructure.
@@ -43,7 +43,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about all Users on given ESXi host system
-  vmware_local_user_facts:
+  community.vmware.vmware_local_user_facts:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -94,6 +94,7 @@ from ansible.module_utils._text import to_native
 
 class VMwareUserFactsManager(PyVmomi):
     """Class to manage local user facts"""
+
     def __init__(self, module):
         super(VMwareUserFactsManager, self).__init__(module)
 
@@ -170,6 +171,10 @@ def main():
     argument_spec = vmware_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
+    if module._name in ('vmware_local_user_facts', 'community.vmware.vmware_local_user_facts'):
+        module.deprecate("The 'vmware_local_user_facts' module has been renamed to 'vmware_local_user_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
+
     vmware_local_user_facts = VMwareUserFactsManager(module)
     vmware_local_user_facts.gather_user_facts()
 

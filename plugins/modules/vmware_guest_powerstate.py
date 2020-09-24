@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = r'''
 ---
@@ -114,7 +111,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Set the state of a virtual machine to poweroff
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -126,7 +123,7 @@ EXAMPLES = r'''
   register: deploy
 
 - name: Set the state of a virtual machine to poweron using MoID
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -138,7 +135,7 @@ EXAMPLES = r'''
   register: deploy
 
 - name: Set the state of a virtual machine to poweroff at given scheduled time
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -153,7 +150,7 @@ EXAMPLES = r'''
   register: deploy_at_schedule_datetime
 
 - name: Wait for the virtual machine to shutdown
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

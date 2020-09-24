@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -33,13 +28,6 @@ requirements:
 - python >= 2.6
 - PyVmomi
 options:
-  datacenter_name:
-    description:
-    - Name of the datacenter to add the datastore.
-    - The datacenter isn't used by the API to create a datastore.
-    - Will be removed in 2.11.
-    required: false
-    type: str
   datastore_name:
     description:
     - Name of the datastore to add/remove.
@@ -48,7 +36,6 @@ options:
   datastore_type:
     description:
     - Type of the datastore to configure (nfs/nfs41/vmfs).
-    required: true
     choices: [ 'nfs', 'nfs41', 'vmfs' ]
     type: str
   nfs_server:
@@ -98,7 +85,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Mount VMFS datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -111,7 +98,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Mount NFS datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -128,7 +115,7 @@ EXAMPLES = r'''
       - { 'name': 'NasDS_vol02', 'server': 'nas01', 'path': '/mnt/vol02', 'type': 'nfs'}
 
 - name: Mount NFS v4.1 datastores to ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -145,7 +132,7 @@ EXAMPLES = r'''
       - { 'name': 'NasDS_vol04', 'server': 'nas01,nas02', 'path': '/mnt/vol02', 'type': 'nfs41'}
 
 - name: Remove/Umount Datastores from a ESXi
-  vmware_host_datastore:
+  community.vmware.vmware_host_datastore:
       hostname: '{{ esxi_hostname }}'
       username: '{{ esxi_username }}'
       password: '{{ esxi_password }}'
@@ -171,8 +158,6 @@ class VMwareHostDatastore(PyVmomi):
     def __init__(self, module):
         super(VMwareHostDatastore, self).__init__(module)
 
-        # NOTE: The below parameter is deprecated starting from Ansible v2.11
-        self.datacenter_name = module.params['datacenter_name']
         self.datastore_name = module.params['datastore_name']
         self.datastore_type = module.params['datastore_type']
         self.nfs_server = module.params['nfs_server']
@@ -311,7 +296,6 @@ class VMwareHostDatastore(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        datacenter_name=dict(type='str', required=False, removed_in_version=2.11),
         datastore_name=dict(type='str', required=True),
         datastore_type=dict(type='str', choices=['nfs', 'nfs41', 'vmfs']),
         nfs_server=dict(type='str'),

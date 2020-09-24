@@ -18,9 +18,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_portgroup_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_portgroup_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_portgroup_info) module.
+  alternative: Use M(community.vmware.vmware_portgroup_info) instead.
 short_description: Gathers facts about an ESXi host's Port Group configuration
 description:
 - This module can be used to gather facts about an ESXi host's Port Group configuration when ESXi hostname or Cluster name is given.
@@ -58,7 +58,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather portgroup facts about all ESXi Host in given Cluster
-  vmware_portgroup_facts:
+  community.vmware.vmware_portgroup_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -66,7 +66,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather portgroup facts about ESXi Host system
-  vmware_portgroup_facts:
+  community.vmware.vmware_portgroup_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -119,6 +119,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class PortgroupFactsManager(PyVmomi):
     """Class to manage Port Group facts"""
+
     def __init__(self, module):
         super(PortgroupFactsManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)
@@ -225,6 +226,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_portgroup_facts', 'community.vmware.vmware_portgroup_facts'):
+        module.deprecate("The 'vmware_portgroup_facts' module has been renamed to 'vmware_portgroup_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     host_pg_mgr = PortgroupFactsManager(module)
     module.exit_json(changed=False, hosts_portgroup_facts=host_pg_mgr.gather_host_portgroup_facts())

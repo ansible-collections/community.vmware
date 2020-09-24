@@ -10,11 +10,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -124,6 +119,7 @@ options:
             - List of dedicated failover hosts.
           type: list
           required: true
+          elements: str
       type: dict
     ha_vm_failure_interval:
       description:
@@ -184,7 +180,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Enable HA without admission control
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -194,7 +190,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable HA and VM monitoring without admission control
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -206,7 +202,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable HA with admission control reserving 50% of resources for HA
-  vmware_cluster_ha:
+  community.vmware.vmware_cluster_ha:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -270,7 +266,7 @@ class VMwareCluster(PyVmomi):
 
         self.advanced_settings = self.params.get('advanced_settings')
         if self.advanced_settings:
-            self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option)
+            self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option, False)
         else:
             self.changed_advanced_settings = None
 

@@ -8,12 +8,6 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = '''
 ---
 module: vmware_guest_tools_upgrade
@@ -24,12 +18,13 @@ requirements:
     - "python >= 2.6"
     - PyVmomi
 notes:
-    - In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module M(vmware_guest_powerstate).
+    - "In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or
+      using module M(community.vmware.vmware_guest_powerstate)."
 options:
    name:
         description:
             - Name of the virtual machine to work with.
-            - This is required if C(uuid) or C(moid) is not supplied.
+            - 'This is required if C(uuid) or C(moid) is not supplied.'
         type: str
    name_match:
         description:
@@ -39,7 +34,7 @@ options:
         type: str
    uuid:
         description:
-            - UUID of the instance to manage if known, this is VMware's unique identifier.
+            - "UUID of the instance to manage if known, this is VMware's unique identifier."
             - This is required if C(name) or C(moid) is not supplied.
         type: str
    moid:
@@ -51,7 +46,7 @@ options:
         description:
             - Destination folder, absolute or relative path to find an existing guest.
             - This is required, if C(name) is supplied.
-            - The folder should include the datacenter. ESX's datacenter is ha-datacenter
+            - "The folder should include the datacenter. ESX's datacenter is ha-datacenter"
             - 'Examples:'
             - '   folder: /ha-datacenter/vm'
             - '   folder: ha-datacenter/vm'
@@ -68,13 +63,12 @@ options:
             - Destination datacenter where the virtual machine exists.
         required: True
         type: str
-    force_upgrade:
+   force_upgrade:
         description:
-            - This flag overrides the guest operating system detection and forcibly upgrade
-              VMware tools or open-vm-tools.
-            - This is useful when VMware tools is too old and unable to detect the 'guestFamily' value.
-            - Using this flag may sometime give unexpected results since module will override the default
-              behaviour of 'guestFamily' detection.
+            - This flag overrides the guest operating system detection and forcibly upgrade VMware tools or open-vm-tools.
+            - "This is useful when VMware tools is too old and unable to detect the 'guestFamily' value."
+            - 'Using this flag may sometime give unexpected results since module will override the default'
+            - "behaviour of 'guestFamily' detection."
         default: False
         type: bool
         required: False
@@ -98,7 +92,7 @@ EXAMPLES = '''
   register: vm_facts
 
 - name: Upgrade VMware Tools using uuid
-  vmware_guest_tools_upgrade:
+  community.vmware.vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -107,7 +101,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Upgrade VMware Tools using MoID
-  vmware_guest_tools_upgrade:
+  community.vmware.vmware_guest_tools_upgrade:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

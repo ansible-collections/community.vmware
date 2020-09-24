@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 module: vmware_host_auto_start
@@ -139,7 +134,7 @@ extends_documentation_fragment:
 EXAMPLES = '''
 ---
 - name: Update for system defaults config.
-  vmware_host_auto_start:
+  community.vmware.vmware_host_auto_start:
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
@@ -151,7 +146,7 @@ EXAMPLES = '''
       stop_action: guestShutdown
 
 - name: Update for powerInfo config of virtual machine.
-  vmware_host_auto_start:
+  community.vmware.vmware_host_auto_start:
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"

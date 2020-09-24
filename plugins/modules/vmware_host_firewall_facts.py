@@ -17,9 +17,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_firewall_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_firewall_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_host_firewall_info) module.
+  alternative: Use M(community.vmware.vmware_host_firewall_info) instead.
 short_description: Gathers facts about an ESXi host's firewall configuration information
 description:
 - This module can be used to gather facts about an ESXi host's firewall configuration information when ESXi hostname or Cluster name is given.
@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather firewall facts about all ESXi Host in given Cluster
-  vmware_host_firewall_facts:
+  community.vmware.vmware_host_firewall_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +56,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather firewall facts about ESXi Host
-  vmware_host_firewall_facts:
+  community.vmware.vmware_host_firewall_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -129,7 +129,7 @@ class FirewallFactsManager(PyVmomi):
 
         allowed_host = rule_obj.allowedHosts
         rule_allow_host = dict()
-        rule_allow_host['ip_address'] = [ip for ip in allowed_host.ipAddress]
+        rule_allow_host['ip_address'] = list(allowed_host.ipAddress)
         rule_allow_host['ip_network'] = [ip.network + "/" + str(ip.prefixLength) for ip in allowed_host.ipNetwork]
         rule_allow_host['all_ip'] = allowed_host.allIp
         rule_dict['allowed_hosts'] = rule_allow_host
@@ -160,6 +160,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_host_firewall_facts', 'community.vmware.vmware_host_firewall_facts'):
+        module.deprecate("The 'vmware_host_firewall_facts' module has been renamed to 'vmware_host_firewall_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_host_firewall = FirewallFactsManager(module)
     module.exit_json(changed=False, hosts_firewall_facts=vmware_host_firewall.gather_host_firewall_facts())

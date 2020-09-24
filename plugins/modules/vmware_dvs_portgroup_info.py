@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_dvs_portgroup_info
@@ -66,7 +60,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get info about DVPG
-  vmware_dvs_portgroup_info:
+  community.vmware.vmware_dvs_portgroup_info:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -244,6 +238,7 @@ class DVSPortgroupInfoManager(PyVmomi):
                     port_policy=port_policy,
                     network_policy=network_policy,
                     vlan_info=vlan_info,
+                    key=dvs_pg.key,
                 )
                 result[dvs.name].append(dvpg_details)
 

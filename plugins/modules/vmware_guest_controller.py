@@ -8,13 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_guest_controller
@@ -116,6 +109,7 @@ options:
            - present
            - absent
      type: list
+     elements: dict
    gather_disk_controller_facts:
      description:
      - Whether to collect existing disk and USB controllers facts only.
@@ -135,7 +129,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add disk and USB 3.0 controllers for virtual machine located by name
-  vmware_guest_controller:
+  community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -153,7 +147,7 @@ EXAMPLES = '''
   register: disk_controller_facts
 
 - name: Remove disk controllers and USB 2.0 from virtual machine located by moid
-  vmware_guest_controller:
+  community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

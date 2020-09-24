@@ -9,13 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_guest_info
@@ -109,6 +102,7 @@ options:
      - '   ]'
      - Only valid when C(schema) is C(vsphere).
      type: list
+     elements: str
      required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -117,7 +111,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -128,7 +122,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some info from a guest using the vSphere API output schema
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -141,7 +135,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some information about a guest using MoID
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -154,7 +148,7 @@ EXAMPLES = '''
   register: vm_moid_info
 
 - name: Gather Managed object ID (moid) from a guest using the vSphere API output schema for REST Calls
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -261,13 +255,17 @@ def main():
         datacenter=dict(type='str', required=True),
         tags=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            required_one_of=[['name', 'uuid', 'moid']],
                            supports_check_mode=True)
-    if module._name == 'vmware_guest_facts':
-        module.deprecate("The 'vmware_guest_facts' module has been renamed to 'vmware_guest_info'", version='2.13')
+    if module._name in ('vmware_guest_facts', 'community.vmware.vmware_guest_facts'):
+        module.deprecate(
+            msg="The 'vmware_guest_facts' module has been renamed to 'vmware_guest_info'",
+            version='3.0.0',
+            collection_name='community.vmware'
+        )
 
     if module.params.get('folder'):
         # FindByInventoryPath() does not require an absolute path

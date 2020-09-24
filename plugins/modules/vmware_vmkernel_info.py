@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -46,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather VMKernel info about all ESXi Host in given Cluster
-  vmware_vmkernel_info:
+  community.vmware.vmware_vmkernel_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -55,7 +50,7 @@ EXAMPLES = r'''
   register: cluster_host_vmks
 
 - name: Gather VMKernel info about ESXi Host
-  vmware_vmkernel_info:
+  community.vmware.vmware_vmkernel_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -148,7 +143,7 @@ class VmkernelInfoManager(PyVmomi):
 
         if not query or not query.selectedVnic:
             return vmks_list
-        selected_vnics = [vnic for vnic in query.selectedVnic]
+        selected_vnics = list(query.selectedVnic)
         vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in selected_vnics]
         return vnics_with_service_type
 

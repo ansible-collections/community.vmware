@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -44,6 +39,7 @@ options:
             - Please see examples for more information.
         type: list
         default: []
+        elements: dict
     secondary_pvlans:
         description:
             - A list of VLAN IDs that should be configured as Secondary PVLANs.
@@ -54,6 +50,7 @@ options:
             - Please see examples for more information.
         type: list
         default: []
+        elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -61,7 +58,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create PVLANs on a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -82,7 +79,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create primary PVLAN and secondary promiscuous PVLAN on a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -92,7 +89,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove all PVLANs from a Distributed Switch
-  vmware_dvswitch_pvlans:
+  community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -516,8 +513,8 @@ def main():
     argument_spec.update(
         dict(
             switch=dict(required=True, aliases=['dvswitch']),
-            primary_pvlans=dict(type='list', default=list(), required=False),
-            secondary_pvlans=dict(type='list', default=list(), required=False),
+            primary_pvlans=dict(type='list', default=list(), elements='dict'),
+            secondary_pvlans=dict(type='list', default=list(), elements='dict'),
         )
     )
 

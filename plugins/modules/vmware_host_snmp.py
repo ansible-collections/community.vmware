@@ -9,13 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_host_snmp
 short_description: Configures SNMP on an ESXi host system
@@ -41,6 +35,7 @@ options:
     description:
         - List of SNMP community strings.
     type: list
+    elements: str
   snmp_port:
     description:
         - Port used by the SNMP agent.
@@ -52,12 +47,14 @@ options:
         - You need to use C(hostname), C(port), and C(community) for each trap target.
     default: []
     type: list
+    elements: dict
   trap_filter:
     description:
         - A list of trap oids for traps not to be sent by agent,
           e.g. [ 1.3.6.1.4.1.6876.4.1.1.0, 1.3.6.1.4.1.6876.4.1.1.1 ]
         - Use value C(reset) to clear settings.
     type: list
+    elements: str
   send_trap:
     description:
         - Send a test trap to validate the configuration.
@@ -83,7 +80,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable and configure SNMP community
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -93,7 +90,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure SNMP traps and filters
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -113,7 +110,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Disable SNMP
-  vmware_host_snmp:
+  community.vmware.vmware_host_snmp:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -472,9 +469,9 @@ def main():
     argument_spec.update(
         state=dict(type='str', default='disabled', choices=['enabled', 'disabled', 'reset']),
         snmp_port=dict(type='int', default=161),
-        community=dict(type='list', default=[]),
-        trap_targets=dict(type='list', default=list()),
-        trap_filter=dict(type='list'),
+        community=dict(type='list', default=[], elements='str'),
+        trap_targets=dict(type='list', default=list(), elements='dict'),
+        trap_filter=dict(type='list', elements='str'),
         hw_source=dict(type='str', default='indications', choices=['indications', 'sensors']),
         log_level=dict(type='str', default='info', choices=['debug', 'info', 'warning', 'error']),
         send_trap=dict(type='bool', default=False),

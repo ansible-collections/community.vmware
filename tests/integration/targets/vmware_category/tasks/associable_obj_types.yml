@@ -2,33 +2,47 @@
 # Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: Create different types of category with associable object types
-  vmware_category:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    validate_certs: False
-    category_name: '{{ item }} name'
-    category_description: '{{ item }} description'
-    associable_object_types:
-      - "{{ item }}"
-    state: present
-  with_items:
-    - All objects
-    - Folder
-    - Cluster
-    - Datacenter
-    - Datastore
-    - Datastore Cluster
-    - Distributed Port Group
-    - Distributed Switch
-    - Host
-    - Content Library
-    - Library item
-    - Network
-    - Resource Pool
-    - vApp
-    - Virtual Machine
+- name: Define required data
+  set_fact:
+    cat_data:
+    - name: 'Folder'
+      result: 'Folder'
+    - name: 'Cluster'
+      result: 'ClusterComputeResource'
+    - name: Datacenter
+      result: Datacenter
+    - name: Datastore
+      result: Datastore
+    - name: 'Datastore Cluster'
+      result: 'StoragePod'
+    - name: 'Distributed Port Group'
+      result: 'DistributedVirtualPortgroup'
+    - name: 'Distributed Switch'
+      result: 'VmwareDistributedVirtualSwitch'
+    - name: 'Host'
+      result: 'HostSystem'
+    - name: 'Content Library'
+      result: 'com.vmware.content.Library'
+    - name: 'Library item'
+      result: 'com.vmware.content.library.Item'
+    - name: 'Network'
+      result: 'Network'
+    - name: 'Host Network'
+      result: 'HostNetwork'
+    - name: 'Opaque Network'
+      result: 'OpaqueNetwork'
+    - name: 'Resource Pool'
+      result: 'ResourcePool'
+    - name: 'vApp'
+      result: 'VirtualApp'
+    - name: 'Virtual Machine'
+      result: 'VirtualMachine'
+
+- include_tasks: associable_obj_test.yml
+  vars:
+    category_name: "{{ item.name }}"
+    expected_result: "{{ item.result }}"
+  with_items: "{{ cat_data }}"
 
 - name: Delete different types of category with associable object types
   vmware_category:
@@ -36,24 +50,9 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: False
-    category_name: '{{ item }} name'
+    category_name: '{{ item.name }}'
     state: absent
-  with_items:
-    - All objects
-    - Folder
-    - Cluster
-    - Datacenter
-    - Datastore
-    - Datastore Cluster
-    - Distributed Port Group
-    - Distributed Switch
-    - Host
-    - Content Library
-    - Library item
-    - Network
-    - Resource Pool
-    - vApp
-    - Virtual Machine
+  with_items: "{{ cat_data }}"
 
 - name: Create category with 2 associable object types
   vmware_category:

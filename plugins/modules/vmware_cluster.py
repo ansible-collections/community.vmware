@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -60,7 +55,7 @@ options:
     enable_drs:
       description:
       - If set to C(yes), will enable DRS when the cluster is created.
-      - Use C(enable_drs) of M(vmware_cluster_drs) instead.
+      - Use C(enable_drs) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
       default: 'no'
@@ -68,7 +63,7 @@ options:
       description:
       - Determines whether DRS Behavior overrides for individual virtual machines are enabled.
       - If set to C(True), overrides C(drs_default_vm_behavior).
-      - Use C(drs_enable_vm_behavior_overrides) of M(vmware_cluster_drs) instead.
+      - Use C(drs_enable_vm_behavior_overrides) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
       default: True
@@ -81,21 +76,23 @@ options:
         for the placement with a host. vCenter should not implement the recommendations automatically.
       - If set to C(fullyAutomated), then vCenter should automate both the migration of virtual machines
         and their placement with a host at power on.
-      - Use C(drs_default_vm_behavior) of M(vmware_cluster_drs) instead.
+      - Use C(drs_default_vm_behavior) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       default: fullyAutomated
+      type: str
       choices: [ fullyAutomated, manual, partiallyAutomated ]
     drs_vmotion_rate:
       description:
       - Threshold for generated ClusterRecommendations.
-      - Use C(drs_vmotion_rate) of M(vmware_cluster_drs) instead.
+      - Use C(drs_vmotion_rate) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 3
       choices: [ 1, 2, 3, 4, 5 ]
+      type: int
     enable_ha:
       description:
       - If set to C(yes) will enable HA when the cluster is created.
-      - Use C(enable_ha) of M(vmware_cluster_ha) instead.
+      - Use C(enable_ha) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
       default: 'no'
@@ -105,10 +102,11 @@ options:
       - If set to C(enabled), HA restarts virtual machines after a host fails.
       - If set to C(disabled), HA does not restart virtual machines after a host fails.
       - If C(enable_ha) is set to C(no), then this value is ignored.
-      - Use C(ha_host_monitoring) of M(vmware_cluster_ha) instead.
+      - Use C(ha_host_monitoring) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
+      type: str
     ha_vm_monitoring:
       description:
       - Indicates the state of virtual machine health monitoring service.
@@ -116,23 +114,29 @@ options:
       - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
       - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
       - If C(enable_ha) is set to C(no), then this value is ignored.
-      - Use C(ha_vm_monitoring) of M(vmware_cluster_ha) instead.
+      - Use C(ha_vm_monitoring) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'
+      type: str
     ha_failover_level:
       description:
       - Number of host failures that should be tolerated, still guaranteeing sufficient resources to
         restart virtual machines on available hosts.
       - Accepts integer values only.
-      - Use C(slot_based_admission_control), C(reservation_based_admission_control) or C(failover_host_admission_control) of M(vmware_cluster_ha) instead.
+      - Use C(slot_based_admission_control), C(reservation_based_admission_control)
+        or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 2
+      type: int
     ha_admission_control_enabled:
       description:
       - Determines if strict admission control is enabled.
-      - It is recommended to set this parameter to C(True), please refer documentation for more details.
-      - Use C(slot_based_admission_control), C(reservation_based_admission_control) or C(failover_host_admission_control) of M(vmware_cluster_ha) instead.
+      - It is recommended to set this parameter to C(True), please refer documentation
+        for more details.
+      - Use C(slot_based_admission_control), C(reservation_based_admission_control)
+        or C(failover_host_admission_control) of M(community.vmware.vmware_cluster_ha)
+        instead.
       - Deprecated option, will be removed in version 2.12.
       default: True
       type: bool
@@ -142,26 +146,29 @@ options:
         if no heartbeat has been received.
       - This setting is only valid if C(ha_vm_monitoring) is set to, either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
       - Unit is seconds.
-      - Use C(ha_vm_failure_interval) of M(vmware_cluster_ha) instead.
+      - Use C(ha_vm_failure_interval) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 30
+      type: int
     ha_vm_min_up_time:
       description:
       - The number of seconds for the virtual machine's heartbeats to stabilize after
         the virtual machine has been powered on.
       - This setting is only valid if C(ha_vm_monitoring) is set to, either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
       - Unit is seconds.
-      - Use C(ha_vm_min_up_time) of M(vmware_cluster_ha) instead.
+      - Use C(ha_vm_min_up_time) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 120
+      type: int
     ha_vm_max_failures:
       description:
       - Maximum number of failures and automated resets allowed during the time
        that C(ha_vm_max_failure_window) specifies.
       - This setting is only valid if C(ha_vm_monitoring) is set to, either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
-      - Use C(ha_vm_max_failures) of M(vmware_cluster_ha) instead.
+      - Use C(ha_vm_max_failures) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 3
+      type: int
     ha_vm_max_failure_window:
       description:
       - The number of seconds for the window during which up to C(ha_vm_max_failures) resets
@@ -169,9 +176,10 @@ options:
       - This setting is only valid if C(ha_vm_monitoring) is set to, either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
       - Unit is seconds.
       - Default specifies no failure window.
-      - Use C(ha_vm_max_failure_window) of M(vmware_cluster_ha) instead.
+      - Use C(ha_vm_max_failure_window) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: -1
+      type: int
     ha_restart_priority:
       description:
       - Determines the preference that HA gives to a virtual machine if sufficient capacity is not available
@@ -184,14 +192,15 @@ options:
         when there is insufficient capacity on hosts to meet all virtual machine needs.
       - If set to C(low), then virtual machine with this priority have a lower chance of powering on after a failure,
         when there is insufficient capacity on hosts to meet all virtual machine needs.
-      - Use C(ha_restart_priority) of M(vmware_cluster_ha) instead.
+      - Use C(ha_restart_priority) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       default: 'medium'
       choices: [ 'disabled', 'high', 'low', 'medium' ]
+      type: str
     enable_vsan:
       description:
       - If set to C(yes) will enable vSAN when the cluster is created.
-      - Use C(enable_vsan) of M(vmware_cluster_vsan) instead.
+      - Use C(enable_vsan) of M(community.vmware.vmware_cluster_vsan) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
       default: 'no'
@@ -199,7 +208,7 @@ options:
       description:
       - Determines whether the VSAN service is configured to automatically claim local storage
         on VSAN-enabled hosts in the cluster.
-      - Use C(vsan_auto_claim_storage) of M(vmware_cluster_vsan) instead.
+      - Use C(vsan_auto_claim_storage) of M(community.vmware.vmware_cluster_vsan) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
       default: False
@@ -208,10 +217,11 @@ options:
       - Create C(present) or remove C(absent) a VMware vSphere cluster.
       choices: [ absent, present ]
       default: present
+      type: str
 seealso:
-- module: vmware_cluster_drs
-- module: vmware_cluster_ha
-- module: vmware_cluster_vsan
+- module: community.vmware.vmware_cluster_drs
+- module: community.vmware.vmware_cluster_ha
+- module: community.vmware.vmware_cluster_vsan
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -219,7 +229,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Create Cluster
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -231,7 +241,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Create Cluster with additional changes
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -247,7 +257,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Delete Cluster
-  vmware_cluster:
+  community.vmware.vmware_cluster:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -318,9 +328,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster DAS configuration spec
 
         """
-        msg = 'Configuring HA using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring HA using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_ha module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         das_config = vim.cluster.DasConfigInfo()
         das_config.enabled = self.enable_ha
@@ -357,9 +367,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster DRS configuration spec
 
         """
-        msg = 'Configuring DRS using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring DRS using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_drs module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         drs_config = vim.cluster.DrsConfigInfo()
 
@@ -376,9 +386,9 @@ class VMwareCluster(PyVmomi):
         Returns: Cluster VSAN configuration spec
 
         """
-        msg = 'Configuring VSAN using vmware_cluster module is deprecated and will be removed in version 2.12. ' \
+        msg = 'Configuring VSAN using vmware_cluster module is deprecated and will be removed in version 2.0.0. ' \
               'Please use vmware_cluster_vsan module for the new functionality.'
-        self.module.deprecate(msg, '2.12')
+        self.module.deprecate(msg=msg, version='2.0.0', collection_name='community.vmware')  # was Ansible 2.12
 
         vsan_config = vim.vsan.cluster.ConfigInfo()
         vsan_config.enabled = self.enable_vsan
@@ -401,9 +411,6 @@ class VMwareCluster(PyVmomi):
             if not self.module.check_mode:
                 self.datacenter.hostFolder.CreateClusterEx(self.cluster_name, cluster_config_spec)
             self.module.exit_json(changed=True)
-        except vim.fault.DuplicateName:
-            # To match other vmware_* modules
-            pass
         except vmodl.fault.InvalidArgument as invalid_args:
             self.module.fail_json(msg="Cluster configuration specification"
                                       " parameter is invalid : %s" % to_native(invalid_args.msg))
@@ -568,38 +575,38 @@ def main():
                    choices=['absent', 'present']),
         # DRS
         ignore_drs=dict(type='bool', default=False),
-        enable_drs=dict(type='bool', default=False),
-        drs_enable_vm_behavior_overrides=dict(type='bool', default=True),
-        drs_default_vm_behavior=dict(type='str',
+        enable_drs=dict(type='bool', removed_from_collection='ansible.builtin', removed_in_version='2.12', default=False),
+        drs_enable_vm_behavior_overrides=dict(type='bool', removed_from_collection='ansible.builtin', removed_in_version='2.12', default=True),
+        drs_default_vm_behavior=dict(type='str', removed_from_collection='ansible.builtin', removed_in_version='2.12',
                                      choices=['fullyAutomated', 'manual', 'partiallyAutomated'],
                                      default='fullyAutomated'),
-        drs_vmotion_rate=dict(type='int',
-                              choices=range(1, 6),
+        drs_vmotion_rate=dict(type='int', removed_from_collection='ansible.builtin', removed_in_version='2.12',
+                              choices=[1, 2, 3, 4, 5],
                               default=3),
         # HA
         ignore_ha=dict(type='bool', default=False),
-        enable_ha=dict(type='bool', default=False),
-        ha_failover_level=dict(type='int', default=2),
-        ha_host_monitoring=dict(type='str',
+        enable_ha=dict(type='bool', default=False, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_failover_level=dict(type='int', default=2, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_host_monitoring=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                                 default='enabled',
                                 choices=['enabled', 'disabled']),
         # HA VM Monitoring related parameters
-        ha_vm_monitoring=dict(type='str',
+        ha_vm_monitoring=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                               choices=['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled'],
                               default='vmMonitoringDisabled'),
-        ha_vm_failure_interval=dict(type='int', default=30),
-        ha_vm_min_up_time=dict(type='int', default=120),
-        ha_vm_max_failures=dict(type='int', default=3),
-        ha_vm_max_failure_window=dict(type='int', default=-1),
+        ha_vm_failure_interval=dict(type='int', default=30, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_min_up_time=dict(type='int', default=120, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_max_failures=dict(type='int', default=3, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
+        ha_vm_max_failure_window=dict(type='int', default=-1, removed_from_collection='ansible.builtin', removed_in_version='2.12'),
 
-        ha_restart_priority=dict(type='str',
+        ha_restart_priority=dict(type='str', removed_in_version='2.12', removed_from_collection='ansible.builtin',
                                  choices=['high', 'low', 'medium', 'disabled'],
                                  default='medium'),
-        ha_admission_control_enabled=dict(type='bool', default=True),
+        ha_admission_control_enabled=dict(type='bool', default=True, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
         # VSAN
         ignore_vsan=dict(type='bool', default=False),
-        enable_vsan=dict(type='bool', default=False),
-        vsan_auto_claim_storage=dict(type='bool', default=False),
+        enable_vsan=dict(type='bool', default=False, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
+        vsan_auto_claim_storage=dict(type='bool', default=False, removed_in_version='2.12', removed_from_collection='ansible.builtin'),
     ))
 
     module = AnsibleModule(

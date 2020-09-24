@@ -18,9 +18,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_dns_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_dns_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_host_dns_info) module.
+  alternative: Use M(community.vmware.vmware_host_dns_info) instead.
 short_description: Gathers facts about an ESXi host's DNS configuration information
 description:
 - This module can be used to gather facts about an ESXi host's DNS configuration information when ESXi hostname or Cluster name is given.
@@ -50,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DNS facts about all ESXi Hosts in given Cluster
-  vmware_host_dns_facts:
+  community.vmware.vmware_host_dns_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -58,7 +58,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather DNS facts about ESXi Host
-  vmware_host_dns_facts:
+  community.vmware.vmware_host_dns_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -107,8 +107,8 @@ class VmwareDnsFactsManager(PyVmomi):
             host_facts['virtual_nic_device'] = dns_config.virtualNicDevice
             host_facts['host_name'] = dns_config.hostName
             host_facts['domain_name'] = dns_config.domainName
-            host_facts['ip_address'] = [ip for ip in dns_config.address]
-            host_facts['search_domain'] = [domain for domain in dns_config.searchDomain]
+            host_facts['ip_address'] = list(dns_config.address)
+            host_facts['search_domain'] = list(dns_config.searchDomain)
             hosts_facts[host.name] = host_facts
         return hosts_facts
 
@@ -127,6 +127,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_host_dns_facts', 'community.vmware.vmware_host_dns_facts'):
+        module.deprecate("The 'vmware_host_dns_facts' module has been renamed to 'vmware_host_dns_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_dns_config = VmwareDnsFactsManager(module)
     module.exit_json(changed=False, hosts_dns_facts=vmware_dns_config.gather_dns_facts())

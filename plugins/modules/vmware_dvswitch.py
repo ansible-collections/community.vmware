@@ -11,11 +11,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -111,9 +106,13 @@ options:
     contact:
         description:
             - Dictionary which configures administrator contact name and description for the Distributed Switch.
-            - 'Valid attributes are:'
-            - '- C(name) (str): Administrator name.'
-            - '- C(description) (str): Description or other details.'
+        suboptions:
+            name:
+                type: str
+                description: Administrator name.
+            description:
+                type: str
+                description: Description or other details.
         type: dict
     description:
         description:
@@ -122,13 +121,27 @@ options:
     health_check:
         description:
             - Dictionary which configures Health Check for the Distributed Switch.
-            - 'Valid attributes are:'
-            - '- C(vlan_mtu) (bool): VLAN and MTU health check. (default: False)'
-            - '- C(teaming_failover) (bool): Teaming and failover health check. (default: False)'
-            - '- C(vlan_mtu_interval) (int): VLAN and MTU health check interval (minutes). (default: 0)'
-            - '- The default for C(vlan_mtu_interval) is 1 in the vSphere Client if the VLAN and MTU health check is enabled.'
-            - '- C(teaming_failover_interval) (int): Teaming and failover health check interval (minutes). (default: 0)'
-            - '- The default for C(teaming_failover_interval) is 1 in the vSphere Client if the Teaming and failover health check is enabled.'
+        suboptions:
+            vlan_mtu:
+                type: bool
+                description: VLAN and MTU health check.
+                default: False
+            teaming_failover:
+                type: bool
+                description: Teaming and failover health check.
+                default: False
+            vlan_mtu_interval:
+                type: int
+                description:
+                - VLAN and MTU health check interval (minutes).
+                - The default value is 1 in the vSphere Client if the VLAN and MTU health check is enabled.
+                default: 0
+            teaming_failover_interval:
+                type: int
+                description:
+                - Teaming and failover health check interval (minutes).
+                - The default value is 1 in the vSphere Client if the Teaming and failover health check is enabled.
+                default: 0
         type: dict
         default: {
             vlan_mtu: False,
@@ -138,8 +151,8 @@ options:
         }
     state:
         description:
-            - If set to C(present) and the Distributed Switch doesn't exists then the Distributed Switch will be created.
-            - If set to C(absent) and the Distributed Switch exists then the Distributed Switch will be deleted.
+            - If set to C(present) and the Distributed Switch does not exist, the Distributed Switch will be created.
+            - If set to C(absent) and the Distributed Switch exists, the Distributed Switch will be deleted.
         default: 'present'
         choices: ['present', 'absent']
         type: str
@@ -166,7 +179,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create dvSwitch
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -181,7 +194,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Create dvSwitch with all options
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -203,7 +216,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Delete dvSwitch
-  vmware_dvswitch:
+  community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -256,6 +269,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareDvSwitch(PyVmomi):
     """Class to manage a Distributed Virtual Switch"""
+
     def __init__(self, module):
         super(VMwareDvSwitch, self).__init__(module)
         self.dvs = None
@@ -400,6 +414,7 @@ class VMwareDvSwitch(PyVmomi):
             # Set Health Check config
             results['health_check_vlan'] = self.health_check_vlan
             results['health_check_teaming'] = self.health_check_teaming
+            results['uuid'] = self.dvs.uuid
             result = self.check_health_check_config(self.dvs.config.healthCheckConfig)
             changed_health_check = result[1]
             if changed_health_check:
@@ -671,6 +686,7 @@ class VMwareDvSwitch(PyVmomi):
                         self.module.fail_json(msg="Failed to update DVS version : %s" % to_native(invalid_argument))
         else:
             message = "DVS already configured properly"
+        results['uuid'] = self.dvs.uuid
         results['changed'] = changed
         results['result'] = message
 

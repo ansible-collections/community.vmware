@@ -8,11 +8,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -39,7 +34,7 @@ options:
       - datacenter_name
     description:
       - "Datacenter to search for DRS VM/Host groups."
-    required: true
+    required: false
     type: str
 requirements:
   - "python >= 2.6"
@@ -51,17 +46,16 @@ EXAMPLES = r'''
 ---
 - name: "Gather DRS info about given Cluster"
   register: cluster_drs_group_info
-  vmware_drs_group_info:
+  community.vmware.vmware_drs_group_info:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
     cluster_name: "{{ cluster_name }}"
-    datacenter: "{{ datacenter }}"
   delegate_to: localhost
 
 - name: "Gather DRS group info about all clusters in given datacenter"
   register: cluster_drs_group_info
-  vmware_drs_group_info:
+  community.vmware.vmware_drs_group_info:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"

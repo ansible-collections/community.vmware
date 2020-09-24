@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -83,7 +78,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Move Virtual Machine
-  vmware_guest_move:
+  community.vmware.vmware_guest_move:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -94,7 +89,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Move Virtual Machine using MoID
-  vmware_guest_move:
+  community.vmware.vmware_guest_move:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -117,7 +112,7 @@ EXAMPLES = r'''
   register: vm_facts
 
 - name: Get UUID from previous task and pass it to this task
-  vmware_guest_move:
+  community.vmware.vmware_guest_move:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

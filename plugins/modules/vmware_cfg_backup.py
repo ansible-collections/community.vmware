@@ -8,9 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -50,6 +47,7 @@ options:
             - If C(loaded), the backup file in I(src) will be loaded to the ESXi host rewriting the hosts settings.
         choices: [saved, absent, loaded]
         type: str
+        required: True
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -57,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Save the ESXi configuration locally by authenticating directly against the ESXi host
-  vmware_cfg_backup:
+  community.vmware.vmware_cfg_backup:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -66,7 +64,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Save the ESXi configuration locally by authenticating against the vCenter and selecting the ESXi host
-  vmware_cfg_backup:
+  community.vmware.vmware_cfg_backup:
     hostname: '{{ vcenter_hostname }}'
     esxi_hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'

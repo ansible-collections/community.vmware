@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -47,6 +42,7 @@ options:
     - This accepts a list of NTP servers. For multiple servers, please look at the examples.
     type: list
     required: True
+    elements: str
   state:
     description:
     - "present: Add NTP server(s), if specified server(s) are absent else do nothing."
@@ -68,7 +64,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: vcenter01.example.local
     username: administrator@vsphere.local
     password: SuperSecretPassword
@@ -79,7 +75,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set NTP servers for all ESXi Host in given Cluster
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +87,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Set NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,7 +99,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove NTP servers for an ESXi Host
-  vmware_host_ntp:
+  community.vmware.vmware_host_ntp:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -370,7 +366,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        ntp_servers=dict(type='list', required=True),
+        ntp_servers=dict(type='list', required=True, elements='str'),
         state=dict(type='str', choices=['absent', 'present']),
         verbose=dict(type='bool', default=False, required=False)
     )

@@ -7,12 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 
 DOCUMENTATION = '''
 ---
@@ -47,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Create Datacenter
-  vmware_datacenter:
+  community.vmware.vmware_datacenter:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +50,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Delete Datacenter
-  vmware_datacenter:
+  community.vmware.vmware_datacenter:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

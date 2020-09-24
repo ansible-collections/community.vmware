@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -83,6 +78,8 @@ options:
       - Host
       - Library item
       - Network
+      - Host Network
+      - Opaque Network
       - Resource Pool
       - vApp
       - Virtual Machine
@@ -95,7 +92,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -105,7 +102,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Rename category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -114,7 +111,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Update category description
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -123,7 +120,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Delete category
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -131,7 +128,7 @@ EXAMPLES = r'''
     state: absent
 
 - name: Create category with 2 associable object types
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -203,9 +200,36 @@ class VmwareCategory(VmwareRestClient):
         obj_types_set = []
         if associable_object_types:
             for obj_type in associable_object_types:
-                if obj_type.lower() == 'all objects':
+                lower_obj_type = obj_type.lower()
+                if lower_obj_type == 'all objects':
                     obj_types_set = []
                     break
+                if lower_obj_type == 'cluster':
+                    obj_types_set.append('ClusterComputeResource')
+                elif lower_obj_type == 'content library':
+                    obj_types_set.append('com.vmware.content.Library')
+                elif lower_obj_type == 'datastore cluster':
+                    obj_types_set.append('StoragePod')
+                elif lower_obj_type == 'distributed port group':
+                    obj_types_set.append('DistributedVirtualPortgroup')
+                elif lower_obj_type == 'distributed switch':
+                    obj_types_set.append('VmwareDistributedVirtualSwitch')
+                elif lower_obj_type == 'host':
+                    obj_types_set.append('HostSystem')
+                elif lower_obj_type == 'library item':
+                    obj_types_set.append('com.vmware.content.library.Item')
+                elif lower_obj_type == 'resource pool':
+                    obj_types_set.append('ResourcePool')
+                elif lower_obj_type == 'vapp':
+                    obj_types_set.append('VirtualApp')
+                elif lower_obj_type == 'virtual machine':
+                    obj_types_set.append('VirtualMachine')
+                elif lower_obj_type == 'network':
+                    obj_types_set.append('Network')
+                elif lower_obj_type == 'host network':
+                    obj_types_set.append('HostNetwork')
+                elif lower_obj_type == 'opaque network':
+                    obj_types_set.append('OpaqueNetwork')
                 else:
                     obj_types_set.append(obj_type)
 
@@ -311,13 +335,13 @@ def main():
         associable_object_types=dict(
             type='list',
             choices=[
-                'All objects', 'Folder', 'Cluster',
-                'Datacenter', 'Datastore', 'Datastore Cluster',
-                'Distributed Port Group', 'Distributed Switch',
-                'Host', 'Content Library', 'Library item', 'Network',
-                'Resource Pool', 'vApp', 'Virtual Machine',
+                'All objects', 'Cluster', 'Content Library', 'Datacenter',
+                'Datastore', 'Datastore Cluster', 'Distributed Port Group', 'Distributed Switch',
+                'Folder', 'Host', 'Library item', 'Network',
+                'Host Network', 'Opaque Network', 'Resource Pool', 'vApp',
+                'Virtual Machine',
             ],
-            elements=str,
+            elements='str',
         ),
     )
     module = AnsibleModule(argument_spec=argument_spec)

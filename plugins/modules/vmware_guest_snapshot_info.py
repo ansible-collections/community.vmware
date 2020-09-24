@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -53,7 +48,7 @@ options:
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required only, if multiple virtual machines with same name are found on given vCenter.
+     - This is required parameter, if C(name) is supplied.
      - The folder should include the datacenter. ESX's datacenter is ha-datacenter
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -78,17 +73,18 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather snapshot information about the virtual machine in the given vCenter
-  vmware_guest_snapshot_info:
+  community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
+    folder: "/{{ datacenter_name }}/vm/"
     name: "{{ guest_name }}"
   delegate_to: localhost
   register: snapshot_info
 
 - name: Gather snapshot information about the virtual machine using MoID
-  vmware_guest_snapshot_info:
+  community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -166,8 +162,10 @@ def main():
         ],
         supports_check_mode=True,
     )
-    if module._name == 'vmware_guest_snapshot_facts':
-        module.deprecate("The 'vmware_guest_snapshot_facts' module has been renamed to 'vmware_guest_snapshot_info'", version='2.13')
+
+    if module._name in ('vmware_guest_snapshot_facts', 'community.vmware.vmware_guest_snapshot_facts'):
+        module.deprecate(msg="The 'vmware_guest_snapshot_facts' module has been renamed to 'vmware_guest_snapshot_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     if module.params['folder']:
         # FindByInventoryPath() does not require an absolute path

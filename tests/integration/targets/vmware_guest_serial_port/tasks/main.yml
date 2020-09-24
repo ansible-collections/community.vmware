@@ -33,7 +33,447 @@
     that:
         - create_vm_for_test is changed
 
-- name: Create multiple serial ports with Backing type - network, pipe, device and file
+- name: "Create a new serial port for pipe type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+  register: create_serial_port_pipe_type
+
+- assert:
+    that:
+      - create_serial_port_pipe_type.changed is sameas true
+
+- name: "Create a new serial port for pipe type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+  register: create_serial_port_pipe_type_idempotency_check
+
+- assert:
+    that:
+      - create_serial_port_pipe_type_idempotency_check.changed is sameas false
+
+- name: "Update serial port for pipe type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: server
+        no_rx_loss: false
+  register: update_serial_port_pipe_type
+
+- assert:
+    that:
+      - update_serial_port_pipe_type.changed is sameas true
+
+- name: "Remove serial port for pipe type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: server
+        no_rx_loss: false
+        state: absent
+  register: remove_serial_port_pipe_type
+
+- assert:
+    that:
+      - remove_serial_port_pipe_type.changed is sameas true
+
+- name: "Remove serial port for pipe type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: server
+        no_rx_loss: false
+        state: absent
+  register: remove_serial_port_pipe_type_idempotency_check
+
+- assert:
+    that:
+      - remove_serial_port_pipe_type_idempotency_check.changed is sameas false
+
+- name: "Create a new serial port for network type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: network
+        service_uri: tcp://6000
+        direction: client
+  register: create_serial_port_network_type
+
+- assert:
+    that:
+      - create_serial_port_network_type.changed is sameas true
+
+- name: "Create a new serial port for network type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: network
+        service_uri: tcp://6000
+        direction: client
+  register: create_serial_port_network_type_idempotency_check
+
+- assert:
+    that:
+      - create_serial_port_network_type_idempotency_check.changed is sameas false
+
+- name: "Update serial port for network type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: network
+        service_uri: tcp://6000
+        direction: server
+  register: update_serial_port_network_type
+
+- assert:
+    that:
+      - update_serial_port_network_type.changed is sameas true
+
+- name: "Remove serial port for network type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: network
+        service_uri: tcp://6000
+        direction: server
+        state: absent
+  register: remove_serial_network_pipe_type
+
+- assert:
+    that:
+      - remove_serial_network_pipe_type.changed is sameas true
+
+- name: "Remove serial port for network type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: network
+        service_uri: tcp://6000
+        direction: server
+        state: absent
+  register: remove_serial_port_network_type_idempotency_check
+
+- assert:
+    that:
+      - remove_serial_port_network_type_idempotency_check.changed is sameas false
+
+- name: "Create a new serial port for device type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: device
+        device_name: /dev/char/serial/uart0
+  register: create_serial_port_device_type
+
+- assert:
+    that:
+      - create_serial_port_device_type.changed is sameas true
+
+- name: "Create a new serial port for device type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: device
+        device_name: /dev/char/serial/uart0
+  register: create_serial_port_device_type_idempotency_check
+
+- assert:
+    that:
+      - create_serial_port_device_type_idempotency_check.changed is sameas false
+
+- name: "Update serial port for device type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: device
+        device_name: /dev/char/serial/uart1
+  register: update_serial_port_device_type
+
+- assert:
+    that:
+      - update_serial_port_device_type.changed is sameas true
+
+- name: "Remove serial port for device type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: device
+        device_name: /dev/char/serial/uart1
+        state: absent
+  register: remove_serial_network_device_type
+
+- assert:
+    that:
+      - remove_serial_network_device_type.changed is sameas true
+
+- name: "Remove serial port for device type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: device
+        device_name: /dev/char/serial/uart1
+        state: absent
+  register: remove_serial_port_device_type_idempotency_check
+
+- assert:
+    that:
+      - remove_serial_port_device_type_idempotency_check.changed is sameas false
+
+- name: "Create a new serial port for file type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: file
+        file_path: "[{{ rw_datastore }}] file1"
+  register: create_serial_port_file_type
+
+- assert:
+    that:
+      - create_serial_port_file_type.changed is sameas true
+
+- name: "Create a new serial port for file type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: file
+        file_path: "[{{ rw_datastore }}] file1"
+  register: create_serial_port_file_type_idempotency_check
+
+- assert:
+    that:
+      - create_serial_port_file_type_idempotency_check.changed is sameas false
+
+- name: "Update serial port for file type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: file
+        file_path: "[{{ rw_datastore }}] file2"
+  register: update_serial_port_file_type
+
+- assert:
+    that:
+      - update_serial_port_file_type.changed is sameas true
+
+- name: "Remove serial port for file type"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: file
+        file_path: "[{{ rw_datastore }}] file2"
+        state: absent
+  register: remove_serial_network_file_type
+
+- assert:
+    that:
+      - remove_serial_network_file_type.changed is sameas true
+
+- name: "Remove serial port for file type(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: file
+        file_path: "[{{ rw_datastore }}] file2"
+        state: absent
+  register: remove_serial_port_file_type_idempotency_check
+
+- assert:
+    that:
+      - remove_serial_port_file_type_idempotency_check.changed is sameas false
+
+- name: "Create a new serial port for pipe type using yield_on_poll param"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+        yield_on_poll: true
+  register: create_serial_port_pipe_type_using_yield_on_poll
+
+- assert:
+    that:
+      - create_serial_port_pipe_type_using_yield_on_poll.changed is sameas true
+
+- name: "Create a new serial port for pipe type using yield_on_poll param(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+        yield_on_poll: true
+  register: create_serial_port_pipe_type_using_yield_on_poll_idempotency_check
+
+- assert:
+    that:
+      - create_serial_port_pipe_type_using_yield_on_poll_idempotency_check.changed is sameas false
+
+- name: "Update serial port for pipe type using yield_on_poll param"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+        yield_on_poll: false
+  register: update_serial_port_pipe_type_using_yield_on_poll
+
+- assert:
+    that:
+      - update_serial_port_pipe_type_using_yield_on_poll.changed is sameas true
+
+- name: "Remove serial port for pipe type using yield_on_poll param"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+        yield_on_poll: false
+        state: absent
+  register: remove_serial_port_pipe_type_using_yield_on_poll
+
+- assert:
+    that:
+      - remove_serial_port_pipe_type_using_yield_on_poll.changed is sameas true
+
+- name: "Remove serial port for pipe type using yield_on_poll param(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+      - type: pipe
+        pipe_name: test_pipe
+        endpoint: client
+        no_rx_loss: true
+        yield_on_poll: false
+        state: absent
+  register: remove_serial_port_pipe_type_using_yield_on_poll_idempotency_check
+
+- assert:
+    that:
+      - remove_serial_port_pipe_type_using_yield_on_poll_idempotency_check.changed is sameas false
+
+- name: "Create multiple serial ports with Backing type - network, pipe, device and file"
   vmware_guest_serial_port:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -48,21 +488,48 @@
     - type: 'pipe'
       pipe_name: 'serial_pipe'
       endpoint: 'client'
+      no_rx_loss: true
     - type: 'device'
       device_name: '/dev/char/serial/uart0'
     - type: 'file'
-      file_path: '[{{ rw_datastore }}]/file1'
+      file_path: '[{{ rw_datastore }}] file1'
       yield_on_poll:  True
   register: create_multiple_ports
  
-- debug: var=create_multiple_ports
-
 - name: assert that changes were made
   assert:
     that:
-        - create_multiple_ports is changed
+        - create_multiple_ports.changed is sameas true
 
-- name: Modify existing serial port with Backing type - network
+- name: "Create multiple serial ports with Backing type - network, pipe, device and file(idempotency check)"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: "test_vm1"
+    backings:
+    - type: 'network'
+      direction: 'client'
+      service_uri: 'tcp://6000'
+      yield_on_poll: True
+    - type: 'pipe'
+      pipe_name: 'serial_pipe'
+      endpoint: 'client'
+      no_rx_loss: true
+    - type: 'device'
+      device_name: '/dev/char/serial/uart0'
+    - type: 'file'
+      file_path: '[{{ rw_datastore }}] file1'
+      yield_on_poll:  True
+  register: create_multiple_ports_idempotency_check
+ 
+- name: assert that changes were made
+  assert:
+    that:
+        - create_multiple_ports_idempotency_check.changed is sameas false
+
+- name: "Modify existing serial port with Backing type - network"
   vmware_guest_serial_port:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -76,14 +543,12 @@
       service_uri: 'tcp://6000'
   register: modify_network_port
 
-- debug: var=modify_network_port
-
 - name: assert that changes were made
   assert:
     that:
-        - modify_network_port is changed
+        - modify_network_port.changed is sameas true
 
-- name: Remove serial port with  Backing type - pipe
+- name: "Remove serial port with  Backing type - pipe"
   vmware_guest_serial_port:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -92,12 +557,34 @@
     name: 'test_vm1'
     backings:
     - type: 'pipe'
+      pipe_name: 'serial_pipe'
       state: 'absent'
   register: remove_pipe_port
-
-- debug: var=remove_pipe_port
 
 - name: assert that changes were made
   assert:
     that:
-        - remove_pipe_port is changed
+        - remove_pipe_port.changed is sameas true
+
+- name: "Remove all serial ports"
+  vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    name: 'test_vm1'
+    backings:
+      - type: network
+        service_uri: 'tcp://6000'
+        state: absent
+      - type: device
+        device_name: '/dev/char/serial/uart0'
+        state: absent
+      - type: file
+        file_path: '[{{ rw_datastore }}] file1'
+        state: absent
+  register: remove_all_serial_ports
+
+- assert:
+    that:
+      - remove_all_serial_ports.changed is sameas true

@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -74,7 +69,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -85,7 +80,7 @@ EXAMPLES = r'''
     var: vminfo.virtual_machines
 
 - name: Gather only registered virtual machine templates
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -97,7 +92,7 @@ EXAMPLES = r'''
     var: template_info.virtual_machines
 
 - name: Gather only registered virtual machines
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -111,7 +106,7 @@ EXAMPLES = r'''
 - name: Get UUID from given VM Name
   block:
     - name: Get virtual machine info
-      vmware_vm_info:
+      community.vmware.vmware_vm_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
@@ -129,7 +124,7 @@ EXAMPLES = r'''
 - name: Get Tags from given VM Name
   block:
     - name: Get virtual machine info
-      vmware_vm_info:
+      community.vmware.vmware_vm_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
@@ -145,7 +140,7 @@ EXAMPLES = r'''
         query: "[?guest_name=='DC0_H0_VM0']"
 
 - name: Gather all VMs from a specific folder
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -322,8 +317,9 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    if module._name == 'vmware_vm_facts':
-        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'", version='2.13')
+    if module._name in ('vmware_vm_facts', 'community.vmware.vmware_vm_facts'):
+        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vm_info = VmwareVmInfo(module)
     _virtual_machines = vmware_vm_info.get_all_virtual_machines()

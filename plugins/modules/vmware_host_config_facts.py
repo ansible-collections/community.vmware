@@ -17,9 +17,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_config_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_config_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_host_config_info) module.
+  alternative: Use M(community.vmware.vmware_host_config_info) instead.
 short_description: Gathers facts about an ESXi host's advance configuration information
 description:
 - This module can be used to gather facts about an ESXi host's advance configuration information when ESXi hostname or Cluster name is given.
@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about all ESXi Host in given Cluster
-  vmware_host_config_facts:
+  community.vmware.vmware_host_config_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +56,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather facts about ESXi Host
-  vmware_host_config_facts:
+  community.vmware.vmware_host_config_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -116,6 +116,10 @@ def main():
         ],
         supports_check_mode=True
     )
+
+    if module._name in ('vmware_host_config_facts', 'community.vmware.vmware_host_config_facts'):
+        module.deprecate("The 'vmware_host_config_facts' module has been renamed to 'vmware_host_config_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_host_config = VmwareConfigFactsManager(module)
     module.exit_json(changed=False, hosts_facts=vmware_host_config.gather_host_facts())

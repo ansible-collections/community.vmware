@@ -8,13 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_datastore_maintenancemode
@@ -62,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Enter datastore into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -71,7 +64,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enter all datastores under cluster into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -80,7 +73,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Enter all datastores under datastore cluster into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -89,7 +82,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Exit datastore into Maintenance Mode
-  vmware_datastore_maintenancemode:
+  community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -158,7 +151,7 @@ class VmwareDatastoreMaintenanceMgr(PyVmomi):
             if self.state == 'present' and datastore.summary.maintenanceMode != 'normal':
                 datastore_results[datastore.name] = "Datastore '%s' is already in maintenance mode." % datastore.name
                 break
-            elif self.state == 'absent' and datastore.summary.maintenanceMode == 'normal':
+            if self.state == 'absent' and datastore.summary.maintenanceMode == 'normal':
                 datastore_results[datastore.name] = "Datastore '%s' is not in maintenance mode." % datastore.name
                 break
 

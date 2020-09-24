@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -174,7 +169,8 @@ distributed_virtual_switches:
               },
               "privateVlan": []
             }
-          }
+          },
+          "uuid": "50 30 99 9c a7 60 8a 4f-05 9f e7 b5 da df 8f 17"
         }
       ]
 '''
@@ -273,8 +269,10 @@ class VMwareDvSwitchInfoManager(PyVmomi):
                         'healthCheck': health_check
                     },
                     'hosts': host_members,
-                    'folder': switch_obj.parent.name
-                }
+                    'folder': switch_obj.parent.name,
+                    'name': switch_obj.name,
+                },
+                'uuid': switch_obj.uuid,
             })
 
         self.module.exit_json(changed=False, distributed_virtual_switches=distributed_virtual_switches)

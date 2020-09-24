@@ -19,9 +19,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_local_role_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_local_role_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_local_role_info) module.
+  alternative: Use M(community.vmware.vmware_local_role_info) instead.
 short_description: Gather facts about local roles on an ESXi host
 description:
     - This module can be used to gather facts about local role facts on an ESXi host
@@ -41,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather facts about local role from an ESXi
-  vmware_local_role_facts:
+  community.vmware.vmware_local_role_facts:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -101,6 +101,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 
 class VMwareLocalRoleFacts(PyVmomi):
     """Class to manage local role facts"""
+
     def __init__(self, module):
         super(VMwareLocalRoleFacts, self).__init__(module)
         self.module = module
@@ -120,7 +121,7 @@ class VMwareLocalRoleFacts(PyVmomi):
                 dict(
                     role_name=role.name,
                     role_id=role.roleId,
-                    privileges=[priv_name for priv_name in role.privilege],
+                    privileges=list(role.privilege),
                     role_system=role.system,
                     role_info_label=role.info.label,
                     role_info_summary=role.info.summary,
@@ -135,6 +136,10 @@ def main():
     argument_spec = vmware_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
+
+    if module._name in ('vmware_local_role_facts', 'community.vmware.vmware_local_role_facts'):
+        module.deprecate("The 'vmware_local_role_facts' module has been renamed to 'vmware_local_role_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_local_role_facts = VMwareLocalRoleFacts(module)
     vmware_local_role_facts.gather_local_role_facts()

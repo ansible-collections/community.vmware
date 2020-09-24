@@ -18,9 +18,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_guest_customization_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_guest_customization_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_guest_customization_info) module.
+  alternative: Use M(community.vmware.vmware_guest_customization_info) instead.
 short_description: Gather facts about VM customization specifications
 description:
     - This module can be used to gather facts about customization specifications.
@@ -45,7 +45,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather facts about all customization specification
-  vmware_guest_customization_facts:
+  community.vmware.vmware_guest_customization_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -54,7 +54,7 @@ EXAMPLES = '''
   register: all_custom_spec_facts
 
 - name: Gather facts about customization specification with the given name
-  vmware_guest_customization_facts:
+  community.vmware.vmware_guest_customization_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -141,8 +141,8 @@ class VmwareCustomSpecManger(PyVmomi):
                     mac_address=nic.macAddress,
                     ip_address=nic.adapter.ip.ipAddress,
                     subnet_mask=nic.adapter.subnetMask,
-                    gateway=[gw for gw in nic.adapter.gateway],
-                    nic_dns_server_list=[ndsl for ndsl in nic.adapter.dnsServerList],
+                    gateway=list(nic.adapter.gateway),
+                    nic_dns_server_list=list(nic.adapter.dnsServerList),
                     dns_domain=nic.adapter.dnsDomain,
                     primary_wins=nic.adapter.primaryWINS,
                     secondry_wins=nic.adapter.secondaryWINS,
@@ -169,8 +169,8 @@ class VmwareCustomSpecManger(PyVmomi):
                 time_zone=current_spec.spec.identity.timeZone,
                 hw_clock_utc=current_spec.spec.identity.hwClockUTC,
                 # global IP Settings
-                dns_suffix_list=[i for i in current_spec.spec.globalIPSettings.dnsSuffixList],
-                dns_server_list=[i for i in current_spec.spec.globalIPSettings.dnsServerList],
+                dns_suffix_list=list(current_spec.spec.globalIPSettings.dnsSuffixList),
+                dns_server_list=list(current_spec.spec.globalIPSettings.dnsServerList),
                 # NIC setting map
                 nic_setting_map=adapter_mapping_list,
             )
@@ -186,6 +186,10 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
+
+    if module._name in ('vmware_guest_customization_facts', 'community.vmware.vmware_guest_customization_facts'):
+        module.deprecate("The 'vmware_guest_boot_facts' module has been renamed to 'vmware_guest_customization_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     pyv = VmwareCustomSpecManger(module)
     try:

@@ -10,11 +10,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -80,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Assign user to VM folder
-  vmware_object_role_permission:
+  community.vmware.vmware_object_role_permission:
     role: Admin
     principal: user_bob
     object_name: services
@@ -88,7 +83,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove user from VM folder
-  vmware_object_role_permission:
+  community.vmware.vmware_object_role_permission:
     role: Admin
     principal: user_bob
     object_name: services
@@ -96,7 +91,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Assign finance group to VM folder
-  vmware_object_role_permission:
+  community.vmware.vmware_object_role_permission:
     role: Limited Users
     group: finance
     object_name: Accounts
@@ -104,7 +99,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Assign view_user Read Only permission at root folder
-  vmware_object_role_permission:
+  community.vmware.vmware_object_role_permission:
     role: ReadOnly
     principal: view_user
     object_name: rootFolder

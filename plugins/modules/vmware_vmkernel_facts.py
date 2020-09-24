@@ -17,9 +17,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_vmkernel_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_vmkernel_info) module.
+  alternative: Use M(community.vmware.vmware_vmkernel_info) instead.
 short_description: Gathers VMKernel facts about an ESXi host
 description:
 - This module can be used to gather VMKernel facts about an ESXi host from given ESXi hostname or cluster name.
@@ -50,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather VMKernel facts about all ESXi Host in given Cluster
-  vmware_vmkernel_facts:
+  community.vmware.vmware_vmkernel_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -59,7 +59,7 @@ EXAMPLES = r'''
   register: cluster_host_vmks
 
 - name: Gather VMKernel facts about ESXi Host
-  vmware_vmkernel_facts:
+  community.vmware.vmware_vmkernel_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -152,7 +152,7 @@ class VmkernelFactsManager(PyVmomi):
 
         if not query.selectedVnic:
             return vmks_list
-        selected_vnics = [vnic for vnic in query.selectedVnic]
+        selected_vnics = list(query.selectedVnic)
         vnics_with_service_type = [vnic.device for vnic in query.candidateVnic if vnic.key in selected_vnics]
         return vnics_with_service_type
 
@@ -199,6 +199,9 @@ def main():
         ],
         supports_check_mode=True
     )
+    if module._name in ('vmware_vmkernel_facts', 'community.vmware.vmware_vmkernel_facts'):
+        module.deprecate("The 'vmware_vmkernel_facts' module has been renamed to 'vmware_vmkernel_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vmk_config = VmkernelFactsManager(module)
     module.exit_json(changed=False, host_vmk_facts=vmware_vmk_config.gather_host_vmk_facts())

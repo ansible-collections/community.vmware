@@ -19,9 +19,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_guest_disk_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_guest_disk_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_guest_disk_info) module.
+  alternative: Use M(community.vmware.vmware_guest_disk_info) instead.
 short_description: Gather facts about disks of given virtual machine
 description:
     - This module can be used to gather facts about disks belonging to given virtual machine.
@@ -84,7 +84,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather disk facts from virtual machine using UUID
-  vmware_guest_disk_facts:
+  community.vmware.vmware_guest_disk_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -95,7 +95,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Gather disk facts from virtual machine using name
-  vmware_guest_disk_facts:
+  community.vmware.vmware_guest_disk_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -106,7 +106,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Gather disk facts from virtual machine using moid
-  vmware_guest_disk_facts:
+  community.vmware.vmware_guest_disk_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -304,6 +304,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_guest_disk_facts', 'community.vmware.vmware_guest_disk_facts'):
+        module.deprecate("The 'vmware_guest_disk_facts' module has been renamed to 'vmware_guest_disk_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     if module.params['folder']:
         # FindByInventoryPath() does not require an absolute path

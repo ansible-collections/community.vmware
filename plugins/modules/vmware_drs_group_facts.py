@@ -17,9 +17,9 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_drs_group_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_drs_group_info) module.
+  alternative: Use M(community.vmware.vmware_drs_group_info) instead.
 author:
   - "Karsten Kaj Jakobsen (@karstenjakobsen)"
 description:
@@ -43,7 +43,6 @@ options:
       - datacenter_name
     description:
       - "Datacenter to search for DRS VM/Host groups."
-    required: true
     type: str
 requirements:
   - "python >= 2.6"
@@ -55,7 +54,7 @@ EXAMPLES = r'''
 ---
 - name: "Gather DRS facts about given Cluster"
   register: cluster_drs_group_facts
-  vmware_drs_group_facts:
+  community.vmware.vmware_drs_group_facts:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
@@ -65,7 +64,7 @@ EXAMPLES = r'''
 
 - name: "Gather DRS group facts about all clusters in given datacenter"
   register: cluster_drs_group_facts
-  vmware_drs_group_facts:
+  community.vmware.vmware_drs_group_facts:
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"

@@ -9,14 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_role_manager
 short_description: Manage local roles on an ESXi host
@@ -43,6 +36,7 @@ options:
     - Please see U(https://docs.vmware.com/en/VMware-vSphere/6.0/com.vmware.vsphere.security.doc/GUID-ED56F3C4-77D0-49E3-88B6-B99B8B437B62.html)
     default: []
     type: list
+    elements: str
   state:
     description:
     - Indicate desired state of the role.
@@ -69,9 +63,9 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add local role to ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -80,7 +74,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add local role with privileges to ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -90,7 +84,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove local role from ESXi
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -99,7 +93,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -109,7 +103,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Remove a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -119,7 +113,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Set a privilege to an existing local role
-  vmware_local_role_manager:
+  community.vmware.vmware_local_role_manager:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -392,7 +386,7 @@ class VMwareLocalRoleManager(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(local_role_name=dict(required=True, type='str'),
-                              local_privilege_ids=dict(default=[], type='list'),
+                              local_privilege_ids=dict(default=[], type='list', elements='str'),
                               force_remove=dict(default=False, type='bool'),
                               action=dict(type='str', default='set', choices=[
                                   'add',

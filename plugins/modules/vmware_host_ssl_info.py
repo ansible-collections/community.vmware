@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_ssl_info
@@ -47,7 +41,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather SSL thumbprint information about all ESXi Hosts in given Cluster
-  vmware_host_ssl_info:
+  community.vmware.vmware_host_ssl_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +50,7 @@ EXAMPLES = r'''
   register: all_host_ssl_info
 
 - name: Get SSL Thumbprint info about "{{ esxi_hostname }}"
-  vmware_host_ssl_info:
+  community.vmware.vmware_host_ssl_info:
     hostname: "{{ vcenter_server }}"
     username: "{{ vcenter_user }}"
     password: "{{ vcenter_pass }}"
@@ -122,7 +116,7 @@ class VMwareHostSslManager(PyVmomi):
             if host_ssl_info_mgr:
                 self.hosts_info[host.name]['principal'] = host_ssl_info_mgr.principal
                 self.hosts_info[host.name]['owner_tag'] = host_ssl_info_mgr.ownerTag
-                self.hosts_info[host.name]['ssl_thumbprints'] = [i for i in host_ssl_info_mgr.sslThumbprints]
+                self.hosts_info[host.name]['ssl_thumbprints'] = list(host_ssl_info_mgr.sslThumbprints)
 
         self.module.exit_json(changed=False, host_ssl_info=self.hosts_info)
 

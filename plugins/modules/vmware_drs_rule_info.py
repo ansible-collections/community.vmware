@@ -8,11 +8,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -47,7 +42,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DRS info about given Cluster
-  vmware_drs_rule_info:
+  community.vmware.vmware_drs_rule_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +51,7 @@ EXAMPLES = r'''
   register: cluster_drs_info
 
 - name: Gather DRS info about all Clusters in given datacenter
-  vmware_drs_rule_info:
+  community.vmware.vmware_drs_rule_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -161,7 +156,7 @@ class VmwareDrsInfoManager(PyVmomi):
                 if not hostgroup and isinstance(group, vim.cluster.VmGroup):
                     obj_name_list = [vm.name for vm in group.vm]
                     break
-                elif hostgroup and isinstance(group, vim.cluster.HostGroup):
+                if hostgroup and isinstance(group, vim.cluster.HostGroup):
                     obj_name_list = [host.name for host in group.host]
                     break
 

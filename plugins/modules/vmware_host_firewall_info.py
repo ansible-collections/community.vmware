@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -44,7 +39,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather firewall info about all ESXi Host in given Cluster
-  vmware_host_firewall_info:
+  community.vmware.vmware_host_firewall_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -52,7 +47,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather firewall info about ESXi Host
-  vmware_host_firewall_info:
+  community.vmware.vmware_host_firewall_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -125,7 +120,7 @@ class FirewallInfoManager(PyVmomi):
 
         allowed_host = rule_obj.allowedHosts
         rule_allow_host = dict()
-        rule_allow_host['ip_address'] = [ip for ip in allowed_host.ipAddress]
+        rule_allow_host['ip_address'] = list(allowed_host.ipAddress)
         rule_allow_host['ip_network'] = [ip.network + "/" + str(ip.prefixLength) for ip in allowed_host.ipNetwork]
         rule_allow_host['all_ip'] = allowed_host.allIp
         rule_dict['allowed_hosts'] = rule_allow_host

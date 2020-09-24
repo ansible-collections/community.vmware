@@ -1,0 +1,87 @@
+automerge: false
+files:
+  docs/:
+    labels: docs
+  $connection/:
+    labels: connection
+  $modules/:
+    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte
+    keywords:
+    - esx
+    - vcenter
+    - vcsa
+    - vcsim
+    - vsphere
+    labels:
+    - cloud
+    - vmware
+    maintainers: $team_vmware
+    notified: lparkes
+  $modules/vmware_deploy_ovf.py:
+    ignored: sivel
+  $httpapi:
+    keywords:
+    - esx
+    - vcenter
+    - vcsa
+    - vcsim
+    - vsphere
+    labels:
+    - cloud
+    - vmware_httpapi
+    maintainers: $team_vmware_httpapi
+  $modules/vmware_vm_shell.py:
+    maintainers: chrrrles
+  scripts/inventory/vmware.py:
+    keywords:
+    - vmware inventory
+    - vmware dynamic inventory script
+    labels:
+    - cloud
+    - inventory
+    maintainers: $team_vmware
+    migrated_to: community.vmware
+  scripts/inventory/vmware_inventory.py:
+    keywords:
+    - vmware inventory
+    - vmware dynamic inventory script
+    labels:
+    - cloud
+    - vmware
+    - inventory
+    maintainers: $team_vmware
+  $module_utils/vmware:
+  $module_utils/vmware_httpapi:
+  $connection/vmware_tools.py:
+    support: community
+    maintainers: $team_vmware
+    labels:
+    - vmware
+    - cloud
+  $inventory/vmware_vm_inventory.py:
+    labels:
+    - vmware
+    - cloud
+    maintainers: $team_vmware
+    keywords:
+    - vmware inventory
+    - vmware dynamic inventory plugin
+    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte
+  tests/:
+    labels: tests
+  tests/integration/:
+    labels: integrations
+  tests/units/:
+    labels: units
+macros:
+  action: plugins/action
+  callback: plugins/callback
+  connection: plugins/connection
+  doc_fragments: plugins/doc_fragments
+  httpapi: plugins/httpapi
+  inventory: plugins/inventory
+  lookup: plugins/lookup
+  module_utils: plugins/module_utils
+  modules: plugins/modules
+  team_vmware: Akasurde warthog9 Tomorrow9 goneri pgbidkar
+  team_vmware_httpapi: Akasurde warthog9 Tomorrow9 goneri pgbidkar n3pjk

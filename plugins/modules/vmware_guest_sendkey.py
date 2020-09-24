@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -87,6 +82,7 @@ options:
         C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      type: list
+     elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -94,7 +90,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Send list of keys to virtual machine
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -110,7 +106,7 @@ EXAMPLES = '''
   register: keys_num_sent
 
 - name: Send list of keys to virtual machine using MoID
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -124,7 +120,7 @@ EXAMPLES = '''
   register: ctrl_alt_del_sent
 
 - name: Send a string to virtual machine
-  vmware_guest_sendkey:
+  community.vmware.vmware_guest_sendkey:
     validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -361,7 +357,7 @@ def main():
         datacenter=dict(type='str'),
         esxi_hostname=dict(type='str'),
         cluster=dict(type='str'),
-        keys_send=dict(type='list', default=[]),
+        keys_send=dict(type='list', default=[], elements='str'),
         string_send=dict(type='str')
     )
 

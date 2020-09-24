@@ -8,11 +8,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -20,7 +15,7 @@ module: vmware_host_scanhba
 short_description: Rescan host HBA's and optionally refresh the storage system
 description:
 - This module can force a rescan of the hosts HBA subsystem which is needed when wanting to mount a new datastore.
-- You could use this before using M(vmware_host_datastore) to mount a new datastore to ensure your device/volume is ready.
+- You could use this before using M(community.vmware.vmware_host_datastore) to mount a new datastore to ensure your device/volume is ready.
 - You can also optionally force a Refresh of the Storage System in vCenter/ESXi Web Client.
 - All parameters and VMware object names are case sensitive.
 - You can supply an esxi_hostname or a cluster_name
@@ -55,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Recan HBA's for a given ESXi host and refresh storage system objects
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -64,7 +59,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Rescan HBA's for a given cluster - all found hosts will be scanned
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -73,7 +68,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Recan HBA's for a given ESXi host and don't refresh storage system objects
-  vmware_host_scanhba:
+  community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

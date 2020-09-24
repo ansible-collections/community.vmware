@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -88,6 +83,7 @@ options:
      - Only valid when C(schema) is C(vsphere).
      type: list
      required: False
+     elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -95,7 +91,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -105,7 +101,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather info from datacenter about specific datastore
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -115,7 +111,7 @@ EXAMPLES = '''
   register: info
 
 - name: Gather some info from a datastore using the vSphere API output schema
-  vmware_datastore_info:
+  community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -186,6 +182,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareHostDatastore(PyVmomi):
     """ This class populates the datastore list """
+
     def __init__(self, module):
         super(VMwareHostDatastore, self).__init__(module)
         self.gather_nfs_mount_info = self.module.params['gather_nfs_mount_info']
@@ -259,6 +256,7 @@ class VMwareHostDatastore(PyVmomi):
 
 class PyVmomiCache(object):
     """ This class caches references to objects which are requested multiples times but not modified """
+
     def __init__(self, content, dc_name=None):
         self.content = content
         self.dc_name = dc_name
@@ -284,6 +282,7 @@ class PyVmomiCache(object):
 
 class PyVmomiHelper(PyVmomi):
     """ This class gets datastores """
+
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.cache = PyVmomiCache(self.content, dc_name=self.params['datacenter'])
@@ -312,13 +311,17 @@ def main():
         gather_nfs_mount_info=dict(type='bool', default=False),
         gather_vmfs_mount_info=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list')
+        properties=dict(type='list', elements='str')
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True
                            )
     if module._name == 'vmware_datastore_facts':
-        module.deprecate("The 'vmware_datastore_facts' module has been renamed to 'vmware_datastore_info'", version='2.13')
+        module.deprecate(
+            msg="The 'vmware_datastore_facts' module has been renamed to 'vmware_datastore_info'",
+            version='3.0.0',  # was Ansible 2.13
+            collection_name='community.vmware'
+        )
 
     result = dict(changed=False)
 

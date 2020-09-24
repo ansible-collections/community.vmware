@@ -10,13 +10,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_guest_custom_attributes
@@ -68,14 +61,25 @@ options:
    datacenter:
      description:
      - Datacenter name where the virtual machine is located in.
-     required: True
      type: str
    attributes:
      description:
      - A list of name and value of custom attributes that needs to be manage.
      - Value of custom attribute is not required and will be ignored, if C(state) is set to C(absent).
+     suboptions:
+        name:
+          description:
+          - Name of the attribute.
+          type: str
+          required: True
+        value:
+          description:
+          - Value of the attribute.
+          type: str
+          default: ''
      default: []
      type: list
+     elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -83,7 +87,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add virtual machine custom attributes
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -96,7 +100,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Add multiple virtual machine custom attributes
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -111,7 +115,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Remove virtual machine Attribute
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -123,7 +127,7 @@ EXAMPLES = '''
   register: attributes
 
 - name: Remove virtual machine Attribute using Virtual Machine MoID
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -214,9 +218,10 @@ def main():
         attributes=dict(
             type='list',
             default=[],
+            elements='dict',
             options=dict(
                 name=dict(type='str', required=True),
-                value=dict(type='str'),
+                value=dict(type='str', default=''),
             )
         ),
     )

@@ -19,9 +19,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_guest_boot_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_guest_boot_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_guest_boot_info) module.
+  alternative: Use M(community.vmware.vmware_guest_boot_info) instead.
 short_description: Gather facts about boot options for the given virtual machine
 description:
     - Gather facts about boot options for the given virtual machine.
@@ -66,7 +66,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about virtual machine's boot order and related parameters
-  vmware_guest_boot_facts:
+  community.vmware.vmware_guest_boot_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -75,7 +75,7 @@ EXAMPLES = r'''
   register: vm_boot_order_facts
 
 - name: Gather facts about virtual machine's boot order using MoID
-  vmware_guest_boot_facts:
+  community.vmware.vmware_guest_boot_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -210,6 +210,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_guest_boot_facts', 'community.vmware.vmware_guest_boot_facts'):
+        module.deprecate("The 'vmware_guest_boot_facts' module has been renamed to 'vmware_guest_boot_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     pyv = VmBootFactsManager(module)
     pyv.ensure()

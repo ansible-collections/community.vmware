@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -41,7 +36,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather info about all customization specification
-  vmware_guest_customization_info:
+  community.vmware.vmware_guest_customization_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -50,7 +45,7 @@ EXAMPLES = '''
   register: all_custom_spec_info
 
 - name: Gather info about customization specification with the given name
-  vmware_guest_customization_info:
+  community.vmware.vmware_guest_customization_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -135,10 +130,10 @@ class VmwareCustomSpecManger(PyVmomi):
             for nic in current_spec.spec.nicSettingMap:
                 temp_data = dict(
                     mac_address=nic.macAddress,
-                    ip_address=nic.adapter.ip.ipAddress,
+                    ip_address=nic.adapter.ip.ipAddress if hasattr(nic.adapter.ip, 'ipAddress') else None,
                     subnet_mask=nic.adapter.subnetMask,
-                    gateway=[gw for gw in nic.adapter.gateway],
-                    nic_dns_server_list=[ndsl for ndsl in nic.adapter.dnsServerList],
+                    gateway=list(nic.adapter.gateway),
+                    nic_dns_server_list=list(nic.adapter.dnsServerList),
                     dns_domain=nic.adapter.dnsDomain,
                     primary_wins=nic.adapter.primaryWINS,
                     secondry_wins=nic.adapter.secondaryWINS,
@@ -146,11 +141,21 @@ class VmwareCustomSpecManger(PyVmomi):
                 )
                 adapter_mapping_list.append(temp_data)
 
+            # Set the following variables from parameters in LnuxPrep or SysPrep
             current_hostname = None
-            if isinstance(current_spec.spec.identity.hostName, vim.vm.customization.PrefixNameGenerator):
-                current_hostname = current_spec.spec.identity.hostName.base
-            elif isinstance(current_spec.spec.identity.hostName, vim.vm.customization.FixedName):
-                current_hostname = current_spec.spec.identity.hostName.name
+            domain = None
+            time_zone = None
+            hw_clock = None
+            if isinstance(current_spec.spec.identity, vim.vm.customization.LinuxPrep):
+                if isinstance(current_spec.spec.identity.hostName, vim.vm.customization.PrefixNameGenerator):
+                    current_hostname = current_spec.spec.identity.hostName.base
+                elif isinstance(current_spec.spec.identity.hostName, vim.vm.customization.FixedName):
+                    current_hostname = current_spec.spec.identity.hostName.name
+                domain = current_spec.spec.identity.domain
+                time_zone = current_spec.spec.identity.timeZone
+                hw_clock = current_spec.spec.identity.hwClockUTC
+            else:
+                time_zone = current_spec.spec.identity.guiUnattended.timeZone
 
             spec_info[spec] = dict(
                 # Spec
@@ -161,12 +166,12 @@ class VmwareCustomSpecManger(PyVmomi):
                 change_version=current_spec.info.changeVersion,
                 # Identity
                 hostname=current_hostname,
-                domain=current_spec.spec.identity.domain,
-                time_zone=current_spec.spec.identity.timeZone,
-                hw_clock_utc=current_spec.spec.identity.hwClockUTC,
+                domain=domain,
+                time_zone=time_zone,
+                hw_clock_utc=hw_clock,
                 # global IP Settings
-                dns_suffix_list=[i for i in current_spec.spec.globalIPSettings.dnsSuffixList],
-                dns_server_list=[i for i in current_spec.spec.globalIPSettings.dnsServerList],
+                dns_suffix_list=list(current_spec.spec.globalIPSettings.dnsSuffixList),
+                dns_server_list=list(current_spec.spec.globalIPSettings.dnsServerList),
                 # NIC setting map
                 nic_setting_map=adapter_mapping_list,
             )

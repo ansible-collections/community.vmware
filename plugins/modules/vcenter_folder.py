@@ -7,11 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -80,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Create a VM folder on given datacenter
-  vcenter_folder:
+  community.vmware.vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -92,7 +87,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a datastore folder on given datacenter
-  vcenter_folder:
+  community.vmware.vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -104,7 +99,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Create a sub folder under VM folder on given datacenter
-  vcenter_folder:
+  community.vmware.vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -116,7 +111,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Delete a VM folder on given datacenter
-  vcenter_folder:
+  community.vmware.vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -81,7 +76,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Enable DRS
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -91,7 +86,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,7 +98,7 @@ EXAMPLES = r"""
   delegate_to: localhost
 
 - name: Enable DRS and set default VM behavior to partially automated
-  vmware_cluster_drs:
+  community.vmware.vmware_cluster_drs:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -226,7 +221,7 @@ def main():
                                      choices=['fullyAutomated', 'manual', 'partiallyAutomated'],
                                      default='fullyAutomated'),
         drs_vmotion_rate=dict(type='int',
-                              choices=range(1, 6),
+                              choices=[1, 2, 3, 4, 5],
                               default=3),
         advanced_settings=dict(type='dict', default=dict(), required=False),
     ))

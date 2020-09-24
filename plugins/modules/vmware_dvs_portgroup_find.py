@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_dvs_portgroup_find
@@ -56,7 +50,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get all portgroups in dvswitch vDS
-  vmware_dvs_portgroup_find:
+  community.vmware.vmware_dvs_portgroup_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -65,7 +59,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Confirm if vlan 15 is present
-  vmware_dvs_portgroup_find:
+  community.vmware.vmware_dvs_portgroup_find:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -141,7 +135,7 @@ class DVSPortgroupFindManager(PyVmomi):
         for ln in vlanlst:
             if '-' in ln:
                 arr = ln.split('-')
-                if arr[0] < self.vlan and self.vlan < arr[1]:
+                if int(arr[0]) < self.vlan and self.vlan < int(arr[1]):
                     res = True
             elif ln == str(self.vlan):
                 res = True
@@ -203,7 +197,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['show_uplink', 'True', 'vlanid']
+            ['show_uplink', 'True', ['vlanid']]
         ]
     )
 

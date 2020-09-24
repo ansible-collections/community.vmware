@@ -10,11 +10,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -45,23 +40,32 @@ options:
     vmnics:
         description:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
-        required: True
+        required: False
         type: list
+        elements: str
     state:
         description:
         - If the host should be present or absent attached to the vSwitch.
         choices: [ present, absent ]
-        required: True
         default: 'present'
         type: str
     vendor_specific_config:
         description:
-            - List of key,value dictionaries for the Vendor Specific Configuration.
-            - 'Element attributes are:'
-            - '- C(key) (str): Key of setting. (default: None)'
-            - '- C(value) (str): Value of setting. (default: None)'
+            - List of key, value dictionaries for the Vendor Specific Configuration.
+        suboptions:
+            key:
+              description:
+              - Key of setting.
+              type: str
+              required: True
+            value:
+              description:
+              - Value of setting.
+              type: str
+              required: True
         required: False
         type: list
+        elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -69,7 +73,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add Host to dVS
-  vmware_dvs_host:
+  community.vmware.vmware_dvs_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -82,7 +86,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add Host to dVS/enable learnswitch (https://labs.vmware.com/flings/learnswitch)
-  vmware_dvs_host:
+  community.vmware.vmware_dvs_host:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -271,7 +275,7 @@ def main():
         dict(
             esxi_hostname=dict(required=True, type='str'),
             switch_name=dict(required=True, type='str'),
-            vmnics=dict(required=True, type='list'),
+            vmnics=dict(required=False, type='list', default=[], elements='str'),
             state=dict(default='present', choices=['present', 'absent'], type='str'),
             vendor_specific_config=dict(
                 type='list',

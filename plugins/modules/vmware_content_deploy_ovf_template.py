@@ -6,11 +6,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -57,24 +52,43 @@ options:
       required: True
     host:
       description:
-      - Name of the ESX Host in datacenter in which to place deployed VM.
+      - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
       type: str
       required: True
     resource_pool:
       description:
       - Name of the resourcepool in datacenter in which to place deployed VM.
       type: str
-      required: False
+      required: True
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
       type: str
       required: False
-extends_documentation_fragment: vmware_rest_client.documentation
+    storage_provisioning:
+      description:
+      - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.
+      type: str
+      choices: [ thin, thick, eagerZeroedThick ]
+extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
 '''
 
 EXAMPLES = r'''
 - name: Deploy Virtual Machine from OVF template in content library
+  community.vmware.vmware_content_deploy_ovf_template:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    ovf_template: rhel_test_template
+    datastore: Shared_NFS_Volume
+    folder: vm
+    datacenter: Sample_DC_1
+    name: Sample_VM
+    resource_pool: test_rp
+    validate_certs: False
+  delegate_to: localhost
+
+- name: Deploy Virtual Machine from OVF template in content library with eagerZeroedThick storage
   vmware_content_deploy_ovf_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -86,6 +100,7 @@ EXAMPLES = r'''
     name: Sample_VM
     resource_pool: test_rp
     validate_certs: False
+    storage_provisioning: eagerZeroedThick
   delegate_to: localhost
 '''
 
@@ -101,12 +116,14 @@ vm_deploy_info:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.vmware_rest_client import VmwareRestClient
-from ansible.module_utils.vmware import PyVmomi
+from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.vcenter.ovf_client import LibraryItem
+    from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -124,6 +141,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         self.resourcepool = self.params.get('resource_pool')
         self.cluster = self.params.get('cluster')
         self.host = self.params.get('host')
+        self.storage_provisioning = self.params.get('storage_provisioning')
 
     def deploy_vm_from_ovf_template(self):
         # Find the datacenter by the given datacenter name
@@ -147,11 +165,9 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         if not self.host_id:
             self.module.fail_json(msg="Failed to find the Host %s" % self.host)
         # Find the resourcepool by the given resourcepool name
-        self.resourcepool_id = None
-        if self.resourcepool:
-            self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool)
-            if not self.resourcepool_id:
-                self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
+        self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
+        if not self.resourcepool_id:
+            self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
         # Find the Cluster by the given Cluster name
         self.cluster_id = None
         if self.cluster:
@@ -174,14 +190,22 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
             accept_all_eula=True,
             network_mappings=None,
             storage_mappings=None,
-            storage_provisioning=None,
+            storage_provisioning=self.storage_provisioning,
             storage_profile_id=None,
             locale=None,
             flags=None,
             additional_parameters=None,
-            default_datastore_id=None)
+            default_datastore_id=self.datastore_id)
 
-        result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
+        result = {
+            'succeeded': False
+        }
+        try:
+            result = self.api_client.vcenter.ovf.LibraryItem.deploy(self.library_item_id, deployment_target, self.deploy_spec)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
+        except Exception as err:
+            self.module.fail_json(msg="%s" % to_native(err))
 
         if result.succeeded:
             self.module.exit_json(
@@ -204,8 +228,12 @@ def main():
         datastore=dict(type='str', required=True),
         folder=dict(type='str', required=True),
         host=dict(type='str', required=True),
-        resource_pool=dict(type='str', required=False),
+        resource_pool=dict(type='str', required=True),
         cluster=dict(type='str', required=False),
+        storage_provisioning=dict(type='str',
+                                  required=False,
+                                  choices=['thin', 'thick', 'eagerZeroedThick'],
+                                  default=None),
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)

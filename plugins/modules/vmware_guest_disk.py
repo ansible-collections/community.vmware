@@ -8,14 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_disk
 short_description: Manage disks related to virtual machine in given vCenter infrastructure
@@ -91,6 +84,9 @@ options:
      - '     - C(persistent) Changes are immediately and permanently written to the virtual disk. This is default.'
      - '     - C(independent_persistent) Same as persistent, but not affected by snapshots.'
      - '     - C(independent_nonpersistent) Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.'
+     - ' - C(sharing) (bool): The sharing mode of the virtual disk. The default value is no sharing.'
+     - '   Setting C(sharing) means that multiple virtual machines can write to the virtual disk.'
+     - '   Sharing can only be set if C(type) is C(eagerzeroedthick).'
      - ' - C(datastore) (string): Name of datastore or datastore cluster to be used for the disk.'
      - ' - C(autoselect_datastore) (bool): Select the less used datastore. Specify only if C(datastore) is not specified.'
      - ' - C(scsi_controller) (integer): SCSI controller number. Valid value range from 0 to 3.'
@@ -148,14 +144,15 @@ options:
          elements: dict
      default: []
      type: list
+     elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add disks to virtual machine using UUID
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -192,7 +189,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Add disks with specified shares to the virtual machine
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -213,7 +210,7 @@ EXAMPLES = '''
   register: test_custom_shares
 
 - name: create new disk with custom IO limits and shares in IO Limits
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -236,7 +233,7 @@ EXAMPLES = '''
   register: test_custom_IoLimit_shares
 
 - name: Remove disks from virtual machine using name
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -251,7 +248,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Remove disk from virtual machine using moid
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -266,7 +263,7 @@ EXAMPLES = '''
   register: disk_facts
 
 - name: Remove disk from virtual machine but keep the VMDK file on the datastore
-  vmware_guest_disk:
+  community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -282,7 +279,7 @@ EXAMPLES = '''
   register: disk_facts
 '''
 
-RETURN = """
+RETURN = r"""
 disk_status:
     description: metadata about the virtual machine's disks after managing them
     returned: always
@@ -295,6 +292,7 @@ disk_status:
             "backing_filename": "[datastore2] VM_225/VM_225.vmdk",
             "backing_thinprovisioned": false,
             "backing_writethrough": false,
+            "backing_uuid": "421e4592-c069-924d-ce20-7e7533fab926",
             "capacity_in_bytes": 10485760,
             "capacity_in_kb": 10240,
             "controller_key": 1000,
@@ -351,13 +349,14 @@ class PyVmomiHelper(PyVmomi):
         return scsi_ctl
 
     @staticmethod
-    def create_scsi_disk(scsi_ctl_key, disk_index, disk_mode, disk_filename):
+    def create_scsi_disk(scsi_ctl_key, disk_index, disk_mode, disk_filename, sharing):
         """
         Create Virtual Device Spec for virtual disk
         Args:
             scsi_ctl_key: Unique SCSI Controller Key
             disk_index: Disk unit number at which disk needs to be attached
             disk_mode: Disk mode
+            sharing: Disk sharing mode
             disk_filename: Path to the disk file on the datastore
 
         Returns: Virtual Device Spec for virtual disk
@@ -368,6 +367,7 @@ class PyVmomiHelper(PyVmomi):
         disk_spec.device = vim.vm.device.VirtualDisk()
         disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
         disk_spec.device.backing.diskMode = disk_mode
+        disk_spec.device.backing.sharing = sharing
         disk_spec.device.controllerKey = scsi_ctl_key
         disk_spec.device.unitNumber = disk_index
 
@@ -423,6 +423,28 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.storageIOAllocation = io_disk_spec
         return disk_spec
 
+    def get_sharing(self, disk, disk_type, disk_index):
+        """
+        Get the sharing mode of the virtual disk
+        Args:
+            disk: Virtual disk data object
+            disk_type: Disk type of the virtual disk
+            disk_index: Disk unit number at which disk needs to be attached
+
+        Returns:
+            sharing_mode: The sharing mode of the virtual disk
+
+        """
+        sharing = disk.get('sharing')
+        if sharing and disk_type != 'eagerzeroedthick':
+            self.module.fail_json(msg="Invalid 'sharing' mode specified for disk index [%s]. 'disk_mode'"
+                                      " must be 'eagerzeroedthick' when 'sharing'." % disk_index)
+        if sharing:
+            sharing_mode = 'sharingMultiWriter'
+        else:
+            sharing_mode = 'sharingNone'
+        return sharing_mode
+
     def ensure_disks(self, vm_obj=None):
         """
         Manage internal state of virtual machine disks
@@ -473,7 +495,7 @@ class PyVmomiHelper(PyVmomi):
             scsi_controller = disk['scsi_controller'] + 1000  # VMware auto assign 1000 + SCSI Controller
             if disk['disk_unit_number'] not in current_scsi_info[scsi_controller]['disks'] and disk['state'] == 'present':
                 # Add new disk
-                disk_spec = self.create_scsi_disk(scsi_controller, disk['disk_unit_number'], disk['disk_mode'], disk['filename'])
+                disk_spec = self.create_scsi_disk(scsi_controller, disk['disk_unit_number'], disk['disk_mode'], disk['filename'], disk['sharing'])
                 if disk['filename'] is None:
                     disk_spec.device.capacityInKB = disk['size']
                 if disk['disk_type'] == 'thin':
@@ -487,6 +509,7 @@ class PyVmomiHelper(PyVmomi):
                 if disk['filename'] is not None:
                     disk_spec.device.backing.fileName = disk['filename']
                 disk_spec.device.backing.datastore = disk['datastore']
+                disk_spec.device.backing.sharing = disk['sharing']
                 disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
                 self.config_spec.deviceChange.append(disk_spec)
                 disk_change = True
@@ -559,7 +582,8 @@ class PyVmomiHelper(PyVmomi):
                                 autoselect_datastore=True,
                                 disk_unit_number=0,
                                 scsi_controller=0,
-                                disk_mode='persistent')
+                                disk_mode='persistent',
+                                sharing=False)
             # Check state
             if 'state' in disk:
                 if disk['state'] not in ['absent', 'present']:
@@ -569,8 +593,9 @@ class PyVmomiHelper(PyVmomi):
                 else:
                     current_disk['state'] = disk['state']
 
+            # By default destroy file from datastore if 'destroy' parameter is not provided
             if current_disk['state'] == 'absent':
-                current_disk['destroy'] = disk['destroy']
+                current_disk['destroy'] = disk.get('destroy', True)
             elif current_disk['state'] == 'present':
                 # Select datastore or datastore cluster
                 if 'datastore' in disk:
@@ -725,6 +750,9 @@ class PyVmomiHelper(PyVmomi):
                                           " 'disk_mode' value from ['persistent', 'independent_persistent', 'independent_nonpersistent']." % disk_index)
             current_disk['disk_mode'] = temp_disk_mode
 
+            # Sharing mode of disk
+            current_disk['sharing'] = self.get_sharing(disk, disk_type, disk_index)
+
             # SCSI Controller Type
             scsi_contrl_type = disk.get('scsi_type', 'paravirtual').lower()
             if scsi_contrl_type not in self.scsi_device_type.keys():
@@ -814,9 +842,11 @@ class PyVmomiHelper(PyVmomi):
                     backing_filename=disk.backing.fileName,
                     backing_datastore=disk.backing.datastore.name,
                     backing_disk_mode=disk.backing.diskMode,
+                    backing_sharing=disk.backing.sharing,
                     backing_writethrough=disk.backing.writeThrough,
                     backing_thinprovisioned=disk.backing.thinProvisioned,
                     backing_eagerlyscrub=bool(disk.backing.eagerlyScrub),
+                    backing_uuid=disk.backing.uuid,
                     controller_key=disk.controllerKey,
                     unit_number=disk.unitNumber,
                     iolimit_limit=disk.storageIOAllocation.limit,
@@ -839,7 +869,7 @@ def main():
         moid=dict(type='str'),
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
-        disk=dict(type='list', default=[]),
+        disk=dict(type='list', default=[], elements='dict'),
         use_instance_uuid=dict(type='bool', default=False),
     )
     module = AnsibleModule(

@@ -1,0 +1,41 @@
+---
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+- name: 'Attach the hosts to the DVSwitch without specifying any vnics (Issue #185)'
+  when: vcsim is not defined
+  block:
+  - name: Create the DVSwitch
+    vmware_dvswitch:
+      datacenter_name: '{{ dc1 }}'
+      switch_name: 'dvs_host_test_switch'
+      switch_version: 6.5.0
+      uplink_quantity: 2
+      discovery_proto: lldp
+      discovery_operation: both
+      state: present
+
+  - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      state: present
+    register: host_dvs_attachment
+  - assert:
+      that:
+        - host_dvs_attachment is changed
+
+# Cleanup
+  always:
+    - name: 'Cleanup: detaching hosts from dvs'
+      vmware_dvs_host:
+        esxi_hostname: "{{ esxi1 }}"
+        switch_name: 'dvs_host_test_switch'
+        state: absent
+
+    - name: 'Cleanup: Deleting DVSwitch'
+      vmware_dvswitch:
+        datacenter_name: '{{ dc1 }}'
+        switch_name: 'dvs_host_test_switch'
+        state: absent

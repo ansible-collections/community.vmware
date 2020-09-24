@@ -17,9 +17,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_host_capability_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_host_capability_info) instead.
+  removed_at_date: "2021-12-01"
+  why: Deprecated in favour of M(community.vmware.vmware_host_capability_info) module.
+  alternative: Use M(community.vmware.vmware_host_capability_info) instead.
 short_description: Gathers facts about an ESXi host's capability information
 description:
 - This module can be used to gather facts about an ESXi host's capability information when ESXi hostname or Cluster name is given.
@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather capability facts about all ESXi Host in given Cluster
-  vmware_host_capability_facts:
+  community.vmware.vmware_host_capability_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -57,7 +57,7 @@ EXAMPLES = r'''
   register: all_cluster_hosts_facts
 
 - name: Gather capability facts about ESXi Host
-  vmware_host_capability_facts:
+  community.vmware.vmware_host_capability_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -192,11 +192,11 @@ class CapabilityFactsManager(PyVmomi):
                 encryptionVFlashSupported=hc.encryptionVFlashSupported,
                 encryptionCBRCSupported=hc.encryptionCBRCSupported,
                 encryptionHBRSupported=hc.encryptionHBRSupported,
-                supportedVmfsMajorVersion=[version for version in hc.supportedVmfsMajorVersion],
-                vmDirectPathGen2UnsupportedReason=[reason for reason in hc.vmDirectPathGen2UnsupportedReason],
-                ftCompatibilityIssues=[issue for issue in hc.ftCompatibilityIssues],
-                smpFtCompatibilityIssues=[issue for issue in hc.smpFtCompatibilityIssues],
-                replayCompatibilityIssues=[issue for issue in hc.replayCompatibilityIssues],
+                supportedVmfsMajorVersion=list(hc.supportedVmfsMajorVersion),
+                vmDirectPathGen2UnsupportedReason=list(hc.vmDirectPathGen2UnsupportedReason),
+                ftCompatibilityIssues=list(hc.ftCompatibilityIssues),
+                smpFtCompatibilityIssues=list(hc.smpFtCompatibilityIssues),
+                replayCompatibilityIssues=list(hc.replayCompatibilityIssues),
             )
 
             # The `checkpointFtSupported` and `checkpointFtCompatibilityIssues` properties have been removed from pyvmomi 7.0.
@@ -225,6 +225,10 @@ def main():
         ],
         supports_check_mode=True,
     )
+
+    if module._name in ('vmware_host_capability_facts', 'community.vmware.vmware_host_capability_facts'):
+        module.deprecate("The 'vmware_host_capability_facts' module has been renamed to 'vmware_host_capability_info'",
+                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     host_capability_manager = CapabilityFactsManager(module)
     module.exit_json(changed=False,

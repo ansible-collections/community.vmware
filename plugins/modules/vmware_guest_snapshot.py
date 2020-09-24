@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -37,7 +34,6 @@ options:
      - If set to C(revert) and snapshot absent, then no changes are made.
      - If set to C(remove_all) and snapshot(s) present, then all snapshot(s) will be removed.
      - If set to C(remove_all) and snapshot(s) absent, then no changes are made.
-     required: True
      choices: ['present', 'absent', 'revert', 'remove_all']
      default: 'present'
      type: str
@@ -136,7 +132,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
   - name: Create a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -149,7 +145,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -161,7 +157,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Revert to a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -173,7 +169,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove all snapshots of a VM
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -184,7 +180,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove all snapshots of a VM using MoID
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -195,7 +191,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Take snapshot of a VM using quiesce and memory flag on
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -209,7 +205,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Remove a snapshot and snapshot subtree
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -222,7 +218,7 @@ EXAMPLES = '''
     delegate_to: localhost
 
   - name: Rename a snapshot
-    vmware_guest_snapshot:
+    community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

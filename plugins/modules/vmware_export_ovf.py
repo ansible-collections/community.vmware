@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = r'''
 ---
@@ -48,9 +45,9 @@ options:
   folder:
     description:
     - Destination folder, absolute path to find the specified guest.
-    - The folder should include the datacenter. ESX's datacenter is ha-datacenter.
+    - The folder should include the datacenter. ESX datacenter is ha-datacenter.
     - This parameter is case sensitive.
-    - 'If multiple machines are found with same name, this parameter is used to identify
+    - 'If multiple machines are found with same name, this parameter is used to identify'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
@@ -85,7 +82,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- vmware_export_ovf:
+- community.vmware.vmware_export_ovf:
     validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -275,10 +272,10 @@ class VMwareExportVmOvf(PyVmomi):
                             ovf_file.size = current_bytes_written
                             ovf_files.append(ovf_file)
                     break
-                elif http_nfc_lease.state == vim.HttpNfcLease.State.initializing:
+                if http_nfc_lease.state == vim.HttpNfcLease.State.initializing:
                     sleep(2)
                     continue
-                elif http_nfc_lease.state == vim.HttpNfcLease.State.error:
+                if http_nfc_lease.state == vim.HttpNfcLease.State.error:
                     lease_updater.stop()
                     self.module.fail_json(msg='Get HTTP NFC lease error %s.' % http_nfc_lease.state.error[0].fault)
 

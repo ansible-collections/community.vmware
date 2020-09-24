@@ -7,12 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 
 DOCUMENTATION = '''
 ---
@@ -81,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather VMware tools info installed in VM specified by uuid
-  vmware_guest_tools_info:
+  community.vmware.vmware_guest_tools_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -91,7 +85,7 @@ EXAMPLES = '''
   register: vmtools_info
 
 - name: Gather VMware tools info installed in VM specified by name
-  vmware_guest_tools_info:
+  community.vmware.vmware_guest_tools_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

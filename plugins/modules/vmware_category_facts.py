@@ -19,9 +19,9 @@ DOCUMENTATION = r'''
 ---
 module: vmware_category_facts
 deprecated:
-  removed_in: '2.13'
-  why: Deprecated in favour of C(_info) module.
-  alternative: Use M(vmware_category_info) instead.
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_category_info) module.
+  alternative: Use M(community.vmware.vmware_category_info) instead.
 short_description: Gather facts about VMware tag categories
 description:
 - This module can be used to gather facts about VMware tag categories.
@@ -42,7 +42,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather facts about tag categories
-  vmware_category_facts:
+  community.vmware.vmware_category_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -50,7 +50,7 @@ EXAMPLES = r'''
   register: all_tag_category_facts
 
 - name: Gather category id from given tag category
-  vmware_category_facts:
+  community.vmware.vmware_category_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

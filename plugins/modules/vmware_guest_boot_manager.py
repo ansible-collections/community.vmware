@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -54,6 +49,7 @@ options:
      - List of the boot devices.
      default: []
      type: list
+     elements: str
    name_match:
      description:
      - If multiple virtual machines matching the name, use the first or last found.
@@ -100,7 +96,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Change virtual machine's boot order and related parameters
-  vmware_guest_boot_manager:
+  community.vmware.vmware_guest_boot_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -120,7 +116,7 @@ EXAMPLES = r'''
   register: vm_boot_order
 
 - name: Change virtual machine's boot order using Virtual Machine MoID
-  vmware_guest_boot_manager:
+  community.vmware.vmware_guest_boot_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -366,6 +362,7 @@ def main():
         boot_order=dict(
             type='list',
             default=[],
+            elements='str',
         ),
         name_match=dict(
             choices=['first', 'last'],

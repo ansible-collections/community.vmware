@@ -7,12 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 
 DOCUMENTATION = r'''
 ---
@@ -65,14 +59,14 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather information about all datacenters
-  vmware_datacenter_info:
+  community.vmware.vmware_datacenter_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
 
 - name: Gather information about a particular datacenter
-  vmware_datacenter_info:
+  community.vmware.vmware_datacenter_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -80,7 +74,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather information about a particular datacenter
-  vmware_datacenter_info:
+  community.vmware.vmware_datacenter_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -89,7 +83,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather vSphere schema information
-  vmware_datacenter_info:
+  community.vmware.vmware_datacenter_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

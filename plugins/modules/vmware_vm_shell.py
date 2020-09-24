@@ -8,11 +8,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -92,6 +87,7 @@ options:
       description:
       - Comma separated list of environment variable, specified in the guest OS notation.
       type: list
+      elements: str
     vm_shell_cwd:
       description:
       - The current working directory of the application from which it will be run.
@@ -114,7 +110,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Run command inside a virtual machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -133,7 +129,7 @@ EXAMPLES = r'''
   register: shell_command_output
 
 - name: Run command inside a virtual machine with wait and timeout
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -150,7 +146,7 @@ EXAMPLES = r'''
   register: shell_command_with_wait_timeout
 
 - name: Change user password in the guest machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -164,7 +160,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Change hostname of guest machine
-  vmware_vm_shell:
+  community.vmware.vmware_vm_shell:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -347,7 +343,7 @@ def main():
             vm_password=dict(type='str', no_log=True, required=True),
             vm_shell=dict(type='str', required=True),
             vm_shell_args=dict(default=" ", type='str'),
-            vm_shell_env=dict(type='list'),
+            vm_shell_env=dict(type='list', elements='str'),
             vm_shell_cwd=dict(type='str'),
             wait_for_process=dict(type='bool', default=False),
             timeout=dict(type='int', default=3600),

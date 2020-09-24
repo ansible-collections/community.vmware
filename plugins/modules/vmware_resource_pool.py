@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -107,7 +104,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Add resource pool to vCenter
-  vmware_resource_pool:
+  community.vmware.vmware_resource_pool:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

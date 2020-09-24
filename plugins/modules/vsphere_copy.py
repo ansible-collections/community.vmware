@@ -7,14 +7,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vsphere_copy
 short_description: Copy a file to a VMware datastore
@@ -32,6 +26,7 @@ options:
       - The file to push to vCenter.
     required: true
     type: str
+    aliases: [ name ]
   datacenter:
     description:
       - The datacenter on the vCenter server that holds the datastore.
@@ -47,6 +42,7 @@ options:
       - The file to push to the datastore.
     required: true
     type: str
+    aliases: [ dest ]
   timeout:
     description:
       - The timeout in seconds for the upload to the datastore.
@@ -64,7 +60,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Copy file to datastore using delegate_to
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -75,7 +71,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Copy file to datastore when datacenter is inside folder called devel
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -86,7 +82,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Copy file to datastore using other_system
-  vsphere_copy:
+  community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -145,9 +141,9 @@ def main():
     )
 
     if module.params.get('host'):
-        module.deprecate("The 'host' option is being replaced by 'hostname'", version='2.12')
+        module.deprecate("The 'host' option is being replaced by 'hostname'", version='2.0.0', collection_name='community.vmware')
     if module.params.get('login'):
-        module.deprecate("The 'login' option is being replaced by 'username'", version='2.12')
+        module.deprecate("The 'login' option is being replaced by 'username'", version='2.0.0', collection_name='community.vmware')
 
     hostname = module.params['hostname']
     username = module.params['username']

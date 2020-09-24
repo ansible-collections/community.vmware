@@ -55,38 +55,116 @@
 - <<: *ensure_vc_cluster_data
   name: Ensure info is gathered for the given cluster in check mode
 
-- when: vcsim is not defined
-  block:
-  - import_role:
-      name: prepare_vmware_tests
-    vars:
-      setup_category: true
-      # Temporarily disabled
-      # setup_tag: true
+- name: Gather info about all clusters in the given datacenter with properties
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    datacenter: "{{ dc1 }}"
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
+  register: all_cluster_result
 
-  # - name: Apply tag to cluster
-  #   vmware_tag_manager:
-  #     hostname: "{{ vcenter_hostname }}"
-  #     username: "{{ vcenter_username }}"
-  #     password: "{{ vcenter_password }}"
-  #     validate_certs: no
-  #     tag_names:
-  #       - '{{ cluster_category }}:{{ cluster_tag }}'
-  #     state: present
-  #     object_name: '{{ ccr1 }}'
-  #     object_type: ClusterComputeResource
+- name: Ensure info are gathered for all clusters with properteis
+  assert:
+    that:
+      - all_cluster_result.clusters
+      - all_cluster_result.clusters[item].name == item
+      - all_cluster_result.clusters[item].configuration.dasConfig.enabled is defined
+      - all_cluster_result.clusters[item].summary.totalCpu is defined
+      - not all_cluster_result.changed
+  loop: "{{ all_cluster_result.clusters.keys() }}"
 
-  - name: Get info about cluster
-    vmware_cluster_info:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: no
-      show_tag: True
-      cluster_name: "{{ ccr1 }}"
-    register: cluster_info
+- name: Gather info about the given cluster with properties
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    cluster_name: "{{ ccr1 }}"
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
+  register: cluster_result
 
-  - assert:
-      that:
-        - cluster_info is defined
-        #- cluster_info.clusters[ccr1].tags is defined
+- name: Ensure info are gathered for the given cluster with properties
+  assert:
+    that:
+      - cluster_result.clusters
+      - cluster_result.clusters[item].name == item
+      - cluster_result.clusters[item].configuration.dasConfig.enabled is defined
+      - cluster_result.clusters[item].summary.totalCpu is defined
+      - not cluster_result.changed
+  loop: "{{ cluster_result.clusters.keys() }}"
+
+# Disabled until we get a fix for https://github.com/ansible-collections/vmware/issues/301
+#- when: vcsim is not defined
+#  block:
+#  - import_role:
+#      name: prepare_vmware_tests
+#    vars:
+#      setup_category: true
+#      setup_tag: true
+#
+#  - name: Apply tag to cluster
+#    vmware_tag_manager:
+#      hostname: "{{ vcenter_hostname }}"
+#      username: "{{ vcenter_username }}"
+#      password: "{{ vcenter_password }}"
+#      validate_certs: no
+#      tag_names:
+#        - '{{ cluster_category }}:{{ cluster_tag }}'
+#      state: present
+#      object_name: '{{ ccr1 }}'
+#      object_type: ClusterComputeResource
+#
+#  - name: Get info about cluster
+#    vmware_cluster_info:
+#      hostname: "{{ vcenter_hostname }}"
+#      username: "{{ vcenter_username }}"
+#      password: "{{ vcenter_password }}"
+#      validate_certs: no
+#      show_tag: True
+#      cluster_name: "{{ ccr1 }}"
+#    register: cluster_info
+#
+#  - assert:
+#      that:
+#        - cluster_info is defined
+#        - cluster_info.clusters[ccr1].tags is defined
+
+- name: "Prepare a cluster name with character to be URL-encoded"
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster/\%'
+    state: present
+  register: prepare_cluster_url_encoded_result
+
+- assert:
+    that:
+      - prepare_cluster_url_encoded_result.changed is sameas true
+
+- name: "Gather information about all datacenter"
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+  register: all_cluster_result
+
+- name: "Ensure URL-encoded cluster name"
+  assert:
+    that:
+      - all_cluster_result.clusters['Cluster/\%']
+

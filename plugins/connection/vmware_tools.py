@@ -115,7 +115,7 @@ DOCUMENTATION = '''
           - VM path absolute to the connection.
           - "vCenter Example: C(Datacenter/vm/Discovered virtual machine/testVM)."
           - "ESXi Host Example: C(ha-datacenter/vm/testVM)."
-          - Must include VM name, appended to 'folder' as would be passed to M(vmware_guest).
+          - Must include VM name, appended to 'folder' as would be passed to M(community.vmware.vmware_guest).
           - Needs to include I(vm) between the Datacenter and the rest of the VM path.
           - Datacenter default value for ESXi server is C(ha-datacenter).
           - Folder I(vm) is not visible in the vSphere Web Client but necessary for VMware API to work.
@@ -165,7 +165,7 @@ DOCUMENTATION = '''
             - name: ansible_vmware_tools_executable
 '''
 
-EXAMPLES = r'''
+example = r'''
 # example vars.yml
 ---
 ansible_connection: vmware_tools

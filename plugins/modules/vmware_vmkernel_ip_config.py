@@ -7,9 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = '''
 ---
@@ -50,7 +47,7 @@ EXAMPLES = '''
 # Example command from Ansible Playbook
 
 - name: Configure IP address on ESX host
-  vmware_vmkernel_ip_config:
+  community.vmware.vmware_vmkernel_ip_config:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'

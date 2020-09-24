@@ -9,13 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vswitch
 short_description: Manage a VMware Standard Switch to an ESXi host.
@@ -45,6 +39,7 @@ options:
     aliases: [ nic_name ]
     default: []
     type: list
+    elements: str
   number_of_ports:
     description:
     - Number of port to configure on vSwitch.
@@ -71,9 +66,9 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add a VMware vSwitch
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -83,7 +78,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch without any physical NIC attached
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -92,7 +87,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch with multiple NICs
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -104,7 +99,7 @@ EXAMPLES = '''
   delegate_to: localhost
 
 - name: Add a VMware vSwitch to a specific host system
-  vmware_vswitch:
+  community.vmware.vmware_vswitch:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -115,7 +110,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r"""
 result:
     description: information about performed operation
     returned: always
@@ -395,7 +390,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
         switch=dict(type='str', required=True, aliases=['switch_name']),
-        nics=dict(type='list', aliases=['nic_name'], default=[]),
+        nics=dict(type='list', aliases=['nic_name'], default=[], elements='str'),
         number_of_ports=dict(type='int', default=128),
         mtu=dict(type='int', default=1500),
         state=dict(type='str', default='present', choices=['absent', 'present'])),

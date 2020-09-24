@@ -9,12 +9,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_dns
@@ -58,10 +52,12 @@ options:
     - A list of DNS servers to be used.
     - The order of the DNS servers is important as they are used consecutively in order.
     type: list
+    elements: str
   search_domains:
     description:
     - A list of domains to be searched through by the resolver.
     type: list
+    elements: str
   verbose:
     description:
     - Verbose output of the DNS server configuration change.
@@ -87,7 +83,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Configure DNS for an ESXi host
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -104,7 +100,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure DNS for all ESXi hosts of a cluster
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -120,7 +116,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configure DNS via DHCP for an ESXi host
-  vmware_host_dns:
+  community.vmware.vmware_host_dns:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -440,8 +436,8 @@ def main():
         device=dict(type='str'),
         host_name=dict(required=False, type='str'),
         domain=dict(required=False, type='str'),
-        dns_servers=dict(required=False, type='list', default=None),
-        search_domains=dict(required=False, type='list', default=None),
+        dns_servers=dict(required=False, type='list', default=None, elements='str'),
+        search_domains=dict(required=False, type='list', default=None, elements='str'),
         esxi_hostname=dict(required=False, type='str'),
         cluster_name=dict(required=False, type='str'),
         verbose=dict(type='bool', default=False, required=False)
@@ -454,12 +450,7 @@ def main():
         ],
         mutually_exclusive=[
             ['cluster_name', 'host_name'],
-            ['cluster_name', 'esxi_host_name'],
-            ['static', 'device'],
-            ['dhcp', 'host_name'],
-            ['dhcp', 'domain'],
-            ['dhcp', 'dns_servers'],
-            ['dhcp', 'search_domains'],
+            ['cluster_name', 'esxi_hostname'],
         ],
         supports_check_mode=True
     )

@@ -16,14 +16,12 @@
           hostnames:
             - 'skip_undefined_empty_none_var'
             - 'config.name + "_" + runtime.powerState'
-
     - name: Test properties option are populate
       assert:
         that:
           - "'config.name' in test_host.value"
           - "'runtime.powerState' in test_host.value"
           - "'name' not in test_host.value"
-
     - name: Test hostnames option
       assert:
         that:
@@ -38,7 +36,6 @@
           strict: False
           with_nested_properties: False
           properties: ['all']
-
     - name: Test properties(all) option are populate
       assert:
         that:
@@ -55,40 +52,37 @@
           with_nested_properties: False
           properties:
             - config
-
     - name: Test properties(config) option are populate
       assert:
         that:
           - "'name' not in test_host.value"
           - "'config.name' in test_host.value"
 
-    # TODO: Uncomment once with_path is included
-    # - name: Inventory with 'with_path' option
-    #   include_tasks: build_inventory.yml
-    #   vars:
-    #     content: |-
-    #       plugin: community.vmware.vmware_vm_inventory
-    #       strict: False
-    #       with_path: True
 
-    # - name: Test path option
-    #   assert:
-    #     that:
-    #       - "'path' in test_host.value"
+    - name: Inventory with 'with_path' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_path: True
+    - name: Test path option
+      assert:
+        that:
+          - "'path' in test_host.value"
 
-    # - name: Inventory with rooted 'with_path' option
-    #   include_tasks: build_inventory.yml
-    #   vars:
-    #     content: |-
-    #       plugin: community.vmware.vmware_vm_inventory
-    #       strict: False
-    #       with_path: my_center
-
-    # - name: Test path option with rooted path
-    #   assert:
-    #     that:
-    #       - "'path' in test_host.value"
-    #       - "'my_center' in test_host.value.group_names"
+    - name: Inventory with rooted 'with_path' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_path: my_center
+    - name: Test path option with rooted path
+      assert:
+        that:
+          - "'path' in test_host.value"
+          - "'my_center' in test_host.value.group_names"
 
     - name: Inventory 'with_nested_properties' option
       include_tasks: build_inventory.yml
@@ -99,33 +93,30 @@
           properties:
             - config.name
             - config.uuid
-
           with_nested_properties: True
-
     - name: Test 'with_nested_properties' option
       assert:
         that:
           - test_host.value.config.name is defined
 
-    # TODO: Uncomment once sanitize_property_name is included
-    # - name: Inventory 'sanitize_property_name' option
-    #   include_tasks: build_inventory.yml
-    #   vars:
-    #     content: |-
-    #       plugin: community.vmware.vmware_vm_inventory
-    #       strict: False
-    #       properties:
-    #         - config.name
-    #         - config.uuid
-    #         - runtime.powerState
 
-    #       with_nested_properties: False
-    #       with_sanitized_property_name: True
+    - name: Inventory 'sanitize_property_name' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          properties:
+            - config.name
+            - config.uuid
+            - runtime.powerState
 
-    # - name: Test 'with_nested_properties' option
-    #   assert:
-    #     that:
-    #       - test_host.value.runtime_power_state is defined
+          with_nested_properties: False
+          with_sanitized_property_name: True
+    - name: Test 'with_nested_properties' option
+      assert:
+        that:
+          - test_host.value.runtime_power_state is defined
 
 
     - name: Inventory 'Constructable' options - keyed_groups
@@ -145,11 +136,64 @@
               separator: ''
             - key: 'runtime.powerState'
               separator: ''
-
     - name: Test 'Constructable' options - keyed_groups
       assert:
         that:
           - "'poweredOff' in test_host.value.group_names"
+
+
+    - name: Inventory filters options
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.name
+            - runtime.powerState
+          filters:
+            - runtime.powerState == "poweredOff"
+          hostnames:
+            - config.name
+    - name: Test filters options
+      assert:
+        that:
+          - "'DC0_H0_VM0' in test_host.value.groups.all"
+
+
+    - name: Inventory 'Constructable' options - compose, groups
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.uuid
+            - config.guestId
+            - runtime.powerState
+            - config.name
+          compose:
+            ansible_host: 'config.name'
+            composed_var: 'config.name'
+          groups:
+            VMs: true
+          keyed_groups:
+            - key: 'config.guestId'
+              separator: ''
+            - key: 'runtime.powerState'
+              separator: ''
+    - name: Test 'Constructable' options - compose, groups
+      assert:
+        that:
+          - "'VMs' in test_host.value.group_names"
+          - "'poweredOff' in test_host.value.group_names"
+          - "'ansible_host' in test_host.value"
+          - "'composed_var' in test_host.value"
+          - test_host.value.ansible_host == test_host.value.config.name
+          - test_host.value.composed_var == test_host.value.config.name
+
 
     - name: Inventory 'with_tag' option
       include_tasks: build_inventory.yml
@@ -164,9 +208,124 @@
             - config.uuid
             - config.guestId
             - runtime.powerState
-
     - name: Test 'with_tags' options
       assert:
         that:
           - "'tags' in test_host.value"
       when: not (vcsim is defined)
+
+
+    - name: Inventory with binary values (https://github.com/ansible/awx/issues/7052)
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: True
+          properties:
+            - config.vmxConfigChecksum
+            - config.name
+            - summary.runtime.powerState
+          hostnames:
+            - config.name
+    - name: Test filters options
+      assert:
+        that:
+          - "'DC0_H0_VM0' in test_host.value.groups.all"
+          - test_host.value.config.name is defined
+          - test_host.value.config.vmxConfigChecksum is defined
+
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0
+    - name: Test 'resources' options
+      assert:
+        that:
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0
+                    - DC0_C0_NOT_EXIST
+    - name: Test 'resources' options with 'DC0_C0' and 'DC0_C0_NOT_EXIST'
+      assert:
+        that:
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0_NOT_EXIST
+    - name: Test 'resources' options with 'DC0_C0' and 'DC0_C0_NOT_EXIST' using two 'datacenter'
+      assert:
+        that:
+          - "'DC0_C0_RP0_VM0' in hostvars"
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          with_nested_properties: False
+          hostnames:
+            - config.name
+          properties:
+            - config.name
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0_NOT_EXIST
+    - name: Test 'resources' options with 'DC0_C0_NOT_EXIST'
+      assert:
+        that:
+          - hostvars | length == 0

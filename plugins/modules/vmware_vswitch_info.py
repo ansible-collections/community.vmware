@@ -6,11 +6,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -47,7 +42,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather vswitch info about all ESXi Host in given Cluster
-  vmware_vswitch_info:
+  community.vmware.vmware_vswitch_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -56,7 +51,7 @@ EXAMPLES = r'''
   register: all_hosts_vswitch_info
 
 - name: Gather firewall info about ESXi Host
-  vmware_vswitch_info:
+  community.vmware.vmware_vswitch_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -97,6 +92,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 
 class VswitchInfoManager(PyVmomi):
     """Class to gather vSwitch info"""
+
     def __init__(self, module):
         super(VswitchInfoManager, self).__init__(module)
         cluster_name = self.params.get('cluster_name', None)

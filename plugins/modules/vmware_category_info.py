@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -38,7 +33,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about tag categories
-  vmware_category_info:
+  community.vmware.vmware_category_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -46,7 +41,7 @@ EXAMPLES = r'''
   register: all_tag_category_info
 
 - name: Gather category id from given tag category
-  vmware_category_info:
+  community.vmware.vmware_category_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

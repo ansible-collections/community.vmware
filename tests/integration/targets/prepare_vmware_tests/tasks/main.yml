@@ -22,4 +22,4 @@
     include_tasks: init_real_lab.yml
 
 - when: vcsim is defined
-  include_tasks: init_vcsim.yml
+  include_tasks: init_vcsim_with_{{ vcsim_with }}.yml

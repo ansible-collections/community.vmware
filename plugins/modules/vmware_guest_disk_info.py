@@ -9,11 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = '''
 ---
@@ -80,7 +75,7 @@ extends_documentation_fragment:
 
 EXAMPLES = '''
 - name: Gather disk info from virtual machine using UUID
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -91,7 +86,7 @@ EXAMPLES = '''
   register: disk_info
 
 - name: Gather disk info from virtual machine using name
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -102,7 +97,7 @@ EXAMPLES = '''
   register: disk_info
 
 - name: Gather disk info from virtual machine using moid
-  vmware_guest_disk_info:
+  community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

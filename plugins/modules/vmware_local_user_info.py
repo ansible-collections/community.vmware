@@ -8,13 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
-
 DOCUMENTATION = '''
 ---
 module: vmware_local_user_info
@@ -38,7 +31,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather info about all Users on given ESXi host system
-  vmware_local_user_info:
+  community.vmware.vmware_local_user_info:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
@@ -83,6 +76,7 @@ from ansible.module_utils._text import to_native
 
 class VMwareUserInfoManager(PyVmomi):
     """Class to manage local user info"""
+
     def __init__(self, module):
         super(VMwareUserInfoManager, self).__init__(module)
 

@@ -11,6 +11,9 @@
 #   * more jq examples
 #   * optional folder hierarchy
 
+from __future__ import (absolute_import, division, print_function)
+__metaclass__ = type
+
 """
 $ jq '._meta.hostvars[].config' data.json | head
 {
@@ -25,7 +28,6 @@ $ jq '._meta.hostvars[].config' data.json | head
   "firmware": "bios",
 """
 
-from __future__ import print_function
 
 import atexit
 import datetime
@@ -347,7 +349,7 @@ class VMWareInventory(object):
         if self.validate_certs and hasattr(ssl, 'SSLContext'):
             context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
             context.verify_mode = ssl.CERT_REQUIRED
-            context.check_hostname = True
+            context.check_hostname = True  # noqa  # pylint: disable=assigning-non-slot
             kwargs['sslContext'] = context
         elif self.validate_certs and not hasattr(ssl, 'SSLContext'):
             sys.exit('pyVim does not support changing verification mode with python < 2.7.9. Either update '
@@ -355,7 +357,7 @@ class VMWareInventory(object):
         elif not self.validate_certs and hasattr(ssl, 'SSLContext'):
             context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
             context.verify_mode = ssl.CERT_NONE
-            context.check_hostname = False
+            context.check_hostname = False  # noqa  # pylint: disable=assigning-non-slot
             kwargs['sslContext'] = context
         elif not self.validate_certs and not hasattr(ssl, 'SSLContext'):
             # Python 2.7.9 < or RHEL/CentOS 7.4 <
@@ -426,7 +428,7 @@ class VMWareInventory(object):
 
         return instance_tuples
 
-    def instances_to_inventory(self, instances):
+    def instances_to_inventory(self, instances):  # noqa  # pylint: disable=too-complex
         ''' Convert a list of vm objects into a json compliant inventory '''
         self.debugl('re-indexing instances based on ini settings')
         inventory = VMWareInventory._empty_inventory()
@@ -550,7 +552,7 @@ class VMWareInventory(object):
                 self.debugl(e)
             if not newkey:
                 continue
-            elif dtype == 'integer':
+            if dtype == 'integer':
                 newkey = int(newkey)
             elif dtype == 'boolean':
                 if newkey.lower() == 'false':
@@ -562,7 +564,7 @@ class VMWareInventory(object):
             mapping[k] = newkey
         return mapping
 
-    def facts_from_proplist(self, vm):
+    def facts_from_proplist(self, vm):  # noqa  # pylint: disable=too-complex
         '''Get specific properties instead of serializing everything'''
 
         rdata = {}
@@ -685,7 +687,7 @@ class VMWareInventory(object):
 
         return rdata
 
-    def _process_object_types(self, vobj, thisvm=None, inkey='', level=0):
+    def _process_object_types(self, vobj, thisvm=None, inkey='', level=0):  # noqa  # pylint: disable=too-complex
         ''' Serialize an object '''
         rdata = {}
 

@@ -8,12 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_dns_info
@@ -46,7 +40,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather DNS info about all ESXi Hosts in given Cluster
-  vmware_host_dns_info:
+  community.vmware.vmware_host_dns_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -54,7 +48,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Gather DNS info about ESXi Host
-  vmware_host_dns_info:
+  community.vmware.vmware_host_dns_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,8 +97,8 @@ class VmwareDnsInfoManager(PyVmomi):
             host_info['virtual_nic_device'] = dns_config.virtualNicDevice
             host_info['host_name'] = dns_config.hostName
             host_info['domain_name'] = dns_config.domainName
-            host_info['ip_address'] = [ip for ip in dns_config.address]
-            host_info['search_domain'] = [domain for domain in dns_config.searchDomain]
+            host_info['ip_address'] = list(dns_config.address)
+            host_info['search_domain'] = list(dns_config.searchDomain)
             hosts_info[host.name] = host_info
         return hosts_info
 
