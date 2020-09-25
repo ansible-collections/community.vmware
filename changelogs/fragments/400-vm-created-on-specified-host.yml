@@ -1,0 +1,2 @@
+minor_changes:
+  - `vmware_guest` takes now into account the `esxi_hostname` argument to create the vm on the right host according to the doc(https://github.com/ansible-collections/vmware/pull/400)
