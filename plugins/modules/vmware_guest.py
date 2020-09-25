@@ -3157,10 +3157,14 @@ class PyVmomiHelper(PyVmomi):
                                                         snapshotDirectory=None,
                                                         suspendDirectory=None,
                                                         vmPathName="[" + datastore_name + "]")
+                esx_host = None
+                # Only select specific host when ESXi hostname is provided
+                if self.params['esxi_hostname']:
+                    esx_host = self.select_host()
 
                 clone_method = 'CreateVM_Task'
                 try:
-                    task = destfolder.CreateVM_Task(config=self.configspec, pool=resource_pool)
+                    task = destfolder.CreateVM_Task(config=self.configspec, pool=resource_pool, host=esx_host)
                 except vmodl.fault.InvalidRequest as e:
                     self.module.fail_json(msg="Failed to create virtual machine due to invalid configuration "
                                               "parameter %s" % to_native(e.msg))
