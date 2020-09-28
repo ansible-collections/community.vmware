@@ -13,7 +13,7 @@ short_description: Gather iSCSI configuration information of ESXi host
 author:
   - sky-joker (@sky-joker)
 description:
-  - This module can be used to gather information about iSCSI configuration of ESXi host
+  - This module can be used to gather information about the iSCSI configuration of the ESXi host.
 requirements:
   - python >= 2.7
   - PyVmomi
