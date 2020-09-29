@@ -53,6 +53,22 @@
         that:
           - tag_manager_ops.changed
 
+    - name: Get tags from a virtual machine
+      vmware_guest_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        name: "{{ vm_name }}"
+      register: r
+
+    - name: Check if tag information is available
+      assert:
+        that:
+          - not r.changed
+          - r['instance']['tags'] is defined
+          - "{{ Tag_Name[0] in r['instance']['tags'] }}"
+
     - <<: *tag_assign
       name: Add tags to a virtual machine again
 

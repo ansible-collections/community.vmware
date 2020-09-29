@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_guest_info - Fix get tags API call (https://github.com/ansible-collections/community.vmware/issues/403).

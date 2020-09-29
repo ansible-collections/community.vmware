@@ -293,10 +293,11 @@ def main():
                                          " - https://code.vmware.com/web/sdk/60/vcloudsuite-python")
 
                 vm_rest_client = VmwareTag(module)
+                dynamic_obj = DynamicID(type='VirtualMachine', id=vm._moId)
                 instance.update(
                     tags=vm_rest_client.get_vm_tags(vm_rest_client.tag_service,
                                                     vm_rest_client.tag_association_svc,
-                                                    vm_mid=vm._moId)
+                                                    vm_mid=dynamic_obj)
                 )
             module.exit_json(instance=instance)
         except Exception as exc:
