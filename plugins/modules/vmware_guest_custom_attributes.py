@@ -199,8 +199,10 @@ class VmAttributeManager(PyVmomi):
 
     def check_exists(self, field):
         for x in self.custom_field_mgr:
-            if x.name == field:
-                return x
+            # The custom attribute should be either global (managedObjectType == None) or VM specific
+            if x.managedObjectType is None or x.managedObjectType == vim.VirtualMachine:
+                if x.name == field:
+                    return x
         return False
 
 
