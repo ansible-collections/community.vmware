@@ -426,3 +426,97 @@
     assert:
       that:
         - "{{ new_nic.network_info | length | int }} > 0"
+
+  # https://github.com/ansible-collections/community.vmware/issues/204
+  - name: "Change a dvpg with in same DVS(integration test for 204)"
+    block:
+      - name: "Prepare the integration test for 204"
+        vmware_dvs_portgroup:
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          switch_name: "{{ dvswitch1 }}"
+          portgroup_name: 204dvpg
+          num_ports: 8
+          portgroup_type: earlyBinding
+          vlan_id: 1
+          state: present
+        register: prepare_integration_test_204_result
+
+      - assert:
+          that:
+            - prepare_integration_test_204_result.changed is sameas true
+
+      - name: "Change a port group to a dvport group"
+        vmware_guest_network:
+          validate_certs: False
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          name: test_vm1
+          networks:
+            - name: "{{ dvpg1 }}"
+              label: Network adapter 1
+              state: present
+        register: change_port_group_result
+
+      - assert:
+          that:
+            - change_port_group_result.changed is sameas true
+
+      - name: "Change a dvport group with in same DVS"
+        vmware_guest_network:
+          validate_certs: False
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          name: test_vm1
+          networks:
+            - name: 204dvpg
+              label: Network adapter 1
+              state: present
+        register: change_dvport_group_result
+
+      - assert:
+          that:
+            - change_dvport_group_result.changed is sameas true
+
+      - name: "Revert a dvport group to port group"
+        vmware_guest_network:
+          validate_certs: False
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          name: test_vm1
+          networks:
+            - name: VM Network
+              label: Network adapter 1
+              state: present
+        register: revert_dvport_group_result
+
+      - assert:
+          that:
+            - revert_dvport_group_result.changed is sameas true
+
+      - name: "Delete a dvport group for 204 integration test"
+        vmware_dvs_portgroup:
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          validate_certs: False
+          switch_name: "{{ dvswitch1 }}"
+          portgroup_name: 204dvpg
+          num_ports: 8
+          portgroup_type: earlyBinding
+          vlan_id: 1
+          state: absent
+        register: delete_integration_test_204_result
+
+      - assert:
+          that:
+            - delete_integration_test_204_result.changed is sameas true
+

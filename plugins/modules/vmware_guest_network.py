@@ -428,32 +428,42 @@ class PyVmomiHelper(PyVmomi):
         nic_info_lst = []
         nics = [nic for nic in vm_obj.config.hardware.device if isinstance(nic, vim.vm.device.VirtualEthernetCard)]
         for nic in nics:
+            # common items of nic parameters
             d_item = dict(
                 mac_address=nic.macAddress,
                 label=nic.deviceInfo.label,
-                network_name=nic.backing.network.name,
                 unit_number=nic.unitNumber,
                 wake_onlan=nic.wakeOnLanEnabled,
                 allow_guest_ctl=nic.connectable.allowGuestControl,
                 connected=nic.connectable.connected,
                 start_connected=nic.connectable.startConnected,
-                vlan_id=self._get_vlanid_from_network(nic.backing.network)
             )
+            # If a distributed port group specified
+            if isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo):
+                key = nic.backing.port.portgroupKey
+                for portgroup in vm_obj.network:
+                    if hasattr(portgroup, 'key') and portgroup.key == key:
+                        d_item['network_name'] = portgroup.name
+                        d_item['switch'] = portgroup.config.distributedVirtualSwitch.name
+                        break
+            # If an NSX-T port group specified
+            elif isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo):
+                d_item['network_name'] = nic.backing.opaqueNetworkId
+                d_item['switch'] = nic.backing.opaqueNetworkType
+            # If a port group specified
+            elif isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.NetworkBackingInfo):
+                d_item['network_name'] = nic.backing.network.name
+                d_item['vlan_id'] = self._get_vlanid_from_network(nic.backing.network)
+                if isinstance(nic.backing.network, vim.Network):
+                    for pg in vm_obj.runtime.host.config.network.portgroup:
+                        if pg.spec.name == nic.backing.network.name:
+                            d_item['switch'] = pg.spec.vswitchName
+                            break
+
             for k in self.nic_device_type:
                 if isinstance(nic, self.nic_device_type[k]):
                     d_item['device_type'] = k
                     break
-
-            if isinstance(nic.backing.network, vim.dvs.DistributedVirtualPortgroup):
-                d_item['switch'] = nic.backing.network.ConfigInfo.distributedVirtualSwitch.config.name
-            if isinstance(nic.backing.network, vim.OpaqueNetwork):
-                d_item['switch'] = nic.backing.network.summary.opaqueNetworkId
-
-            if isinstance(nic.backing.network, vim.Network):
-                for pg in vm_obj.runtime.host.config.network.portgroup:
-                    if pg.spec.name == nic.backing.network.name:
-                        d_item['switch'] = pg.spec.vswitchName
-                        break
 
             nic_info_lst.append(d_item)
 
@@ -559,12 +569,12 @@ class PyVmomiHelper(PyVmomi):
                     switchUuid=network_obj.config.distributedVirtualSwitch.uuid
                 )
             )
-        if isinstance(network_obj, vim.OpaqueNetwork):
+        elif isinstance(network_obj, vim.OpaqueNetwork):
             rv = vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo(
                 opaqueNetworkType='nsx.LogicalSwitch',
                 opaqueNetworkId=network_obj.summary.opaqueNetworkId
             )
-        if isinstance(network_obj, vim.Network):
+        elif isinstance(network_obj, vim.Network):
             rv = vim.vm.device.VirtualEthernetCard.NetworkBackingInfo(
                 deviceName=network_obj.name,
                 network=network_obj
