@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_network - Fixed to port group changes to work properly and NSX-T port group supported(https://github.com/ansible-collections/community.vmware/pull/401).

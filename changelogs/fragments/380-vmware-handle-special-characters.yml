@@ -1,2 +1,0 @@
-bugfixes:
-  - "``module_utils/vmware.py`` handles an object name using special characters that URL-decoded(https://github.com/ansible-collections/vmware/pull/380)."
