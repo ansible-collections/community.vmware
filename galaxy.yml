@@ -8,13 +8,14 @@ name: vmware
 readme: README.md
 authors:
   - Ansible (https://github.com/ansible)
-description:
+description: The collection includes the VMware modules and plugins supported by Ansible VMware community to help the management of VMware infrastructure.
 license_file: LICENSE
 tags:
   - cloud
   - vmware
   - virtualization
 dependencies: {}
-repository: https://github.com/ansible-collections/vmware.git
-homepage: https://github.com/ansible-collections/vmware
-issues: https://github.com/ansible-collections/vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+documentation: https://docs.ansible.com/ansible/latest/collections/community/vmware/
+repository: https://github.com/ansible-collections/community.vmware
+homepage: https://github.com/ansible-collections/community.vmware
+issues: https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
