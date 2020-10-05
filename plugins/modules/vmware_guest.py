@@ -181,7 +181,7 @@ options:
             description:
             - The Virtual machine hardware versions.
             - Default is 10 (ESXi 5.5 and onwards).
-            - If value specified as C(latest), version is set to the most current virtual hardware supported on the host.
+            - If set to C(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - C(latest) is added in Ansible 2.10.
             - Please check VMware documentation for correct virtual machine hardware version.
             - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
@@ -191,8 +191,10 @@ options:
         virt_based_security:
             type: bool
             description:
-            - Enable Virtualization Based Security feature for Windows 10.
-            - Supported from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016.
+            - Enable Virtualization Based Security feature for Windows on ESXi 6.7 and later, from hardware version 14.
+            - Supported Guest OS are Windows 10 64 bit, Windows Server 2016, Windows Server 2019 and later.
+            - The firmware of virtual machine must be EFI.
+            - Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.
   guest_id:
     type: str
     description:
@@ -270,7 +272,8 @@ options:
             description:
             - Type of disk controller.
             - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas), C(paravirtual), C(sata) and C(nvme).
-            - C(nvme) support starts from hardware C(version) 13 and ESXi version 6.5.
+            - C(nvme) controller type support starts on ESXi 6.5 with VM hardware version C(version) 13.
+              Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.
             - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA CDROMs.
             - If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when C(cdrom) also set to C(sata) type.
         controller_number:
@@ -1815,31 +1818,16 @@ class PyVmomiHelper(PyVmomi):
                             pass
 
             if 'virt_based_security' in self.params['hardware']:
-                host_version = self.select_host().summary.config.product.version
-                if int(host_version.split('.')[0]) < 6 or (int(host_version.split('.')[0]) == 6 and int(host_version.split('.')[1]) < 7):
-                    self.module.fail_json(msg="ESXi version %s not support VBS." % host_version)
-                guest_ids = ['windows9_64Guest', 'windows9Server64Guest']
-                if vm_obj is None:
-                    guestid = self.configspec.guestId
-                else:
-                    guestid = vm_obj.summary.config.guestId
-                if guestid not in guest_ids:
-                    self.module.fail_json(msg="Guest '%s' not support VBS." % guestid)
-                if (vm_obj is None and int(self.configspec.version.split('-')[1]) >= 14) or \
-                        (vm_obj and int(vm_obj.config.version.split('-')[1]) >= 14 and (vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOff)):
+                virt_based_security_set = bool(self.params['hardware']['virt_based_security'])
+                if vm_obj is None or vm_obj.config.flags.vbsEnabled != virt_based_security_set:
                     self.configspec.flags = vim.vm.FlagInfo()
-                    self.configspec.flags.vbsEnabled = bool(self.params['hardware']['virt_based_security'])
-                    if bool(self.params['hardware']['virt_based_security']):
+                    self.configspec.flags.vbsEnabled = virt_based_security_set
+                    if virt_based_security_set:
                         self.configspec.flags.vvtdEnabled = True
                         self.configspec.nestedHVEnabled = True
-                        if (vm_obj is None and self.configspec.firmware == 'efi') or \
-                                (vm_obj and vm_obj.config.firmware == 'efi'):
-                            self.configspec.bootOptions = vim.vm.BootOptions()
-                            self.configspec.bootOptions.efiSecureBootEnabled = True
-                        else:
-                            self.module.fail_json(msg="Not support VBS when firmware is BIOS.")
-                    if vm_obj is None or self.configspec.flags.vbsEnabled != vm_obj.config.flags.vbsEnabled:
-                        self.change_detected = True
+                        self.configspec.bootOptions = vim.vm.BootOptions()
+                        self.configspec.bootOptions.efiSecureBootEnabled = True
+                    self.change_detected = True
 
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
@@ -2503,21 +2491,6 @@ class PyVmomiHelper(PyVmomi):
                 self.module.fail_json(msg="'disk.controller_number' value is invalid, valid value is from 0 to 3.")
             if ctl_type not in ['buslogic', 'paravirtual', 'lsilogic', 'lsilogicsas', 'sata', 'nvme']:
                 self.module.fail_json(msg="Disk controller type: '%s' is not supported or invalid." % disk_spec['controller_type'])
-            # nvme support starts from hardware version 13 on ESXi 6.5
-            if ctl_type == 'nvme':
-                if 'version' in self.params['hardware'] and self.params['hardware']['version'] < 13:
-                    self.module.fail_json(msg="Configured hardware version '%d' not support nvme controller."
-                                              % self.params['hardware']['version'])
-                elif self.params['esxi_hostname'] is not None:
-                    if not self.host_version_at_least(version=(6, 5, 0), host_name=self.params['esxi_hostname']):
-                        self.module.fail_json(msg="ESXi host '%s' version < 6.5.0, not support nvme controller."
-                                                  % self.params['esxi_hostname'])
-                elif vm_obj is not None:
-                    try:
-                        if int(vm_obj.config.version.split('-')[1]) < 13:
-                            self.module.fail_json(msg="VM hardware version < 13 not support nvme controller.")
-                    except ValueError:
-                        self.module.fail_json(msg="Failed to get VM hardware version to check if nvme is supported.")
 
             if len(controllers) != 0:
                 ctl_exist = False
