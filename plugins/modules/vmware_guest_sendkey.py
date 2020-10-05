@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_sendkey
 short_description: Send USB HID codes to the Virtual Machine's keyboard.
@@ -83,12 +83,20 @@ options:
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      type: list
      elements: str
+   sleep_time:
+     description:
+     - Sleep time in seconds between two keys or string sent to the virtual machine.
+     - API is faster than actual key or string send to virtual machine, this parameter allow to control
+       delay between keys and/or strings.
+     type: int
+     default: 0
+     version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Send list of keys to virtual machine
   community.vmware.vmware_guest_sendkey:
     validate_certs: no
@@ -133,7 +141,7 @@ EXAMPLES = '''
   register: keys_num_sent
 '''
 
-RETURN = """
+RETURN = r"""
 sendkey_info:
     description: display the keys and the number of keys sent to the virtual machine
     returned: always
@@ -152,6 +160,7 @@ sendkey_info:
     }
 """
 
+import time
 try:
     from pyVmomi import vim, vmodl
 except ImportError:
@@ -166,7 +175,6 @@ class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.change_detected = False
-        self.usb_scan_code_spec = vim.UsbScanCodeSpec()
         self.num_keys_send = 0
         # HID usage tables https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf
         # define valid characters and keys value, hex_code, key value and key modifier
@@ -297,9 +305,23 @@ class PyVmomiHelper(PyVmomi):
 
         return sendkey_facts
 
+    def send_key_events(self, vm_obj, key_queue, sleep_time=0):
+        """
+        Send USB HID Scan codes individually to prevent dropping or cobblering
+        """
+        send_keys = 0
+        for item in key_queue:
+            usb_spec = vim.UsbScanCodeSpec()
+            usb_spec.keyEvents.append(item)
+            send_keys += vm_obj.PutUsbScanCodes(usb_spec)
+            # Sleep in between key / string send event
+            time.sleep(sleep_time)
+        return send_keys
+
     def send_key_to_vm(self, vm_obj):
         key_event = None
         num_keys_returned = 0
+        key_queue = []
         if self.params['keys_send']:
             for specified_key in self.params['keys_send']:
                 key_found = False
@@ -308,7 +330,7 @@ class PyVmomiHelper(PyVmomi):
                             (not isinstance(keys[0], tuple) and specified_key == keys[0]):
                         hid_code, modifiers = self.get_hid_from_key(specified_key)
                         key_event = self.get_key_event(hid_code, modifiers)
-                        self.usb_scan_code_spec.keyEvents.append(key_event)
+                        key_queue.append(key_event)
                         self.num_keys_send += 1
                         key_found = True
                         break
@@ -323,7 +345,7 @@ class PyVmomiHelper(PyVmomi):
                     if (isinstance(keys[0], tuple) and char in keys[0]) or char == ' ':
                         hid_code, modifiers = self.get_hid_from_key(char)
                         key_event = self.get_key_event(hid_code, modifiers)
-                        self.usb_scan_code_spec.keyEvents.append(key_event)
+                        key_queue.append(key_event)
                         self.num_keys_send += 1
                         key_found = True
                         break
@@ -331,9 +353,9 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="string_send parameter: '%s' contains char: '%s' not supported."
                                               % (self.params['string_send'], char))
 
-        if self.usb_scan_code_spec.keyEvents:
+        if key_queue:
             try:
-                num_keys_returned = vm_obj.PutUsbScanCodes(self.usb_scan_code_spec)
+                num_keys_returned = self.send_key_events(vm_obj=vm_obj, key_queue=key_queue, sleep_time=self.module.params.get('sleep_time'))
                 self.change_detected = True
             except vmodl.RuntimeFault as e:
                 self.module.fail_json(msg="Failed to send key %s to virtual machine due to %s" % (key_event, to_native(e.msg)))
@@ -358,7 +380,8 @@ def main():
         esxi_hostname=dict(type='str'),
         cluster=dict(type='str'),
         keys_send=dict(type='list', default=[], elements='str'),
-        string_send=dict(type='str')
+        string_send=dict(type='str'),
+        sleep_time=dict(type='int', default=0),
     )
 
     module = AnsibleModule(
@@ -377,8 +400,7 @@ def main():
     result = pyv.send_key_to_vm(vm)
     if result['failed']:
         module.fail_json(**result)
-    else:
-        module.exit_json(**result)
+    module.exit_json(**result)
 
 
 if __name__ == '__main__':
