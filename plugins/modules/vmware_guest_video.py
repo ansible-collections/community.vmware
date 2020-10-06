@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_video
 short_description: Modify video card configurations of specified virtual machine in given vCenter infrastructure
@@ -101,7 +101,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Change video card settings of virtual machine
   community.vmware.vmware_guest_video:
     hostname: "{{ vcenter_hostname }}"
@@ -137,9 +137,21 @@ EXAMPLES = '''
     memory_3D_mb: 512
   delegate_to: localhost
   register: video_facts
+
+- name: Gather video card settings of virtual machine
+  community.vmware.vmware_guest_video:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: test-vm
+    gather_video_facts: false
+  delegate_to: localhost
+  register: video_facts
 '''
 
-RETURN = """
+RETURN = r"""
 video_status:
     description: metadata about the virtual machine's video card after managing them
     returned: always
@@ -209,7 +221,7 @@ class PyVmomiHelper(PyVmomi):
         video_card, video_card_facts = self.gather_video_card_facts(vm_obj)
         self.video_card_facts = video_card_facts
         if video_card is None:
-            self.module.fail_json(msg='Not get video card device of specified virtual machine.')
+            self.module.fail_json(msg='Unable to get video card device for the specified virtual machine.')
         video_spec = vim.vm.device.VirtualDeviceSpec()
         video_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
         video_spec.device = video_card
@@ -348,13 +360,14 @@ def main():
 
     vm_facts = pyv.gather_facts(vm)
     vm_power_state = vm_facts['hw_power_status'].lower()
+    gather_video_facts = module.params.get('gather_video_facts') or False
     if vm_power_state != 'poweredoff':
-        module.fail_json(msg='VM state should be poweredoff to reconfigure video card settings.')
+        if not gather_video_facts:
+            module.fail_json(msg='VM state should be poweredoff to reconfigure video card settings.')
     result = pyv.reconfigure_vm_video(vm_obj=vm)
     if result['failed']:
         module.fail_json(**result)
-    else:
-        module.exit_json(**result)
+    module.exit_json(**result)
 
 
 if __name__ == '__main__':

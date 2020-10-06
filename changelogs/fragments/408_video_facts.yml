@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_guest_video - gather facts for video devices even if the virtual machine is poweredoff (https://github.com/ansible-collections/community.vmware/issues/408).
