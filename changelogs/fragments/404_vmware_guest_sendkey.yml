@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_guest_sendkey - add sleep_time parameter to add delay in-between keys sent (https://github.com/ansible-collections/community.vmware/issues/404).
