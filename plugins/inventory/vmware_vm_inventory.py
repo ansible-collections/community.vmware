@@ -273,6 +273,29 @@ EXAMPLES = r'''
         - folder:
           - dev
           - prod
+
+# Use Category and it's relation with Tag
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.201.128
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    hostnames:
+    - 'config.name'
+    properties:
+    - 'config.name'
+    - 'config.guestId'
+    - 'guest.ipAddress'
+    - 'summary.runtime.powerState'
+    with_tags: True
+    keyed_groups:
+    - key: tag_category.OS
+      prefix: "vmware_tag_os_category_"
+      separator: ""
+    with_nested_properties: True
+    filters:
+    - "tag_category.OS is defined and 'Linux' in tag_category.OS"
 '''
 
 import ssl
@@ -620,7 +643,7 @@ def parse_vim_property(vim_prop):
     elif isinstance(vim_prop, list):
         return [parse_vim_property(x) for x in vim_prop]
 
-    elif prop_type in ['bool', 'int', 'NoneType']:
+    elif prop_type in ['bool', 'int', 'NoneType', 'dict']:
         return vim_prop
 
     elif prop_type in ['binary']:
@@ -733,12 +756,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         tags_info = dict()
         if self.pyv.with_tags:
             tag_svc = self.pyv.rest_content.tagging.Tag
-            tag_association = self.pyv.rest_content.tagging.TagAssociation
+            cat_svc = self.pyv.rest_content.tagging.Category
 
             tags = tag_svc.list()
             for tag in tags:
                 tag_obj = tag_svc.get(tag)
-                tags_info[tag_obj.id] = tag_obj.name
+                tags_info[tag_obj.id] = (tag_obj.name, cat_svc.get(tag_obj.category_id).name)
 
         hostnames = self.get_option('hostnames')
 
@@ -764,8 +787,19 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 # Add virtual machine to appropriate tag group
                 vm_mo_id = vm_obj.obj._GetMoId()  # pylint: disable=protected-access
                 vm_dynamic_id = DynamicID(type='VirtualMachine', id=vm_mo_id)
-                attached_tags = [tags_info[tag_id] for tag_id in tag_association.list_attached_tags(vm_dynamic_id)]
-                properties['tags'] = attached_tags
+                tag_association = self.pyv.rest_content.tagging.TagAssociation
+                properties['tags'] = []
+                properties['categories'] = []
+                properties['tag_category'] = {}
+                for tag_id in tag_association.list_attached_tags(vm_dynamic_id):
+                    # Add tags related to VM
+                    properties['tags'].append(tags_info[tag_id][0])
+                    # Add categories related to VM
+                    properties['categories'].append(tags_info[tag_id][1])
+                    # Add tag and categories related to VM
+                    if tags_info[tag_id][1] not in properties['tag_category']:
+                        properties['tag_category'][tags_info[tag_id][1]] = []
+                    properties['tag_category'][tags_info[tag_id][1]].append(tags_info[tag_id][0])
 
             # Path
             with_path = self.get_option('with_path')
