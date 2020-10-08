@@ -73,7 +73,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Assign user to VM folder
   community.vmware.vmware_object_role_permission:
     hostname: '{{ esxi_hostname }}'
