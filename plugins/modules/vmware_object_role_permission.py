@@ -11,7 +11,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_object_role_permission
 short_description: Manage local roles on an ESXi host
@@ -73,9 +73,12 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Assign user to VM folder
   community.vmware.vmware_object_role_permission:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
     role: Admin
     principal: user_bob
     object_name: services
@@ -84,6 +87,9 @@ EXAMPLES = '''
 
 - name: Remove user from VM folder
   community.vmware.vmware_object_role_permission:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
     role: Admin
     principal: user_bob
     object_name: services
@@ -92,6 +98,9 @@ EXAMPLES = '''
 
 - name: Assign finance group to VM folder
   community.vmware.vmware_object_role_permission:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
     role: Limited Users
     group: finance
     object_name: Accounts
@@ -100,6 +109,9 @@ EXAMPLES = '''
 
 - name: Assign view_user Read Only permission at root folder
   community.vmware.vmware_object_role_permission:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
     role: ReadOnly
     principal: view_user
     object_name: rootFolder
