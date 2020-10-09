@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_custom_attributes
 short_description: Manage custom attributes from VMware for the given virtual machine
@@ -85,7 +85,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add virtual machine custom attributes
   community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"

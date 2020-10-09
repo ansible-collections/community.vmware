@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_target_canonical_info
 short_description: Return canonical (NAA) from an ESXi host system
@@ -45,7 +45,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Get Canonical name of particular target on particular ESXi host system
   community.vmware.vmware_target_canonical_info:
     hostname: '{{ vcenter_hostname }}'

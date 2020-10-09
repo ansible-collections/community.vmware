@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_snapshot_info
 short_description: Gather info about virtual machine's snapshots in vCenter
@@ -71,7 +71,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather snapshot information about the virtual machine in the given vCenter
   community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"

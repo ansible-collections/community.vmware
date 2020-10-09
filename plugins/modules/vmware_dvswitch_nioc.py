@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch_nioc
 short_description: Manage distributed switch Network IO Control
@@ -104,7 +104,7 @@ resources_changed:
     sample: [ "vmotion", "vsan" ]
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enable NIOC
   community.vmware.vmware_dvswitch_nioc:
     hostname: '{{ vcenter_hostname }}'

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_resource_pool
 short_description: Add/remove resource pools to/from vCenter
@@ -102,7 +102,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add resource pool to vCenter
   community.vmware.vmware_resource_pool:
     hostname: '{{ vcenter_hostname }}'

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = r"""
+DOCUMENTATION = r'''
 ---
 module: vmware_host_sriov
 short_description: Manage SR-IOV settings on host
@@ -56,9 +56,9 @@ options:
     required: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-"""
+'''
 
-EXAMPLES = r"""
+EXAMPLES = r'''
 - name: enable SR-IOV on vmnic0 with 8 functions
   community.vmware.vmware_host_sriov:
     hostname: "{{ vcenter_hostname }}"
@@ -103,7 +103,7 @@ EXAMPLES = r"""
     vmnic: vmnic0
     sriov_on: false
     num_virt_func: 0
-"""
+'''
 
 RETURN = r"""
 host_sriov_diff:

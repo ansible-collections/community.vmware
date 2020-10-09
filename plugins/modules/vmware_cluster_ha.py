@@ -178,7 +178,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = r"""
+EXAMPLES = r'''
 - name: Enable HA without admission control
   community.vmware.vmware_cluster_ha:
     hostname: '{{ vcenter_hostname }}'
@@ -215,7 +215,7 @@ EXAMPLES = r"""
       cpu_failover_resources_percent: 50
       memory_failover_resources_percent: 50
   delegate_to: localhost
-"""
+'''
 
 RETURN = r"""#
 """

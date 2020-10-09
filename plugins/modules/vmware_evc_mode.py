@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_evc_mode
 short_description: Enable/Disable EVC mode on vCenter
@@ -49,7 +49,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
     - name: Enable EVC Mode
       community.vmware.vmware_evc_mode:
          hostname: "{{ groups['vcsa'][0] }}"

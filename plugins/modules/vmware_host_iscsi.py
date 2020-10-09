@@ -7,7 +7,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_host_iscsi
 short_description: Manage the iSCSI configuration of ESXi host
 author:
@@ -263,7 +263,7 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enable iSCSI of ESXi
   vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"

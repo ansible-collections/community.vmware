@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_screenshot
 short_description: Create a screenshot of the Virtual Machine console.
@@ -83,7 +83,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: take a screenshot of the virtual machine console
   community.vmware.vmware_guest_screenshot:
     validate_certs: no

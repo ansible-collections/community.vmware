@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_host_logbundle_info
 short_description: Gathers manifest info for logbundle
@@ -29,7 +29,7 @@ extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: fetch the manifests for logbundle from ESXi
   community.vmware.vmware_host_logbundle_info:
     hostname: "{{ vcenter_hostname }}"

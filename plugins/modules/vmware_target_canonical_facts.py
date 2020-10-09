@@ -13,7 +13,7 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_target_canonical_facts
 deprecated:
@@ -55,7 +55,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Get Canonical name of particular target on particular ESXi host system
   community.vmware.vmware_target_canonical_facts:
     hostname: '{{ vcenter_hostname }}'

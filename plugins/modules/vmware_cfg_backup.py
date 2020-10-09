@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_cfg_backup
 short_description: Backup / Restore / Reset ESXi host configuration
@@ -53,7 +53,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Save the ESXi configuration locally by authenticating directly against the ESXi host
   community.vmware.vmware_cfg_backup:
     hostname: '{{ esxi_hostname }}'

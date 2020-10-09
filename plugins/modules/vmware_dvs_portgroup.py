@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvs_portgroup
 short_description: Create or remove a Distributed vSwitch portgroup.
@@ -218,7 +218,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create vlan portgroup
   community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'

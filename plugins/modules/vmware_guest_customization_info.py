@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_customization_info
 short_description: Gather info about VM customization specifications
@@ -34,7 +34,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather info about all customization specification
   community.vmware.vmware_guest_customization_info:
     hostname: "{{ vcenter_hostname }}"

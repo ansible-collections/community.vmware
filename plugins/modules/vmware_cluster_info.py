@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_cluster_info
 short_description: Gather info about clusters available in given vCenter
@@ -70,7 +70,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather cluster info from given datacenter
   community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'

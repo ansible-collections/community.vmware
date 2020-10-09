@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch_uplink_pg
 short_description: Manage uplink portproup configuration of a Distributed Switch
@@ -126,7 +126,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Configure Uplink portgroup
   community.vmware.vmware_dvswitch_uplink_pg:
     hostname: '{{ inventory_hostname }}'

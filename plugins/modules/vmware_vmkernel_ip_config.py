@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel_ip_config
 short_description: Configure the VMkernel IP Address
@@ -43,7 +43,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 # Example command from Ansible Playbook
 
 - name: Configure IP address on ESX host

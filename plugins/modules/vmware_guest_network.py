@@ -201,7 +201,7 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: change network for 00:50:56:11:22:33 on vm01.domain.fake
   community.vmware.vmware_guest_network:
     hostname: "{{ vcenter_hostname }}"

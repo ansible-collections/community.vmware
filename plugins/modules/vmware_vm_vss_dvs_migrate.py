@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vm_vss_dvs_migrate
 short_description: Migrates a virtual machine from a standard vswitch to distributed
@@ -37,7 +37,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Migrate VCSA to vDS
   community.vmware.vmware_vm_vss_dvs_migrate:
     hostname: '{{ vcenter_hostname }}'

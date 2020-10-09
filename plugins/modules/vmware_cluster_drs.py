@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = r"""
+EXAMPLES = r'''
 - name: Enable DRS
   community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
@@ -108,7 +108,7 @@ EXAMPLES = r"""
     enable_drs: True
     drs_default_vm_behavior: partiallyAutomated
   delegate_to: localhost
-"""
+'''
 
 RETURN = r"""#
 """

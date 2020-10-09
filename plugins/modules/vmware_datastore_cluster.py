@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_datastore_cluster
 short_description: Manage VMware vSphere datastore clusters
@@ -94,7 +94,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create datastore cluster and enable SDRS
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'

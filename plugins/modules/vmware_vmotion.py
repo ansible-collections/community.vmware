@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Perform vMotion of virtual machine
   community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'

@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_disk_info
 short_description: Gather info about disks of given virtual machine
@@ -73,7 +73,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather disk info from virtual machine using UUID
   community.vmware.vmware_guest_disk_info:
     hostname: "{{ vcenter_hostname }}"

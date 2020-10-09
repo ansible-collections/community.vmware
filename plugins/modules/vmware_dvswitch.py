@@ -12,7 +12,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch
 short_description: Create or remove a Distributed Switch
@@ -177,7 +177,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create dvSwitch
   community.vmware.vmware_dvswitch:
     hostname: '{{ vcenter_hostname }}'

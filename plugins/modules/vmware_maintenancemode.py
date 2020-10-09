@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_maintenancemode
 short_description: Place a host into maintenance mode
@@ -66,7 +66,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enter VSAN-Compliant Maintenance Mode
   community.vmware.vmware_maintenancemode:
     hostname: "{{ vcenter_hostname }}"

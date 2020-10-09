@@ -8,7 +8,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_tools_wait
 short_description: Wait for VMware tools to become available
@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Wait for VMware tools to become available by UUID
   vmware_guest_facts:
     hostname: "{{ vcenter_hostname }}"

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch_info
 short_description: Gathers info dvswitch configurations
@@ -69,7 +69,7 @@ extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather all registered dvswitch
   community.vmware.vmware_dvswitch_info:
     hostname: "{{ vcenter_hostname }}"

@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch_lacp
 short_description: Manage LACP configuration on a Distributed Switch
@@ -89,7 +89,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enable enhanced mode on a Distributed Switch
   community.vmware.vmware_dvswitch_lacp:
     hostname: '{{ inventory_hostname }}'

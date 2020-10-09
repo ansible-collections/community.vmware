@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_file_operation
 short_description: Files operation in a VMware guest operating system without network
@@ -156,7 +156,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create directory inside a vm
   community.vmware.vmware_guest_file_operation:
     hostname: "{{ vcenter_hostname }}"

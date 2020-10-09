@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vcenter_extension
 short_description: Register/deregister vCenter Extensions
@@ -82,7 +82,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
     - name: Register vCenter Extension
       community.vmware.vcenter_extension:
          hostname: "{{ groups['vcsa'][0] }}"

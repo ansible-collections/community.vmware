@@ -15,7 +15,7 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_role_facts
 deprecated:
@@ -39,7 +39,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather facts about local role from an ESXi
   community.vmware.vmware_local_role_facts:
     hostname: '{{ esxi_hostname }}'

@@ -80,7 +80,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = r"""
+EXAMPLES = r'''
 - name: Enable vSAN
   community.vmware.vmware_cluster_vsan:
     hostname: '{{ vcenter_hostname }}'
@@ -114,7 +114,7 @@ EXAMPLES = r"""
     enable_vsan: True
     vsan_auto_claim_storage: True
   delegate_to: localhost
-"""
+'''
 
 RETURN = r"""#
 """

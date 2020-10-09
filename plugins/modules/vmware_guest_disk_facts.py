@@ -15,7 +15,7 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_disk_facts
 deprecated:
@@ -82,7 +82,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather disk facts from virtual machine using UUID
   community.vmware.vmware_guest_disk_facts:
     hostname: "{{ vcenter_hostname }}"
