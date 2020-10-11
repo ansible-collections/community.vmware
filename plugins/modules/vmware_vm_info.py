@@ -25,6 +25,7 @@ author:
 notes:
 - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
+- Fact about C(moid) added in VMware collection 1.4.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -187,7 +188,8 @@ virtual_machines:
                 "id": "urn:vmomi:InventoryServiceTag:43737ec0-b832-4abf-abb1-fd2448ce3b26:GLOBAL",
                 "name": "tag_0001"
             }
-        ]
+        ],
+        "moid": "vm-24"
     }
   ]
 '''
@@ -291,6 +293,7 @@ class VmwareVmInfo(PyVmomi):
                 "attributes": vm_attributes,
                 "tags": vm_tags,
                 "folder": vm_folder,
+                "moid": vm._moId,
             }
 
             vm_type = self.module.params.get('vm_type')

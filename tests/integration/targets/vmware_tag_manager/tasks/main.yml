@@ -9,7 +9,6 @@
     setup_datastore: true
     setup_virtualmachines: true
 
-
 - set_fact:
     cat_one: category_1003
     tag_one: tag:1003
