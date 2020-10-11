@@ -117,7 +117,7 @@ EXAMPLES = r'''
   register: disk_facts
 '''
 
-RETURN = """
+RETURN = r'''
 guest_disk_facts:
     description: metadata about the virtual machine's disks
     returned: always
@@ -161,7 +161,7 @@ guest_disk_facts:
             "unit_number": 1
         },
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

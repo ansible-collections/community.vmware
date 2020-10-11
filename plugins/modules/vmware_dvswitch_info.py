@@ -116,7 +116,7 @@ EXAMPLES = r'''
   register: dvswitch_info
 '''
 
-RETURN = '''
+RETURN = r'''
 distributed_virtual_switches:
     description: list of dictionary of dvswitch and their information
     returned: always

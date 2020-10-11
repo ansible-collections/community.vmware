@@ -82,7 +82,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = r"""
+RETURN = r'''
 canonical:
     description: metadata about SCSI Target device
     returned: if host system and target id is given
@@ -113,7 +113,7 @@ scsi_tgt_facts:
             }
         },
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec

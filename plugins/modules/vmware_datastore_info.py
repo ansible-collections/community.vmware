@@ -126,7 +126,7 @@ EXAMPLES = r'''
   register: info
 '''
 
-RETURN = """
+RETURN = r'''
 datastores:
     description: metadata about the available datastores
     returned: always
@@ -164,7 +164,7 @@ datastores:
             "url": "ds:///vmfs/volumes/420b3e73-67070776/"
         },
     ]
-"""
+'''
 
 try:
     from pyVmomi import vim

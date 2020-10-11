@@ -94,7 +94,7 @@ EXAMPLES = r'''
   register: snapshot_info
 '''
 
-RETURN = """
+RETURN = r'''
 guest_snapshots:
     description: metadata about the snapshot information
     returned: always
@@ -117,7 +117,7 @@ guest_snapshots:
             }
         ]
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, list_snapshots, vmware_argument_spec

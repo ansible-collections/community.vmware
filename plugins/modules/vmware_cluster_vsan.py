@@ -116,8 +116,8 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = r"""#
-"""
+RETURN = r'''#
+'''
 
 import traceback
 

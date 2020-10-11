@@ -254,7 +254,7 @@ EXAMPLES = r'''
       connected: true
 '''
 
-RETURN = '''
+RETURN = r'''
 network_info:
   description: metadata about the virtual machine network adapters
   returned: always

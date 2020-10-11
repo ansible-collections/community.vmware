@@ -61,7 +61,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = '''# '''
+RETURN = r'''# '''
 
 try:
     from pyVmomi import vim, vmodl

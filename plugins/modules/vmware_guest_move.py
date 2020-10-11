@@ -124,7 +124,7 @@ EXAMPLES = r'''
   register: facts
 '''
 
-RETURN = """
+RETURN = r'''
 instance:
     description: metadata about the virtual machine
     returned: always
@@ -172,7 +172,7 @@ instance:
         "module_hw": true,
         "snapshots": []
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native

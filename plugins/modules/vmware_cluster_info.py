@@ -116,7 +116,7 @@ EXAMPLES = r'''
   register: cluster_info
 '''
 
-RETURN = """
+RETURN = r'''
 clusters:
     description: metadata about the available clusters
     returned: always
@@ -179,7 +179,7 @@ clusters:
             ],
         },
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

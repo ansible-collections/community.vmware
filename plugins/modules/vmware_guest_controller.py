@@ -167,7 +167,7 @@ EXAMPLES = r'''
   register: disk_controller_facts
 '''
 
-RETURN = """
+RETURN = r'''
 disk_controller_status:
     description: metadata about the virtual machine's existing disk controllers or after adding or removing operation
     returned: always
@@ -232,7 +232,7 @@ disk_controller_status:
             }
         }
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

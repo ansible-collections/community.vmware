@@ -74,13 +74,13 @@ EXAMPLES = r'''
       register: disable_evc
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
     type: str
     sample: "EVC Mode for 'intel-broadwell' has been enabled."
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

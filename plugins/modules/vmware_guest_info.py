@@ -162,7 +162,7 @@ EXAMPLES = r'''
   register: moid_info
 '''
 
-RETURN = """
+RETURN = r'''
 instance:
     description: metadata about the virtual machine
     returned: always
@@ -223,7 +223,7 @@ instance:
         "moid": "vm-42",
         "vimref": "vim.VirtualMachine:vm-42"
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text

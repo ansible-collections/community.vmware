@@ -120,13 +120,13 @@ EXAMPLES = r'''
   register: facts
 '''
 
-RETURN = """
+RETURN = r'''
 instance:
     description: metadata about the virtual machine
     returned: always
     type: dict
     sample: None
-"""
+'''
 
 import datetime
 import time

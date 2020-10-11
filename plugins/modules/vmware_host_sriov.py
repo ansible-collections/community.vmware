@@ -105,7 +105,7 @@ EXAMPLES = r'''
     num_virt_func: 0
 '''
 
-RETURN = r"""
+RETURN = r'''
 host_sriov_diff:
     description:
     - contains info about SR-IOV status on vmnic before, after and requested changes
@@ -147,7 +147,7 @@ host_sriov_diff:
             }
         }
     }
-"""
+'''
 
 
 try:

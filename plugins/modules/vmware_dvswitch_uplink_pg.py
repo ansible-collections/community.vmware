@@ -159,7 +159,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
@@ -185,7 +185,7 @@ result:
             "4049-4092"
         ]
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

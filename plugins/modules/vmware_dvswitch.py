@@ -226,7 +226,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
@@ -253,7 +253,7 @@ result:
         ],
         "version": "6.6.0"
     }
-"""
+'''
 
 try:
     from pyVmomi import vim, vmodl

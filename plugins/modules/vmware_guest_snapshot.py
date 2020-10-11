@@ -232,7 +232,7 @@ EXAMPLES = r'''
     delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 snapshot_results:
     description: metadata about the virtual machine snapshots
     returned: always
@@ -262,7 +262,7 @@ snapshot_results:
           }
       ]
     }
-"""
+'''
 
 import time
 try:

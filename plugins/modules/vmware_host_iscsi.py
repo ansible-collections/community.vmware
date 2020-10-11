@@ -344,7 +344,7 @@ EXAMPLES = r'''
     state: absent
 '''
 
-RETURN = '''
+RETURN = r'''
 iscsi_properties:
   description: Parameter return when system defaults config is changed.
   returned: changed

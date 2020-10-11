@@ -60,8 +60,8 @@ EXAMPLES = r'''
   register: datacenter_delete_result
 '''
 
-RETURN = """#
-"""
+RETURN = r'''#
+'''
 
 try:
     from pyVmomi import vim, vmodl

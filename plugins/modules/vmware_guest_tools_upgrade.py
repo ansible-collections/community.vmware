@@ -110,7 +110,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = ''' # '''
+RETURN = r''' # '''
 
 
 from ansible.module_utils.basic import AnsibleModule

@@ -151,7 +151,7 @@ EXAMPLES = r'''
   register: video_facts
 '''
 
-RETURN = r"""
+RETURN = r'''
 video_status:
     description: metadata about the virtual machine's video card after managing them
     returned: always
@@ -164,7 +164,7 @@ video_status:
         "renderer_3D": "automatic",
         "video_memory": 8192
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

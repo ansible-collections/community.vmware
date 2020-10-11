@@ -111,7 +111,7 @@ EXAMPLES = r'''
   register: take_screenshot
 '''
 
-RETURN = """
+RETURN = r'''
 screenshot_info:
     description: display the facts of captured virtual machine screenshot file
     returned: always
@@ -126,7 +126,7 @@ screenshot_info:
             "download_local_path": "/tmp/",
             "download_file_size": 2367,
     }
-"""
+'''
 
 try:
     from pyVmomi import vim, vmodl

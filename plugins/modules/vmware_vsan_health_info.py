@@ -54,7 +54,7 @@ EXAMPLES = r'''
     fetch_from_cache: False
 '''
 
-RETURN = '''
+RETURN = r'''
 vsan_health_info:
     description: vSAN cluster health info
     returned: on success

@@ -110,13 +110,13 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = r"""
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
     type: str
     sample: "vSwitch 'vSwitch_1002' is created successfully"
-"""
+'''
 
 try:
     from pyVmomi import vim, vmodl

@@ -74,7 +74,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 dest_file:
     description: The full path of where the file holding the ESXi configurations was stored
     returned: changed

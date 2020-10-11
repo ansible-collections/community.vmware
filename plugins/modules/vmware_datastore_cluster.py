@@ -127,13 +127,13 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about datastore cluster operation
     returned: always
     type: str
     sample: "Datastore cluster 'DSC2' created successfully."
-"""
+'''
 
 try:
     from pyVmomi import vim

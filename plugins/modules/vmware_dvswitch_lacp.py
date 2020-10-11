@@ -126,7 +126,7 @@ EXAMPLES = r'''
   with_items: "{{ vcenter_distributed_switches }}"
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
@@ -142,7 +142,7 @@ result:
         "support_mode": "enhanced",
         "result": "lacp lags changed"
     }
-"""
+'''
 
 try:
     from pyVmomi import vim, vmodl

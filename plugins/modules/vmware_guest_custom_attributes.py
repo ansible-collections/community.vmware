@@ -139,7 +139,7 @@ EXAMPLES = r'''
   register: attributes
 '''
 
-RETURN = """
+RETURN = r'''
 custom_attributes:
     description: metadata about the virtual machine attributes
     returned: always
@@ -151,7 +151,7 @@ custom_attributes:
         "sample_2": "sample_2_value",
         "sample_3": "sample_3_value"
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

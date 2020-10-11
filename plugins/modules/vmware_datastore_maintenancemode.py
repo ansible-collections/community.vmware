@@ -91,7 +91,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 datastore_status:
     description: Action taken for datastore
     returned: always

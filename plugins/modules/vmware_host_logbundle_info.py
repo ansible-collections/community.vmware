@@ -40,7 +40,7 @@ EXAMPLES = r'''
   register: fetch_manifests_result
 '''
 
-RETURN = '''
+RETURN = r'''
 manifests:
     description: list of dictionary of manifest information for logbundle
     returned: always

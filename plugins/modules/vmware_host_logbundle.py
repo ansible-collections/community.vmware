@@ -135,7 +135,7 @@ EXAMPLES = r'''
       - VirtualMachines:VirtualMachineStats
 '''
 
-RETURN = '''
+RETURN = r'''
 dest:
     description: saved path of a logbundle file for ESXi
     returned: on success

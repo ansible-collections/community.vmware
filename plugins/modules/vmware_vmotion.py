@@ -128,7 +128,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 running_host:
     description: List the host the virtual machine is registered to
     returned: changed or success

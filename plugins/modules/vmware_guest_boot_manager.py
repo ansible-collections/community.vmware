@@ -136,7 +136,7 @@ EXAMPLES = r'''
   register: vm_boot_order
 '''
 
-RETURN = r"""
+RETURN = r'''
 vm_boot_status:
     description: metadata about boot order of virtual machine
     returned: always
@@ -167,7 +167,7 @@ vm_boot_status:
             "disk"
         ],
     }
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

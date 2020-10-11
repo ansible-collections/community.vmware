@@ -84,7 +84,7 @@ EXAMPLES = r'''
   register: vm_moid_boot_order_facts
 '''
 
-RETURN = r"""
+RETURN = r'''
 vm_boot_facts:
     description: metadata about boot order of virtual machine
     returned: always
@@ -103,7 +103,7 @@ vm_boot_facts:
         "current_boot_firmware": "bios",
         "current_secure_boot_enabled": false,
     }
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

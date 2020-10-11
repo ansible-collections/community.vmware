@@ -80,7 +80,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 hostsystem:
     description: Name of vim reference
     returned: always

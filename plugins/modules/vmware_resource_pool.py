@@ -123,13 +123,13 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 instance:
     description: metadata about the new resource pool
     returned: always
     type: dict
     sample: None
-"""
+'''
 
 try:
     from pyVmomi import vim, vmodl

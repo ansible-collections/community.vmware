@@ -95,7 +95,7 @@ EXAMPLES = r'''
   register: vmtools_info
 '''
 
-RETURN = """
+RETURN = r'''
 vmtools_info:
     description: metadata about the VMware tools installed in virtual machine
     returned: always
@@ -118,7 +118,7 @@ vmtools_info:
         "vm_tools_version": 10341,
         "vm_tools_version_status": "guestToolsCurrent"
     }
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

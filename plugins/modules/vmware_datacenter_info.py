@@ -94,7 +94,7 @@ EXAMPLES = r'''
     - overallStatus
 '''
 
-RETURN = r"""
+RETURN = r'''
 datacenter_info:
   description: Information about datacenter
   returned: always
@@ -107,7 +107,7 @@ datacenter_info:
             "name": "Asia-Datacenter1"
         }
     ]
-"""
+'''
 
 try:
     from pyVmomi import vim

@@ -38,7 +38,7 @@ EXAMPLES = r'''
   register: iscsi_info
 '''
 
-RETURN = '''
+RETURN = r'''
 iscsi_properties:
   description: dictionary of current iSCSI information
   returned: always

@@ -112,13 +112,13 @@ EXAMPLES = r'''
       register: deregister_extension
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
     type: str
     sample: "'com.acme.Extension' installed."
-"""
+'''
 
 try:
     from pyVmomi import vim

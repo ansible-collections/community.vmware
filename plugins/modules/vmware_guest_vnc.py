@@ -130,7 +130,7 @@ EXAMPLES = r'''
   register: vnc_result
 '''
 
-RETURN = '''
+RETURN = r'''
 changed:
   description: If anything changed on VM's extraConfig.
   returned: always

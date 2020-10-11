@@ -161,7 +161,7 @@ EXAMPLES = r'''
       wait_for_heartbeat: yes
 '''
 
-RETURN = '''
+RETURN = r'''
 system_defaults_config:
   description: Parameter return when system defaults config is changed.
   returned: changed

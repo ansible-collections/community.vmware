@@ -64,7 +64,7 @@ EXAMPLES = r'''
   register: custom_spec_facts
 '''
 
-RETURN = """
+RETURN = r'''
 custom_spec_facts:
     description: metadata about the customization specification
     returned: always
@@ -96,7 +96,7 @@ custom_spec_facts:
             "type": "Linux"
         },
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

@@ -99,7 +99,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
@@ -127,7 +127,7 @@ result:
         "private_vlans_previous": [],
         "result": "All private VLANs added"
     }
-"""
+'''
 
 try:
     from pyVmomi import vim
