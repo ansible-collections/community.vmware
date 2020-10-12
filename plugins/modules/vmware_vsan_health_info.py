@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vsan_health_info
 
@@ -42,7 +42,7 @@ author:
     - Erwan Quelin (@equelin)
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather health info from a vSAN's cluster
   hosts: localhost
   gather_facts: 'no'
@@ -54,7 +54,7 @@ EXAMPLES = '''
     fetch_from_cache: False
 '''
 
-RETURN = '''
+RETURN = r'''
 vsan_health_info:
     description: vSAN cluster health info
     returned: on success

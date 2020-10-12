@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_datacenter
 short_description: Manage VMware vSphere Datacenters
@@ -39,7 +39,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create Datacenter
   community.vmware.vmware_datacenter:
     hostname: '{{ vcenter_hostname }}'
@@ -60,8 +60,8 @@ EXAMPLES = '''
   register: datacenter_delete_result
 '''
 
-RETURN = """#
-"""
+RETURN = r'''#
+'''
 
 try:
     from pyVmomi import vim, vmodl

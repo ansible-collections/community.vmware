@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_find
 short_description: Find the folder path(s) for a virtual machine by name or UUID
@@ -63,7 +63,7 @@ EXAMPLES = r'''
   register: vm_folder
 '''
 
-RETURN = r"""
+RETURN = r'''
 folders:
     description: List of folders for user specified virtual machine
     returned: on success
@@ -71,7 +71,7 @@ folders:
     sample: [
         '/DC0/vm',
     ]
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

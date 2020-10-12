@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_user_manager
 short_description: Manage local users on an ESXi host
@@ -51,7 +51,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add local user to ESXi
   community.vmware.vmware_local_user_manager:
     hostname: esxi_hostname
@@ -61,7 +61,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = '''# '''
+RETURN = r'''# '''
 
 try:
     from pyVmomi import vim, vmodl

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_target_canonical_info
 short_description: Return canonical (NAA) from an ESXi host system
@@ -45,7 +45,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Get Canonical name of particular target on particular ESXi host system
   community.vmware.vmware_target_canonical_info:
     hostname: '{{ vcenter_hostname }}'
@@ -72,7 +72,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = r"""
+RETURN = r'''
 canonical:
     description: metadata about SCSI Target device
     returned: if host system and target id is given
@@ -103,7 +103,7 @@ scsi_tgt_info:
             }
         },
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec

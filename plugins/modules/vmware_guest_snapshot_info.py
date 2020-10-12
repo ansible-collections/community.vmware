@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_snapshot_info
 short_description: Gather info about virtual machine's snapshots in vCenter
@@ -71,7 +71,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather snapshot information about the virtual machine in the given vCenter
   community.vmware.vmware_guest_snapshot_info:
     hostname: "{{ vcenter_hostname }}"
@@ -94,7 +94,7 @@ EXAMPLES = '''
   register: snapshot_info
 '''
 
-RETURN = """
+RETURN = r'''
 guest_snapshots:
     description: metadata about the snapshot information
     returned: always
@@ -117,7 +117,7 @@ guest_snapshots:
             }
         ]
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, list_snapshots, vmware_argument_spec

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_vsan_cluster
 short_description: Configure VSAN clustering on an ESXi host
@@ -32,7 +32,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Configure VMware VSAN Cluster
   hosts: deploy_node
   tags:

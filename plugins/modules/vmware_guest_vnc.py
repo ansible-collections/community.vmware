@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_vnc
 short_description: Manages VNC remote display on virtual machines in vCenter
@@ -89,7 +89,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enable VNC remote display on the VM
   community.vmware.vmware_guest_vnc:
     hostname: "{{ vcenter_hostname }}"
@@ -130,7 +130,7 @@ EXAMPLES = '''
   register: vnc_result
 '''
 
-RETURN = '''
+RETURN = r'''
 changed:
   description: If anything changed on VM's extraConfig.
   returned: always

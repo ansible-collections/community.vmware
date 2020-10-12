@@ -15,7 +15,7 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_disk_facts
 deprecated:
@@ -82,7 +82,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather disk facts from virtual machine using UUID
   community.vmware.vmware_guest_disk_facts:
     hostname: "{{ vcenter_hostname }}"
@@ -117,7 +117,7 @@ EXAMPLES = '''
   register: disk_facts
 '''
 
-RETURN = """
+RETURN = r'''
 guest_disk_facts:
     description: metadata about the virtual machine's disks
     returned: always
@@ -161,7 +161,7 @@ guest_disk_facts:
             "unit_number": 1
         },
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

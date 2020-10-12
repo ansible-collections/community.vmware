@@ -74,7 +74,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Perform vMotion of virtual machine
   community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
@@ -128,7 +128,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 running_host:
     description: List the host the virtual machine is registered to
     returned: changed or success

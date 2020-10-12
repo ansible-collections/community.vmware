@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_guest_register_operation
 short_description: VM inventory registration operation
 author:
@@ -87,7 +87,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Register VM to inventory
   community.vmware.vmware_guest_register_operation:
     hostname: "{{ vcenter_hostname }}"

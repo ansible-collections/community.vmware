@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_controller
 short_description: Manage disk or USB controllers related to virtual machine in given vCenter infrastructure
@@ -127,7 +127,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add disk and USB 3.0 controllers for virtual machine located by name
   community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
@@ -167,7 +167,7 @@ EXAMPLES = '''
   register: disk_controller_facts
 '''
 
-RETURN = """
+RETURN = r'''
 disk_controller_status:
     description: metadata about the virtual machine's existing disk controllers or after adding or removing operation
     returned: always
@@ -232,7 +232,7 @@ disk_controller_status:
             }
         }
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

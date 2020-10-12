@@ -15,7 +15,7 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_local_user_facts
 deprecated:

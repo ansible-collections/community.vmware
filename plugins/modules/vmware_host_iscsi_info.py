@@ -7,7 +7,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_host_iscsi_info
 short_description: Gather iSCSI configuration information of ESXi host
 author:
@@ -27,7 +27,7 @@ extends_documentation_fragment:
   - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather iSCSI configuration information of ESXi host
   community.vmware.vmware.vmware_host_iscsi_info:
     hostname: "{{ vcenter_hostname }}"
@@ -38,7 +38,7 @@ EXAMPLES = '''
   register: iscsi_info
 '''
 
-RETURN = '''
+RETURN = r'''
 iscsi_properties:
   description: dictionary of current iSCSI information
   returned: always

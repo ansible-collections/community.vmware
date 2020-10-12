@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_host_auto_start
 short_description: Manage the auto power ON or OFF for vm on ESXi host
 author:
@@ -131,7 +131,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 ---
 - name: Update for system defaults config.
   community.vmware.vmware_host_auto_start:
@@ -161,7 +161,7 @@ EXAMPLES = '''
       wait_for_heartbeat: yes
 '''
 
-RETURN = '''
+RETURN = r'''
 system_defaults_config:
   description: Parameter return when system defaults config is changed.
   returned: changed

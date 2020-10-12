@@ -14,7 +14,7 @@ ANSIBLE_METADATA = {
     'supported_by': 'community'
 }
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_customization_facts
 deprecated:
@@ -43,7 +43,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather facts about all customization specification
   community.vmware.vmware_guest_customization_facts:
     hostname: "{{ vcenter_hostname }}"
@@ -64,7 +64,7 @@ EXAMPLES = '''
   register: custom_spec_facts
 '''
 
-RETURN = """
+RETURN = r'''
 custom_spec_facts:
     description: metadata about the customization specification
     returned: always
@@ -96,7 +96,7 @@ custom_spec_facts:
             "type": "Linux"
         },
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

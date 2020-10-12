@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 module: vmware_guest_cross_vc_clone
 
 short_description: Cross-vCenter VM/template clone
@@ -114,7 +114,7 @@ author:
   - Anusha Hegde (@anusha94)
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 # Clone template
 - name: clone a template across VC
   community.vmware.vmware_guest_cross_vc_clone:

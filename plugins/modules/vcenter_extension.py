@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vcenter_extension
 short_description: Register/deregister vCenter Extensions
@@ -82,7 +82,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
     - name: Register vCenter Extension
       community.vmware.vcenter_extension:
          hostname: "{{ groups['vcsa'][0] }}"
@@ -112,13 +112,13 @@ EXAMPLES = '''
       register: deregister_extension
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
     type: str
     sample: "'com.acme.Extension' installed."
-"""
+'''
 
 try:
     from pyVmomi import vim

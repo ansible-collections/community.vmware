@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_datastore_maintenancemode
 short_description: Place a datastore into maintenance mode
@@ -53,7 +53,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enter datastore into Maintenance Mode
   community.vmware.vmware_datastore_maintenancemode:
     hostname: '{{ vcenter_hostname }}'
@@ -91,7 +91,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = '''
+RETURN = r'''
 datastore_status:
     description: Action taken for datastore
     returned: always

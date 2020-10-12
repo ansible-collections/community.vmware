@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_host_logbundle
 short_description: Fetch logbundle file from ESXi
@@ -112,7 +112,7 @@ extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: fetch logbundle file from ESXi
   community.vmware.vmware_host_logbundle:
     hostname: "{{ vcenter_hostname }}"
@@ -135,7 +135,7 @@ EXAMPLES = '''
       - VirtualMachines:VirtualMachineStats
 '''
 
-RETURN = '''
+RETURN = r'''
 dest:
     description: saved path of a logbundle file for ESXi
     returned: on success

@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvswitch_pvlans
 short_description: Manage Private VLAN configuration of a Distributed Switch
@@ -56,7 +56,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Create PVLANs on a Distributed Switch
   community.vmware.vmware_dvswitch_pvlans:
     hostname: '{{ inventory_hostname }}'
@@ -99,7 +99,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 result:
     description: information about performed operation
     returned: always
@@ -127,7 +127,7 @@ result:
         "private_vlans_previous": [],
         "result": "All private VLANs added"
     }
-"""
+'''
 
 try:
     from pyVmomi import vim

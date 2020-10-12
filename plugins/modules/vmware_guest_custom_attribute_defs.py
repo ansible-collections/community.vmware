@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_custom_attribute_defs
 short_description: Manage custom attributes definitions for virtual machine from VMware
@@ -45,7 +45,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add VMware Attribute Definition
   community.vmware.vmware_guest_custom_attribute_defs:
     hostname: "{{ vcenter_hostname }}"
@@ -67,13 +67,13 @@ EXAMPLES = '''
   register: defs
 '''
 
-RETURN = """
+RETURN = r'''
 custom_attribute_defs:
     description: list of all current attribute definitions
     returned: always
     type: list
     sample: ["sample_5", "sample_4"]
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec

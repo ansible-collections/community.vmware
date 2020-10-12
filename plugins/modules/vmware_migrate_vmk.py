@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_migrate_vmk
 short_description: Migrate a VMK interface from VSS to VDS
@@ -58,7 +58,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Migrate Management vmk
   community.vmware.vmware_migrate_vmk:
     hostname: "{{ vcenter_hostname }}"

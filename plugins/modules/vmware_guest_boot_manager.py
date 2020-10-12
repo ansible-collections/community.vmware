@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_boot_manager
 short_description: Manage boot options for the given virtual machine
@@ -136,7 +136,7 @@ EXAMPLES = r'''
   register: vm_boot_order
 '''
 
-RETURN = r"""
+RETURN = r'''
 vm_boot_status:
     description: metadata about boot order of virtual machine
     returned: always
@@ -167,7 +167,7 @@ vm_boot_status:
             "disk"
         ],
     }
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_serial_port
 short_description: Manage serial ports on an existing VM
@@ -120,7 +120,7 @@ author:
   - Anusha Hegde (@anusha94)
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 # Create serial ports
 - name: Create multiple serial ports with Backing type - network, pipe, device and file
   community.vmware.vmware_guest_serial_port:

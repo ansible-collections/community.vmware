@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_snapshot
 short_description: Manages virtual machines snapshots in vCenter
@@ -130,7 +130,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
   - name: Create a snapshot
     community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
@@ -232,7 +232,7 @@ EXAMPLES = '''
     delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r'''
 snapshot_results:
     description: metadata about the virtual machine snapshots
     returned: always
@@ -262,7 +262,7 @@ snapshot_results:
           }
       ]
     }
-"""
+'''
 
 import time
 try:

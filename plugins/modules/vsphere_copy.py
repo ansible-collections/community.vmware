@@ -58,7 +58,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Copy file to datastore using delegate_to
   community.vmware.vsphere_copy:
     hostname: '{{ vcenter_hostname }}'

@@ -141,7 +141,7 @@ EXAMPLES = r'''
   register: keys_num_sent
 '''
 
-RETURN = r"""
+RETURN = r'''
 sendkey_info:
     description: display the keys and the number of keys sent to the virtual machine
     returned: always
@@ -158,7 +158,7 @@ sendkey_info:
             "keys_send_number": 4,
             "returned_keys_send_number": 4,
     }
-"""
+'''
 
 import time
 try:

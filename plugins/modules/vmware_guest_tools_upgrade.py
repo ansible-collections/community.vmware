@@ -8,7 +8,7 @@ from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_tools_upgrade
 short_description: Module to upgrade VMTools
@@ -79,7 +79,7 @@ author:
     - Mike Klebolt (@MikeKlebolt) <michael.klebolt@centurylink.com>
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Get VM UUID
   vmware_guest_facts:
     hostname: "{{ vcenter_hostname }}"
@@ -110,7 +110,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = ''' # '''
+RETURN = r''' # '''
 
 
 from ansible.module_utils.basic import AnsibleModule

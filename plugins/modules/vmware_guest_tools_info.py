@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_tools_info
 short_description: Gather info about VMware tools installed in VM
@@ -73,7 +73,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather VMware tools info installed in VM specified by uuid
   community.vmware.vmware_guest_tools_info:
     hostname: "{{ vcenter_hostname }}"
@@ -95,7 +95,7 @@ EXAMPLES = '''
   register: vmtools_info
 '''
 
-RETURN = """
+RETURN = r'''
 vmtools_info:
     description: metadata about the VMware tools installed in virtual machine
     returned: always
@@ -118,7 +118,7 @@ vmtools_info:
         "vm_tools_version": 10341,
         "vm_tools_version_status": "guestToolsCurrent"
     }
-"""
+'''
 
 
 from ansible.module_utils.basic import AnsibleModule

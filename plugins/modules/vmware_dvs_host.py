@@ -11,7 +11,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_dvs_host
 short_description: Add or remove a host from distributed virtual switch
@@ -71,7 +71,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Add Host to dVS
   community.vmware.vmware_dvs_host:
     hostname: '{{ vcenter_hostname }}'

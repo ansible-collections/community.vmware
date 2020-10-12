@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_guest_info
 short_description: Gather info about a single VM
@@ -109,7 +109,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
   community.vmware.vmware_guest_info:
     hostname: "{{ vcenter_hostname }}"
@@ -162,7 +162,7 @@ EXAMPLES = '''
   register: moid_info
 '''
 
-RETURN = """
+RETURN = r'''
 instance:
     description: metadata about the virtual machine
     returned: always
@@ -223,7 +223,7 @@ instance:
         "moid": "vm-42",
         "vimref": "vim.VirtualMachine:vm-42"
     }
-"""
+'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text

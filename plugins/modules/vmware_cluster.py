@@ -227,7 +227,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = r"""
+EXAMPLES = r'''
 - name: Create Cluster
   community.vmware.vmware_cluster:
     hostname: '{{ vcenter_hostname }}'
@@ -268,10 +268,10 @@ EXAMPLES = r"""
     enable_vsan: yes
     state: absent
   delegate_to: localhost
-"""
+'''
 
-RETURN = r"""#
-"""
+RETURN = r'''#
+'''
 
 try:
     from pyVmomi import vim, vmodl

@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
 ---
 module: vmware_datastore_info
 short_description: Gather info about datastores available in given vCenter
@@ -89,7 +89,7 @@ extends_documentation_fragment:
 
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
   community.vmware.vmware_datastore_info:
     hostname: '{{ vcenter_hostname }}'
@@ -126,7 +126,7 @@ EXAMPLES = '''
   register: info
 '''
 
-RETURN = """
+RETURN = r'''
 datastores:
     description: metadata about the available datastores
     returned: always
@@ -164,7 +164,7 @@ datastores:
             "url": "ds:///vmfs/volumes/420b3e73-67070776/"
         },
     ]
-"""
+'''
 
 try:
     from pyVmomi import vim
