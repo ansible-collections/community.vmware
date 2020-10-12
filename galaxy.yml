@@ -15,6 +15,6 @@ tags:
   - vmware
   - virtualization
 dependencies: {}
-repository: https://github.com/ansible-collections/vmware.git
-homepage: https://github.com/ansible-collections/vmware
-issues: https://github.com/ansible-collections/vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+repository: https://github.com/ansible-collections/community.vmware.git
+homepage: https://github.com/ansible-collections/community.vmware
+issues: https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
