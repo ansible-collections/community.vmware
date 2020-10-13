@@ -385,7 +385,7 @@ class BaseVMwareInventory:
                                                         pwd=self.password, port=self.port)
             else:
                 service_instance = connect.SmartConnectNoSSL(host=self.hostname, user=self.username,
-                                                        pwd=self.password, port=self.port)
+                                                             pwd=self.password, port=self.port)
 
         except vim.fault.InvalidLogin as e:
             raise AnsibleParserError("Unable to log on to vCenter or ESXi API at %s:%s as %s: %s" % (self.hostname, self.port, self.username, e.msg))
