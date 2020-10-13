@@ -721,6 +721,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             query_props = None
             vm_properties.remove('all')
         else:
+            if 'runtime.connectionState' not in vm_properties:
+                vm_properties.append('runtime.connectionState')
             query_props = [x for x in vm_properties if x != "customValue"]
 
         objects = self.pyv.get_managed_objects_properties(
@@ -743,13 +745,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         hostnames = self.get_option('hostnames')
 
         for vm_obj in objects:
-            if not vm_obj.obj.config:
-                # Sometime orphaned VMs return no configurations
-                continue
-
             properties = dict()
             for vm_obj_property in vm_obj.propSet:
                 properties[vm_obj_property.name] = vm_obj_property.val
+
+            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) == 'orphaned':
+                continue
 
             # Custom values
             if 'customValue' in vm_properties:
