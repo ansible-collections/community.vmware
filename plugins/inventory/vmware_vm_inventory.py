@@ -280,7 +280,6 @@ import atexit
 import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
-from ansible.module_utils.common.dict_transformations import dict_merge
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
@@ -551,6 +550,23 @@ class BaseVMwareInventory:
         except Exception as err:  # pylint: disable=broad-except
             _handle_error("Couldn't retrieve contents from host: %s" % to_native(err))
         return []
+
+
+def dict_merge(a, b):
+    """
+        Smiler to "ansible.module_utils.common.dict_transformations.dict_merge" but without "deepcopy"
+    """
+
+    if not isinstance(b, dict):
+        print(b)
+        return b
+    result = a
+    for k, v in b.items():
+        if k in result and isinstance(result[k], dict):
+            result[k] = dict_merge(result[k], v)
+        else:
+            result[k] = v
+    return result
 
 
 def to_nested_dict(vm_properties):
