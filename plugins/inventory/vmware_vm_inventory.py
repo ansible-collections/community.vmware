@@ -378,16 +378,15 @@ class BaseVMwareInventory:
             raise AnsibleError('pyVim does not support changing verification mode with python < 2.7.9. Either update '
                                'python or set validate_certs to false in configuration YAML file.')
 
-        ssl_context = None
-        if not self.validate_certs and hasattr(ssl, 'SSLContext'):
-            ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-            ssl_context.verify_mode = ssl.CERT_NONE
-
         service_instance = None
         try:
-            service_instance = connect.SmartConnect(host=self.hostname, user=self.username,
-                                                    pwd=self.password, sslContext=ssl_context,
-                                                    port=self.port)
+            if self.validate_certs:
+                service_instance = connect.SmartConnect(host=self.hostname, user=self.username,
+                                                        pwd=self.password, port=self.port)
+            else:
+                service_instance = connect.SmartConnectNoSSL(host=self.hostname, user=self.username,
+                                                        pwd=self.password, port=self.port)
+
         except vim.fault.InvalidLogin as e:
             raise AnsibleParserError("Unable to log on to vCenter or ESXi API at %s:%s as %s: %s" % (self.hostname, self.port, self.username, e.msg))
         except vim.fault.NoPermission as e:
