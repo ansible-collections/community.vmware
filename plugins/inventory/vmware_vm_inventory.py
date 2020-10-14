@@ -558,7 +558,6 @@ def dict_merge(a, b):
     """
 
     if not isinstance(b, dict):
-        print(b)
         return b
     result = a
     for k, v in b.items():
