@@ -554,20 +554,19 @@ class BaseVMwareInventory:
         return []
 
 
-def dict_merge(a, b):
+def in_place_merge(a, b):
     """
-        Similar to "ansible.module_utils.common.dict_transformations.dict_merge" but without "deepcopy"
-    """
+        Recursively merges second dict into the first.
 
+    """
     if not isinstance(b, dict):
         return b
-    result = a
     for k, v in b.items():
-        if k in result and isinstance(result[k], dict):
-            result[k] = dict_merge(result[k], v)
+        if k in a and isinstance(a[k], dict):
+            a[k] = in_place_merge(a[k], v)
         else:
-            result[k] = v
-    return result
+            a[k] = v
+    return a
 
 
 def to_nested_dict(vm_properties):
@@ -584,7 +583,7 @@ def to_nested_dict(vm_properties):
 
         for k in prop_parents:
             prop_dict = {k: prop_dict}
-        host_properties = dict_merge(host_properties, prop_dict)
+        host_properties = in_place_merge(host_properties, prop_dict)
 
     return host_properties
 
