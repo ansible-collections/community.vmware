@@ -554,7 +554,7 @@ class BaseVMwareInventory:
 
 def dict_merge(a, b):
     """
-        Smiler to "ansible.module_utils.common.dict_transformations.dict_merge" but without "deepcopy"
+        Similar to "ansible.module_utils.common.dict_transformations.dict_merge" but without "deepcopy"
     """
 
     if not isinstance(b, dict):
