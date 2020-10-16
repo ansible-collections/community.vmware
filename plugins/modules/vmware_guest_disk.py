@@ -79,11 +79,16 @@ options:
      - '     - C(thin) thin disk'
      - '     - C(eagerzeroedthick) eagerzeroedthick disk'
      - '     - C(thick) thick disk'
+     - '     - C(rdm) raw disk maping'
      - '     Default: C(thick) thick disk, no eagerzero.'
      - ' - C(disk_mode) (string): Type of disk mode. Valid values are:'
      - '     - C(persistent) Changes are immediately and permanently written to the virtual disk. This is default.'
      - '     - C(independent_persistent) Same as persistent, but not affected by snapshots.'
      - '     - C(independent_nonpersistent) Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.'
+     - ' - C(rdm_path) (string): RDM Path. Required if disk type is raw. /vmfs/devices/naa.[alpahnumeric string]'
+     - ' - C(compatibility_mode) (string): Compatibility mode for raw devices. Valid values are:'
+     - '     - C(physicalMode) in this mode disk_mode will be blank'
+     - '     - C(virtualMode)'
      - ' - C(sharing) (bool): The sharing mode of the virtual disk. The default value is no sharing.'
      - '   Setting C(sharing) means that multiple virtual machines can write to the virtual disk.'
      - '   Sharing can only be set if C(type) is C(eagerzeroedthick).'
@@ -208,6 +213,21 @@ EXAMPLES = r'''
           level_value: 1300
   delegate_to: localhost
   register: test_custom_shares
+
+- name: Add raw device mapping to virtual machine using name
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.06000980ab1234efg453
 
 - name: create new disk with custom IO limits and shares in IO Limits
   community.vmware.vmware_guest_disk:
@@ -496,18 +516,25 @@ class PyVmomiHelper(PyVmomi):
             if disk['disk_unit_number'] not in current_scsi_info[scsi_controller]['disks'] and disk['state'] == 'present':
                 # Add new disk
                 disk_spec = self.create_scsi_disk(scsi_controller, disk['disk_unit_number'], disk['disk_mode'], disk['filename'], disk['sharing'])
-                if disk['filename'] is None:
-                    disk_spec.device.capacityInKB = disk['size']
                 if disk['disk_type'] == 'thin':
                     disk_spec.device.backing.thinProvisioned = True
-                elif disk['disk_type'] == 'eagerzeroedthick':
+                if disk['disk_type'] == 'eagerzeroedthick':
                     disk_spec.device.backing.eagerlyScrub = True
+                if disk['disk_type'] == 'rdm':
+                    disk_spec.device.backing = vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo()
+                    disk_spec.device.backing.deviceName = disk['disk_rdm_path']
+                    disk_spec.device.backing.compatibilityMode = disk['disk_compatibility_mode']
+
                 # get Storage DRS recommended datastore from the datastore cluster
                 if disk['datastore_cluster'] is not None:
                     datastore_name = self.get_recommended_datastore(datastore_cluster_obj=disk['datastore_cluster'], disk_spec_obj=disk_spec)
                     disk['datastore'] = find_obj(self.content, [vim.Datastore], datastore_name)
-                if disk['filename'] is not None:
+
+                if disk['filename'] is None and disk['disk_type'] != 'rdm':
+                    disk_spec.device.capacityInKB = disk['size']
+                if disk['filename'] is not None and disk['disk_type'] != 'rdm':
                     disk_spec.device.backing.fileName = disk['filename']
+
                 disk_spec.device.backing.datastore = disk['datastore']
                 disk_spec.device.backing.sharing = disk['sharing']
                 disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
@@ -738,9 +765,9 @@ class PyVmomiHelper(PyVmomi):
 
             # Type of Disk
             disk_type = disk.get('type', 'thick').lower()
-            if disk_type not in ['thin', 'thick', 'eagerzeroedthick']:
+            if disk_type not in ['thin', 'thick', 'eagerzeroedthick', 'rdm']:
                 self.module.fail_json(msg="Invalid 'disk_type' specified for disk index [%s]. Please specify"
-                                          " 'disk_type' value from ['thin', 'thick', 'eagerzeroedthick']." % disk_index)
+                                          " 'disk_type' value from ['thin', 'thick', 'eagerzeroedthick', 'rdm']." % disk_index)
             current_disk['disk_type'] = disk_type
 
             # Mode of Disk
@@ -749,6 +776,20 @@ class PyVmomiHelper(PyVmomi):
                 self.module.fail_json(msg="Invalid 'disk_mode' specified for disk index [%s]. Please specify"
                                           " 'disk_mode' value from ['persistent', 'independent_persistent', 'independent_nonpersistent']." % disk_index)
             current_disk['disk_mode'] = temp_disk_mode
+
+            # If RDM make sure we have a compatibility mode
+            if disk.get('type') == 'raw':
+                compatibility_mode = disk.get('compatibility_mode', 'physicalMode')
+                if compatibility_mode not in ['physicalMode', 'virtualMode']:
+                    self.module.fail_json(msg="Invalid 'compatibility_mode' specified for disk index [%s]. Please specify"
+                                          "'compatibility_mode' value from ['physicalMode', 'virtualMode']." % disk_index)
+
+                current_disk['disk_compatibility_mode'] = compatibility_mode
+                # RDMs need a path
+                if 'rdm_path' not in disk:
+                    self.module.fail_json(msg="rdm_path needs must be specified when using disk type 'rdm' for disk index [%s]" % disk_index)
+                else:
+                    current_disk['disk_rdm_path'] = disk.get('rdm_path')
 
             # Sharing mode of disk
             current_disk['sharing'] = self.get_sharing(disk, disk_type, disk_index)
