@@ -319,7 +319,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: datacenter
-        validate_certs: no
+        validate_certs: false
         name: testvm-1
         dest_folder: "/{{ datacenter }}/vm"
       delegate_to: localhost
@@ -330,7 +330,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: datacenter
-        validate_certs: no
+        validate_certs: false
         moid: vm-42
         dest_folder: "/{{ datacenter }}/vm"
       delegate_to: localhost
@@ -340,7 +340,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/{{ datacenter }}/vm"
         name: "{{ vm_name }}"
@@ -352,7 +352,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         uuid: "{{ vm_facts.instance.hw_product_uuid }}"
         dest_folder: "/DataCenter/vm/path/to/new/folder/where/we/want"

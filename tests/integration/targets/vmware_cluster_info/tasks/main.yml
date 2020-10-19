@@ -24,7 +24,7 @@
 
 - <<: *vc_all_data
   name: Gather info about all clusters in the given datacenter in check mode
-  check_mode: yes
+  check_mode: true
 
 - debug: msg=all_cluster_result
 
@@ -50,7 +50,7 @@
 
 - <<: *vc_cluster_data
   name: Gather info about the given cluster in check mode
-  check_mode: yes
+  check_mode: true
 
 - <<: *ensure_vc_cluster_data
   name: Ensure info is gathered for the given cluster in check mode

@@ -14,7 +14,7 @@
     validate_certs: no
     state: present
   register: role_creation
-  check_mode: yes
+  check_mode: true
 
 - name: Verify if role was created
   assert:

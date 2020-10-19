@@ -662,9 +662,9 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
-        enable_drs: yes
-        enable_vsan: yes
+        enable_ha: true
+        enable_drs: true
+        enable_vsan: true
       delegate_to: localhost
 
     - name: Create Cluster with additional changes
@@ -672,7 +672,7 @@ Examples
         hostname: "{{ vcenter_server }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
-        validate_certs: no
+        validate_certs: false
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_ha: True
@@ -690,9 +690,9 @@ Examples
         password: "{{ vcenter_pass }}"
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
-        enable_drs: yes
-        enable_vsan: yes
+        enable_ha: true
+        enable_drs: true
+        enable_vsan: true
         state: absent
       delegate_to: localhost
 

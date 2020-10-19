@@ -135,7 +135,7 @@
           - 0.pool.ntp.org
         validate_certs: no
       register: present
-      check_mode: yes
+      check_mode: true
     - debug: var=present
 
     - name: Remove NTP server to a host in check mode
@@ -149,7 +149,7 @@
           - 0.pool.ntp.org
         validate_certs: no
       register: present
-      check_mode: yes
+      check_mode: true
     - debug: var=present
 
     - name: Configure NTP servers for a host in check mode
@@ -164,5 +164,5 @@
           - 2.pool.ntp.org
         validate_certs: no
       register: ntp_servers
-      check_mode: yes
+      check_mode: true
     - debug: var=ntp_servers

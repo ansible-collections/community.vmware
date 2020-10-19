@@ -424,7 +424,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: "/{{ datacenter_name }}/vm/my_folder"
         name: "{{ guest_name }}"
         state: powered-off
@@ -436,7 +436,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: "/{{ datacenter_name }}/vm/my_folder"
         moid: vm-42
         state: powered-on

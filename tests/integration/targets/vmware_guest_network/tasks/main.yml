@@ -247,7 +247,7 @@
           manual_mac: "aa:50:56:11:22:33"
           state: new
     register: no_nw_details
-    ignore_errors: yes
+    ignore_errors: true
 
   - debug: var=no_nw_details
 

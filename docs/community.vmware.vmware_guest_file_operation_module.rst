@@ -555,14 +555,14 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         vm_id: "{{ guest_name }}"
         vm_username: "{{ guest_username }}"
         vm_password: "{{ guest_userpassword }}"
         directory:
           path: "/test"
           operation: create
-          recurse: no
+          recurse: false
       delegate_to: localhost
 
     - name: copy file to vm

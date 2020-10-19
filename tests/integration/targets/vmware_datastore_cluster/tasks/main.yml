@@ -17,7 +17,7 @@
       datastore_cluster_name: DSC1
       enable_sdrs: False
       state: present
-    check_mode: yes
+    check_mode: true
     register: add_dsc_check
 
   - assert:
@@ -50,7 +50,7 @@
       datastore_cluster_name: DSC1
       enable_sdrs: True
       state: present
-    check_mode: yes
+    check_mode: true
     register: enable_sdrs_check
 
   - assert:
@@ -109,7 +109,7 @@
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
       state: absent
-    check_mode: yes
+    check_mode: true
     register: delete_dsc_check
 
   - assert:

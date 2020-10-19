@@ -256,7 +256,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         dvswitch: 'vDS'
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
     - name: Confirm if vlan 15 is present
@@ -265,7 +265,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         vlanid: '15'
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
 

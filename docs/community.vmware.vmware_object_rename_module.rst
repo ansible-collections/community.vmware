@@ -237,7 +237,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         new_name: Fedora_31
         object_name: Fedora_VM
         object_type: VirtualMachine
@@ -248,7 +248,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         new_name: Fedora_31
         object_moid: vm-14
         object_type: VirtualMachine
@@ -259,7 +259,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         new_name: Asia_Datacenter
         object_name: dc1
         object_type: Datacenter
@@ -270,7 +270,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         new_name: backup
         object_moid: group-v46
         object_type: Folder
@@ -281,7 +281,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         new_name: CCR_1
         object_moid: domain-c33
         object_type: Cluster

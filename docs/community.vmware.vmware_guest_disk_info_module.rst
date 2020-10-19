@@ -302,7 +302,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: ha-datacenter
-        validate_certs: no
+        validate_certs: false
         uuid: 421e4592-c069-924d-ce20-7e7533fab926
       delegate_to: localhost
       register: disk_info
@@ -313,7 +313,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: ha-datacenter
-        validate_certs: no
+        validate_certs: false
         name: VM_225
       delegate_to: localhost
       register: disk_info
@@ -324,7 +324,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: ha-datacenter
-        validate_certs: no
+        validate_certs: false
         moid: vm-42
       delegate_to: localhost
       register: disk_info

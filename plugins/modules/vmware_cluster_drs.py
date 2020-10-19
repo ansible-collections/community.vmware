@@ -28,12 +28,12 @@ options:
       description:
       - The name of the cluster to be managed.
       type: str
-      required: yes
+      required: true
     datacenter:
       description:
       - The name of the datacenter.
       type: str
-      required: yes
+      required: true
       aliases: [ datacenter_name ]
     enable_drs:
       description:
@@ -82,7 +82,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_drs: yes
+    enable_drs: true
   delegate_to: localhost
 
 - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
@@ -92,7 +92,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_drs: yes
+    enable_drs: true
     advanced_settings:
       'TryBalanceVmsPerHost': '1'
   delegate_to: localhost

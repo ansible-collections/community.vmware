@@ -515,10 +515,10 @@ Examples
         hostname: "{{ hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         system_defaults:
-          enabled: yes
+          enabled: true
           start_delay: 100
           stop_action: guestShutdown
 
@@ -527,7 +527,7 @@ Examples
         hostname: "{{ hostname }}"
         username: "{{ username }}"
         password: "{{ password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         name: "{{ vm_name }}"
         power_info:
@@ -535,7 +535,7 @@ Examples
           start_delay: 10
           start_order: 1
           stop_action: powerOff
-          wait_for_heartbeat: yes
+          wait_for_heartbeat: true
 
 
 

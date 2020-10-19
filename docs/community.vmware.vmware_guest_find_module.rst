@@ -239,7 +239,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: testvm
       delegate_to: localhost
       register: vm_folder

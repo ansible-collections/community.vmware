@@ -243,7 +243,7 @@ Examples
         password: '{{ vcenter_password }}'
         esxi_hostname: '{{ esxi_host }}'
         policy: high-performance
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
     - name: Set the Power Management Policy of all host systems from cluster to high-performance
@@ -253,7 +253,7 @@ Examples
         password: '{{ vcenter_password }}'
         cluster_name: '{{ cluster_name }}'
         policy: high-performance
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
 

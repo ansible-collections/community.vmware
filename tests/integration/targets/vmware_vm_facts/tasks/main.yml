@@ -54,7 +54,7 @@
 
 - <<: *vm_data
   name: Get facts about available vms in check mode
-  check_mode: yes
+  check_mode: true
 
 - <<: *vm_fact_check
   name: Verify if VM facts exist in check mode

@@ -29,7 +29,7 @@
 
     - <<: *host_srv_facts
       name: Check facts about all hosts in given cluster in check mode
-      check_mode: yes
+      check_mode: true
 
     - debug:
         var: host_services

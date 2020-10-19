@@ -189,7 +189,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: profiles
 

@@ -11,7 +11,7 @@
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
-      enabled: yes
+      enabled: true
   register: changed_system_defaults_result
 
 - name: Check return parameters.
@@ -52,11 +52,11 @@
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
-      enabled: yes
+      enabled: true
       start_delay: 200
       stop_action: guestShutdown
       stop_delay: 300
-      wait_for_heartbeat: yes
+      wait_for_heartbeat: true
 
 - name: Gather facts for autoStart defaults parameters from ESXi.
   vmware_host_facts:
@@ -245,8 +245,8 @@
       start_order: -1
       stop_action: suspend
       stop_delay: 20
-  check_mode: yes
-  diff: yes
+  check_mode: true
+  diff: true
 
 - name: Gather facts for autoStart config of other VM from ESXi.
   vmware_host_facts:
@@ -294,7 +294,7 @@
     validate_certs: no
     esxi_hostname: "{{ esxi1 }}"
     uuid: "{{ vm_instanceUuid_and_moid_result.instance.config.instanceUuid }}"
-    use_instance_uuid: yes
+    use_instance_uuid: true
     power_info:
       start_action: powerOn
       start_delay: 300

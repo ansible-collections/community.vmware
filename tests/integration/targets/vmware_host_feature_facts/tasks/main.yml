@@ -33,7 +33,7 @@
     validate_certs: no
     cluster_name: "{{ ccr1 }}"
   register: capability_0001_results
-  check_mode: yes
+  check_mode: true
 
 - debug: var=capability_0001_results
 
@@ -67,7 +67,7 @@
     validate_certs: no
     esxi_hostname: '{{ esxi1 }}'
   register: capability_0002_results
-  check_mode: yes
+  check_mode: true
 
 - debug: var=capability_0002_results
 

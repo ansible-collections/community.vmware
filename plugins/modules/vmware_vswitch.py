@@ -29,7 +29,7 @@ options:
     description:
     - vSwitch name to add.
     - Alias C(switch) is added in version 2.4.
-    required: yes
+    required: true
     aliases: [ switch_name ]
     type: str
   nics:

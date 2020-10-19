@@ -204,7 +204,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: all_custom_spec_info
 
@@ -213,7 +213,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         spec_name: custom_linux_spec
       delegate_to: localhost
       register: custom_spec_info

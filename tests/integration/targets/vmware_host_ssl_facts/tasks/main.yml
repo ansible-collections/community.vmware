@@ -44,7 +44,7 @@
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
     validate_certs: no
-  check_mode: yes
+  check_mode: true
   register: ssl_facts
 
 - debug: var=ssl_facts
@@ -60,7 +60,7 @@
     password: "{{ vcenter_password }}"
     cluster_name: "{{ ccr1 }}"
     validate_certs: no
-  check_mode: yes
+  check_mode: true
   register: ssl_facts
 
 - debug: var=ssl_facts

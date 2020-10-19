@@ -181,7 +181,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: tag_details
     - debug:
@@ -192,7 +192,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: tag_results
     - set_fact:

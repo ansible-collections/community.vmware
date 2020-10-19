@@ -43,7 +43,7 @@
         vmnic: vmnic0
         sriov_on: true
         num_virt_func: 100
-      ignore_errors: yes
+      ignore_errors: true
       register: present
     - debug: var=present
 
@@ -83,7 +83,7 @@
         vmnic: vmnic0
         sriov_on: true
         num_virt_func: 10
-      check_mode: yes
+      check_mode: true
       register: present
     - debug: var=present
 
@@ -97,6 +97,6 @@
         vmnic: vmnic0
         sriov_on: false
         num_virt_func: 1
-      check_mode: yes
+      check_mode: true
       register: present
     - debug: var=present

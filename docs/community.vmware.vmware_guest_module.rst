@@ -53,7 +53,7 @@ Parameters
                 </td>
                 <td>
                         <div>A note or annotation to include in the virtual machine.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: notes</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: falsetes</div>
                 </td>
             </tr>
             <tr>
@@ -2077,7 +2077,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: /DC1/vm/
         name: test_vm_0001
         state: poweredon
@@ -2098,7 +2098,7 @@ Examples
           ip: 10.10.10.100
           netmask: 255.255.255.0
           device_type: vmxnet3
-        wait_for_ip_address: yes
+        wait_for_ip_address: true
         wait_for_ip_address_timeout: 600
       delegate_to: localhost
       register: deploy_vm
@@ -2108,7 +2108,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: /testvms
         name: testvm_2
         state: poweredon
@@ -2144,7 +2144,7 @@ Examples
         networks:
         - name: VM Network
           mac: aa:bb:dd:aa:00:14
-        wait_for_ip_address: yes
+        wait_for_ip_address: true
       delegate_to: localhost
       register: deploy
 
@@ -2153,7 +2153,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: datacenter1
         cluster: cluster
         name: testvm-2
@@ -2171,7 +2171,7 @@ Examples
         - vlan: 1234
           type: dhcp
         customization:
-          autologon: yes
+          autologon: true
           dns_servers:
           - 192.168.1.1
           - 192.168.1.2
@@ -2186,7 +2186,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         state: present
         folder: /DC1/vm
@@ -2213,7 +2213,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         uuid: "{{ vm_uuid }}"
         name: new_name
         state: present
@@ -2224,7 +2224,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         uuid: "{{ vm_uuid }}"
         state: absent
       delegate_to: localhost
@@ -2234,7 +2234,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: vm_name
         delete_from_inventory: True
         state: absent
@@ -2245,7 +2245,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: vm_name
         state: present
         vapp_properties:
@@ -2263,7 +2263,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         uuid: "{{ vm_uuid }}"
         state: poweredoff
       delegate_to: localhost
@@ -2307,7 +2307,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: /DC1/vm/
         name: test_vm_multi_disks
         state: poweredoff

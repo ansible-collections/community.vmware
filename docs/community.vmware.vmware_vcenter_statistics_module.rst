@@ -600,7 +600,7 @@ Examples
           enabled: true
           save_for_years: 1
           level: 1
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
 

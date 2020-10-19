@@ -20,7 +20,7 @@
         ad_state: present
         validate_certs: no
       register: host_active_directory_info_check_mode
-      check_mode: yes
+      check_mode: true
 
     - debug: var=host_active_directory_info_check_mode
 
@@ -59,7 +59,7 @@
         ad_state: absent
         validate_certs: no
       register: host_active_directory_info_2_check_mode
-      check_mode: yes
+      check_mode: true
 
     - debug: var=host_active_directory_info_2_check_mode
 

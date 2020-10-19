@@ -371,7 +371,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_vsan: yes
+        enable_vsan: true
       delegate_to: localhost
 
     - name: Enable vSAN and automatic rebalancing
@@ -381,7 +381,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_vsan: yes
+        enable_vsan: true
         advanced_options:
           automatic_rebalance: True
       delegate_to: localhost
@@ -391,7 +391,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_vsan: True

@@ -33,7 +33,7 @@
 
   - <<: *evc_enable_data
     name: Enable EVC mode on vCenter cluster in check mode
-    check_mode: yes
+    check_mode: true
 
   - &evc_disable_data
     name: Disable EVC mode on vCenter Cluster
@@ -49,4 +49,4 @@
 
   - <<: *evc_disable_data
     name: Disable EVC mode on vCenter Cluster in check mode
-    check_mode: yes
+    check_mode: true

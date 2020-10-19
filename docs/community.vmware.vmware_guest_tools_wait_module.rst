@@ -317,7 +317,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/{{datacenter}}/vm"
         name: "{{ vm_name }}"
@@ -329,7 +329,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         uuid: "{{ vm_facts.instance.hw_product_uuid }}"
       delegate_to: localhost
       register: facts
@@ -340,7 +340,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         moid: vm-42
       delegate_to: localhost
       register: facts
@@ -350,7 +350,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: test-vm
         folder: "/{{datacenter}}/vm"
       delegate_to: localhost

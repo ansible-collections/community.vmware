@@ -435,7 +435,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         name: "test_vm1"
         destination_vm_name: "cloned_vm_from_template"
         destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -454,7 +454,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: "test_vm1"
         destination_vm_name: "cloned_vm_from_vm"
         destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -471,7 +471,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: "test_vm1"
         destination_vm_name: "cloned_vm_from_vm"
         destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -480,7 +480,7 @@ Examples
         destination_host: '{{ destination_esxi }}'
         destination_datastore: '{{ destination_datastore }}'
         destination_vm_folder: '{{ destination_vm_folder }}'
-      check_mode: yes
+      check_mode: true
 
 
 

@@ -42,7 +42,7 @@
         validate_certs: no
         state: enabled
       register: host_ipv6_info_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=host_ipv6_info_check_mode
     - assert:
         that:
@@ -83,7 +83,7 @@
         validate_certs: no
         state: enabled
       register: hosts_ipv6_info_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=hosts_ipv6_info_check_mode
     - assert:
         that:

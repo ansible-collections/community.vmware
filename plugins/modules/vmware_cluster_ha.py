@@ -29,12 +29,12 @@ options:
       description:
       - The name of the cluster to be managed.
       type: str
-      required: yes
+      required: true
     datacenter:
       description:
       - The name of the datacenter.
       type: str
-      required: yes
+      required: true
       aliases: [ datacenter_name ]
     enable_ha:
       description:
@@ -186,7 +186,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
+    enable_ha: true
   delegate_to: localhost
 
 - name: Enable HA and VM monitoring without admission control
@@ -208,7 +208,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
+    enable_ha: true
     reservation_based_admission_control:
       auto_compute_percentages: False
       failover_level: 1

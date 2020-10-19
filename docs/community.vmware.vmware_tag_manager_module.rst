@@ -260,7 +260,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - Sample_Tag_0002
           - Category_0001:Sample_Tag_0003
@@ -274,7 +274,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - tag: tag_0001
             category: cat_0001
@@ -290,7 +290,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - Sample_Tag_0002
         object_name: Fedora_VM
@@ -303,7 +303,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - Sample_Tag_0003
         object_name: Switch_0001
@@ -316,7 +316,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - Sample_Tag_0004
         object_name: Switch_0001:Portgroup_0001

@@ -360,12 +360,12 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/vm"
         esxi_hostname: "{{ esxi_hostname }}"
         name: "{{ vm_name }}"
-        template: no
+        template: false
         path: "[datastore1] vm/vm.vmx"
         state: present
 
@@ -374,12 +374,12 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/vm"
         resource_pool: "{{ resource_pool }}"
         name: "{{ vm_name }}"
-        template: no
+        template: false
         path: "[datastore1] vm/vm.vmx"
         state: present
 
@@ -388,12 +388,12 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/vm"
         cluster: "{{ cluster_name }}"
         name: "{{ vm_name }}"
-        template: no
+        template: false
         path: "[datastore1] vm/vm.vmx"
         state: present
 
@@ -402,7 +402,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/vm"
         name: "{{ vm_name }}"

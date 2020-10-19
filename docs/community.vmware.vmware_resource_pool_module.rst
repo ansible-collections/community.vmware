@@ -404,14 +404,14 @@ Examples
         datacenter: '{{ datacenter_name }}'
         cluster: '{{ cluster_name }}'
         resource_pool: '{{ resource_pool_name }}'
-        mem_shares: normal
+        mem_shares: falsermal
         mem_limit: -1
         mem_reservation: 0
-        mem_expandable_reservations: yes
-        cpu_shares: normal
+        mem_expandable_reservations: true
+        cpu_shares: falsermal
         cpu_limit: -1
         cpu_reservation: 0
-        cpu_expandable_reservations: yes
+        cpu_expandable_reservations: true
         state: present
       delegate_to: localhost
 

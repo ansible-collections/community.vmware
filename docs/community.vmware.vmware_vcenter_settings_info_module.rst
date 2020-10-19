@@ -224,7 +224,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
       register: vcenter_settings_info
 
     - name: "Gather some info from vCenter using the vSphere API output schema"
@@ -232,7 +232,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         schema: vsphere
         properties:
           - config.workflow.port

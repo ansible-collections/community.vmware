@@ -48,7 +48,7 @@
       validate_certs: no
       state: disabled
     register: host_hyperthreading_info_check_mode
-    check_mode: yes
+    check_mode: true
 
   - debug: var=host_hyperthreading_info_check_mode
 
@@ -82,7 +82,7 @@
       validate_certs: no
       state: enabled
     register: host_hyperthreading_info_check_mode
-    check_mode: yes
+    check_mode: true
 
   - debug: var=host_hyperthreading_info_check_mode
 

@@ -318,7 +318,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: yes
+        enable_drs: true
       delegate_to: localhost
 
     - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
@@ -328,7 +328,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: yes
+        enable_drs: true
         advanced_settings:
           'TryBalanceVmsPerHost': '1'
       delegate_to: localhost
@@ -338,7 +338,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_drs: True

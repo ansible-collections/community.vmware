@@ -320,7 +320,7 @@ Examples
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
         cluster_name: "{{ cluster_name }}"
-        validate_certs: no
+        validate_certs: false
         vms:
             - vm1
             - vm2
@@ -336,7 +336,7 @@ Examples
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
         cluster_name: "{{ cluster_name }}"
-        validate_certs: no
+        validate_certs: false
         enabled: True
         vms:
             - vm1
@@ -352,7 +352,7 @@ Examples
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
         cluster_name: "{{ cluster_name }}"
-        validate_certs: no
+        validate_certs: false
         drs_rule_name: vm1-vm2-affinity-rule-001
         state: absent
       delegate_to: localhost

@@ -20,6 +20,6 @@
 
   - <<: *spbm_data
     name: Get information about vSphere SPBM info in check mode
-    check_mode: yes
+    check_mode: true
     
   - <<: *spbm_check

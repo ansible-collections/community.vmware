@@ -65,7 +65,7 @@
     - <<: *pv_data
       name: Configure PVLANs in check mode
       register: pvlans_result_check_mode
-      check_mode: yes
+      check_mode: true
     - debug:
         var: pvlans_result_check_mode
     - name: ensure pvlans were not changed

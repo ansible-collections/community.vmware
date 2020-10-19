@@ -326,7 +326,7 @@ Examples
 
     - name: take a screenshot of the virtual machine console
       community.vmware.vmware_guest_screenshot:
-        validate_certs: no
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -339,7 +339,7 @@ Examples
 
     - name: Take a screenshot of the virtual machine console using MoID
       community.vmware.vmware_guest_screenshot:
-        validate_certs: no
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

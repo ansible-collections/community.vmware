@@ -295,7 +295,7 @@ Examples
         hostname: "{{ vcenter_server }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter_name }}"
       register: dvpg_info
 

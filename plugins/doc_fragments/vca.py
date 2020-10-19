@@ -55,7 +55,7 @@ options:
       description:
         - If the certificates of the authentication is to be verified.
       type: bool
-      default: yes
+      default: true
       aliases: [ verify_certs ]
     vdc_name:
       description:

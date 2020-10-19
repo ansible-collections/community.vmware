@@ -19,7 +19,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         validate_certs: no
-      ignore_errors: yes
+      ignore_errors: true
       register: no_pg_vs
 
     - assert:
@@ -33,7 +33,7 @@
         password: '{{ vcenter_password }}'
         vswitch: ''
         validate_certs: no
-      ignore_errors: yes
+      ignore_errors: true
       register: no_vs
 
     - assert:
@@ -48,7 +48,7 @@
         vswitch: '{{ switch1 }}'
         portgroup: 'pg_03'
         validate_certs: no
-      ignore_errors: yes
+      ignore_errors: true
       register: no_cluster
 
     - assert:
@@ -65,7 +65,7 @@
         cluster_name: "{{ ccr1 }}"
         validate_certs: no
         state: present
-      ignore_errors: yes
+      ignore_errors: true
       register: pg_info
 
     - assert:

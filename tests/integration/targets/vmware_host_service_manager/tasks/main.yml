@@ -48,7 +48,7 @@
         service_name: ntpd
         state: present
       register: all_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - name: ensure info are gathered for all hosts
       assert:
         that:
@@ -64,7 +64,7 @@
         service_name: ntpd
         state: absent
       register: single_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - name: ensure info are gathered
       assert:
         that:

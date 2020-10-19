@@ -203,7 +203,7 @@ ansible_shell_type: powershell
     - fetch:
         src: /home/user/foo
         dest: linux-foo
-        flat: yes
+        flat: true
 
     - file:
         path: /home/user/foo
@@ -226,7 +226,7 @@ ansible_shell_type: powershell
     - fetch:
         src: C:\Users\user\foo
         dest: windows-foo
-        flat: yes
+        flat: true
 
     - win_file:
         path: C:\Users\user\foo

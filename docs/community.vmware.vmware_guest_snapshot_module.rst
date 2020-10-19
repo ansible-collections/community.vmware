@@ -535,8 +535,8 @@ Examples
           name: "{{ guest_name }}"
           state: present
           snapshot_name: dummy_vm_snap_0001
-          quiesce: yes
-          memory_dump: yes
+          quiesce: true
+          memory_dump: true
         delegate_to: localhost
 
       - name: Remove a snapshot and snapshot subtree
@@ -548,7 +548,7 @@ Examples
           folder: "/{{ datacenter_name }}/vm/"
           name: "{{ guest_name }}"
           state: absent
-          remove_children: yes
+          remove_children: true
           snapshot_name: snap1
         delegate_to: localhost
 

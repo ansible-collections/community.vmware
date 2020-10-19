@@ -291,7 +291,7 @@ Examples
         ad_user: adjoin
         ad_password: Password123$
         ad_state: present
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
     - name: Leave AD domain
@@ -301,7 +301,7 @@ Examples
         password: '{{ vcenter_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
         ad_state: absent
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
 

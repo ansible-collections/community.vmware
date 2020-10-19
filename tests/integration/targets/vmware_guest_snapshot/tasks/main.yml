@@ -169,7 +169,7 @@
     snapshot_name: snap_a
     description: "snap named a"
   register: snapshot_failure_details
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Check if error is shown
   assert:

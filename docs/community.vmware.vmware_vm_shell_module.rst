@@ -468,7 +468,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter }}"
         folder: "/{{datacenter}}/vm"
         vm_id: "{{ vm_name }}"

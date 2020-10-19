@@ -274,7 +274,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: "{{ vm_name }}"
       register: vm_boot_order_info
 
@@ -283,7 +283,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         moid: "vm-42"
       register: vm_moid_boot_order_info
 

@@ -239,7 +239,7 @@ Examples
         path: some/remote/file
         state: touch
       delegate_to: localhost
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Delete a file on a datastore
       community.vmware.vsphere_file:

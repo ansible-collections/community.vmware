@@ -298,7 +298,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         name: "vSphere storage policy"
         description: "vSphere storage performance policy"
         tag_category: "performance_tier"
@@ -312,7 +312,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         name: "vSphere storage policy"
         state: "absent"
       delegate_to: localhost

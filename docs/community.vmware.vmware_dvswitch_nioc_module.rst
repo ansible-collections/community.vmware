@@ -374,7 +374,7 @@ Examples
             - name: vmotion
               limit: -1
               reservation: 128
-              shares_level: normal
+              shares_level: falsermal
             - name: vsan
               limit: -1
               shares_level: custom

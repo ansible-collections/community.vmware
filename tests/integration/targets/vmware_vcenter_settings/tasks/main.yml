@@ -40,7 +40,7 @@
     logging_options: info
     validate_certs: no
   register: all_settings_results_check_mode
-  check_mode: yes
+  check_mode: true
 
 - debug: var=all_settings_results_check_mode
 

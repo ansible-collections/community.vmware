@@ -59,7 +59,7 @@
     esxi_hostname: '{{ esxi1 }}'
     policies: true
   register: portgroup_0004_results
-  check_mode: yes
+  check_mode: true
 
 - assert:
     that:

@@ -503,8 +503,8 @@ Examples
         datastore: vsandatastore
         name: NewVM
         networks: "{u'VM Network':u'{{ ProvisioningNetworkLabel }}'}"
-        validate_certs: no
-        power_on: no
+        validate_certs: false
+        power_on: false
         ovf: /absolute/path/to/template/mytemplate.ova
       delegate_to: localhost
 

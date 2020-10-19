@@ -433,7 +433,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         name: test_VM
         controllers:
           - state: present
@@ -451,7 +451,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         moid: vm-33
         controllers:
           - state: absent

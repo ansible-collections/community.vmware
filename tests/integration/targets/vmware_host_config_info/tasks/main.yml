@@ -31,7 +31,7 @@
     validate_certs: no
     cluster_name: "{{ ccr1 }}"
   register: all_hosts_result_check_mode
-  check_mode: yes
+  check_mode: true
 
 - name: ensure info are gathered for all hosts
   assert:
@@ -48,7 +48,7 @@
       validate_certs: no
       esxi_hostname: "{{ esxi1 }}"
     register: single_hosts_result_check_mode
-    check_mode: yes
+    check_mode: true
   - name: ensure info are gathered for all hosts
     assert:
       that:

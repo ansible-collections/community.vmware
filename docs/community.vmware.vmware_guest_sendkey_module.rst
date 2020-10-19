@@ -344,7 +344,7 @@ Examples
 
     - name: Send list of keys to virtual machine
       community.vmware.vmware_guest_sendkey:
-        validate_certs: no
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -360,7 +360,7 @@ Examples
 
     - name: Send list of keys to virtual machine using MoID
       community.vmware.vmware_guest_sendkey:
-        validate_certs: no
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -374,7 +374,7 @@ Examples
 
     - name: Send a string to virtual machine
       community.vmware.vmware_guest_sendkey:
-        validate_certs: no
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

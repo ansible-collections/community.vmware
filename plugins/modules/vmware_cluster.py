@@ -30,12 +30,12 @@ options:
       description:
       - The name of the cluster to be managed.
       type: str
-      required: yes
+      required: true
     datacenter:
       description:
       - The name of the datacenter.
       type: str
-      required: yes
+      required: true
       aliases: [ datacenter_name ]
     ignore_drs:
       description:
@@ -235,9 +235,9 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
-    enable_drs: yes
-    enable_vsan: yes
+    enable_ha: true
+    enable_drs: true
+    enable_vsan: true
   delegate_to: localhost
 
 - name: Create Cluster with additional changes
@@ -263,9 +263,9 @@ EXAMPLES = r'''
     password: "{{ vcenter_pass }}"
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
-    enable_drs: yes
-    enable_vsan: yes
+    enable_ha: true
+    enable_drs: true
+    enable_vsan: true
     state: absent
   delegate_to: localhost
 '''

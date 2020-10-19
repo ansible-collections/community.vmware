@@ -921,7 +921,7 @@ Examples
           normal_operations: 30
           long_operations: 120
         logging_options: info
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
 
 

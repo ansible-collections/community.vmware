@@ -577,7 +577,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
+        enable_ha: true
       delegate_to: localhost
 
     - name: Enable HA and VM monitoring without admission control
@@ -585,7 +585,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_ha: True
@@ -599,7 +599,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
+        enable_ha: true
         reservation_based_admission_control:
           auto_compute_percentages: False
           failover_level: 1

@@ -30,12 +30,12 @@ options:
       description:
       - The name of the cluster to be managed.
       type: str
-      required: yes
+      required: true
     datacenter:
       description:
       - The name of the datacenter.
       type: str
-      required: yes
+      required: true
       aliases: [ datacenter_name ]
     enable_vsan:
       description:
@@ -88,7 +88,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_vsan: yes
+    enable_vsan: true
   delegate_to: localhost
 
 - name: Enable vSAN and automatic rebalancing
@@ -98,7 +98,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_vsan: yes
+    enable_vsan: true
     advanced_options:
       automatic_rebalance: True
   delegate_to: localhost

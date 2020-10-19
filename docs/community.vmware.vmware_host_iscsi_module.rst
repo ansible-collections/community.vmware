@@ -998,7 +998,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         state: enabled
 
@@ -1007,7 +1007,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         iscsi_config:
           vmhba_name: vmhba65
@@ -1020,7 +1020,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         iscsi_config:
           vmhba_name: vmhba65
@@ -1034,7 +1034,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         iscsi_config:
           vmhba_name: vmhba65
@@ -1048,7 +1048,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         iscsi_config:
           vmhba_name: vmhba65
@@ -1064,7 +1064,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
         iscsi_config:
           vmhba_name: vmhba65

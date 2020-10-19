@@ -35,7 +35,7 @@ options:
     description:
     - Name of the datacenter to add the host.
     - Aliases added in version 2.6.
-    required: yes
+    required: true
     aliases: ['datacenter']
     type: str
   cluster_name:
@@ -65,7 +65,7 @@ options:
   esxi_hostname:
     description:
     - ESXi hostname to manage.
-    required: yes
+    required: true
     type: str
   esxi_username:
     description:

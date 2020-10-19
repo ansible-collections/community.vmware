@@ -19,7 +19,7 @@
         state: enabled
         validate_certs: no
       register: snmp_enabled_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=snmp_enabled_check_mode
     - assert:
         that:

@@ -47,7 +47,7 @@
       vmware_vmkernel:
         <<: *new_vmkernel
       register: host_vmkernel
-      check_mode: yes
+      check_mode: true
     - debug: var=host_vmkernel
 
     - name: Delete VMkernel adapter

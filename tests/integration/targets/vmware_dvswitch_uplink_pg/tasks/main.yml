@@ -51,7 +51,7 @@
         block_all_ports: False
         validate_certs: no
       register: uplink_pg_result_check_mode
-      check_mode: yes
+      check_mode: true
 
     - debug:
         var: uplink_pg_result_check_mode

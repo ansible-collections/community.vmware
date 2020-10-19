@@ -30,7 +30,7 @@ options:
   vapp_name:
     description:
       - The name of the vCloud Air vApp instance
-    required: yes
+    required: true
   template_name:
     description:
       - The name of the vApp template to use to create the vApp instance.  If

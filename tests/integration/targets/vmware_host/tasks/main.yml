@@ -129,7 +129,7 @@
         folder_name: "/{{ dc1 }}/host/Staging"
         state: present
       register: add_host_to_folder_result
-      check_mode: yes
+      check_mode: true
 
     - name: ensure host system is not present
       assert:

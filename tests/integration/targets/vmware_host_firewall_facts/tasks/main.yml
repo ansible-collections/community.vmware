@@ -14,7 +14,7 @@
     validate_certs: no
     esxi_hostname: '{{ esxi1 }}'
   register: firewall_0004_results
-  check_mode: yes
+  check_mode: true
 
 - assert:
     that:
@@ -65,7 +65,7 @@
       validate_certs: no
       cluster_name: "{{ ccr1 }}"
     register: firewall_0003_results
-    check_mode: yes
+    check_mode: true
 
   - assert:
       that:

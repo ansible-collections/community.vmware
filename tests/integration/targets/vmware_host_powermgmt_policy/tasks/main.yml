@@ -68,7 +68,7 @@
         policy: high-performance
         validate_certs: no
       register: host_result
-      check_mode: yes
+      check_mode: true
     - debug: var=host_result
     - name: Ensure Power Management Policy for esxi1 in check mode
       assert:
@@ -85,7 +85,7 @@
         policy: balanced
         validate_certs: no
       register: all_hosts_result
-      check_mode: yes
+      check_mode: true
     - debug: var=all_hosts_result
     - name: Ensure we are still using the 'balanced' mode
       assert:

@@ -302,7 +302,7 @@ Examples
         hostname: "{{ vcenter_server }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ datacenter_name }}"
       register: dvpg_facts
     - name: Get number of ports for portgroup 'dvpg_001' in 'dvs_001'

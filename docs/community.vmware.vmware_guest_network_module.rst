@@ -787,7 +787,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         name: vm01.domain.fake
         mac_address: 00:50:56:11:22:33
         network_name: admin-network
@@ -799,7 +799,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         uuid: 422d000d-2000-ffff-0000-b00000000000
         vlan_id: 2001
 
@@ -809,7 +809,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         mac_address: 00:50:56:11:22:33
         name: vm01.domain.fake
         state: absent
@@ -820,7 +820,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         name: vm01.domain.fake
         state: present
         vlan_id: "{{ item.vlan_id | default(omit) }}"

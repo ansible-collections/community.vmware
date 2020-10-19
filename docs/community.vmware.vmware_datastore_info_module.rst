@@ -330,7 +330,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         datacenter_name: '{{ datacenter_name }}'
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: info
 

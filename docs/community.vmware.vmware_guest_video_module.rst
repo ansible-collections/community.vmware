@@ -409,7 +409,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         name: test-vm
         gather_video_facts: false
         use_auto_detect: false
@@ -427,7 +427,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
+        validate_certs: false
         moid: vm-42
         gather_video_facts: false
         use_auto_detect: false

@@ -25,7 +25,7 @@
     - rebootguest
     - reboot-guest
   register: check_mode_state
-  check_mode: yes
+  check_mode: true
 
 - debug:
     var: check_mode_state
@@ -54,7 +54,7 @@
     - restarted
     - suspended
   register: check_mode_state
-  check_mode: yes
+  check_mode: true
 
 - debug:
     var: check_mode_state

@@ -45,7 +45,7 @@
     cluster_name: "{{ ccr1 }}"
     validate_certs: no
   register: all_hosts_dns_result_check_mode
-  check_mode: yes
+  check_mode: true
 
 - name: ensure DNS info are gathered for all hosts in given cluster
   assert:
@@ -61,7 +61,7 @@
     esxi_hostname: '{{ esxi1 }}'
     validate_certs: no
   register: all_hosts_dns_result_check_mode
-  check_mode: yes
+  check_mode: true
 
 - name: ensure DNS info are gathered about host system
   assert:

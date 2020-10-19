@@ -289,7 +289,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         datacenter: ha-datacenter
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: cluster_info
 
@@ -317,7 +317,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         cluster_name: DC0_C0
         schema: vsphere
         properties:

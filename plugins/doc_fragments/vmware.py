@@ -40,7 +40,7 @@ options:
       - Environment variable support added in Ansible 2.6.
       - If set to C(yes), please make sure Python >= 2.7.9 is installed on the given machine.
       type: bool
-      default: yes
+      default: true
     port:
       description:
       - The port number of the vSphere vCenter or ESXi server.
@@ -94,7 +94,7 @@ options:
       - Environment variable supported added in Ansible 2.6.
       - If set to C(yes), please make sure Python >= 2.7.9 is installed on the given machine.
       type: bool
-      default: yes
+      default: true
     port:
       description:
       - The port number of the vSphere vCenter server.

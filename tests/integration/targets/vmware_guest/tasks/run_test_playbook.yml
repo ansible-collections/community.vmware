@@ -9,7 +9,7 @@
         validate_certs: no
 #        cluster: "{{ ccr1 }}"
         name: '{{ item }}'
-        force: yes
+        force: true
         state: absent
       with_items:
         - test_vm1

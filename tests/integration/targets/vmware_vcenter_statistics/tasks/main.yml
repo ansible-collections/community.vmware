@@ -48,7 +48,7 @@
       level: 1
     validate_certs: no
   register: statistics_results_check_mode
-  check_mode: yes
+  check_mode: true
 
 - debug: var=statistics_results_check_mode
 

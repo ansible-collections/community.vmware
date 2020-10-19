@@ -236,7 +236,7 @@ Examples
         hostname: "{{ vcenter_server }}"
         username: "{{ vcenter_user }}"
         password: "{{ vcenter_pass }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi_hostname }}"
       register: features_set
     - set_fact:

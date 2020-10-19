@@ -74,7 +74,7 @@
           - name: vvold
             enabled: True
       register: all_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=all_hosts_result_check_mode
     - name: ensure everything is changed for all hosts of {{ ccr1 }}
       assert:
@@ -100,7 +100,7 @@
           - name: vvold
             enabled: False
       register: host_result_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: msg="{{ host_result_check_mode }}"
     - name: ensure vvold is disabled for {{ host1 }}
       assert:

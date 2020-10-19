@@ -61,7 +61,7 @@
 
 - <<: *vm_move
   name: Move VM in check mode
-  check_mode: yes
+  check_mode: true
   register: vm_move_0003
 
 - name: Make sure changes are not made in check mode

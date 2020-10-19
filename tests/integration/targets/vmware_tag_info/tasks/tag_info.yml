@@ -15,7 +15,7 @@
 
     - <<: *tag_info
       name: Get info about tag in check mode
-      check_mode: yes
+      check_mode: true
 
     - name: Check if facts exists
       assert:

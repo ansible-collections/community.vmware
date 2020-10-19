@@ -40,7 +40,7 @@
 
 - <<: *role_data
   name: Gather Role facts in check mode
-  check_mode: yes
+  check_mode: true
 
 - <<: *role_test
   name: Test if role id is present for role in check mode

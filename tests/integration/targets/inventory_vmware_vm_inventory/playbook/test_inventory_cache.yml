@@ -12,7 +12,7 @@
       fail:
         msg:  Cache not found. Please debug.
       when: result.matched|int == 0
-      ignore_errors: yes
+      ignore_errors: true
 
     - when: result.matched|int == 0
       meta: end_play

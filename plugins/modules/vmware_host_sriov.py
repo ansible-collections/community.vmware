@@ -91,7 +91,7 @@ EXAMPLES = r'''
     vmnic: vmnic0
     sriov_on: true
     num_virt_func: 100
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: disable SR-IOV on vmnic0
   community.vmware.vmware_host_sriov:

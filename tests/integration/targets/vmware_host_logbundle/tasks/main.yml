@@ -237,7 +237,7 @@
     manifests:
       - example
   register: fetch_logbundle_result
-  ignore_errors: yes
+  ignore_errors: true
 
 - assert:
     that:
@@ -254,7 +254,7 @@
     manifests:
       - example
   register: fetch_logbundle_result
-  ignore_errors: yes
+  ignore_errors: true
 
 - assert:
     that:

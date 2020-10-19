@@ -284,7 +284,7 @@ Examples
         password: '{{ vcenter_password }}'
         library_name: test-content-lib
         library_description: 'Library with Datastore Backing'
-        validate_certs: no
+        validate_certs: false
         state: present
       delegate_to: localhost
 
@@ -294,7 +294,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         library_name: test-content-lib
-        validate_certs: no
+        validate_certs: false
         state: absent
       delegate_to: localhost
 

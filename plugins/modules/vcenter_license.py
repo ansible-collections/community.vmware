@@ -28,7 +28,7 @@ options:
   license:
     description:
     - The license key to manage in vSphere vCenter.
-    required: yes
+    required: true
     type: str
   state:
     description:

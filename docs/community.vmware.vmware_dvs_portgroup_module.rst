@@ -792,7 +792,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        portgroup_name: no-vlan-portrgoup
+        portgroup_name: false-vlan-portrgoup
         switch_name: dvSwitch
         vlan_id: 0
         num_ports: 120
@@ -812,21 +812,21 @@ Examples
         portgroup_type: earlyBinding
         state: present
         network_policy:
-          promiscuous: yes
-          forged_transmits: yes
-          mac_changes: yes
+          promiscuous: true
+          forged_transmits: true
+          mac_changes: true
         port_policy:
-          block_override: yes
-          ipfix_override: yes
-          live_port_move: yes
-          network_rp_override: yes
-          port_config_reset_at_disconnect: yes
-          security_override: yes
-          shaping_override: yes
-          traffic_filter_override: yes
-          uplink_teaming_override: yes
-          vendor_config_override: yes
-          vlan_override: yes
+          block_override: true
+          ipfix_override: true
+          live_port_move: true
+          network_rp_override: true
+          port_config_reset_at_disconnect: true
+          security_override: true
+          shaping_override: true
+          traffic_filter_override: true
+          uplink_teaming_override: true
+          vendor_config_override: true
+          vlan_override: true
       delegate_to: localhost
 
 

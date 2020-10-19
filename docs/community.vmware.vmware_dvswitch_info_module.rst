@@ -269,7 +269,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
       delegate_to: localhost
       register: dvswitch_info
 
@@ -278,7 +278,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         switch_name: DVSwitch01
       delegate_to: localhost
       register: dvswitch_info
@@ -288,7 +288,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         folder: /datacenter1/network/F01
         switch_name: DVSwitch02
       delegate_to: localhost
@@ -299,7 +299,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         schema: vsphere
         properties:
           - summary.name

@@ -704,7 +704,7 @@ EXAMPLES = r'''
       ip: 10.10.10.100
       netmask: 255.255.255.0
       device_type: vmxnet3
-    wait_for_ip_address: yes
+    wait_for_ip_address: true
     wait_for_ip_address_timeout: 600
   delegate_to: localhost
   register: deploy_vm
@@ -750,7 +750,7 @@ EXAMPLES = r'''
     networks:
     - name: VM Network
       mac: aa:bb:dd:aa:00:14
-    wait_for_ip_address: yes
+    wait_for_ip_address: true
   delegate_to: localhost
   register: deploy
 
@@ -777,7 +777,7 @@ EXAMPLES = r'''
     - vlan: 1234
       type: dhcp
     customization:
-      autologon: yes
+      autologon: true
       dns_servers:
       - 192.168.1.1
       - 192.168.1.2

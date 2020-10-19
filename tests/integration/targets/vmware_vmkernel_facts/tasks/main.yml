@@ -31,7 +31,7 @@
         esxi_hostname: '{{ esxi1 }}'
         validate_certs: no
       register: host_vmkernel_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=host_vmkernel
     - assert:
         that:

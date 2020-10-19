@@ -166,7 +166,7 @@ EXAMPLES = r'''
     destination_host: '{{ destination_esxi }}'
     destination_datastore: '{{ destination_datastore }}'
     destination_vm_folder: '{{ destination_vm_folder }}'
-  check_mode: yes
+  check_mode: true
 '''
 
 RETURN = r'''

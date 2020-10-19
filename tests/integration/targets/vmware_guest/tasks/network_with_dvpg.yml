@@ -210,7 +210,7 @@
         password: "{{ vcenter_password }}"
         validate_certs: no
         name: '{{ item }}'
-        force: yes
+        force: true
         state: absent
       with_items:
         - test_vm1

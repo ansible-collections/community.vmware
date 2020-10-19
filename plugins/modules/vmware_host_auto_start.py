@@ -141,7 +141,7 @@ EXAMPLES = r'''
     validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     system_defaults:
-      enabled: yes
+      enabled: true
       start_delay: 100
       stop_action: guestShutdown
 
@@ -158,7 +158,7 @@ EXAMPLES = r'''
       start_delay: 10
       start_order: 1
       stop_action: powerOff
-      wait_for_heartbeat: yes
+      wait_for_heartbeat: true
 '''
 
 RETURN = r'''
