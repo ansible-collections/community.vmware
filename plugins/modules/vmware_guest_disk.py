@@ -257,6 +257,39 @@ EXAMPLES = r'''
   delegate_to: localhost
   register: test_custom_shares
 
+- name: Add physical raw device mapping to virtual machine using name
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.06000980ab1234efg453
+        compatibility_mode: 'physicalMode'
+
+- name: Add virtual raw device mapping to virtual machine using name
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.06000980ab1234efg453
+        compatibility_mode: 'virtualMode'
+        disk_mode: 'persistent'
+
 - name: create new disk with custom IO limits and shares in IO Limits
   community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
@@ -350,7 +383,7 @@ EXAMPLES = r'''
   register: disk_facts
 '''
 
-RETURN = r'''
+RETURN = r"""
 disk_status:
     description: metadata about the virtual machine's disks after managing them
     returned: always
@@ -373,7 +406,7 @@ disk_status:
             "unit_number": 0
         },
     }
-'''
+"""
 
 import re
 try:
@@ -539,7 +572,7 @@ class PyVmomiHelper(PyVmomi):
 
         """
         sharing = disk.get('sharing')
-        if sharing and disk_type != 'eagerzeroedthick':
+        if sharing and disk_type != 'eagerzeroedthick' and disk_type != 'rdm':
             self.module.fail_json(msg="Invalid 'sharing' mode specified for disk index [%s]. 'disk_mode'"
                                       " must be 'eagerzeroedthick' when 'sharing'." % disk_index)
         if sharing:
@@ -949,30 +982,49 @@ class PyVmomiHelper(PyVmomi):
                 if disk.storageIOAllocation is None:
                     disk.storageIOAllocation = vim.StorageResourceManager.IOAllocationInfo()
                     disk.storageIOAllocation.shares = vim.SharesInfo()
+
                 if disk.shares is None:
                     disk.shares = vim.SharesInfo()
-                disks_facts[disk_index] = dict(
-                    key=disk.key,
-                    label=disk.deviceInfo.label,
-                    summary=disk.deviceInfo.summary,
-                    backing_filename=disk.backing.fileName,
-                    backing_datastore=disk.backing.datastore.name,
-                    backing_disk_mode=disk.backing.diskMode,
-                    backing_sharing=disk.backing.sharing,
-                    backing_writethrough=disk.backing.writeThrough,
-                    backing_thinprovisioned=disk.backing.thinProvisioned,
-                    backing_eagerlyscrub=bool(disk.backing.eagerlyScrub),
-                    backing_uuid=disk.backing.uuid,
-                    controller_key=disk.controllerKey,
-                    unit_number=disk.unitNumber,
-                    iolimit_limit=disk.storageIOAllocation.limit,
-                    iolimit_shares_level=disk.storageIOAllocation.shares.level,
-                    iolimit_shares_limit=disk.storageIOAllocation.shares.shares,
-                    shares_level=disk.shares.level,
-                    shares_limit=disk.shares.shares,
-                    capacity_in_kb=disk.capacityInKB,
-                    capacity_in_bytes=disk.capacityInBytes,
-                )
+
+                if isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):
+                    disks_facts[disk_index] = dict(key=disk.key,
+                                                   label=disk.deviceInfo.label,
+                                                   summary=disk.deviceInfo.summary,
+                                                   backing_filename=disk.backing.fileName,
+                                                   backing_devicename=disk.backing.deviceName,
+                                                   backing_disk_mode=disk.backing.diskMode,
+                                                   backing_compatibility_mode=disk.backing.compatibilityMode,
+                                                   backing_sharing=disk.backing.sharing,
+                                                   backing_uuid=disk.backing.uuid,
+                                                   unit_number=disk.unitNumber,
+                                                   iolimit_limit=disk.storageIOAllocation.limit,
+                                                   iolimit_shares_level=disk.storageIOAllocation.shares.level,
+                                                   iolimit_shares_limit=disk.storageIOAllocation.shares.shares,
+                                                   shares_level=disk.shares.level,
+                                                   shares_limit=disk.shares.shares,
+                                                   capacity_in_kb=disk.capacityInKB,
+                                                   capacity_in_bytes=disk.capacityInBytes)
+                else:
+                    disks_facts[disk_index] = dict(key=disk.key,
+                                                   label=disk.deviceInfo.label,
+                                                   summary=disk.deviceInfo.summary,
+                                                   backing_filename=disk.backing.fileName,
+                                                   backing_datastore=disk.backing.datastore.name,
+                                                   backing_disk_mode=disk.backing.diskMode,
+                                                   backing_sharing=disk.backing.sharing,
+                                                   backing_writethrough=disk.backing.writeThrough,
+                                                   backing_thinprovisioned=disk.backing.thinProvisioned,
+                                                   backing_eagerlyscrub=bool(disk.backing.eagerlyScrub),
+                                                   backing_uuid=disk.backing.uuid,
+                                                   controller_key=disk.controllerKey,
+                                                   unit_number=disk.unitNumber,
+                                                   iolimit_limit=disk.storageIOAllocation.limit,
+                                                   iolimit_shares_level=disk.storageIOAllocation.shares.level,
+                                                   iolimit_shares_limit=disk.storageIOAllocation.shares.shares,
+                                                   shares_level=disk.shares.level,
+                                                   shares_limit=disk.shares.shares,
+                                                   capacity_in_kb=disk.capacityInKB,
+                                                   capacity_in_bytes=disk.capacityInBytes)
                 disk_index += 1
         return disks_facts
 
