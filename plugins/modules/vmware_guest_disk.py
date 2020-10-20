@@ -86,7 +86,7 @@ options:
      - '     - C(persistent) Changes are immediately and permanently written to the virtual disk. This is default.'
      - '     - C(independent_persistent) Same as persistent, but not affected by snapshots.'
      - '     - C(independent_nonpersistent) Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.'
-     - ' - C(rdm_path) (string): RDM Path. Required if disk type is raw. /vmfs/devices/naa.[alpahnumeric string]'
+     - ' - C(rdm_path) (string): RDM Path. Required if disk type is raw. /vmfs/devices/naa.[alphanumeric string]'
      - ' - C(compatibility_mode) (string): Compatibility mode for raw devices. Valid values are:'
      - '     - C(physicalMode) in this mode disk_mode must be blank'
      - '     - C(virtualMode)'
