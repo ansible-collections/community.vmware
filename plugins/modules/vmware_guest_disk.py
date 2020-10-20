@@ -298,7 +298,7 @@ EXAMPLES = r'''
   delegate_to: localhost
   register: test_custom_shares
 
-- name: Add physical raw device mapping to virtual machine using name
+- name: Add physical raw device mapping to the virtual machine using physical mode
   vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
