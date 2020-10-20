@@ -1,0 +1,2 @@
+added_feature:
+- vmware_guest_disk - Add capability to create and remove RDM disks from Virtual Machines
