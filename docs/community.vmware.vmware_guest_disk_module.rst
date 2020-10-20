@@ -83,13 +83,7 @@ Parameters
                         <div>- <code>thin</code> thin disk</div>
                         <div>- <code>eagerzeroedthick</code> eagerzeroedthick disk</div>
                         <div>- <code>thick</code> thick disk</div>
-                        <div>- <code>rdm</code> raw device mapping</div>
                         <div>Default: <code>thick</code> thick disk, no eagerzero.</div>
-                        <div>- <code>compatibility_mode</code> (string): Valid values are:</div>
-                        <div>- <code>physicalMode</code> Physical RDM disk. Does not use disk_mode</div>
-                        <div>- <code>virtualMode</code> Virtual RDM Disk. Requires disk_mode</div>
-                        <div>- <code>rdm_path</code> path the RDM is located. Example:</div>
-                        <div>- <code>/vmfs/devices/disks/naa.60000000000000000e00000000010001</code>
                         <div>- <code>disk_mode</code> (string): Type of disk mode. Valid values are:</div>
                         <div>- <code>persistent</code> Changes are immediately and permanently written to the virtual disk. This is default.</div>
                         <div>- <code>independent_persistent</code> Same as persistent, but not affected by snapshots.</div>
