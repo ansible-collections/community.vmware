@@ -79,7 +79,7 @@ Parameters
                         <div>- <code>size[_tb,_gb,_mb,_kb]</code> (integer): Disk storage size in specified unit.</div>
                         <div>If <code>size</code> specified then unit must be specified. There is no space allowed in between size number and unit.</div>
                         <div>Only first occurrence in disk element will be considered, even if there are multiple size* parameters available.</div>
-                        <div>- <code>rdm</code> raw device mapping</div>
+                        <div>- <code>type</code> (string): Valid values are:</div>>
                         <div>- <code>thin</code> thin disk</div>
                         <div>- <code>eagerzeroedthick</code> eagerzeroedthick disk</div>
                         <div>- <code>thick</code> thick disk</div>
