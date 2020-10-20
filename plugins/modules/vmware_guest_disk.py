@@ -383,7 +383,7 @@ EXAMPLES = r'''
   register: disk_facts
 '''
 
-RETURN = r'''
+RETURN = r"""
 disk_status:
     description: metadata about the virtual machine's disks after managing them
     returned: always
@@ -406,7 +406,7 @@ disk_status:
             "unit_number": 0
         },
     }
-'''
+"""
 
 import re
 try:
