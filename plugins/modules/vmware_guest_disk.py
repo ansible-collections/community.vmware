@@ -986,35 +986,13 @@ class PyVmomiHelper(PyVmomi):
                 if disk.shares is None:
                     disk.shares = vim.SharesInfo()
 
-                if isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):
-                    disks_facts[disk_index] = dict(key=disk.key,
-                                                   label=disk.deviceInfo.label,
-                                                   summary=disk.deviceInfo.summary,
-                                                   backing_filename=disk.backing.fileName,
-                                                   backing_devicename=disk.backing.deviceName,
-                                                   backing_disk_mode=disk.backing.diskMode,
-                                                   backing_compatibility_mode=disk.backing.compatibilityMode,
-                                                   backing_sharing=disk.backing.sharing,
-                                                   backing_uuid=disk.backing.uuid,
-                                                   unit_number=disk.unitNumber,
-                                                   iolimit_limit=disk.storageIOAllocation.limit,
-                                                   iolimit_shares_level=disk.storageIOAllocation.shares.level,
-                                                   iolimit_shares_limit=disk.storageIOAllocation.shares.shares,
-                                                   shares_level=disk.shares.level,
-                                                   shares_limit=disk.shares.shares,
-                                                   capacity_in_kb=disk.capacityInKB,
-                                                   capacity_in_bytes=disk.capacityInBytes)
-                else:
-                    disks_facts[disk_index] = dict(key=disk.key,
+                disks_facts[disk_index] = dict(key=disk.key,
                                                    label=disk.deviceInfo.label,
                                                    summary=disk.deviceInfo.summary,
                                                    backing_filename=disk.backing.fileName,
                                                    backing_datastore=disk.backing.datastore.name,
                                                    backing_disk_mode=disk.backing.diskMode,
                                                    backing_sharing=disk.backing.sharing,
-                                                   backing_writethrough=disk.backing.writeThrough,
-                                                   backing_thinprovisioned=disk.backing.thinProvisioned,
-                                                   backing_eagerlyscrub=bool(disk.backing.eagerlyScrub),
                                                    backing_uuid=disk.backing.uuid,
                                                    controller_key=disk.controllerKey,
                                                    unit_number=disk.unitNumber,
@@ -1025,6 +1003,16 @@ class PyVmomiHelper(PyVmomi):
                                                    shares_limit=disk.shares.shares,
                                                    capacity_in_kb=disk.capacityInKB,
                                                    capacity_in_bytes=disk.capacityInBytes)
+
+                if isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):                    
+                    disks_facts[disk_index].update(backing_devicename=disk.backing.deviceName,
+                                                backing_compatibility_mode=disk.backing.compatibilityMode)
+                
+                else:
+                   disks_facts[disk_index].update(backing_writethrough=disk.backing.writeThrough,
+                                                backing_thinprovisioned=disk.backing.thinProvisioned,
+                                                backing_eagerlyscrub=bool(disk.backing.eagerlyScrub))            
+
                 disk_index += 1
         return disks_facts
 
