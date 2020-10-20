@@ -25,6 +25,7 @@
         affinity_rule: True
         mandatory: True
       register: drs_rule_0001_results
+      check_mode: yes
 
     - debug: var=drs_rule_0001_results
 
