@@ -273,7 +273,7 @@ EXAMPLES = r'''
         rdm_path: /vmfs/devices/disks/naa.06000980ab1234efg453
         compatibility_mode: 'physicalMode'
 
-- name: Add virtual raw device mapping to virtual machine using name
+- name: Add virtual raw device mapping to the virtual machine using virtual mode
   vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
