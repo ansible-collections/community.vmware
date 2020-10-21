@@ -11,9 +11,9 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vm_vm_drs_rule
-short_description: Configure VMware DRS Affinity rule for virtual machine in given cluster
+short_description: Configure VMware DRS Affinity rule for virtual machines in the given cluster
 description:
-- This module can be used to configure VMware DRS Affinity rule for virtual machine in given cluster.
+- This module can be used to configure VMware DRS Affinity rule for virtual machines in the given cluster.
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
@@ -187,8 +187,8 @@ class VmwareDrs(PyVmomi):
                                    vm_id_type='vm_name', cluster=self.cluster_obj)
             if vm_obj is None:
                 self.module.fail_json(msg="Failed to find the virtual machine %s "
-                                          "in given cluster %s" % (vm_name,
-                                                                   self.cluster_name))
+                                          "in the given cluster %s" % (vm_name,
+                                                                       self.cluster_name))
             vm_obj_list.append(vm_obj)
         return vm_obj_list
 
@@ -246,18 +246,15 @@ class VmwareDrs(PyVmomi):
                     and (existing_rule['rule_mandatory'] == self.mandatory)
                     and (existing_rule['rule_affinity'] == self.affinity_rule)):
                 self.module.exit_json(changed=False, result=existing_rule, msg="Rule already exists with the same configuration")
-            else:
-                changed, result = self.update_rule_spec(rule_obj)
-                return changed, result
-        else:
-            changed, result = self.create_rule_spec()
-            return changed, result
+            return self.update_rule_spec(rule_obj)
+        return self.create_rule_spec()
 
     def create_rule_spec(self):
         """
         Create DRS rule
         """
         changed = False
+        result = None
         if self.affinity_rule:
             rule = vim.cluster.AffinityRuleSpec()
         else:
@@ -272,8 +269,9 @@ class VmwareDrs(PyVmomi):
         config_spec = vim.cluster.ConfigSpecEx(rulesSpec=[rule_spec])
 
         try:
-            task = self.cluster_obj.ReconfigureEx(config_spec, modify=True)
-            changed, result = wait_for_task(task)
+            if not self.module.check_mode:
+                task = self.cluster_obj.ReconfigureEx(config_spec, modify=True)
+                changed, result = wait_for_task(task)
         except vmodl.fault.InvalidRequest as e:
             result = to_native(e.msg)
         except Exception as e:
@@ -283,6 +281,17 @@ class VmwareDrs(PyVmomi):
             rule_obj = self.get_rule_key_by_name(rule_name=self.rule_name)
             result = self.normalize_rule_spec(rule_obj)
 
+        if self.module.check_mode:
+            changed = True
+            result = dict(
+                rule_key='',
+                rule_enabled=rule.enabled,
+                rule_name=self.rule_name,
+                rule_mandatory=rule.mandatory,
+                rule_uuid='',
+                rule_vms=[vm.name for vm in rule.vm],
+                rule_affinity=self.affinity_rule,
+            )
         return changed, result
 
     def update_rule_spec(self, rule_obj=None):
@@ -290,7 +299,7 @@ class VmwareDrs(PyVmomi):
         Update DRS rule
         """
         changed = False
-
+        result = None
         rule_obj.vm = self.vm_obj_list
 
         if (rule_obj.mandatory != self.mandatory):
@@ -303,8 +312,11 @@ class VmwareDrs(PyVmomi):
         config_spec = vim.cluster.ConfigSpec(rulesSpec=[rule_spec])
 
         try:
-            task = self.cluster_obj.ReconfigureCluster_Task(config_spec, modify=True)
-            changed, result = wait_for_task(task)
+            if not self.module.check_mode:
+                task = self.cluster_obj.ReconfigureCluster_Task(config_spec, modify=True)
+                changed, result = wait_for_task(task)
+            else:
+                changed = True
         except vmodl.fault.InvalidRequest as e:
             result = to_native(e.msg)
         except Exception as e:
@@ -331,8 +343,12 @@ class VmwareDrs(PyVmomi):
             rule_spec = vim.cluster.RuleSpec(removeKey=rule_key, operation='remove')
             config_spec = vim.cluster.ConfigSpecEx(rulesSpec=[rule_spec])
             try:
-                task = self.cluster_obj.ReconfigureEx(config_spec, modify=True)
-                changed, result = wait_for_task(task)
+                if not self.module.check_mode:
+                    task = self.cluster_obj.ReconfigureEx(config_spec, modify=True)
+                    changed, result = wait_for_task(task)
+                else:
+                    changed = True
+                    result = 'Rule %s will be deleted' % self.rule_name
             except vmodl.fault.InvalidRequest as e:
                 result = to_native(e.msg)
             except Exception as e:
@@ -368,9 +384,6 @@ def main():
 
     if state == 'present':
         # Add Rule
-        if module.check_mode:
-            results['changed'] = True
-            module.exit_json(**results)
         changed, result = vm_drs.create()
         if changed:
             results['changed'] = changed
@@ -380,9 +393,6 @@ def main():
         results['result'] = result
     elif state == 'absent':
         # Delete Rule
-        if module.check_mode:
-            results['changed'] = True
-            module.exit_json(**results)
         changed, result = vm_drs.delete()
         if changed:
             results['changed'] = changed

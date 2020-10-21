@@ -12,6 +12,28 @@
         setup_datastore: true
         setup_virtualmachines: true
 
+    - name: Create a DRS Affinity rule for vms in check mode
+      vmware_vm_vm_drs_rule:
+        validate_certs: False
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        drs_rule_name: drs_rule_0001
+        cluster_name: "{{ ccr1 }}"
+        vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
+        enabled: True
+        affinity_rule: True
+        mandatory: True
+      register: drs_rule_0001_results
+      check_mode: yes
+
+    - debug: var=drs_rule_0001_results
+
+    - name: Check if changes are reported in check mode
+      assert:
+        that:
+          - drs_rule_0001_results.changed
+
     - &create_drs_rule
       name: Create a DRS Affinity rule for vms
       vmware_vm_vm_drs_rule:

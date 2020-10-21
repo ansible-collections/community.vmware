@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_vm_vm_drs_rule - report changes in check mode (https://github.com/ansible-collections/community.vmware/issues/440).
