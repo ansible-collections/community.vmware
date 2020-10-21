@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_cluster_info - return tag related information (https://github.com/ansible-collections/community.vmware/issues/453).

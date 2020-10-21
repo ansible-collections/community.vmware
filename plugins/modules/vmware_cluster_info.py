@@ -123,6 +123,7 @@ clusters:
     type: dict
     sample: {
         "DC0_C0": {
+            "moid": "domain-c9",
             "drs_default_vm_behavior": null,
             "drs_enable_vm_behavior_overrides": null,
             "drs_vmotion_rate": null,
@@ -311,7 +312,8 @@ class VmwreClusterInfoManager(PyVmomi):
                     enabled_vsan=enabled_vsan,
                     vsan_auto_claim_storage=vsan_auto_claim_storage,
                     tags=tag_info,
-                    resource_summary=resource_summary
+                    resource_summary=resource_summary,
+                    moid=cluster._moId,
                 )
         else:
             for cluster in self.cluster_objs:
