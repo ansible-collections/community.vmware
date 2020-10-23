@@ -103,7 +103,7 @@ def wait_for_vm_ip(content, vm, timeout=300):
 def find_obj(content, vimtype, name, first=True, folder=None):
     container = content.viewManager.CreateContainerView(folder or content.rootFolder, recursive=True, type=vimtype)
     # Get all objects matching type (and name if given)
-    obj_list = [obj for obj in container.view if not name or to_text(obj.name) == to_text(name)]
+    obj_list = [obj for obj in container.view if not name or to_text(unquote(obj.name)) == to_text(unquote(name))]
     container.Destroy()
 
     # Return first match or None
