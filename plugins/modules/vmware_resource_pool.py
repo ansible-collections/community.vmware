@@ -66,7 +66,7 @@ options:
     cpu_allocation_shares:
         description:
             - The number of cpu shares allocated.
-            - This value is only set if I(cpu_shares) is set to custom.
+            - This value is only set if I(cpu_shares) is set to C(custom).
         type: int
     mem_expandable_reservations:
         description:
@@ -97,7 +97,7 @@ options:
     mem_allocation_shares:
         description:
             - The number of memory shares allocated.
-            - This value is only set if I(mem_shares) is set to custom.
+            - This value is only set if I(mem_shares) is set to C(custom).
         type: int
     state:
         description:
