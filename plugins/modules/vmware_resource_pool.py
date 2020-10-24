@@ -63,6 +63,11 @@ options:
             - normal
         default: normal
         type: str
+    cpu_allocation_shares:
+        description:
+            - The number of cpu shares allocated.
+            - This value is only set if I(cpu_shares) is set to custom.
+        type: int
     mem_expandable_reservations:
         description:
             - In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.
@@ -89,6 +94,11 @@ options:
             - normal
         default: normal
         type: str
+    mem_allocation_shares:
+        description:
+            - The number of memory shares allocated.
+            - This value is only set if I(mem_shares) is set to custom.
+        type: int
     state:
         description:
             - Add or remove the resource pool
@@ -154,11 +164,13 @@ class VMwareResourcePool(object):
         self.password = module.params['password']
         self.state = module.params['state']
         self.mem_shares = module.params['mem_shares']
+        self.mem_allocation_shares = module.params['mem_allocation_shares']
         self.mem_limit = module.params['mem_limit']
         self.mem_reservation = module.params['mem_reservation']
         self.mem_expandable_reservations = module.params[
             'cpu_expandable_reservations']
         self.cpu_shares = module.params['cpu_shares']
+        self.cpu_allocation_shares = module.params['cpu_allocation_shares']
         self.cpu_limit = module.params['cpu_limit']
         self.cpu_reservation = module.params['cpu_reservation']
         self.cpu_expandable_reservations = module.params[
@@ -251,15 +263,24 @@ class VMwareResourcePool(object):
         cpu_alloc.limit = int(self.cpu_limit)
         cpu_alloc.reservation = int(self.cpu_reservation)
         cpu_alloc_shares = vim.SharesInfo()
-        cpu_alloc_shares.level = self.cpu_shares
+        if self.cpu_shares == 'custom':
+            cpu_alloc_shares.level = self.cpu_shares
+            cpu_alloc_shares.shares = self.cpu_allocation_shares
+        else:
+            cpu_alloc_shares.level = self.cpu_shares
         cpu_alloc.shares = cpu_alloc_shares
         rp_spec.cpuAllocation = cpu_alloc
+
         mem_alloc = vim.ResourceAllocationInfo()
         mem_alloc.limit = int(self.mem_limit)
         mem_alloc.expandableReservation = self.mem_expandable_reservations
         mem_alloc.reservation = int(self.mem_reservation)
         mem_alloc_shares = vim.SharesInfo()
-        mem_alloc_shares.level = self.mem_shares
+        if self.mem_shares == 'custom':
+            mem_alloc_shares.level = self.mem_shares
+            mem_alloc_shares.shares = self.mem_allocation_shares
+        else:
+            mem_alloc_shares.level = self.mem_shares
         mem_alloc.shares = mem_alloc_shares
         rp_spec.memoryAllocation = mem_alloc
 
@@ -294,12 +315,14 @@ def main():
                               resource_pool=dict(required=True, type='str'),
                               mem_shares=dict(type='str', default="normal", choices=[
                                               'high', 'custom', 'normal', 'low']),
+                              mem_allocation_shares=dict(type='int'),
                               mem_limit=dict(type='int', default=-1),
                               mem_reservation=dict(type='int', default=0),
                               mem_expandable_reservations=dict(
                                   type='bool', default="True"),
                               cpu_shares=dict(type='str', default="normal", choices=[
                                               'high', 'custom', 'normal', 'low']),
+                              cpu_allocation_shares=dict(type='int'),
                               cpu_limit=dict(type='int', default=-1),
                               cpu_reservation=dict(type='int', default=0),
                               cpu_expandable_reservations=dict(
@@ -307,6 +330,10 @@ def main():
                               state=dict(default='present', choices=['present', 'absent'], type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec,
+                           required_if=[
+                               ['mem_shares', 'custom', ['mem_allocation_shares']],
+                               ['cpu_shares', 'custom', ['cpu_allocation_shares']]
+                           ],
                            supports_check_mode=True)
 
     if not HAS_PYVMOMI:
