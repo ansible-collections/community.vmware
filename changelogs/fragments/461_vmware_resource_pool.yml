@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_resource_pool - Add new allocation shares options for cpu and memory(https://github.com/ansible-collections/community.vmware/pull/461).
