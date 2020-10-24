@@ -49,7 +49,7 @@
 - name: Integration test for issue 457(https://github.com/ansible-collections/community.vmware/issues/457)
   when: vcsim is not defined
   block:
-    - name: Create a new portgroup with '/' in the name
+    - name: Create a new portgroup with / in the name
       vmware_portgroup:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -65,7 +65,7 @@
         that:
           - create_portgroup_result.changed is sameas true
 
-    - name: Deploy VM with '/' in the portgroup name
+    - name: Deploy VM with / in the portgroup name
       vmware_guest:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -111,7 +111,7 @@
         that:
           - destroy_tset_vm_slash_result.changed is sameas true
 
-    - name: Delete the portgroup with ‘/‘ in the name
+    - name: Delete the portgroup with / in the name
       vmware_portgroup:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
