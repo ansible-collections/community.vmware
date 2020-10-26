@@ -120,7 +120,7 @@
     that:
       - "{{ resource_result_0005.changed == true }}"
 
-# Testcase 0005: Add Resource pool with the mem_allocation_shares and cpu_allocation_shares parameters(idempotency check)
+# Testcase 0006: Add Resource pool with the mem_allocation_shares and cpu_allocation_shares parameters(idempotency check)
 - name: add resource pool
   vmware_resource_pool:
     validate_certs: False
@@ -137,13 +137,13 @@
     state: present
   register: resource_result_0006
 
-- name: ensure a resource pool is present
+- name: make sure a resource pool is not changing
   assert:
     that:
       - "{{ resource_result_0006.changed == false }}"
 
-# Testcase 0006: Remove Resource pool
-- name: remove resource pool again
+# Testcase 0007: Remove Resource pool
+- name: remove resource pool
   vmware_resource_pool:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
@@ -159,3 +159,61 @@
   assert:
     that:
         - "{{ resource_result_0007.changed == true }}"
+
+# Testcase 0008: Add Resource pool without the mem_allocation_shares and cpu_allocation_shares parameters
+- name: add resource pool
+  vmware_resource_pool:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: test_resource_0001
+    mem_shares: custom
+    cpu_shares: custom
+    state: present
+  register: resource_result_0008
+
+- name: ensure a resource pool is present
+  assert:
+    that:
+      - "{{ resource_result_0008.changed == true }}"
+
+# Testcase 0009: Add Resource pool without the mem_allocation_shares and cpu_allocation_shares parameters(idempotency check)
+- name: add resource pool
+  vmware_resource_pool:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: test_resource_0001
+    mem_shares: custom
+    cpu_shares: custom
+    state: present
+  register: resource_result_0009
+
+- name: make sure a resource pool is not changing
+  assert:
+    that:
+      - "{{ resource_result_0009.changed == false }}"
+
+# Testcase 0010: Remove Resource pool
+- name: remove resource pool
+  vmware_resource_pool:
+    validate_certs: False
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: test_resource_0001
+    state: absent
+  register: resource_result_0010
+
+- name: check if resource pool is removed
+  assert:
+    that:
+        - "{{ resource_result_0010.changed == true }}"
