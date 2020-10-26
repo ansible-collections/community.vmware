@@ -68,6 +68,8 @@ options:
             - The number of cpu shares allocated.
             - This value is only set if I(cpu_shares) is set to C(custom).
         type: int
+        default: 4000
+        version_added: '1.4.0'
     mem_expandable_reservations:
         description:
             - In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.
@@ -99,6 +101,8 @@ options:
             - The number of memory shares allocated.
             - This value is only set if I(mem_shares) is set to C(custom).
         type: int
+        default: 163840
+        version_added: '1.4.0'
     state:
         description:
             - Add or remove the resource pool
@@ -264,10 +268,8 @@ class VMwareResourcePool(object):
         cpu_alloc.reservation = int(self.cpu_reservation)
         cpu_alloc_shares = vim.SharesInfo()
         if self.cpu_shares == 'custom':
-            cpu_alloc_shares.level = self.cpu_shares
             cpu_alloc_shares.shares = self.cpu_allocation_shares
-        else:
-            cpu_alloc_shares.level = self.cpu_shares
+        cpu_alloc_shares.level = self.cpu_shares
         cpu_alloc.shares = cpu_alloc_shares
         rp_spec.cpuAllocation = cpu_alloc
 
@@ -277,10 +279,8 @@ class VMwareResourcePool(object):
         mem_alloc.reservation = int(self.mem_reservation)
         mem_alloc_shares = vim.SharesInfo()
         if self.mem_shares == 'custom':
-            mem_alloc_shares.level = self.mem_shares
             mem_alloc_shares.shares = self.mem_allocation_shares
-        else:
-            mem_alloc_shares.level = self.mem_shares
+        mem_alloc_shares.level = self.mem_shares
         mem_alloc.shares = mem_alloc_shares
         rp_spec.memoryAllocation = mem_alloc
 
@@ -315,14 +315,14 @@ def main():
                               resource_pool=dict(required=True, type='str'),
                               mem_shares=dict(type='str', default="normal", choices=[
                                               'high', 'custom', 'normal', 'low']),
-                              mem_allocation_shares=dict(type='int'),
+                              mem_allocation_shares=dict(type='int', default=163840),
                               mem_limit=dict(type='int', default=-1),
                               mem_reservation=dict(type='int', default=0),
                               mem_expandable_reservations=dict(
                                   type='bool', default="True"),
                               cpu_shares=dict(type='str', default="normal", choices=[
                                               'high', 'custom', 'normal', 'low']),
-                              cpu_allocation_shares=dict(type='int'),
+                              cpu_allocation_shares=dict(type='int', default=4000),
                               cpu_limit=dict(type='int', default=-1),
                               cpu_reservation=dict(type='int', default=0),
                               cpu_expandable_reservations=dict(
