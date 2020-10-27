@@ -149,6 +149,55 @@
         - not recreate_folders.changed
         - not recreate_yet_another_level.changed
 
+# MOID test
+- name: Create tier1 folder
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+    folder_name: tier1
+    folder_type: vm
+    state: present
+
+- name: Create tier2 folder under tier1 folder
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+    folder_name: tier2
+    parent_folder: tier1
+    folder_type: vm
+    state: present
+
+- name: Gather folder information
+  vmware_folder_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+  register: folder_info
+
+- name: Get folder moid for tier1/tier2
+  set_fact:
+    parent_folder_moid: "{{ (folder_info['flat_folder_info'] | selectattr('path', 'search', '/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
+
+- name: Create tier3 folder under tier1/tier2 folder using moid
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: "{{ dc1 }}"
+    folder_name: tier3
+    parent_folder_moid: '{{ parent_folder_moid }}'
+    folder_type: vm
+    state: present
+
 ## Testcase: Delete all types of folder
 #
 # Doesn't work with vcsim. Looks like UnregisterAndDestroy isn't supported.
@@ -214,3 +263,45 @@
     assert:
       that:
           - not all_folder_results.changed
+
+  - name: Delete tier3 folder
+    vcenter_folder:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      datacenter: '{{ dc1 }}'
+      folder_name: tier3
+      parent_folder_moid: '{{ parent_folder_moid }}'
+      state: absent
+    register: delete_tier3
+
+  - name: Delete tier2 folder
+    vcenter_folder:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      datacenter: '{{ dc1 }}'
+      folder_name: tier2
+      parent_folder: tier1
+      state: absent
+    register: delete_tier2
+
+  - name: Delete tier1 folder
+    vcenter_folder:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      datacenter: '{{ dc1 }}'
+      folder_name: tier1
+      state: absent
+    register: delete_tier1
+
+  - name: ensure folders are deleted
+    assert:
+      that:
+        - delete_tier3.changed
+        - delete_tier2.changed
+        - delete_tier1.changed

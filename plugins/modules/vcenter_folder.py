@@ -44,8 +44,17 @@ options:
     - This is case sensitive parameter.
     - "If user wants to create a folder under '/DC0/vm/vm_folder', this value will be 'vm_folder'."
     - "If user wants to create a folder under '/DC0/vm/folder1/folder2', this value will be 'folder1/folder2'."
+    - This is required if C(parent_folder_moid) is not specified when addressing a parent folder.
     required: False
     type: str
+  parent_folder_moid:
+    description:
+    - Managed object ID of the parent folder.
+    - This parameter is useful while identifying non-unique or nested folder objects.
+    - This is required if C(parent_folder) is not specified when addressing a parent folder.
+    required: False
+    type: str
+    version_added: '1.4.0'
   folder_type:
     description:
     - This is type of folder.
@@ -121,6 +130,31 @@ EXAMPLES = r'''
     state: absent
   register: vm_folder_deletion_result
   delegate_to: localhost
+
+# MoID
+- name: Get folder info
+  community.vmware.vmware_folder_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: Asia-Datacenter1
+  register: folder_info
+
+- set_fact:
+    parent_folder_moid: "{{ (folder_info['flat_folder_info'] | selectattr('path', 'search', '/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
+
+- name: Create tier3 folder under tier1/tier2
+  community.vmware.vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: Asia-Datacenter1
+    folder_name: tier3
+    parent_folder_moid: '{{ parent_folder_moid }}'
+    folder_type: vm
+    state: present
 '''
 
 RETURN = r'''
@@ -138,7 +172,7 @@ result:
 '''
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, VmomiSupport, vmodl
 except ImportError:
     pass
 
@@ -171,11 +205,27 @@ class VmwareFolderManager(PyVmomi):
         folder_type = self.module.params.get('folder_type')
         folder_name = self.module.params.get('folder_name')
         parent_folder = self.module.params.get('parent_folder', None)
+        parent_folder_moid = self.module.params.get('parent_folder_moid', None)
+
         results = {'changed': False, 'result': {}}
         if state == 'present':
             # Check if the folder already exists
             p_folder_obj = None
-            if parent_folder:
+            if parent_folder_moid:
+                p_folder_obj = VmomiSupport.templateOf('Folder')(parent_folder_moid, self.si._stub)
+                try:
+                    parent_folder = p_folder_obj.name
+                except vmodl.fault.ManagedObjectNotFound as e:
+                    self.module.fail_json(msg="Could not find folder using moid %s : %s" % (parent_folder_moid, to_native(e)))
+                child_folder_obj = self.get_folder(datacenter_name=datacenter_name,
+                                                   folder_name=folder_name,
+                                                   folder_type=folder_type,
+                                                   parent_folder=p_folder_obj)
+                if child_folder_obj:
+                    results['result'] = "Folder %s already exists under" \
+                                        " parent folder %s" % (folder_name, parent_folder)
+                    self.module.exit_json(**results)
+            elif parent_folder:
                 if "/" in parent_folder:
                     parent_folder_parts = parent_folder.strip('/').split('/')
                     p_folder_obj = None
@@ -225,7 +275,9 @@ class VmwareFolderManager(PyVmomi):
 
             # Create a new folder
             try:
-                if parent_folder and p_folder_obj:
+                if (parent_folder or parent_folder_moid) and p_folder_obj:
+                    if parent_folder_moid:
+                        parent_folder = p_folder_obj.name
                     if self.module.check_mode:
                         results['msg'] = "Folder '%s' of type '%s' under '%s' will be created." % \
                                          (folder_name, folder_type, parent_folder)
@@ -261,7 +313,17 @@ class VmwareFolderManager(PyVmomi):
         elif state == 'absent':
             # Check if the folder already exists
             p_folder_obj = None
-            if parent_folder:
+            if parent_folder_moid:
+                p_folder_obj = VmomiSupport.templateOf('Folder')(parent_folder_moid, self.si._stub)
+                try:
+                    parent_folder = p_folder_obj.name
+                except vmodl.fault.ManagedObjectNotFound as e:
+                    self.module.fail_json(msg="Could not find folder using moid %s : %s" % (parent_folder_moid, to_native(e)))
+                folder_obj = self.get_folder(datacenter_name=datacenter_name,
+                                             folder_name=folder_name,
+                                             folder_type=folder_type,
+                                             parent_folder=p_folder_obj)
+            elif parent_folder:
                 if "/" in parent_folder:
                     parent_folder_parts = parent_folder.strip('/').split('/')
                     p_folder_obj = None
@@ -355,6 +417,7 @@ def main():
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         folder_name=dict(type='str', required=True),
         parent_folder=dict(type='str', required=False),
+        parent_folder_moid=dict(type='str', required=False),
         state=dict(type='str',
                    choices=['present', 'absent'],
                    default='present'),
@@ -367,6 +430,9 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
+        mutually_exclusive=[
+            ['parent_folder', 'parent_folder_moid'],
+        ],
     )
 
     if len(module.params.get('folder_name')) > 79:
