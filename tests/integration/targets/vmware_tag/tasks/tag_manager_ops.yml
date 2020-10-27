@@ -62,12 +62,26 @@
         name: "{{ vm_name }}"
       register: r
 
+    - name: Get detailed tags' information from a virtual machine
+      vmware_guest_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        name: "{{ vm_name }}"
+        tags: True
+        tag_details: True
+      register: tag_details
+
     - name: Check if tag information is available
       assert:
         that:
           - not r.changed
           - r['instance']['tags'] is defined
           - "{{ Tag_Name[0] in r['instance']['tags'] }}"
+          - not tag_details.changed
+          - tag_details['instance']['tags'] is defined
+          - "{{ Tag_Name[0] == tag_details['instance']['tags'][0]['name'] }}"
 
     - <<: *tag_assign
       name: Add tags to a virtual machine again

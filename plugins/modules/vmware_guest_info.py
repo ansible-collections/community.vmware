@@ -74,11 +74,20 @@ options:
    tags:
      description:
      - Whether to show tags or not.
-     - If set C(True), shows tag information.
+     - If set C(True), shows tags information. Returns a list of tag names.
      - If set C(False), hides tags information.
-     - vSphere Automation SDK and vCloud Suite SDK is required.
+     - vSphere Automation SDK is required.
      default: 'no'
      type: bool
+   tag_details:
+     description:
+     - If set C(True), detail information about 'tags' returned.
+     - Without this flag, the 'tags' returns a list of tag names.
+     - With this flag, the 'tags' returns a list of dict about tag information with additional details like category name, category id, and tag id.
+     - This parameter is added to maintain backward compatability.
+     default: 'no'
+     type: bool
+     version_added: '1.4.0'
    schema:
      description:
      - Specify the output schema desired.
@@ -160,6 +169,18 @@ EXAMPLES = r'''
       - _moId
   delegate_to: localhost
   register: moid_info
+
+- name: Gather detailed information about tags and category associated with the given VM
+  community.vmware.vmware_guest_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ datacenter_name }}"
+    name: "{{ vm_name }}"
+    tags: True
+    tag_details: True
+  register: detailed_tag_info
 '''
 
 RETURN = r'''
@@ -255,7 +276,8 @@ def main():
         datacenter=dict(type='str', required=True),
         tags=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list', elements='str')
+        properties=dict(type='list', elements='str'),
+        tag_details=dict(type='bool', default=False),
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            required_one_of=[['name', 'uuid', 'moid']],
@@ -293,12 +315,15 @@ def main():
                                          " - https://code.vmware.com/web/sdk/60/vcloudsuite-python")
 
                 vm_rest_client = VmwareTag(module)
-                dynamic_obj = DynamicID(type='VirtualMachine', id=vm._moId)
-                instance.update(
-                    tags=vm_rest_client.get_vm_tags(vm_rest_client.tag_service,
-                                                    vm_rest_client.tag_association_svc,
-                                                    vm_mid=dynamic_obj)
-                )
+                tags = []
+                if module.params.get('tag_details'):
+                    tags = vm_rest_client.get_tags_for_vm(vm_mid=vm._moId)
+                else:
+                    dynamic_obj = DynamicID(type='VirtualMachine', id=vm._moId)
+                    tags = vm_rest_client.get_vm_tags(vm_rest_client.tag_service,
+                                                      vm_rest_client.tag_association_svc,
+                                                      vm_mid=dynamic_obj)
+                instance.update(tags=tags)
             module.exit_json(instance=instance)
         except Exception as exc:
             module.fail_json(msg="Information gathering failed with exception %s" % to_text(exc))
