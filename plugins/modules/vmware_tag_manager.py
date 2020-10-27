@@ -64,8 +64,16 @@ options:
       description:
       - Name of the object to work with.
       - For DistributedVirtualPortgroups the format should be "switch_name:portgroup_name"
-      required: True
+      - Required if C(moid) is not set.
+      required: False
       type: str
+    moid:
+      description:
+      - Managed object ID for the given object.
+      - Required if C(object_name) is not set.
+      required: False
+      type: str
+      version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 
@@ -140,6 +148,33 @@ EXAMPLES = r'''
     object_type: DistributedVirtualPortgroup
     state: add
   delegate_to: localhost
+
+
+- name: Get information about folders
+  community.vmware.vmware_folder_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: 'Asia-Datacenter1'
+  delegate_to: localhost
+  register: r
+- name: Set Managed object ID for the given folder
+  ansible.builtin.set_fact:
+    folder_mo_id: "{{ (r.flat_folder_info | selectattr('path', 'equalto', '/Asia-Datacenter1/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
+- name: Add tags to a Folder using managed object id
+  community.vmware.vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    tag_names:
+      - Sample_Cat_0004:Sample_Tag_0004
+    object_type: Folder
+    moid: "{{ folder_mo_id }}"
+    state: add
+  delegate_to: localhost
+
 '''
 
 RETURN = r'''
@@ -179,59 +214,74 @@ class VmwareTagManager(VmwareRestClient):
         super(VmwareTagManager, self).__init__(module)
         self.pyv = PyVmomi(module=module)
 
+        moid = self.params.get('moid')
         self.object_type = self.params.get('object_type')
-        self.object_name = self.params.get('object_name')
-        self.managed_object = None
+        managed_object_id = None
 
-        if self.object_type == 'VirtualMachine':
-            self.managed_object = self.pyv.get_vm_or_template(self.object_name)
+        if moid:
+            managed_object_id = moid
+        else:
+            object_name = self.params.get('object_name')
+            managed_object = self.get_managed_object(object_name, self.object_type)
 
-        if self.object_type == 'Folder':
-            self.managed_object = self.pyv.find_folder_by_name(self.object_name)
+            if managed_object is None:
+                self.module.fail_json(msg="Failed to find the managed object for %s with type %s" % (object_name, self.object_type))
 
-        if self.object_type == 'Datacenter':
-            self.managed_object = self.pyv.find_datacenter_by_name(self.object_name)
+            if not hasattr(managed_object, '_moId'):
+                self.module.fail_json(msg="Unable to find managed object id for %s managed object" % object_name)
 
-        if self.object_type == 'Datastore':
-            self.managed_object = self.pyv.find_datastore_by_name(self.object_name)
+            managed_object_id = managed_object._moId
 
-        if self.object_type == 'DatastoreCluster':
-            self.managed_object = self.pyv.find_datastore_cluster_by_name(self.object_name)
-            self.object_type = 'StoragePod'
-
-        if self.object_type == 'ClusterComputeResource':
-            self.managed_object = self.pyv.find_cluster_by_name(self.object_name)
-
-        if self.object_type == 'ResourcePool':
-            self.managed_object = self.pyv.find_resource_pool_by_name(self.object_name)
-
-        if self.object_type == 'HostSystem':
-            self.managed_object = self.pyv.find_hostsystem_by_name(self.object_name)
-
-        if self.object_type == 'DistributedVirtualSwitch':
-            self.managed_object = find_dvs_by_name(self.pyv.content, self.object_name)
-            self.object_type = 'VmwareDistributedVirtualSwitch'
-
-        if self.object_type == 'DistributedVirtualPortgroup':
-            dvs_name, pg_name = self.object_name.split(":", 1)
-            dv_switch = find_dvs_by_name(self.pyv.content, dvs_name)
-            if dv_switch is None:
-                self.module.fail_json(msg="A distributed virtual switch with name %s does not exist" % dvs_name)
-            self.managed_object = find_dvspg_by_name(dv_switch, pg_name)
-
-        if self.managed_object is None:
-            self.module.fail_json(msg="Failed to find the managed object for %s with type %s" % (self.object_name, self.object_type))
-
-        if not hasattr(self.managed_object, '_moId'):
-            self.module.fail_json(msg="Unable to find managed object id for %s managed object" % self.object_name)
-
-        self.dynamic_managed_object = DynamicID(type=self.object_type, id=self.managed_object._moId)
+        self.dynamic_managed_object = DynamicID(type=self.object_type, id=managed_object_id)
 
         self.tag_service = self.api_client.tagging.Tag
         self.category_service = self.api_client.tagging.Category
         self.tag_association_svc = self.api_client.tagging.TagAssociation
 
         self.tag_names = self.params.get('tag_names')
+
+    def get_managed_object(self, object_name=None, object_type=None):
+        managed_object = None
+        if not all([object_type, object_name]):
+            return managed_object
+
+        if object_type == 'VirtualMachine':
+            managed_object = self.pyv.get_vm_or_template(object_name)
+
+        if object_type == 'Folder':
+            managed_object = self.pyv.find_folder_by_name(object_name)
+
+        if object_type == 'Datacenter':
+            managed_object = self.pyv.find_datacenter_by_name(object_name)
+
+        if object_type == 'Datastore':
+            managed_object = self.pyv.find_datastore_by_name(object_name)
+
+        if object_type == 'DatastoreCluster':
+            managed_object = self.pyv.find_datastore_cluster_by_name(object_name)
+            self.object_type = 'StoragePod'
+
+        if object_type == 'ClusterComputeResource':
+            managed_object = self.pyv.find_cluster_by_name(object_name)
+
+        if object_type == 'ResourcePool':
+            managed_object = self.pyv.find_resource_pool_by_name(object_name)
+
+        if object_type == 'HostSystem':
+            managed_object = self.pyv.find_hostsystem_by_name(object_name)
+
+        if object_type == 'DistributedVirtualSwitch':
+            managed_object = find_dvs_by_name(self.pyv.content, object_name)
+            self.object_type = 'VmwareDistributedVirtualSwitch'
+
+        if object_type == 'DistributedVirtualPortgroup':
+            dvs_name, pg_name = object_name.split(":", 1)
+            dv_switch = find_dvs_by_name(self.pyv.content, dvs_name)
+            if dv_switch is None:
+                self.module.fail_json(msg="A distributed virtual switch with name %s does not exist" % dvs_name)
+            managed_object = find_dvspg_by_name(dv_switch, pg_name)
+
+        return managed_object
 
     def ensure_state(self):
         """
@@ -244,9 +294,12 @@ class VmwareTagManager(VmwareRestClient):
         )
         changed = False
         action = self.params.get('state')
-        available_tag_obj = self.get_tags_for_object(tag_service=self.tag_service,
-                                                     tag_assoc_svc=self.tag_association_svc,
-                                                     dobj=self.dynamic_managed_object)
+        try:
+            available_tag_obj = self.get_tags_for_object(tag_service=self.tag_service,
+                                                         tag_assoc_svc=self.tag_association_svc,
+                                                         dobj=self.dynamic_managed_object)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
 
         _temp_prev_tags = ["%s:%s" % (tag['category_name'], tag['name']) for tag in self.get_tags_for_dynamic_obj(self.dynamic_managed_object)]
         results['tag_status']['previous_tags'] = _temp_prev_tags
@@ -323,13 +376,22 @@ def main():
     argument_spec.update(
         tag_names=dict(type='list', required=True, elements='raw'),
         state=dict(type='str', choices=['absent', 'add', 'present', 'remove', 'set'], default='add'),
-        object_name=dict(type='str', required=True),
+        moid=dict(type='str'),
+        object_name=dict(type='str'),
         object_type=dict(type='str', required=True, choices=['VirtualMachine', 'Datacenter', 'ClusterComputeResource',
                                                              'HostSystem', 'DistributedVirtualSwitch',
                                                              'DistributedVirtualPortgroup', 'Datastore', 'ResourcePool',
                                                              'Folder', 'DatastoreCluster']),
     )
-    module = AnsibleModule(argument_spec=argument_spec)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        mutually_exclusive=[
+            ('moid', 'object_name'),
+        ],
+        required_one_of=[
+            ['moid', 'object_name'],
+        ]
+    )
 
     vmware_tag_manager = VmwareTagManager(module)
     vmware_tag_manager.ensure_state()

@@ -42,7 +42,9 @@
       validate_certs: False
     register: vm_info
 
-  - set_fact: vm_name="{{ vm_info['virtual_machines'][0]['guest_name'] }}"
+  - set_fact:
+      vm_name: "{{ vm_info['virtual_machines'][0]['guest_name'] }}"
+      vm_moid: "{{ vm_info['virtual_machines'][0]['moid'] }}"
 
   - name: Assign tag to given virtual machine
     vmware_tag_manager:
@@ -92,6 +94,25 @@
       state: remove
     register: vm_tag_info
 
+  - name: Assign tag to given virtual machine using moid
+    vmware_tag_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      tag_names:
+        - category: "{{ cat_one }}"
+          tag: "{{ tag_one }}"
+      moid: "{{ vm_moid }}"
+      object_type: VirtualMachine
+      state: add
+    register: vm_tag_info
+
+  - name: Check if we assigned correct tags
+    assert:
+      that:
+        - vm_tag_info.changed
+
   - name: Remove tag to datastore
     vmware_tag_manager:
       hostname: '{{ vcenter_hostname }}'
@@ -105,6 +126,20 @@
       object_type: Datastore
       state: remove
     register: datastore_tag_info
+
+  - name: Remove tag to given virtual machine
+    vmware_tag_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: no
+      tag_names:
+        - category: "{{ cat_one }}"
+          tag: "{{ tag_one }}"
+      object_name: "{{ vm_name }}"
+      object_type: VirtualMachine
+      state: remove
+    register: vm_tag_info
 
   - name: Check if we removed correct tag
     assert:

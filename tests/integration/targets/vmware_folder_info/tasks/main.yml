@@ -19,7 +19,7 @@
   vcenter_folder:
     <<: *vcenter_folder_data
     folder_name: "child_folder"
-    parent_folder: "toplevel"    
+    parent_folder: "toplevel"
 
 # Testcase 0001: Get details about folders
 - name: get info about folders
@@ -34,6 +34,7 @@
       - "{{ item }} is defined"
   with_items:
   - folder_info_0001['folder_info']
+  - folder_info_0001['flat_folder_info']
   - folder_info_0001['folder_info']['datastoreFolders']
   - folder_info_0001['folder_info']['hostFolders']
   - folder_info_0001['folder_info']['vmFolders']

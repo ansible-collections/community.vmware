@@ -19,6 +19,7 @@ author:
 - David Hewitt (@davidmhewitt)
 notes:
 - Tested on vSphere 6.5
+- C(flat_folder_info) added in VMware collection 1.4.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -43,17 +44,51 @@ EXAMPLES = r'''
     datacenter: datacenter_name
   delegate_to: localhost
   register: vcenter_folder_info
+
+- name: Get information about folders
+  community.vmware.vmware_folder_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: no
+    datacenter: 'Asia-Datacenter1'
+  register: r
+
+- name: Set Managed object ID for the given folder
+  ansible.builtin.set_fact:
+    folder_mo_id: "{{ (r.flat_folder_info | selectattr('path', 'equalto', '/Asia-Datacenter1/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
 '''
 
 RETURN = r'''
+flat_folder_info:
+    description:
+    - list of dict about folders in flat structure
+    returned: success
+    type: list
+    sample:
+        [
+            {
+                "moid": "group-v3",
+                "path": "/Asia-Datacenter1/vm"
+            },
+            {
+                "moid": "group-v44",
+                "path": "/Asia-Datacenter1/vm/tier1"
+            },
+            {
+                "moid": "group-v45",
+                "path": "/Asia-Datacenter1/vm/tier1/tier2"
+            }
+        ]
 folder_info:
     description:
     - dict about folders
     returned: success
-    type: str
+    type: dict
     sample:
         {
             "datastoreFolders": {
+                "moid": "group-v10",
                 "path": "/DC01/datastore",
                 "subfolders": {
                     "Local Datastores": {
@@ -63,24 +98,30 @@ folder_info:
                 }
             },
             "hostFolders": {
+                "moid": "group-v21",
                 "path": "/DC01/host",
                 "subfolders": {}
             },
             "networkFolders": {
+                "moid": "group-v31",
                 "path": "/DC01/network",
                 "subfolders": {}
             },
             "vmFolders": {
+                "moid": "group-v41",
                 "path": "/DC01/vm",
                 "subfolders": {
                     "Core Infrastructure Servers": {
+                        "moid": "group-v42",
                         "path": "/DC01/vm/Core Infrastructure Servers",
                         "subfolders": {
                             "Staging Network Services": {
+                                "moid": "group-v43",
                                 "path": "/DC01/vm/Core Infrastructure Servers/Staging Network Services",
                                 "subfolders": {}
                             },
                             "VMware": {
+                                "moid": "group-v44",
                                 "path": "/DC01/vm/Core Infrastructure Servers/VMware",
                                 "subfolders": {}
                             }
@@ -116,15 +157,43 @@ class VmwareFolderInfoManager(PyVmomi):
         folder_trees['networkFolders'] = self.build_folder_tree(datacenter.networkFolder, "/%s/network" % self.dc_name)
         folder_trees['datastoreFolders'] = self.build_folder_tree(datacenter.datastoreFolder, "/%s/datastore" % self.dc_name)
 
+        flat_folder_info = self.build_flat_folder_tree(datacenter.vmFolder, '/%s/vm' % self.dc_name)
+        flat_folder_info.extend(self.build_flat_folder_tree(datacenter.hostFolder, "/%s/host" % self.dc_name))
+        flat_folder_info.extend(self.build_flat_folder_tree(datacenter.networkFolder, "/%s/network" % self.dc_name))
+        flat_folder_info.extend(self.build_flat_folder_tree(datacenter.datastoreFolder, "/%s/datastore" % self.dc_name))
+
         self.module.exit_json(
             changed=False,
-            folder_info=folder_trees
+            folder_info=folder_trees,
+            flat_folder_info=flat_folder_info,
         )
+
+    def build_flat_folder_tree(self, folder, path):
+        ret = []
+        tree = {
+            'path': path,
+            'moid': folder._moId,
+        }
+
+        ret.append(tree)
+
+        children = None
+        if hasattr(folder, 'childEntity'):
+            children = folder.childEntity
+
+        if children:
+            for child in children:
+                if child == folder:
+                    continue
+                if isinstance(child, vim.Folder):
+                    ret.extend(self.build_flat_folder_tree(child, "%s/%s" % (path, child.name)))
+        return ret
 
     def build_folder_tree(self, folder, path):
         tree = {
             'path': path,
-            'subfolders': {}
+            'subfolders': {},
+            'moid': folder._moId,
         }
 
         children = None
