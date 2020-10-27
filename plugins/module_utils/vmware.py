@@ -194,8 +194,8 @@ def find_resource_pool_by_cluster(content, resource_pool_name='Resources', clust
     return find_object_by_name(content, resource_pool_name, [vim.ResourcePool], folder=cluster)
 
 
-def find_network_by_name(content, network_name):
-    return find_object_by_name(content, quote_obj_name(network_name), [vim.Network])
+def find_network_by_name(content, network_name, datacenter_name=None):
+    return find_object_by_name(content, quote_obj_name(network_name), [vim.Network], datacenter_name)
 
 
 def find_vm_by_id(content, vm_id, vm_id_type="vm_name", datacenter=None,
