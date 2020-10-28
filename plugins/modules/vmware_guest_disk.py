@@ -71,7 +71,7 @@ options:
      - A list of disks to add or remove.
      - The virtual disk related information is provided using this list.
      - All values and parameters are case sensitive.
-     - rdm is added in Collection version 1.4.0
+     - RDM support is added in collection version 1.4.0.
      - 'Valid attributes are:'
      - ' - C(size[_tb,_gb,_mb,_kb]) (integer): Disk storage size in specified unit.'
      - '   If C(size) specified then unit must be specified. There is no space allowed in between size number and unit.'
