@@ -138,11 +138,43 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-instance:
-    description: metadata about the new resource pool
+resource_pool_config:
+    description: config data about the resource pool
     returned: always
     type: dict
-    sample: None
+    sample: >-
+      {
+        "_vimtype": "vim.ResourceConfigSpec",
+        "changeVersion": null,
+        "cpuAllocation": {
+          "_vimtype": "vim.ResourceAllocationInfo",
+          "expandableReservation": true,
+          "limit": -1,
+          "overheadLimit": null,
+          "reservation": 0,
+          "shares": {
+            "_vimtype": "vim.SharesInfo",
+            "level": "normal",
+            "shares": 4000
+          }
+        },
+        "entity": "vim.ResourcePool:resgroup-1108",
+        "lastModified": null,
+        "memoryAllocation": {
+          "_vimtype": "vim.ResourceAllocationInfo",
+          "expandableReservation": true,
+          "limit": -1,
+          "overheadLimit": null,
+          "reservation": 0,
+          "shares": {
+            "_vimtype": "vim.SharesInfo",
+            "level": "high",
+            "shares": 327680
+          }
+        },
+        "name": "test_pr1",
+        "scaleDescendantsShares": null
+      }
 '''
 
 try:
@@ -151,15 +183,16 @@ try:
 except ImportError:
     HAS_PYVMOMI = False
 
-from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, connect_to_api, vmware_argument_spec, find_datacenter_by_name, \
-    find_cluster_by_name, wait_for_task, find_host_by_cluster_datacenter
+from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, vmware_argument_spec, find_datacenter_by_name, \
+    find_cluster_by_name, wait_for_task, PyVmomi
 from ansible.module_utils.basic import AnsibleModule
 
 
-class VMwareResourcePool(object):
+class VMwareResourcePool(PyVmomi):
 
     def __init__(self, module):
-        self.module = module
+        super(VMwareResourcePool, self).__init__(module)
         self.datacenter = module.params['datacenter']
         self.cluster = module.params['cluster']
         self.resource_pool = module.params['resource_pool']
@@ -172,7 +205,7 @@ class VMwareResourcePool(object):
         self.mem_limit = module.params['mem_limit']
         self.mem_reservation = module.params['mem_reservation']
         self.mem_expandable_reservations = module.params[
-            'cpu_expandable_reservations']
+            'mem_expandable_reservations']
         self.cpu_shares = module.params['cpu_shares']
         self.cpu_allocation_shares = module.params['cpu_allocation_shares']
         self.cpu_limit = module.params['cpu_limit']
@@ -181,11 +214,9 @@ class VMwareResourcePool(object):
             'cpu_expandable_reservations']
         self.dc_obj = None
         self.cluster_obj = None
-        self.host_obj = None
         self.resource_pool_obj = None
-        self.content = connect_to_api(module)
 
-    def select_resource_pool(self, host):
+    def select_resource_pool(self):
         pool_obj = None
 
         resource_pools = get_all_objs(self.content, [vim.ResourcePool])
@@ -228,7 +259,7 @@ class VMwareResourcePool(object):
                     'absent': self.state_exit_unchanged,
                 },
                 'present': {
-                    'present': self.state_exit_unchanged,
+                    'present': self.state_update_existing_pr,
                     'absent': self.state_add_rp,
                 }
             }
@@ -240,32 +271,14 @@ class VMwareResourcePool(object):
         except vmodl.MethodFault as method_fault:
             self.module.fail_json(msg=method_fault.msg)
         except Exception as e:
-            self.module.fail_json(msg=str(e))
+            self.module.fail_json(msg=to_native(e))
 
-    def state_exit_unchanged(self):
-        self.module.exit_json(changed=False)
-
-    def state_remove_rp(self):
-        changed = True
-        result = None
-        resource_pool = self.select_resource_pool(self.host_obj)
-        try:
-            task = self.resource_pool_obj.Destroy()
-            success, result = wait_for_task(task)
-
-        except Exception:
-            self.module.fail_json(msg="Failed to remove resource pool '%s' '%s'" % (
-                self.resource_pool, resource_pool))
-        self.module.exit_json(changed=changed, result=str(result))
-
-    def state_add_rp(self):
-        changed = True
-
+    def generate_rp_config(self):
         rp_spec = vim.ResourceConfigSpec()
         cpu_alloc = vim.ResourceAllocationInfo()
         cpu_alloc.expandableReservation = self.cpu_expandable_reservations
-        cpu_alloc.limit = int(self.cpu_limit)
-        cpu_alloc.reservation = int(self.cpu_reservation)
+        cpu_alloc.limit = self.cpu_limit
+        cpu_alloc.reservation = self.cpu_reservation
         cpu_alloc_shares = vim.SharesInfo()
         if self.cpu_shares == 'custom':
             cpu_alloc_shares.shares = self.cpu_allocation_shares
@@ -274,15 +287,112 @@ class VMwareResourcePool(object):
         rp_spec.cpuAllocation = cpu_alloc
 
         mem_alloc = vim.ResourceAllocationInfo()
-        mem_alloc.limit = int(self.mem_limit)
+        mem_alloc.limit = self.mem_limit
         mem_alloc.expandableReservation = self.mem_expandable_reservations
-        mem_alloc.reservation = int(self.mem_reservation)
+        mem_alloc.reservation = self.mem_reservation
         mem_alloc_shares = vim.SharesInfo()
         if self.mem_shares == 'custom':
             mem_alloc_shares.shares = self.mem_allocation_shares
         mem_alloc_shares.level = self.mem_shares
         mem_alloc.shares = mem_alloc_shares
         rp_spec.memoryAllocation = mem_alloc
+
+        return rp_spec
+
+    def generate_rp_config_return_value(self, include_rp_config=False):
+        resource_config_return_value = {}
+        if include_rp_config:
+            resource_config_return_value = self.to_json(self.select_resource_pool().config)
+
+        resource_config_return_value['name'] = self.resource_pool
+
+        return resource_config_return_value
+
+    def state_exit_unchanged(self):
+        changed = False
+        if self.module.check_mode:
+            self.module.exit_json(changed=changed)
+
+        self.module.exit_json(changed=changed, resource_pool_config=self.generate_rp_config_return_value())
+
+    def state_update_existing_pr(self):
+        changed = False
+
+        # check the difference between the existing config and the new config
+        rp_spec = self.generate_rp_config()
+        resource_pool_obj = self.select_resource_pool()
+
+        if self.mem_shares and self.mem_shares != resource_pool_obj.config.memoryAllocation.shares.level:
+            changed = True
+            rp_spec.memoryAllocation.shares.level = self.mem_shares
+
+        if self.mem_allocation_shares and self.mem_shares == 'custom':
+            if self.mem_allocation_shares != resource_pool_obj.config.memoryAllocation.shares.shares:
+                changed = True
+                rp_spec.memoryAllocation.shares.shares = self.mem_allocation_shares
+
+        if self.mem_limit and self.mem_limit != resource_pool_obj.config.memoryAllocation.limit:
+            changed = True
+            rp_spec.memoryAllocation.limit = self.mem_limit
+
+        if self.mem_reservation and self.mem_reservation != resource_pool_obj.config.memoryAllocation.reservation:
+            changed = True
+            rp_spec.memoryAllocation.reservation = self.mem_reservation
+
+        if self.mem_expandable_reservations != resource_pool_obj.config.memoryAllocation.expandableReservation:
+            changed = True
+            rp_spec.memoryAllocation.expandableReservation = self.mem_expandable_reservations
+
+        if self.cpu_shares and self.cpu_shares != resource_pool_obj.config.cpuAllocation.shares.level:
+            changed = True
+            rp_spec.cpuAllocation.shares.level = self.cpu_shares
+
+        if self.cpu_allocation_shares and self.cpu_shares == 'custom':
+            if self.cpu_allocation_shares != resource_pool_obj.config.cpuAllocation.shares.shares:
+                changed = True
+                rp_spec.cpuAllocation.shares.shares = self.cpu_allocation_shares
+
+        if self.cpu_limit and self.cpu_limit != resource_pool_obj.config.cpuAllocation.limit:
+            changed = True
+            rp_spec.cpuAllocation.limit = self.cpu_limit
+
+        if self.cpu_reservation and self.cpu_reservation != resource_pool_obj.config.cpuAllocation.reservation:
+            changed = True
+            rp_spec.cpuAllocation.reservation = self.cpu_reservation
+
+        if self.cpu_expandable_reservations != resource_pool_obj.config.cpuAllocation.expandableReservation:
+            changed = True
+            rp_spec.cpuAllocation.expandableReservation = self.cpu_expandable_reservations
+
+        if self.module.check_mode:
+            self.module.exit_json(changed=changed)
+
+        resource_pool_obj.UpdateConfig(self.resource_pool, rp_spec)
+
+        resource_pool_config = self.generate_rp_config_return_value(True)
+        self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
+
+    def state_remove_rp(self):
+        changed = True
+        result = None
+        if self.module.check_mode:
+            self.module.exit_json(changed=changed)
+
+        resource_pool_obj = self.select_resource_pool()
+        resource_pool_config = self.generate_rp_config_return_value(True)
+        try:
+            task = resource_pool_obj.Destroy()
+            success, result = wait_for_task(task)
+
+        except Exception:
+            self.module.fail_json(msg="Failed to remove resource pool '%s' '%s'" % (
+                self.resource_pool, self.resource_pool))
+        self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
+
+    def state_add_rp(self):
+        changed = True
+        if self.module.check_mode:
+            self.module.exit_json(changed=changed)
 
         self.dc_obj = find_datacenter_by_name(self.content, self.datacenter)
         if self.dc_obj is None:
@@ -291,18 +401,18 @@ class VMwareResourcePool(object):
         self.cluster_obj = find_cluster_by_name(self.content, self.cluster, datacenter=self.dc_obj)
         if self.cluster_obj is None:
             self.module.fail_json(msg="Unable to find cluster with name %s" % self.cluster)
+
+        rp_spec = self.generate_rp_config()
         rootResourcePool = self.cluster_obj.resourcePool
+
         rootResourcePool.CreateResourcePool(self.resource_pool, rp_spec)
 
-        self.module.exit_json(changed=changed)
+        resource_pool_config = self.generate_rp_config_return_value(True)
+        self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
 
     def check_rp_state(self):
-
-        self.host_obj, self.cluster_obj = find_host_by_cluster_datacenter(self.module, self.content, self.datacenter,
-                                                                          self.cluster, self.hostname)
-        self.resource_pool_obj = self.select_resource_pool(self.host_obj)
-
-        if self.resource_pool_obj is None:
+        resource_pool_obj = self.select_resource_pool()
+        if resource_pool_obj is None:
             return 'absent'
         else:
             return 'present'
