@@ -320,54 +320,52 @@ class VMwareResourcePool(PyVmomi):
 
         # check the difference between the existing config and the new config
         rp_spec = self.generate_rp_config()
-        resource_pool_obj = self.select_resource_pool()
-
-        if self.mem_shares and self.mem_shares != resource_pool_obj.config.memoryAllocation.shares.level:
+        if self.mem_shares and self.mem_shares != self.resource_pool_obj.config.memoryAllocation.shares.level:
             changed = True
             rp_spec.memoryAllocation.shares.level = self.mem_shares
 
         if self.mem_allocation_shares and self.mem_shares == 'custom':
-            if self.mem_allocation_shares != resource_pool_obj.config.memoryAllocation.shares.shares:
+            if self.mem_allocation_shares != self.resource_pool_obj.config.memoryAllocation.shares.shares:
                 changed = True
                 rp_spec.memoryAllocation.shares.shares = self.mem_allocation_shares
 
-        if self.mem_limit and self.mem_limit != resource_pool_obj.config.memoryAllocation.limit:
+        if self.mem_limit and self.mem_limit != self.resource_pool_obj.config.memoryAllocation.limit:
             changed = True
             rp_spec.memoryAllocation.limit = self.mem_limit
 
-        if self.mem_reservation and self.mem_reservation != resource_pool_obj.config.memoryAllocation.reservation:
+        if self.mem_reservation and self.mem_reservation != self.resource_pool_obj.config.memoryAllocation.reservation:
             changed = True
             rp_spec.memoryAllocation.reservation = self.mem_reservation
 
-        if self.mem_expandable_reservations != resource_pool_obj.config.memoryAllocation.expandableReservation:
+        if self.mem_expandable_reservations != self.resource_pool_obj.config.memoryAllocation.expandableReservation:
             changed = True
             rp_spec.memoryAllocation.expandableReservation = self.mem_expandable_reservations
 
-        if self.cpu_shares and self.cpu_shares != resource_pool_obj.config.cpuAllocation.shares.level:
+        if self.cpu_shares and self.cpu_shares != self.resource_pool_obj.config.cpuAllocation.shares.level:
             changed = True
             rp_spec.cpuAllocation.shares.level = self.cpu_shares
 
         if self.cpu_allocation_shares and self.cpu_shares == 'custom':
-            if self.cpu_allocation_shares != resource_pool_obj.config.cpuAllocation.shares.shares:
+            if self.cpu_allocation_shares != self.resource_pool_obj.config.cpuAllocation.shares.shares:
                 changed = True
                 rp_spec.cpuAllocation.shares.shares = self.cpu_allocation_shares
 
-        if self.cpu_limit and self.cpu_limit != resource_pool_obj.config.cpuAllocation.limit:
+        if self.cpu_limit and self.cpu_limit != self.resource_pool_obj.config.cpuAllocation.limit:
             changed = True
             rp_spec.cpuAllocation.limit = self.cpu_limit
 
-        if self.cpu_reservation and self.cpu_reservation != resource_pool_obj.config.cpuAllocation.reservation:
+        if self.cpu_reservation and self.cpu_reservation != self.resource_pool_obj.config.cpuAllocation.reservation:
             changed = True
             rp_spec.cpuAllocation.reservation = self.cpu_reservation
 
-        if self.cpu_expandable_reservations != resource_pool_obj.config.cpuAllocation.expandableReservation:
+        if self.cpu_expandable_reservations != self.resource_pool_obj.config.cpuAllocation.expandableReservation:
             changed = True
             rp_spec.cpuAllocation.expandableReservation = self.cpu_expandable_reservations
 
         if self.module.check_mode:
             self.module.exit_json(changed=changed)
 
-        resource_pool_obj.UpdateConfig(self.resource_pool, rp_spec)
+        self.resource_pool_obj.UpdateConfig(self.resource_pool, rp_spec)
 
         resource_pool_config = self.generate_rp_config_return_value(True)
         self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
@@ -378,10 +376,9 @@ class VMwareResourcePool(PyVmomi):
         if self.module.check_mode:
             self.module.exit_json(changed=changed)
 
-        resource_pool_obj = self.select_resource_pool()
         resource_pool_config = self.generate_rp_config_return_value(True)
         try:
-            task = resource_pool_obj.Destroy()
+            task = self.resource_pool_obj.Destroy()
             success, result = wait_for_task(task)
 
         except Exception:
@@ -411,11 +408,11 @@ class VMwareResourcePool(PyVmomi):
         self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
 
     def check_rp_state(self):
-        resource_pool_obj = self.select_resource_pool()
-        if resource_pool_obj is None:
+        self.resource_pool_obj = self.select_resource_pool()
+        if self.resource_pool_obj is None:
             return 'absent'
-        else:
-            return 'present'
+
+        return 'present'
 
 
 def main():
