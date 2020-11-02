@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_content_deploy_ovf_template - make resource pool, host, cluster optional parameter and add check (https://github.com/ansible-collections/community.vmware/issues/420).

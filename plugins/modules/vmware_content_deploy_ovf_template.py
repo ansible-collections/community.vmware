@@ -58,22 +58,29 @@ options:
       required: True
     host:
       description:
-      - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
+      - Name of the ESX Host in datacenter in which to place deployed VM.
+      - The host has to be a member of the cluster that contains the resource pool.
+      - Required with I(resource_pool) to find resource pool details. This will be used as additional
+        information when there are resource pools with same name.
       type: str
-      required: True
+      required: False
     resource_pool:
       description:
-      - Name of the resourcepool in datacenter in which to place deployed VM.
+      - Name of the resource pool in datacenter in which to place deployed VM.
+      - Required if I(cluster) is not specified.
+      - For default or non-unique resource pool names, specify I(host) and I(cluster).
+      - C(Resources) is the default name of resource pool.
       type: str
-      required: True
+      required: False
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
+      - Required if I(resource_pool) is not specified.
       type: str
       required: False
     storage_provisioning:
       description:
-      - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.
+      - Default storage provisioning type to use for all sections of type I(vmw:StorageSection) in the OVF descriptor.
       type: str
       choices: [ thin, thick, eagerZeroedThick ]
 extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
@@ -94,7 +101,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Deploy Virtual Machine from OVF template in content library with eagerZeroedThick storage
-  vmware_content_deploy_ovf_template:
+  community.vmware.vmware_content_deploy_ovf_template:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -105,6 +112,20 @@ EXAMPLES = r'''
     name: Sample_VM
     resource_pool: test_rp
     storage_provisioning: eagerZeroedThick
+  delegate_to: localhost
+
+- name: Deploy Virtual Machine from OVF template to the given Cluster
+  community.vmware.vmware_content_deploy_ovf_template:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    ovf_template: rhel_test_template
+    datastore: ds_200
+    folder: prod
+    datacenter: Sample_DC_1
+    name: Sample_VM
+    cluster: Asia-Cluster1
+    validate_certs: False
   delegate_to: localhost
 '''
 
@@ -137,6 +158,17 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
     def __init__(self, module):
         """Constructor."""
         super(VmwareContentDeployOvfTemplate, self).__init__(module)
+        self.pyv = PyVmomi(module=module)
+        vm = self.pyv.get_vm()
+        if vm:
+            module.exit_json(
+                changed=False,
+                vm_deploy_info=dict(
+                    msg="Virtual Machine '%s' already Exists." % module.params['name'],
+                    vm_id=vm._moId,
+                )
+            )
+
         self.ovf_template_name = self.params.get('ovf_template')
         self.content_library_name = self.params.get('content_library')
         self.vm_name = self.params.get('name')
@@ -171,29 +203,53 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         self.folder_id = self.get_folder_by_name(self.datacenter, self.folder)
         if not self.folder_id:
             self.module.fail_json(msg="Failed to find the folder %s" % self.folder)
-        # Find the Host by given HostName
-        self.host_id = self.get_host_by_name(self.datacenter, self.host)
-        if not self.host_id:
-            self.module.fail_json(msg="Failed to find the Host %s" % self.host)
-        # Find the resourcepool by the given resourcepool name
-        self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
-        if not self.resourcepool_id:
-            self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
+        host_id = None
+        if self.host:
+            # Find the Host by given HostName
+            host_id = self.get_host_by_name(self.datacenter, self.host)
+            if not host_id:
+                self.module.fail_json(msg="Failed to find the Host %s" % self.host)
+
         # Find the Cluster by the given Cluster name
         self.cluster_id = None
+        self.resourcepool_id = None
         if self.cluster:
             self.cluster_id = self.get_cluster_by_name(self.datacenter, self.cluster)
             if not self.cluster_id:
                 self.module.fail_json(msg="Failed to find the Cluster %s" % self.cluster)
+            cluster_obj = self.api_client.vcenter.Cluster.get(self.cluster_id)
+            self.resourcepool_id = cluster_obj.resource_pool
+
+        # Find the resourcepool by the given resourcepool name
+        if self.resourcepool:
+            # Override Cluster resource pool
+            self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
+
+        if not self.resourcepool_id:
+            msg = "Failed to find the resource_pool"
+            if self.cluster:
+                msg += " using cluster %s" % self.cluster
+            if self.resourcepool:
+                msg += " using resource pool name %s" % self.resourcepool
+            if self.host:
+                msg += " and host %s" % self.host
+            if not self.cluster and not self.resourcepool and not self.host:
+                msg += ". Please consider specifying either cluster or combination of host and resource pool."
+            self.module.fail_json(msg=msg)
 
         deployment_target = LibraryItem.DeploymentTarget(
             resource_pool_id=self.resourcepool_id,
             folder_id=self.folder_id
         )
 
-        self.ovf_summary = self.api_client.vcenter.ovf.LibraryItem.filter(
-            ovf_library_item_id=self.library_item_id,
-            target=deployment_target)
+        try:
+            self.ovf_summary = self.api_client.vcenter.ovf.LibraryItem.filter(
+                ovf_library_item_id=self.library_item_id,
+                target=deployment_target)
+        except Error as error:
+            self.module.fail_json(msg="%s" % self.get_error_message(error))
+        except Exception as err:
+            self.module.fail_json(msg="%s" % to_native(err))
 
         self.deploy_spec = LibraryItem.ResourcePoolDeploymentSpec(
             name=self.vm_name,
@@ -239,8 +295,8 @@ def main():
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
         folder=dict(type='str', required=True),
-        host=dict(type='str', required=True),
-        resource_pool=dict(type='str', required=True),
+        host=dict(type='str'),
+        resource_pool=dict(type='str'),
         cluster=dict(type='str', required=False),
         storage_provisioning=dict(type='str',
                                   required=False,
@@ -250,16 +306,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
     result = {'failed': False, 'changed': False}
-    pyv = PyVmomi(module=module)
-    vm = pyv.get_vm()
-    if vm:
-        module.exit_json(
-            changed=False,
-            vm_deploy_info=dict(
-                msg="Virtual Machine '%s' already Exists." % module.params['name'],
-                vm_id=vm._moId,
-            )
-        )
     vmware_contentlib_create = VmwareContentDeployOvfTemplate(module)
     if module.check_mode:
         result.update(
