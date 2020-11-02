@@ -23,7 +23,7 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 notes:
-    - Tested on vSphere 6.5 and 6.7
+    - Tested on vSphere 6.5, 6.7 and 7.0
 requirements:
     - "python >= 2.6"
     - PyVmomi
@@ -47,10 +47,11 @@ options:
             - The version of the Distributed Switch to create.
             - Can be 6.0.0, 5.5.0, 5.1.0, 5.0.0 with a vCenter running vSphere 6.0 and 6.5.
             - Can be 6.6.0, 6.5.0, 6.0.0 with a vCenter running vSphere 6.7.
+            - Can be 7.0.0, 6.6.0, 6.5.0 with a vCenter running vSphere 7.0.
             - The version must match the version of the ESXi hosts you want to connect.
             - The version of the vCenter server is used if not specified.
             - Required only if C(state) is set to C(present).
-        choices: ['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0']
+        choices: ['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0', '7.0.0']
         aliases: ['version']
         type: str
     mtu:
@@ -704,7 +705,7 @@ def main():
             mtu=dict(type='int', default=1500),
             multicast_filtering_mode=dict(type='str', default='basic', choices=['basic', 'snooping']),
             switch_version=dict(
-                choices=['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0'],
+                choices=['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0', '7.0.0'],
                 aliases=['version'],
                 default=None
             ),
