@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_drs_group - code refactor (https://github.com/ansible-collections/community.vmware/pull/475).

@@ -20,7 +20,7 @@ extends_documentation_fragment:
 
 module: vmware_drs_group
 notes:
-  - "Tested on vSphere 6.5 and 6.7"
+  - Tested on vSphere 6.5, and 6.7
 options:
   cluster_name:
     description:
@@ -63,7 +63,7 @@ options:
     type: list
     elements: str
 requirements:
-  - "python >= 2.6"
+  - "python >= 2.7"
   - PyVmomi
 short_description: "Creates vm/host group in a given cluster."
 '''
@@ -109,7 +109,6 @@ EXAMPLES = r'''
     datacenter_name: DC0
     group_name: TEST_HOST_01
     state: absent
-
 '''
 
 RETURN = r'''
@@ -186,7 +185,7 @@ class VmwareDrsGroupManager(PyVmomi):
 
             self.__datacenter_obj = find_datacenter_by_name(self.content, self.__datacenter_name)
 
-            if self.__datacenter_obj is None and module.check_mode is False:
+            if self.__datacenter_obj is None:
                 raise Exception("Datacenter '%s' not found" % self.__datacenter_name)
 
         self.__cluster_obj = find_cluster_by_name(content=self.content,
@@ -195,7 +194,7 @@ class VmwareDrsGroupManager(PyVmomi):
 
         # Throw error if cluster does not exist
         if self.__cluster_obj is None:
-            if module.check_mode is False:
+            if not module.check_mode:
                 raise Exception("Cluster '%s' not found" % self.__cluster_name)
         else:
             # get group
@@ -203,7 +202,7 @@ class VmwareDrsGroupManager(PyVmomi):
             # Set result here. If nothing is to be updated, result is already set
             self.__set_result(self.__group_obj)
 
-        # Dont populate lists if we are deleting group
+        # Do not populate lists if we are deleting group
         if state == 'present':
 
             if self.__group_obj:
@@ -278,19 +277,14 @@ class VmwareDrsGroupManager(PyVmomi):
             cluster_obj = self.__cluster_obj
 
         if vm_list is not None:
-
             for vm in vm_list:
-
-                if self.module.check_mode is False:
-
+                if not self.module.check_mode:
                     # Get host data
                     vm_obj = find_vm_by_id(content=self.content, vm_id=vm,
                                            vm_id_type='vm_name', cluster=cluster_obj)
-
                     if vm_obj is None:
                         raise Exception("VM %s does not exist in cluster %s" % (vm,
                                                                                 self.__cluster_name))
-
                     self.__vm_obj_list.append(vm_obj)
 
     def __set_host_obj_list(self, host_list=None):
@@ -307,17 +301,12 @@ class VmwareDrsGroupManager(PyVmomi):
             host_list = self.__host_list
 
         if host_list is not None:
-
             for host in host_list:
-
-                if self.module.check_mode is False:
-
+                if not self.module.check_mode:
                     # Get host data
                     host_obj = self.find_hostsystem_by_name(host)
-
-                    if host_obj is None and self.module.check_mode is False:
+                    if host_obj is None:
                         raise Exception("ESXi host %s does not exist in cluster %s" % (host, self.__cluster_name))
-
                     self.__host_obj_list.append(host_obj)
 
     def __get_group_by_name(self, group_name=None, cluster_obj=None):
@@ -404,8 +393,7 @@ class VmwareDrsGroupManager(PyVmomi):
         # By casting lists as a set, you remove duplicates and order doesn't count. Comparing sets is also much faster and more efficient than comparing lists.
         if set(list_a) == set(list_b):
             return False
-        else:
-            return True
+        return True
 
     def __create_host_group(self):
 
@@ -419,13 +407,14 @@ class VmwareDrsGroupManager(PyVmomi):
             group_spec = vim.cluster.GroupSpec(info=group, operation=self.__operation)
             config_spec = vim.cluster.ConfigSpecEx(groupSpec=[group_spec])
 
+            changed = True
             if not self.module.check_mode:
                 task = self.__cluster_obj.ReconfigureEx(config_spec, modify=True)
-                wait_for_task(task)
+                changed, result = wait_for_task(task)
 
             # Set new result since something changed
             self.__set_result(group)
-            self.__changed = True
+            self.__changed = changed
 
         if self.__operation == 'edit':
             self.__msg = "Updated host group %s successfully" % (self.__group_name)
@@ -438,7 +427,6 @@ class VmwareDrsGroupManager(PyVmomi):
         if self.__operation == 'add' or (self.__operation == 'edit' and self.__check_if_vms_hosts_changed()):
 
             group = vim.cluster.VmGroup()
-
             group.name = self.__group_name
             group.vm = self.__vm_obj_list
 
@@ -446,12 +434,13 @@ class VmwareDrsGroupManager(PyVmomi):
             config_spec = vim.cluster.ConfigSpecEx(groupSpec=[group_spec])
 
             # Check if dry run
+            changed = True
             if not self.module.check_mode:
                 task = self.__cluster_obj.ReconfigureEx(config_spec, modify=True)
-                wait_for_task(task)
+                changed, result = wait_for_task(task)
 
             self.__set_result(group)
-            self.__changed = True
+            self.__changed = changed
 
         if self.__operation == 'edit':
             self.__msg = "Updated vm group %s successfully" % (self.__group_name)
@@ -477,12 +466,11 @@ class VmwareDrsGroupManager(PyVmomi):
                 hosts=self.__host_list,
                 type="host"
             )
-        else:
-            return dict(
-                group_name=group_obj.name,
-                vms=self.__vm_list,
-                type="vm"
-            )
+        return dict(
+            group_name=group_obj.name,
+            vms=self.__vm_list,
+            type="vm"
+        )
 
     def create_drs_group(self):
         """
@@ -514,7 +502,7 @@ class VmwareDrsGroupManager(PyVmomi):
                 task = self.__cluster_obj.ReconfigureEx(config_spec, modify=True)
                 wait_for_task(task)
 
-        # Dont throw error if group does not exist. Simply set changed = False
+        # Do not throw error if group does not exist. Simply set changed = False
         if self.__changed:
             self.__msg = "Deleted group `%s` successfully" % (self.__group_name)
         else:
@@ -534,7 +522,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         group_name=dict(type='str', required=True),
         vms=dict(type='list', elements='str'),
-        hosts=dict(type='list', elements='str')
+        hosts=dict(type='list', elements='str'),
     )
 
     required_if = [
