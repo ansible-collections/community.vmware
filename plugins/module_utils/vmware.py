@@ -1413,25 +1413,68 @@ class PyVmomi(object):
         return find_folder_by_name(self.content, folder_name=folder_name)
 
     # Datastore cluster
-    def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None):
+    def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None, folder=None):
         """
         Get datastore cluster managed object by name
         Args:
             datastore_cluster_name: Name of datastore cluster
             datacenter: Managed object of the datacenter
+            folder: Managed object of the folder which holds datastore
 
         Returns: Datastore cluster managed object if found else None
 
         """
         if datacenter and hasattr(datacenter, 'datastoreFolder'):
             folder = datacenter.datastoreFolder
-        else:
+        if not folder:
             folder = self.content.rootFolder
 
         data_store_clusters = get_all_objs(self.content, [vim.StoragePod], folder=folder)
         for dsc in data_store_clusters:
             if dsc.name == datastore_cluster_name:
                 return dsc
+        return None
+
+    def get_recommended_datastore(self, datastore_cluster_obj=None):
+        """
+        Return Storage DRS recommended datastore from datastore cluster
+        Args:
+            datastore_cluster_obj: datastore cluster managed object
+
+        Returns: Name of recommended datastore from the given datastore cluster
+
+        """
+        if datastore_cluster_obj is None:
+            return None
+        # Check if Datastore Cluster provided by user is SDRS ready
+        sdrs_status = datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.enabled
+        if sdrs_status:
+            # We can get storage recommendation only if SDRS is enabled on given datastorage cluster
+            pod_sel_spec = vim.storageDrs.PodSelectionSpec()
+            pod_sel_spec.storagePod = datastore_cluster_obj
+            storage_spec = vim.storageDrs.StoragePlacementSpec()
+            storage_spec.podSelectionSpec = pod_sel_spec
+            storage_spec.type = 'create'
+
+            try:
+                rec = self.content.storageResourceManager.RecommendDatastores(storageSpec=storage_spec)
+                rec_action = rec.recommendations[0].action[0]
+                return rec_action.destination.name
+            except Exception:
+                # There is some error so we fall back to general workflow
+                pass
+        datastore = None
+        datastore_freespace = 0
+        for ds in datastore_cluster_obj.childEntity:
+            if isinstance(ds, vim.Datastore) and ds.summary.freeSpace > datastore_freespace:
+                # If datastore field is provided, filter destination datastores
+                if not self.is_datastore_valid(datastore_obj=ds):
+                    continue
+
+                datastore = ds
+                datastore_freespace = ds.summary.freeSpace
+        if datastore:
+            return datastore.name
         return None
 
     # Resource pool

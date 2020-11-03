@@ -57,6 +57,7 @@ Parameters
                 </td>
                 <td>
                         <div>Name of the cluster in datacenter in which to place deployed VM.</div>
+                        <div>Required if <em>resource_pool</em> is not specified.</div>
                 </td>
             </tr>
             <tr>
@@ -98,13 +99,32 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
                         <div>Name of the datastore to store deployed VM and disk.</div>
+                        <div>Required if <em>datastore_cluster</em> is not provided.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datastore_cluster</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the datastore cluster to store deployed VM and disk.</div>
+                        <div>Please make sure Storage DRS is active for recommended datastore from the given datastore cluster.</div>
+                        <div>If Storage DRS is not enabled, datastore with largest free storage space is selected.</div>
+                        <div>Required if <em>datastore</em> is not provided.</div>
                 </td>
             </tr>
             <tr>
@@ -130,13 +150,14 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
                         <div>Name of the ESX Host in datacenter in which to place deployed VM.</div>
+                        <div>The host has to be a member of the cluster that contains the resource pool.</div>
+                        <div>Required with <em>resource_pool</em> to find resource pool details. This will be used as additional information when there are resource pools with same name.</div>
                 </td>
             </tr>
             <tr>
@@ -237,7 +258,10 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the resourcepool in datacenter in which to place deployed VM.</div>
+                        <div>Name of the resource pool in datacenter in which to place deployed VM.</div>
+                        <div>Required if <em>cluster</em> is not specified.</div>
+                        <div>For default or non-unique resource pool names, specify <em>host</em> and <em>cluster</em>.</div>
+                        <div><code>Resources</code> is the default name of resource pool.</div>
                 </td>
             </tr>
             <tr>
@@ -333,7 +357,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Deploy Virtual Machine from template in content library
       community.vmware.vmware_content_deploy_template:

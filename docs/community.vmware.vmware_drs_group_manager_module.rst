@@ -5,7 +5,7 @@
 community.vmware.vmware_drs_group_manager
 *****************************************
 
-**Manage VMs/Hosts group in the DRS group.**
+**Manage VMs and Hosts in DRS group.**
 
 
 Version added: 1.7.0
@@ -17,7 +17,7 @@ Version added: 1.7.0
 
 Synopsis
 --------
-- The module can be used to add / remove VMs/Hosts groups in a given cluster.
+- The module can be used to add VMs / Hosts to or remove them from a DRS group.
 
 
 

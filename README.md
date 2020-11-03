@@ -98,7 +98,7 @@ Name | Description
 [community.vmware.vmware_drs_group](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_module.rst)|Creates vm/host group in a given cluster.
 [community.vmware.vmware_drs_group_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_facts_module.rst)|Gathers facts about DRS VM/Host groups on the given cluster
 [community.vmware.vmware_drs_group_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_info_module.rst)|Gathers info about DRS VM/Host groups on the given cluster
-[community.vmware.vmware_drs_group_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_manager_module.rst)|Manage VMs/Hosts group in the DRS group.
+[community.vmware.vmware_drs_group_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_manager_module.rst)|Manage VMs and Hosts in DRS group.
 [community.vmware.vmware_drs_rule_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_rule_facts_module.rst)|Gathers facts about DRS rule on the given cluster
 [community.vmware.vmware_drs_rule_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_rule_info_module.rst)|Gathers info about DRS rule on the given cluster
 [community.vmware.vmware_dvs_host](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvs_host_module.rst)|Add or remove a host from distributed virtual switch
