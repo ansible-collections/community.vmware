@@ -224,7 +224,7 @@ class VmwareRestClient(object):
         Returns: List of tag object associated with the given cluster
 
         """
-        dobj = DynamicID(type='cluster', id=cluster_mid)
+        dobj = DynamicID(type='ClusterComputeResource', id=cluster_mid)
         return self.get_tags_for_dynamic_obj(dobj=dobj)
 
     def get_tags_for_hostsystem(self, hostsystem_mid=None):
