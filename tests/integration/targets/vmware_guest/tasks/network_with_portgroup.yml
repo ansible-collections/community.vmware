@@ -45,3 +45,85 @@
 - assert:
     that:
       - vm_with_portgroup is changed
+
+- name: Integration test for issue 457(https://github.com/ansible-collections/community.vmware/issues/457)
+  when: vcsim is not defined
+  block:
+    - name: Create a new portgroup with / in the name
+      vmware_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        hosts:
+          - "{{ esxi1 }}"
+        switch: "{{ switch1 }}"
+        portgroup: "192.168.0.0/24"
+      register: create_portgroup_result
+
+    - assert:
+        that:
+          - create_portgroup_result.changed is sameas true
+
+    - name: Deploy VM with / in the portgroup name
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        datacenter: "{{ dc1 }}"
+        esxi_hostname: "{{ esxi1 }}"
+        state: poweredon
+        folder: "{{ f0 }}"
+        name: test_vm_slash
+        disk:
+          - size: 10mb
+            datastore: "{{ rw_datastore }}"
+        guest_id: rhel7_64guest
+        hardware:
+          memory_mb: 128
+          num_cpus: 1
+        networks:
+          - name: '192.168.0.0/24'
+            device_type: "vmxnet3"
+      register: deploy_vm_slash_result
+
+    - assert:
+        that:
+          - deploy_vm_slash_result.changed is sameas true
+
+    - name: Destroy the test_vm_slash VM
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        datacenter: "{{ dc1 }}"
+        esxi_hostname: "{{ esxi1 }}"
+        state: poweredon
+        folder: "{{ f0 }}"
+        name: test_vm_slash
+        force: true
+        state: absent
+      register: destroy_tset_vm_slash_result
+
+    - assert:
+        that:
+          - destroy_tset_vm_slash_result.changed is sameas true
+
+    - name: Delete the portgroup with / in the name
+      vmware_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        hosts:
+          - "{{ esxi1 }}"
+        switch: "{{ switch1 }}"
+        portgroup: "192.168.0.0/24"
+        state: absent
+      register: delete_portgroup_result
+
+    - assert:
+        that:
+          - delete_portgroup_result.changed is sameas true

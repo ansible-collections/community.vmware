@@ -135,6 +135,72 @@
     - assert:
         that:
           - not (no_vm_result is changed)
+
+    - name: Integration test for issue 457(https://github.com/ansible-collections/community.vmware/issues/457)
+      block:
+        - name: Create a new dvportgroup with / in the name
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: no
+            switch_name: "{{ dvswitch1 }}"
+            portgroup_name: "192.168.0.0/24"
+            vlan_id: 0
+            portgroup_type: earlyBinding
+            num_ports: 8
+            state: present
+          register: create_dvportgroup_result
+
+        - assert:
+            that:
+              - create_dvportgroup_result.changed is sameas true
+
+        - name: Deploy VM with / in the portgroup name
+          vmware_guest:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: False
+            datacenter: "{{ dc1 }}"
+            esxi_hostname: "{{ esxi1 }}"
+            state: poweredon
+            folder: "{{ f0 }}"
+            name: test_vm_slash
+            disk:
+              - size: 10mb
+                datastore: "{{ rw_datastore }}"
+            guest_id: rhel7_64guest
+            hardware:
+              memory_mb: 128
+              num_cpus: 1
+            networks:
+              - name: '192.168.0.0/24'
+                device_type: "vmxnet3"
+          register: deploy_vm_slash_result
+
+        - assert:
+            that:
+              - deploy_vm_slash_result.changed is sameas true
+
+        - name: Delete the dvportgroup with / in the name
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: no
+            switch_name: "{{ dvswitch1 }}"
+            portgroup_name: "192.168.0.0/24"
+            vlan_id: 0
+            portgroup_type: earlyBinding
+            num_ports: 8
+            state: absent
+          register: delete_dvportgroup_result
+    
+        - assert:
+            that:
+              - delete_dvportgroup_result.changed is sameas true
+
   always:
     - when: vcsim is not defined
       name: Remove VM to free the portgroup
@@ -150,3 +216,4 @@
         - test_vm1
         - test_vm2
         - test_vm3
+        - test_vm_slash
