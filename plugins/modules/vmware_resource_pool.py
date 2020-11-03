@@ -138,10 +138,16 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
+instance:
+    description: metadata about the new resource pool
+    returned: always
+    type: dict
+    sample: None
 resource_pool_config:
     description: config data about the resource pool
     returned: always
     type: dict
+    version_added: 1.4.0
     sample: >-
       {
         "_vimtype": "vim.ResourceConfigSpec",
