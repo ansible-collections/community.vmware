@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_resource_pool - added a changing feature of resource pool config (https://github.com/ansible-collections/community.vmware/pull/469).
