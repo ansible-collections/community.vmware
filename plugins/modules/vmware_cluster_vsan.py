@@ -41,13 +41,13 @@ options:
       description:
       - Whether to enable vSAN.
       type: bool
-      default: 'no'
+      default: false
     vsan_auto_claim_storage:
       description:
       - Whether the VSAN service is configured to automatically claim local storage
         on VSAN-enabled hosts in the cluster.
       type: bool
-      default: False
+      default: false
     advanced_options:
       version_added: "1.1.0"
       description:
@@ -108,7 +108,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
     enable_vsan: True

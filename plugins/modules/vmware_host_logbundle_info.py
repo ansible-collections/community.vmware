@@ -35,7 +35,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
   register: fetch_manifests_result
 '''

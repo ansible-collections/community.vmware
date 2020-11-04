@@ -50,7 +50,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     datacenter: 'Asia-Datacenter1'
   register: r
 

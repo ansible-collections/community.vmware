@@ -6,7 +6,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
 #        cluster: "{{ ccr1 }}"
         name: '{{ item }}'
         force: true

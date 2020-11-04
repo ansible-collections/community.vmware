@@ -69,7 +69,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
   delegate_to: localhost
 
 - name: export vCenter appliance infra profile config
@@ -77,7 +76,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
     api: "export"
     profiles: "ApplianceManagement"
   delegate_to: localhost
@@ -87,7 +85,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
     api: "validate"
     profiles: "ApplianceManagement"
     config_path: "export.json"
@@ -97,7 +94,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
     api: "import"
     profiles: "ApplianceManagement"
     config_path: "import.json"

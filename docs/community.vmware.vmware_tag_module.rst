@@ -219,7 +219,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -245,7 +245,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         category_id: 'urn:vmomi:InventoryServiceCategory:e785088d-6981-4b1c-9fb8-1100c3e1f742:GLOBAL'
         tag_name: Sample_Tag_0002
         tag_description: Sample Description

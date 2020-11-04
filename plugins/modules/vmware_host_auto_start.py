@@ -39,7 +39,7 @@ options:
     description:
     - Whether to use the VMware instance UUID rather than the BIOS UUID.
     type: bool
-    default: no
+    default: false
   moid:
     description:
     - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
@@ -138,7 +138,6 @@ EXAMPLES = r'''
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     system_defaults:
       enabled: true
@@ -150,7 +149,6 @@ EXAMPLES = r'''
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     name: "{{ vm_name }}"
     power_info:

@@ -173,7 +173,7 @@ ansible_connection: vmware_tools
 ansible_vmware_host: vcenter.example.com
 ansible_vmware_user: administrator@vsphere.local
 ansible_vmware_password: Secr3tP4ssw0rd!12
-ansible_vmware_validate_certs: no  # default is yes
+ansible_vmware_validate_certs: false  # default is true
 
 # vCenter Connection VM Path Example
 ansible_vmware_guest_path: DATACENTER/vm/FOLDER/{{ inventory_hostname }}

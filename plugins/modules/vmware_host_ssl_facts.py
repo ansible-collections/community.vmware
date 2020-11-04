@@ -61,9 +61,9 @@ EXAMPLES = r'''
 
 - name: Get SSL Thumbprint info about "{{ esxi_hostname }}"
   community.vmware.vmware_host_ssl_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi_hostname }}'
   register: ssl_facts
 - set_fact:

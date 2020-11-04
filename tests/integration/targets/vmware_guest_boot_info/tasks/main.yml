@@ -13,7 +13,7 @@
 
   - name: Gather info about VM boot order
     vmware_guest_boot_info:
-      validate_certs: no
+      validate_certs: false
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -32,7 +32,7 @@
 
   - name: Gather info about VM boot order in check mode
     vmware_guest_boot_info:
-      validate_certs: no
+      validate_certs: false
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

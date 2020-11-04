@@ -95,7 +95,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: /mydatacenter/vm
     name: testvm1
     vnc_port: 5990
@@ -110,7 +109,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     uuid: 32074771-7d6b-699a-66a8-2d9cf8236fff
     state: absent
@@ -122,7 +120,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     moid: vm-42
     state: absent

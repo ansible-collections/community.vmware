@@ -13,7 +13,7 @@
 
   - name: set state to poweron the first VM
     vmware_guest_powerstate:
-      validate_certs: no
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

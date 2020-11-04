@@ -180,7 +180,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -192,6 +192,7 @@ Notes
 
 .. note::
    - Tested on vSphere 6.5
+   - ``flat_folder_info`` added in VMware collection 1.4.0.
 
 
 
@@ -208,6 +209,18 @@ Examples
         datacenter: datacenter_name
       delegate_to: localhost
       register: vcenter_folder_info
+
+    - name: Get information about folders
+      community.vmware.vmware_folder_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter: 'Asia-Datacenter1'
+      register: r
+
+    - name: Set Managed object ID for the given folder
+      ansible.builtin.set_fact:
+        folder_mo_id: "{{ (r.flat_folder_info | selectattr('path', 'equalto', '/Asia-Datacenter1/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
 
 
 
@@ -226,10 +239,27 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>flat_folder_info</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>success</td>
+                <td>
+                            <div>list of dict about folders in flat structure</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;moid&#x27;: &#x27;group-v3&#x27;, &#x27;path&#x27;: &#x27;/Asia-Datacenter1/vm&#x27;}, {&#x27;moid&#x27;: &#x27;group-v44&#x27;, &#x27;path&#x27;: &#x27;/Asia-Datacenter1/vm/tier1&#x27;}, {&#x27;moid&#x27;: &#x27;group-v45&#x27;, &#x27;path&#x27;: &#x27;/Asia-Datacenter1/vm/tier1/tier2&#x27;}]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>folder_info</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">string</span>
+                      <span style="color: purple">dictionary</span>
                     </div>
                 </td>
                 <td>success</td>
@@ -237,7 +267,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict about folders</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;datastoreFolders&#x27;: {&#x27;path&#x27;: &#x27;/DC01/datastore&#x27;, &#x27;subfolders&#x27;: {&#x27;Local Datastores&#x27;: {&#x27;path&#x27;: &#x27;/DC01/datastore/Local Datastores&#x27;, &#x27;subfolders&#x27;: {}}}}, &#x27;hostFolders&#x27;: {&#x27;path&#x27;: &#x27;/DC01/host&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;networkFolders&#x27;: {&#x27;path&#x27;: &#x27;/DC01/network&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;vmFolders&#x27;: {&#x27;path&#x27;: &#x27;/DC01/vm&#x27;, &#x27;subfolders&#x27;: {&#x27;Core Infrastructure Servers&#x27;: {&#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers&#x27;, &#x27;subfolders&#x27;: {&#x27;Staging Network Services&#x27;: {&#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers/Staging Network Services&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;VMware&#x27;: {&#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers/VMware&#x27;, &#x27;subfolders&#x27;: {}}}}}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;datastoreFolders&#x27;: {&#x27;moid&#x27;: &#x27;group-v10&#x27;, &#x27;path&#x27;: &#x27;/DC01/datastore&#x27;, &#x27;subfolders&#x27;: {&#x27;Local Datastores&#x27;: {&#x27;path&#x27;: &#x27;/DC01/datastore/Local Datastores&#x27;, &#x27;subfolders&#x27;: {}}}}, &#x27;hostFolders&#x27;: {&#x27;moid&#x27;: &#x27;group-v21&#x27;, &#x27;path&#x27;: &#x27;/DC01/host&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;networkFolders&#x27;: {&#x27;moid&#x27;: &#x27;group-v31&#x27;, &#x27;path&#x27;: &#x27;/DC01/network&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;vmFolders&#x27;: {&#x27;moid&#x27;: &#x27;group-v41&#x27;, &#x27;path&#x27;: &#x27;/DC01/vm&#x27;, &#x27;subfolders&#x27;: {&#x27;Core Infrastructure Servers&#x27;: {&#x27;moid&#x27;: &#x27;group-v42&#x27;, &#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers&#x27;, &#x27;subfolders&#x27;: {&#x27;Staging Network Services&#x27;: {&#x27;moid&#x27;: &#x27;group-v43&#x27;, &#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers/Staging Network Services&#x27;, &#x27;subfolders&#x27;: {}}, &#x27;VMware&#x27;: {&#x27;moid&#x27;: &#x27;group-v44&#x27;, &#x27;path&#x27;: &#x27;/DC01/vm/Core Infrastructure Servers/VMware&#x27;, &#x27;subfolders&#x27;: {}}}}}}}</div>
                 </td>
             </tr>
     </table>

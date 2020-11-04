@@ -21,7 +21,7 @@
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       register: readd_host_result
 
     - name: Add first ESXi Host to vCenter (again)
@@ -35,7 +35,7 @@
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       register: readd_host_result
 
     - name: ensure precend task didn't changed anything
@@ -48,7 +48,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
@@ -68,7 +68,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         datacenter_name: "{{ dc1 }}"
         cluster_name: "{{ ccr1 }}"
@@ -80,7 +80,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         datacenter_name: "{{ dc1 }}"
         cluster_name: "{{ ccr1 }}"
@@ -102,7 +102,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         folder_name: "Staging"
         folder_type: host
@@ -121,7 +121,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
@@ -141,7 +141,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
@@ -160,7 +160,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi2 }}'
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'

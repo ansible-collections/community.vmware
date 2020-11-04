@@ -54,7 +54,6 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
     state: enabled
-    validate_certs: no
   delegate_to: localhost
 
 - name: Disable IPv6 for an host system
@@ -64,7 +63,6 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
     state: disabled
-    validate_certs: no
   delegate_to: localhost
 
 - name: Disable IPv6 for all host systems from cluster
@@ -74,7 +72,6 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     cluster_name: '{{ cluster_name }}'
     state: disabled
-    validate_certs: no
   delegate_to: localhost
 '''
 

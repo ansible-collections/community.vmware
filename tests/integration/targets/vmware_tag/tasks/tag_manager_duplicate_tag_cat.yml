@@ -9,7 +9,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         category_name: "{{ cat_one }}"
         category_cardinality: 'multiple'
         state: present
@@ -20,7 +20,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         category_name: "{{ cat_two }}"
         category_cardinality: 'multiple'
         state: present
@@ -43,7 +43,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: "{{ tag_one }}"
         category_id: "{{ cat_one_id }}"
         state: present
@@ -59,7 +59,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: "{{ tag_one }}"
         category_id: "{{ cat_two_id }}"
         state: present
@@ -75,7 +75,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: "{{ tag_two }}"
         category_id: "{{ cat_one_id }}"
         state: present
@@ -91,7 +91,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: "{{ tag_two }}"
         category_id: "{{ cat_two_id }}"
         state: present
@@ -107,7 +107,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
       register: vm_facts
 
     - set_fact: vm_name="{{ vm_facts['virtual_machines'][0]['guest_name'] }}"
@@ -117,7 +117,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - "{{ cat_one }}:{{ tag_one }}"
         object_name: "{{ vm_name }}"
@@ -136,7 +136,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: "{{ item }}"
         state: absent
       register: delete_tag
@@ -149,7 +149,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         category_name: "{{ item }}"
         state: absent
       register: delete_categories

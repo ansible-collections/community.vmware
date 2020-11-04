@@ -7,7 +7,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     local_user_name: testuser_0003
     local_user_password: "SamplePassword!"
     state: present
@@ -26,7 +26,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     local_user_name: testuser_0003
     state: absent
   register: user_delete_0004

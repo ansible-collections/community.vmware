@@ -269,7 +269,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     state: enabled
 
@@ -278,7 +277,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     iscsi_config:
       vmhba_name: vmhba65
@@ -291,7 +289,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     iscsi_config:
       vmhba_name: vmhba65
@@ -305,7 +302,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     iscsi_config:
       vmhba_name: vmhba65
@@ -319,7 +315,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     iscsi_config:
       vmhba_name: vmhba65
@@ -335,7 +330,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     esxi_hostname: "{{ esxi_hostname }}"
     iscsi_config:
       vmhba_name: vmhba65

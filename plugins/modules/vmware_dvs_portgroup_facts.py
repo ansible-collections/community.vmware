@@ -71,10 +71,9 @@ extends_documentation_fragment:
 EXAMPLES = r'''
 - name: Get facts about DVPG
   community.vmware.vmware_dvs_portgroup_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
   register: dvpg_facts
 - name: Get number of ports for portgroup 'dvpg_001' in 'dvs_001'

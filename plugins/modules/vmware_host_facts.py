@@ -85,18 +85,18 @@ EXAMPLES = r'''
 
 - name: Gather vmware host facts from vCenter
   community.vmware.vmware_host_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
   register: host_facts
   delegate_to: localhost
 
 - name: Gather vmware host facts from vCenter with tag information
   community.vmware.vmware_host_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
     show_tag: True
   register: host_facts_tag
@@ -113,9 +113,9 @@ EXAMPLES = r'''
 
 - name: Gather some info from a host using the vSphere API output schema
   community.vmware.vmware_host_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
     schema: vsphere
     properties:
@@ -127,9 +127,9 @@ EXAMPLES = r'''
 
 - name: Gather information about powerstate and connection state
   community.vmware.vmware_host_facts:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
     schema: vsphere
     properties:
@@ -141,9 +141,8 @@ EXAMPLES = r'''
     - name: Gather product version info for ESXi from vCenter
       community.vmware.vmware_host_facts:
         hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
-        validate_certs: no
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         esxi_hostname: "{{ esxi_hostname }}"
         schema: vsphere
         properties:

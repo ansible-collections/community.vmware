@@ -271,6 +271,29 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>tag_details</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If set <code>True</code>, detail information about &#x27;tags&#x27; returned.</div>
+                        <div>Without this flag, the &#x27;tags&#x27; returns a list of tag names.</div>
+                        <div>With this flag, the &#x27;tags&#x27; returns a list of dict about tag information with additional details like category name, category id, and tag id.</div>
+                        <div>This parameter is added to maintain backward compatability.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>tags</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -285,9 +308,9 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to show tags or not.</div>
-                        <div>If set <code>True</code>, shows tag information.</div>
+                        <div>If set <code>True</code>, shows tags information. Returns a list of tag names.</div>
                         <div>If set <code>False</code>, hides tags information.</div>
-                        <div>vSphere Automation SDK and vCloud Suite SDK is required.</div>
+                        <div>vSphere Automation SDK is required.</div>
                 </td>
             </tr>
             <tr>
@@ -362,7 +385,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -388,7 +411,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: ha-datacenter
-        validate_certs: false
         uuid: 421e4592-c069-924d-ce20-7e7533fab926
       delegate_to: localhost
       register: info
@@ -398,7 +420,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         datacenter: "{{ datacenter_name }}"
         name: "{{ vm_name }}"
         schema: "vsphere"
@@ -411,7 +432,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         datacenter: "{{ datacenter_name }}"
         moid: vm-42
         schema: "vsphere"
@@ -424,7 +444,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         datacenter: "{{ datacenter_name }}"
         name: "{{ vm_name }}"
         schema: "vsphere"
@@ -432,6 +451,17 @@ Examples
           - _moId
       delegate_to: localhost
       register: moid_info
+
+    - name: Gather detailed information about tags and category associated with the given VM
+      community.vmware.vmware_guest_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        name: "{{ vm_name }}"
+        tags: True
+        tag_details: True
+      register: detailed_tag_info
 
 
 

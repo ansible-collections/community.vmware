@@ -1,11 +1,11 @@
-.. _community.vmware.vmware_host_dns_info_module:
+.. _community.vmware.vmware_host_iscsi_info_module:
 
 
-*************************************
-community.vmware.vmware_host_dns_info
-*************************************
+***************************************
+community.vmware.vmware_host_iscsi_info
+***************************************
 
-**Gathers info about an ESXi host's DNS configuration information**
+**Gather iSCSI configuration information of ESXi host**
 
 
 
@@ -16,8 +16,7 @@ community.vmware.vmware_host_dns_info
 
 Synopsis
 --------
-- This module can be used to gather information about an ESXi host's DNS configuration information when ESXi hostname or Cluster name is given.
-- All parameters and VMware object names are case sensitive.
+- This module can be used to gather information about the iSCSI configuration of the ESXi host.
 
 
 
@@ -25,7 +24,7 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.6
+- python >= 2.7
 - PyVmomi
 
 
@@ -43,33 +42,17 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the cluster from which the ESXi host belong to.</div>
-                        <div>If <code>esxi_hostname</code> is not given, this parameter is required.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>esxi_hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>ESXi hostname to gather information from.</div>
-                        <div>If <code>cluster_name</code> is not given, this parameter is required.</div>
+                        <div>The ESXi hostname on which to gather iSCSI settings.</div>
                 </td>
             </tr>
             <tr>
@@ -203,12 +186,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-   - Tested on vSphere 6.5
-
 
 
 Examples
@@ -216,21 +193,13 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    - name: Gather DNS info about all ESXi Hosts in given Cluster
-      community.vmware.vmware_host_dns_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: cluster_name
-      delegate_to: localhost
-
-    - name: Gather DNS info about ESXi Host
-      community.vmware.vmware_host_dns_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
-      delegate_to: localhost
+    - name: Gather iSCSI configuration information of ESXi host
+      community.vmware.vmware.vmware_host_iscsi_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        esxi_hostname: "{{ esxi_hostname }}"
+      register: iscsi_info
 
 
 
@@ -249,7 +218,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>hosts_dns_info</b>
+                    <b>iscsi_properties</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
@@ -257,10 +226,65 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>always</td>
                 <td>
-                            <div>metadata about DNS config from given cluster / host system</div>
+                            <div>dictionary of current iSCSI information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;DC0_C0_H0&#x27;: {&#x27;dhcp&#x27;: True, &#x27;domain_name&#x27;: &#x27;localdomain&#x27;, &#x27;host_name&#x27;: &#x27;localhost&#x27;, &#x27;ip_address&#x27;: [&#x27;8.8.8.8&#x27;], &#x27;search_domain&#x27;: [&#x27;localdomain&#x27;], &#x27;virtual_nic_device&#x27;: &#x27;vmk0&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+      &quot;iscsi_alias&quot;: &quot;&quot;,
+      &quot;iscsi_authentication_properties&quot;: {
+        &quot;_vimtype&quot;: &quot;vim.host.InternetScsiHba.AuthenticationProperties&quot;,
+        &quot;chapAuthEnabled&quot;: false,
+        &quot;chapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+        &quot;chapInherited&quot;: null,
+        &quot;chapName&quot;: &quot;&quot;,
+        &quot;chapSecret&quot;: &quot;XXXXXXXXX&quot;,
+        &quot;mutualChapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+        &quot;mutualChapInherited&quot;: null,
+        &quot;mutualChapName&quot;: &quot;&quot;,
+        &quot;mutualChapSecret&quot;: &quot;XXXXXXXXX&quot;
+      },
+      &quot;iscsi_enabled&quot;: true,
+      &quot;iscsi_name&quot;: &quot;iqn.1998-01.com.vmware:esxi-033f58ee&quot;,
+      &quot;iscsi_send_targets&quot;: [
+        {
+          &quot;address&quot;: &quot;192.168.0.1&quot;,
+          &quot;authenticationProperties&quot;: {
+            &quot;_vimtype&quot;: &quot;vim.host.InternetScsiHba.AuthenticationProperties&quot;,
+            &quot;chapAuthEnabled&quot;: false,
+            &quot;chapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+            &quot;chapInherited&quot;: true,
+            &quot;chapName&quot;: &quot;&quot;,
+            &quot;chapSecret&quot;: &quot;XXXXXXXXX&quot;,
+            &quot;mutualChapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+            &quot;mutualChapInherited&quot;: true,
+            &quot;mutualChapName&quot;: &quot;&quot;,
+            &quot;mutualChapSecret&quot;: &quot;XXXXXXXXX&quot;
+          },
+          &quot;port&quot;: 3260
+        }
+      ],
+      &quot;iscsi_static_targets&quot;: [
+        {
+          &quot;address&quot;: &quot;192.168.0.1&quot;,
+          &quot;authenticationProperties&quot;: {
+            &quot;_vimtype&quot;: &quot;vim.host.InternetScsiHba.AuthenticationProperties&quot;,
+            &quot;chapAuthEnabled&quot;: false,
+            &quot;chapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+            &quot;chapInherited&quot;: true,
+            &quot;chapName&quot;: &quot;&quot;,
+            &quot;chapSecret&quot;: &quot;XXXXXXXXX&quot;,
+            &quot;mutualChapAuthenticationType&quot;: &quot;chapProhibited&quot;,
+            &quot;mutualChapInherited&quot;: true,
+            &quot;mutualChapName&quot;: &quot;&quot;,
+            &quot;mutualChapSecret&quot;: &quot;XXXXXXXXX&quot;
+          },
+          &quot;iscsi_name&quot;: &quot;iqn.2004-04.com.qnap:tvs-673:iscsi.vm3.2c580e&quot;,
+          &quot;port&quot;: 3260
+        }
+      ],
+      &quot;port_bind&quot;: [],
+      &quot;vmhba_name&quot;: &quot;vmhba65&quot;
+    }</div>
                 </td>
             </tr>
     </table>
@@ -274,4 +298,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- sky-joker (@sky-joker)

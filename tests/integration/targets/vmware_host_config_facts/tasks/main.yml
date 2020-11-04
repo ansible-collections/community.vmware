@@ -11,7 +11,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: all_hosts_result
 
@@ -28,7 +28,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: all_hosts_result_check_mode
   check_mode: true
@@ -45,7 +45,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       esxi_hostname: "{{ esxi1 }}"
     register: single_hosts_result_check_mode
     check_mode: true
@@ -59,7 +59,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       esxi_hostname: "{{ esxi1 }}"
     register: single_hosts_result
   - name: ensure facts are gathered for all hosts

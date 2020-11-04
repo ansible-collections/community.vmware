@@ -148,7 +148,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -181,7 +181,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
       delegate_to: localhost
       register: tag_details
     - debug:
@@ -192,7 +191,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
       delegate_to: localhost
       register: tag_results
     - set_fact:

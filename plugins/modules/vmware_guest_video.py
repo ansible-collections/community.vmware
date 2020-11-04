@@ -62,14 +62,14 @@ options:
      type: str
    gather_video_facts:
      description:
-     - If set to True, return settings of the video card, other attributes are ignored.
-     - If set to False, will do reconfiguration and return video card settings.
+     - If set to C(True), return settings of the video card, other attributes are ignored.
+     - If set to C(False), will do reconfiguration and return video card settings.
      type: bool
-     default: 'no'
+     default: false
    use_auto_detect:
      description:
-     - 'If set to True, applies common video settings to the guest operating system, attributes C(display_number) and C(video_memory_mb) are ignored.'
-     - 'If set to False, the number of display and the total video memory will be reconfigured using C(display_number) and C(video_memory_mb).'
+     - 'If set to C(True), applies common video settings to the guest operating system, attributes C(display_number) and C(video_memory_mb) are ignored.'
+     - 'If set to C(False), the number of display and the total video memory will be reconfigured using C(display_number) and C(video_memory_mb).'
      type: bool
    display_number:
      description:
@@ -108,7 +108,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: test-vm
     gather_video_facts: false
     use_auto_detect: false
@@ -126,7 +125,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     moid: vm-42
     gather_video_facts: false
     use_auto_detect: false
@@ -144,7 +142,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: test-vm
     gather_video_facts: false
   delegate_to: localhost

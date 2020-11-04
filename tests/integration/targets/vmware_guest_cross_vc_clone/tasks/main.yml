@@ -53,7 +53,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm2"
     destination_vm_name: "cloned_vm_from_template"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -75,7 +75,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -99,7 +99,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -121,7 +121,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm2"
     destination_vm_name: "cloned_vm_from_template_in_check_mode"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -142,7 +142,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'

@@ -38,7 +38,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -56,7 +56,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -74,7 +74,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -92,7 +92,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -111,7 +111,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -130,7 +130,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: network
@@ -147,7 +147,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: network
@@ -164,7 +164,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: network
@@ -181,7 +181,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: network
@@ -199,7 +199,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: network
@@ -217,7 +217,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: device
@@ -233,7 +233,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: device
@@ -249,7 +249,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: device
@@ -265,7 +265,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: device
@@ -282,7 +282,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: device
@@ -299,7 +299,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: file
@@ -315,7 +315,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: file
@@ -331,7 +331,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: file
@@ -347,7 +347,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: file
@@ -364,7 +364,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: file
@@ -381,7 +381,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -400,7 +400,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -419,7 +419,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -438,7 +438,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -458,7 +458,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
       - type: pipe
@@ -478,7 +478,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
     - type: 'network'
@@ -495,7 +495,7 @@
       file_path: '[{{ rw_datastore }}] file1'
       yield_on_poll:  True
   register: create_multiple_ports
- 
+
 - name: assert that changes were made
   assert:
     that:
@@ -506,7 +506,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     backings:
     - type: 'network'
@@ -523,7 +523,7 @@
       file_path: '[{{ rw_datastore }}] file1'
       yield_on_poll:  True
   register: create_multiple_ports_idempotency_check
- 
+
 - name: assert that changes were made
   assert:
     that:
@@ -534,7 +534,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: 'test_vm1'
     backings:
     - type: 'network'
@@ -553,7 +553,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: 'test_vm1'
     backings:
     - type: 'pipe'
@@ -571,7 +571,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: 'test_vm1'
     backings:
       - type: network

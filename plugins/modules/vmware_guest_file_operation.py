@@ -163,7 +163,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     vm_id: "{{ guest_name }}"
     vm_username: "{{ guest_username }}"
     vm_password: "{{ guest_userpassword }}"

@@ -14,7 +14,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
       register: gather_host_facts_from_esxi_result
 
@@ -34,7 +34,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
       register: gather_vswitch_info_result
 
@@ -47,7 +47,7 @@
             hostname: "{{ esxi1 }}"
             username: "{{ esxi_user }}"
             password: "{{ esxi_password }}"
-            validate_certs: no
+            validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
             switch: "{{ switch1 }}"
           register: create_new_vswitch_result
@@ -61,7 +61,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         portgroup: "{{ vswitch_pg_name_for_test }}"
@@ -76,7 +76,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         vswitch_name: "{{ switch1 }}"
         portgroup_name: "{{ vswitch_pg_name_for_test }}"
@@ -96,7 +96,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     vmk_name: "{{ device_name }}"
     ip_address: 192.168.1.254
     subnet_mask: 255.255.255.0
@@ -111,7 +111,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     vmk_name: "{{ device_name }}"
     ip_address: 192.168.1.254
     subnet_mask: 255.255.255.0
@@ -128,7 +128,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         vswitch_name: "{{ switch1 }}"
         portgroup_name: "{{ vswitch_pg_name_for_test }}"
@@ -145,7 +145,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         portgroup: "{{ vswitch_pg_name_for_test }}"
@@ -161,7 +161,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         state: absent

@@ -144,10 +144,9 @@ instance:
     type: dict
     sample: None
 resource_pool_config:
-    description: config data about the resource pool
+    description: config data about the resource pool, version added 1.4.0
     returned: always
     type: dict
-    version_added: 1.4.0
     sample: >-
       {
         "_vimtype": "vim.ResourceConfigSpec",

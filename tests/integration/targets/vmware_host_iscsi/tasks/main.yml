@@ -13,7 +13,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
       register: prepare_iscsi_enabled_result
@@ -26,7 +26,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         state: disabled
       register: prepare_iscsi_disabled_result
@@ -40,7 +40,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:

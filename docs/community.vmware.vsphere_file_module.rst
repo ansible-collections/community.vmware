@@ -187,7 +187,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <code>no</code>, SSL certificates will not be validated. This should only be set to <code>no</code> when no other option exists.</div>
+                        <div>If <code>false</code>, SSL certificates will not be validated. This should only be set to <code>false</code> when no other option exists.</div>
                 </td>
             </tr>
     </table>

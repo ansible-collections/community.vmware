@@ -263,7 +263,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -289,7 +289,6 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         datacenter: ha-datacenter
-        validate_certs: false
       delegate_to: localhost
       register: cluster_info
 
@@ -317,7 +316,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         cluster_name: DC0_C0
         schema: vsphere
         properties:
@@ -355,7 +353,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the available clusters</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;DC0_C0&#x27;: {&#x27;drs_default_vm_behavior&#x27;: None, &#x27;drs_enable_vm_behavior_overrides&#x27;: None, &#x27;drs_vmotion_rate&#x27;: None, &#x27;enable_ha&#x27;: None, &#x27;enabled_drs&#x27;: True, &#x27;enabled_vsan&#x27;: False, &#x27;ha_admission_control_enabled&#x27;: None, &#x27;ha_failover_level&#x27;: None, &#x27;ha_host_monitoring&#x27;: None, &#x27;ha_restart_priority&#x27;: None, &#x27;ha_vm_failure_interval&#x27;: None, &#x27;ha_vm_max_failure_window&#x27;: None, &#x27;ha_vm_max_failures&#x27;: None, &#x27;ha_vm_min_up_time&#x27;: None, &#x27;ha_vm_monitoring&#x27;: None, &#x27;ha_vm_tools_monitoring&#x27;: None, &#x27;vsan_auto_claim_storage&#x27;: False, &#x27;hosts&#x27;: [{&#x27;name&#x27;: &#x27;esxi01.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi02.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi03.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi04.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}], &#x27;resource_summary&#x27;: {&#x27;cpuCapacityMHz&#x27;: 4224, &#x27;cpuUsedMHz&#x27;: 87, &#x27;memCapacityMB&#x27;: 6139, &#x27;memUsedMB&#x27;: 1254, &#x27;pMemAvailableMB&#x27;: 0, &#x27;pMemCapacityMB&#x27;: 0, &#x27;storageCapacityMB&#x27;: 33280, &#x27;storageUsedMB&#x27;: 19953}, &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:9fbf83de-7903-442e-8004-70fd3940297c:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;sample_cluster_cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:93d680db-b3a6-4834-85ad-3e9516e8fee8:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;sample_cluster_tag_0001&#x27;}]}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;DC0_C0&#x27;: {&#x27;moid&#x27;: &#x27;domain-c9&#x27;, &#x27;drs_default_vm_behavior&#x27;: None, &#x27;drs_enable_vm_behavior_overrides&#x27;: None, &#x27;drs_vmotion_rate&#x27;: None, &#x27;enable_ha&#x27;: None, &#x27;enabled_drs&#x27;: True, &#x27;enabled_vsan&#x27;: False, &#x27;ha_admission_control_enabled&#x27;: None, &#x27;ha_failover_level&#x27;: None, &#x27;ha_host_monitoring&#x27;: None, &#x27;ha_restart_priority&#x27;: None, &#x27;ha_vm_failure_interval&#x27;: None, &#x27;ha_vm_max_failure_window&#x27;: None, &#x27;ha_vm_max_failures&#x27;: None, &#x27;ha_vm_min_up_time&#x27;: None, &#x27;ha_vm_monitoring&#x27;: None, &#x27;ha_vm_tools_monitoring&#x27;: None, &#x27;vsan_auto_claim_storage&#x27;: False, &#x27;hosts&#x27;: [{&#x27;name&#x27;: &#x27;esxi01.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi02.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi03.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}, {&#x27;name&#x27;: &#x27;esxi04.vsphere.local&#x27;, &#x27;folder&#x27;: &#x27;/DC0/host/DC0_C0&#x27;}], &#x27;resource_summary&#x27;: {&#x27;cpuCapacityMHz&#x27;: 4224, &#x27;cpuUsedMHz&#x27;: 87, &#x27;memCapacityMB&#x27;: 6139, &#x27;memUsedMB&#x27;: 1254, &#x27;pMemAvailableMB&#x27;: 0, &#x27;pMemCapacityMB&#x27;: 0, &#x27;storageCapacityMB&#x27;: 33280, &#x27;storageUsedMB&#x27;: 19953}, &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:9fbf83de-7903-442e-8004-70fd3940297c:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;sample_cluster_cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:93d680db-b3a6-4834-85ad-3e9516e8fee8:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;sample_cluster_tag_0001&#x27;}]}}</div>
                 </td>
             </tr>
     </table>

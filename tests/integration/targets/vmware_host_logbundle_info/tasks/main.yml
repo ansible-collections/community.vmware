@@ -12,7 +12,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
   register: fetch_manifests_result
 
@@ -27,7 +27,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
   register: fetch_manifests_result
 

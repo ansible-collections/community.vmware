@@ -70,7 +70,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: "{{ vm_name }}"
   register: vm_boot_order_facts
 
@@ -79,7 +78,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     moid: "vm-42"
   register: vm_moid_boot_order_facts
 '''

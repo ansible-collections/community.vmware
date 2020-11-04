@@ -70,7 +70,7 @@
 #      hostname: "{{ vcenter_hostname }}"
 #      username: "{{ vcenter_username }}"
 #      password: "{{ vcenter_password }}"
-#      validate_certs: no
+#      validate_certs: false
 #      tag_names:
 #        - '{{ cluster_category }}:{{ cluster_tag }}'
 #      state: present
@@ -82,7 +82,7 @@
 #      hostname: "{{ vcenter_hostname }}"
 #      username: "{{ vcenter_username }}"
 #      password: "{{ vcenter_password }}"
-#      validate_certs: no
+#      validate_certs: false
 #      show_tag: True
 #      cluster_name: "{{ ccr1 }}"
 #    register: cluster_info

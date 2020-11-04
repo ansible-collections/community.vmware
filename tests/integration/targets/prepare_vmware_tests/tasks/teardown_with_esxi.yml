@@ -72,7 +72,7 @@
     esxi_hostname: '{{ esxi_hosts }}'
     switch: vSwitch0
     portgroup: VM Network
-    validate_certs: no
+    validate_certs: false
     state: absent
   ignore_errors: true
 

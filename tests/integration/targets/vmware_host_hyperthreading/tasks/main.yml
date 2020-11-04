@@ -14,7 +14,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     state: disabled
   register: enable_hyperthreading_everywhere
   ignore_errors: true
@@ -28,7 +28,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       esxi_hostname: '{{ esxi1 }}'
-      validate_certs: no
+      validate_certs: false
       state: disabled
     register: host_hyperthreading_info
 
@@ -45,7 +45,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       esxi_hostname: '{{ esxi1 }}'
-      validate_certs: no
+      validate_certs: false
       state: disabled
     register: host_hyperthreading_info_check_mode
     check_mode: true
@@ -62,7 +62,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       cluster_name: "{{ ccr1 }}"
-      validate_certs: no
+      validate_certs: false
       state: disabled
     register: host_hyperthreading_info
 
@@ -79,7 +79,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       cluster_name: "{{ ccr1 }}"
-      validate_certs: no
+      validate_certs: false
       state: enabled
     register: host_hyperthreading_info_check_mode
     check_mode: true

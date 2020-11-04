@@ -18,7 +18,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter: "{{ dc1 }}"
-      validate_certs: no
+      validate_certs: false
       folder: '/DC0/vm/F0'
       name: test_vm1
       state: poweredon
@@ -43,5 +43,5 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       timeout: 800
-      validate_certs: no
+      validate_certs: false
       name: test_vm1

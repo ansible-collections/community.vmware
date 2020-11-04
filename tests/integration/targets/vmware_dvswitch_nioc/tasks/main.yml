@@ -40,7 +40,7 @@
         password: "{{ vcenter_password }}"
         switch: dvswitch_0001
         version: version3
-        validate_certs: no
+        validate_certs: false
         resources:
           - name: vmotion
             limit: -1
@@ -78,7 +78,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         switch: dvswitch_0001
-        validate_certs: no
+        validate_certs: false
         state: absent
       register: disable_nioc_result
 

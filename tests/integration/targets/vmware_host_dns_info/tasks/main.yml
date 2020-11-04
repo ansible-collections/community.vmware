@@ -13,7 +13,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: "{{ ccr1 }}"
-    validate_certs: no
+    validate_certs: false
   register: all_hosts_dns_result
 
 - name: ensure DNS info are gathered for all hosts in given cluster
@@ -28,7 +28,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
+    validate_certs: false
   register: all_hosts_dns_result
 
 - name: ensure DNS info are gathered about host system
@@ -43,7 +43,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: "{{ ccr1 }}"
-    validate_certs: no
+    validate_certs: false
   register: all_hosts_dns_result_check_mode
   check_mode: true
 
@@ -59,7 +59,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
+    validate_certs: false
   register: all_hosts_dns_result_check_mode
   check_mode: true
 

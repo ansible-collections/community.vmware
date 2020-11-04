@@ -61,11 +61,27 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Managed object ID for the given object.</div>
+                        <div>Required if <code>object_name</code> is not set.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>object_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
@@ -73,6 +89,7 @@ Parameters
                 <td>
                         <div>Name of the object to work with.</div>
                         <div>For DistributedVirtualPortgroups the format should be &quot;switch_name:portgroup_name&quot;</div>
+                        <div>Required if <code>moid</code> is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -234,7 +251,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -260,7 +277,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         tag_names:
           - Sample_Tag_0002
           - Category_0001:Sample_Tag_0003
@@ -274,7 +290,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         tag_names:
           - tag: tag_0001
             category: cat_0001
@@ -290,7 +305,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         tag_names:
           - Sample_Tag_0002
         object_name: Fedora_VM
@@ -303,7 +317,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         tag_names:
           - Sample_Tag_0003
         object_name: Switch_0001
@@ -316,11 +329,34 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: false
         tag_names:
           - Sample_Tag_0004
         object_name: Switch_0001:Portgroup_0001
         object_type: DistributedVirtualPortgroup
+        state: add
+      delegate_to: localhost
+
+
+    - name: Get information about folders
+      community.vmware.vmware_folder_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter: 'Asia-Datacenter1'
+      delegate_to: localhost
+      register: r
+    - name: Set Managed object ID for the given folder
+      ansible.builtin.set_fact:
+        folder_mo_id: "{{ (r.flat_folder_info | selectattr('path', 'equalto', '/Asia-Datacenter1/vm/tier1/tier2') | map(attribute='moid'))[0] }}"
+    - name: Add tags to a Folder using managed object id
+      community.vmware.vmware_tag_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        tag_names:
+          - Sample_Cat_0004:Sample_Tag_0004
+        object_type: Folder
+        moid: "{{ folder_mo_id }}"
         state: add
       delegate_to: localhost
 

@@ -49,7 +49,7 @@
       - primary_pvlan_id: 4
         secondary_pvlan_id: 5
         pvlan_type: community
-    validate_certs: no
+    validate_certs: false
   register: pvlans_result
 
 - debug:

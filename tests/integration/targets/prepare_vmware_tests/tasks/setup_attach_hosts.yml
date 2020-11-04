@@ -36,7 +36,7 @@
     esxi_hostname: '{{ esxi_hosts }}'
     switch: isolated_vSwitch
     portgroup: VM Network
-    validate_certs: no
+    validate_certs: false
   register: _vm_network_portgroup
   until: _vm_network_portgroup is succeeded
   retries: 10

@@ -134,8 +134,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to True, return settings of the video card, other attributes are ignored.</div>
-                        <div>If set to False, will do reconfiguration and return video card settings.</div>
+                        <div>If set to <code>True</code>, return settings of the video card, other attributes are ignored.</div>
+                        <div>If set to <code>False</code>, will do reconfiguration and return video card settings.</div>
                 </td>
             </tr>
             <tr>
@@ -310,8 +310,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to True, applies common video settings to the guest operating system, attributes <code>display_number</code> and <code>video_memory_mb</code> are ignored.</div>
-                        <div>If set to False, the number of display and the total video memory will be reconfigured using <code>display_number</code> and <code>video_memory_mb</code>.</div>
+                        <div>If set to <code>True</code>, applies common video settings to the guest operating system, attributes <code>display_number</code> and <code>video_memory_mb</code> are ignored.</div>
+                        <div>If set to <code>False</code>, the number of display and the total video memory will be reconfigured using <code>display_number</code> and <code>video_memory_mb</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -367,7 +367,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -409,7 +409,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: false
         name: test-vm
         gather_video_facts: false
         use_auto_detect: false
@@ -427,7 +426,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: false
         moid: vm-42
         gather_video_facts: false
         use_auto_detect: false
@@ -436,6 +434,17 @@ Examples
         enable_3D: true
         renderer_3D: automatic
         memory_3D_mb: 512
+      delegate_to: localhost
+      register: video_facts
+
+    - name: Gather video card settings of virtual machine
+      community.vmware.vmware_guest_video:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        name: test-vm
+        gather_video_facts: false
       delegate_to: localhost
       register: video_facts
 

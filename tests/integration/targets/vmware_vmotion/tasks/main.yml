@@ -33,7 +33,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
-    validate_certs: no
+    validate_certs: false
     name: test_vm1
     folder: vm
     esxi_hostname: "{{ esxi1 }}"
@@ -55,7 +55,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     vm_name: not_a_thing
     destination_host: '{{ esxi2 }}'
     destination_datastore: '{{ rw_datastore }}'
@@ -72,7 +72,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     vm_name: test_vm1
     destination_host: '{{ esxi2 }}'
     destination_datastore: '{{ rw_datastore }}'
@@ -105,7 +105,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     vm_name: test_vm1
     destination_host: '{{ esxi1 }}'
     destination_resourcepool: DC0_C0_RP1
@@ -121,7 +121,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     vm_name: test_vm1
     destination_host: '{{ esxi2 }}'
     destination_datastore: '{{ rw_datastore }}'

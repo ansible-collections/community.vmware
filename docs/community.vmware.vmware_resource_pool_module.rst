@@ -58,6 +58,24 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cpu_allocation_shares</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">4000</div>
+                </td>
+                <td>
+                        <div>The number of cpu shares allocated.</div>
+                        <div>This value is only set if <em>cpu_shares</em> is set to <code>custom</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cpu_expandable_reservations</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -159,6 +177,24 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mem_allocation_shares</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">163840</div>
+                </td>
+                <td>
+                        <div>The number of memory shares allocated.</div>
+                        <div>This value is only set if <em>mem_shares</em> is set to <code>custom</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -376,7 +412,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -404,11 +440,11 @@ Examples
         datacenter: '{{ datacenter_name }}'
         cluster: '{{ cluster_name }}'
         resource_pool: '{{ resource_pool_name }}'
-        mem_shares: falsermal
+        mem_shares: normal
         mem_limit: -1
         mem_reservation: 0
         mem_expandable_reservations: true
-        cpu_shares: falsermal
+        cpu_shares: normal
         cpu_limit: -1
         cpu_reservation: 0
         cpu_expandable_reservations: true
@@ -444,6 +480,54 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">None</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>resource_pool_config</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>config data about the resource pool, version added 1.4.0</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+      &quot;_vimtype&quot;: &quot;vim.ResourceConfigSpec&quot;,
+      &quot;changeVersion&quot;: null,
+      &quot;cpuAllocation&quot;: {
+        &quot;_vimtype&quot;: &quot;vim.ResourceAllocationInfo&quot;,
+        &quot;expandableReservation&quot;: true,
+        &quot;limit&quot;: -1,
+        &quot;overheadLimit&quot;: null,
+        &quot;reservation&quot;: 0,
+        &quot;shares&quot;: {
+          &quot;_vimtype&quot;: &quot;vim.SharesInfo&quot;,
+          &quot;level&quot;: &quot;normal&quot;,
+          &quot;shares&quot;: 4000
+        }
+      },
+      &quot;entity&quot;: &quot;vim.ResourcePool:resgroup-1108&quot;,
+      &quot;lastModified&quot;: null,
+      &quot;memoryAllocation&quot;: {
+        &quot;_vimtype&quot;: &quot;vim.ResourceAllocationInfo&quot;,
+        &quot;expandableReservation&quot;: true,
+        &quot;limit&quot;: -1,
+        &quot;overheadLimit&quot;: null,
+        &quot;reservation&quot;: 0,
+        &quot;shares&quot;: {
+          &quot;_vimtype&quot;: &quot;vim.SharesInfo&quot;,
+          &quot;level&quot;: &quot;high&quot;,
+          &quot;shares&quot;: 327680
+        }
+      },
+      &quot;name&quot;: &quot;test_pr1&quot;,
+      &quot;scaleDescendantsShares&quot;: null
+    }</div>
                 </td>
             </tr>
     </table>

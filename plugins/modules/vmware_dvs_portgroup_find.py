@@ -55,7 +55,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     dvswitch: 'vDS'
-    validate_certs: no
   delegate_to: localhost
 
 - name: Confirm if vlan 15 is present
@@ -64,7 +63,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     vlanid: '15'
-    validate_certs: no
   delegate_to: localhost
 '''
 

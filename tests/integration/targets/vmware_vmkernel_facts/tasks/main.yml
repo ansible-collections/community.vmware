@@ -16,7 +16,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
       register: host_vmkernel
     - debug: var=host_vmkernel
     - assert:
@@ -29,7 +29,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
       register: host_vmkernel_check_mode
       check_mode: true
     - debug: var=host_vmkernel

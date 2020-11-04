@@ -39,7 +39,7 @@ options:
       description:
       - Whether to enable DRS.
       type: bool
-      default: 'no'
+      default: false
     drs_enable_vm_behavior_overrides:
       description:
       - Whether DRS Behavior overrides for individual virtual machines are enabled.
@@ -102,7 +102,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
     enable_drs: True

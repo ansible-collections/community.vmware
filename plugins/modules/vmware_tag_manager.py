@@ -85,7 +85,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - Sample_Tag_0002
       - Category_0001:Sample_Tag_0003
@@ -99,7 +98,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - tag: tag_0001
         category: cat_0001
@@ -115,7 +113,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - Sample_Tag_0002
     object_name: Fedora_VM
@@ -128,7 +125,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - Sample_Tag_0003
     object_name: Switch_0001
@@ -141,7 +137,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - Sample_Tag_0004
     object_name: Switch_0001:Portgroup_0001
@@ -155,7 +150,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     datacenter: 'Asia-Datacenter1'
   delegate_to: localhost
   register: r
@@ -167,7 +161,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     tag_names:
       - Sample_Cat_0004:Sample_Tag_0004
     object_type: Folder

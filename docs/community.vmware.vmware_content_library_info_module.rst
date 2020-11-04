@@ -161,7 +161,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -195,7 +195,6 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         library_id: '13b0f060-f4d3-4f84-b61f-0fe1b0c0a5a8'
-        validate_certs: false
       delegate_to: localhost
 
 

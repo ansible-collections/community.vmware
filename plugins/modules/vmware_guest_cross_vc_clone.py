@@ -36,7 +36,7 @@ options:
   use_instance_uuid:
     description:
       - Whether to use the VMware instance UUID rather than the BIOS UUID.
-    default: no
+    default: false
     type: bool
   destination_vm_name:
     description:
@@ -121,7 +121,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_template"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -140,7 +139,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -157,7 +155,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'

@@ -69,7 +69,6 @@ EXAMPLES = r'''
     ad_user: adjoin
     ad_password: Password123$
     ad_state: present
-    validate_certs: no
   delegate_to: localhost
 
 - name: Leave AD domain
@@ -79,7 +78,6 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
     ad_state: absent
-    validate_certs: no
   delegate_to: localhost
 '''
 

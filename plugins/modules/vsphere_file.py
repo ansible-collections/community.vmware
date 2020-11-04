@@ -51,8 +51,8 @@ options:
     aliases: [ dest ]
   validate_certs:
     description:
-    - If C(no), SSL certificates will not be validated. This should only be
-      set to C(no) when no other option exists.
+    - If C(false), SSL certificates will not be validated. This should only be
+      set to C(false) when no other option exists.
     type: bool
     default: true
   timeout:

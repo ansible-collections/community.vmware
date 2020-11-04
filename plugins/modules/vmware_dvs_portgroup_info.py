@@ -61,10 +61,9 @@ extends_documentation_fragment:
 EXAMPLES = r'''
 - name: Get info about DVPG
   community.vmware.vmware_dvs_portgroup_info:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
   register: dvpg_info
 

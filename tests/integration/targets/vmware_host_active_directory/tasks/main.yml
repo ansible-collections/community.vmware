@@ -18,7 +18,7 @@
         ad_user: '{{ active_directory_user }}'
         ad_password: '{{ active_directory_password }}'
         ad_state: present
-        validate_certs: no
+        validate_certs: false
       register: host_active_directory_info_check_mode
       check_mode: true
 
@@ -39,7 +39,7 @@
         ad_user: adjoin
         ad_password: Password123$
         ad_state: present
-        validate_certs: no
+        validate_certs: false
       register: host_active_directory_info
       ignore_errors: true
 
@@ -57,7 +57,7 @@
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         ad_state: absent
-        validate_certs: no
+        validate_certs: false
       register: host_active_directory_info_2_check_mode
       check_mode: true
 
@@ -75,7 +75,7 @@
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         ad_state: absent
-        validate_certs: no
+        validate_certs: false
       register: host_active_directory_info_2
       ignore_errors: true
 

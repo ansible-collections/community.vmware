@@ -146,7 +146,6 @@ EXAMPLES = r'''
       enabled: true
       save_for_years: 1
       level: 1
-    validate_certs: no
   delegate_to: localhost
 '''
 

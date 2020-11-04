@@ -13,7 +13,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
@@ -41,7 +41,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
@@ -68,7 +68,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
@@ -94,7 +94,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
@@ -122,7 +122,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: CIMHttpServer
@@ -168,7 +168,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC
@@ -203,7 +203,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC

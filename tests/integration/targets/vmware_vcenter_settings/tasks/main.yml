@@ -38,7 +38,7 @@
       normal_operations: 30
       long_operations: 120
     logging_options: info
-    validate_certs: no
+    validate_certs: false
   register: all_settings_results_check_mode
   check_mode: true
 
@@ -77,7 +77,7 @@
       normal_operations: 30
       long_operations: 120
     logging_options: info
-    validate_certs: no
+    validate_certs: false
   register: all_settings_results
 
 - debug: var=all_settings_results
@@ -87,7 +87,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     mail:
       server: mail.example.local
       sender: vcenter@{{ inventory_hostname }}

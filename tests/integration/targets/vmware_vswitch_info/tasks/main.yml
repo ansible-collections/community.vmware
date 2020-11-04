@@ -15,7 +15,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
+    validate_certs: false
   register: switch_info
 
 - debug: var=switch_info
@@ -30,7 +30,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
+    validate_certs: false
   register: switch_info_check_mode
   check_mode: true
 

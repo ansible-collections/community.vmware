@@ -19,7 +19,7 @@
         state: present
         ntp_servers:
           - 0.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
     - debug: var=present
 
@@ -32,7 +32,7 @@
         state: present
         ntp_servers:
           - 1.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
     - debug: var=present
 
@@ -45,7 +45,7 @@
         state: absent
         ntp_servers:
           - 1.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: absent_one
     - debug: var=absent_one
 
@@ -58,7 +58,7 @@
         state: present
         ntp_servers:
           - 1.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
     - debug: var=present
 
@@ -73,7 +73,7 @@
           - 2.pool.ntp.org
           - 3.pool.ntp.org
           - 4.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
     - debug: var=present
 
@@ -91,7 +91,7 @@
           - 3.pool.ntp.org
           - 4.pool.ntp.org
           - 6.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: absent_all
     - debug: var=absent_all
 
@@ -105,7 +105,7 @@
           - 0.pool.ntp.org
           - 1.pool.ntp.org
           - 2.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: ntp_servers
     - debug: var=ntp_servers
 
@@ -120,7 +120,7 @@
           - 4.pool.ntp.org
           - 5.pool.ntp.org
         verbose: true
-        validate_certs: no
+        validate_certs: false
       register: ntp_servers
     - debug: var=ntp_servers
 
@@ -133,7 +133,7 @@
         state: present
         ntp_servers:
           - 0.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
       check_mode: true
     - debug: var=present
@@ -147,7 +147,7 @@
         state: absent
         ntp_servers:
           - 0.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: present
       check_mode: true
     - debug: var=present
@@ -162,7 +162,7 @@
           - 0.pool.ntp.org
           - 1.pool.ntp.org
           - 2.pool.ntp.org
-        validate_certs: no
+        validate_certs: false
       register: ntp_servers
       check_mode: true
     - debug: var=ntp_servers

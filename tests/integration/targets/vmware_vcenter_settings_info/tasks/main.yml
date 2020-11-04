@@ -12,7 +12,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: gather_info_about_vcenter_settings_result
 
 - assert:
@@ -30,7 +30,7 @@
       - config.workflow.port
       - config.log.level
       - vpxd.locale
-    validate_certs: no
+    validate_certs: false
   register: get_list_of_info_about_vcenter_settings_result
 
 - assert:

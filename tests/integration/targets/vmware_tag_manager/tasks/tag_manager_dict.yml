@@ -9,7 +9,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       category_name: "{{ cat_one }}"
       category_cardinality: 'multiple'
       state: present
@@ -23,7 +23,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_name: "{{ tag_one }}"
       category_id: "{{ cat_one_id }}"
       state: present
@@ -51,7 +51,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"
@@ -65,7 +65,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"
@@ -85,7 +85,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"
@@ -99,7 +99,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"
@@ -118,7 +118,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"
@@ -132,7 +132,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_names:
         - category: "{{ cat_one }}"
           tag: "{{ tag_one }}"

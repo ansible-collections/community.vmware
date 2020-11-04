@@ -90,7 +90,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     password: "{{ vcenter_password }}"
     username: "{{ vcenter_username }}"
-    validate_certs: False
     cluster_name: DC0_C0
     drs_rule_name: drs_rule_host_aff_0001
     host_group_name: DC0_C0_HOST_GR1

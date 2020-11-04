@@ -116,7 +116,7 @@
      hostname: "{{ vcenter_hostname }}"
      username: "{{ vcenter_username }}"
      password: "{{ vcenter_password }}"
-     validate_certs: no
+     validate_certs: false
      tag_names:
        - '{{ cluster_category }}:{{ cluster_tag }}'
      state: present
@@ -128,7 +128,7 @@
      hostname: "{{ vcenter_hostname }}"
      username: "{{ vcenter_username }}"
      password: "{{ vcenter_password }}"
-     validate_certs: no
+     validate_certs: false
      show_tag: True
      cluster_name: "{{ ccr1 }}"
     register: cluster_info
@@ -143,7 +143,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter_name: "{{ dc1 }}"
     cluster_name: 'Cluster/\%'
     state: present
@@ -158,7 +158,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
   register: all_cluster_result
 

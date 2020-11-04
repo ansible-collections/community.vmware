@@ -75,7 +75,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
   delegate_to: localhost
   register: dvswitch_info
 
@@ -84,7 +83,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     switch_name: DVSwitch01
   delegate_to: localhost
   register: dvswitch_info
@@ -94,7 +92,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: /datacenter1/network/F01
     switch_name: DVSwitch02
   delegate_to: localhost
@@ -105,7 +102,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     schema: vsphere
     properties:
       - summary.name

@@ -42,16 +42,15 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    cluster_name: cluster_name
+    cluster_name: '{{ cluster_name }}'
   delegate_to: localhost
   register: all_cluster_hosts_info
 
 - name: Check if ESXi is vulnerable for Speculative Store Bypass Disable (SSBD) vulnerability
   community.vmware.vmware_host_feature_info:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
   register: features_set
 - set_fact:

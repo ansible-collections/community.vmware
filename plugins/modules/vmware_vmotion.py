@@ -49,7 +49,7 @@ options:
     use_instance_uuid:
       description:
       - Whether to use the VMware instance UUID rather than the BIOS UUID.
-      default: no
+      default: false
       type: bool
     destination_host:
       description:
@@ -80,7 +80,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     vm_name: 'vm_name_as_per_vcenter'
     destination_host: 'destination_host_as_per_vcenter'
   delegate_to: localhost
@@ -90,7 +89,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     moid: vm-42
     destination_host: 'destination_host_as_per_vcenter'
   delegate_to: localhost
@@ -100,7 +98,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     moid: vm-42
     destination_host: 'destination_host_as_per_vcenter'
     destination_resourcepool: 'destination_resourcepool_as_per_vcenter'
@@ -111,7 +108,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     vm_name: 'vm_name_as_per_vcenter'
     destination_datastore: 'destination_datastore_as_per_vcenter'
   delegate_to: localhost
@@ -121,7 +117,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     vm_name: 'vm_name_as_per_vcenter'
     destination_host: 'destination_host_as_per_vcenter'
     destination_datastore: 'destination_datastore_as_per_vcenter'

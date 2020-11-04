@@ -65,7 +65,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi1 }}"
-    validate_certs: no
     vmnic: vmnic0
     sriov_on: true
     num_virt_func: 8
@@ -76,7 +75,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi1 }}"
-    validate_certs: no
     vmnic: vmnic0
     sriov_on: true
     num_virt_func: 8
@@ -87,7 +85,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi1 }}"
-    validate_certs: no
     vmnic: vmnic0
     sriov_on: true
     num_virt_func: 100
@@ -99,7 +96,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi1 }}"
-    validate_certs: no
     vmnic: vmnic0
     sriov_on: false
     num_virt_func: 0

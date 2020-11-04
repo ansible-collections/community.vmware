@@ -274,7 +274,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -297,9 +297,9 @@ Examples
 
     - name: Create a category
       community.vmware.vmware_category:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         category_name: Sample_Cat_0001
         category_description: Sample Description
         category_cardinality: 'multiple'
@@ -307,27 +307,27 @@ Examples
 
     - name: Rename category
       community.vmware.vmware_category:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         category_name: Sample_Category_0001
         new_category_name: Sample_Category_0002
         state: present
 
     - name: Update category description
       community.vmware.vmware_category:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         category_name: Sample_Category_0001
         category_description: Some fancy description
         state: present
 
     - name: Delete category
       community.vmware.vmware_category:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         category_name: Sample_Category_0002
         state: absent
 
@@ -336,7 +336,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
         category_name: 'Sample_Category_0003'
         category_description: 'sample description'
         associable_object_types:

@@ -16,7 +16,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
       register: host_vmnics
     - debug: var=host_vmnics
     - assert:
@@ -29,7 +29,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
         capabilities: true
         directpath_io: true
         sriov: true

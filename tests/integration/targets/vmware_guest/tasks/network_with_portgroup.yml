@@ -54,7 +54,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         hosts:
           - "{{ esxi1 }}"
         switch: "{{ switch1 }}"
@@ -116,7 +116,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         hosts:
           - "{{ esxi1 }}"
         switch: "{{ switch1 }}"

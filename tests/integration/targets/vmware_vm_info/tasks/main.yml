@@ -77,7 +77,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     folder: "{{ folder_path }}"
   register: vm_info
   when: folder_path_info.folders is defined

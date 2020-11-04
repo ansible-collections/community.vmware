@@ -10,18 +10,18 @@
 
 - name: Get the version number of vcenter
   vmware_about_info:
-    hostname: "{{vcenter_hostname}}"
-    username: "{{vcenter_username}}"
-    password: "{{vcenter_password}}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
   register: about
 
 - name: Get List of infraprofile configs
   vmware_vc_infraprofile_info:
-    hostname: "{{vcenter_hostname}}"
-    username: "{{vcenter_username}}"
-    password: "{{vcenter_password}}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
     api: "list"
   register: infraprofile_config_info
   when: about.about_info.version | int >= 7
@@ -29,10 +29,10 @@
 
 - name: export Vcenter appliance infra profile config
   vmware_vc_infraprofile_info:
-    hostname: "{{vcenter_hostname}}"
-    username: "{{vcenter_username}}"
-    password: "{{vcenter_password}}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
     api: "export"
     profiles: "ApplianceManagement"
   register: infraprofile_config_info
@@ -41,10 +41,10 @@
 
 - name: validate infra profile config json
   vmware_vc_infraprofile_info:
-    hostname: "{{vcenter_hostname}}"
-    username: "{{vcenter_username}}"
-    password: "{{vcenter_password}}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
     api: "validate"
     profiles: "ApplianceManagement"
     config_path: "export.json"
@@ -54,10 +54,10 @@
 
 - name: import Vcenter appliance infra profile config
   vmware_vc_infraprofile_info:
-    hostname: "{{vcenter_hostname}}"
-    username: "{{vcenter_username}}"
-    password: "{{vcenter_password}}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
     api: "import"
     profiles: "ApplianceManagement"
     config_path: "export.json"

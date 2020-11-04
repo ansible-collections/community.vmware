@@ -9,7 +9,7 @@
 
 - name: Change an invalid key
   vmware_host_config_manager:
-    validate_certs: no
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -35,7 +35,7 @@
       cluster_name: "{{ ccr1 }}"
       options:
         'Config.HostAgent.log.level': 'verbose'
-      validate_certs: no
+      validate_certs: false
 
   - name: Change info about a given host
     vmware_host_config_manager:
@@ -45,7 +45,7 @@
       esxi_hostname: '{{ esxi1 }}'
       options:
         'Config.HostAgent.log.level': 'info'
-      validate_certs: no
+      validate_certs: false
     register: host_result
 
   - debug: var=host_result
@@ -63,7 +63,7 @@
       cluster_name: "{{ ccr1 }}"
       options:
         'Config.HostAgent.log.level': 'verbose'
-      validate_certs: no
+      validate_certs: false
     register: all_hosts_result_check_mode
     check_mode: true
 
@@ -80,7 +80,7 @@
       esxi_hostname: '{{ esxi1 }}'
       options:
         'Config.HostAgent.log.level': 'info'
-      validate_certs: no
+      validate_certs: false
     register: host_result_check_mode
     check_mode: true
 
@@ -98,7 +98,7 @@
       esxi_hostname: '{{ esxi1 }}'
       options:
         'Syslog.global.logDirUnique': true
-      validate_certs: no
+      validate_certs: false
     check_mode: true
     register: change_logDirUnique_check
 

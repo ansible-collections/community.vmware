@@ -314,7 +314,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -346,7 +346,6 @@ Examples
         datacenter: Sample_DC_1
         name: Sample_VM
         resource_pool: test_rp
-        validate_certs: False
         state: present
       delegate_to: localhost
 
@@ -362,7 +361,6 @@ Examples
         datacenter: Sample_DC_1
         name: Sample_VM
         resource_pool: test_rp
-        validate_certs: False
         state: poweredon
       delegate_to: localhost
 

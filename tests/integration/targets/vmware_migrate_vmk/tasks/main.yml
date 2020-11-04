@@ -14,7 +14,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
       register: gather_host_facts_from_vcenter_result
 
@@ -35,7 +35,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
       register: gather_vswitch_info_result
 
@@ -48,7 +48,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: no
+            validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
             switch: "{{ switch1 }}"
           register: create_new_vswitch_result
@@ -62,7 +62,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         portgroup: "{{ vswitch_pg_name_for_test }}"
@@ -77,7 +77,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         vswitch_name: "{{ switch1 }}"
         portgroup_name: "{{ vswitch_pg_name_for_test }}"
@@ -97,7 +97,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
       register: gather_dvswitch_info_result
 
     - name: "Create a new dvSwitch block"
@@ -114,7 +114,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: no
+            validate_certs: false
             datacenter: "{{ dc1 }}"
             switch: "{{ dvswitch1 }}"
             uplink_quantity: 1
@@ -129,7 +129,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: no
+            validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
             switch_name: "{{ dvswitch1 }}"
             vmnics:
@@ -146,7 +146,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         switch_name: "{{ dvswitch1 }}"
         portgroup_name: "{{ dvswitch_pg_name_for_test }}"
         portgroup_type: earlyBinding
@@ -164,7 +164,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     device: "{{ device_name }}"
     current_switch_name: "{{ switch1 }}"
@@ -182,7 +182,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     device: "{{ device_name }}"
     current_switch_name: "{{ switch1 }}"
@@ -200,7 +200,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     device: "{{ device_name }}"
     current_switch_name: "{{ dvswitch1 }}"
@@ -218,7 +218,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     device: "{{ device_name }}"
     current_switch_name: "{{ dvswitch1 }}"
@@ -238,7 +238,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         switch: "{{ dvswitch1 }}"
         uplink_quantity: 1
@@ -254,7 +254,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         vswitch_name: "{{ switch1 }}"
         portgroup_name: "{{ vswitch_pg_name_for_test }}"
@@ -271,7 +271,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         portgroup: "{{ vswitch_pg_name_for_test }}"
@@ -287,7 +287,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         state: absent

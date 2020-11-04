@@ -83,7 +83,6 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - community.vmware.vmware_export_ovf:
-    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

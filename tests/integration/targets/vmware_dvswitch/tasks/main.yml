@@ -37,7 +37,7 @@
     folder_name: network_folder
     folder_type: network
     state: present
-    validate_certs: no
+    validate_certs: false
   register:
     network_folder_result
 

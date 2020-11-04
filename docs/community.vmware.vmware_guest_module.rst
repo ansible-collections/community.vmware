@@ -53,7 +53,7 @@ Parameters
                 </td>
                 <td>
                         <div>A note or annotation to include in the virtual machine.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: falsetes</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: notes</div>
                 </td>
             </tr>
             <tr>
@@ -736,7 +736,7 @@ Parameters
                 <td>
                         <div>Type of disk controller.</div>
                         <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code>, <code>paravirtual</code>, <code>sata</code> and <code>nvme</code>.</div>
-                        <div><code>nvme</code> support starts from hardware <code>version</code> 13 and ESXi version 6.5.</div>
+                        <div><code>nvme</code> controller type support starts on ESXi 6.5 with VM hardware version <code>version</code> 13. Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.</div>
                         <div>When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA CDROMs.</div>
                         <div>If set to <code>sata</code> type, please make sure <code>controller_number</code> and <code>unit_number</code> are set correctly when <code>cdrom</code> also set to <code>sata</code> type.</div>
                 </td>
@@ -1282,7 +1282,7 @@ Parameters
                 <td>
                         <div>The Virtual machine hardware versions.</div>
                         <div>Default is 10 (ESXi 5.5 and onwards).</div>
-                        <div>If value specified as <code>latest</code>, version is set to the most current virtual hardware supported on the host.</div>
+                        <div>If set to <code>latest</code>, the specified virtual machine will be upgraded to the most current hardware version supported on the host.</div>
                         <div><code>latest</code> is added in Ansible 2.10.</div>
                         <div>Please check VMware documentation for correct virtual machine hardware version.</div>
                         <div>Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.</div>
@@ -1305,8 +1305,10 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Enable Virtualization Based Security feature for Windows 10.</div>
-                        <div>Supported from Virtual machine hardware version 14, Guest OS Windows 10 64 bit, Windows Server 2016.</div>
+                        <div>Enable Virtualization Based Security feature for Windows on ESXi 6.7 and later, from hardware version 14.</div>
+                        <div>Supported Guest OS are Windows 10 64 bit, Windows Server 2016, Windows Server 2019 and later.</div>
+                        <div>The firmware of virtual machine must be EFI.</div>
+                        <div>Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.</div>
                 </td>
             </tr>
 
@@ -1880,7 +1882,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -2077,7 +2079,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         folder: /DC1/vm/
         name: test_vm_0001
         state: poweredon
@@ -2108,7 +2109,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         folder: /testvms
         name: testvm_2
         state: poweredon
@@ -2153,7 +2153,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         datacenter: datacenter1
         cluster: cluster
         name: testvm-2
@@ -2186,7 +2185,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         datacenter: "{{ datacenter }}"
         state: present
         folder: /DC1/vm
@@ -2213,7 +2211,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         uuid: "{{ vm_uuid }}"
         name: new_name
         state: present
@@ -2224,7 +2221,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         uuid: "{{ vm_uuid }}"
         state: absent
       delegate_to: localhost
@@ -2234,7 +2230,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         name: vm_name
         delete_from_inventory: True
         state: absent
@@ -2245,7 +2240,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         name: vm_name
         state: present
         vapp_properties:
@@ -2263,7 +2257,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         uuid: "{{ vm_uuid }}"
         state: poweredoff
       delegate_to: localhost
@@ -2286,7 +2279,6 @@ Examples
 
     - name: Create a diskless VM
       community.vmware.vmware_guest:
-        validate_certs: False
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -2307,7 +2299,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
         folder: /DC1/vm/
         name: test_vm_multi_disks
         state: poweredoff

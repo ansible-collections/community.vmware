@@ -25,7 +25,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_0001
       evc_mode: intel-broadwell
@@ -41,7 +41,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_0001
       evc_mode: intel-broadwell

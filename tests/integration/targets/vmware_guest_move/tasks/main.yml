@@ -17,7 +17,7 @@
     folder_name: 'f1'
     folder_type: vm
     state: present
-    validate_certs: no
+    validate_certs: false
   register: dest_folder
 
 # Testcase 0001: Move vm and get changed status

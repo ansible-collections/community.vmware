@@ -45,7 +45,7 @@ author:
 EXAMPLES = r'''
 - name: Gather health info from a vSAN's cluster
   hosts: localhost
-  gather_facts: 'no'
+  gather_facts: false
   community.vmware.vmware_vsan_health_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"

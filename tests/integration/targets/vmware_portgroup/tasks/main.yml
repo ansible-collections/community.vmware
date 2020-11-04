@@ -18,7 +18,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
       ignore_errors: true
       register: no_pg_vs
 
@@ -32,7 +32,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         vswitch: ''
-        validate_certs: no
+        validate_certs: false
       ignore_errors: true
       register: no_vs
 
@@ -47,7 +47,7 @@
         password: '{{ vcenter_password }}'
         vswitch: '{{ switch1 }}'
         portgroup: 'pg_03'
-        validate_certs: no
+        validate_certs: false
       ignore_errors: true
       register: no_cluster
 
@@ -63,7 +63,7 @@
         vswitch: '{{ switch1 }}'
         portgroup: 'pg_03'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: no
+        validate_certs: false
         state: present
       ignore_errors: true
       register: pg_info

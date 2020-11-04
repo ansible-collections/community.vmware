@@ -49,7 +49,7 @@
         vlan_trunk_range: [ 2-3967, 4049-4092 ]
         netflow_enabled: True
         block_all_ports: False
-        validate_certs: no
+        validate_certs: false
       register: uplink_pg_result_check_mode
       check_mode: true
 
