@@ -371,7 +371,8 @@ class VMwareResourcePool(PyVmomi):
         if self.module.check_mode:
             self.module.exit_json(changed=changed)
 
-        self.resource_pool_obj.UpdateConfig(self.resource_pool, rp_spec)
+        if changed:
+            self.resource_pool_obj.UpdateConfig(self.resource_pool, rp_spec)
 
         resource_pool_config = self.generate_rp_config_return_value(True)
         self.module.exit_json(changed=changed, resource_pool_config=resource_pool_config)
