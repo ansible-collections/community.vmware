@@ -303,7 +303,6 @@ import atexit
 import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
-from ansible.module_utils.common.dict_transformations import dict_merge
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
@@ -411,6 +410,7 @@ class BaseVMwareInventory:
             service_instance = connect.SmartConnect(host=self.hostname, user=self.username,
                                                     pwd=self.password, sslContext=ssl_context,
                                                     port=self.port)
+
         except vim.fault.InvalidLogin as e:
             raise AnsibleParserError("Unable to log on to vCenter or ESXi API at %s:%s as %s: %s" % (self.hostname, self.port, self.username, e.msg))
         except vim.fault.NoPermission as e:
@@ -577,6 +577,21 @@ class BaseVMwareInventory:
         return []
 
 
+def in_place_merge(a, b):
+    """
+        Recursively merges second dict into the first.
+
+    """
+    if not isinstance(b, dict):
+        return b
+    for k, v in b.items():
+        if k in a and isinstance(a[k], dict):
+            a[k] = in_place_merge(a[k], v)
+        else:
+            a[k] = v
+    return a
+
+
 def to_nested_dict(vm_properties):
     """
     Parse properties from dot notation to dict
@@ -591,7 +606,7 @@ def to_nested_dict(vm_properties):
 
         for k in prop_parents:
             prop_dict = {k: prop_dict}
-        host_properties = dict_merge(host_properties, prop_dict)
+        host_properties = in_place_merge(host_properties, prop_dict)
 
     return host_properties
 
@@ -744,6 +759,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             query_props = None
             vm_properties.remove('all')
         else:
+            if 'runtime.connectionState' not in vm_properties:
+                vm_properties.append('runtime.connectionState')
             query_props = [x for x in vm_properties if x != "customValue"]
 
         objects = self.pyv.get_managed_objects_properties(
@@ -766,13 +783,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         hostnames = self.get_option('hostnames')
 
         for vm_obj in objects:
-            if not vm_obj.obj.config:
-                # Sometime orphaned VMs return no configurations
-                continue
-
             properties = dict()
             for vm_obj_property in vm_obj.propSet:
                 properties[vm_obj_property.name] = vm_obj_property.val
+
+            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) == 'orphaned':
+                continue
 
             # Custom values
             if 'customValue' in vm_properties:

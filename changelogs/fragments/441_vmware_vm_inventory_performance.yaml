@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_vm_inventory - improve plugin performance (https://github.com/ansible-collections/community.vmware/issues/434).
