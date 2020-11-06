@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_deploy_ovf - fixed network mapping in multi-datacenter environments
