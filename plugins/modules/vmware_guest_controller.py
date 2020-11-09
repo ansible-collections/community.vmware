@@ -243,7 +243,7 @@ from random import randint
 import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, TaskError
 
 
 class PyVmomiHelper(PyVmomi):
@@ -478,6 +478,9 @@ class PyVmomiHelper(PyVmomi):
         except vim.fault.RestrictedVersion as e:
             self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
                                       " product versioning restrictions: %s" % to_native(e.msg))
+        except TaskError as task_e:
+            self.module.fail_json(msg=to_native(task_e))
+
         if task.info.state == 'error':
             results = {'changed': self.change_detected, 'failed': True, 'msg': task.info.error.msg}
         else:
