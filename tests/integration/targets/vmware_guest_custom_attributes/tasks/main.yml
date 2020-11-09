@@ -12,7 +12,7 @@
     setup_virtualmachines: true
 - name: Add custom attribute to the given virtual machine
   vmware_guest_custom_attributes:
-    validate_certs: False
+    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -37,7 +37,7 @@
 
 - name: Add custom attribute to the given virtual machine again
   vmware_guest_custom_attributes:
-    validate_certs: False
+    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -62,7 +62,7 @@
 
 - name: Remove custom attribute to the given virtual machine
   vmware_guest_custom_attributes:
-    validate_certs: False
+    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -89,7 +89,7 @@
   block:
     - name: Remove custom attribute to the given virtual machine again
       vmware_guest_custom_attributes:
-        validate_certs: False
+        validate_certs: false
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'

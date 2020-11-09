@@ -49,7 +49,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
+    validate_certs: false
     category_name: '{{ item.name }}'
     state: absent
   with_items: "{{ cat_data }}"
@@ -59,7 +59,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
+    validate_certs: false
     category_name: 'Sample_cate_0001'
     category_description: 'sample description'
     associable_object_types:
@@ -78,7 +78,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
+    validate_certs: false
     category_name: 'Sample_cate_0001'
     state: absent
   register: category_change

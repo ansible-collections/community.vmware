@@ -4,7 +4,7 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     esxi_hostname: "{{ item }}"
-    validate_certs: False
+    validate_certs: false
     type: 'static'
     host_name: "{{ dns['results'][index]['hosts_dns_info'][item]['host_name'] }}"
     domain: "{{ dns['results'][index]['hosts_dns_info'][item]['domain_name'] }}"

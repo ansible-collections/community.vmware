@@ -6,7 +6,7 @@
         setup_attach_host: true
     - name: get host facts through a vcenter
       vmware_host_facts:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -24,7 +24,7 @@
 
     - name: get host facts through from a host
       vmware_host_facts:
-        validate_certs: False
+        validate_certs: false
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
@@ -41,7 +41,7 @@
 
     - name: get host properties facts through a vcenter
       vmware_host_facts:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -68,7 +68,7 @@
 
     - name: get host properties facts through from a host
       vmware_host_facts:
-        validate_certs: False
+        validate_certs: false
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'

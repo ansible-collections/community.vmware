@@ -16,7 +16,7 @@
     cluster_name: "{{ ccr1 }}"
     options:
       'This.Is.No.Where': 'verbose'
-  failed_when: False
+  failed_when: false
   register: invalid_key
 - debug: var=invalid_key
 - name: ensure we raise the correct error

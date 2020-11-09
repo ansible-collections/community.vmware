@@ -6,7 +6,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'dhcp'
         device: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['virtual_nic_device'] }}"
       register: vmware_host_dns_result_0001
@@ -22,7 +22,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['host_name'] }}"
         domain: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['domain_name'] }}"
@@ -41,7 +41,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['host_name'] }}"
         domain: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['domain_name'] }}"
@@ -60,7 +60,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: newname
         domain: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['domain_name'] }}"
@@ -79,7 +79,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: newname
         domain: new.domain
@@ -98,7 +98,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: newname
         domain: new.domain
@@ -119,7 +119,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: newname
         domain: new.domain
@@ -142,7 +142,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'dhcp'
         device: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['virtual_nic_device'] }}"
       register: vmware_host_dns_result_0008
@@ -151,7 +151,7 @@
       assert:
         that:
           - vmware_host_dns_result_0008 is changed
- 
+
     # Testcase 0009: Ensure DNS config on the cluster is idempotent for DHCP
     - name: Ensure DHCP config is idempotent when done on the cluster
       vmware_host_dns:
@@ -159,7 +159,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'dhcp'
         device: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['virtual_nic_device'] }}"
       register: vmware_host_dns_result_0009
@@ -176,7 +176,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['domain_name'] }}"
         dns_servers: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['ip_address'] }}"
@@ -195,7 +195,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['domain_name'] }}"
         dns_servers: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['ip_address'] }}"
@@ -214,7 +214,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: new.domain
         dns_servers: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['ip_address'] }}"
@@ -233,7 +233,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: new.domain
         dns_servers:
@@ -254,7 +254,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: new.domain
         dns_servers:
@@ -277,7 +277,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'dhcp'
         device: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['virtual_nic_device'] }}"
       register: vmware_host_dns_result_0015
@@ -295,7 +295,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         esxi_hostname: "{{ item }}"
-        validate_certs: False
+        validate_certs: false
         type: 'dhcp'
         device: "{{ dns['results'][index]['hosts_dns_info'][esxi1]['virtual_nic_device'] }}"
       loop: "{{ esxi_hosts }}"

@@ -25,7 +25,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
+        validate_certs: false
         library_name: Sample_Library
         library_description: Sample Description
         datastore_name: '{{ rw_datastore }}'

@@ -7,7 +7,7 @@
 
 - name: Gather information about all datacenter
   vmware_datacenter_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -23,7 +23,7 @@
 
 - name: Gather information about all datacenter in check mode
   vmware_datacenter_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -40,7 +40,7 @@
 
 - name: Gather information about particular datacenter
   vmware_datacenter_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -57,7 +57,7 @@
 
 - name: Gather information about particular datacenter in check mode
   vmware_datacenter_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

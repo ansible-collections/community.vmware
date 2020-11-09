@@ -11,7 +11,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     datacenter: "{{ dc1 }}"
   register: all_cluster_result
 
@@ -37,7 +37,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: cluster_result
 
@@ -60,7 +60,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     schema: vsphere
     properties:
@@ -84,7 +84,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
     schema: vsphere
     properties:
@@ -129,7 +129,7 @@
      username: "{{ vcenter_username }}"
      password: "{{ vcenter_password }}"
      validate_certs: false
-     show_tag: True
+     show_tag: true
      cluster_name: "{{ ccr1 }}"
     register: cluster_info
 

@@ -25,7 +25,7 @@
           type: eagerzeroedthick
           unit_number: 2
   register: test_create_disk1
-  ignore_errors: True
+  ignore_errors: true
 
 - debug:
     msg: "{{ test_create_disk1 }}"
@@ -297,7 +297,7 @@
           size_gb: 1
           state: present
           type: eagerzeroedthick
-          sharing: True
+          sharing: true
           unit_number: 6
   register: test_create_disk_sharing
 
@@ -326,9 +326,9 @@
           state: present
           type: thin
           unit_number: 5
-          sharing: True
+          sharing: true
   register: test_create_disk_sharing_invalid
-  ignore_errors: True
+  ignore_errors: true
 
 - debug:
     msg: "{{ test_create_disk_sharing_invalid }}"

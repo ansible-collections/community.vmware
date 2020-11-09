@@ -10,7 +10,7 @@
     setup_virtualmachines: true
 - name: find folders for each vm
   vmware_guest_find:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -32,7 +32,7 @@
 
 - name: get fact of the first VM
   vmware_guest_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -45,7 +45,7 @@
 
 - name: find folders for each vm using UUID
   vmware_guest_find:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

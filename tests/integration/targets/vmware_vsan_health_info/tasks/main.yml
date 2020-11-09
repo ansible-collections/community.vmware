@@ -13,8 +13,8 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
-        fetch_from_cache: False
+        validate_certs: false
+        fetch_from_cache: false
       register: info
     - debug: var=info
     - assert:

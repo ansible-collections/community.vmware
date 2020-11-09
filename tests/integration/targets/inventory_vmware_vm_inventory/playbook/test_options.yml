@@ -8,8 +8,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           properties:
             - config.name
             - runtime.powerState
@@ -33,8 +33,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           properties: ['all']
     - name: Test properties(all) option are populate
       assert:
@@ -48,8 +48,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           properties:
             - config
     - name: Test properties(config) option are populate
@@ -64,8 +64,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_path: True
+          strict: false
+          with_path: true
     - name: Test path option
       assert:
         that:
@@ -76,7 +76,7 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
+          strict: false
           with_path: my_center
     - name: Test path option with rooted path
       assert:
@@ -89,11 +89,11 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
+          strict: false
           properties:
             - config.name
             - config.uuid
-          with_nested_properties: True
+          with_nested_properties: true
     - name: Test 'with_nested_properties' option
       assert:
         that:
@@ -105,14 +105,14 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
+          strict: false
           properties:
             - config.name
             - config.uuid
             - runtime.powerState
 
-          with_nested_properties: False
-          with_sanitized_property_name: True
+          with_nested_properties: false
+          with_sanitized_property_name: true
     - name: Test 'with_nested_properties' option
       assert:
         that:
@@ -124,8 +124,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: True
+          strict: false
+          with_nested_properties: true
           properties:
             - config.name
             - config.uuid
@@ -147,8 +147,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: True
+          strict: false
+          with_nested_properties: true
           properties:
             - config.name
             - runtime.powerState
@@ -167,8 +167,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: True
+          strict: false
+          with_nested_properties: true
           properties:
             - config.uuid
             - config.guestId
@@ -200,9 +200,9 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: True
-          with_tags: True
+          strict: false
+          with_nested_properties: true
+          with_tags: true
           properties:
             - config.name
             - config.uuid
@@ -222,8 +222,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: True
+          strict: false
+          with_nested_properties: true
           properties:
             - config.vmxConfigChecksum
             - config.name
@@ -243,8 +243,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           hostnames:
             - config.name
           properties:
@@ -265,8 +265,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           hostnames:
             - config.name
           properties:
@@ -288,8 +288,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           hostnames:
             - config.name
           properties:
@@ -315,8 +315,8 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          with_nested_properties: False
+          strict: false
+          with_nested_properties: false
           hostnames:
             - config.name
           properties:

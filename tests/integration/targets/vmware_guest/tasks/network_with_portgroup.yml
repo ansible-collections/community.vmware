@@ -4,7 +4,7 @@
 
 - name: Add portgroup
   vmware_dvs_portgroup:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -18,7 +18,7 @@
 - debug: var=dvsportgroup
 - name: create new VMs with portgroup
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -38,7 +38,7 @@
     state: poweredoff
     folder: "{{ f0 }}"
   register: vm_with_portgroup
-  ignore_errors: no
+  ignore_errors: false
 
 - debug: var=vm_with_portgroup
 
@@ -70,7 +70,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi1 }}"
         state: poweredon
@@ -97,7 +97,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi1 }}"
         state: poweredon

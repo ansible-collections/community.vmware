@@ -11,7 +11,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
+        validate_certs: false
         category_name: Sample_Cat_0006
         category_description: Sample Description
         category_cardinality: 'multiple'

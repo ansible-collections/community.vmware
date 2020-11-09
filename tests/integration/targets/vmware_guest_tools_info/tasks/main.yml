@@ -13,7 +13,7 @@
 
   - name: get instance uuid of virtual machine
     vmware_guest_info:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -24,12 +24,12 @@
 
   - name: get VMware tools info of virtual machine by instance uuid
     vmware_guest_tools_info:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       uuid: "{{ guest_info['instance']['instance_uuid'] }}"
-      use_instance_uuid: True
+      use_instance_uuid: true
     register: vmtools_info
   - debug: var=vmtools_info
   - name: assert VMware tools info returned
@@ -39,7 +39,7 @@
 
   - name: get VMware tools info of virtual machine by name
     vmware_guest_tools_info:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

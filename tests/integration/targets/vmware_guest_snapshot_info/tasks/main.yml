@@ -12,7 +12,7 @@
 
 - name: Gather snapshot info about given virtual machine
   vmware_guest_snapshot_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

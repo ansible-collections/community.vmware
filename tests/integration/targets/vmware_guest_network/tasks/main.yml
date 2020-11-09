@@ -48,7 +48,7 @@
 
   - name: gather network adapters' facts of the virtual machine
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -64,7 +64,7 @@
 
   - name: add new network adapters to virtual machine
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -74,10 +74,10 @@
           state: new
           device_type: e1000e
           manual_mac: "aa:50:56:58:59:60"
-          connected: True
+          connected: true
         - name: "VM Network"
           state: new
-          connected: True
+          connected: true
           device_type: vmxnet3
           manual_mac: "aa:50:56:58:59:61"
     register: add_netadapter
@@ -92,7 +92,7 @@
 
   - name: delete one specified network adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -112,7 +112,7 @@
 
   - name: get instance uuid of virtual machines
     vmware_guest_info:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -124,16 +124,16 @@
 
   - name: add new network adapters to virtual machine with instance uuid
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       uuid: '{{ vm1_instance_uuid }}'
-      use_instance_uuid: True
+      use_instance_uuid: true
       networks:
         - name: "VM Network"
           state: new
-          connected: True
+          connected: true
           device_type: e1000e
           manual_mac: "bb:50:56:58:59:60"
     register: add_netadapter_instanceuuid
@@ -148,7 +148,7 @@
 
   - name: delete one specified network adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -166,7 +166,7 @@
 
   - name: delete again one specified network adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -186,7 +186,7 @@
 
   - name: disable DirectPath I/O on a Vmxnet3 adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -194,14 +194,14 @@
       networks:
         - state: present
           mac: "aa:50:56:58:59:61"
-          directpath_io: False
+          directpath_io: false
     register: disable_directpath_io
 
   - debug: var=disable_directpath_io
 
   - name: enable DirectPath I/O on a Vmxnet3 adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -209,14 +209,14 @@
       networks:
         - state: present
           mac: "aa:50:56:58:59:61"
-          directpath_io: True
+          directpath_io: true
     register: enable_directpath_io
 
   - debug: var=enable_directpath_io
 
   - name: disconnect one specified network adapter
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -237,7 +237,7 @@
 
   - name: Check if network does not exists
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -259,7 +259,7 @@
 
   - name: Change portgroup to dvPortgroup
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -281,7 +281,7 @@
 
   - name: Change portgroup to dvPortgroup
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -303,7 +303,7 @@
 
   - name: Change dvPortgroup to PortGroup
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -326,7 +326,7 @@
 
   - name: Change dvPortgroup to PortGroup
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -350,7 +350,7 @@
   # https://github.com/ansible/ansible/issues/65968
   - name: Create a network with dvPortgroup
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -372,7 +372,7 @@
 
   - name: gather network adapters' facts of the virtual machine
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -387,7 +387,7 @@
 
   - name: Remove all network interfaces with loop
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -398,7 +398,7 @@
 
   - name: gather network adapters' facts of the virtual machine
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -413,7 +413,7 @@
 
   - name: add new adapter(s)
     vmware_guest_network:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -435,7 +435,7 @@
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: False
+          validate_certs: false
           switch_name: "{{ dvswitch1 }}"
           portgroup_name: 204dvpg
           num_ports: 8
@@ -450,11 +450,11 @@
 
       - name: "Change a port group to a dvport group"
         vmware_guest_network:
-          validate_certs: False
+          validate_certs: false
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: False
+          validate_certs: false
           name: test_vm1
           networks:
             - name: "{{ dvpg1 }}"
@@ -468,11 +468,11 @@
 
       - name: "Change a dvport group with in same DVS"
         vmware_guest_network:
-          validate_certs: False
+          validate_certs: false
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: False
+          validate_certs: false
           name: test_vm1
           networks:
             - name: 204dvpg
@@ -486,11 +486,11 @@
 
       - name: "Revert a dvport group to port group"
         vmware_guest_network:
-          validate_certs: False
+          validate_certs: false
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: False
+          validate_certs: false
           name: test_vm1
           networks:
             - name: VM Network
@@ -507,7 +507,7 @@
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: False
+          validate_certs: false
           switch_name: "{{ dvswitch1 }}"
           portgroup_name: 204dvpg
           num_ports: 8

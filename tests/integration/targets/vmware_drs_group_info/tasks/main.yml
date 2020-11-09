@@ -13,7 +13,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       cluster_name: '{{ ccr1 }}'
-      validate_certs: False
+      validate_certs: false
     register: drs_group_0001_results
 
   - debug:
@@ -31,7 +31,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter: '{{ dc1 }}'
-      validate_certs: False
+      validate_certs: false
     register: drs_group_0002_results
 
   - debug:

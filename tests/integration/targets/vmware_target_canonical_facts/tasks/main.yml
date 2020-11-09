@@ -14,7 +14,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: target_0001_results
 
@@ -28,7 +28,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     esxi_hostname: '{{ esxi1 }}'
   register: target_0002_results
 

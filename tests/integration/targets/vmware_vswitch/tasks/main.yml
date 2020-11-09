@@ -70,7 +70,7 @@
 
   - name: Add vswitch to a specific host system
     vmware_vswitch:
-      validate_certs: False
+      validate_certs: false
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

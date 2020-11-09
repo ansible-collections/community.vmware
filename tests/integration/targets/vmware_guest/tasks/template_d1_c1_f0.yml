@@ -25,7 +25,7 @@
 
 - name: ensure that VM1 are not flagged as templates
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -33,7 +33,7 @@
     folder: "{{ virtual_machines[1].folder }}"
     name: "{{ virtual_machines[1].name }}"
     state: present
-    is_template: False
+    is_template: false
   register: no_template_initial
 
 - debug: var=no_template_initial
@@ -45,7 +45,7 @@
 
 - name: convert VM1 to template
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -53,7 +53,7 @@
     folder: "{{ virtual_machines[1].folder }}"
     name: "{{ virtual_machines[1].name }}"
     state: present
-    is_template: True
+    is_template: true
   register: convert_to_template
 
 - debug: var=convert_to_template
@@ -65,7 +65,7 @@
 
 - name: make double sure that VM1 is template
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -73,7 +73,7 @@
     folder: "{{ virtual_machines[1].folder }}"
     name: "{{ virtual_machines[1].name }}"
     state: present
-    is_template: True
+    is_template: true
   register: still_templates
 
 - debug: var=still_templates
@@ -88,7 +88,7 @@
   block:
     - name: convert template back to VMs
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -96,7 +96,7 @@
         folder: "{{ virtual_machines[1].folder }}"
         name: "{{ virtual_machines[1].name }}"
         state: present
-        is_template: False
+        is_template: false
       register: revert_to_vm
     - debug: var=revert_to_vm
     - name: ensure that changes were made

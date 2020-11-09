@@ -4,7 +4,7 @@
 
 - name: create new VMs with invalid disk mode
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -22,7 +22,7 @@
     state: poweredoff
     folder: "{{ f0 }}"
   register: test_vm1
-  ignore_errors: True
+  ignore_errors: true
 
 - debug: var=test_vm1
 
@@ -33,7 +33,7 @@
 
 - name: create new VMs with valid disk mode
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -64,7 +64,7 @@
   block:
   - name: create new VMs with valid disk mode again
     vmware_guest:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

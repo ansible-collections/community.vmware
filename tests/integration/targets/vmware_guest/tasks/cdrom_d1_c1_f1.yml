@@ -2,7 +2,7 @@
 # attached to IDE or SATA
 - name: Create VM with multiple CDROMs attached to IDE
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -47,7 +47,7 @@
 
 - name: Remove the last 2 CDROMs and update the first 2 for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -84,7 +84,7 @@
 
 - name: Create VM with multiple CDROMs attached to SATA
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -131,7 +131,7 @@
 
 - name: Remove the first 2 CDROMs and update the last 2 for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -168,7 +168,7 @@
 
 - name: Create VM with multiple CDROMs attached to IDE and SATA
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -215,7 +215,7 @@
 
 - name: Remove the 2 CDROMs and update the other 2 for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

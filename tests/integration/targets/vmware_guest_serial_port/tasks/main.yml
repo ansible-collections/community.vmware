@@ -10,7 +10,7 @@
 
 - name: Create VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -484,7 +484,7 @@
     - type: 'network'
       direction: 'client'
       service_uri: 'tcp://6000'
-      yield_on_poll: True
+      yield_on_poll: true
     - type: 'pipe'
       pipe_name: 'serial_pipe'
       endpoint: 'client'
@@ -493,7 +493,7 @@
       device_name: '/dev/char/serial/uart0'
     - type: 'file'
       file_path: '[{{ rw_datastore }}] file1'
-      yield_on_poll:  True
+      yield_on_poll:  true
   register: create_multiple_ports
 
 - name: assert that changes were made
@@ -512,7 +512,7 @@
     - type: 'network'
       direction: 'client'
       service_uri: 'tcp://6000'
-      yield_on_poll: True
+      yield_on_poll: true
     - type: 'pipe'
       pipe_name: 'serial_pipe'
       endpoint: 'client'
@@ -521,7 +521,7 @@
       device_name: '/dev/char/serial/uart0'
     - type: 'file'
       file_path: '[{{ rw_datastore }}] file1'
-      yield_on_poll:  True
+      yield_on_poll:  true
   register: create_multiple_ports_idempotency_check
 
 - name: assert that changes were made

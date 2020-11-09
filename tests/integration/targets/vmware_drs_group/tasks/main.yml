@@ -14,7 +14,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     # Options
     cluster_name: '{{ ccr1 }}'
     datacenter_name: '{{ dc1 }}'
@@ -37,7 +37,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: False
+      validate_certs: false
       cluster_name: '{{ ccr1 }}'
       datacenter_name: '{{ dc1 }}'
       group_name: TEST_HOST_01
@@ -58,7 +58,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: False
+      validate_certs: false
       # Options
       cluster_name: DC0_C0
       datacenter_name: DC0

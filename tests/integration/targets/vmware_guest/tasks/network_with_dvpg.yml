@@ -161,7 +161,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: False
+            validate_certs: false
             datacenter: "{{ dc1 }}"
             esxi_hostname: "{{ esxi1 }}"
             state: poweredon

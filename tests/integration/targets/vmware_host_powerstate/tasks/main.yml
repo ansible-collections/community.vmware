@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # TODO: vcsim does not support Powerstate related to operations
-- when: False
+- when: false
   block:
   - import_role:
       name: prepare_vmware_tests
@@ -21,10 +21,10 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: False
+      validate_certs: false
       state: power-down-to-standby
       esxi_hostname: '{{ esxi1 }}'
-      force: True
+      force: true
     register: host_powerstate
 
   - debug: var=host_powerstate

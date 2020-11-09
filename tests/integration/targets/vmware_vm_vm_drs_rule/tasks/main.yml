@@ -14,18 +14,18 @@
 
     - name: Create a DRS Affinity rule for vms in check mode
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         drs_rule_name: drs_rule_0001
         cluster_name: "{{ ccr1 }}"
         vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        enabled: True
-        affinity_rule: True
-        mandatory: True
+        enabled: true
+        affinity_rule: true
+        mandatory: true
       register: drs_rule_0001_results
-      check_mode: yes
+      check_mode: true
 
     - debug: var=drs_rule_0001_results
 
@@ -37,16 +37,16 @@
     - &create_drs_rule
       name: Create a DRS Affinity rule for vms
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         drs_rule_name: drs_rule_0001
         cluster_name: "{{ ccr1 }}"
         vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        enabled: True
-        affinity_rule: True
-        mandatory: True
+        enabled: true
+        affinity_rule: true
+        mandatory: true
       register: drs_rule_0001_results
 
     - debug: var=drs_rule_0001_results
@@ -67,16 +67,16 @@
     - &update_drs_rule
       name: Update a DRS Affinity rule for vms
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         drs_rule_name: drs_rule_0001
         cluster_name: "{{ ccr1 }}"
         vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        enabled: False
-        affinity_rule: True
-        mandatory: False
+        enabled: false
+        affinity_rule: true
+        mandatory: false
       register: drs_rule_0001_results
 
     - name: Check if changes are made if drs rule is created
@@ -95,7 +95,7 @@
     - &delete_drs_rule
       name: Delete a DRS Affinity rule for vms
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -120,16 +120,16 @@
     - &create_anti_drs_rule
       name: Create a DRS Anti-Affinity rule for vms
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         drs_rule_name: drs_rule_0002
         cluster_name: "{{ ccr1 }}"
         vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        enabled: True
-        affinity_rule: False
-        mandatory: False
+        enabled: true
+        affinity_rule: false
+        mandatory: false
       register: drs_rule_0002_results
 
     - debug: var=drs_rule_0002_results
@@ -151,7 +151,7 @@
 
     - name: Delete a DRS Anti-Affinity rule for vms
       vmware_vm_vm_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

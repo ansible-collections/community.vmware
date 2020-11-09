@@ -4,7 +4,7 @@
 
 - name: Create VM to unregister
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -27,15 +27,15 @@
   assert:
     that:
         - create_vm_for_test is changed
-   
+
 - name: Remove VM from Inventory
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    delete_from_inventory: True
+    delete_from_inventory: true
     state: absent
   register: remove_vm_from_inventory
 
@@ -46,12 +46,12 @@
 
 - name: Remove VM again from Inventory
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    delete_from_inventory: True
+    delete_from_inventory: true
     state: absent
   register: remove_again_vm_from_inventory
 

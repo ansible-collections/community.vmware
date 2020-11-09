@@ -20,7 +20,7 @@
 
   - name: export VM to ovf template
     vmware_export_ovf:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -37,7 +37,7 @@
 
   - name: export VM to ovf template with timeout set
     vmware_export_ovf:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

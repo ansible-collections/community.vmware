@@ -10,7 +10,7 @@
     setup_virtualmachines: true
 - name: remove attribute definition
   vmware_guest_custom_attribute_defs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -19,7 +19,7 @@
 
 - name: add custom attribute definition
   vmware_guest_custom_attribute_defs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -36,7 +36,7 @@
 
 - name: add attribute definition again
   vmware_guest_custom_attribute_defs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -52,7 +52,7 @@
 
 - name: remove attribute definition
   vmware_guest_custom_attribute_defs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -69,7 +69,7 @@
 
 - name: remove attribute definition
   vmware_guest_custom_attribute_defs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

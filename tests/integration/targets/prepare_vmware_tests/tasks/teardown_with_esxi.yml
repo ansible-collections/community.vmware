@@ -4,15 +4,15 @@
     cluster_name: '{{ ccr1 }}'
     rules:
         - name: vvold
-          enabled: False
+          enabled: false
         - name: CIMHttpServer
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: True
+            all_ip: true
         - name: NFC
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: True
+            all_ip: true
   ignore_errors: true
 
 - name: Remove the VM prepared by prepare_vmware_tests

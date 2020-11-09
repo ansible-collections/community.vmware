@@ -16,7 +16,7 @@
   - &vm_guest_facts
     name: Gather facts about given customization spec
     vmware_guest_customization_facts:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

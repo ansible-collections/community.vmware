@@ -6,7 +6,7 @@
   block:
     - name: create new VM
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -26,7 +26,7 @@
 
     - name: convert to VM template
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -34,11 +34,11 @@
         datacenter: "{{ dc1 }}"
         cluster: "{{ ccr1 }}"
         folder: "{{ f0 }}"
-        is_template: True
+        is_template: true
 
     - name: clone template and modify disks
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -63,7 +63,7 @@
 
     - name: delete VM clone & original template
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
