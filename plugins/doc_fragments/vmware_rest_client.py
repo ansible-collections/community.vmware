@@ -32,10 +32,10 @@ options:
   validate_certs:
     description:
     - Allows connection when SSL certificates are not valid.
-    - Set to C(no) when certificates are not trusted.
+    - Set to C(False) when certificates are not trusted.
     - If the value is not specified in the task, the value of environment variable C(VMWARE_VALIDATE_CERTS) will be used instead.
     type: bool
-    default: yes
+    default: true
   port:
     description:
     - The port number of the vSphere vCenter.

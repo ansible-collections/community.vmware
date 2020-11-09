@@ -10,7 +10,7 @@
     nfs_path: '{{ infra.datastores[ro_datastore].path }}'
     nfs_ro: '{{ infra.datastores[ro_datastore].ro }}'
     state: present
-    validate_certs: no
+    validate_certs: false
   with_items: "{{ esxi_hosts }}"
 
 - name: Mount NFS (rw_datastore) datastores on the ESXi
@@ -24,7 +24,7 @@
     nfs_path: '{{ infra.datastores[rw_datastore].path }}'
     nfs_ro: '{{ infra.datastores[rw_datastore].ro }}'
     state: present
-    validate_certs: no
+    validate_certs: false
   with_items: "{{ esxi_hosts }}"
 
 - vmware_host_scanhba:

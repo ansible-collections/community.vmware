@@ -49,7 +49,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
   delegate_to: localhost
   register: all_custom_spec_facts
 
@@ -58,7 +57,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     spec_name: custom_linux_spec
   delegate_to: localhost
   register: custom_spec_facts

@@ -50,7 +50,7 @@ options:
   use_instance_uuid:
     description:
     - Whether to use the VMware instance UUID rather than the BIOS UUID.
-    default: no
+    default: false
     type: bool
   folder:
     description:
@@ -115,7 +115,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: "/{{ datacenter_name }}/vm/my_folder"
     name: "{{ guest_name }}"
     state: powered-off
@@ -127,7 +126,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: "/{{ datacenter_name }}/vm/my_folder"
     moid: vm-42
     state: powered-on

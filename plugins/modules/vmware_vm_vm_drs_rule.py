@@ -78,7 +78,6 @@ EXAMPLES = r'''
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
     cluster_name: "{{ cluster_name }}"
-    validate_certs: no
     vms:
         - vm1
         - vm2
@@ -94,7 +93,6 @@ EXAMPLES = r'''
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
     cluster_name: "{{ cluster_name }}"
-    validate_certs: no
     enabled: True
     vms:
         - vm1
@@ -110,7 +108,6 @@ EXAMPLES = r'''
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
     cluster_name: "{{ cluster_name }}"
-    validate_certs: no
     drs_rule_name: vm1-vm2-affinity-rule-001
     state: absent
   delegate_to: localhost

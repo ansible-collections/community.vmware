@@ -39,7 +39,7 @@
           subnet_mask: 255.255.255.0
           tcpip_stack: vmotion
         state: present
-        validate_certs: no
+        validate_certs: false
       register: host_vmkernel
     - debug: var=host_vmkernel
 
@@ -47,7 +47,7 @@
       vmware_vmkernel:
         <<: *new_vmkernel
       register: host_vmkernel
-      check_mode: yes
+      check_mode: true
     - debug: var=host_vmkernel
 
     - name: Delete VMkernel adapter
@@ -60,6 +60,6 @@
         device: '{{ host_vmkernel.device }}'
         portgroup: vMotion
         state: absent
-        validate_certs: no
+        validate_certs: false
       register: host_vmkernel
     - debug: var=host_vmkernel

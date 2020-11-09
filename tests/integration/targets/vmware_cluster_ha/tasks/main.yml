@@ -25,7 +25,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: yes
+    enable_ha: true
   register: cluster_ha_result_0001
 
 - name: Ensure HA is enabled
@@ -42,7 +42,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: yes
+    enable_ha: true
     slot_based_admission_control:
       failover_level: 1
   register: cluster_ha_result_0002
@@ -61,7 +61,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: yes
+    enable_ha: true
     reservation_based_admission_control:
       auto_compute_percentages: false
       failover_level: 1
@@ -83,7 +83,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: yes
+    enable_ha: true
     host_isolation_response: 'powerOff'
   register: cluster_ha_result_0004
 
@@ -101,7 +101,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: yes
+    enable_ha: true
     host_isolation_response: 'shutdown'
   register: cluster_ha_result_0005
 
@@ -139,7 +139,7 @@
       cluster_name: test_cluster_ha
       advanced_settings:
           'das.heartbeatDsPerHost': '4'
-    check_mode: yes
+    check_mode: true
     register: change_num_heartbeat_ds_check
 
   - assert:
@@ -172,7 +172,7 @@
       cluster_name: test_cluster_ha
       advanced_settings:
           'das.includeFTcomplianceChecks': 'false'
-    check_mode: yes
+    check_mode: true
     register: change_includeFTcomplianceChecks_check
 
   - assert:

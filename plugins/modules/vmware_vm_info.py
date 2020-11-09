@@ -42,7 +42,7 @@ options:
     show_attribute:
       description:
       - Attributes related to VM guest shown in information only when this is set C(true).
-      default: no
+      default: false
       type: bool
     folder:
       description:

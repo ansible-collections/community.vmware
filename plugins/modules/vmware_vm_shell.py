@@ -164,7 +164,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter }}"
     folder: "/{{datacenter}}/vm"
     vm_id: "{{ vm_name }}"

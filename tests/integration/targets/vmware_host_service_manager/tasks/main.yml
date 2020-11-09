@@ -16,7 +16,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         service_name: ntpd
         state: present
@@ -28,7 +28,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         service_name: ntpd
         state: absent
@@ -43,12 +43,12 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         service_name: ntpd
         state: present
       register: all_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - name: ensure info are gathered for all hosts
       assert:
         that:
@@ -59,12 +59,12 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         service_name: ntpd
         state: absent
       register: single_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - name: ensure info are gathered
       assert:
         that:
@@ -75,7 +75,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         service_name: ntpd
         state: present

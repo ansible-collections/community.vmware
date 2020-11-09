@@ -12,7 +12,7 @@
     datacenter: "{{ dc1 }}"
     state: absent
   register: delete_vm
-  ignore_errors: yes
+  ignore_errors: true
 
 - debug: var=delete_vm
 

@@ -266,7 +266,6 @@ EXAMPLES = r'''
       normal_operations: 30
       long_operations: 120
     logging_options: info
-    validate_certs: no
   delegate_to: localhost
 '''
 

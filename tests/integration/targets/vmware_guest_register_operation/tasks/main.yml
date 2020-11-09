@@ -41,7 +41,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     name: "{{ virtual_machines[0].name }}"
@@ -52,7 +52,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -74,7 +74,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     esxi_hostname: "{{ esxi1 }}"
@@ -87,7 +87,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -105,7 +105,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     name: "{{ virtual_machines[0].name }}"
@@ -116,7 +116,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -133,7 +133,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     cluster: "{{ ccr1 }}"
@@ -146,7 +146,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -164,7 +164,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     name: "{{ virtual_machines[0].name }}"
@@ -175,7 +175,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -192,7 +192,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     resource_pool: DC0_C0_RP1
@@ -205,7 +205,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:
@@ -222,7 +222,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     name: "{{ virtual_machines[0].name }}"
@@ -236,7 +236,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
     name: "{{ virtual_machines[0].name }}"
@@ -248,7 +248,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: vms
 
 - assert:

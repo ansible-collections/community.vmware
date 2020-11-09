@@ -41,7 +41,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: Sample_Tag_0001
         category_id: "{{ Cat_ID }}"
         tag_description: Sample Description
@@ -68,7 +68,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: Sample_Tag_0001
         tag_description: Some fancy description
         state: present
@@ -94,7 +94,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_name: Sample_Tag_0001
         state: absent
       register: delete_tag

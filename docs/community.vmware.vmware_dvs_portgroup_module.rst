@@ -667,7 +667,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -812,21 +812,21 @@ Examples
         portgroup_type: earlyBinding
         state: present
         network_policy:
-          promiscuous: yes
-          forged_transmits: yes
-          mac_changes: yes
+          promiscuous: true
+          forged_transmits: true
+          mac_changes: true
         port_policy:
-          block_override: yes
-          ipfix_override: yes
-          live_port_move: yes
-          network_rp_override: yes
-          port_config_reset_at_disconnect: yes
-          security_override: yes
-          shaping_override: yes
-          traffic_filter_override: yes
-          uplink_teaming_override: yes
-          vendor_config_override: yes
-          vlan_override: yes
+          block_override: true
+          ipfix_override: true
+          live_port_move: true
+          network_rp_override: true
+          port_config_reset_at_disconnect: true
+          security_override: true
+          shaping_override: true
+          traffic_filter_override: true
+          uplink_teaming_override: true
+          vendor_config_override: true
+          vlan_override: true
       delegate_to: localhost
 
 

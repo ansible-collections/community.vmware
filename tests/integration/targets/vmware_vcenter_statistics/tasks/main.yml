@@ -18,7 +18,7 @@
       enabled: false
     interval_past_year:
       enabled: false
-    validate_certs: no
+    validate_certs: false
   register: statistics_results_check_mode
 
 - name: Configure statistics in check mode
@@ -46,9 +46,9 @@
       interval_days: 1
       save_for_years: 1
       level: 1
-    validate_certs: no
+    validate_certs: false
   register: statistics_results_check_mode
-  check_mode: yes
+  check_mode: true
 
 - debug: var=statistics_results_check_mode
 
@@ -102,7 +102,7 @@
     interval_past_year:
       enabled: true
       level: 2
-    validate_certs: no
+    validate_certs: false
   when: vcsim is not defined
 
 - name: Increase daily and weekly while decrease monthly and yearly
@@ -122,7 +122,7 @@
     interval_past_year:
       enabled: true
       level: 1
-    validate_certs: no
+    validate_certs: false
   register: statistics_results_mixed_increase_decrease
   when: vcsim is not defined
 

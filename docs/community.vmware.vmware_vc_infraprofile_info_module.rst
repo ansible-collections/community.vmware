@@ -244,7 +244,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>no</code> when certificates are not trusted.</div>
+                        <div>Set to <code>False</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>
@@ -270,7 +270,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
       delegate_to: localhost
 
     - name: export vCenter appliance infra profile config
@@ -278,7 +277,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
         api: "export"
         profiles: "ApplianceManagement"
       delegate_to: localhost
@@ -288,7 +286,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
         api: "validate"
         profiles: "ApplianceManagement"
         config_path: "export.json"
@@ -298,7 +295,6 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
         api: "import"
         profiles: "ApplianceManagement"
         config_path: "import.json"

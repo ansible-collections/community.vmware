@@ -38,9 +38,9 @@ options:
       - Allows connection when SSL certificates are not valid. Set to C(false) when certificates are not trusted.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_VALIDATE_CERTS) will be used instead.
       - Environment variable support added in Ansible 2.6.
-      - If set to C(yes), please make sure Python >= 2.7.9 is installed on the given machine.
+      - If set to C(true), please make sure Python >= 2.7.9 is installed on the given machine.
       type: bool
-      default: yes
+      default: true
     port:
       description:
       - The port number of the vSphere vCenter or ESXi server.
@@ -92,9 +92,9 @@ options:
       - Allows connection when SSL certificates are not valid. Set to C(false) when certificates are not trusted.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_VALIDATE_CERTS) will be used instead.
       - Environment variable supported added in Ansible 2.6.
-      - If set to C(yes), please make sure Python >= 2.7.9 is installed on the given machine.
+      - If set to C(true), please make sure Python >= 2.7.9 is installed on the given machine.
       type: bool
-      default: yes
+      default: true
     port:
       description:
       - The port number of the vSphere vCenter server.

@@ -13,19 +13,19 @@
           enabled: True
           allowed_hosts:
             all_ip: True
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove the VM prepared by prepare_vmware_tests
   vmware_guest:
     name: "{{ item.name }}"
-    force: yes
+    force: true
     state: absent
   with_items: '{{ virtual_machines + virtual_machines_in_cluster }}'
 
 - name: Remove the test_vm* VMs
   vmware_guest:
     name: "{{ item }}"
-    force: yes
+    force: true
     state: absent
   with_items:
     - test_vm1
@@ -43,7 +43,7 @@
   loop:
   - DC0_DVPG0
   - DVPG/1
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove the DVSwitch
   vmware_dvswitch:
@@ -54,7 +54,7 @@
     - '{{ dvswitch1 }}'
     - dvswitch_0001
     - dvswitch_0002
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Clean up the VM Network portgroup
   vmware_portgroup:
@@ -72,9 +72,9 @@
     esxi_hostname: '{{ esxi_hosts }}'
     switch: vSwitch0
     portgroup: VM Network
-    validate_certs: no
+    validate_certs: false
     state: absent
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove the vSwitches
   vmware_vswitch:
@@ -84,7 +84,7 @@
     switch_name: "{{ switch1 }}"
     state: absent
   with_items: "{{ esxi_hosts }}"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Remove ESXi Hosts to vCenter
   vmware_host:
@@ -95,7 +95,7 @@
     esxi_password: '{{ esxi_password }}'
     state: absent
   with_items: "{{ esxi_hosts }}"
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Umount NFS datastores to ESXi (1/2)
   vmware_host_datastore:

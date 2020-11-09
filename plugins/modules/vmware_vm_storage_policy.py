@@ -76,7 +76,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     name: "vSphere storage policy"
     description: "vSphere storage performance policy"
     tag_category: "performance_tier"
@@ -90,7 +89,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     name: "vSphere storage policy"
     state: "absent"
   delegate_to: localhost

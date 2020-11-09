@@ -68,7 +68,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     esxi_hostname: '{{ esxi_hostname }}'
     state: reboot-host
   delegate_to: localhost
@@ -79,7 +78,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     esxi_hostname: '{{ esxi_hostname }}'
     state: power-down-to-standby
   delegate_to: localhost
@@ -90,7 +88,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     cluster_name: '{{ cluster_name }}'
     state: reboot-host
   delegate_to: localhost

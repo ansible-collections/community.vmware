@@ -10,7 +10,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: about
 
 - assert:
@@ -36,7 +36,7 @@
   vmware_about_facts:
     <<: *vmware_about_data
   register: about
-  check_mode: yes
+  check_mode: true
 
 - assert:
     that:

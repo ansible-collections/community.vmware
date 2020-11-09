@@ -12,7 +12,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter: "{{ dc1 | basename }}"
-      validate_certs: no
+      validate_certs: false
     folder_name: "toplevel"
 
 - name: create an example child folder

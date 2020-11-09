@@ -16,7 +16,7 @@
         nfs_path: '{{ infra.datastores[ro_datastore].path }}'
         nfs_ro: '{{ infra.datastores[ro_datastore].ro }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       ignore_errors: true
       register: mount_vmware_host_datastore
     - debug: var=mount_vmware_host_datastore
@@ -37,7 +37,7 @@
         nfs_path: '{{ infra.datastores[ro_datastore].path }}'
         nfs_ro: '{{ infra.datastores[ro_datastore].ro }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       ignore_errors: true
       register: mount_vmware_host_datastore
     - debug: var=mount_vmware_host_datastore
@@ -58,7 +58,7 @@
         nfs_path: '{{ infra.datastores[ro_datastore].path }}'
         nfs_ro: '{{ infra.datastores[ro_datastore].ro }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       register: mount_vmware_host_datastore
     - debug: var=mount_vmware_host_datastore
     - assert:
@@ -76,7 +76,7 @@
         nfs_path: '{{ infra.datastores[ro_datastore].path }}'
         nfs_ro: '{{ infra.datastores[ro_datastore].ro }}'
         state: present
-        validate_certs: no
+        validate_certs: false
       register: mount_vmware_host_datastore
     - debug: var=mount_vmware_host_datastore
     - assert:

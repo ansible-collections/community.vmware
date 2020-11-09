@@ -12,12 +12,12 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
       enable_sdrs: False
       state: present
-    check_mode: yes
+    check_mode: true
     register: add_dsc_check
 
   - assert:
@@ -45,12 +45,12 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
       enable_sdrs: True
       state: present
-    check_mode: yes
+    check_mode: true
     register: enable_sdrs_check
 
   - assert:
@@ -82,7 +82,7 @@
       folder_name: 'my_datastore_folder'
       folder_type: datastore
       state: present
-      validate_certs: no
+      validate_certs: false
     register: my_datastore_folder
 
   - name: Add a datastore cluster using folder
@@ -90,7 +90,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       folder: "{{ my_datastore_folder.result.path }}"
       datastore_cluster_name: DSC2
       state: present
@@ -105,11 +105,11 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
       state: absent
-    check_mode: yes
+    check_mode: true
     register: delete_dsc_check
 
   - assert:

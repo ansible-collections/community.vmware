@@ -96,7 +96,6 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter_name: '{{ datacenter_name }}'
-    validate_certs: no
   delegate_to: localhost
   register: info
 

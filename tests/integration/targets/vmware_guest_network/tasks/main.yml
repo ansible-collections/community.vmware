@@ -18,7 +18,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter: "{{ dc1 }}"
-      validate_certs: no
+      validate_certs: false
       folder: '/DC0/vm/F0'
       name: test_vm1
       state: poweredon
@@ -43,7 +43,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       timeout: 600
-      validate_certs: no
+      validate_certs: false
       name: test_vm1
 
   - name: gather network adapters' facts of the virtual machine
@@ -247,7 +247,7 @@
           manual_mac: "aa:50:56:11:22:33"
           state: new
     register: no_nw_details
-    ignore_errors: yes
+    ignore_errors: true
 
   - debug: var=no_nw_details
 

@@ -162,7 +162,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code>, will enable DRS when the cluster is created.</div>
+                        <div>If set to <code>True</code>, will enable DRS when the cluster is created.</div>
                         <div>Use <code>enable_drs</code> of <span class='module'>community.vmware.vmware_cluster_drs</span> instead.</div>
                         <div>Deprecated option, will be removed in version 2.12.</div>
                 </td>
@@ -183,7 +183,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code> will enable HA when the cluster is created.</div>
+                        <div>If set to <code>True</code> will enable HA when the cluster is created.</div>
                         <div>Use <code>enable_ha</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                         <div>Deprecated option, will be removed in version 2.12.</div>
                 </td>
@@ -204,7 +204,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code> will enable vSAN when the cluster is created.</div>
+                        <div>If set to <code>True</code> will enable vSAN when the cluster is created.</div>
                         <div>Use <code>enable_vsan</code> of <span class='module'>community.vmware.vmware_cluster_vsan</span> instead.</div>
                         <div>Deprecated option, will be removed in version 2.12.</div>
                 </td>
@@ -269,7 +269,7 @@ Parameters
                         <div>Indicates whether HA restarts virtual machines after a host fails.</div>
                         <div>If set to <code>enabled</code>, HA restarts virtual machines after a host fails.</div>
                         <div>If set to <code>disabled</code>, HA does not restart virtual machines after a host fails.</div>
-                        <div>If <code>enable_ha</code> is set to <code>no</code>, then this value is ignored.</div>
+                        <div>If <code>enable_ha</code> is set to <code>False</code>, then this value is ignored.</div>
                         <div>Use <code>ha_host_monitoring</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                         <div>Deprecated option, will be removed in version 2.12.</div>
                 </td>
@@ -403,7 +403,7 @@ Parameters
                         <div>If set to <code>vmAndAppMonitoring</code>, HA response to both virtual machine and application heartbeat failure.</div>
                         <div>If set to <code>vmMonitoringDisabled</code>, virtual machine health monitoring is disabled.</div>
                         <div>If set to <code>vmMonitoringOnly</code>, HA response to virtual machine heartbeat failure.</div>
-                        <div>If <code>enable_ha</code> is set to <code>no</code>, then this value is ignored.</div>
+                        <div>If <code>enable_ha</code> is set to <code>False</code>, then this value is ignored.</div>
                         <div>Use <code>ha_vm_monitoring</code> of <span class='module'>community.vmware.vmware_cluster_ha</span> instead.</div>
                         <div>Deprecated option, will be removed in version 2.12.</div>
                 </td>
@@ -441,7 +441,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code>, DRS will not be configured; all explicit and default DRS related configurations will be ignored.</div>
+                        <div>If set to <code>True</code>, DRS will not be configured; all explicit and default DRS related configurations will be ignored.</div>
                 </td>
             </tr>
             <tr>
@@ -460,7 +460,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code>, HA will not be configured; all explicit and default HA related configurations will be ignored.</div>
+                        <div>If set to <code>True</code>, HA will not be configured; all explicit and default HA related configurations will be ignored.</div>
                 </td>
             </tr>
             <tr>
@@ -479,7 +479,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>yes</code>, VSAN will not be configured; all explicit and default VSAN related configurations will be ignored.</div>
+                        <div>If set to <code>True</code>, VSAN will not be configured; all explicit and default VSAN related configurations will be ignored.</div>
                 </td>
             </tr>
             <tr>
@@ -608,7 +608,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -662,17 +662,16 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
-        enable_drs: yes
-        enable_vsan: yes
+        enable_ha: true
+        enable_drs: true
+        enable_vsan: true
       delegate_to: localhost
 
     - name: Create Cluster with additional changes
       community.vmware.vmware_cluster:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
-        validate_certs: no
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_ha: True
@@ -685,14 +684,14 @@ Examples
 
     - name: Delete Cluster
       community.vmware.vmware_cluster:
-        hostname: "{{ vcenter_server }}"
-        username: "{{ vcenter_user }}"
-        password: "{{ vcenter_pass }}"
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: yes
-        enable_drs: yes
-        enable_vsan: yes
+        enable_ha: true
+        enable_drs: true
+        enable_vsan: true
         state: absent
       delegate_to: localhost
 

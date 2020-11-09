@@ -35,7 +35,7 @@ options:
    use_instance_uuid:
      description:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: no
+     default: false
      type: bool
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -48,7 +48,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: testvm
   delegate_to: localhost
   register: vm_folder

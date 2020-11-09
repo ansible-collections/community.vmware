@@ -6,13 +6,13 @@
   block:
   - &spbm_data
     name: Get information about vSphere SPBM info
-    vmware_vm_storage_policy_info: 
+    vmware_vm_storage_policy_info:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
     register: spbm_data
-    
+
   - &spbm_check
     assert:
       that:
@@ -20,6 +20,6 @@
 
   - <<: *spbm_data
     name: Get information about vSphere SPBM info in check mode
-    check_mode: yes
-    
+    check_mode: true
+
   - <<: *spbm_check

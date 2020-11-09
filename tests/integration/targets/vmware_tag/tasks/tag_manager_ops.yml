@@ -27,7 +27,7 @@
 
     - <<: *tag_info
       name: Get info about tag in check mode
-      check_mode: yes
+      check_mode: true
 
     - set_fact: Tag_Name={{ tag_info['tag_facts'].keys() | list }}
 
@@ -40,7 +40,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         tag_names:
           - "{{ Tag_Name[0] }}"
         object_name: "{{ vm_name }}"
@@ -58,7 +58,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: "{{ vm_name }}"
       register: r
 
@@ -67,7 +67,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: "{{ vm_name }}"
         tags: True
         tag_details: True

@@ -86,7 +86,6 @@ EXAMPLES = r'''
     password: '{{ esxi_password }}'
     community: [ test ]
     state: enabled
-    validate_certs: no
   delegate_to: localhost
 
 - name: Configure SNMP traps and filters
@@ -106,7 +105,6 @@ EXAMPLES = r'''
       - 1.3.6.1.4.1.6876.4.1.1.0
       - 1.3.6.1.4.1.6876.4.1.1.1
     state: enabled
-    validate_certs: no
   delegate_to: localhost
 
 - name: Disable SNMP
@@ -115,7 +113,6 @@ EXAMPLES = r'''
     username: '{{ esxi_username }}'
     password: '{{ esxi_password }}'
     state: disabled
-    validate_certs: no
   delegate_to: localhost
 '''
 

@@ -62,7 +62,7 @@ options:
    use_instance_uuid:
      description:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: no
+     default: false
      type: bool
    timeout:
      description:
@@ -80,7 +80,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter }}"
     folder: "/{{datacenter}}/vm"
     name: "{{ vm_name }}"
@@ -92,7 +91,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     uuid: "{{ vm_facts.instance.hw_product_uuid }}"
   delegate_to: localhost
   register: facts
@@ -103,7 +101,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     moid: vm-42
   delegate_to: localhost
   register: facts
@@ -113,7 +110,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: test-vm
     folder: "/{{datacenter}}/vm"
   delegate_to: localhost

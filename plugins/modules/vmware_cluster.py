@@ -30,35 +30,35 @@ options:
       description:
       - The name of the cluster to be managed.
       type: str
-      required: yes
+      required: true
     datacenter:
       description:
       - The name of the datacenter.
       type: str
-      required: yes
+      required: true
       aliases: [ datacenter_name ]
     ignore_drs:
       description:
-      - If set to C(yes), DRS will not be configured; all explicit and default DRS related configurations will be ignored.
+      - If set to C(True), DRS will not be configured; all explicit and default DRS related configurations will be ignored.
       type: bool
-      default: 'no'
+      default: false
     ignore_ha:
       description:
-      - If set to C(yes), HA will not be configured; all explicit and default HA related configurations will be ignored.
+      - If set to C(True), HA will not be configured; all explicit and default HA related configurations will be ignored.
       type: bool
-      default: 'no'
+      default: false
     ignore_vsan:
       description:
-      - If set to C(yes), VSAN will not be configured; all explicit and default VSAN related configurations will be ignored.
+      - If set to C(True), VSAN will not be configured; all explicit and default VSAN related configurations will be ignored.
       type: bool
-      default: 'no'
+      default: false
     enable_drs:
       description:
-      - If set to C(yes), will enable DRS when the cluster is created.
+      - If set to C(True), will enable DRS when the cluster is created.
       - Use C(enable_drs) of M(community.vmware.vmware_cluster_drs) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
-      default: 'no'
+      default: false
     drs_enable_vm_behavior_overrides:
       description:
       - Determines whether DRS Behavior overrides for individual virtual machines are enabled.
@@ -91,17 +91,17 @@ options:
       type: int
     enable_ha:
       description:
-      - If set to C(yes) will enable HA when the cluster is created.
+      - If set to C(True) will enable HA when the cluster is created.
       - Use C(enable_ha) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
-      default: 'no'
+      default: false
     ha_host_monitoring:
       description:
       - Indicates whether HA restarts virtual machines after a host fails.
       - If set to C(enabled), HA restarts virtual machines after a host fails.
       - If set to C(disabled), HA does not restart virtual machines after a host fails.
-      - If C(enable_ha) is set to C(no), then this value is ignored.
+      - If C(enable_ha) is set to C(False), then this value is ignored.
       - Use C(ha_host_monitoring) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       choices: [ 'enabled', 'disabled' ]
@@ -113,7 +113,7 @@ options:
       - If set to C(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
       - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
       - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
-      - If C(enable_ha) is set to C(no), then this value is ignored.
+      - If C(enable_ha) is set to C(False), then this value is ignored.
       - Use C(ha_vm_monitoring) of M(community.vmware.vmware_cluster_ha) instead.
       - Deprecated option, will be removed in version 2.12.
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
@@ -199,11 +199,11 @@ options:
       type: str
     enable_vsan:
       description:
-      - If set to C(yes) will enable vSAN when the cluster is created.
+      - If set to C(True) will enable vSAN when the cluster is created.
       - Use C(enable_vsan) of M(community.vmware.vmware_cluster_vsan) instead.
       - Deprecated option, will be removed in version 2.12.
       type: bool
-      default: 'no'
+      default: false
     vsan_auto_claim_storage:
       description:
       - Determines whether the VSAN service is configured to automatically claim local storage
@@ -235,17 +235,16 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
-    enable_drs: yes
-    enable_vsan: yes
+    enable_ha: true
+    enable_drs: true
+    enable_vsan: true
   delegate_to: localhost
 
 - name: Create Cluster with additional changes
   community.vmware.vmware_cluster:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
-    validate_certs: no
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
     enable_ha: True
@@ -258,14 +257,14 @@ EXAMPLES = r'''
 
 - name: Delete Cluster
   community.vmware.vmware_cluster:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: yes
-    enable_drs: yes
-    enable_vsan: yes
+    enable_ha: true
+    enable_drs: true
+    enable_vsan: true
     state: absent
   delegate_to: localhost
 '''

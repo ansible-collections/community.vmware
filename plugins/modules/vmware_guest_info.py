@@ -43,7 +43,7 @@ options:
    use_instance_uuid:
      description:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: no
+     default: false
      type: bool
    moid:
      description:
@@ -77,7 +77,7 @@ options:
      - If set C(True), shows tags information. Returns a list of tag names.
      - If set C(False), hides tags information.
      - vSphere Automation SDK is required.
-     default: 'no'
+     default: false
      type: bool
    tag_details:
      description:
@@ -85,7 +85,7 @@ options:
      - Without this flag, the 'tags' returns a list of tag names.
      - With this flag, the 'tags' returns a list of dict about tag information with additional details like category name, category id, and tag id.
      - This parameter is added to maintain backward compatability.
-     default: 'no'
+     default: false
      type: bool
      version_added: '1.4.0'
    schema:
@@ -125,7 +125,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: ha-datacenter
-    validate_certs: no
     uuid: 421e4592-c069-924d-ce20-7e7533fab926
   delegate_to: localhost
   register: info
@@ -135,7 +134,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     name: "{{ vm_name }}"
     schema: "vsphere"
@@ -148,7 +146,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     moid: vm-42
     schema: "vsphere"
@@ -161,7 +158,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     name: "{{ vm_name }}"
     schema: "vsphere"
@@ -175,7 +171,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter_name }}"
     name: "{{ vm_name }}"
     tags: True

@@ -12,7 +12,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter_name: "{{ dc1 }}"
     switch_name: "{{ dvswitch1 }}"
     mtu: 9000
@@ -31,9 +31,9 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     switch_name: "{{ dvswitch1 }}"
-  check_mode: yes
+  check_mode: true
   register: info_dvswitches_result
 
 - debug: var=info_dvswitches_result
@@ -49,7 +49,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: info_dvswitches_result
 
 - debug: var=info_dvswitches_result
@@ -66,7 +66,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     switch_name: "{{ dvswitch1 }}"
   register: info_dvswitches_result
 
@@ -83,7 +83,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     folder: "{{ dc1 }}/network"
     switch_name: "{{ dvswitch1 }}"
   register: info_dvswitches_result
@@ -101,7 +101,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     switch_name: "{{ dvswitch1 }}"
     schema: vsphere
     properties:
@@ -120,7 +120,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     folder: "{{ dc1 }}/network"
     switch_name: "{{ dvswitch1 }}"
     schema: vsphere
@@ -139,7 +139,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     switch_name: "{{ dvswitch1 }}"
     schema: vsphere
     properties:
@@ -161,7 +161,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     folder: "{{ dc1 }}/network"
     switch_name: "{{ dvswitch1 }}"
     schema: vsphere
@@ -184,7 +184,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter_name: "{{ dc1 }}"
     switch_name: "{{ dvswitch1 }}"
     state: absent
@@ -199,7 +199,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: info_dvswitches_result
 
 - assert:
@@ -211,7 +211,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     switch_name: "not_exist_the_dvswitch"
   register: info_dvswitches_result
 

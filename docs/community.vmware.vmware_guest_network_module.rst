@@ -726,7 +726,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -787,7 +787,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
         name: vm01.domain.fake
         mac_address: 00:50:56:11:22:33
         network_name: admin-network
@@ -799,7 +798,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
         uuid: 422d000d-2000-ffff-0000-b00000000000
         vlan_id: 2001
 
@@ -809,7 +807,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
         mac_address: 00:50:56:11:22:33
         name: vm01.domain.fake
         state: absent
@@ -820,7 +817,6 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        validate_certs: no
         name: vm01.domain.fake
         state: present
         vlan_id: "{{ item.vlan_id | default(omit) }}"

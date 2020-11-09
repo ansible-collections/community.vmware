@@ -208,7 +208,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: vm01.domain.fake
     mac_address: 00:50:56:11:22:33
     network_name: admin-network
@@ -220,7 +219,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     uuid: 422d000d-2000-ffff-0000-b00000000000
     vlan_id: 2001
 
@@ -230,7 +228,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     mac_address: 00:50:56:11:22:33
     name: vm01.domain.fake
     state: absent
@@ -241,7 +238,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: vm01.domain.fake
     state: present
     vlan_id: "{{ item.vlan_id | default(omit) }}"

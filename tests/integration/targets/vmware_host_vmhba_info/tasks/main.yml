@@ -17,7 +17,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
       register: host_vmhbas
 
     - debug:
@@ -28,8 +28,8 @@
           - host_vmhbas.hosts_vmhbas_info is defined
 
     - <<: *vmhba_data
-      name: Gather vmhba info in check mode 
-      check_mode: yes
+      name: Gather vmhba info in check mode
+      check_mode: true
 
     - debug:
         var: host_vmhbas

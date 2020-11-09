@@ -7,7 +7,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
   register: enable_iscsi_result
@@ -21,7 +21,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
   register: iscsi_info_vmhba_result
 
@@ -34,7 +34,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -58,7 +58,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
   register: iscsi_info_result
 
@@ -81,7 +81,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -105,7 +105,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
   register: disable_iscsi_result

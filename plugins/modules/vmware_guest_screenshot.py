@@ -86,7 +86,6 @@ extends_documentation_fragment:
 EXAMPLES = r'''
 - name: take a screenshot of the virtual machine console
   community.vmware.vmware_guest_screenshot:
-    validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -99,7 +98,6 @@ EXAMPLES = r'''
 
 - name: Take a screenshot of the virtual machine console using MoID
   community.vmware.vmware_guest_screenshot:
-    validate_certs: no
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

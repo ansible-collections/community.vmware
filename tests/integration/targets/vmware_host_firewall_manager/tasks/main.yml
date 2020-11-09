@@ -13,7 +13,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
@@ -41,7 +41,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
@@ -68,13 +68,13 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
             enabled: True
       register: all_hosts_result_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=all_hosts_result_check_mode
     - name: ensure everything is changed for all hosts of {{ ccr1 }}
       assert:
@@ -94,13 +94,13 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
             enabled: False
       register: host_result_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: msg="{{ host_result_check_mode }}"
     - name: ensure vvold is disabled for {{ host1 }}
       assert:
@@ -122,7 +122,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: CIMHttpServer
@@ -168,7 +168,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC
@@ -203,7 +203,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC

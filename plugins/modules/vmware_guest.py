@@ -86,7 +86,7 @@ options:
   use_instance_uuid:
     description:
     - Whether to use the VMware instance UUID rather than the BIOS UUID.
-    default: no
+    default: false
     type: bool
   template:
     description:
@@ -101,7 +101,7 @@ options:
     description:
     - Flag the instance as a template.
     - This will mark the given virtual machine as template.
-    default: 'no'
+    default: false
     type: bool
   folder:
     description:
@@ -347,7 +347,7 @@ options:
     - Wait until vCenter detects an IP address for the virtual machine.
     - This requires vmware-tools (vmtoolsd) to properly work after creation.
     - "vmware-tools needs to be installed on the given virtual machine in order to work with this parameter."
-    default: 'no'
+    default: false
     type: bool
   wait_for_ip_address_timeout:
     description:
@@ -366,7 +366,7 @@ options:
     - When enabled, the VM will automatically be powered on.
     - "If vCenter does not detect guest customization start or succeed, failed events after time
       C(wait_for_customization_timeout) parameter specified, warning message will be printed and task result is fail."
-    default: 'no'
+    default: false
     type: bool
   state_change_timeout:
     description:
@@ -385,7 +385,7 @@ options:
     description:
     - Whether to create a linked clone from the snapshot specified.
     - If specified, then C(snapshot_src) is required parameter.
-    default: 'no'
+    default: false
     type: bool
   force:
     description:
@@ -394,7 +394,7 @@ options:
     - 'This module reflects the VMware vCenter API and UI workflow, as such, in some cases the `force` flag will
        be mandatory to perform the action to ensure you are certain the action has to be taken, no matter what the consequence.
        This is specifically the case for removing a powered on the virtual machine when C(state) is set to C(absent).'
-    default: 'no'
+    default: false
     type: bool
   delete_from_inventory:
     description:
@@ -683,7 +683,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: /DC1/vm/
     name: test_vm_0001
     state: poweredon
@@ -704,7 +703,7 @@ EXAMPLES = r'''
       ip: 10.10.10.100
       netmask: 255.255.255.0
       device_type: vmxnet3
-    wait_for_ip_address: yes
+    wait_for_ip_address: true
     wait_for_ip_address_timeout: 600
   delegate_to: localhost
   register: deploy_vm
@@ -714,7 +713,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: /testvms
     name: testvm_2
     state: poweredon
@@ -750,7 +748,7 @@ EXAMPLES = r'''
     networks:
     - name: VM Network
       mac: aa:bb:dd:aa:00:14
-    wait_for_ip_address: yes
+    wait_for_ip_address: true
   delegate_to: localhost
   register: deploy
 
@@ -759,7 +757,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: datacenter1
     cluster: cluster
     name: testvm-2
@@ -777,7 +774,7 @@ EXAMPLES = r'''
     - vlan: 1234
       type: dhcp
     customization:
-      autologon: yes
+      autologon: true
       dns_servers:
       - 192.168.1.1
       - 192.168.1.2
@@ -792,7 +789,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter }}"
     state: present
     folder: /DC1/vm
@@ -819,7 +815,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     uuid: "{{ vm_uuid }}"
     name: new_name
     state: present
@@ -830,7 +825,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     uuid: "{{ vm_uuid }}"
     state: absent
   delegate_to: localhost
@@ -840,7 +834,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: vm_name
     delete_from_inventory: True
     state: absent
@@ -851,7 +844,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     name: vm_name
     state: present
     vapp_properties:
@@ -869,7 +861,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     uuid: "{{ vm_uuid }}"
     state: poweredoff
   delegate_to: localhost
@@ -892,7 +883,6 @@ EXAMPLES = r'''
 
 - name: Create a diskless VM
   community.vmware.vmware_guest:
-    validate_certs: False
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -913,7 +903,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     folder: /DC1/vm/
     name: test_vm_multi_disks
     state: poweredoff

@@ -53,7 +53,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm2"
     destination_vm_name: "cloned_vm_from_template"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -75,7 +75,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -86,7 +86,7 @@
     destination_host: '{{ destination_esxi1 }}'
     destination_datastore: '{{ destination_datastore }}'
     destination_vm_folder: '{{ destination_vm_folder }}'
-    power_on: yes
+    power_on: true
   register: cross_vc_clone_from_vm
 
 - name: assert that changes were made
@@ -99,7 +99,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -108,7 +108,7 @@
     destination_host: '{{ destination_esxi1 }}'
     destination_datastore: '{{ destination_datastore_cluster }}'
     destination_vm_folder: '{{ destination_vm_folder }}'
-    power_on: yes
+    power_on: true
   register: cross_vc_clone_from_vm_with_datastore_cluster
 
 - name: assert that changes were made
@@ -121,7 +121,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm2"
     destination_vm_name: "cloned_vm_from_template_in_check_mode"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -131,7 +131,7 @@
     destination_datastore: '{{ destination_datastore }}'
     destination_vm_folder: '{{ destination_vm_folder }}'
     power_on: no
-  check_mode: yes
+  check_mode: true
   register: check_mode_clone
 
 - debug:
@@ -142,7 +142,7 @@
     hostname: '{{ destination_vcenter_hostname }}'
     username: '{{ destination_vcenter_username }}'
     password: "{{ destination_vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     name: "test_vm1"
     destination_vm_name: "cloned_vm_from_vm"
     destination_vcenter: '{{ destination_vcenter_hostname }}'
@@ -151,7 +151,7 @@
     destination_host: '{{ destination_esxi1 }}'
     destination_datastore: '{{ destination_datastore }}'
     destination_vm_folder: '{{ destination_vm_folder }}'
-    power_on: yes
+    power_on: true
   register: idempotency_check
 
 - name: assert that no changes were made

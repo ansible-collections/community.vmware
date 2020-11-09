@@ -54,7 +54,7 @@
 
 - <<: *vm_data
   name: Get info about available vms in check mode
-  check_mode: yes
+  check_mode: true
 
 - <<: *vm_fact_check
   name: Verify if VM info exist in check mode
@@ -77,7 +77,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     folder: "{{ folder_path }}"
   register: vm_info
   when: folder_path_info.folders is defined

@@ -63,7 +63,7 @@ options:
     description:
     - Absolute path to place the exported files on the server running this task, must have write permission.
     - If folder not exist will create it, also create a folder under this path named with VM name.
-    required: yes
+    required: true
     type: path
   export_with_images:
     default: false
@@ -83,7 +83,6 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - community.vmware.vmware_export_ovf:
-    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

@@ -77,7 +77,6 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: ha-datacenter
-    validate_certs: no
   delegate_to: localhost
   register: cluster_info
 
@@ -105,7 +104,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
     cluster_name: DC0_C0
     schema: vsphere
     properties:

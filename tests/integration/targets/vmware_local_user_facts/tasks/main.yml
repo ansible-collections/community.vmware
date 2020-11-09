@@ -29,7 +29,7 @@
 
     - <<: *user_fact_data
       name: Gather facts about users in check mode
-      check_mode: yes
+      check_mode: true
 
     - name: ensure user facts are gathered
       assert:

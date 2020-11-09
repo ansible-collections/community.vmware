@@ -25,7 +25,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_drs
-    enable_drs: yes
+    enable_drs: true
   register: cluster_drs_result_0001
 
 - name: Ensure DRS is enabled
@@ -62,7 +62,7 @@
       cluster_name: test_cluster_drs
       advanced_settings:
           'TryBalanceVmsPerHost': '1'
-    check_mode: yes
+    check_mode: true
     register: change_balance_vms_check
 
   - assert:

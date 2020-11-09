@@ -17,7 +17,7 @@
     folder_name: 'f1'
     folder_type: vm
     state: present
-    validate_certs: no
+    validate_certs: false
   register: dest_folder
 
 # Testcase 0001: Move vm and get changed status
@@ -61,7 +61,7 @@
 
 - <<: *vm_move
   name: Move VM in check mode
-  check_mode: yes
+  check_mode: true
   register: vm_move_0003
 
 - name: Make sure changes are not made in check mode

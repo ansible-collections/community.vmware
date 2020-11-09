@@ -20,7 +20,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
   register: role_details
 
 - &list_to_dict
@@ -40,7 +40,7 @@
 
 - <<: *role_data
   name: Gather Role facts in check mode
-  check_mode: yes
+  check_mode: true
 
 - <<: *role_test
   name: Test if role id is present for role in check mode

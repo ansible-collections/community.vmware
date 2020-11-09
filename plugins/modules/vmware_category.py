@@ -93,9 +93,9 @@ extends_documentation_fragment:
 EXAMPLES = r'''
 - name: Create a category
   community.vmware.vmware_category:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     category_name: Sample_Cat_0001
     category_description: Sample Description
     category_cardinality: 'multiple'
@@ -103,27 +103,27 @@ EXAMPLES = r'''
 
 - name: Rename category
   community.vmware.vmware_category:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     category_name: Sample_Category_0001
     new_category_name: Sample_Category_0002
     state: present
 
 - name: Update category description
   community.vmware.vmware_category:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     category_name: Sample_Category_0001
     category_description: Some fancy description
     state: present
 
 - name: Delete category
   community.vmware.vmware_category:
-    hostname: "{{ vcenter_server }}"
-    username: "{{ vcenter_user }}"
-    password: "{{ vcenter_pass }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     category_name: Sample_Category_0002
     state: absent
 
@@ -132,7 +132,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: False
     category_name: 'Sample_Category_0003'
     category_description: 'sample description'
     associable_object_types:

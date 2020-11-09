@@ -13,7 +13,7 @@
 
   - name: Gather facts about VM boot order
     vmware_guest_boot_facts:
-      validate_certs: no
+      validate_certs: false
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -32,12 +32,12 @@
 
   - name: Gather facts about VM boot order in check mode
     vmware_guest_boot_facts:
-      validate_certs: no
+      validate_certs: false
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
       name: "{{ virtual_machines[0].name }}"
-    check_mode: yes
+    check_mode: true
     register: vm1_facts
   - debug: var=vm1_facts
   - name: assert that values are set

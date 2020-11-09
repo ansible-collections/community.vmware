@@ -17,9 +17,9 @@
         password: '{{ esxi_password }}'
         community: [ test ]
         state: enabled
-        validate_certs: no
+        validate_certs: false
       register: snmp_enabled_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=snmp_enabled_check_mode
     - assert:
         that:
@@ -33,7 +33,7 @@
         password: '{{ esxi_password }}'
         community: [ test ]
         state: enabled
-        validate_certs: no
+        validate_certs: false
       register: snmp_enabled
     - debug: var=snmp_enabled
     - assert:
@@ -47,7 +47,7 @@
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
         state: disabled
-        validate_certs: no
+        validate_certs: false
       register: snmp_disabled
     - debug: var=snmp_enabled
     - assert:

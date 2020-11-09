@@ -16,7 +16,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       esxi_hostname: '{{ esxi1 }}'
-      validate_certs: no
+      validate_certs: false
       acceptance_level: community
       state: present
     register: host_acceptance_info
@@ -31,11 +31,11 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       esxi_hostname: '{{ esxi1 }}'
-      validate_certs: no
+      validate_certs: false
       acceptance_level: community
       state: present
     register: host_acceptance_info_check_mode
-    check_mode: yes
+    check_mode: true
   - debug: var=host_acceptance_info_check_mode
   - assert:
       that:

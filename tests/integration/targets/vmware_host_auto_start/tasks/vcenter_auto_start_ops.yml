@@ -7,10 +7,10 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
-      enabled: yes
+      enabled: true
   register: changed_system_defaults_result
 
 - name: Check return parameters.
@@ -27,7 +27,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -48,21 +48,21 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
-      enabled: yes
+      enabled: true
       start_delay: 200
       stop_action: guestShutdown
       stop_delay: 300
-      wait_for_heartbeat: yes
+      wait_for_heartbeat: true
 
 - name: Gather facts for autoStart defaults parameters from ESXi.
   vmware_host_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -83,7 +83,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     name: test_vm1
     schema: vsphere
@@ -96,7 +96,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm1
     power_info:
@@ -118,7 +118,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -142,7 +142,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm1
     power_info:
@@ -158,7 +158,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -182,7 +182,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     name: test_vm2
     schema: vsphere
@@ -195,7 +195,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm2
     power_info:
@@ -211,7 +211,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -235,7 +235,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm2
     power_info:
@@ -244,15 +244,15 @@
       start_order: -1
       stop_action: suspend
       stop_delay: 20
-  check_mode: yes
-  diff: yes
+  check_mode: true
+  diff: true
 
 - name: Gather facts for autoStart config of other VM from ESXi.
   vmware_host_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -276,7 +276,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     datacenter: "{{ dc1 }}"
     name: test_vm2
     schema: vsphere
@@ -290,10 +290,10 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     uuid: "{{ vm_instanceUuid_and_moid_result.instance.config.instanceUuid }}"
-    use_instance_uuid: yes
+    use_instance_uuid: true
     power_info:
       start_action: powerOn
       start_delay: 300
@@ -307,7 +307,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:
@@ -331,7 +331,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     moid: "{{ vm_instanceUuid_and_moid_result.instance._moId }}"
     power_info:
@@ -347,7 +347,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     schema: vsphere
     properties:

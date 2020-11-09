@@ -28,7 +28,7 @@
 
     - <<: *dvs_facts
       name: Gather facts about DVS portgroup in check mode
-      check_mode: yes
+      check_mode: true
 
     - debug:
         var: dvs_results

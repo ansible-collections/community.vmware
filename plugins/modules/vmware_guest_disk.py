@@ -64,7 +64,7 @@ options:
    use_instance_uuid:
      description:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: no
+     default: false
      type: bool
    disk:
      description:
@@ -157,7 +157,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     uuid: 421e4592-c069-924d-ce20-7e7533fab926
     disk:
       - size_mb: 10
@@ -194,7 +193,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     disk:
       - size_gb: 1
         type: thin
@@ -215,7 +213,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     disk:
       - size_gb: 1
         type: thin
@@ -238,7 +235,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: VM_225
     disk:
       - state: absent
@@ -253,7 +249,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     moid: vm-42
     disk:
       - state: absent
@@ -268,7 +263,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
     name: VM_225
     disk:
       - state: absent

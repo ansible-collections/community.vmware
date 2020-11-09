@@ -128,11 +128,11 @@ EXAMPLES = r'''
     mem_shares: normal
     mem_limit: -1
     mem_reservation: 0
-    mem_expandable_reservations: yes
+    mem_expandable_reservations: true
     cpu_shares: normal
     cpu_limit: -1
     cpu_reservation: 0
-    cpu_expandable_reservations: yes
+    cpu_expandable_reservations: true
     state: present
   delegate_to: localhost
 '''
@@ -144,10 +144,9 @@ instance:
     type: dict
     sample: None
 resource_pool_config:
-    description: config data about the resource pool
+    description: config data about the resource pool, version added 1.4.0
     returned: always
     type: dict
-    version_added: 1.4.0
     sample: >-
       {
         "_vimtype": "vim.ResourceConfigSpec",

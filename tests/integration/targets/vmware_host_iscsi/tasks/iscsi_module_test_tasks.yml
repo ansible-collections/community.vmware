@@ -7,10 +7,10 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
-  check_mode: yes
+  check_mode: true
   register: enable_iscsi_check_mode_result
 
 - assert:
@@ -22,7 +22,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
   register: enable_iscsi_result
@@ -37,7 +37,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: enabled
   register: enable_iscsi_idempotency_check_result
@@ -51,13 +51,13 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       vmhba_name: "{{ vmhba_name }}"
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_alias_check_mode_result
 
 - assert:
@@ -69,7 +69,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -87,7 +87,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -104,18 +104,18 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapPreferred
         chap_name: chap_name
         chap_secret: chap_secret
       vmhba_name: "{{ vmhba_name }}"
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_chap_authentication_check_mode_result
 
 - assert:
@@ -127,12 +127,12 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapPreferred
         chap_name: chap_name
         chap_secret: chap_secret
@@ -152,12 +152,12 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapPreferred
         chap_name: chap_name
         chap_secret: chap_secret
@@ -174,12 +174,12 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapRequired
         chap_name: chap_name
         chap_secret: chap_secret
@@ -188,7 +188,7 @@
         mutual_chap_secret: mutual_chap_secret
       vmhba_name: "{{ vmhba_name }}"
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_mutual_chap_authentication_check_mode_result
 
 - assert:
@@ -200,12 +200,12 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapRequired
         chap_name: chap_name
         chap_secret: chap_secret
@@ -230,12 +230,12 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
       authentication:
-        chap_auth_enabled: yes
+        chap_auth_enabled: true
         chap_authentication_type: chapRequired
         chap_name: chap_name
         chap_secret: chap_secret
@@ -255,7 +255,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -263,7 +263,7 @@
       port_bind:
         - vmk0
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_port_bind_check_mode_result
 
 - assert:
@@ -276,7 +276,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -296,7 +296,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -315,7 +315,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -325,7 +325,7 @@
       send_target:
         address: 100.64.0.1
     state: present
-  check_mode: yes
+  check_mode: true
   register: add_dynamic_target_check_mode_result
 
 - assert:
@@ -337,7 +337,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -360,7 +360,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -381,7 +381,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -391,13 +391,13 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
           chap_secret: chap_secret
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_chap_authentication_dynamic_target_check_mode_result
 
 - assert:
@@ -409,7 +409,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -419,7 +419,7 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
@@ -442,7 +442,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -452,7 +452,7 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
@@ -469,7 +469,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -479,7 +479,7 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
@@ -489,7 +489,7 @@
           mutual_chap_name: mutual_chap_name
           mutual_chap_secret: mutual_chap_secret
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_mutual_chap_authentication_dynamic_target_check_mode_result
 
 - assert:
@@ -501,7 +501,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -511,7 +511,7 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapRequired
           chap_inherited: false
           chap_name: chap_name
@@ -541,7 +541,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -551,7 +551,7 @@
       send_target:
         address: 100.64.0.1
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapRequired
           chap_inherited: false
           chap_name: chap_name
@@ -572,7 +572,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -583,7 +583,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
     state: present
-  check_mode: yes
+  check_mode: true
   register: add_static_target_check_mode_result
 
 - assert:
@@ -595,7 +595,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -623,7 +623,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -645,7 +645,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -656,13 +656,13 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
           chap_secret: chap_secret
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_chap_authentication_static_target_check_mode_result
 
 - assert:
@@ -674,7 +674,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -685,7 +685,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
@@ -708,7 +708,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -719,7 +719,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapPreferred
           chap_inherited: false
           chap_name: chap_name
@@ -736,7 +736,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -747,7 +747,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapRequired
           chap_inherited: false
           chap_name: chap_name
@@ -757,7 +757,7 @@
           mutual_chap_name: mutual_chap_name
           mutual_chap_secret: mutual_chap_secret
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_mutual_chap_authentication_static_target_check_mode_result
 
 - assert:
@@ -769,7 +769,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -780,7 +780,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapRequired
           chap_inherited: false
           chap_name: chap_name
@@ -810,7 +810,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: example
@@ -821,7 +821,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
         authentication:
-          chap_auth_enabled: yes
+          chap_auth_enabled: true
           chap_authentication_type: chapRequired
           chap_inherited: false
           chap_name: chap_name
@@ -842,13 +842,13 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: ''
       vmhba_name: "{{ vmhba_name }}"
     state: present
-  check_mode: yes
+  check_mode: true
   register: update_alias_blank_check_mode_result
 
 - assert:
@@ -860,7 +860,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: ''
@@ -878,7 +878,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       alias: ''
@@ -895,14 +895,14 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
       port_bind:
         - vmk0
     state: absent
-  check_mode: yes
+  check_mode: true
   register: remove_port_bind_check_mode_result
 
 - assert:
@@ -914,7 +914,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -933,7 +933,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -951,14 +951,14 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
       send_target:
         address: 100.64.0.1
     state: absent
-  check_mode: yes
+  check_mode: true
   register: remove_dynamic_target_check_mode_result
 
 - assert:
@@ -970,7 +970,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -989,7 +989,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -1007,7 +1007,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -1015,7 +1015,7 @@
         iscsi_name: iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001
         address: 100.64.0.2
     state: absent
-  check_mode: yes
+  check_mode: true
   register: remove_dynamic_static_check_mode_result
 
 - assert:
@@ -1027,7 +1027,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -1047,7 +1047,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
       vmhba_name: "{{ vmhba_name }}"
@@ -1065,10 +1065,10 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
-  check_mode: yes
+  check_mode: true
   register: disable_iscsi_check_mode_result
 
 - assert:
@@ -1080,7 +1080,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
   register: disable_iscsi_result
@@ -1095,7 +1095,7 @@
     hostname: "{{ hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     state: disabled
   register: disable_iscsi_idempotency_check_result

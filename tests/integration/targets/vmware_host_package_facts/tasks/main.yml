@@ -16,7 +16,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
       register: host_packages
     - debug: var=host_packages
     - assert:

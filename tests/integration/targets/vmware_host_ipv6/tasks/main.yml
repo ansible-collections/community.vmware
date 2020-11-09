@@ -14,7 +14,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: "{{ ccr1 }}"
-        validate_certs: no
+        validate_certs: false
         state: disabled
       register: host_ipv6_info
 
@@ -24,7 +24,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
         state: enabled
       register: host_ipv6_info
     - debug: var=host_ipv6_info
@@ -39,10 +39,10 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
-        validate_certs: no
+        validate_certs: false
         state: enabled
       register: host_ipv6_info_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=host_ipv6_info_check_mode
     - assert:
         that:
@@ -55,7 +55,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: "{{ ccr1 }}"
-        validate_certs: no
+        validate_certs: false
         state: disabled
       register: host_ipv6_info
 
@@ -65,7 +65,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: "{{ ccr1 }}"
-        validate_certs: no
+        validate_certs: false
         state: enabled
       register: hosts_ipv6_info
     - debug: var=hosts_ipv6_info
@@ -80,10 +80,10 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: "{{ ccr1 }}"
-        validate_certs: no
+        validate_certs: false
         state: enabled
       register: hosts_ipv6_info_check_mode
-      check_mode: yes
+      check_mode: true
     - debug: var=hosts_ipv6_info_check_mode
     - assert:
         that:

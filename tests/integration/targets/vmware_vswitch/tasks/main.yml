@@ -18,7 +18,7 @@
       hostname: '{{ esxi1 }}'
       username: '{{ esxi_user }}'
       password: '{{ esxi_password }}'
-      validate_certs: no
+      validate_certs: false
       switch: vmswitch_0001
       nics: vmnic1
       state: present
@@ -33,7 +33,7 @@
       hostname: '{{ esxi1 }}'
       username: '{{ esxi_user }}'
       password: '{{ esxi_password }}'
-      validate_certs: no
+      validate_certs: false
       switch: vmswitch_0001
       nics: vmnic1
       state: present
@@ -47,7 +47,7 @@
       hostname: '{{ esxi1 }}'
       username: '{{ esxi_user }}'
       password: '{{ esxi_password }}'
-      validate_certs: no
+      validate_certs: false
       switch: vmswitch_0001
       state: absent
     register: remove_nic_run
@@ -60,7 +60,7 @@
       hostname: '{{ esxi1 }}'
       username: '{{ esxi_user }}'
       password: '{{ esxi_password }}'
-      validate_certs: no
+      validate_certs: false
       switch: vmswitch_0001
       state: absent
     register: remove_nic_again_run

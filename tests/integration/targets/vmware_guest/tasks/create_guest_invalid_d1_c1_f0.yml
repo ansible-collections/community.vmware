@@ -23,7 +23,7 @@
         state: present
         folder: "{{ f0 }}"
       register: invalid_guest_0001_d1_c1_f0
-      ignore_errors: yes
+      ignore_errors: true
     - debug: var=invalid_guest_0001_d1_c1_f0
     - name: assert that changes were made
       assert:

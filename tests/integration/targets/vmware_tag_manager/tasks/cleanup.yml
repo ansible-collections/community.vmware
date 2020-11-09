@@ -3,7 +3,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     tag_name: "{{ item }}"
     state: absent
   register: delete_tag
@@ -15,7 +15,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
+    validate_certs: false
     category_name: "{{ item }}"
     state: absent
   register: delete_categories

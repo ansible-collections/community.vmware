@@ -28,7 +28,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
   register: dc_result
-  check_mode: yes
+  check_mode: true
 
 - debug:
     var: dc_result
@@ -63,7 +63,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc_result.datacenter_info[0]['name'] }}"
   register: dc_result
-  check_mode: yes
+  check_mode: true
 
 - debug:
     var: dc_result

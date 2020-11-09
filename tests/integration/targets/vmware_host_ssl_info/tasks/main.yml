@@ -13,7 +13,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
+    validate_certs: false
   register: ssl_info
 
 - debug: var=ssl_info
@@ -28,7 +28,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: "{{ ccr1 }}"
-    validate_certs: no
+    validate_certs: false
   register: ssl_info
 
 - debug: var=ssl_info
@@ -43,8 +43,8 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
-    validate_certs: no
-  check_mode: yes
+    validate_certs: false
+  check_mode: true
   register: ssl_info
 
 - debug: var=ssl_info
@@ -59,8 +59,8 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: "{{ ccr1 }}"
-    validate_certs: no
-  check_mode: yes
+    validate_certs: false
+  check_mode: true
   register: ssl_info
 
 - debug: var=ssl_info

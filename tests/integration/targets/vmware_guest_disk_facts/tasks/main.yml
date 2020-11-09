@@ -11,7 +11,7 @@
 
 - name: set state to poweron the first VM
   vmware_guest_powerstate:
-    validate_certs: no
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -21,7 +21,7 @@
 
 - name: Gather facts about virtual machine disks
   vmware_guest_disk_facts: &get_facts
-    validate_certs: no
+    validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -41,7 +41,7 @@
   vmware_guest_disk_facts:
     <<: *get_facts
   register: disk_facts
-  check_mode: yes
+  check_mode: true
 
 - debug:
     msg: '{{ disk_facts }}'

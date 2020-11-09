@@ -11,10 +11,10 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     state: present
   register: role_creation
-  check_mode: yes
+  check_mode: true
 
 - name: Verify if role was created
   assert:
@@ -28,7 +28,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     state: present
   register: role_creation_0001
 
@@ -52,7 +52,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     state: absent
   register: role_creation_0001
 
@@ -75,7 +75,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     local_privilege_ids: ['VirtualMachine.State.RenameSnapshot']
     state: present
   register: role_creation_0001
@@ -92,7 +92,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     local_privilege_ids: ['Folder.Create']
     action: add
     state: present
@@ -118,7 +118,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     local_privilege_ids: ['Folder.Create']
     action: remove
   register: role_remove
@@ -143,7 +143,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
-    validate_certs: no
+    validate_certs: false
     local_privilege_ids: ['Folder.Create']
     action: set
   register: role_set

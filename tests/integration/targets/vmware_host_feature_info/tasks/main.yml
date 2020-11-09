@@ -14,7 +14,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: capability_0001_results
 
@@ -30,10 +30,10 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     cluster_name: "{{ ccr1 }}"
   register: capability_0001_results
-  check_mode: yes
+  check_mode: true
 
 - debug: var=capability_0001_results
 
@@ -47,7 +47,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: '{{ esxi1 }}'
   register: capability_0002_results
 
@@ -64,10 +64,10 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: '{{ esxi1 }}'
   register: capability_0002_results
-  check_mode: yes
+  check_mode: true
 
 - debug: var=capability_0002_results
 

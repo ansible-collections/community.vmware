@@ -297,7 +297,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -318,7 +318,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: yes
+        enable_drs: true
       delegate_to: localhost
 
     - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
@@ -328,7 +328,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: yes
+        enable_drs: true
         advanced_settings:
           'TryBalanceVmsPerHost': '1'
       delegate_to: localhost
@@ -338,7 +338,6 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
         enable_drs: True

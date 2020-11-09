@@ -32,7 +32,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
-        validate_certs: no
+        validate_certs: false
         name: '{{ item }}'
         folder: vm
         esxi_hostname: "{{ esxi1 }}"

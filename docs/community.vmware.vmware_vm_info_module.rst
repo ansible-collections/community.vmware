@@ -228,7 +228,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
             <tr>
@@ -263,6 +263,7 @@ Notes
 .. note::
    - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
    - From 2.8 and onwards, information are returned as list of dict instead of dict.
+   - Fact about ``moid`` added in VMware collection 1.4.0.
 
 
 
@@ -379,7 +380,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>list of dictionary of virtual machines and their information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;guest_name&#x27;: &#x27;ubuntu_t&#x27;, &#x27;datacenter&#x27;: &#x27;Datacenter-1&#x27;, &#x27;cluster&#x27;: None, &#x27;esxi_hostname&#x27;: &#x27;10.76.33.226&#x27;, &#x27;folder&#x27;: &#x27;/Datacenter-1/vm&#x27;, &#x27;guest_fullname&#x27;: &#x27;Ubuntu Linux (64-bit)&#x27;, &#x27;ip_address&#x27;: &#x27;&#x27;, &#x27;mac_address&#x27;: [&#x27;00:50:56:87:a5:9a&#x27;], &#x27;power_state&#x27;: &#x27;poweredOff&#x27;, &#x27;uuid&#x27;: &#x27;4207072c-edd8-3bd5-64dc-903fd3a0db04&#x27;, &#x27;vm_network&#x27;: {&#x27;00:50:56:87:a5:9a&#x27;: {&#x27;ipv4&#x27;: [&#x27;10.76.33.228&#x27;], &#x27;ipv6&#x27;: []}}, &#x27;attributes&#x27;: {&#x27;job&#x27;: &#x27;backup-prepare&#x27;}, &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:43737ec0-b832-4abf-abb1-fd2448ce3b26:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;tag_0001&#x27;}]}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;guest_name&#x27;: &#x27;ubuntu_t&#x27;, &#x27;datacenter&#x27;: &#x27;Datacenter-1&#x27;, &#x27;cluster&#x27;: None, &#x27;esxi_hostname&#x27;: &#x27;10.76.33.226&#x27;, &#x27;folder&#x27;: &#x27;/Datacenter-1/vm&#x27;, &#x27;guest_fullname&#x27;: &#x27;Ubuntu Linux (64-bit)&#x27;, &#x27;ip_address&#x27;: &#x27;&#x27;, &#x27;mac_address&#x27;: [&#x27;00:50:56:87:a5:9a&#x27;], &#x27;power_state&#x27;: &#x27;poweredOff&#x27;, &#x27;uuid&#x27;: &#x27;4207072c-edd8-3bd5-64dc-903fd3a0db04&#x27;, &#x27;vm_network&#x27;: {&#x27;00:50:56:87:a5:9a&#x27;: {&#x27;ipv4&#x27;: [&#x27;10.76.33.228&#x27;], &#x27;ipv6&#x27;: []}}, &#x27;attributes&#x27;: {&#x27;job&#x27;: &#x27;backup-prepare&#x27;}, &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:43737ec0-b832-4abf-abb1-fd2448ce3b26:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;tag_0001&#x27;}], &#x27;moid&#x27;: &#x27;vm-24&#x27;}]</div>
                 </td>
             </tr>
     </table>

@@ -7,7 +7,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm1
     power_info:
@@ -18,7 +18,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     name: test_vm2
     power_info:
@@ -29,7 +29,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
       enabled: no

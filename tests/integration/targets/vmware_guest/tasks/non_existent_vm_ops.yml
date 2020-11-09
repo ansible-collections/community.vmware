@@ -13,7 +13,7 @@
     folder: "{{ f0 }}"
     state: poweredoff
   register: non_existent_vm_ops
-  ignore_errors: yes
+  ignore_errors: true
 - debug: var=non_existent_vm_ops
 - name: assert that changes were not made
   assert:

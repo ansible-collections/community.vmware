@@ -74,7 +74,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
     vsan: ensureObjectAccessibility
-    evacuate: yes
+    evacuate: true
     timeout: 3600
     state: present
   delegate_to: localhost

@@ -10,7 +10,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         state: poweredon
         folder: "{{ f0 }}"
@@ -38,7 +38,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         state: poweredon
         folder: "{{ f0 }}"
@@ -64,7 +64,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         state: poweredon
         folder: "{{ f0 }}"
@@ -90,7 +90,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         state: poweredon
         folder: "{{ f0 }}"
@@ -116,7 +116,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         datacenter: "{{ dc1 }}"
         state: poweredon
         folder: "{{ f0 }}"
@@ -143,7 +143,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: no
+            validate_certs: false
             switch_name: "{{ dvswitch1 }}"
             portgroup_name: "192.168.0.0/24"
             vlan_id: 0
@@ -188,7 +188,7 @@
             hostname: "{{ vcenter_hostname }}"
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
-            validate_certs: no
+            validate_certs: false
             switch_name: "{{ dvswitch1 }}"
             portgroup_name: "192.168.0.0/24"
             vlan_id: 0
@@ -196,7 +196,7 @@
             num_ports: 8
             state: absent
           register: delete_dvportgroup_result
-    
+
         - assert:
             that:
               - delete_dvportgroup_result.changed is sameas true
@@ -208,9 +208,9 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: '{{ item }}'
-        force: yes
+        force: true
         state: absent
       with_items:
         - test_vm1

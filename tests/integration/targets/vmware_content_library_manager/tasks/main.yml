@@ -15,10 +15,10 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         library_name: Sample_Library
         state: absent
-  
+
     - &content_lib_create
       name: Create content library
       vmware_content_library_manager:
@@ -52,7 +52,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         library_name: Sample_Library
         library_description: Update Sample Description
         state: present

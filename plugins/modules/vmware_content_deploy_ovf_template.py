@@ -85,7 +85,6 @@ EXAMPLES = r'''
     datacenter: Sample_DC_1
     name: Sample_VM
     resource_pool: test_rp
-    validate_certs: False
   delegate_to: localhost
 
 - name: Deploy Virtual Machine from OVF template in content library with eagerZeroedThick storage
@@ -99,7 +98,6 @@ EXAMPLES = r'''
     datacenter: Sample_DC_1
     name: Sample_VM
     resource_pool: test_rp
-    validate_certs: False
     storage_provisioning: eagerZeroedThick
   delegate_to: localhost
 '''

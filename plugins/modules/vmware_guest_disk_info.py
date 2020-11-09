@@ -45,7 +45,7 @@ options:
    use_instance_uuid:
      description:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: no
+     default: false
      type: bool
    folder:
      description:
@@ -80,7 +80,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: ha-datacenter
-    validate_certs: no
     uuid: 421e4592-c069-924d-ce20-7e7533fab926
   delegate_to: localhost
   register: disk_info
@@ -91,7 +90,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: ha-datacenter
-    validate_certs: no
     name: VM_225
   delegate_to: localhost
   register: disk_info
@@ -102,7 +100,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: ha-datacenter
-    validate_certs: no
     moid: vm-42
   delegate_to: localhost
   register: disk_info

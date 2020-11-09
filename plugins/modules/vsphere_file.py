@@ -51,10 +51,10 @@ options:
     aliases: [ dest ]
   validate_certs:
     description:
-    - If C(no), SSL certificates will not be validated. This should only be
-      set to C(no) when no other option exists.
+    - If C(false), SSL certificates will not be validated. This should only be
+      set to C(false) when no other option exists.
     type: bool
-    default: yes
+    default: true
   timeout:
     description:
     - The timeout in seconds for the upload to the datastore.
@@ -107,7 +107,7 @@ EXAMPLES = r'''
     path: some/remote/file
     state: touch
   delegate_to: localhost
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: Delete a file on a datastore
   community.vmware.vsphere_file:

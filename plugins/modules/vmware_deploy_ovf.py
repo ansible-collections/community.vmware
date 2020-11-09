@@ -18,7 +18,7 @@ module: vmware_deploy_ovf
 notes: []
 options:
     allow_duplicates:
-        default: "yes"
+        default: "True"
         description:
           - Whether or not to allow duplicate VM names. ESXi allows duplicates, vCenter may not.
         type: bool
@@ -59,7 +59,7 @@ options:
     fail_on_spec_warnings:
         description:
         - Cause the module to treat OVF Import Spec warnings as errors.
-        default: "no"
+        default: false
         type: bool
     folder:
         description:
@@ -148,7 +148,6 @@ EXAMPLES = r'''
     datastore: vsandatastore
     name: NewVM
     networks: "{u'VM Network':u'{{ ProvisioningNetworkLabel }}'}"
-    validate_certs: no
     power_on: no
     ovf: /absolute/path/to/template/mytemplate.ova
   delegate_to: localhost

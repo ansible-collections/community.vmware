@@ -11,10 +11,10 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: '{{ esxi1 }}'
   register: firewall_0004_results
-  check_mode: yes
+  check_mode: true
 
 - assert:
     that:
@@ -34,7 +34,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       cluster_name: "{{ ccr1 }}"
     register: firewall_0001_results
 
@@ -48,7 +48,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       esxi_hostname: '{{ esxi1 }}'
     register: firewall_0002_results
 
@@ -62,10 +62,10 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       cluster_name: "{{ ccr1 }}"
     register: firewall_0003_results
-    check_mode: yes
+    check_mode: true
 
   - assert:
       that:

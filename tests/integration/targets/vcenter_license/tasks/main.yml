@@ -9,7 +9,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: no
+      validate_certs: false
       license: 00000-00000-00000-00000-00000
       state: present
 

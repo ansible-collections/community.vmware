@@ -103,7 +103,6 @@ EXAMPLES = r'''
     datacenter: Sample_DC_1
     name: Sample_VM
     resource_pool: test_rp
-    validate_certs: False
     state: present
   delegate_to: localhost
 
@@ -119,7 +118,6 @@ EXAMPLES = r'''
     datacenter: Sample_DC_1
     name: Sample_VM
     resource_pool: test_rp
-    validate_certs: False
     state: poweredon
   delegate_to: localhost
 '''

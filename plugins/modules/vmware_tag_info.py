@@ -47,7 +47,6 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    validate_certs: no
   delegate_to: localhost
   register: tag_details
 - debug:
@@ -58,7 +57,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
   delegate_to: localhost
   register: tag_results
 - set_fact:

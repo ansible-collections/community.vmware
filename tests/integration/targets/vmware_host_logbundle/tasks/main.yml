@@ -15,7 +15,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
   register: fetch_logbundle_result
@@ -49,7 +49,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
   register: fetch_logbundle_result
@@ -83,7 +83,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
@@ -120,7 +120,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
@@ -157,7 +157,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     performance_data:
@@ -194,7 +194,7 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     performance_data:
@@ -231,13 +231,13 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
       - example
   register: fetch_logbundle_result
-  ignore_errors: yes
+  ignore_errors: true
 
 - assert:
     that:
@@ -248,13 +248,13 @@
     hostname: "{{ esxi1 }}"
     username: "{{ esxi_user }}"
     password: "{{ esxi_password }}"
-    validate_certs: no
+    validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
       - example
   register: fetch_logbundle_result
-  ignore_errors: yes
+  ignore_errors: true
 
 - assert:
     that:

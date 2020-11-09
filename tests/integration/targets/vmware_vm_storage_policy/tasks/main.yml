@@ -11,7 +11,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       category_name: "{{ cat_one }}"
       category_cardinality: 'multiple'
       state: present
@@ -25,7 +25,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_name: "{{ tag_one }}"
       category_id: "{{ cat_one_id }}"
       state: present
@@ -42,7 +42,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       name: "{{ policy_one }}"
       description: "{{ policy_one }}"
       tag_category: "{{ cat_one }}"
@@ -70,7 +70,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       name: "{{ policy_one }}"
       state: "absent"
     register: policy_delete
@@ -95,7 +95,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       tag_name: "{{ item }}"
       state: absent
     register: delete_tag
@@ -107,7 +107,7 @@
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no
+      validate_certs: false
       category_name: "{{ item }}"
       state: absent
     register: delete_categories

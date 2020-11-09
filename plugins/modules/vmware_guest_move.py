@@ -41,7 +41,7 @@ options:
    use_instance_uuid:
         description:
             - Whether to use the VMware instance UUID rather than the BIOS UUID.
-        default: no
+        default: false
         type: bool
    name_match:
         description:
@@ -83,7 +83,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: datacenter
-    validate_certs: no
     name: testvm-1
     dest_folder: "/{{ datacenter }}/vm"
   delegate_to: localhost
@@ -94,7 +93,6 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: datacenter
-    validate_certs: no
     moid: vm-42
     dest_folder: "/{{ datacenter }}/vm"
   delegate_to: localhost
@@ -104,7 +102,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter }}"
     folder: "/{{ datacenter }}/vm"
     name: "{{ vm_name }}"
@@ -116,7 +113,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     datacenter: "{{ datacenter }}"
     uuid: "{{ vm_facts.instance.hw_product_uuid }}"
     dest_folder: "/DataCenter/vm/path/to/new/folder/where/we/want"

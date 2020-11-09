@@ -47,7 +47,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
   register: vcenter_settings_info
 
 - name: "Gather some info from vCenter using the vSphere API output schema"
@@ -55,7 +54,6 @@ EXAMPLES = r'''
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: no
     schema: vsphere
     properties:
       - config.workflow.port

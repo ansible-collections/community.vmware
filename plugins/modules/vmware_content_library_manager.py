@@ -83,7 +83,6 @@ EXAMPLES = r'''
     library_description: 'Library with Datastore Backing'
     library_type: local
     datastore_name: datastore
-    validate_certs: False
     state: present
   delegate_to: localhost
 
@@ -94,7 +93,6 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     library_name: test-content-lib
     library_description: 'Library with Datastore Backing'
-    validate_certs: no
     state: present
   delegate_to: localhost
 
@@ -104,7 +102,6 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     library_name: test-content-lib
-    validate_certs: no
     state: absent
   delegate_to: localhost
 '''
