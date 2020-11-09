@@ -4,7 +4,7 @@
 
 - name: create new linked clone without specifying snapshot_src
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -13,9 +13,9 @@
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
-    linked_clone: True
+    linked_clone: true
   register: linked_clone_d1_c1_f0
-  ignore_errors: True
+  ignore_errors: true
 
 - debug:
     var: linked_clone_d1_c1_f0
@@ -27,7 +27,7 @@
 
 - name: create new linked clone without specifying linked_clone
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -38,7 +38,7 @@
     folder: "{{ f0 }}"
     snapshot_src: "snap_shot1"
   register: linked_clone_d1_c1_f0
-  ignore_errors: True
+  ignore_errors: true
 
 - debug:
     var: linked_clone_d1_c1_f0
@@ -52,7 +52,7 @@
 #
 #- name: create new linked clone with linked_clone and snapshot_src
 #  vmware_guest:
-#    validate_certs: False
+#    validate_certs: false
 #    hostname: "{{ vcenter_hostname }}"
 #    username: "{{ vcenter_username }}"
 #    password: "{{ vcenter_password }}"
@@ -62,10 +62,10 @@
 #    datacenter: "{{ (item|basename).split('_')[0] }}"
 #    folder: "{{ item|dirname }}"
 #    snapshot_src: "snap_shot1"
-#    linked_clone: True
+#    linked_clone: true
 #  with_items: "{{ vmlist['json'] }}"
 #  register: linked_clone_d1_c1_f0
-#  ignore_errors: True
+#  ignore_errors: true
 
 #- debug: var=linked_clone_d1_c1_f0
 
@@ -78,7 +78,7 @@
 #
 #- name: create new linked clone with linked_clone and snapshot_src again
 #  vmware_guest:
-#    validate_certs: False
+#    validate_certs: false
 #    hostname: "{{ vcenter_hostname }}"
 #    username: "{{ vcenter_username }}"
 #    password: "{{ vcenter_password }}"
@@ -88,10 +88,10 @@
 #    datacenter: "{{ (item|basename).split('_')[0] }}"
 #    folder: "{{ item|dirname }}"
 #    snapshot_src: "snap_shot1"
-#    linked_clone: True
+#    linked_clone: true
 #  with_items: "{{ vmlist['json'] }}"
 #  register: linked_clone_d1_c1_f0
-#  ignore_errors: True
+#  ignore_errors: true
 
 #- debug: var=linked_clone_d1_c1_f0
 

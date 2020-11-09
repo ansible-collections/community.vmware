@@ -35,7 +35,7 @@
 
 - name: set state to poweroff the first VM
   vmware_guest_powerstate:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -56,7 +56,7 @@
   block:
   - name: Set a schedule task for first VM
     vmware_guest_powerstate:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

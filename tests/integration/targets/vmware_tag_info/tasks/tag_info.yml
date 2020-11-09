@@ -10,7 +10,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
+        validate_certs: false
       register: tag_info
 
     - <<: *tag_info

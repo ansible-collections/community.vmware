@@ -13,7 +13,7 @@
 
   - name: gather disk controllers facts of the virtual machine
     vmware_guest_controller:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -33,7 +33,7 @@
 
   - name: add new disk controllers to virtual machine
     vmware_guest_controller:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -57,7 +57,7 @@
 
   - name: delete specified disk controllers
     vmware_guest_controller:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

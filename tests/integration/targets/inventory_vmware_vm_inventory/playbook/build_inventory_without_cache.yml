@@ -7,6 +7,6 @@
       vars:
         content: |-
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
-          cache: False
+          strict: false
+          cache: false
           properties: [all]

@@ -26,11 +26,11 @@
         dest: vmware.yaml
         content: |
           plugin: community.vmware.vmware_vm_inventory
-          strict: False
+          strict: false
           hostname: {{ vcenter_hostname }}
           username: {{ vcenter_username }}
           password: "{{ vcenter_password }}"
-          validate_certs: False
-          with_tags: True
+          validate_certs: false
+          with_tags: true
           hostnames:
             - config.name

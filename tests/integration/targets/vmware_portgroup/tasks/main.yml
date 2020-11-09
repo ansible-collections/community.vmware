@@ -99,9 +99,9 @@
             switch: 'Switch\/%'
             portgroup: 'PortGroup\/%'
             security:
-              promiscuous_mode: False
-              mac_changes: False
-              forged_transmits: False
+              promiscuous_mode: false
+              mac_changes: false
+              forged_transmits: false
             state: present
           register: create_portgroup_with_special_characters_result
 
@@ -119,9 +119,9 @@
             switch: 'Switch\/%'
             portgroup: 'PortGroup\/%'
             security:
-              promiscuous_mode: False
-              mac_changes: False
-              forged_transmits: False
+              promiscuous_mode: false
+              mac_changes: false
+              forged_transmits: false
             state: present
           register: create_portgroup_with_special_characters_idempotency_check_result
 

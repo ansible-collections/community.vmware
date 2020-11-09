@@ -32,4 +32,4 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     system_defaults:
-      enabled: no
+      enabled: false

@@ -6,7 +6,7 @@
 - &vapp_new_vm
   name: Create test VM with vAPP settings
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -62,7 +62,7 @@
 - &vapp_edit_vm
   name: Edit one vApp property and removing another
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

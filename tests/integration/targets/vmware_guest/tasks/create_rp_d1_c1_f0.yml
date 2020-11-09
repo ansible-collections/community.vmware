@@ -1,7 +1,7 @@
 # Create one with the defaults
 - name: create new VM with default resource pool
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -29,7 +29,7 @@
 
 - name: delete the new VMs
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -51,7 +51,7 @@
 # now create with just a cluster
 - name: create new VM with default resource pool in cluster
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -80,7 +80,7 @@
 
 - name: delete the new VMs
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -103,7 +103,7 @@
 # now create with a specific resource pool
 - name: create new VM with specific resource pool in cluster
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -133,7 +133,7 @@
 
 - name: delete the new VMs
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -156,7 +156,7 @@
 # now create with a specific host
 - name: create new VM with specific host
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -185,7 +185,7 @@
 
 - name: delete the new VMs
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

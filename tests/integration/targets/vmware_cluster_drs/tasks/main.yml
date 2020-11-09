@@ -8,7 +8,7 @@
 # Setup: Create test cluster
 - name: Create test cluster
   vmware_cluster:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -19,7 +19,7 @@
 # Testcase 0001: Enable DRS
 - name: Enable DRS
   vmware_cluster_drs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -36,13 +36,13 @@
 # Testcase 0002: Disable DRS
 - name: Disable DRS
   vmware_cluster_drs:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_drs
-    enable_drs: no
+    enable_drs: false
   register: cluster_drs_result_0002
 
 - name: Ensure DRS is disabled
@@ -54,7 +54,7 @@
   block:
   - name: Change advanced setting "TryBalanceVmsPerHost" (check-mode)
     vmware_cluster_drs: &change_balance_vms
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -88,7 +88,7 @@
   # Delete test cluster
   - name: Delete test cluster
     vmware_cluster:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

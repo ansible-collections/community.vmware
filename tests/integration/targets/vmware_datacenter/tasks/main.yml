@@ -8,7 +8,7 @@
 - &add_dc
   name: Add datacenter
   vmware_datacenter:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -36,7 +36,7 @@
   block:
   - name: Delete datacenter
     vmware_datacenter:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

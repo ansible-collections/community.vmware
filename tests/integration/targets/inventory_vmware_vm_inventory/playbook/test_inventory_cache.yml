@@ -1,9 +1,9 @@
 ---
 - name: Test inventory cache
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
   tasks:
-    - find: 
+    - find:
         paths: "{{ lookup('env', 'ANSIBLE_CACHE_PLUGIN_CONNECTION') }}"
         patterns: "community.vmware.vmware_vm_inventory*"
       register: result
@@ -20,22 +20,22 @@
     - set_fact:
         cached_groups: "{{groups}}"
         cached_hostvars: "{{hostvars}}"
-    
+
     - meta: refresh_inventory
 
     - name: 'Compare groups'
       fail:
         msg: "{{ item.key }} not found in cached groups. Please debug."
       when: cached_groups[item.key] is not defined
-      loop:  "{{ q('dict', groups) }}" 
+      loop:  "{{ q('dict', groups) }}"
       loop_control:
         label: "{{ item.key }}"
-  
+
     - name: 'Compare hosts'
       fail:
         msg: "{{ item.key }} not found in cached hosts. Please debug."
       when: cached_hostvars[item.key] is not defined
-      loop:  "{{ q('dict', hostvars) }}" 
+      loop:  "{{ q('dict', hostvars) }}"
       loop_control:
         label: "{{ item.key }}"
 

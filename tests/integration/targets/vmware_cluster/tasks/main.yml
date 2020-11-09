@@ -11,7 +11,7 @@
 - &add_cluster
   name: add cluster
   vmware_cluster:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -41,7 +41,7 @@
   - &del_cluster
     name: delete cluster
     vmware_cluster:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

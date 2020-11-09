@@ -14,7 +14,7 @@
 
   - name: Gather facts about DRS rule from given cluster
     vmware_drs_rule_facts:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -31,7 +31,7 @@
 
   - name: Gather facts about DRS rule from given datacenter
     vmware_drs_rule_facts:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

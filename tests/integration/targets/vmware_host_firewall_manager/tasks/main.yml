@@ -17,7 +17,7 @@
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
-            enabled: True
+            enabled: true
       register: all_hosts_result
     - debug: msg="{{ all_hosts_result }}"
     - name: ensure everything is changed for all hosts of {{ ccr1 }}
@@ -29,8 +29,8 @@
     - name: ensure info are gathered for all hosts of {{ ccr1 }}
       assert:
         that:
-            - all_hosts_result.rule_set_state[item]['vvold']['current_state'] == True
-            - all_hosts_result.rule_set_state[item]['vvold']['desired_state'] == True
+            - all_hosts_result.rule_set_state[item]['vvold']['current_state'] == true
+            - all_hosts_result.rule_set_state[item]['vvold']['desired_state'] == true
             - all_hosts_result.rule_set_state[item]['vvold']['previous_state'] == False
       with_items:
         - '{{ esxi1 }}'
@@ -45,7 +45,7 @@
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
-            enabled: False
+            enabled: false
       register: host_result
     - debug: msg="{{ host_result }}"
     - name: ensure vvold is disabled for {{ host1 }}
@@ -59,7 +59,7 @@
         that:
             - host_result.rule_set_state[item]['vvold']['current_state'] == False
             - host_result.rule_set_state[item]['vvold']['desired_state'] == False
-            - host_result.rule_set_state[item]['vvold']['previous_state'] == True
+            - host_result.rule_set_state[item]['vvold']['previous_state'] == true
       with_items:
         - '{{ esxi1 }}'
 
@@ -72,7 +72,7 @@
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: vvold
-            enabled: True
+            enabled: true
       register: all_hosts_result_check_mode
       check_mode: true
     - debug: var=all_hosts_result_check_mode
@@ -85,9 +85,9 @@
     - name: ensure info are gathered for all hosts of {{ ccr1 }}
       assert:
         that:
-            - all_hosts_result_check_mode.rule_set_state[esxi1]['vvold']['current_state'] == True
-            - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['current_state'] == True
-            - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['desired_state'] == True
+            - all_hosts_result_check_mode.rule_set_state[esxi1]['vvold']['current_state'] == true
+            - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['current_state'] == true
+            - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['desired_state'] == true
 
     - name: Disable vvold for {{ host1 }} in check mode
       vmware_host_firewall_manager:
@@ -98,7 +98,7 @@
         esxi_hostname: '{{ esxi1 }}'
         rules:
           - name: vvold
-            enabled: False
+            enabled: false
       register: host_result_check_mode
       check_mode: true
     - debug: msg="{{ host_result_check_mode }}"
@@ -126,9 +126,9 @@
         cluster_name: "{{ ccr1 }}"
         rules:
           - name: CIMHttpServer
-            enabled: True
+            enabled: true
             allowed_hosts:
-              all_ip: False
+              all_ip: false
               ip_address:
                 - "192.168.100.11"
                 - "192.168.100.12"
@@ -145,11 +145,11 @@
     - name: ensure CIMHttpServer is configured for all hosts in {{ ccr1 }}
       assert:
         that:
-          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['current_state'] == True
-          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['desired_state'] == True
-          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['previous_state'] == True
+          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['current_state'] == true
+          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['desired_state'] == true
+          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['previous_state'] == true
           - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['current_allowed_all'] == False
-          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['previous_allowed_all'] == True
+          - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['previous_allowed_all'] == true
           - all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['desired_allowed_all'] == False
           - "'192.168.100.11' in all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['current_allowed_ip']"
           - "'192.168.100.12' in all_hosts_ip_specific.rule_set_state[item]['CIMHttpServer']['allowed_hosts']['current_allowed_ip']"
@@ -172,9 +172,9 @@
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC
-            enabled: True
+            enabled: true
             allowed_hosts:
-              all_ip: False
+              all_ip: false
               ip_address:
                 - "192.168.100.11"
       register: single_host_ip_specific
@@ -189,10 +189,10 @@
           - nfc_state.desired_state == true
           - nfc_state.previous_state == true
           - nfc_state.allowed_hosts.current_allowed_all == False
-          - nfc_state.allowed_hosts.previous_allowed_all == True
+          - nfc_state.allowed_hosts.previous_allowed_all == true
           - nfc_state.allowed_hosts.desired_allowed_all == False
           - nfc_state.allowed_hosts.current_allowed_ip == ["192.168.100.11"]
-          - nfc_state.allowed_hosts.previous_allowed_all == True
+          - nfc_state.allowed_hosts.previous_allowed_all == true
           - nfc_state.allowed_hosts.desired_allowed_ip == ["192.168.100.11"]
           - nfc_state.allowed_hosts.current_allowed_networks == []
           - nfc_state.allowed_hosts.previous_allowed_networks == []
@@ -207,9 +207,9 @@
         esxi_hostname: "{{ esxi1 }}"
         rules:
           - name: NFC
-            enabled: True
+            enabled: true
             allowed_hosts:
-              - all_ip: False
+              - all_ip: false
                 ip_address:
                   - "1.2.3.4"
       register: using_list

@@ -6,7 +6,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: "{{ dns['results'][0]['hosts_dns_info'][esxi1]['host_name'] }}"
       register: vmware_host_dns_result_0001
@@ -24,7 +24,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         host_name: newname
       register: vmware_host_dns_result_0002
@@ -43,7 +43,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: new.domain
       register: vmware_host_dns_result_0003
@@ -62,7 +62,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         dns_servers:
           - 1.2.3.4
@@ -83,7 +83,7 @@
         hostname: '{{ esxi1 }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         search_domains:
           - subdomain.example.local
@@ -105,7 +105,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         search_domains: "different-search-domain"
       register: vmware_host_dns_result_0006
@@ -125,7 +125,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: new.domain
       register: vmware_host_dns_result_0007
@@ -145,7 +145,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         dns_servers:
           - 1.2.3.4
@@ -167,7 +167,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         search_domains:
           - subdomain.example.local
@@ -188,7 +188,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         dns_servers: []
       register: vmware_host_dns_result_0010
@@ -204,7 +204,7 @@
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: "{{ ccr1 }}"
-        validate_certs: False
+        validate_certs: false
         type: 'static'
         domain: ''
       register: vmware_host_dns_result_0011

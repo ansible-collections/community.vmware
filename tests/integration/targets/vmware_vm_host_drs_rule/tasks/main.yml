@@ -16,7 +16,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         # Options
         cluster_name: '{{ ccr1 }}'
         datacenter_name: '{{ dc1 }}'
@@ -31,7 +31,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         # Options
         cluster_name: '{{ ccr1 }}'
         datacenter_name: '{{ dc1 }}'
@@ -43,7 +43,7 @@
 
     - name: Create mandatory DRS Affinity rule for VM/Host
       vmware_vm_host_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -51,9 +51,9 @@
         vm_group_name: DC0_C0_VM_GR1
         host_group_name: DC0_C0_HOST_GR1
         cluster_name: "{{ ccr1 }}"
-        enabled: True
-        affinity_rule: True
-        mandatory: True
+        enabled: true
+        affinity_rule: true
+        mandatory: true
       register: drs_rule_host_0001_results
     - debug: var=drs_rule_host_0001_results
     - assert:
@@ -63,7 +63,7 @@
     # TODO: create host/vm group when vcsim supports this
     - name: Create non-mandatory DRS Anti-Affinity rule for VM/Host
       vmware_vm_host_drs_rule:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -71,9 +71,9 @@
         vm_group_name: DC0_C0_VM_GR1
         host_group_name: DC0_C0_HOST_GR1
         cluster_name: "{{ ccr1 }}"
-        enabled: True
-        affinity_rule: False
-        mandatory: False
+        enabled: true
+        affinity_rule: false
+        mandatory: false
       register: drs_rule_host_0002_results
     - debug: var=drs_rule_host_0002_results
     - assert:

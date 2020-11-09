@@ -1,6 +1,6 @@
 - name: Create Windows 10 VM with VBS enabled
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -13,7 +13,7 @@
     hardware:
       memory_mb: 128
       num_cpus: 1
-      virt_based_security: True
+      virt_based_security: true
       version: 14
       boot_firmware: efi
       scsi: paravirtual
@@ -35,7 +35,7 @@
 
 - name: Create Windows Server 2016 VM without VBS enabled
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -69,7 +69,7 @@
 
 - name: Enable VBS for Windows Server 2016 VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -81,7 +81,7 @@
       type: thin
       datastore: '{{ rw_datastore }}'
     hardware:
-      virt_based_security: True
+      virt_based_security: true
     state: present
   register: vbs_vm
 

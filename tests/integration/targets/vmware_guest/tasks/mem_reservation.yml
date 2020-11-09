@@ -7,7 +7,7 @@
     - &add_mem_reserve
       name: Create new VMs with mem_reservation as 0
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -47,7 +47,7 @@
     - &add_memory_reserve
       name: Create new VM with memory_reservation as 0
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -87,7 +87,7 @@
     - &no_memory_reserve
       name: Create new VMs without memory_reservation or mem_reservation
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

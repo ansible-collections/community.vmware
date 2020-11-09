@@ -72,7 +72,7 @@
         esxi_hostname: '{{ esxi2 }}'
         datacenter_name: "{{ dc1 }}"
         cluster_name: "{{ ccr1 }}"
-        fetch_ssl_thumbprint: False
+        fetch_ssl_thumbprint: false
         state: absent
 
     - name: remove host again

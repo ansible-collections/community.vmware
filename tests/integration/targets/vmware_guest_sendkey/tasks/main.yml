@@ -23,7 +23,7 @@
 
   - name: send keys to virtual machine
     vmware_guest_sendkey:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -41,7 +41,7 @@
 
   - name: send string to virtual machine
     vmware_guest_sendkey:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

@@ -10,7 +10,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
+        validate_certs: false
       register: vm_info
 
     - set_fact: vm_name="{{ vm_info['virtual_machines'][0]['guest_name'] }}"
@@ -22,7 +22,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: False
+        validate_certs: false
       register: tag_info
 
     - <<: *tag_info
@@ -69,8 +69,8 @@
         password: "{{ vcenter_password }}"
         validate_certs: false
         name: "{{ vm_name }}"
-        tags: True
-        tag_details: True
+        tags: true
+        tag_details: true
       register: tag_details
 
     - name: Check if tag information is available

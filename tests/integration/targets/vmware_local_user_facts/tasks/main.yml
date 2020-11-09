@@ -18,7 +18,7 @@
         hostname: "{{ esxi1 }}"
         username: "{{ esxi_user }}"
         password: "{{ esxi_password }}"
-        validate_certs: False
+        validate_certs: false
       register: all_user_facts
 
     - name: ensure user facts are gathered

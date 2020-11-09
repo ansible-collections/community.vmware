@@ -11,7 +11,7 @@
 
     - name: Add distributed vSwitch
       vmware_dvswitch:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

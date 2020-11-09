@@ -17,7 +17,7 @@
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      validate_certs: False
+      validate_certs: false
       datacenter: "{{ dc1 }}"
       folder: "{{ f0 }}"
       name: "{{ virtual_machines[0].name }}"
@@ -31,7 +31,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    validate_certs: False
+    validate_certs: false
     folder: /vm
     name: "{{ virtual_machines[0].name }}"
     state: powered-off

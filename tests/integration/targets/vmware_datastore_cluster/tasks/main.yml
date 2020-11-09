@@ -15,7 +15,7 @@
       validate_certs: false
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
-      enable_sdrs: False
+      enable_sdrs: false
       state: present
     check_mode: true
     register: add_dsc_check
@@ -48,7 +48,7 @@
       validate_certs: false
       datacenter_name: "{{ dc1 }}"
       datastore_cluster_name: DSC1
-      enable_sdrs: True
+      enable_sdrs: true
       state: present
     check_mode: true
     register: enable_sdrs_check

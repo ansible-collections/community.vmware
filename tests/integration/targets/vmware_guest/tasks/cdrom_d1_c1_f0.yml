@@ -1,7 +1,7 @@
 # this is used to test create and configure VM with a single CDROM
 - name: Create VM with CDROM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -33,7 +33,7 @@
 
 - name: Update CDROM to iso for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -56,7 +56,7 @@
 
 - name: Update CDROM to client for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -77,7 +77,7 @@
 
 - name: clone vm
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -90,7 +90,7 @@
 
 - name: Update CDROM to none for the new VM
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -111,7 +111,7 @@
 
 - name: Create VM with multiple disks and a CDROM - GitHub issue 38679
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -153,7 +153,7 @@
   block:
     - name: Again create VM with multiple disks and a CDROM - GitHub issue 38679
       vmware_guest:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

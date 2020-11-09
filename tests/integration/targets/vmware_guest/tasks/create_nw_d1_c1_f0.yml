@@ -4,7 +4,7 @@
 
 - name: create new VMs
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -23,9 +23,9 @@
           device_type: vmxnet3
           ip: 192.168.10.1
           netmask: 255.255.255.0
-          wake_on_lan: True
-          start_connected: True
-          allow_guest_control: True
+          wake_on_lan: true
+          start_connected: true
+          allow_guest_control: true
     state: poweredoff
     folder: F0
   register: clone_d1_c1_f0

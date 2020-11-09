@@ -11,9 +11,9 @@
       setup_datastore: true
       setup_virtualmachines: true
 
-  - name: set VM state to powered on 
+  - name: set VM state to powered on
     vmware_guest:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -24,7 +24,7 @@
 
   - name: take screenshot of virtual machine's console
     vmware_guest_screenshot:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -38,7 +38,7 @@
 
   - name: take screenshot of virtual machine's console and download to local
     vmware_guest_screenshot:
-      validate_certs: False
+      validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"

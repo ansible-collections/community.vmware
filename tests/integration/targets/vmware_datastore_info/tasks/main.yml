@@ -14,7 +14,7 @@
   block:
     - name: get list of info about datastores from the ESXi
       vmware_datastore_info:
-        validate_certs: False
+        validate_certs: false
         hostname: '{{ item }}'
         username: '{{ esxi_user }}'
         password: '{{ esxi_password }}'
@@ -26,7 +26,7 @@
 
 - name: get list of info about datastores
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -38,7 +38,7 @@
   block:
     - name: get list of info about datastores
       vmware_datastore_info:
-        validate_certs: False
+        validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -54,7 +54,7 @@
 # Testcase 0002: Get a full list of datastores in a cluster
 - name: get list of info about datastores - no dc
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -71,7 +71,7 @@
 # Testcase 0003: Find a specific datastore
 - name: get list of info about one datastore
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -89,14 +89,14 @@
 
 - name: get list of extended info about one datastore
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    gather_nfs_mount_info: True
-    gather_vmfs_mount_info: True
+    gather_nfs_mount_info: true
+    gather_vmfs_mount_info: true
   register: datastore_info_0004
 
 - debug:
@@ -109,7 +109,7 @@
 
 - name: get list of info about one datastore in check mode
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -128,7 +128,7 @@
 # Testcase with property specify
 - name: get list of info about datastores with properties specify - no dc
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -147,7 +147,7 @@
 
 - name: get list of info about one datastore with properties specify
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -169,7 +169,7 @@
 
 - name: get list of info about datastores with multiple properties specify
   vmware_datastore_info:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

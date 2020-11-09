@@ -4,7 +4,7 @@
 
 - name: create new VMs with invalid disk size
   vmware_guest:
-    validate_certs: False
+    validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -21,7 +21,7 @@
     state: poweredoff
     folder: "{{ f0 }}"
   register: disk_size_d1_c1_f0
-  ignore_errors: True
+  ignore_errors: true
 
 - debug: var=disk_size_d1_c1_f0
 
