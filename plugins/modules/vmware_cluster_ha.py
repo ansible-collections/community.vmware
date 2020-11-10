@@ -173,6 +173,18 @@ options:
       - A dictionary of advanced HA settings.
       default: {}
       type: dict
+    apd_response:
+      description:
+      - VM storage protection setting for storage failures categorized as All Paths Down (APD).
+      type: str
+      default: 'warning'
+      choices: [ 'disabled', 'warning', 'restartConservative', 'restartAggressive' ]
+    pdl_response:
+      description:
+      - VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).
+      type: str
+      default: 'warning'
+      choices: [ 'disabled', 'warning', 'restartAggressive' ]
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -314,6 +326,10 @@ class VMwareCluster(PyVmomi):
             != self.params.get("ha_vm_max_failures")
             or das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow
             != self.params.get("ha_vm_max_failure_window")
+            or das_config.defaultVmSettings.vmComponentProtectionSettings.vmStorageProtectionForAPD
+            != self.params.get("apd_response")
+            or das_config.defaultVmSettings.vmComponentProtectionSettings.vmStorageProtectionForPDL
+            != self.params.get("pdl_response")
         ):
             return True
 
@@ -373,6 +389,11 @@ class VMwareCluster(PyVmomi):
                     das_vm_config.restartPriority = self.params.get('ha_restart_priority')
                     das_vm_config.isolationResponse = self.host_isolation_response
                     das_vm_config.vmToolsMonitoringSettings = vm_tool_spec
+
+                    das_vm_config.vmComponentProtectionSettings = vim.cluster.VmComponentProtectionSettings()
+                    das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForAPD = self.params.get('apd_response')
+                    das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForPDL = self.params.get('pdl_response')
+
                     cluster_config_spec.dasConfig.defaultVmSettings = das_vm_config
 
                 cluster_config_spec.dasConfig.admissionControlEnabled = self.ha_admission_control
@@ -461,6 +482,12 @@ def main():
         failover_host_admission_control=dict(type='dict', options=dict(
             failover_hosts=dict(type='list', elements='str', required=True),
         )),
+        apd_response=dict(type='str',
+                          choices=['disabled', 'warning', 'restartConservative', 'restartAggressive'],
+                          default='warning'),
+        pdl_response=dict(type='str',
+                          choices=['disabled', 'warning', 'restartAggressive'],
+                          default='warning'),
     ))
 
     module = AnsibleModule(
