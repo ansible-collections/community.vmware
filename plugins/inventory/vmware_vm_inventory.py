@@ -46,6 +46,7 @@ DOCUMENTATION = r'''
         port:
             description: Port number used to connect to vCenter or ESXi Server.
             default: 443
+            type: int
             env:
               - name: VMWARE_PORT
         validate_certs:
