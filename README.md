@@ -177,6 +177,7 @@ Name | Description
 [community.vmware.vmware_host_powermgmt_policy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powermgmt_policy_module.rst)|Manages the Power Management Policy of an ESXI host system
 [community.vmware.vmware_host_powerstate](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powerstate_module.rst)|Manages power states of host systems in vCenter
 [community.vmware.vmware_host_scanhba](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_scanhba_module.rst)|Rescan host HBA's and optionally refresh the storage system
+[community.vmware.vmware_host_scsidisk_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_scsidisk_info_module.rst)|Gather information about SCSI disk attached to the given ESXi
 [community.vmware.vmware_host_service_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_service_facts_module.rst)|Gathers facts about an ESXi host's services
 [community.vmware.vmware_host_service_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_service_info_module.rst)|Gathers info about an ESXi host's services
 [community.vmware.vmware_host_service_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_service_manager_module.rst)|Manage services on a given ESXi host

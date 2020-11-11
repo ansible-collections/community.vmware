@@ -1,0 +1,71 @@
+---
+# Test code for the vmware_host_scsidisk_info module.
+# Copyright: (c) 2020, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Gather SCSI disks info about all hosts in given cluster
+  vmware_host_scsidisk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: "{{ ccr1 }}"
+    validate_certs: false
+  register: all_hosts_disk_result
+
+- name: Ensure SCSI disks info are gathered for all hosts in given cluster
+  assert:
+    that:
+      - all_hosts_disk_result.hosts_scsidisk_info
+      - not all_hosts_disk_result.changed
+
+- name: Gather SCSI disks info about host system
+  vmware_host_scsidisk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: all_hosts_disk_result
+
+- name: Ensure SCSI disks info are gathered about host system
+  assert:
+    that:
+      - all_hosts_disk_result.hosts_scsidisk_info
+      - not all_hosts_disk_result.changed
+
+- name: Gather SCSI disks info about all hosts in given cluster in check mode
+  vmware_host_scsidisk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: "{{ ccr1 }}"
+    validate_certs: false
+  register: all_hosts_disk_result_check_mode
+  check_mode: true
+
+- name: Ensure SCSI disks info are gathered for all hosts in given cluster
+  assert:
+    that:
+      - all_hosts_disk_result_check_mode.hosts_scsidisk_info
+      - not all_hosts_disk_result_check_mode.changed
+
+- name: Ensure SCSI disks info about host system in check mode
+  vmware_host_scsidisk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: all_hosts_disk_result_check_mode
+  check_mode: true
+
+- name: Ensure SCSI disks info are gathered about host system
+  assert:
+    that:
+      - all_hosts_disk_result_check_mode.hosts_scsidisk_info
+      - not all_hosts_disk_result_check_mode.changed
