@@ -1,2 +1,2 @@
 bugfixes:
-- vmware_vm_inventory - ensure self.port is integer (https://github.com/ansible-collections/community.vmware/pull/489).
+- vmware_vm_inventory - ensure self.port is integer (https://github.com/ansible-collections/community.vmware/issues/488).
