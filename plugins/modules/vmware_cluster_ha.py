@@ -186,6 +186,7 @@ options:
       type: str
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartAggressive' ]
+      version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
