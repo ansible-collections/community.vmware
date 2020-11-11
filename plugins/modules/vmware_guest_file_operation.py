@@ -349,6 +349,8 @@ class VmwareGuestFileManager(PyVmomi):
             url = fileTransferInfo.url
             url = url.replace("*", hostname)
             resp, info = urls.fetch_url(self.module, url, method="GET")
+            if info.get('status') != 200 or not resp:
+                self.module.fail_json(msg="Failed to fetch file : %s" % info.get('msg', ''), body=info.get('body', ''))
             try:
                 with open(dest, "wb") as local_file:
                     local_file.write(resp.read())
