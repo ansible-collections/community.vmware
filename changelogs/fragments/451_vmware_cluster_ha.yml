@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_cluster_ha - added APD and PDL configuration (https://github.com/ansible-collections/community.vmware/issues/451).
