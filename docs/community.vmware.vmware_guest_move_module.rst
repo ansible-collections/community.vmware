@@ -311,7 +311,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Move Virtual Machine
       community.vmware.vmware_guest_move:

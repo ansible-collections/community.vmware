@@ -1,2 +1,0 @@
-bugfixes:
-  - "Fixed the find_obj method in the ``module_utils/vmware.py`` to handle an object name using special characters that URL-decoded(https://github.com/ansible-collections/community.vmware/pull/460)."

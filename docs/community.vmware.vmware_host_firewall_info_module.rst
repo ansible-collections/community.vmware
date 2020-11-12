@@ -213,7 +213,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather firewall info about all ESXi Host in given Cluster
       community.vmware.vmware_host_firewall_info:

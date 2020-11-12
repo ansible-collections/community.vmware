@@ -284,7 +284,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a VM folder on given datacenter
       community.vmware.vcenter_folder:

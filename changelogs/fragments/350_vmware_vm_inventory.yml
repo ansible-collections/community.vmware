@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_vm_inventory - support for categories and tag, category relation (https://github.com/ansible-collections/community.vmware/issues/350).

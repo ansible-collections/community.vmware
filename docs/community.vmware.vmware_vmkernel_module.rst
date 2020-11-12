@@ -561,7 +561,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     -  name: Add Management vmkernel port using static network type
        community.vmware.vmware_vmkernel:

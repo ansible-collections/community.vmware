@@ -430,7 +430,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add resource pool to vCenter
       community.vmware.vmware_resource_pool:

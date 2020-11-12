@@ -247,7 +247,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add local user to ESXi
       community.vmware.vmware_local_user_manager:

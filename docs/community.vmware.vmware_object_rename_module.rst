@@ -230,7 +230,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Rename a virtual machine
       community.vmware.vmware_object_rename:

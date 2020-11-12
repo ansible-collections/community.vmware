@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_object_role_permission - add missing required fields of hostname, username, and password to module examples (https://github.com/ansible-collections/community.vmware/issues/426).

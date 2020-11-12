@@ -547,7 +547,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create directory inside a vm
       community.vmware.vmware_guest_file_operation:

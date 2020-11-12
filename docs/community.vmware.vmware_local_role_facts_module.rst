@@ -190,7 +190,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather facts about local role from an ESXi
       community.vmware.vmware_local_role_facts:
