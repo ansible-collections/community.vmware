@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_resource_pool - fixed that always updates occur bug on vCenter Server even when not changing resource pool config (https://github.com/ansible-collections/community.vmware/pull/482).

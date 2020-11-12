@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest_info - added a new parameter to gather detailed information about tag from the given virtual machine.

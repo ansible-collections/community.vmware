@@ -1,4 +1,0 @@
-bugfixes:
-- vmware_tag_manager - added new parameter 'moid' to identify VMware object to tag (https://github.com/ansible-collections/community.vmware/issues/430).
-- vmware_folder_info - added the flat_folder_info in the return value.
-- vmware_vm_info - added the moid information in the return value.

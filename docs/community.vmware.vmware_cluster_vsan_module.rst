@@ -362,7 +362,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable vSAN
       community.vmware.vmware_cluster_vsan:

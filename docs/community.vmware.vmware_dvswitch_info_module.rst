@@ -262,7 +262,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather all registered dvswitch
       community.vmware.vmware_dvswitch_info:

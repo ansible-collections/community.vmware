@@ -481,7 +481,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Configure Uplink portgroup
       community.vmware.vmware_dvswitch_uplink_pg:

@@ -257,7 +257,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Copy file to datastore using delegate_to
       community.vmware.vsphere_copy:

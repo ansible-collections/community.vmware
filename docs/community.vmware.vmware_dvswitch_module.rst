@@ -468,12 +468,14 @@ Parameters
                                     <li>6.0.0</li>
                                     <li>6.5.0</li>
                                     <li>6.6.0</li>
+                                    <li>7.0.0</li>
                         </ul>
                 </td>
                 <td>
                         <div>The version of the Distributed Switch to create.</div>
                         <div>Can be 6.0.0, 5.5.0, 5.1.0, 5.0.0 with a vCenter running vSphere 6.0 and 6.5.</div>
                         <div>Can be 6.6.0, 6.5.0, 6.0.0 with a vCenter running vSphere 6.7.</div>
+                        <div>Can be 7.0.0, 6.6.0, 6.5.0 with a vCenter running vSphere 7.0.</div>
                         <div>The version must match the version of the ESXi hosts you want to connect.</div>
                         <div>The version of the vCenter server is used if not specified.</div>
                         <div>Required only if <code>state</code> is set to <code>present</code>.</div>
@@ -564,14 +566,14 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.5 and 6.7
+   - Tested on vSphere 6.5, 6.7 and 7.0
 
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create dvSwitch
       community.vmware.vmware_dvswitch:

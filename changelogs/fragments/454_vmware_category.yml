@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_category - add additional associable object types (https://github.com/ansible-collections/community.vmware/issues/454).

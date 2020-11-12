@@ -251,7 +251,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Configure IPv6 to be off via tcpip4 kernel module
       community.vmware.vmware_host_kernel_manager:

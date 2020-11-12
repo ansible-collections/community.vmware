@@ -280,30 +280,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>leading_separator</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Use in conjunction with keyed_groups.</div>
-                        <div>By default, a keyed group that does not have a prefix or a separator provided will have a name that starts with an underscore.</div>
-                        <div>This is because the default prefix is &quot;&quot; and the default separator is &quot;_&quot;.</div>
-                        <div>Set this option to False to omit the leading underscore (or other separator) if no prefix is given.</div>
-                        <div>If the group name is derived from a mapping the separator is still used to concatenate the items.</div>
-                        <div>To not use a separator in the group name at all, set the separator for the keyed group to an empty string instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -326,7 +302,7 @@ Parameters
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
+                        <span style="color: purple">integer</span>
                     </div>
                 </td>
                 <td>
@@ -408,32 +384,6 @@ Parameters
                 <td>
                         <div>If <code>yes</code> make invalid entries a fatal error, otherwise skip and continue.</div>
                         <div>Since it is possible to use facts in the expressions they might not always be available and we ignore those errors by default.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>use_extra_vars</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[inventory_plugins]<br>use_extra_vars = no</p>
-                            </div>
-                                <div>env:ANSIBLE_INVENTORY_USE_EXTRA_VARS</div>
-                    </td>
-                <td>
-                        <div>Merge extra vars into the available variables for composition (highest precedence).</div>
                 </td>
             </tr>
             <tr>
@@ -577,7 +527,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Sample configuration file for VMware Guest dynamic inventory
         plugin: community.vmware.vmware_vm_inventory
@@ -715,6 +665,29 @@ Examples
             - folder:
               - dev
               - prod
+
+    # Use Category and it's relation with Tag
+        plugin: community.vmware.vmware_vm_inventory
+        strict: False
+        hostname: 10.65.201.128
+        username: administrator@vsphere.local
+        password: Esxi@123$%
+        validate_certs: False
+        hostnames:
+        - 'config.name'
+        properties:
+        - 'config.name'
+        - 'config.guestId'
+        - 'guest.ipAddress'
+        - 'summary.runtime.powerState'
+        with_tags: True
+        keyed_groups:
+        - key: tag_category.OS
+          prefix: "vmware_tag_os_category_"
+          separator: ""
+        with_nested_properties: True
+        filters:
+        - "tag_category.OS is defined and 'Linux' in tag_category.OS"
 
 
 

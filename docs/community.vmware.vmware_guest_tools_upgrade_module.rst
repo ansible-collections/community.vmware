@@ -313,7 +313,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get VM UUID
       vmware_guest_facts:

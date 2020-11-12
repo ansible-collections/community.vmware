@@ -301,7 +301,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather disk facts from virtual machine using UUID
       community.vmware.vmware_guest_disk_facts:

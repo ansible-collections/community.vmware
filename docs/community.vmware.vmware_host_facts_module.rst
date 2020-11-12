@@ -262,7 +262,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather vmware host facts
       community.vmware.vmware_host_facts:
