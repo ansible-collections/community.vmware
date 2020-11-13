@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_deploy_ovf - fixed the issue that the name variable referenced error occurs when the check mode (https://github.com/ansible-collections/community.vmware/pull/499).
