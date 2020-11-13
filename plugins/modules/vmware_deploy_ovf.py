@@ -436,6 +436,7 @@ class VMwareDeployOvf(PyVmomi):
         for warning in getattr(self.import_spec, 'warning', []):
             self.module.warn('Problem validating OVF import spec: %s' % to_native(warning.msg))
 
+        name = self.params.get('name')
         if not self.params['allow_duplicates']:
             name = self.import_spec.importSpec.configSpec.name
             match = find_vm_by_name(self.content, name, folder=folder)
