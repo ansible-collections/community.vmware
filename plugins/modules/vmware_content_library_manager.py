@@ -127,7 +127,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.content_client import LibraryModel
-    from com.vmware.content.library_client import StorageBacking
+    from com.vmware.content.library_client import StorageBacking, SubscriptionInfo
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -143,7 +143,10 @@ class VmwareContentLibCreate(VmwareRestClient):
         self.library_description = self.params.get('library_description')
         self.library_type = self.params.get('library_type')
         self.library_types = dict()
+        self.subscription_url = self.params.get('subscription_url')
+        self.ssl_thumbprint = self.params.get('ssl_thumbprint')
         self.datastore_name = self.params.get('datastore_name')
+        self.update_on_demand = self.params.get('update_on_demand')
         self.get_all_libraries()
         self.pyv = PyVmomi(module=module)
 
@@ -169,6 +172,17 @@ class VmwareContentLibCreate(VmwareRestClient):
         if content_libs:
             for content_lib in content_libs:
                 lib_details = self.content_service.content.LocalLibrary.get(content_lib)
+                self.local_libraries[lib_details.name] = dict(
+                    lib_name=lib_details.name,
+                    lib_description=lib_details.description,
+                    lib_id=lib_details.id,
+                    lib_type=lib_details.type
+                )
+
+        content_libs = self.content_service.content.SubscribedLibrary.list()
+        if content_libs:
+            for content_lib in content_libs:
+                lib_details = self.content_service.content.SubscribedLibrary.get(content_lib)
                 self.local_libraries[lib_details.name] = dict(
                     lib_name=lib_details.name,
                     lib_description=lib_details.description,
@@ -202,12 +216,27 @@ class VmwareContentLibCreate(VmwareRestClient):
         create_spec.description = self.library_description
         self.library_types = {'local': create_spec.LibraryType.LOCAL,
                               'subscribed': create_spec.LibraryType.SUBSCRIBED}
-        create_spec.type = self.library_types[self.library_type]
+        create_spec.type = self.library_types[self.library_type]        
         create_spec.storage_backings = storage_backings
 
-        # Create a local content library backed the VC datastore
-        library_id = self.content_service.content.LocalLibrary.create(create_spec=create_spec,
-                                                                      client_token=str(uuid.uuid4()))
+        # Build subscribed specification
+        if self.library_type == "subscribed":
+            if "https:" in self.subscription_url and not self.ssl_thumbprint:
+                self.module.fail_json(msg="When https us used, a SSL thumbprint must be provided.")
+            subscription_info = SubscriptionInfo()
+            subscription_info.on_demand = self.update_on_demand
+            subscription_info.automatic_sync_enabled = not self.update_on_demand
+            subscription_info.subscription_url = self.subscription_url
+            subscription_info.authentication_method  = SubscriptionInfo.AuthenticationMethod.NONE
+            if "https:" in self.subscription_url:
+                subscription_info.ssl_thumbprint = self.ssl_thumbprint
+            create_spec.subscription_info = subscription_info
+            library_id = self.content_service.content.SubscribedLibrary.create(create_spec=create_spec,
+                                                                        client_token=str(uuid.uuid4()))
+        else: 
+            # Create a local content library backed the VC datastore
+            library_id = self.content_service.content.LocalLibrary.create(create_spec=create_spec,
+                                                                        client_token=str(uuid.uuid4()))
         if library_id:
             self.module.exit_json(
                 changed=True,
@@ -271,6 +300,9 @@ def main():
         library_type=dict(type='str', required=False, choices=['local', 'subscribed'], default='local'),
         datastore_name=dict(type='str', required=False, aliases=['datastore']),
         state=dict(type='str', choices=['present', 'absent'], default='present', required=False),
+        subscription_url=dict(type='str', default='', required=False),
+        ssl_thumbprint=dict(type='str', default='', required=False),
+        update_on_demand=dict(type='bool', default=False, required=False),
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
