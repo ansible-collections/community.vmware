@@ -426,7 +426,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add ESXi Host to vCenter
       community.vmware.vmware_host:

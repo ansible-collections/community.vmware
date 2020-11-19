@@ -309,7 +309,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable DRS
       community.vmware.vmware_cluster_drs:

@@ -196,7 +196,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Configure VMware VSAN Cluster
       hosts: deploy_node

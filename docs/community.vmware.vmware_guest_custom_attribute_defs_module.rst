@@ -220,7 +220,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add VMware Attribute Definition
       community.vmware.vmware_guest_custom_attribute_defs:

@@ -215,7 +215,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather NTP info about all ESXi Host in the given Cluster
       community.vmware.vmware_host_ntp_info:

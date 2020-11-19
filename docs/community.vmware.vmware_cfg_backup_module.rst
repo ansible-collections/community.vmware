@@ -253,7 +253,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Save the ESXi configuration locally by authenticating directly against the ESXi host
       community.vmware.vmware_cfg_backup:

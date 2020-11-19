@@ -282,7 +282,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather facts about vmnics of all ESXi Host in the given Cluster
       community.vmware.vmware_host_vmnic_facts:

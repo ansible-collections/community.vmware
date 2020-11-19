@@ -464,7 +464,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create a snapshot
         community.vmware.vmware_guest_snapshot:

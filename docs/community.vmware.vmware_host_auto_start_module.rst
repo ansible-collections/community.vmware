@@ -507,7 +507,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     ---
     - name: Update for system defaults config.

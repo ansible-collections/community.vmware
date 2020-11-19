@@ -353,7 +353,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add virtual machine custom attributes
       community.vmware.vmware_guest_custom_attributes:

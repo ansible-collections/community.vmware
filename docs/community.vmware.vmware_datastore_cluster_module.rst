@@ -353,7 +353,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create datastore cluster and enable SDRS
       community.vmware.vmware_datastore_cluster:

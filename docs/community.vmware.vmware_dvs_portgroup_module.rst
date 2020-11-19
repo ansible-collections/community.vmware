@@ -744,7 +744,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create vlan portgroup
       community.vmware.vmware_dvs_portgroup:

@@ -181,7 +181,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Provide information about vCenter
       community.vmware.vmware_about_info:

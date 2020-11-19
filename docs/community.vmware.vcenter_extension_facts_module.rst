@@ -188,7 +188,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather facts about vCenter Extensions
       community.vmware.vcenter_extension_facts:

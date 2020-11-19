@@ -353,7 +353,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Register VM to inventory
       community.vmware.vmware_guest_register_operation:

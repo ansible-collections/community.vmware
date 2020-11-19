@@ -279,7 +279,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Join an AD domain
       community.vmware.vmware_host_active_directory:

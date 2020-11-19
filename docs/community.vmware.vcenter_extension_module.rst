@@ -373,7 +373,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Register vCenter Extension
           community.vmware.vcenter_extension:

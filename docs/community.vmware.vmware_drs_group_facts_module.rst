@@ -221,7 +221,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     ---
     - name: "Gather DRS facts about given Cluster"

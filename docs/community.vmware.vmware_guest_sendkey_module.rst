@@ -358,7 +358,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Send list of keys to virtual machine
       community.vmware.vmware_guest_sendkey:

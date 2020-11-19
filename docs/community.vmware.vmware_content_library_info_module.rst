@@ -180,7 +180,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Get List of Content Libraries
       community.vmware.vmware_content_library_info:

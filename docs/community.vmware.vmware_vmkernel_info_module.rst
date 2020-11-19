@@ -215,7 +215,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather VMKernel info about all ESXi Host in given Cluster
       community.vmware.vmware_vmkernel_info:
