@@ -510,6 +510,15 @@ options:
             - Domain name for this network interface (Windows).
             - Optional per entry.
             - Used for OS customization.
+        connected:
+            type: bool
+            description:
+            - Indicates whether the NIC is currently connected.
+            version_added: '1.5.0'
+        start_connected:
+            type: bool
+            description:
+            - Specifies whether or not to connect the device when the virtual machine starts.
   customization:
     description:
     - Parameters for OS customization when cloning from the template or the virtual machine, or apply to the existing virtual machine directly.
@@ -1224,7 +1233,7 @@ class PyVmomiDeviceHelper(object):
         nic.device.connectable = vim.vm.device.VirtualDevice.ConnectInfo()
         nic.device.connectable.startConnected = bool(device_infos.get('start_connected', True))
         nic.device.connectable.allowGuestControl = bool(device_infos.get('allow_guest_control', True))
-        nic.device.connectable.connected = True
+        nic.device.connectable.connected = bool(device_infos.get('connected', True))
         if 'mac' in device_infos and is_mac(device_infos['mac']):
             nic.device.addressType = 'manual'
             nic.device.macAddress = device_infos['mac']
@@ -1950,34 +1959,21 @@ class PyVmomiHelper(PyVmomi):
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
 
                 nic.device = current_net_devices[key]
-                if "wake_on_lan" in network_devices[
-                    key
-                ] and nic.device.wakeOnLanEnabled != network_devices[key].get(
-                    "wake_on_lan"
-                ):
-                    nic.device.wakeOnLanEnabled = network_devices[key].get(
-                        "wake_on_lan"
-                    )
+                if "wake_on_lan" in network_devices[key] and \
+                   nic.device.wakeOnLanEnabled != network_devices[key].get("wake_on_lan"):
+                    nic.device.wakeOnLanEnabled = network_devices[key].get("wake_on_lan")
                     nic_change_detected = True
-                if "start_connected" in network_devices[
-                    key
-                ] and nic.device.connectable.startConnected != network_devices[key].get(
-                    "start_connected"
-                ):
-                    nic.device.connectable.startConnected = network_devices[key].get(
-                        "start_connected"
-                    )
+                if "start_connected" in network_devices[key] and \
+                   nic.device.connectable.startConnected != network_devices[key].get("start_connected"):
+                    nic.device.connectable.startConnected = network_devices[key].get("start_connected")
                     nic_change_detected = True
-                if "allow_guest_control" in network_devices[
-                    key
-                ] and nic.device.connectable.allowGuestControl != network_devices[
-                    key
-                ].get(
-                    "allow_guest_control"
-                ):
-                    nic.device.connectable.allowGuestControl = network_devices[key].get(
-                        "allow_guest_control"
-                    )
+                if "connected" in network_devices[key] and \
+                   nic.device.connectable.connected != network_devices[key].get("connected"):
+                    nic.device.connectable.connected = network_devices[key].get("connected")
+                    nic_change_detected = True
+                if "allow_guest_control" in network_devices[key] and \
+                   nic.device.connectable.allowGuestControl != network_devices[key].get("allow_guest_control"):
+                    nic.device.connectable.allowGuestControl = network_devices[key].get("allow_guest_control")
                     nic_change_detected = True
 
                 if nic.device.deviceInfo.summary != network_name:
@@ -2003,9 +1999,9 @@ class PyVmomiHelper(PyVmomi):
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 nic_change_detected = True
 
-            if hasattr(self.cache.get_network(network_name), 'portKeys'):
+            net_obj = self.cache.get_network(network_name)
+            if hasattr(net_obj, 'portKeys'):
                 # VDS switch
-
                 pg_obj = None
                 if 'dvswitch_name' in network_devices[key]:
                     dvs_name = network_devices[key]['dvswitch_name']
@@ -2052,10 +2048,10 @@ class PyVmomiHelper(PyVmomi):
                 nic.device.backing = vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo()
                 nic.device.backing.port = dvs_port_connection
 
-            elif isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
+            elif isinstance(net_obj, vim.OpaqueNetwork):
                 # NSX-T Logical Switch
                 nic.device.backing = vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo()
-                network_id = self.cache.get_network(network_name).summary.opaqueNetworkId
+                network_id = net_obj.summary.opaqueNetworkId
                 nic.device.backing.opaqueNetworkType = 'nsx.LogicalSwitch'
                 nic.device.backing.opaqueNetworkId = network_id
                 nic.device.deviceInfo.summary = 'nsx.LogicalSwitch: %s' % network_id
@@ -2066,7 +2062,6 @@ class PyVmomiHelper(PyVmomi):
                     nic.device.backing = vim.vm.device.VirtualEthernetCard.NetworkBackingInfo()
                     nic_change_detected = True
 
-                net_obj = self.cache.get_network(network_name)
                 if nic.device.backing.network != net_obj:
                     nic.device.backing.network = net_obj
                     nic_change_detected = True
@@ -2079,7 +2074,7 @@ class PyVmomiHelper(PyVmomi):
                 # Change to fix the issue found while configuring opaque network
                 # VMs cloned from a template with opaque network will get disconnected
                 # Replacing deprecated config parameter with relocation Spec
-                if isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
+                if isinstance(net_obj, vim.OpaqueNetwork):
                     self.relospec.deviceChange.append(nic)
                 else:
                     self.configspec.deviceChange.append(nic)
