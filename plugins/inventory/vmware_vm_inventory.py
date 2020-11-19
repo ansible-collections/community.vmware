@@ -788,7 +788,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             for vm_obj_property in vm_obj.propSet:
                 properties[vm_obj_property.name] = vm_obj_property.val
 
-            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) == 'orphaned':
+            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) in ('orphaned', 'inaccessible'):
                 continue
 
             # Custom values
