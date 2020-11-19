@@ -351,7 +351,7 @@ class PyVmomiHelper(PyVmomi):
         '''
         return network object matching given parameters
         :param vm_obj: vm object
-        :param network_params: dict containing parameters from deprectaed networks list method
+        :param network_params: dict containing parameters from deprecated networks list method
         :return: network object
         :rtype: object
         '''
@@ -380,7 +380,11 @@ class PyVmomiHelper(PyVmomi):
                     if (switch_name and dvs.config.name == switch_name) or not switch_name:
                         if network.config.name == network_name:
                             return network
-                        if network.config.defaultPortConfig.vlan.vlanId == vlan_id:
+                        if hasattr(network.config.defaultPortConfig.vlan, 'vlanId') and \
+                           network.config.defaultPortConfig.vlan.vlanId == vlan_id:
+                            return network
+                        if hasattr(network.config.defaultPortConfig.vlan, 'pvlanId') and \
+                           network.config.defaultPortConfig.vlan.pvlanId == vlan_id:
                             return network
                 elif isinstance(network, vim.Network):
                     if network_name and network_name == network.name:
