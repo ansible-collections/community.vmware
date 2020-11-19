@@ -1382,16 +1382,22 @@ class PyVmomi(object):
         return find_folder_by_name(self.content, folder_name=folder_name)
 
     # Datastore cluster
-    def find_datastore_cluster_by_name(self, datastore_cluster_name):
+    def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None):
         """
         Get datastore cluster managed object by name
         Args:
             datastore_cluster_name: Name of datastore cluster
+            datacenter: Managed object of the datacenter
 
         Returns: Datastore cluster managed object if found else None
 
         """
-        data_store_clusters = get_all_objs(self.content, [vim.StoragePod])
+        if datacenter and hasattr(datacenter, 'datastoreFolder'):
+            folder = datacenter.datastoreFolder
+        else:
+            folder = self.content.rootFolder
+
+        data_store_clusters = get_all_objs(self.content, [vim.StoragePod], folder=folder)
         for dsc in data_store_clusters:
             if dsc.name == datastore_cluster_name:
                 return dsc

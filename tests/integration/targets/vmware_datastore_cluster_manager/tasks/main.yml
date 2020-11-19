@@ -1,0 +1,142 @@
+# Test code for the vmware_datastore_cluster_manager module.
+# Copyright (c) 2017, Tim Rightnour <thegarbledone@gmail.com>
+# Copyright (c) 2018, Ansible Project
+# Copyright (c) 2020, Abhijeet Kasurde
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_datastore: true
+
+  - name: Get list of info about datastores
+    vmware_datastore_info:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ dc1 }}"
+      gather_nfs_mount_info: true
+    register: datastore_info_0001
+
+  - set_fact:
+      datastore_name: "{{ datastore_info_0001['datastores'][0]['name'] }}"
+      datastore_cluster_name: "DSC1"
+
+  - name: Add a datastore cluster to datacenter
+    vmware_datastore_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      enable_sdrs: false
+      state: present
+    register: add_dsc
+
+  - assert:
+      that:
+        - add_dsc.changed
+
+  - name: Add a datastore in the given datastore cluster in check mode
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      datastores:
+      - "{{ datastore_name }}"
+    check_mode: true
+    register: check_mode
+
+  - assert:
+      that:
+        - check_mode.changed
+
+  - name: Add a datastore in the given datastore cluster
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      datastores:
+      - "{{ datastore_name }}"
+    register: add_ds
+
+  - assert:
+      that:
+        - add_ds.changed
+
+  - name: Again add a datastore in the given datastore cluster (idempotency)
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      datastores:
+      - "{{ datastore_name }}"
+    register: add_ds
+
+  - assert:
+      that:
+        - not add_ds.changed
+
+  - name: Remove a datastore from the given datastore cluster
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      datastores:
+      - "{{ datastore_name }}"
+      state: absent
+    register: remove_ds
+
+  - assert:
+      that:
+        - remove_ds.changed
+
+  - name: Again remove a datastore from the given datastore cluster (idempotency)
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      datastores:
+      - "{{ datastore_name }}"
+      state: absent
+    register: remove_ds
+
+  - assert:
+      that:
+        - not remove_ds.changed
+
+  - name: Remove datastore cluster to datacenter
+    vmware_datastore_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ datastore_cluster_name }}"
+      state: absent
+    register: remove_dsc
+
+  - assert:
+      that:
+        - remove_dsc.changed
