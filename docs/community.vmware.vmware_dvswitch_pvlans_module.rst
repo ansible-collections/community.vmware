@@ -242,7 +242,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create PVLANs on a Distributed Switch
       community.vmware.vmware_dvswitch_pvlans:

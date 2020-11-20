@@ -216,7 +216,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create Datacenter
       community.vmware.vmware_datacenter:

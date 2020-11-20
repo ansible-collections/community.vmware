@@ -574,7 +574,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create distributed mirroring session.
       community.vmware.vmware_vspan_session:

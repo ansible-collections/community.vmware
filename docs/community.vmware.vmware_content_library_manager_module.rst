@@ -262,7 +262,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create Content Library
       community.vmware.vmware_content_library_manager:

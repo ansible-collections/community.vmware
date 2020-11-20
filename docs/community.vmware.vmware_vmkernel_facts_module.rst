@@ -222,7 +222,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather VMKernel facts about all ESXi Host in given Cluster
       community.vmware.vmware_vmkernel_facts:

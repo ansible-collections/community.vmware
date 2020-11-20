@@ -886,7 +886,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Configure vCenter general settings
       community.vmware.vmware_vcenter_settings:

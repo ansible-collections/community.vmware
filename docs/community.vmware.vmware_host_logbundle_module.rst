@@ -275,7 +275,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: fetch logbundle file from ESXi
       community.vmware.vmware_host_logbundle:

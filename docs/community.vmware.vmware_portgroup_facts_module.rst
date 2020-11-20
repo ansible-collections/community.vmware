@@ -242,7 +242,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather portgroup facts about all ESXi Host in given Cluster
       community.vmware.vmware_portgroup_facts:

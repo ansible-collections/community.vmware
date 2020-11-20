@@ -262,7 +262,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Set acceptance level to community for all ESXi Host in given Cluster
       community.vmware.vmware_host_acceptance:

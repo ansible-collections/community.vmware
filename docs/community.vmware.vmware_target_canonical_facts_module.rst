@@ -232,7 +232,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Get Canonical name of particular target on particular ESXi host system
       community.vmware.vmware_target_canonical_facts:

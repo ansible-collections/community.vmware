@@ -213,7 +213,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Migrate VCSA to vDS
       community.vmware.vmware_vm_vss_dvs_migrate:

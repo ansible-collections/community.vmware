@@ -237,7 +237,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Configure ESXi hostname and DNS servers
       community.vmware.vmware_dns_config:

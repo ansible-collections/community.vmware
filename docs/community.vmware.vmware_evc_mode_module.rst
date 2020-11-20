@@ -249,7 +249,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable EVC Mode
           community.vmware.vmware_evc_mode:

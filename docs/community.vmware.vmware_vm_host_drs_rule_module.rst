@@ -342,7 +342,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     ---
     - name: "Create mandatory DRS Affinity rule for VM/Host"

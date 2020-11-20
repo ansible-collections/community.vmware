@@ -238,7 +238,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create a tag
       community.vmware.vmware_tag:

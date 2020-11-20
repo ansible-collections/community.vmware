@@ -322,7 +322,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: take a screenshot of the virtual machine console
       community.vmware.vmware_guest_screenshot:

@@ -191,7 +191,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: fetch the manifests for logbundle from ESXi
       community.vmware.vmware_host_logbundle_info:
