@@ -1,0 +1,98 @@
+# Test code for the vmware_drs_group_manager module
+# Copyright: (c) 2018, Karsten Kaj Jakobsen <kj@patientsky.com>
+# Copyright: (c) 2020, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+
+- set_fact:
+    vm_one: "{{ virtual_machines_in_cluster[0]['name'] }}"
+    vm_two: "{{ virtual_machines_in_cluster[1]['name'] }}"
+
+- name: Create DRS VM group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: TEST_VM_01
+    vms: "{{ vm_one }}"
+    state: present
+  register: drs_vm_group_01_results
+
+- debug:
+    var: drs_vm_group_01_results
+
+- assert:
+    that:
+      - "drs_vm_group_01_results.changed"
+
+- name: Add a VM in an existing DRS VM group
+  vmware_drs_group_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: TEST_VM_01
+    vms:
+    - "{{ vm_two }}"
+    state: present
+  register: drs_vm_group_01_results
+
+- debug:
+    var: drs_vm_group_01_results
+
+- assert:
+    that:
+      - drs_vm_group_01_results.changed
+
+- name: Again add a VM in an existing DRS VM group (idempotency)
+  vmware_drs_group_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: TEST_VM_01
+    vms:
+    - "{{ vm_two }}"
+    state: present
+  register: drs_vm_group_01_results
+
+- debug:
+    var: drs_vm_group_01_results
+
+- assert:
+    that:
+      - not drs_vm_group_01_results.changed
+
+- name: delete DRS VM group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: TEST_VM_01
+    vms: "{{ vm_one }}"
+    state: absent
+  register: drs_vm_group_01_results
+
+
+- debug:
+    var: drs_vm_group_01_results
+
+- assert:
+    that:
+      - drs_vm_group_01_results.changed
