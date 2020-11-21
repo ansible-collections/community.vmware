@@ -34,6 +34,7 @@ options:
       - The name of the content library from where the template resides.
       type: str
       required: False
+      version_added: '1.5.0'
     name:
       description:
       - The name of the VM to be deployed.
