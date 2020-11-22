@@ -1214,9 +1214,10 @@ class PyVmomiDeviceHelper(object):
             self.module.fail_json(msg='Invalid device_type "%s"'
                                       ' for network "%s"' % (device_type, name))
 
-    def create_nic(self, device_type, device_label, device_infos):
+    def create_nic(self, device_type, device_label, device_infos, key):
         nic = vim.vm.device.VirtualDeviceSpec()
         nic.device = self.get_device(device_type, device_infos['name'])
+        nic.device.key = key
         nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
         nic.device.deviceInfo = vim.Description()
         nic.device.deviceInfo.label = device_label
@@ -1940,6 +1941,7 @@ class PyVmomiHelper(PyVmomi):
                                       "Removing interfaces is not allowed"
                                       % (len(network_devices), len(current_net_devices)))
 
+        add_key = len(network_devices)
         for key in range(0, len(network_devices)):
             nic_change_detected = False
             network_name = network_devices[key]['name']
@@ -1997,9 +1999,11 @@ class PyVmomiHelper(PyVmomi):
             else:
                 # Default device type is vmxnet3, VMware best practice
                 device_type = network_devices[key].get('device_type', 'vmxnet3')
+                add_key = add_key + 1
                 nic = self.device_helper.create_nic(device_type,
-                                                    'Network Adapter %s' % (key + 1),
-                                                    network_devices[key])
+                                                    'Network Adapter %s' % (add_key),
+                                                    network_devices[key],
+                                                    add_key)
                 nic.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 nic_change_detected = True
 
@@ -2078,8 +2082,9 @@ class PyVmomiHelper(PyVmomi):
             if nic_change_detected:
                 # Change to fix the issue found while configuring opaque network
                 # VMs cloned from a template with opaque network will get disconnected
+                # Only for existing network devices
                 # Replacing deprecated config parameter with relocation Spec
-                if isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
+                if key < len(current_net_devices) and isinstance(self.cache.get_network(network_name), vim.OpaqueNetwork):
                     self.relospec.deviceChange.append(nic)
                 else:
                     self.configspec.deviceChange.append(nic)
