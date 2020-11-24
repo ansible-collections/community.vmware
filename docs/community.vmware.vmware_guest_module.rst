@@ -1429,6 +1429,27 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>connected</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.5.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether the NIC is currently connected.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>device_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -1587,6 +1608,26 @@ Parameters
                         <div>Static netmask required for <code>ip</code>.</div>
                         <div>Optional per entry.</div>
                         <div>Used for OS customization.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>start_connected</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies whether or not to connect the device when the virtual machine starts.</div>
                 </td>
             </tr>
             <tr>
@@ -1899,8 +1940,7 @@ Parameters
                 </td>
                 <td>
                         <div>A list of vApp properties.</div>
-                        <div>For full list of attributes and types refer to:</div>
-                        <div><a href='https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/ fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vApp.PropertyInfo.html'>https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/ fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vApp.PropertyInfo.html</a></div>
+                        <div>For full list of attributes and types refer to: <a href='https://code.vmware.com/apis/704/vsphere/vim.vApp.PropertyInfo.html'>https://code.vmware.com/apis/704/vsphere/vim.vApp.PropertyInfo.html</a></div>
                 </td>
             </tr>
                                 <tr>
