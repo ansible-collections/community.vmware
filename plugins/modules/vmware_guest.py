@@ -973,10 +973,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec,
     set_vm_power_state,
     PyVmomi,
-    find_dvs_by_name,
-    find_dvspg_by_name,
     wait_for_vm_ip,
-    quote_obj_name,
 )
 
 
