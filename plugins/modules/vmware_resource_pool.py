@@ -235,7 +235,7 @@ class VMwareResourcePool(PyVmomi):
                 self.module.fail_json(msg="Unable to find cluster with name %s" % module.params['cluster'])
 
         if module.params['esxi_hostname']:
-            self.compute_resource_obj = find_object_by_name(self.content, module.params['esxi_hostname'], [vim.ComputeResource], folder=self.dc_obj.rootFolder)
+            self.compute_resource_obj = find_object_by_name(self.content, module.params['esxi_hostname'], [vim.ComputeResource], folder=self.dc_obj.hostFolder)
             if self.compute_resource_obj is None:
                 self.module.fail_json(msg="Unable to find host with name %s" % module.params['esxi_hostname'])
 
