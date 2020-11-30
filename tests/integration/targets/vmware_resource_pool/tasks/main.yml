@@ -224,7 +224,7 @@
       password: "{{ vcenter_password }}"
       validate_certs: false
       datacenter: "{{ dc1 }}"
-      esxi_hostname: "{{ esxi_hosts.0 }}"
+      esxi_hostname: "{{ esxi1 }}"
 
   block:
     - name: add resource pool to ESXi with check_mode
