@@ -1,0 +1,2 @@
+breaking_changes:
+- vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
