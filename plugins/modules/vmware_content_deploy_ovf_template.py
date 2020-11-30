@@ -29,6 +29,12 @@ options:
       type: str
       required: True
       aliases: ['ovf', 'template_src']
+    content_library:
+      description:
+      - The name of the content library from where the template resides.
+      type: str
+      required: False
+      version_added: '1.5.0'
     name:
       description:
       - The name of the VM to be deployed.
@@ -132,6 +138,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         """Constructor."""
         super(VmwareContentDeployOvfTemplate, self).__init__(module)
         self.ovf_template_name = self.params.get('ovf_template')
+        self.content_library_name = self.params.get('content_library')
         self.vm_name = self.params.get('name')
         self.datacenter = self.params.get('datacenter')
         self.datastore = self.params.get('datastore')
@@ -151,9 +158,15 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         if not self.datastore_id:
             self.module.fail_json(msg="Failed to find the datastore %s" % self.datastore)
         # Find the LibraryItem (Template) by the given LibraryItem name
-        self.library_item_id = self.get_library_item_by_name(self.ovf_template_name)
-        if not self.library_item_id:
-            self.module.fail_json(msg="Failed to find the library Item %s" % self.ovf_template_name)
+        if self.content_library_name:
+            self.library_item_id = self.get_library_item_from_content_library_name(
+                self.ovf_template_name, self.content_library_name)
+            if not self.library_item_id:
+                self.module.fail_json(msg="Failed to find the library Item %s in content library %s" % (self.ovf_template_name, self.content_library_name))
+        else:
+            self.library_item_id = self.get_library_item_by_name(self.ovf_template_name)
+            if not self.library_item_id:
+                self.module.fail_json(msg="Failed to find the library Item %s" % self.ovf_template_name)
         # Find the folder by the given folder name
         self.folder_id = self.get_folder_by_name(self.datacenter, self.folder)
         if not self.folder_id:
@@ -221,6 +234,7 @@ def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
         ovf_template=dict(type='str', aliases=['template_src', 'ovf'], required=True),
+        content_library=dict(type='str', required=False),
         name=dict(type='str', required=True, aliases=['vm_name']),
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
