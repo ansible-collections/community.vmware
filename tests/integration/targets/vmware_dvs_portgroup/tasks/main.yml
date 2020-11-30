@@ -13,11 +13,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0001
 
@@ -35,11 +35,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-vlan10"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-vlan10"
     vlan_id: 10
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0002
 
@@ -54,12 +54,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-trunk"
-    vlan_id: 1-4094
-    vlan_trunk: true
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-trunk"
+    vlan_trunk_range: [ 1-2000 ]
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0003
 
@@ -74,11 +73,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0004
 
@@ -93,20 +92,19 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-all-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-all-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: true
       mac_changes: true
-    port_policy:
+    advanced:
       block_override: true
-      ipfix_override: true
-      live_port_move: true
+      netflow_override: true
       network_rp_override: true
       port_config_reset_at_disconnect: true
       security_override: true
@@ -128,17 +126,17 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-some-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: true
       mac_changes: false
-    port_policy:
+    advanced:
       vlan_override: true
   register: dvs_pg_result_0006
 
@@ -153,17 +151,17 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-some-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: false
       mac_changes: false
-    port_policy:
+    advanced:
       vlan_override: true
   register: dvs_pg_result_0007
 
@@ -178,17 +176,17 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-some-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: false
       mac_changes: false
-    port_policy:
+    advanced:
       vlan_override: false
   register: dvs_pg_result_0008
 
@@ -203,21 +201,21 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-some-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-some-enabled"
     vlan_id: 0
     num_ports: 16
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: false
       mac_changes: false
-    port_policy:
+    advanced:
       vlan_override: false
   register: dvs_pg_result_0009
 
-- name: ensure vlan_override is changed
+- name: ensure num_ports is changed
   assert:
     that:
         - dvs_pg_result_0009.changed
@@ -228,36 +226,35 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-some-enabled"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-some-enabled"
     vlan_id: 0
     num_ports: 16
-    portgroup_type: ephemeral
+    port_binding: ephemeral
     state: present
-    network_policy:
-      promiscuous: true
+    security:
+      promiscuous_mode: true
       forged_transmits: false
       mac_changes: false
-    port_policy:
+    advanced:
       vlan_override: false
   register: dvs_pg_result_0010
 
-- name: ensure vlan_override is changed
+- name: ensure portgroup_type is changed
   assert:
     that:
         - dvs_pg_result_0010.changed
-
 - name: delete basic portgroup
   vmware_dvs_portgroup:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: absent
   register: dvs_pg_result_0011
 
@@ -272,11 +269,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: absent
   register: dvs_pg_result_0012
 
@@ -291,12 +288,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic_trunk_0001"
-    vlan_id: 1-4096
-    vlan_trunk: true
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic_trunk_0001"
+    vlan_trunk_range: [ 1-4096 ]
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0013
   ignore_errors: true
@@ -305,7 +301,7 @@
   assert:
     that:
         - not dvs_pg_result_0013.changed
-        - "'vlan_id range 1-4096 specified is incorrect. The valid vlan_id range is from 0 to 4094.' == '{{ dvs_pg_result_0013.msg }}'"
+        - "'vlan_trunk_range 1-4096 specified is incorrect. The valid vlan_trunk_range is from 0 to 4094.' == '{{ dvs_pg_result_0013.msg }}'"
 
 - name: Change VLAN on basic VLAN portgroup
   vmware_dvs_portgroup:
@@ -313,11 +309,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-vlan10"
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-vlan10"
     vlan_id: 20
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0014
 
@@ -332,12 +328,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic-trunk"
-    vlan_id: 1000-2000
-    vlan_trunk: true
+    switch: "{{ dvswitch1 }}"
+    portgroup: "basic-trunk"
+    vlan_trunk_range: [ 1000-2000 ]
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0015
 
@@ -352,12 +347,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "complex-trunk"
-    vlan_id: 1-1000, 1005, 1100-1200
-    vlan_trunk: true
+    switch: "{{ dvswitch1 }}"
+    portgroup: "complex-trunk"
+    vlan_trunk_range: [ 1-1000, 1005, 1100-1200 ]
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0016
 
@@ -372,12 +366,11 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "complex-trunk"
-    vlan_id: 1-1000, 1006, 1100-1200
-    vlan_trunk: true
+    switch: "{{ dvswitch1 }}"
+    portgroup: "complex-trunk"
+    vlan_trunk_range: [ 1-1000, 1006, 1100-1200 ]
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0017
 
@@ -391,12 +384,11 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    portgroup_name: private-vlan-portgroup
-    switch_name: "{{ dvswitch1 }}"
-    vlan_id: 10
-    vlan_private: true
+    portgroup: private-vlan-portgroup
+    switch: "{{ dvswitch1 }}"
+    private_vlan_id: 10
     num_ports: 12
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     validate_certs: false
   register: dvs_pg_result_0018
@@ -406,7 +398,7 @@
   assert:
     that:
         - not dvs_pg_result_0018.changed
-        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == '{{ dvs_pg_result_0018.msg }}'"
+        - "'Private VLANs are not configured for this distributed switch.' == '{{ dvs_pg_result_0018.msg }}'"
 
 - when: vcsim is not defined
   block:
@@ -418,7 +410,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         state: present
-        switch_name: dvswitch_0001
+        switch: dvswitch_0001
         mtu: 9000
         uplink_quantity: 2
         discovery_proto: lldp
@@ -455,12 +447,11 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        portgroup_name: private-vlan-portgroup
-        switch_name: dvswitch_0001
-        vlan_id: 1
-        vlan_private: true
+        portgroup: private-vlan-portgroup
+        switch: dvswitch_0001
+        private_vlan_id: 1
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0019
@@ -475,12 +466,11 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        portgroup_name: private-vlan-portgroup
-        switch_name: dvswitch_0001
-        vlan_id: 2
-        vlan_private: true
+        portgroup: private-vlan-portgroup
+        switch: dvswitch_0001
+        private_vlan_id: 2
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0020
@@ -495,11 +485,11 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        portgroup_name: private-vlan-portgroup
-        switch_name: dvswitch_0001
+        portgroup: private-vlan-portgroup
+        switch: dvswitch_0001
         vlan_id: 5
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0021
@@ -517,7 +507,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         state: absent
-        switch_name: dvswitch_0001
+        switch: dvswitch_0001
       register: dvs_result_0001
 
     - name: Integration test a dvPortGroup name with special characters
@@ -546,11 +536,11 @@
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
             validate_certs: false
-            switch_name: 'dvSwitch\/%'
-            portgroup_name: 'dvportgroup\/%'
+            switch: 'dvSwitch\/%'
+            portgroup: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: present
           register: create_dvportgroup_with_special_characters_result
 
@@ -564,11 +554,11 @@
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
             validate_certs: false
-            switch_name: 'dvSwitch\/%'
-            portgroup_name: 'dvportgroup\/%'
+            switch: 'dvSwitch\/%'
+            portgroup: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: present
           register: create_dvportgroup_with_special_characters_idempotency_check_result
 
@@ -582,11 +572,11 @@
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
             validate_certs: false
-            switch_name: 'dvSwitch\/%'
-            portgroup_name: 'dvportgroup\/%'
+            switch: 'dvSwitch\/%'
+            portgroup: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: absent
           register: delete_dvportgroup_with_special_characters_result
 
@@ -600,11 +590,11 @@
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
             validate_certs: false
-            switch_name: 'dvSwitch\/%'
-            portgroup_name: 'dvportgroup\/%'
+            switch: 'dvSwitch\/%'
+            portgroup: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: absent
           register: delete_dvportgroup_with_special_characters_idempotency_check_result
 
