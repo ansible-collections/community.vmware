@@ -253,8 +253,10 @@ class VMwareHostFactManager(PyVmomi):
             if len(self.host) > 1:
                 self.module.fail_json(msg="esxi_hostname matched multiple hosts")
             self.host = self.host[0]
+            self.esxi_time = None
         else:
             self.host = find_obj(self.content, [vim.HostSystem], None)
+            self.esxi_time = self.si.CurrentTime()
 
         if self.host is None:
             self.module.fail_json(msg="Failed to find host system.")
@@ -268,6 +270,7 @@ class VMwareHostFactManager(PyVmomi):
         ansible_facts.update(self.get_system_facts())
         ansible_facts.update(self.get_vsan_facts())
         ansible_facts.update(self.get_cluster_facts())
+        ansible_facts.update({'host_current_time': self.esxi_time})
         if self.params.get('show_tag'):
             vmware_client = VmwareRestClient(self.module)
             tag_info = {
