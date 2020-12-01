@@ -18,8 +18,11 @@
       num_cpus: 1
       scsi: paravirtual
     cdrom:
-      type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      - controller_type: ide
+        controller_number: 0
+        unit_number: 0
+        type: iso
+        iso_path: "[{{ ro_datastore }}] fedora.iso"
     networks:
     - name: VM Network
 

@@ -21,8 +21,6 @@
     - size_mb: 128
       type: thin
       datastore: '{{ rw_datastore }}'
-    cdrom:
-      type: client
   register: vbs_vm
 
 - debug: var=vbs_vm
@@ -55,8 +53,6 @@
     - size_mb: 128
       type: thin
       datastore: '{{ rw_datastore }}'
-    cdrom:
-      type: client
   register: vbs_vm
 
 - debug: var=vbs_vm

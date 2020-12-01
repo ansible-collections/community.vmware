@@ -20,8 +20,11 @@
       type: thin
       datastore: "{{ rw_datastore }}"
     cdrom:
-      type: iso
-      iso_path: "[{{ ro_datastore }}] centos.iso"
+      - type: iso
+        iso_path: "[{{ ro_datastore }}] centos.iso"
+        controller_type: ide
+        controller_number: 0
+        unit_number: 0
   register: cdrom_vm
 
 - debug: var=cdrom_vm
@@ -42,8 +45,11 @@
     datastore: "{{ rw_datastore }}"
     datacenter: "{{ dc1 }}"
     cdrom:
-      type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      - type: iso
+        iso_path: "[{{ ro_datastore }}] fedora.iso"
+        controller_type: ide
+        controller_number: 0
+        unit_number: 0
     state: present
   register: cdrom_vm
 
@@ -64,7 +70,10 @@
     name: test_vm1
     datacenter: "{{ dc1 }}"
     cdrom:
-      type: client
+      - type: client
+        controller_type: ide
+        controller_number: 0
+        unit_number: 0
     state: present
   register: cdrom_vm
 
@@ -98,7 +107,7 @@
     name: test_vm2
     datacenter: "{{ dc1 }}"
     cdrom:
-      type: none
+      - type: none
     state: present
   register: cdrom_vm
 
@@ -136,8 +145,11 @@
       type: thin
       datastore: "{{ rw_datastore }}"
     cdrom:
-      type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      - type: iso
+        iso_path: "[{{ ro_datastore }}] fedora.iso"
+        controller_type: ide
+        controller_number: 0
+        unit_number: 0
   register: cdrom_vm
 
 - debug: var=cdrom_vm
@@ -178,8 +190,11 @@
           type: thin
           datastore: "{{ rw_datastore }}"
         cdrom:
-          type: iso
-          iso_path: "[{{ ro_datastore }}] base.iso"
+          - type: iso
+            iso_path: "[{{ ro_datastore }}] base.iso"
+            controller_type: ide
+            controller_number: 0
+            unit_number: 0
       register: cdrom_vm
     - debug: var=cdrom_vm
     - name: assert the VM was created
