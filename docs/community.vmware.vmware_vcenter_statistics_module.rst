@@ -578,7 +578,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Configure vCenter statistics
       community.vmware.vmware_vcenter_statistics:

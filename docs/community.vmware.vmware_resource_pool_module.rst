@@ -46,13 +46,13 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the cluster to add the host.</div>
+                        <div>Name of the cluster to configure the resource pool.</div>
+                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
                 </td>
             </tr>
             <tr>
@@ -159,7 +159,25 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the datacenter to add the host.</div>
+                        <div>Name of the datacenter.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>esxi_hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.5.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the host to configure the resource pool.</div>
+                        <div>The host must not be member of a cluster.</div>
+                        <div>This parameter is required if <code>cluster</code> is not specified.</div>
                 </td>
             </tr>
             <tr>
@@ -430,7 +448,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add resource pool to vCenter
       community.vmware.vmware_resource_pool:

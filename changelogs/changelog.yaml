@@ -435,3 +435,32 @@ releases:
     - vmware_deploy_ovf.yml
     - vmware_guest_info.yml
     release_date: '2020-11-12'
+  1.5.0:
+    changes:
+      breaking_changes:
+      - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
+      bugfixes:
+      - vmware_cluster_ha - added APD and PDL configuration (https://github.com/ansible-collections/community.vmware/issues/451).
+      - vmware_deploy_ovf - fixed an UnboundLocalError for variable 'name' in check
+        mode (https://github.com/ansible-collections/community.vmware/pull/499).
+      - vmware_object_role_permission - add support for role name presented in vSphere
+        Web UI (https://github.com/ansible-collections/community.vmware/issues/436).
+      minor_changes:
+      - vmware_content_deploy_ovf_template - added new parameter "content_library"
+        to get the OVF template from (https://github.com/ansible-collections/community.vmware/issues/514).
+      - vmware_drs_group - code refactor (https://github.com/ansible-collections/community.vmware/pull/475).
+      - vmware_guest - add documentation for networks parameters connected and start_connected
+        (https://github.com/ansible-collections/community.vmware/issues/507).
+      - vmware_guest_controller - error handling in task exception.
+      - vmware_vm_inventory - skip inaccessible vm configuration.
+    fragments:
+    - 436_vmware_object_role_permission.yml
+    - 451_vmware_cluster_ha.yml
+    - 492-vmware_resource_pool-esxi_host.yml
+    - 499-vmware_deploy_ovf.yml
+    - 507-vmware_guest_fix-documentation.yml
+    - 514_vmware_content_deploy_ovf_template-add_content_library_parameter.yml
+    - 81_vmware_drs_group.yml
+    - inventory_fix.yml
+    - vmware_guest_ctrl.yml
+    release_date: '2020-12-01'

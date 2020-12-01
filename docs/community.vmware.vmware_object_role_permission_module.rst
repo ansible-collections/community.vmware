@@ -234,6 +234,7 @@ Parameters
                 </td>
                 <td>
                         <div>The role to be assigned permission.</div>
+                        <div>User can also specify role name presented in Web UI. Supported added in 1.5.0.</div>
                 </td>
             </tr>
             <tr>
@@ -314,7 +315,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Assign user to VM folder
       community.vmware.vmware_object_role_permission:

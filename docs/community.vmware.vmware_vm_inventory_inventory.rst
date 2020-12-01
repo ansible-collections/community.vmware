@@ -527,7 +527,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Sample configuration file for VMware Guest dynamic inventory
         plugin: community.vmware.vmware_vm_inventory

@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest - add documentation for networks parameters connected and start_connected (https://github.com/ansible-collections/community.vmware/issues/507).

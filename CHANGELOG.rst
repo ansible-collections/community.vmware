@@ -5,6 +5,30 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.5.0
+======
+
+Minor Changes
+-------------
+
+- vmware_content_deploy_ovf_template - added new parameter "content_library" to get the OVF template from (https://github.com/ansible-collections/community.vmware/issues/514).
+- vmware_drs_group - code refactor (https://github.com/ansible-collections/community.vmware/pull/475).
+- vmware_guest - add documentation for networks parameters connected and start_connected (https://github.com/ansible-collections/community.vmware/issues/507).
+- vmware_guest_controller - error handling in task exception.
+- vmware_vm_inventory - skip inaccessible vm configuration.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
+
+Bugfixes
+--------
+
+- vmware_cluster_ha - added APD and PDL configuration (https://github.com/ansible-collections/community.vmware/issues/451).
+- vmware_deploy_ovf - fixed an UnboundLocalError for variable 'name' in check mode (https://github.com/ansible-collections/community.vmware/pull/499).
+- vmware_object_role_permission - add support for role name presented in vSphere Web UI (https://github.com/ansible-collections/community.vmware/issues/436).
+
 v1.4.0
 ======
 

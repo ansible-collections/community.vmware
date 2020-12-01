@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - fixed an UnboundLocalError for variable 'name' in check mode (https://github.com/ansible-collections/community.vmware/pull/499).

@@ -229,7 +229,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Example command from Ansible Playbook
 

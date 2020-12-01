@@ -288,7 +288,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get info about DVPG
       community.vmware.vmware_dvs_portgroup_info:

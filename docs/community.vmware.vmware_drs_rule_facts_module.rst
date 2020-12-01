@@ -222,7 +222,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather DRS facts about given Cluster
       community.vmware.vmware_drs_rule_facts:

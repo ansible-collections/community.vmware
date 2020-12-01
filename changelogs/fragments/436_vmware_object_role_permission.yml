@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_object_role_permission - add support for role name presented in vSphere Web UI (https://github.com/ansible-collections/community.vmware/issues/436).

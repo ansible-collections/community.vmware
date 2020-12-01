@@ -322,7 +322,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - community.vmware.vmware_export_ovf:
         hostname: '{{ vcenter_hostname }}'

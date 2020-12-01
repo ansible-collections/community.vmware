@@ -222,7 +222,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather SSL thumbprint information about all ESXi Hosts in given Cluster
       community.vmware.vmware_host_ssl_facts:

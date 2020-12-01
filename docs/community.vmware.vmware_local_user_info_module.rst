@@ -183,7 +183,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather info about all Users on given ESXi host system
       community.vmware.vmware_local_user_info:
