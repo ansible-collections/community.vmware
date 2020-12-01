@@ -37,6 +37,7 @@ options:
     description:
     - The user to be assigned permission.
     - Required if C(group) is not specified.
+    - If specifying domain user, required separator of domain uses backslash.
     type: str
   group:
     description:
@@ -116,6 +117,18 @@ EXAMPLES = r'''
     role: ReadOnly
     principal: view_user
     object_name: rootFolder
+    state: present
+  delegate_to: localhost
+
+- name: Assign domain user to VM folder
+  community.vmware.vmware_object_role_permission:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    role: Admin
+    principal: "vsphere.local\\domainuser"
+    object_name: services
     state: present
   delegate_to: localhost
 '''
