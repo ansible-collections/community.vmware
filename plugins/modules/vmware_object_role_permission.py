@@ -30,6 +30,7 @@ options:
   role:
     description:
     - The role to be assigned permission.
+    - User can also specify role name presented in Web UI. Supported added in 1.5.0.
     required: True
     type: str
   principal:
@@ -142,6 +143,10 @@ class VMwareObjectRolePermission(PyVmomi):
         self.module = module
         self.params = module.params
         self.is_group = False
+        self.role_list = {}
+        self.role = None
+        self.auth_manager = self.content.authorizationManager
+        self.populate_role_list()
 
         if self.params.get('principal', None) is not None:
             self.applied_to = self.params['principal']
@@ -155,8 +160,51 @@ class VMwareObjectRolePermission(PyVmomi):
         self.perm = self.setup_permission()
         self.state = self.params['state']
 
+    def populate_role_list(self):
+        user_friendly_role_names = {
+            'Admin': ['Administrator'],
+            'ReadOnly': ['Read-Only'],
+            'com.vmware.Content.Admin': [
+                'Content library administrator (sample)',
+                'Content library administrator'
+            ],
+            'NoCryptoAdmin': ['No cryptography administrator'],
+            'NoAccess': ['No access'],
+            'VirtualMachinePowerUser': [
+                'Virtual machine power user (sample)',
+                'Virtual machine power user'
+            ],
+            'VirtualMachineUser': [
+                'Virtual machine user (sample)',
+                'Virtual machine user'
+            ],
+            'ResourcePoolAdministrator': [
+                'Resource pool administrator (sample)',
+                'Resource pool administrator'
+            ],
+            'VMwareConsolidatedBackupUser': [
+                'VMware Consolidated Backup user (sample)',
+                'VMware Consolidated Backup user'
+            ],
+            'DatastoreConsumer': [
+                'Datastore consumer (sample)',
+                'Datastore consumer'
+            ],
+            'NetworkConsumer': [
+                'Network administrator (sample)',
+                'Network administrator'
+            ],
+            'VirtualMachineConsoleUser': ['Virtual Machine console user'],
+            'InventoryService.Tagging.TaggingAdmin': ['Tagging Admin'],
+        }
+        for role in self.auth_manager.roleList:
+            self.role_list[role.name] = role
+            if user_friendly_role_names.get(role.name):
+                for role_name in user_friendly_role_names[role.name]:
+                    self.role_list[role_name] = role
+
     def get_perms(self):
-        self.current_perms = self.content.authorizationManager.RetrieveEntityPermissions(self.current_obj, False)
+        self.current_perms = self.auth_manager.RetrieveEntityPermissions(self.current_obj, False)
 
     def same_permission(self, perm_one, perm_two):
         return perm_one.principal.lower() == perm_two.principal.lower() \
@@ -202,20 +250,18 @@ class VMwareObjectRolePermission(PyVmomi):
 
     def add_permission(self):
         if not self.module.check_mode:
-            self.content.authorizationManager.SetEntityPermissions(self.current_obj, [self.perm])
+            self.auth_manager.SetEntityPermissions(self.current_obj, [self.perm])
         self.module.exit_json(changed=True)
 
     def remove_permission(self):
         if not self.module.check_mode:
-            self.content.authorizationManager.RemoveEntityPermission(self.current_obj, self.applied_to, self.is_group)
+            self.auth_manager.RemoveEntityPermission(self.current_obj, self.applied_to, self.is_group)
         self.module.exit_json(changed=True)
 
     def get_role(self):
-        for role in self.content.authorizationManager.roleList:
-            if role.name == self.params['role']:
-                self.role = role
-                return
-        self.module.fail_json(msg="Specified role (%s) was not found" % self.params['role'])
+        self.role = self.role_list.get(self.params['role'], None)
+        if not self.role:
+            self.module.fail_json(msg="Specified role (%s) was not found" % self.params['role'])
 
     def get_object(self):
         # find_obj doesn't include rootFolder
@@ -275,8 +321,12 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        mutually_exclusive=[['principal', 'group']],
-        required_one_of=[['principal', 'group']],
+        mutually_exclusive=[
+            ['principal', 'group']
+        ],
+        required_one_of=[
+            ['principal', 'group']
+        ],
     )
 
     vmware_object_permission = VMwareObjectRolePermission(module)
