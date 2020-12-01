@@ -209,7 +209,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather information SCSI disk attached to the given ESXi
       community.vmware.vmware_host_scsidisk_info:

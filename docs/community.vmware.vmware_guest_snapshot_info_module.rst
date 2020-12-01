@@ -293,7 +293,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather snapshot information about the virtual machine in the given vCenter
       community.vmware.vmware_guest_snapshot_info:

@@ -234,7 +234,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Set the Power Management Policy of a host system to high-performance
       community.vmware.vmware_host_powermgmt_policy:

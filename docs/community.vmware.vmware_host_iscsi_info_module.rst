@@ -191,7 +191,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather iSCSI configuration information of ESXi host
       community.vmware.vmware.vmware_host_iscsi_info:

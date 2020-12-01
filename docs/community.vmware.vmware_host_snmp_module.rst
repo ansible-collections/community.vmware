@@ -330,7 +330,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable and configure SNMP community
       community.vmware.vmware_host_snmp:

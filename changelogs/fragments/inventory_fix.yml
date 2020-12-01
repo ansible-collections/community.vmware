@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_vm_inventory - skip inaccessible vm configuration.

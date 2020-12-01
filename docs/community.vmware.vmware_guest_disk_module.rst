@@ -491,7 +491,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add disks to virtual machine using UUID
       community.vmware.vmware_guest_disk:

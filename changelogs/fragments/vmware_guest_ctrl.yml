@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest_controller - error handling in task exception.

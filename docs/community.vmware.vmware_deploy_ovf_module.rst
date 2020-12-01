@@ -484,7 +484,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - community.vmware.vmware_deploy_ovf:
         hostname: '{{ vcenter_hostname }}'
