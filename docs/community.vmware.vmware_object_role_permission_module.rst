@@ -165,6 +165,7 @@ Parameters
                 <td>
                         <div>The user to be assigned permission.</div>
                         <div>Required if <code>group</code> is not specified.</div>
+                        <div>If specifying domain user, required separator of domain uses backslash.</div>
                 </td>
             </tr>
             <tr>
@@ -234,6 +235,7 @@ Parameters
                 </td>
                 <td>
                         <div>The role to be assigned permission.</div>
+                        <div>User can also specify role name presented in Web UI. Supported added in 1.5.0.</div>
                 </td>
             </tr>
             <tr>
@@ -294,7 +296,7 @@ Parameters
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                        <div>If set to <code>yes</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
     </table>
@@ -314,7 +316,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Assign user to VM folder
       community.vmware.vmware_object_role_permission:
@@ -357,6 +359,18 @@ Examples
         role: ReadOnly
         principal: view_user
         object_name: rootFolder
+        state: present
+      delegate_to: localhost
+
+    - name: Assign domain user to VM folder
+      community.vmware.vmware_object_role_permission:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        role: Admin
+        principal: "vsphere.local\\domainuser"
+        object_name: services
         state: present
       delegate_to: localhost
 
