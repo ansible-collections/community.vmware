@@ -437,8 +437,6 @@ releases:
     release_date: '2020-11-12'
   1.5.0:
     changes:
-      breaking_changes:
-      - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
       bugfixes:
       - vmware_cluster_ha - added APD and PDL configuration (https://github.com/ansible-collections/community.vmware/issues/451).
       - vmware_deploy_ovf - fixed an UnboundLocalError for variable 'name' in check
@@ -453,6 +451,7 @@ releases:
         (https://github.com/ansible-collections/community.vmware/issues/507).
       - vmware_guest_controller - error handling in task exception.
       - vmware_vm_inventory - skip inaccessible vm configuration.
+      - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
     fragments:
     - 436_vmware_object_role_permission.yml
     - 451_vmware_cluster_ha.yml
@@ -464,3 +463,8 @@ releases:
     - inventory_fix.yml
     - vmware_guest_ctrl.yml
     release_date: '2020-12-01'
+  1.5.1:
+    changes:
+      minor_changes:
+      - vmware_resource_pool - relabel the change introduced in 1.5.0 as Minor Changes (https://github.com/ansible-collections/community.vmware/issues/540).
+    release_date: '2020-12-02'

@@ -4,6 +4,7 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+
 v1.5.1
 ======
 
@@ -22,8 +23,8 @@ Minor Changes
 - vmware_drs_group - code refactor (https://github.com/ansible-collections/community.vmware/pull/475).
 - vmware_guest - add documentation for networks parameters connected and start_connected (https://github.com/ansible-collections/community.vmware/issues/507).
 - vmware_guest_controller - error handling in task exception.
-- vmware_vm_inventory - skip inaccessible vm configuration.
 - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
+- vmware_vm_inventory - skip inaccessible vm configuration.
 
 Bugfixes
 --------
