@@ -4,6 +4,13 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+v1.5.1
+======
+
+Minor Changes
+-------------
+
+- vmware_resource_pool - relabel the change introduced in 1.5.0 as Minor Changes (https://github.com/ansible-collections/community.vmware/issues/540).
 
 v1.5.0
 ======
@@ -16,10 +23,6 @@ Minor Changes
 - vmware_guest - add documentation for networks parameters connected and start_connected (https://github.com/ansible-collections/community.vmware/issues/507).
 - vmware_guest_controller - error handling in task exception.
 - vmware_vm_inventory - skip inaccessible vm configuration.
-
-Breaking Changes / Porting Guide
---------------------------------
-
 - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
 
 Bugfixes
