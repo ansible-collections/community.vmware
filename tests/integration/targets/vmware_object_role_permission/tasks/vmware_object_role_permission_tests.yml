@@ -859,12 +859,12 @@
         object_name: "{{ dvswitch1 }}"
         object_type: DistributedVirtualSwitch
         state: absent
-      register: assing_user_dvswitch_result
+      register: unassing_user_dvswitch_result
 
     - name: Make sure if unassing a user from an object
       assert:
         that:
-          - assing_user_dvswitch_result.changed is sameas true
+          - unassing_user_dvswitch_result.changed is sameas true
 
     - name: Unassign user from DistributedVirtualSwitch(idempotency check)
       vmware_object_role_permission:
@@ -873,9 +873,9 @@
         object_name: "{{ dvswitch1 }}"
         object_type: DistributedVirtualSwitch
         state: absent
-      register: assing_user_dvswitch_idempotency_result
+      register: unassing_user_dvswitch_idempotency_result
 
     - name: Make sure if unassing a user from an object doesn't change
       assert:
         that:
-          - assing_user_dvswitch_idempotency_result.changed is sameas false
+          - unassing_user_dvswitch_idempotency_result.changed is sameas false
