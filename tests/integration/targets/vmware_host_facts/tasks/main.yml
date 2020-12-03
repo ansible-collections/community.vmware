@@ -101,11 +101,11 @@
         esxi_hostname: '{{ esxi1 }}'
       register: facts
     - debug: var=facts
-    - name: verify host_current_time
+    - name: verify host_date_time
       assert:
         that:
-          - "'host_current_time' in facts['ansible_facts']"
-          - facts['ansible_facts']['host_current_time'] == None
+          - "'host_date_time' in facts['ansible_facts']"
+          - facts['ansible_facts']['host_date_time'] == {}
 
     - name: check host current time through a host
       vmware_host_facts:
@@ -115,8 +115,8 @@
         password: '{{ esxi_password }}'
       register: facts
     - debug: var=facts
-    - name: verify host_current_time
+    - name: verify host_date_time
       assert:
         that:
-          - "'host_current_time' in facts['ansible_facts']"
-          - facts['ansible_facts']['host_current_time'] != None
+          - "'host_date_time' in facts['ansible_facts']"
+          - facts['ansible_facts']['host_date_time'] != {}

@@ -229,10 +229,16 @@ ansible_facts:
     }
 '''
 
+import datetime
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible.module_utils.common.text.formatters import bytes_to_human
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    vmware_argument_spec,
+    find_obj,
+    ansible_date_time_facts
+)
 
 try:
     from pyVmomi import vim
@@ -270,7 +276,7 @@ class VMwareHostFactManager(PyVmomi):
         ansible_facts.update(self.get_system_facts())
         ansible_facts.update(self.get_vsan_facts())
         ansible_facts.update(self.get_cluster_facts())
-        ansible_facts.update({'host_current_time': self.esxi_time})
+        ansible_facts.update({'host_date_time': ansible_date_time_facts(self.esxi_time)})
         if self.params.get('show_tag'):
             vmware_client = VmwareRestClient(self.module)
             tag_info = {
