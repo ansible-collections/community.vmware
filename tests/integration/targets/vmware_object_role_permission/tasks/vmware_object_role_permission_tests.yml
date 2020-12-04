@@ -1,0 +1,881 @@
+# Test code for the vmware_object_role_permission module.
+# Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Set default parameter of the module
+  module_defaults:
+    vmware_object_role_permission:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+  block:
+    # Here start to VM folder test
+    - name: Assign user to VM folder with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: present
+      check_mode: true
+      register: assing_user_vm_folder_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_vm_folder_check_mode_result.changed is sameas true
+
+    - name: Assign user to VM folder
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: present
+      register: assing_user_vm_folder_result
+
+    - name: Make sure if a user assigned to an object
+      assert:
+        that:
+          - assing_user_vm_folder_result.changed is sameas true
+
+    - name: Assign user to VM folder(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: present
+      register: assing_user_vm_folder_idempotency_result
+
+    - name: Make sure if a user assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_vm_folder_idempotency_result.changed is sameas false
+
+    - name: Unassign user from VM folder with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: absent
+      check_mode: true
+      register: unassing_user_vm_folder_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_vm_folder_check_mode_result.changed is sameas true
+
+    - name: Unassign user from VM folder
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: absent
+      register: unassing_user_vm_folder_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_vm_folder_result.changed is sameas true
+
+    - name: Unassign user from VM folder(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        state: absent
+      register: unassing_user_vm_folder_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_vm_folder_idempotency_result.changed is sameas false
+
+    # Here start to VM test
+    - name: Assign user to VM with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      check_mode: true
+      register: assing_user_vm_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_vm_check_mode_result.changed is sameas true
+
+    - name: Assign user to VM
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      register: assing_user_vm_result
+
+    - name: Make sure if a user assigned to an object
+      assert:
+        that:
+          - assing_user_vm_result.changed is sameas true
+
+    - name: Assign user to VM(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      register: assing_user_vm_idempotency_result
+
+    - name: Make sure if a user assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_vm_idempotency_result.changed is sameas false
+
+    - name: Unassign user from VM with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      check_mode: true
+      register: unassing_user_vm_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_vm_check_mode_result.changed is sameas true
+
+    - name: Unassign user from VM
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      register: unassing_user_vm_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_vm_result.changed is sameas true
+
+    - name: Unassign user from VM(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      register: unassing_user_vm_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_vm_idempotency_result.changed is sameas false
+
+    # Here start to Datacenter test
+    - name: Assign user to Datacenter with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: present
+      check_mode: true
+      register: assing_user_dc_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_dc_check_mode_result.changed is sameas true
+
+    - name: Assign user to Datacenter
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: present
+      register: assing_user_dc_result
+
+    - name: Make sure if a user assigned to an object
+      assert:
+        that:
+          - assing_user_dc_result.changed is sameas true
+
+    - name: Assign user to Datacenter(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: present
+      register: assing_user_dc_idempotency_result
+
+    - name: Make sure if a user assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_dc_idempotency_result.changed is sameas false
+
+    - name: Unassign user from Datacenter with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: absent
+      check_mode: true
+      register: unassing_user_dc_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_dc_check_mode_result.changed is sameas true
+
+    - name: Unassign user from Datacenter
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: absent
+      register: unassing_user_dc_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_dc_result.changed is sameas true
+
+    - name: Unassign user from Datacenter(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dc1 }}"
+        object_type: Datacenter
+        state: absent
+      register: unassing_user_dc_idempotency_result
+
+    - name: Make sure if unassing a user from an object and doesn't change
+      assert:
+        that:
+          - unassing_user_dc_idempotency_result.changed is sameas false
+
+    # Here start to Resource Pool test
+    - name: Assign user to ResourcePool with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: present
+      check_mode: true
+      register: assing_user_rp_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_rp_check_mode_result.changed is sameas true
+
+    - name: Assign user to ResourcePool
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: present
+      register: assing_user_rp_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_rp_result.changed is sameas true
+
+    - name: Assign user to ResourcePool(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: present
+      register: assing_user_rp_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_rp_idempotency_result.changed is sameas false
+
+    - name: Unassign user from ResourcePool with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: absent
+      check_mode: true
+      register: unassing_user_rp_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_rp_check_mode_result.changed is sameas true
+
+    - name: Unassign user from ResourcePool
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: absent
+      register: unassing_user_rp_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_rp_result.changed is sameas true
+
+    - name: Unassign user from ResourcePool(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: DC0_C0_RP1
+        object_type: ResourcePool
+        state: absent
+      register: unassing_user_rp_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_rp_idempotency_result.changed is sameas false
+
+    # Here start to Datastore test
+    - name: Assign user to Datastore with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: present
+      check_mode: true
+      register: assing_user_datastore_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_datastore_check_mode_result.changed is sameas true
+
+    - name: Assign user to Datastore
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: present
+      register: assing_user_datastore_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_datastore_result.changed is sameas true
+
+    - name: Assign user to Datastore(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: present
+      register: assing_user_datastore_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_datastore_idempotency_result.changed is sameas false
+
+    - name: Unassign user from Datastore with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: absent
+      check_mode: true
+      register: unassing_user_datastore_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_datastore_check_mode_result.changed is sameas true
+
+    - name: Unassign user from Datastore
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: absent
+      register: unassing_user_datastore_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_datastore_result.changed is sameas true
+
+    - name: Unassign user from Datastore(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ rw_datastore }}"
+        object_type: Datastore
+        state: absent
+      register: unassing_user_datastore_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_datastore_idempotency_result.changed is sameas false
+
+    # Here start to Network test
+    - name: Assign user to Network with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: present
+      check_mode: true
+      register: assing_user_network_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_network_check_mode_result.changed is sameas true
+
+    - name: Assign user to Network
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: present
+      register: assing_user_network_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_network_result.changed is sameas true
+
+    - name: Assign user to Network(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: present
+      register: assing_user_network_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_network_idempotency_result.changed is sameas false
+
+    - name: Unassign user from Network with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: absent
+      check_mode: true
+      register: unassing_user_network_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_network_check_mode_result.changed is sameas true
+
+    - name: Unassign user from Network
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: absent
+      register: unassing_user_network_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_network_result.changed is sameas true
+
+    - name: Unassign user from Network(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: VM Network
+        object_type: Network
+        state: absent
+      register: unassing_user_network_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_network_idempotency_result.changed is sameas false
+
+    # Here start to HostSystem test
+    - name: Assign user to HostSystem with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: present
+      check_mode: true
+      register: assing_user_hostsystem_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_hostsystem_check_mode_result.changed is sameas true
+
+    - name: Assign user to HostSystem
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: present
+      register: assing_user_hostsystem_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_hostsystem_result.changed is sameas true
+
+    - name: Assign user to HostSystem(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: present
+      register: assing_user_hostsystem_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_hostsystem_idempotency_result.changed is sameas false
+
+    - name: Unassign user from HostSystem with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: absent
+      check_mode: true
+      register: assing_user_hostsystem_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_hostsystem_check_mode_result.changed is sameas true
+
+    - name: Unassign user from HostSystem
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: absent
+      register: assing_user_hostsystem_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - assing_user_hostsystem_result.changed is sameas true
+
+    - name: Unassign user from HostSystem(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ esxi1 }}"
+        object_type: HostSystem
+        state: absent
+      register: assing_user_hostsystem_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - assing_user_hostsystem_idempotency_result.changed is sameas false
+
+    # Here start to ComputeResource test
+    - name: Assign user to ComputeResource with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: present
+      check_mode: true
+      register: assing_user_compute_resource_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_compute_resource_check_mode_result.changed is sameas true
+
+    - name: Assign user to ComputeResource
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: present
+      register: assing_user_compute_resource_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_compute_resource_result.changed is sameas true
+
+    - name: Assign user to ComputeResource(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: present
+      register: assing_user_compute_resource_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_compute_resource_idempotency_result.changed is sameas false
+
+    - name: Unassign user from ComputeResource with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: absent
+      check_mode: true
+      register: unassing_user_compute_resource_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_compute_resource_check_mode_result.changed is sameas true
+
+    - name: Unassign user from ComputeResource
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: absent
+      register: unassing_user_compute_resource_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_compute_resource_result.changed is sameas true
+
+    - name: Unassign user from ComputeResource(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ComputeResource
+        state: absent
+      register: unassing_user_compute_resource_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_compute_resource_idempotency_result.changed is sameas false
+
+    # Here start to ClusterComputeResource test
+    - name: Assign user to ClusterComputeResource with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: present
+      check_mode: true
+      register: assing_user_cluster_resource_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_cluster_resource_result.changed is sameas true
+
+    - name: Assign user to ClusterComputeResource
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: present
+      register: assing_user_cluster_resource_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_cluster_resource_result.changed is sameas true
+
+    - name: Assign user to ClusterComputeResource(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: present
+      register: assing_user_cluster_resource_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_cluster_resource_idempotency_result.changed is sameas false
+
+    - name: Unassign user from ClusterComputeResource with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: absent
+      check_mode: true
+      register: unassing_user_cluster_resource_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_cluster_resource_result.changed is sameas true
+
+    - name: Unassign user from ClusterComputeResource
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: absent
+      register: unassing_user_cluster_resource_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_cluster_resource_result.changed is sameas true
+
+    - name: Unassign user from ClusterComputeResource(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ ccr1 }}"
+        object_type: ClusterComputeResource
+        state: absent
+      register: unassing_user_cluster_resource_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_cluster_resource_idempotency_result.changed is sameas false
+
+    # Here start to DistributedVirtualSwitch test
+    - name: Assign user to DistributedVirtualSwitch with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: present
+      check_mode: true
+      register: assing_user_dvswitch_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_dvswitch_check_mode_result.changed is sameas true
+
+    - name: Assign user to DistributedVirtualSwitch
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: present
+      register: assing_user_dvswitch_result
+
+    - name: Make sure if a user and role assigned to an object
+      assert:
+        that:
+          - assing_user_dvswitch_result.changed is sameas true
+
+    - name: Assign user to DistributedVirtualSwitch(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: present
+      register: assing_user_dvswitch_idempotency_result
+
+    - name: Make sure if a user and role assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_dvswitch_idempotency_result.changed is sameas false
+
+    - name: Unassign user from DistributedVirtualSwitch with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: absent
+      check_mode: true
+      register: unassing_user_dvswitch_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_dvswitch_check_mode_result.changed is sameas true
+
+    - name: Unassign user from DistributedVirtualSwitch
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: absent
+      register: unassing_user_dvswitch_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_dvswitch_result.changed is sameas true
+
+    - name: Unassign user from DistributedVirtualSwitch(idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ dvswitch1 }}"
+        object_type: DistributedVirtualSwitch
+        state: absent
+      register: unassing_user_dvswitch_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_dvswitch_idempotency_result.changed is sameas false

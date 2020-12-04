@@ -1,0 +1,26 @@
+# Test code for the vmware_object_role_permission module.
+# Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_dvswitch: true
+    setup_resource_pool: true
+    setup_virtualmachines: true
+    setup_switch: true
+    setup_dvs_portgroup: true
+
+- include_tasks: vmware_object_role_permission_tests.yml
+  vars:
+    principal: "root"
+
+- include_tasks: vmware_object_role_permission_tests.yml
+  vars:
+    principal: "vsphere.local\\K/M"
+
+- include_tasks: user_friendly_role_name_tests.yml
+  vars:
+    principal: "root"
