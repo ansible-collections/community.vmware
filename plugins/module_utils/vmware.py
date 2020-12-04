@@ -449,8 +449,6 @@ def ansible_date_time_facts(timestamp):
     date_time_facts['minute'] = timestamp.strftime('%M')
     date_time_facts['second'] = timestamp.strftime('%S')
     date_time_facts['epoch'] = timestamp.strftime('%s')
-    if date_time_facts['epoch'] == '' or date_time_facts['epoch'][0] == '%':
-        date_time_facts['epoch'] = str(int(epoch_ts))
     date_time_facts['date'] = timestamp.strftime('%Y-%m-%d')
     date_time_facts['time'] = timestamp.strftime('%H:%M:%S')
     date_time_facts['iso8601_micro'] = utctimestamp.strftime("%Y-%m-%dT%H:%M:%S.%fZ")

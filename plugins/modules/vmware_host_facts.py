@@ -229,7 +229,6 @@ ansible_facts:
     }
 '''
 
-import datetime
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible.module_utils.common.text.formatters import bytes_to_human
