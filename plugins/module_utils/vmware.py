@@ -50,6 +50,64 @@ class TaskError(Exception):
         super(TaskError, self).__init__(*args, **kwargs)
 
 
+def is_datastore_valid(datastore_obj=None):
+    """
+    Check if datastore selected is valid or not
+    Args:
+        datastore_obj: datastore managed object
+
+    Returns: True if datastore is valid, False if not
+    """
+    if not datastore_obj \
+       or datastore_obj.summary.maintenanceMode != 'normal' \
+       or not datastore_obj.summary.accessible:
+        return False
+    return True
+
+
+def get_recommended_datastore(content, datastore_cluster_obj=None):
+    """
+    Function to return Storage DRS recommended datastore from datastore cluster
+    Args:
+        datastore_cluster_obj: datastore cluster managed object
+
+    Returns: Name of recommended datastore from the given datastore cluster
+
+    """
+    if datastore_cluster_obj is None:
+        return None
+    # Check if Datastore Cluster provided by user is SDRS ready
+    sdrs_status = datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.enabled
+    if sdrs_status:
+        # We can get storage recommendation only if SDRS is enabled on given datastorage cluster
+        pod_sel_spec = vim.storageDrs.PodSelectionSpec()
+        pod_sel_spec.storagePod = datastore_cluster_obj
+        storage_spec = vim.storageDrs.StoragePlacementSpec()
+        storage_spec.podSelectionSpec = pod_sel_spec
+        storage_spec.type = 'create'
+
+        try:
+            rec = content.storageResourceManager.RecommendDatastores(storageSpec=storage_spec)
+            rec_action = rec.recommendations[0].action[0]
+            return rec_action.destination.name
+        except Exception:
+            # There is some error so we fall back to general workflow
+            pass
+    datastore = None
+    datastore_freespace = 0
+    for ds in datastore_cluster_obj.childEntity:
+        if isinstance(ds, vim.Datastore) and ds.summary.freeSpace > datastore_freespace:
+            # If datastore field is provided, filter destination datastores
+            if not is_datastore_valid(datastore_obj=ds):
+                continue
+
+            datastore = ds
+            datastore_freespace = ds.summary.freeSpace
+    if datastore:
+        return datastore.name
+    return None
+
+
 def wait_for_task(task, max_backoff=64, timeout=3600):
     """Wait for given task using exponential back-off algorithm.
 
@@ -1342,20 +1400,6 @@ class PyVmomi(object):
 
         """
         return find_datacenter_by_name(self.content, datacenter_name=datacenter_name)
-
-    def is_datastore_valid(self, datastore_obj=None):
-        """
-        Check if datastore selected is valid or not
-        Args:
-            datastore_obj: datastore managed object
-
-        Returns: True if datastore is valid, False if not
-        """
-        if not datastore_obj \
-           or datastore_obj.summary.maintenanceMode != 'normal' \
-           or not datastore_obj.summary.accessible:
-            return False
-        return True
 
     def find_datastore_by_name(self, datastore_name, datacenter_name=None):
         """

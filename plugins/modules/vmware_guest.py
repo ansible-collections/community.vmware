@@ -975,6 +975,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_dvspg_by_name,
     wait_for_vm_ip,
     quote_obj_name,
+    get_recommended_datastore,
+    is_datastore_valid,
 )
 
 
@@ -2708,7 +2710,7 @@ class PyVmomiHelper(PyVmomi):
 
         datastore_freespace = 0
         for ds in datastores:
-            if not self.is_datastore_valid(datastore_obj=ds):
+            if not is_datastore_valid(datastore_obj=ds):
                 continue
 
             if ds.summary.freeSpace > datastore_freespace:
@@ -2716,48 +2718,6 @@ class PyVmomiHelper(PyVmomi):
                 datastore_freespace = ds.summary.freeSpace
 
         return datastore
-
-    def get_recommended_datastore(self, datastore_cluster_obj=None):
-        """
-        Function to return Storage DRS recommended datastore from datastore cluster
-        Args:
-            datastore_cluster_obj: datastore cluster managed object
-
-        Returns: Name of recommended datastore from the given datastore cluster
-
-        """
-        if datastore_cluster_obj is None:
-            return None
-        # Check if Datastore Cluster provided by user is SDRS ready
-        sdrs_status = datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.enabled
-        if sdrs_status:
-            # We can get storage recommendation only if SDRS is enabled on given datastorage cluster
-            pod_sel_spec = vim.storageDrs.PodSelectionSpec()
-            pod_sel_spec.storagePod = datastore_cluster_obj
-            storage_spec = vim.storageDrs.StoragePlacementSpec()
-            storage_spec.podSelectionSpec = pod_sel_spec
-            storage_spec.type = 'create'
-
-            try:
-                rec = self.content.storageResourceManager.RecommendDatastores(storageSpec=storage_spec)
-                rec_action = rec.recommendations[0].action[0]
-                return rec_action.destination.name
-            except Exception:
-                # There is some error so we fall back to general workflow
-                pass
-        datastore = None
-        datastore_freespace = 0
-        for ds in datastore_cluster_obj.childEntity:
-            if isinstance(ds, vim.Datastore) and ds.summary.freeSpace > datastore_freespace:
-                # If datastore field is provided, filter destination datastores
-                if not self.is_datastore_valid(datastore_obj=ds):
-                    continue
-
-                datastore = ds
-                datastore_freespace = ds.summary.freeSpace
-        if datastore:
-            return datastore.name
-        return None
 
     def select_datastore(self, vm_obj=None):
         datastore = None
@@ -2787,7 +2747,7 @@ class PyVmomiHelper(PyVmomi):
 
                 datastore_freespace = 0
                 for ds in datastores:
-                    if not self.is_datastore_valid(datastore_obj=ds):
+                    if not is_datastore_valid(datastore_obj=ds):
                         continue
 
                     if (ds.summary.freeSpace > datastore_freespace) or (ds.summary.freeSpace == datastore_freespace and not datastore):
@@ -2807,7 +2767,7 @@ class PyVmomiHelper(PyVmomi):
                 datastore_cluster = self.cache.find_obj(self.content, [vim.StoragePod], datastore_name)
                 if datastore_cluster:
                     # If user specified datastore cluster so get recommended datastore
-                    datastore_name = self.get_recommended_datastore(datastore_cluster_obj=datastore_cluster)
+                    datastore_name = get_recommended_datastore(self.content, datastore_cluster_obj=datastore_cluster)
                 # Check if get_recommended_datastore or user specified datastore exists or not
                 datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
             else:
@@ -3008,7 +2968,7 @@ class PyVmomiHelper(PyVmomi):
             datastore_cluster = self.cache.find_obj(self.content, [vim.StoragePod], datastore_name)
             if datastore_cluster:
                 # If user specified datastore cluster so get recommended datastore
-                datastore_name = self.get_recommended_datastore(datastore_cluster_obj=datastore_cluster)
+                datastore_name = get_recommended_datastore(self.content, datastore_cluster_obj=datastore_cluster)
             # Check if get_recommended_datastore or user specified datastore exists or not
             datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
         else:
