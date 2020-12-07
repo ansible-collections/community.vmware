@@ -165,6 +165,7 @@ Parameters
                 <td>
                         <div>The user to be assigned permission.</div>
                         <div>Required if <code>group</code> is not specified.</div>
+                        <div>If specifying domain user, required separator of domain uses backslash.</div>
                 </td>
             </tr>
             <tr>
@@ -358,6 +359,18 @@ Examples
         role: ReadOnly
         principal: view_user
         object_name: rootFolder
+        state: present
+      delegate_to: localhost
+
+    - name: Assign domain user to VM folder
+      community.vmware.vmware_object_role_permission:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        role: Admin
+        principal: "vsphere.local\\domainuser"
+        object_name: services
         state: present
       delegate_to: localhost
 
