@@ -80,6 +80,7 @@ options:
         description:
         - Force the given properties to be inserted into an OVF Environment and injected through VMware Tools.
         type: bool
+        default: False
     name:
         description:
         - Name of the VM to work with.

@@ -115,6 +115,7 @@ options:
      - Whether to collect existing disk and USB controllers facts only.
      - When this parameter is set to C(True), C(controllers) parameter will be ignored.
      type: bool
+     default: False
    sleep_time:
      description:
      - 'The sleep time in seconds after VM reconfigure task completes, used when not get the updated VM controller

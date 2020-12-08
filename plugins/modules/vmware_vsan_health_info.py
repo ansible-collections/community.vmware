@@ -27,7 +27,7 @@ options:
         description:
             - C(True) to return the result from cache directly instead of running the full health check.
         required: false
-        default: false
+        default: False
         type: bool
 
 requirements:
@@ -124,7 +124,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         cluster_name=dict(required=True, type='str'),
-        fetch_from_cache=dict(required=False, type='bool')
+        fetch_from_cache=dict(required=False, type='bool', default=False)
     )
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
