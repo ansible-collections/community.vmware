@@ -104,37 +104,44 @@ options:
       - Enable VSAN traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     enable_vmotion:
       description:
       - Enable vMotion traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       - You cannot enable vMotion on an additional adapter if you already have an adapter with the vMotion TCP/IP stack configured.
       type: bool
+      default: False
     enable_mgmt:
       description:
       - Enable Management traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     enable_ft:
       description:
       - Enable Fault Tolerance traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     enable_provisioning:
       description:
       - Enable Provisioning traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     enable_replication:
       description:
       - Enable vSphere Replication traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     enable_replication_nfc:
       description:
       - Enable vSphere Replication NFC traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
+      default: False
     state:
       description:
       - If set to C(present), the VMKernel adapter will be created with the given specifications.
