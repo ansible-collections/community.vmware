@@ -178,6 +178,7 @@ def main():
         "Content-Length": str(len(data)),
     }
 
+    r = None
     try:
         r = open_url(url, data=data, headers=headers, method='PUT', timeout=timeout,
                      url_username=username, url_password=password, validate_certs=validate_certs,
@@ -203,6 +204,9 @@ def main():
         module.fail_json(msg=to_native(e), status=None, errno=error_code,
                          reason=to_native(e), url=url, exception=traceback.format_exc())
 
+    if not r:
+        module.fail_json(msg="Failed to upload", url=url,
+                         errno=None, status=None, reason=None)
     status = r.getcode()
     if 200 <= status < 300:
         module.exit_json(changed=True, status=status, reason=r.msg, url=url)
