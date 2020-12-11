@@ -250,7 +250,7 @@ If you want to develop new content for this collection or improve what is alread
 
 ### Testing with `ansible-test`
 
-TBD
+Refer [testing](testing.md) for more information.
 
 ## Publishing New Version
 
