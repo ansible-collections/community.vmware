@@ -1174,6 +1174,7 @@ class PyVmomiDeviceHelper(object):
         diskspec = vim.vm.device.VirtualDeviceSpec()
         diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         diskspec.device = vim.vm.device.VirtualDisk()
+        diskspec.device.key = -randint(20000, 24999)
         diskspec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
         diskspec.device.controllerKey = disk_ctl.device.key
 
@@ -1224,6 +1225,7 @@ class PyVmomiDeviceHelper(object):
     def create_nic(self, device_type, device_label, device_infos):
         nic = vim.vm.device.VirtualDeviceSpec()
         nic.device = self.get_device(device_type, device_infos['name'])
+        nic.device.key = -randint(25000, 29999)
         nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
         nic.device.deviceInfo = vim.Description()
         nic.device.deviceInfo.label = device_label
