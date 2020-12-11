@@ -60,6 +60,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
   delegate_to: localhost
 
 - name: Enable vvold rule set for an ESXi Host
@@ -71,6 +73,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
   delegate_to: localhost
 
 - name: Manage multiple rule set for an ESXi Host
@@ -82,6 +86,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
         - name: CIMHttpServer
           enabled: False
   delegate_to: localhost
@@ -391,6 +397,17 @@ def main():
                         version='3.0.0',
                         collection_name='community.vmware'
                     )
+        if not rule_option.get("enabled"):
+            continue
+        try:
+            isinstance(rule_option["allowed_hosts"]["all_ip"], bool)
+        except (KeyError, IndexError):
+            module.deprecate(
+                msg=('Please adjust your playbook to ensure the `allowed_hosts` '
+                     'entries come with an `all_ip` key (boolean).'),
+                version='2.0.0',
+                collection_name='community.vmware'
+            )
 
     vmware_firewall_manager = VmwareFirewallManager(module)
     vmware_firewall_manager.check_params()
