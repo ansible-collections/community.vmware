@@ -60,6 +60,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
   delegate_to: localhost
 
 - name: Enable vvold rule set for an ESXi Host
@@ -71,6 +73,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
   delegate_to: localhost
 
 - name: Manage multiple rule set for an ESXi Host
@@ -82,6 +86,8 @@ EXAMPLES = r'''
     rules:
         - name: vvold
           enabled: True
+          allowed_hosts:
+            all_ip: True
         - name: CIMHttpServer
           enabled: False
   delegate_to: localhost
@@ -381,16 +387,27 @@ def main():
     )
 
     for rule_option in module.params.get("rules", []):
-        if 'allowed_hosts' in rule_option:
-            if isinstance(rule_option['allowed_hosts'], list):
-                if len(rule_option['allowed_hosts']) == 1:
-                    allowed_hosts = rule_option['allowed_hosts'][0]
-                    rule_option['allowed_hosts'] = allowed_hosts
-                    module.deprecate(
-                        msg='allowed_hosts should be a dict, not a list',
-                        version='3.0.0',
-                        collection_name='community.vmware'
-                    )
+       if 'allowed_hosts' in rule_option:
+           if isinstance(rule_option['allowed_hosts'], list):
+               if len(rule_option['allowed_hosts']) == 1:
+                   allowed_hosts = rule_option['allowed_hosts'][0]
+                   rule_option['allowed_hosts'] = allowed_hosts
+                   module.deprecate(
+                       msg='allowed_hosts should be a dict, not a list',
+                       version='3.0.0',
+                       collection_name='community.vmware'
+                   )
+       if not rule_option.get("enabled"):
+           continue
+       try:
+           isinstance(rule_option["allow_hosts"]["all_ip"], bool)
+       except (KeyError, IndexError):
+           module.deprecate(
+               msg=('Please adjust your playbook to ensure the `allowed_hosts` '
+                    'entries come with an `all_ip` key (boolean).'),
+                   version='2.0.0',
+                   collection_name='community.vmware'
+           )
 
     vmware_firewall_manager = VmwareFirewallManager(module)
     vmware_firewall_manager.check_params()

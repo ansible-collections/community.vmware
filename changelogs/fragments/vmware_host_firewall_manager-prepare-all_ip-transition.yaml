@@ -1,0 +1,4 @@
+---
+minor_changes:
+- vmware_host_firewall_manager - Add a deprecation warning regarding the user of new rule with no ``allowed_hosts`` key. This will be enforced by the release 2.0.0.
+- vmware_host_firewall_manager - Add a deprecation warning regardng the user of new rule with no ``allowed_ip`` entry in the ``allowed_hosts`` dictionary.
