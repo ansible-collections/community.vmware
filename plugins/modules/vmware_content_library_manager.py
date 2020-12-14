@@ -313,7 +313,6 @@ class VmwareContentLibCreate(VmwareRestClient):
 
         # Compare changeable subscribed attributes
         if self.library_type == "subscribed":
-            # self.module.fail_json(msg=str(self.local_libraries[self.library_name]))
             existing_subscription_url = self.local_libraries[self.library_name]['lib_sub_url']
             sub_url_changed = (existing_subscription_url != self.subscription_url)
             
