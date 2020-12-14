@@ -19,7 +19,7 @@ description:
 author:
 - Pavan Bidkar (@pgbidkar)
 notes:
-- Tested on vSphere 6.5, 6.7
+- Tested on vSphere 6.5, 6.7, 7.0
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -57,6 +57,30 @@ options:
       type: str
       required: False
       aliases: ['datastore']
+    subscription_url:
+      description:
+      - The url of the content library to subscribe to.
+      - This is required only if C(library_type) is set to C(subscribed).
+      - This parameter is ignored, when C(state) is set to C(absent).
+      type: str
+      required: False
+    ssl_thumbprint:
+      description:
+      - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
+      - This is required only if C(library_type) is set to C(subscribed) and the library is https.
+      - This parameter is ignored, when C(state) is set to C(absent).
+      - The information can be extracted using openssl using the following example. C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)
+      type: str
+      required: False
+    update_on_demand:
+      description:
+      - Whether to download all content on demand C(True) or ahead of time C(False).
+      - This is required only if C(library_type) is set to C(subscribed).
+      - This parameter is ignored, when C(state) is set to C(absent).
+      type: bool
+      required: False
+      choices: [True, False]
+      default: False
     state:
       description:
       - The state of content library.
@@ -72,9 +96,8 @@ extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 
 '''
-# echo | openssl s_client -connect wp-content.vmware.com:443 |& openssl x509 -fingerprint -noout
 EXAMPLES = r'''
-- name: Create Content Library
+- name: Create Local Content Library
   community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -83,6 +106,21 @@ EXAMPLES = r'''
     library_description: 'Library with Datastore Backing'
     library_type: local
     datastore_name: datastore
+    state: present
+  delegate_to: localhost
+
+- name: Create Subscribed Content Library
+  community.vmware.vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    library_name: test-content-lib
+    library_description: 'Subscribed Library with Datastore Backing'
+    library_type: subscribed
+    datastore_name: datastore
+    subscription_url: 'https://library.url'
+    ssl_thumbprint: 'aa:bb:cc:dd:ee:ff:gg:hh:ii:jj:kk:ll:mm:nn:oo:pp:qq:rr:ss:tt'
+    update_on_demand: 
     state: present
   delegate_to: localhost
 
