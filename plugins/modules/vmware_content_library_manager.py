@@ -199,17 +199,6 @@ class VmwareContentLibCreate(VmwareRestClient):
                 self.local_libraries[lib_details.name] = lib_dict
                 self.existing_library_names.append(lib_details.name)
 
-        content_libs = self.content_service.content.SubscribedLibrary.list()
-        if content_libs:
-            for content_lib in content_libs:
-                lib_details = self.content_service.content.SubscribedLibrary.get(content_lib)
-                self.local_libraries[lib_details.name] = dict(
-                    lib_name=lib_details.name,
-                    lib_description=lib_details.description,
-                    lib_id=lib_details.id,
-                    lib_type=lib_details.type
-                )
-
     def check_content_library_status(self):
         """
         Check if Content Library exists or not
@@ -324,6 +313,7 @@ class VmwareContentLibCreate(VmwareRestClient):
 
         # Compare changeable subscribed attributes
         if self.library_type == "subscribed":
+            # self.module.fail_json(msg=str(self.local_libraries[self.library_name]))
             existing_subscription_url = self.local_libraries[self.library_name]['lib_sub_url']
             sub_url_changed = (existing_subscription_url != self.subscription_url)
             
@@ -331,7 +321,7 @@ class VmwareContentLibCreate(VmwareRestClient):
             sub_on_demand_changed = (existing_on_demand != self.update_on_demand) 
 
             sub_ssl_thumbprint_changed = False
-            if "https:" in self.subscription_url and not self.ssl_thumbprint:
+            if "https:" in self.subscription_url and self.ssl_thumbprint:
                 existing_ssl_thumbprint = self.local_libraries[self.library_name]['lib_sub_ssl_thumbprint']
                 sub_ssl_thumbprint_changed = (existing_ssl_thumbprint != self.ssl_thumbprint) 
                 
