@@ -22,6 +22,7 @@ action_groups:
   - vmware_content_library_manager
   - vmware_datacenter
   - vmware_datastore_cluster
+  - vmware_datastore_cluster_manager
   - vmware_datastore_info
   - vmware_datastore_maintenancemode
   - vmware_deploy_ovf

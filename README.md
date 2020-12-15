@@ -60,11 +60,6 @@ Name | Description
 --- | ---
 [community.vmware.vmware](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_httpapi.rst)|HttpApi Plugin for VMware REST API
 
-### Inventory plugins
-Name | Description
---- | ---
-[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
-
 ### Modules
 Name | Description
 --- | ---
@@ -94,6 +89,7 @@ Name | Description
 [community.vmware.vmware_datacenter](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datacenter_module.rst)|Manage VMware vSphere Datacenters
 [community.vmware.vmware_datacenter_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datacenter_info_module.rst)|Gather information about VMware vSphere Datacenters
 [community.vmware.vmware_datastore_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_cluster_module.rst)|Manage VMware vSphere datastore clusters
+[community.vmware.vmware_datastore_cluster_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_cluster_manager_module.rst)|Manage VMware vSphere datastore cluster's members
 [community.vmware.vmware_datastore_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_info_module.rst)|Gather info about datastores available in given vCenter
 [community.vmware.vmware_datastore_maintenancemode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_maintenancemode_module.rst)|Place a datastore into maintenance mode
 [community.vmware.vmware_deploy_ovf](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_deploy_ovf_module.rst)|Deploys a VMware virtual machine from an OVF or OVA file
@@ -239,6 +235,11 @@ Name | Description
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
+
+### Inventory plugins
+Name | Description
+--- | ---
+[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 <!--end collection content-->
 
