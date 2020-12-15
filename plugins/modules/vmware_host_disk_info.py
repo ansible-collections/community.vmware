@@ -1,23 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+#
+# Copyright (c) 2020, Matt Proud 
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.0',
-    'author': 'Matt Proud'
-}
-
 DOCUMENTATION = '''
 ---
 module: vmware_host_disk_info
-short_description: Gathers information about disks attached to given ESXi host/s
+short_description: Gathers information about disks attached to given ESXi host/s.
 description:
 - This module returns information about disks attached to given ESXi host/s
-- If cluster_name is provide, then disk information about all hosts from given cluster will be returned.
-- If esxi_hostname is provided, then disk information about given host system will be returned.
+- If I(cluster_name) is provided, then disk information about all hosts from the given cluster will be returned.
+- If I(esxi_hostname) is provided, then disk information about the given host system will be returned.
 authot:
 - Matt Proud
 notes:
@@ -26,12 +23,23 @@ requirements:
 - python >= 2.6
 - PyVmomi
 options:
-
+  cluster_name:
+    description:
+    - Name of the cluster from which the ESXi host belong to.
+    - If C(esxi_hostname) is not given, this parameter is required.
+    type: str
+  esxi_hostname:
+    description:
+    - ESXi hostname to gather information from.
+    - If C(cluster_name) is not given, this parameter is required.
+    type: str
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = '''
 - name: Gather info about vmhbas of all ESXi Host in the given Cluster
-  vmware_host_disk_info:
+  community.vmware.vmware_host_disk_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -40,7 +48,7 @@ EXAMPLES = '''
   register: cluster_host_vmhbas
 
 - name: Gather info about vmhbas of an ESXi Host
-  vmware_host_disk_info:
+  community.vmware.vmware_host_disk_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -83,7 +91,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
+
 
 class HostDiskInfo(PyVmomi):
     """Class to return host disk info"""
@@ -124,21 +133,19 @@ class HostDiskInfo(PyVmomi):
                 display_name = disk.displayName
                 disk_uid = disk.key
                 device_ctd_list = lun_lookup[disk_uid]
-                
+
                 disk_dict = {"capacity_mb": capacity,
-                                        "device_path": device_path,
-                                            "device_type": device_type,
-                                            "display_name": display_name,
-                                            "disk_uid": disk_uid,
-                                            "device_ctd_list": device_ctd_list,
-                                            "canonical_name": canonical_name}
+                            "device_path": device_path,
+                            "device_type": device_type,
+                            "display_name": display_name,
+                            "disk_uid": disk_uid,
+                            "device_ctd_list": device_ctd_list,
+                            "canonical_name": canonical_name}
                 host_disk_info.append(disk_dict)
 
             hosts_disk_info[host.name] = host_disk_info
-        
+
         return hosts_disk_info
-
-
 
 def main():
     """Main"""
