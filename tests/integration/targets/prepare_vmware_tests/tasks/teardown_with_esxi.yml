@@ -87,6 +87,28 @@
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
 
+- name: Remove ESXi Hosts to vCenter
+  vmware_host:
+    datacenter_name: '{{ dc1 }}'
+    cluster_name: '{{ ccr1 }}'
+    esxi_hostname: '{{ item }}'
+    esxi_username: '{{ esxi_user }}'
+    esxi_password: '{{ esxi_password }}'
+    state: absent
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
+
+- name: Exit maintenance on hosts to allow deletion of vCSA VMs
+  vmware_maintenancemode:
+    hostname: "{{ item }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    esxi_hostname: "{{ item }}"
+    timeout: 3600
+    state: absent
+  with_items: "{{ esxi_hosts }}"
+  delegate_to: localhost
+
 - name: Gather all remaining VMs on hosts
   vmware_vm_info:
     hostname: '{{ item }}'
@@ -109,17 +131,6 @@
     - "{{ vminfo.results }}"
     - virtual_machines
   when: "'vCLS' in item.1.guest_name"
-
-- name: Remove ESXi Hosts to vCenter
-  vmware_host:
-    datacenter_name: '{{ dc1 }}'
-    cluster_name: '{{ ccr1 }}'
-    esxi_hostname: '{{ item }}'
-    esxi_username: '{{ esxi_user }}'
-    esxi_password: '{{ esxi_password }}'
-    state: absent
-  with_items: "{{ esxi_hosts }}"
-  ignore_errors: true
 
 - name: Umount NFS datastores to ESXi (1/2)
   vmware_host_datastore:
