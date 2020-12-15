@@ -98,7 +98,7 @@
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
 
-- name: Exit maintenance on hosts to allow deletion of vCSA VMs
+- name: Exit maintenance on hosts to allow deletion of vCLS VMs
   vmware_maintenancemode:
     hostname: "{{ item }}"
     username: "{{ esxi_user }}"
