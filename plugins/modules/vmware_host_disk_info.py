@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2020, Matt Proud 
+# Copyright (c) 2020, Matt Proud
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -15,8 +15,8 @@ description:
 - This module returns information about disks attached to given ESXi host/s
 - If I(cluster_name) is provided, then disk information about all hosts from the given cluster will be returned.
 - If I(esxi_hostname) is provided, then disk information about the given host system will be returned.
-authot:
-- Matt Proud
+author:
+- Matt Proud (@laidbackware)
 notes:
 - Tested on vSphere 6.7 and 7.0
 requirements:
@@ -58,7 +58,11 @@ EXAMPLES = '''
 '''
 
 RETURN = '''
-"hosts_disk_info": {
+hosts_disk_info:
+  description: list of information for all disks attached to each ESXi host
+  returned: always
+  type: list
+  sample: >-
     "192.168.0.182": [
         {
             "canonical_name": "naa.6000c296ed6217bd61df35622eb21a3a",
@@ -82,7 +86,6 @@ RETURN = '''
             "disk_uid": "key-vim.host.ScsiDisk-02000000006000c2968ad7142d93faae527fe8822b566972747561",
             "display_name": "Local VMware Disk (naa.6000c2968ad7142d93faae527fe8822b)"
         },]
-    }
 '''
 
 try:
@@ -135,17 +138,18 @@ class HostDiskInfo(PyVmomi):
                 device_ctd_list = lun_lookup[disk_uid]
 
                 disk_dict = {"capacity_mb": capacity,
-                            "device_path": device_path,
-                            "device_type": device_type,
-                            "display_name": display_name,
-                            "disk_uid": disk_uid,
-                            "device_ctd_list": device_ctd_list,
-                            "canonical_name": canonical_name}
+                             "device_path": device_path,
+                             "device_type": device_type,
+                             "display_name": display_name,
+                             "disk_uid": disk_uid,
+                             "device_ctd_list": device_ctd_list,
+                             "canonical_name": canonical_name}
                 host_disk_info.append(disk_dict)
 
             hosts_disk_info[host.name] = host_disk_info
 
         return hosts_disk_info
+
 
 def main():
     """Main"""
