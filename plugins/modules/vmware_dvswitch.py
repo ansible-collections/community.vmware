@@ -653,10 +653,8 @@ class VMwareDvSwitch(PyVmomi):
                 changed_version = True
                 spec_product = self.create_product_spec(self.switch_version)
         else:
-            results['version'] = self.vcenter_switch_version
-            if self.dvs.config.productInfo.version != self.vcenter_switch_version:
-                changed_version = True
-                spec_product = self.create_product_spec(self.vcenter_switch_version)
+            results['version'] = self.dvs.config.productInfo.version
+            changed_version = False
         if changed_version:
             changed = True
             changed_list.append("switch version")
