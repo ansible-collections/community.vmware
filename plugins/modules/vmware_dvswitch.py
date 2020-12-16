@@ -277,10 +277,6 @@ class VMwareDvSwitch(PyVmomi):
 
         self.switch_name = self.module.params['switch_name']
         self.switch_version = self.module.params['switch_version']
-        if self.content.about.version == '6.7.0':
-            self.vcenter_switch_version = '6.6.0'
-        else:
-            self.vcenter_switch_version = self.content.about.version
         folder = self.params['folder']
         if folder:
             self.folder_obj = self.content.searchIndex.FindByInventoryPath(folder)
@@ -653,10 +649,8 @@ class VMwareDvSwitch(PyVmomi):
                 changed_version = True
                 spec_product = self.create_product_spec(self.switch_version)
         else:
-            results['version'] = self.vcenter_switch_version
-            if self.dvs.config.productInfo.version != self.vcenter_switch_version:
-                changed_version = True
-                spec_product = self.create_product_spec(self.vcenter_switch_version)
+            results['version'] = self.dvs.config.productInfo.version
+            changed_version = False
         if changed_version:
             changed = True
             changed_list.append("switch version")

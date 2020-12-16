@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_dvswitch - fix an issue with vSphere 7 when no switch_version is defined (https://github.com/ansible-collections/community.vmware/issues/576)
