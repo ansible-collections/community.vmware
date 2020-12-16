@@ -120,7 +120,7 @@ EXAMPLES = r'''
     datastore_name: datastore
     subscription_url: 'https://library.url'
     ssl_thumbprint: 'aa:bb:cc:dd:ee:ff:gg:hh:ii:jj:kk:ll:mm:nn:oo:pp:qq:rr:ss:tt'
-    update_on_demand: 
+    update_on_demand: true
     state: present
   delegate_to: localhost
 
@@ -192,11 +192,11 @@ class VmwareContentLibCreate(VmwareRestClient):
             'local': self.content_service.content.LocalLibrary,
             'subscribed': self.content_service.content.SubscribedLibrary
         }
-        
+
         # Import objects of both types to prevent duplicate names
         self.get_all_libraries(self.library_types['local'])
         self.get_all_libraries(self.library_types['subscribed'])
-        
+
         # Set library type for create/update actions
         self.library_service = self.library_types[self.library_type]
         self.pyv = PyVmomi(module=module)
@@ -233,7 +233,7 @@ class VmwareContentLibCreate(VmwareRestClient):
                     lib_dict["lib_sub_url"] = lib_details.subscription_info.subscription_url
                     lib_dict["lib_sub_on_demand"] = lib_details.subscription_info.on_demand
                     lib_dict["lib_sub_ssl_thumbprint"] = lib_details.subscription_info.ssl_thumbprint
-            
+
                 self.local_libraries[lib_details.name] = lib_dict
                 self.existing_library_names.append(lib_details.name)
 
@@ -245,7 +245,7 @@ class VmwareContentLibCreate(VmwareRestClient):
         """
         ret = 'present' if self.library_name in self.local_libraries else 'absent'
         return ret
-    
+
     def fail_when_duplicated(self):
         if self.existing_library_names.count(self.library_name) > 1:
             self.module.fail_json(msg="Operation cannot continue, library [%s] is not unique" % self.library_name)
@@ -264,7 +264,7 @@ class VmwareContentLibCreate(VmwareRestClient):
         subscription_info.on_demand = self.update_on_demand
         subscription_info.automatic_sync_enabled = True
         subscription_info.subscription_url = self.subscription_url
-        
+
         if "https:" in self.subscription_url:
             subscription_info.ssl_thumbprint = self.ssl_thumbprint
         return subscription_info
@@ -279,26 +279,26 @@ class VmwareContentLibCreate(VmwareRestClient):
                 action = "updated"
             else:
                 library_id = self.library_service.create(create_spec=spec,
-                                                                            client_token=str(uuid.uuid4()))
+                                                         client_token=str(uuid.uuid4()))
                 action = "created"
         except ResourceInaccessible as e:
             message = ("vCenter Failed to make connection to %s with exception: %s    "
-                "If using https, check that the ssl thumbprint is valid"  % (self.subscription_url, str(e)))
+                       "If using https, check that the ssl thumbprint is valid" % (self.subscription_url, str(e)))
             self.module.fail_json(msg=message)
-        
-        content_library_info= dict(
+
+        content_library_info = dict(
             msg="Content Library '%s' %s." % (spec.name, action),
             library_id=library_id,
             library_description=self.library_description,
             library_type=spec.type,
         )
         if spec.type == "SUBSCRIBED":
-                content_library_info["library_subscription_url"] = spec.subscription_info.subscription_url
-                content_library_info["library_subscription_on_demand"] = spec.subscription_info.on_demand
-                content_library_info["library_subscription_ssl_thumbprint"] = spec.subscription_info.ssl_thumbprint
+            content_library_info["library_subscription_url"] = spec.subscription_info.subscription_url
+            content_library_info["library_subscription_on_demand"] = spec.subscription_info.on_demand
+            content_library_info["library_subscription_ssl_thumbprint"] = spec.subscription_info.ssl_thumbprint
         self.module.exit_json(
             changed=True,
-            content_library_info= content_library_info
+            content_library_info = content_library_info
         )
 
     def state_create_library(self):
@@ -321,17 +321,17 @@ class VmwareContentLibCreate(VmwareRestClient):
         create_spec.description = self.library_description
         self.library_types = {'local': create_spec.LibraryType.LOCAL,
                               'subscribed': create_spec.LibraryType.SUBSCRIBED}
-        create_spec.type = self.library_types[self.library_type]        
+        create_spec.type = self.library_types[self.library_type]    
         create_spec.storage_backings = storage_backings
 
         # Build subscribed specification
         if self.library_type == "subscribed":
             subscription_info = self.set_subscription_spec()
-            subscription_info.authentication_method  = SubscriptionInfo.AuthenticationMethod.NONE
+            subscription_info.authentication_method = SubscriptionInfo.AuthenticationMethod.NONE
             create_spec.subscription_info = subscription_info
 
         self.create_update(spec=create_spec)
-        
+
     def state_update_library(self):
         """
         Update Content Library
@@ -340,33 +340,33 @@ class VmwareContentLibCreate(VmwareRestClient):
         self.fail_when_duplicated()
         changed = False
         library_id = self.local_libraries[self.library_name]['lib_id']
-        
+
         library_update_spec = LibraryModel()
 
         # Ensure library types are consistent
         existing_library_type = self.local_libraries[self.library_name]['lib_type'].lower()
         if existing_library_type != self.library_type:
-            self.module.fail_json(msg="Library [%s] is of type %s, cannot be changed to %s" % 
-                (self.library_name, existing_library_type, self.library_type))
+            self.module.fail_json(msg="Library [%s] is of type %s, cannot be changed to %s" %
+                                  (self.library_name, existing_library_type, self.library_type))
 
         # Compare changeable subscribed attributes
         if self.library_type == "subscribed":
             existing_subscription_url = self.local_libraries[self.library_name]['lib_sub_url']
             sub_url_changed = (existing_subscription_url != self.subscription_url)
-            
+
             existing_on_demand = self.local_libraries[self.library_name]['lib_sub_on_demand']
-            sub_on_demand_changed = (existing_on_demand != self.update_on_demand) 
+            sub_on_demand_changed = (existing_on_demand != self.update_on_demand)
 
             sub_ssl_thumbprint_changed = False
             if "https:" in self.subscription_url and self.ssl_thumbprint:
                 existing_ssl_thumbprint = self.local_libraries[self.library_name]['lib_sub_ssl_thumbprint']
-                sub_ssl_thumbprint_changed = (existing_ssl_thumbprint != self.ssl_thumbprint) 
-                
+                sub_ssl_thumbprint_changed = (existing_ssl_thumbprint != self.ssl_thumbprint)
+
             if sub_url_changed or sub_on_demand_changed or sub_ssl_thumbprint_changed:
                 subscription_info = self.set_subscription_spec()
                 library_update_spec.subscription_info = subscription_info
                 changed = True
-        
+
         # Compare description
         library_desc = self.local_libraries[self.library_name]['lib_description']
         desired_lib_desc = self.params.get('library_description')
@@ -399,6 +399,7 @@ class VmwareContentLibCreate(VmwareRestClient):
                 library_id=library_id
             )
         )
+
 
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
