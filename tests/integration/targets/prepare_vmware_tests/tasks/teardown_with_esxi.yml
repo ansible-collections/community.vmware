@@ -69,12 +69,13 @@
 
 - name: Remove any potential existing "VM Network" on vSwitch0
   vmware_portgroup:
-    esxi_hostname: '{{ esxi_hosts }}'
+    esxi_hostname: '{{ item }}'
     switch: vSwitch0
     portgroup: VM Network
     validate_certs: false
     state: absent
   ignore_errors: true
+  with_items: "{{ esxi_hosts }}"
 
 - name: Remove the vSwitches
   vmware_vswitch:
@@ -89,13 +90,47 @@
 - name: Remove ESXi Hosts to vCenter
   vmware_host:
     datacenter_name: '{{ dc1 }}'
-    cluster_name: ccr1
+    cluster_name: '{{ ccr1 }}'
     esxi_hostname: '{{ item }}'
     esxi_username: '{{ esxi_user }}'
     esxi_password: '{{ esxi_password }}'
     state: absent
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
+
+- name: Exit maintenance on hosts to allow deletion of vCLS VMs
+  vmware_maintenancemode:
+    hostname: "{{ item }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    esxi_hostname: "{{ item }}"
+    timeout: 3600
+    state: absent
+  with_items: "{{ esxi_hosts }}"
+  delegate_to: localhost
+
+- name: Gather all remaining VMs on hosts
+  vmware_vm_info:
+    hostname: '{{ item }}'
+    username: '{{ esxi_user }}'
+    password: '{{ esxi_password }}'
+  delegate_to: localhost
+  register: vminfo
+  with_items: "{{ esxi_hosts }}"
+
+- name: Remove remaining any vCLS VMs
+  vmware_guest:
+    hostname: "{{ item.0.item }}"
+    username: '{{ esxi_user }}'
+    password: '{{ esxi_password }}'
+    uuid: "{{ item.1.uuid }}"
+    force: true
+    state: absent
+  delegate_to: localhost
+  with_subelements:
+    - "{{ vminfo.results }}"
+    - virtual_machines
+  when: "'vCLS' in item.1.guest_name"
 
 - name: Umount NFS datastores to ESXi (1/2)
   vmware_host_datastore:
