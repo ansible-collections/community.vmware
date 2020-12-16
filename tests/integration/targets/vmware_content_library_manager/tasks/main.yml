@@ -160,7 +160,7 @@
       assert:
         that:
           - not subscribed_content_lib_update_result.changed
-    
+
     # Testcase Update Subscribed Content Library as a Local Library
     - name: Update a subscribed content library as a local library
       vmware_content_library_manager:
@@ -197,7 +197,7 @@
         state: present
       register: subscribed_content_lib_invalid_thumbprint_result
       ignore_errors: yes
-    
+
     - debug:
         msg: "{{ subscribed_content_lib_invalid_thumbprint_result }}"
 

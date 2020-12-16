@@ -19,7 +19,7 @@ description:
 author:
 - Pavan Bidkar (@pgbidkar)
 notes:
-- Tested on vSphere 6.5, 6.7, 7.0
+- Tested on vSphere 6.5, 6.7, and 7.0
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -33,8 +33,8 @@ options:
     library_description:
       description:
       - The content library description.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       - Process of updating content library only allows description change.
       type: str
       required: False
@@ -42,8 +42,8 @@ options:
     library_type:
       description:
       - The content library type.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: False
       default: 'local'
@@ -51,8 +51,8 @@ options:
     datastore_name:
       description:
       - Name of the datastore on which backing content library is created.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       - Currently only datastore backing creation is supported.
       type: str
       required: False
@@ -60,27 +60,31 @@ options:
     subscription_url:
       description:
       - The url of the content library to subscribe to.
-      - This is required only if C(library_type) is set to C(subscribed).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(library_type) is set to C(subscribed).
+      - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: False
+      version_added: '1.6.0'
     ssl_thumbprint:
       description:
       - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
-      - This is required only if C(library_type) is set to C(subscribed) and the library is https.
-      - This parameter is ignored, when C(state) is set to C(absent).
-      - The information can be extracted using openssl using the following example. C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)
+      - This is required only if I(library_type) is set to C(subscribed) and the library is https.
+      - This parameter is ignored, when I(state) is set to C(absent).
+      - 'The information can be extracted using openssl using the following example:
+        C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
       required: False
+      version_added: '1.6.0'
     update_on_demand:
       description:
-      - Whether to download all content on demand C(True) or ahead of time C(False).
-      - This is required only if C(library_type) is set to C(subscribed).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - Whether to download all content on demand.
+      - If set to C(True), all content will be downloaded on demand.
+      - If set to C(False) content will be downloaded ahead of time.
+      - This is required only if Ilibrary_type) is set to C(subscribed).
+      - This parameter is ignored, when I(state) is set to C(absent).
       type: bool
-      required: False
-      choices: [True, False]
       default: False
+      version_added: '1.6.0'
     state:
       description:
       - The state of content library.
@@ -298,7 +302,7 @@ class VmwareContentLibCreate(VmwareRestClient):
             content_library_info["library_subscription_ssl_thumbprint"] = spec.subscription_info.ssl_thumbprint
         self.module.exit_json(
             changed=True,
-            content_library_info = content_library_info
+            content_library_info=content_library_info
         )
 
     def state_create_library(self):
@@ -321,7 +325,7 @@ class VmwareContentLibCreate(VmwareRestClient):
         create_spec.description = self.library_description
         self.library_types = {'local': create_spec.LibraryType.LOCAL,
                               'subscribed': create_spec.LibraryType.SUBSCRIBED}
-        create_spec.type = self.library_types[self.library_type]    
+        create_spec.type = self.library_types[self.library_type]
         create_spec.storage_backings = storage_backings
 
         # Build subscribed specification
@@ -377,7 +381,7 @@ class VmwareContentLibCreate(VmwareRestClient):
         if changed:
             library_update_spec.name = self.library_name
             self.create_update(spec=library_update_spec, library_id=library_id, update=True)
-            
+
         content_library_info = dict(msg="Content Library %s is unchanged." % self.library_name, library_id=library_id)
         self.module.exit_json(changed=False,
                               content_library_info=dict(msg=content_library_info, library_id=library_id))
