@@ -52,6 +52,7 @@ options:
       - If I(find_groups) is C(True), domain groups will be included in the result.
     type: bool
     default: True
+version_added: '1.6.0'
 extends_documentation_fragment:
   - community.vmware.vmware.documentation
 '''

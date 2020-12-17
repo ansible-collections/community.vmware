@@ -8,6 +8,7 @@ community.vmware.vcenter_domain_user_group_info
 **Gather user or group information of a domain**
 
 
+Version added: 1.6.0
 
 .. contents::
    :local:
@@ -328,6 +329,17 @@ Examples
         find_users: true
         find_groups: false
       register: gather_all_domain_user_result
+
+    - name: Gather administrator user by exact match condition
+      community.vmware.vcenter_domain_user_group_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        domain: vsphere.local
+        search_string: "vsphere.local\\administrator"
+        exact_match: true
+      register: gather_administrator_user_exact_match_result
 
 
 
