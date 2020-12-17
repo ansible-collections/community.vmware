@@ -31,25 +31,25 @@ options:
     required: True
   belongs_to_group:
     description:
-      -  If a group is existing, the returned contains only users or groups that directly belong to the specified group.
+      -  If a group existing, returned contains only users or groups that directly belong to the specified group.
     type: str
   belongs_to_user:
     description:
-      - If a user is existing, the returned contains only groups that directly contain the specified user.
+      - If a user existing, returned contains only groups that directly contain the specified user.
     type: str
   exact_match:
     description:
-      - If I(exact_match) is True, it indicates the I(search_string) passed should match a user or group name exactly.
+      - If I(exact_match) is C(True), it indicates the I(search_string) passed should match a user or group name exactly.
     type: bool
     default: False
   find_users:
     description:
-      - If I(find_users) is True, domain users will be included in the result.
+      - If I(find_users) is C(True), domain users will be included in the result.
     type: bool
     default: True
   find_groups:
     description:
-      - If I(find_groups) is True, domain groups will be included in the result.
+      - If I(find_groups) is C(True), domain groups will be included in the result.
     type: bool
     default: True
 extends_documentation_fragment:
@@ -57,8 +57,8 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Gather all domain user and group of vsphere.local
-  vcenter_domain_user_group_info:
+- name: Gather all domain user avcenter_domain_user_group_infond group of vsphere.local
+  community.vmware.vcenter_domain_user_group_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -68,7 +68,7 @@ EXAMPLES = r'''
   register: gather_all_domain_user_group_result
 
 - name: Gather all domain user and group included the administrator string
-  vcenter_domain_user_group_info:
+  community.vmware.vcenter_domain_user_group_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -76,6 +76,29 @@ EXAMPLES = r'''
     domain: vsphere.local
     search_string: administrator
   register: gather_domain_user_group_result
+
+- name: Gather all domain user of vsphere.local
+  community.vmware.vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: ''
+    find_users: true
+    find_groups: false
+  register: gather_all_domain_user_result
+
+- name: Gather administrator user by exact match condition
+  community.vmware.vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: "vsphere.local\\administrator"
+    exact_match: true
+  register: gather_administrator_user_exact_match_result
 '''
 
 RETURN = r'''
@@ -115,8 +138,13 @@ class VcenterDomainUserGroupInfo(PyVmomi):
         self.find_groups = self.params['find_groups']
 
     def execute(self):
+        user_directory_manager = self.content.userDirectory
+
+        if not self.domain.upper() in user_directory_manager.domainList:
+            self.module.fail_json(msg="domain not found: %s" % self.domain)
+
         try:
-            user_search_result = self.content.userDirectory.RetrieveUserGroups(
+            user_search_result = user_directory_manager.RetrieveUserGroups(
                 domain=self.domain,
                 searchStr=self.search_string,
                 belongsToGroup=self.belongs_to_group,

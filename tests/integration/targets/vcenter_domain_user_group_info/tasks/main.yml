@@ -159,3 +159,19 @@
     that:
       - gather_license_service_group_administrator_result.domain_user_groups | length == 1
       - gather_license_service_group_administrator_result.domain_user_groups.0.principal == "LicenseService.Administrators"
+
+- name: Gather administrator user by exact match condition
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: "vsphere.local\\administrator"
+    exact_match: true
+  register: gather_administrator_user_exact_match_result
+
+- name: Make sure if administrator user is existing by exact match
+  assert:
+    that:
+      - gather_administrator_user_exact_match_result.domain_user_groups.0.principal == "VSPHERE.LOCAL\\Administrator"

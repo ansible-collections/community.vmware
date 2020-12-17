@@ -51,7 +51,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>If a group is existing, the returned contains only users or groups that directly belong to the specified group.</div>
+                        <div>If a group existing, returned contains only users or groups that directly belong to the specified group.</div>
                 </td>
             </tr>
             <tr>
@@ -66,7 +66,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>If a user is existing, the returned contains only groups that directly contain the specified user.</div>
+                        <div>If a user existing, returned contains only groups that directly contain the specified user.</div>
                 </td>
             </tr>
             <tr>
@@ -101,7 +101,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>exact_match</em> is True, it indicates the <em>search_string</em> passed should match a user or group name exactly.</div>
+                        <div>If <em>exact_match</em> is <code>True</code>, it indicates the <em>search_string</em> passed should match a user or group name exactly.</div>
                 </td>
             </tr>
             <tr>
@@ -120,7 +120,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>find_groups</em> is True, domain groups will be included in the result.</div>
+                        <div>If <em>find_groups</em> is <code>True</code>, domain groups will be included in the result.</div>
                 </td>
             </tr>
             <tr>
@@ -139,7 +139,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>find_users</em> is True, domain users will be included in the result.</div>
+                        <div>If <em>find_users</em> is <code>True</code>, domain users will be included in the result.</div>
                 </td>
             </tr>
             <tr>
@@ -297,8 +297,8 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather all domain user and group of vsphere.local
-      vcenter_domain_user_group_info:
+    - name: Gather all domain user avcenter_domain_user_group_infond group of vsphere.local
+      community.vmware.vcenter_domain_user_group_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -308,7 +308,7 @@ Examples
       register: gather_all_domain_user_group_result
 
     - name: Gather all domain user and group included the administrator string
-      vcenter_domain_user_group_info:
+      community.vmware.vcenter_domain_user_group_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -316,6 +316,18 @@ Examples
         domain: vsphere.local
         search_string: administrator
       register: gather_domain_user_group_result
+
+    - name: Gather all domain user of vsphere.local
+      community.vmware.vcenter_domain_user_group_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        domain: vsphere.local
+        search_string: ''
+        find_users: true
+        find_groups: false
+      register: gather_all_domain_user_result
 
 
 
