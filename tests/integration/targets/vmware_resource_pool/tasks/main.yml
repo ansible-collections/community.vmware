@@ -7,6 +7,7 @@
   vars:
     setup_attach_host: true
     setup_datastore: true
+    move_host_out_of_cluster: true
 
 - name: set the vmware_resource_pool module default values
   module_defaults:
@@ -224,7 +225,7 @@
       password: "{{ vcenter_password }}"
       validate_certs: false
       datacenter: "{{ dc1 }}"
-      esxi_hostname: "{{ esxi1 }}"
+      esxi_hostname: "{{ esxi2 }}"
 
   block:
     - name: add resource pool to ESXi with check_mode

@@ -9,6 +9,8 @@
     - include_tasks: setup_cluster.yml
     - include_tasks: setup_attach_hosts.yml
       when: setup_attach_host is defined
+    - include_tasks: move_host_out_of_cluster.yml
+      when: move_host_out_of_cluster is defined
     - include_tasks: setup_datastore.yml
       when: setup_datastore is defined
     - include_tasks: setup_virtualmachines.yml
