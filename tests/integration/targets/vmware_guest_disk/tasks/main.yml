@@ -16,14 +16,14 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "invalid_disk_mode"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 10
-          state: present
-          type: eagerzeroedthick
-          unit_number: 2
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "invalid_disk_mode"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 10
+        state: present
+        type: eagerzeroedthick
+        unit_number: 2
   register: test_create_disk1
   ignore_errors: true
 
@@ -33,7 +33,7 @@
 - name: assert that changes were not made
   assert:
     that:
-        - not(test_create_disk1 is changed)
+      - not(test_create_disk1 is changed)
 
 - name: create new disk(s) with valid disk mode
   vmware_guest_disk:
@@ -44,30 +44,30 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_persistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: eagerzeroedthick
-          unit_number: 2
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: eagerzeroedthick
-          unit_number: 3
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "persistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: eagerzeroedthick
-          unit_number: 4
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: eagerzeroedthick
+        unit_number: 2
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_nonpersistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: eagerzeroedthick
+        unit_number: 3
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "persistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: eagerzeroedthick
+        unit_number: 4
   register: test_create_disk2
 
 - debug:
@@ -76,7 +76,7 @@
 - name: assert that changes were made
   assert:
     that:
-        - test_create_disk2 is changed
+      - test_create_disk2 is changed
 
 - name: create new disk with custom shares
   vmware_guest_disk:
@@ -87,16 +87,16 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - size_gb: 1
-          type: eagerzeroedthick
-          datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 1
-          state: present
-          unit_number: 4
-          shares:
-            level: custom
-            level_value: 1300
+      - size_gb: 1
+        type: eagerzeroedthick
+        datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_nonpersistent"
+        scsi_controller: 1
+        state: present
+        unit_number: 4
+        shares:
+          level: custom
+          level_value: 1300
   register: test_custom_shares
 
 - debug:
@@ -105,7 +105,7 @@
 - name: assert that changes were made
   assert:
      that:
-         - test_custom_shares is changed
+       - test_custom_shares is changed
 
 - name: create new disk with custom IO limits and shares in IO Limits
   vmware_guest_disk:
@@ -116,18 +116,18 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - size_gb: 1
-          type: eagerzeroedthick
-          datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 2
-          state: present
-          unit_number: 4
-          iolimit:
-            limit: 1506
-            shares:
-              level: custom
-              level_value: 1305
+      - size_gb: 1
+        type: eagerzeroedthick
+        datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_nonpersistent"
+        scsi_controller: 2
+        state: present
+        unit_number: 4
+        iolimit:
+          limit: 1506
+          shares:
+            level: custom
+            level_value: 1305
   register: test_custom_IoLimit_shares
 
 - debug:
@@ -136,123 +136,115 @@
 - name: assert that changes were made
   assert:
      that:
-         - test_custom_IoLimit_shares is changed
+       - test_custom_IoLimit_shares is changed
 
-- name: Update disk for custom IO limits in IO Limits
-  vmware_guest_disk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
-    disk:
-        - size_gb: 2
-          type: eagerzeroedthick
-          datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 2
-          state: present
-          unit_number: 4
-          iolimit:
-            limit: 1500
-            shares:
-              level: custom
-              level_value: 1305
-  register: test_custom_IoLimit
+# TODO: vcsim does not support reconfiguration of disk mode, fails with types.InvalidDeviceSpec
+- when: vcsim is not defined
+  block:
+    - name: Update disk for custom IO limits in IO Limits
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - size_gb: 2
+            scsi_controller: 2
+            state: present
+            unit_number: 4
+            iolimit:
+              limit: 1500
+              shares:
+                level: custom
+                level_value: 1305
+      register: test_custom_IoLimit
 
-- debug:
-    msg: "{{ test_custom_IoLimit }}"
+    - debug:
+        msg: "{{ test_custom_IoLimit }}"
 
-- name: assert that changes were made
-  assert:
-     that:
-         - test_custom_IoLimit is changed
+    - name: assert that changes were made
+      assert:
+         that:
+           - test_custom_IoLimit is changed
 
-- name: Update disk for shares of IO limits
-  vmware_guest_disk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
-    disk:
-        - size_gb: 3
-          type: eagerzeroedthick
-          datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 2
-          state: present
-          unit_number: 4
-          iolimit:
-            limit: 1500
-            shares:
-              level: low
-              level_value: 650
-  register: test_shares_IoLimit
+    - name: Update disk for shares of IO limits
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - size_gb: 3
+            scsi_controller: 2
+            state: present
+            unit_number: 4
+            iolimit:
+              limit: 1500
+              shares:
+                level: low
+      register: test_shares_IoLimit
 
-- debug:
-    msg: "{{ test_shares_IoLimit }}"
+    - debug:
+        msg: "{{ test_shares_IoLimit }}"
 
-- name: assert that changes were made
-  assert:
-     that:
-         - test_shares_IoLimit is changed
+    - name: assert that changes were made
+      assert:
+         that:
+           - test_shares_IoLimit is changed
 
-- name: Update disk for shares and IoLimits of IO limits
-  vmware_guest_disk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
-    disk:
-        - size_gb: 4
-          type: eagerzeroedthick
-          datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_nonpersistent"
-          scsi_controller: 2
-          state: present
-          unit_number: 4
-          iolimit:
-            limit: 1507
-            shares:
-              level: high
-              level_value: 1200
-  register: test_shares_IoLimits
+    - name: Update disk for shares and IoLimits of IO limits
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - size_gb: 4
+            scsi_controller: 2
+            state: present
+            unit_number: 4
+            iolimit:
+              limit: 1507
+              shares:
+                level: high
+      register: test_shares_IoLimits
 
-- debug:
-    msg: "{{ test_shares_IoLimits }}"
+    - debug:
+        msg: "{{ test_shares_IoLimits }}"
 
-- name: assert that changes were made
-  assert:
-     that:
-         - test_shares_IoLimits is changed
+    - name: assert that changes were made
+      assert:
+         that:
+           - test_shares_IoLimits is changed
 
-- name: remove disks without destroy file
-  vmware_guest_disk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
-    disk:
-        - state: "absent"
-          scsi_controller: 0
-          unit_number: 4
-          destroy: false
-  register: test_remove_without_destroy
+    - name: remove disks without destroy file
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - state: "absent"
+            scsi_controller: 0
+            unit_number: 2
+            destroy: false
+      register: test_remove_without_destroy
 
-- debug:
-    msg: "{{ test_remove_without_destroy }}"
+    - debug:
+        msg: "{{ test_remove_without_destroy }}"
 
-- name: assert that changes were made
-  assert:
-    that:
-        - test_remove_without_destroy is changed
+    - name: assert that changes were made
+      assert:
+        that:
+          - test_remove_without_destroy is changed
 
 - name: re-create disk with valid disk mode
   vmware_guest_disk:
@@ -263,14 +255,14 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "persistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: eagerzeroedthick
-          unit_number: 4
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "persistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: eagerzeroedthick
+        unit_number: 8
   register: test_recreate_disk
 
 - debug:
@@ -279,7 +271,7 @@
 - name: assert that changes were made
   assert:
     that:
-        - test_recreate_disk is changed
+      - test_recreate_disk is changed
 
 - name: create new disk with sharing (multi-writer) mode
   vmware_guest_disk:
@@ -290,15 +282,15 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_persistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: eagerzeroedthick
-          sharing: true
-          unit_number: 6
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: eagerzeroedthick
+        sharing: true
+        unit_number: 6
   register: test_create_disk_sharing
 
 - debug:
@@ -307,7 +299,7 @@
 - name: assert that changes were made
   assert:
     that:
-        - test_create_disk_sharing is changed
+      - test_create_disk_sharing is changed
 
 - name: create new disk with invalid disk type for sharing (multi-writer) mode
   vmware_guest_disk:
@@ -318,15 +310,15 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - datastore: "{{ rw_datastore }}"
-          disk_mode: "independent_persistent"
-          scsi_controller: 0
-          scsi_type: 'paravirtual'
-          size_gb: 1
-          state: present
-          type: thin
-          unit_number: 5
-          sharing: true
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        scsi_controller: 0
+        scsi_type: 'paravirtual'
+        size_gb: 1
+        state: present
+        type: thin
+        unit_number: 5
+        sharing: true
   register: test_create_disk_sharing_invalid
   ignore_errors: true
 
@@ -336,9 +328,37 @@
 - name: assert that changes were not made
   assert:
     that:
-        - not(test_create_disk_sharing_invalid is changed)
+      - not(test_create_disk_sharing_invalid is changed)
 
-- name: remove disk with destroy file
+- when: vcsim is not defined
+  block:
+    - name: remove disk with destroy file
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - state: "absent"
+            scsi_controller: 0
+            unit_number: 3
+            destroy: true
+          - state: "absent"
+            scsi_controller: 0
+            unit_number: 4
+      register: test_remove_with_destroy
+
+    - debug:
+        msg: "{{ test_remove_with_destroy }}"
+
+    - name: assert that changes were made
+      assert:
+        that:
+          - test_remove_with_destroy is changed
+
+- name: create new disk with SATA controller
   vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -347,19 +367,169 @@
     validate_certs: false
     name: "{{ virtual_machines[0].name }}"
     disk:
-        - state: "absent"
-          scsi_controller: 0
-          unit_number: 3
-          destroy: true
-        - state: "absent"
-          scsi_controller: 0
-          unit_number: 4
-  register: test_remove_with_destroy
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        controller_type: 'sata'
+        controller_number: 1
+        unit_number: 3
+        size_gb: 1
+        state: present
+        type: thin
+  register: test_create_sata_disk
 
 - debug:
-    msg: "{{ test_remove_with_destroy }}"
+    msg: "{{ test_create_sata_disk }}"
 
 - name: assert that changes were made
   assert:
     that:
-        - test_remove_with_destroy is changed
+      - test_create_sata_disk is changed
+
+- name: create new disk with NVMe controller
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        controller_type: 'nvme'
+        controller_number: 0
+        unit_number: 1
+        size: 1gb
+        state: present
+        type: thin
+  register: test_create_nvme_disk
+
+- debug:
+    msg: "{{ test_create_nvme_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+      - test_create_nvme_disk is changed
+
+- name: create 2 new disks on existing SATA controller and NVMe controller
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: "{{ virtual_machines[0].name }}"
+    disk:
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        controller_type: 'sata'
+        controller_number: 1
+        unit_number: 6
+        size_gb: 1
+        state: present
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        controller_type: 'nvme'
+        controller_number: 0
+        unit_number: 4
+        size: 1gb
+        state: present
+        type: thin
+  register: test_create_two_disks
+
+- debug:
+    msg: "{{ test_create_two_disks }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+      - test_create_two_disks is changed
+
+- when: vcsim is not defined
+  block:
+    - name: re-configure SATA disk
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - disk_mode: "independent_nonpersistent"
+            controller_type: 'sata'
+            controller_number: 1
+            unit_number: 3
+            size_gb: 2
+            state: present
+            shares:
+              level: custom
+              level_value: 1200
+      register: test_reconfig_sata_disk
+
+    - debug:
+        msg: "{{ test_reconfig_sata_disk }}"
+
+    - name: assert that changes were made
+      assert:
+        that:
+          - test_reconfig_sata_disk is changed
+
+    - name: re-configure NVMe disk
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - controller_type: 'nvme'
+            controller_number: 0
+            unit_number: 1
+            size_gb: 2
+            state: present
+            iolimit:
+              limit: 1507
+              shares:
+                level: custom
+                level_value: 1000
+      register: test_reconfig_nvme_disk
+
+    - debug:
+        msg: "{{ test_reconfig_nvme_disk }}"
+
+    - name: assert that changes were made
+      assert:
+        that:
+          - test_reconfig_nvme_disk is changed
+
+    - name: remove SATA and NVMe disks
+      vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - state: "absent"
+            controller_type: 'sata'
+            controller_number: 1
+            unit_number: 3
+            destroy: false
+          - state: "absent"
+            controller_type: 'nvme'
+            controller_number: 0
+            unit_number: 1
+            destroy: true
+      register: test_remove_sata_nvme_disk
+
+    - debug:
+        msg: "{{ test_remove_sata_nvme_disk }}"
+
+    - name: assert that changes were made
+      assert:
+        that:
+          - test_remove_sata_nvme_disk is changed
