@@ -298,7 +298,7 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather all domain user avcenter_domain_user_group_infond group of vsphere.local
+    - name: Gather all domain user and group of vsphere.local
       community.vmware.vcenter_domain_user_group_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
