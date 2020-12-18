@@ -1,0 +1,177 @@
+# Test code for the vcenter_domain_user_group_info module.
+# Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+- name: Gather all domain user and group of vsphere.local
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: ''
+  register: gather_all_domain_user_group_result
+
+- name: Make sure if domain_user_groups attribute is existing
+  assert:
+    that:
+      - gather_all_domain_user_group_result.domain_user_groups is defined
+      - gather_all_domain_user_group_result.domain_user_groups | length >= 1
+
+- name: Gather all domain user and group included the admin string
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: admin
+  register: gather_domain_user_group_result
+
+- name: Make sure if multiple users are existing and included the admin string
+  assert:
+    that:
+      - >-
+        gather_domain_user_group_result.domain_user_groups
+        | map(attribute='principal')
+        | map('upper')
+        | map('regex_search', 'ADMIN')
+        | select('none')
+        | list
+        | length == 0
+      - gather_domain_user_group_result.domain_user_groups | length >= 2
+
+- name: Gather all domain user of vsphere.local
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: ''
+    find_users: true
+    find_groups: false
+  register: gather_all_domain_user_result
+
+- name: Make sure if the result doesn't include domain groups
+  assert:
+    that:
+      - >-
+        gather_all_domain_user_result.domain_user_groups
+        | map(attribute='group')
+        | select('true')
+        | list
+        | length == 0
+
+- name: Gather all domain group of vsphere.local
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: ''
+    find_users: false
+    find_groups: true
+  register: gather_all_domain_group_result
+
+- name: Make sure if the result doesn't include domain users
+  assert:
+    that:
+      - >-
+        gather_all_domain_group_result.domain_user_groups
+        | map(attribute='group')
+        | select('false')
+        | list
+        | length == 0
+
+- name: Gather administrator user only of domain
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: administrator
+    find_users: true
+    find_groups: false
+  register: gather_administrator_user_only_result
+
+- name: Make sure if the administrator user only is existing in result
+  assert:
+    that:
+      - gather_administrator_user_only_result.domain_user_groups | length == 1
+      - gather_administrator_user_only_result.domain_user_groups.0.principal == "Administrator"
+      - gather_administrator_user_only_result.domain_user_groups.0.group is sameas false
+
+- name: Gather DCAdmins group only of domain
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: DCAdmins
+    find_users: false
+    find_groups: true
+  register: gather_dcadmins_group_only_result
+
+- name: Make sure if the DCAdmins group only is existing in result
+  assert:
+    that:
+      - gather_dcadmins_group_only_result.domain_user_groups | length == 1
+      - gather_dcadmins_group_only_result.domain_user_groups.0.principal == "DCAdmins"
+      - gather_dcadmins_group_only_result.domain_user_groups.0.group is sameas true
+
+- name: Gather administrators included to LicenseService.Administrators group
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: administrators
+    belongs_to_group: LicenseService.Administrators
+  register: gather_administrators_license_service_group_result
+
+- name: Make sure if the administrators a member of LicenseService.Administrtors group is existing
+  assert:
+    that:
+      - gather_administrators_license_service_group_result.domain_user_groups | length == 1
+      - gather_administrators_license_service_group_result.domain_user_groups.0.principal == "Administrators"
+
+- name: Gather LicenseService.Administrators group included to administrators user
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: LicenseService.Administrators
+    belongs_to_user: administrators
+  register: gather_license_service_group_administrator_result
+
+- name: Make sure if the administrators belonging to LicenseService.Administrtors group is existing
+  assert:
+    that:
+      - gather_license_service_group_administrator_result.domain_user_groups | length == 1
+      - gather_license_service_group_administrator_result.domain_user_groups.0.principal == "LicenseService.Administrators"
+
+- name: Gather administrator user by exact match condition
+  vcenter_domain_user_group_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    domain: vsphere.local
+    search_string: "vsphere.local\\administrator"
+    exact_match: true
+  register: gather_administrator_user_exact_match_result
+
+- name: Make sure if administrator user is existing by exact match
+  assert:
+    that:
+      - gather_administrator_user_exact_match_result.domain_user_groups.0.principal == "VSPHERE.LOCAL\\Administrator"
