@@ -468,6 +468,7 @@ class PyVmomiHelper(PyVmomi):
         disk_spec = vim.vm.device.VirtualDeviceSpec()
         disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         disk_spec.device = vim.vm.device.VirtualDisk()
+        disk_spec.device.key = -randint(20000, 24999)
         disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
         disk_spec.device.backing.diskMode = disk['disk_mode']
         disk_spec.device.backing.sharing = disk['sharing']
