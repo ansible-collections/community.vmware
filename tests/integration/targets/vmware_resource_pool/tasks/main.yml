@@ -7,6 +7,7 @@
   vars:
     setup_attach_host: true
     setup_datastore: true
+    move_host_out_of_cluster: true
 
 - name: set the vmware_resource_pool module default values
   module_defaults:
@@ -215,3 +216,101 @@
         that:
           - resource_result_014.changed is sameas false
           - resource_result_014.resource_pool_config is defined
+
+- name: set the vmware_resource_pool module default values without cluster parameter
+  module_defaults:
+    vmware_resource_pool:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      esxi_hostname: "{{ esxi2 }}"
+
+  block:
+    - name: add resource pool to ESXi with check_mode
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+      check_mode: true
+      register: resource_result_015
+
+    - assert:
+        that:
+          - resource_result_015.changed is sameas true
+
+    - name: add resource pool to ESXi
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+      register: resource_result_016
+
+    - assert:
+        that:
+          - resource_result_016.changed is sameas true
+
+    - name: add resource pool to ESXi(idempotency check)
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+      register: resource_result_017
+
+    - assert:
+        that:
+          - resource_result_017.changed is sameas false
+
+    - name: change resource pool config with the custom default value and check_mode
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+        mem_shares: custom
+        cpu_shares: custom
+      check_mode: true
+      register: resource_result_018
+
+    - assert:
+        that:
+          - resource_result_018.changed is sameas true
+
+    - name: change resource pool config with the custom default value
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+        mem_shares: custom
+        cpu_shares: custom
+      register: resource_result_019
+
+    - assert:
+        that:
+          - resource_result_019.changed is sameas true
+          - resource_result_019.resource_pool_config is defined
+          - resource_result_019.resource_pool_config.cpuAllocation.shares.level == 'custom'
+          - resource_result_019.resource_pool_config.cpuAllocation.shares.shares == 4000
+          - resource_result_019.resource_pool_config.memoryAllocation.shares.level == 'custom'
+          - resource_result_019.resource_pool_config.memoryAllocation.shares.shares == 163840
+
+    - name: remove resource pool from ESXi with check_mode
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+        state: absent
+      check_mode: true
+      register: resource_result_020
+
+    - assert:
+        that:
+          - resource_result_020.changed is sameas true
+
+    - name: remove resource pool from ESXi
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+        state: absent
+      register: resource_result_021
+
+    - assert:
+        that:
+          - resource_result_021.changed is sameas true
+
+    - name: remove resource pool from ESXi(idempotency check)
+      vmware_resource_pool:
+        resource_pool: test_resource_015
+        state: absent
+      register: resource_result_023
+
+    - assert:
+        that:
+          - resource_result_023.changed is sameas false
