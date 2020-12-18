@@ -2227,9 +2227,8 @@ class PyVmomiHelper(PyVmomi):
                 temp_spec = cc_mgr.GetCustomizationSpec(name=custom_spec_name)
                 self.customspec = temp_spec.spec
                 return
-            else:
-                self.module.fail_json(msg="Unable to find customization specification"
-                                          " '%s' in given configuration." % custom_spec_name)
+            self.module.fail_json(msg="Unable to find customization specification"
+                                      " '%s' in given configuration." % custom_spec_name)
 
         # Network settings
         adaptermaps = []
@@ -2298,7 +2297,11 @@ class PyVmomiHelper(PyVmomi):
             # Setting hostName, orgName and fullName is mandatory, so we set some default when missing
             ident.userData.computerName = vim.vm.customization.FixedName()
             # computer name will be truncated to 15 characters if using VM name
-            default_name = self.params['name'].replace(' ', '')
+            default_name = ""
+            if 'name' in self.params and self.params['name']:
+                default_name = self.params['name'].replace(' ', '')
+            elif vm_obj:
+                default_name = vm_obj.name.replace(' ', '')
             punctuation = string.punctuation.replace('-', '')
             default_name = ''.join([c for c in default_name if c not in punctuation])
             ident.userData.computerName.name = str(self.params['customization'].get('hostname', default_name[0:15]))
@@ -2357,7 +2360,12 @@ class PyVmomiHelper(PyVmomi):
                 ident.domain = str(self.params['customization']['domain'])
 
             ident.hostName = vim.vm.customization.FixedName()
-            hostname = str(self.params['customization'].get('hostname', self.params['name'].split('.')[0]))
+            default_name = ""
+            if 'name' in self.params and self.params['name']:
+                default_name = self.params['name']
+            elif vm_obj:
+                default_name = vm_obj.name
+            hostname = str(self.params['customization'].get('hostname', default_name.split('.')[0]))
             # Remove all characters except alphanumeric and minus which is allowed by RFC 952
             valid_hostname = re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
             ident.hostName.name = valid_hostname
