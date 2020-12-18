@@ -111,7 +111,7 @@
         library_name: Sample_Subscribed_Library
         library_description: Sample Description
         subscription_url: "https://wp-content.vmware.com/v2/latest/lib.json"
-        update_on_demand: True
+        update_on_demand: true
         library_type: subscribed
         ssl_thumbprint: ba:c6:4e:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
         datastore_name: '{{ rw_datastore }}'
@@ -142,7 +142,7 @@
         library_name: Sample_Subscribed_Library
         library_description: Update Sample Description
         subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
-        update_on_demand: True
+        update_on_demand: true
         library_type: subscribed
         ssl_thumbprint: ba:c6:4e:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
         state: present
@@ -173,7 +173,7 @@
         library_type: local
         state: present
       register: subscribed_content_lib_invalid_update_result
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Check subscribed content library is not updated and errors cleanly
       assert:
@@ -191,12 +191,12 @@
         library_name: Sample_Subscribed_Library
         library_description: Update Sample Description
         subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
-        update_on_demand: True
+        update_on_demand: true
         library_type: subscribed
         ssl_thumbprint: aa:bb:cc:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
         state: present
       register: subscribed_content_lib_invalid_thumbprint_result
-      ignore_errors: yes
+      ignore_errors: true
 
     - debug:
         msg: "{{ subscribed_content_lib_invalid_thumbprint_result }}"
