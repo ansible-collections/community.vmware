@@ -994,7 +994,7 @@ Examples
 .. code-block:: yaml
 
     - name: Enable iSCSI of ESXi
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -1002,7 +1002,7 @@ Examples
         state: enabled
 
     - name: Add a dynamic target to iSCSI config of ESXi
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -1014,7 +1014,7 @@ Examples
         state: present
 
     - name: Add a static target to iSCSI config of ESXi
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -1027,7 +1027,7 @@ Examples
         state: present
 
     - name: Add VMKernels to iSCSI config of ESXi
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -1040,7 +1040,7 @@ Examples
         state: present
 
     - name: Use CHAP authentication
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -1055,7 +1055,7 @@ Examples
         state: present
 
     - name: Remove a dynamic target from iSCSI config of ESXi
-      vmware_host_iscsi:
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

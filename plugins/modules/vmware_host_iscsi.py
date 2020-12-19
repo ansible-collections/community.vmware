@@ -265,7 +265,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Enable iSCSI of ESXi
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -273,7 +273,7 @@ EXAMPLES = r'''
     state: enabled
 
 - name: Add a dynamic target to iSCSI config of ESXi
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -285,7 +285,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Add a static target to iSCSI config of ESXi
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -298,7 +298,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Add VMKernels to iSCSI config of ESXi
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -311,7 +311,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Use CHAP authentication
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -326,7 +326,7 @@ EXAMPLES = r'''
     state: present
 
 - name: Remove a dynamic target from iSCSI config of ESXi
-  vmware_host_iscsi:
+  community.vmware.vmware_host_iscsi:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
