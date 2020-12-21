@@ -549,7 +549,7 @@ class VMwareCluster(PyVmomi):
             self.datacenter = find_datacenter_by_name(self.content, self.datacenter_name)
             if self.datacenter is None:
                 self.module.fail_json(msg="Datacenter %s does not exist." % self.datacenter_name)
-            self.cluster = self.find_cluster_by_name(cluster_name=self.cluster_name)
+            self.cluster = self.find_cluster_by_name(cluster_name=self.cluster_name, datacenter_name=self.datacenter)
 
             if self.cluster is None:
                 return 'absent'
