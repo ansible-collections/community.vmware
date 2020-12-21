@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_vsan_health_info - add new parameter to support datacenter.
