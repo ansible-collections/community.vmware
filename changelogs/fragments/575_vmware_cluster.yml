@@ -1,0 +1,5 @@
+bugfixes:
+- vmware_cluster - consider datacenter name while creating cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_vsan - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_ha - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_drs - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
