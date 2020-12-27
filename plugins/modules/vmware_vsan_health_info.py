@@ -10,14 +10,17 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vsan_health_info
-
 short_description: Gather information about a VMware vSAN cluster's health
-
-
 description:
-    - "Gather information about a VMware vSAN cluster's health"
-
+    - "Gather information about a VMware vSAN cluster's health."
 options:
+    datacenter:
+        description:
+            - Name of the Datacenter.
+        required: false
+        type: str
+        aliases: [ 'datacenter_name' ]
+        version_added: '1.6.0'
     cluster_name:
         description:
             - Name of the vSAN cluster.
@@ -27,31 +30,34 @@ options:
         description:
             - C(True) to return the result from cache directly instead of running the full health check.
         required: false
-        default: False
+        default: false
         type: bool
-
 requirements:
     - PyVmomi
     - VMware vSAN Python's SDK
-
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
-
 author:
     - Erwan Quelin (@equelin)
 '''
 
 EXAMPLES = r'''
 - name: Gather health info from a vSAN's cluster
-  hosts: localhost
-  gather_facts: false
   community.vmware.vmware_vsan_health_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: 'vSAN01'
     fetch_from_cache: False
+
+- name: Gather health info from a vSAN's cluster with datacenter
+  community.vmware.vmware_vsan_health_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: 'vSAN01'
+    datacenter: 'Datacenter_01'
+    fetch_from_cache: True
 '''
 
 RETURN = r'''
@@ -117,20 +123,65 @@ except ImportError:
     HAS_VSANPYTHONSDK = False
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api, vmware_argument_spec, find_cluster_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
+
+
+class VSANInfoManager(PyVmomi):
+    def __init__(self, module):
+        super(VSANInfoManager, self).__init__(module)
+        self.datacenter = None
+        self.cluster = None
+
+    def gather_info(self):
+        datacenter_name = self.module.params.get('datacenter')
+        if datacenter_name:
+            self.datacenter = self.find_datacenter_by_name(datacenter_name)
+            if self.datacenter is None:
+                self.module.fail_json(msg="Datacenter %s does not exist." % datacenter_name)
+
+        cluster_name = self.module.params.get('cluster_name')
+        self.cluster = self.find_cluster_by_name(cluster_name=cluster_name, datacenter_name=self.datacenter)
+        if self.cluster is None:
+            self.module.fail_json(msg="Cluster %s does not exist." % cluster_name)
+
+        fetch_from_cache = self.module.params.get('fetch_from_cache')
+
+        client_stub = self.si._GetStub()
+        ssl_context = client_stub.schemeArgs.get('context')
+
+        api_version = vsanapiutils.GetLatestVmodlVersion(self.module.params['hostname'])
+        vc_mos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=api_version)
+
+        vsan_cluster_health_system = vc_mos['vsan-cluster-health-system']
+
+        cluster_health = {}
+        try:
+            cluster_health = vsan_cluster_health_system.VsanQueryVcClusterHealthSummary(
+                cluster=self.cluster,
+                fetchFromCache=fetch_from_cache,
+            )
+        except vmodl.fault.NotFound as not_found:
+            self.module.fail_json(msg=not_found.msg)
+        except vmodl.fault.RuntimeFault as runtime_fault:
+            self.module.fail_json(msg=runtime_fault.msg)
+
+        health = json.dumps(cluster_health, cls=VmomiSupport.VmomiJSONEncoder, sort_keys=True, strip_dynamic=True)
+
+        self.module.exit_json(changed=False, vsan_health_info=health)
 
 
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
+        datacenter=dict(required=False, type='str', aliases=['datacenter_name']),
         cluster_name=dict(required=True, type='str'),
         fetch_from_cache=dict(required=False, type='bool', default=False)
     )
 
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
-
-    if not HAS_PYVMOMI:
-        module.fail_json(msg=missing_required_lib('PyVmomi'), exception=PYVMOMI_IMP_ERR)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True
+    )
 
     if not HAS_VSANPYTHONSDK:
         module.fail_json(msg=missing_required_lib('vSAN Management SDK for Python'), exception=VSANPYTHONSDK_IMP_ERR)
@@ -138,37 +189,8 @@ def main():
     if not HAS_PYVMOMIJSON:
         module.fail_json(msg='The installed version of pyvmomi lacks JSON output support; need pyvmomi>6.7.1')
 
-    try:
-        si, content = connect_to_api(module, True, True)
-    except Exception as e:
-        module.fail_json(msg=e.msg)
-
-    client_stub = si._GetStub()
-    ssl_context = client_stub.schemeArgs.get('context')
-
-    cluster = find_cluster_by_name(content, module.params['cluster_name'])
-
-    if not cluster:
-        module.fail_json(msg="Failed to find cluster %s" % module.params['cluster_name'])
-
-    apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
-    vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
-
-    vsanClusterHealthSystem = vcMos['vsan-cluster-health-system']
-
-    try:
-        clusterHealth = vsanClusterHealthSystem.VsanQueryVcClusterHealthSummary(
-            cluster=cluster,
-            fetchFromCache=module.params['fetch_from_cache']
-        )
-    except vmodl.fault.NotFound as not_found:
-        module.fail_json(msg=not_found.msg)
-    except vmodl.fault.RuntimeFault as runtime_fault:
-        module.fail_json(msg=runtime_fault.msg)
-
-    health = json.dumps(clusterHealth, cls=VmomiSupport.VmomiJSONEncoder, sort_keys=True, strip_dynamic=True)
-
-    module.exit_json(changed=False, vsan_health_info=health)
+    vsan_info_manager = VSANInfoManager(module)
+    vsan_info_manager.gather_info()
 
 
 if __name__ == '__main__':
