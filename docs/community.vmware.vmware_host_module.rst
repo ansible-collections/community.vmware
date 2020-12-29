@@ -360,6 +360,7 @@ Parameters
                                     <li>absent</li>
                                     <li>add_or_reconnect</li>
                                     <li>reconnect</li>
+                                    <li>disconnected</li>
                         </ul>
                 </td>
                 <td>
@@ -369,6 +370,7 @@ Parameters
                         <div>If set to <code>absent</code>, do nothing if host already does not exists.</div>
                         <div>If set to <code>add_or_reconnect</code>, add the host if it&#x27;s absent else reconnect it and update the location.</div>
                         <div>If set to <code>reconnect</code>, then reconnect the host if it&#x27;s present and update the location.</div>
+                        <div>If set to <code>disconnected</code>, disconnect the host if the host already exists.</div>
                 </td>
             </tr>
             <tr>

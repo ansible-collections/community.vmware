@@ -91,8 +91,9 @@ options:
     - If set to C(absent), do nothing if host already does not exists.
     - If set to C(add_or_reconnect), add the host if it's absent else reconnect it and update the location.
     - If set to C(reconnect), then reconnect the host if it's present and update the location.
+    - If set to C(disconnected), disconnect the host if the host already exists.
     default: present
-    choices: ['present', 'absent', 'add_or_reconnect', 'reconnect']
+    choices: ['present', 'absent', 'add_or_reconnect', 'reconnect', 'disconnected']
     type: str
   esxi_ssl_thumbprint:
     description:
@@ -261,6 +262,10 @@ class VMwareHost(PyVmomi):
             'reconnect': {
                 'present': self.state_reconnect_host,
                 'update': self.state_update_host,
+            },
+            'disconnected': {
+                'present': self.state_disconnected_host,
+                'absent': self.state_exit_unchanged,
             }
         }
 
@@ -788,6 +793,37 @@ class VMwareHost(PyVmomi):
 
         self.module.exit_json(changed=changed, msg=str(result))
 
+    def state_disconnected_host(self):
+        """Disconnect host to vCenter"""
+        changed = True
+        result = None
+
+        if self.module.check_mode:
+            result = "Host would be disconnected host from vCenter '%s'" % self.vcenter
+        else:
+            if self.host.runtime.connectionState == 'disconnected':
+                changed = False
+                result = "Host already disconnected"
+            else:
+                self.disconnect_host(self.host)
+                result = "Host disconnected from vCenter '%s'" % self.vcenter
+        self.module.exit_json(changed=changed, result=to_native(result))
+
+    def disconnect_host(self, host_object):
+        """Disconnect host to vCenter"""
+        try:
+            task = host_object.DisconnectHost_Task()
+        except Exception as e:
+            self.module.fail_json(msg="Failed to disconnect host from vCenter: %s" % to_native(e))
+
+        try:
+            changed, result = wait_for_task(task)
+        except TaskError as task_error:
+            self.module.fail_json(
+                msg="Failed to disconnect host from vCenter '%s' due to %s" %
+                    (self.vcenter, to_native(task_error))
+            )
+
 
 def main():
     """Main"""
@@ -801,7 +837,7 @@ def main():
         esxi_ssl_thumbprint=dict(type='str', default='', aliases=['ssl_thumbprint']),
         fetch_ssl_thumbprint=dict(type='bool', default=True),
         state=dict(default='present',
-                   choices=['present', 'absent', 'add_or_reconnect', 'reconnect'],
+                   choices=['present', 'absent', 'add_or_reconnect', 'reconnect', 'disconnected'],
                    type='str'),
         folder=dict(type='str', aliases=['folder_name']),
         add_connected=dict(type='bool', default=True),
