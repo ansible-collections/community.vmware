@@ -233,6 +233,24 @@
         that:
           - disconnect_host_idempotency_result.changed is false
 
+    - name: disconnect host with check_mode again
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      check_mode: true
+      register: disconnect_host_check_mode_again_result
+
+    - name: ensure not to occur the changed
+      assert:
+        that:
+          - disconnect_host_check_mode_again_result.changed is false
+
     - name: reconnect host
       vmware_host:
         hostname: "{{ vcenter_hostname }}"

@@ -799,7 +799,11 @@ class VMwareHost(PyVmomi):
         result = None
 
         if self.module.check_mode:
-            result = "Host would be disconnected host from vCenter '%s'" % self.vcenter
+            if self.host.runtime.connectionState == 'disconnected':
+                result = "Host already disconnected"
+                changed = False
+            else:
+                result = "Host would be disconnected host from vCenter '%s'" % self.vcenter
         else:
             if self.host.runtime.connectionState == 'disconnected':
                 changed = False
