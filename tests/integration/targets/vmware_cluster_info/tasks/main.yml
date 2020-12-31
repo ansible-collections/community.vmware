@@ -22,6 +22,33 @@
         - all_cluster_result.clusters
         - not all_cluster_result.changed
 
+- name: ensure info are all defined
+  assert:
+    that:
+      - all_cluster_result.clusters[item].datacenter is defined
+      - all_cluster_result.clusters[item].hosts is defined
+      - all_cluster_result.clusters[item].enable_ha  is defined
+      - all_cluster_result.clusters[item].ha_failover_level  is defined
+      - all_cluster_result.clusters[item].ha_vm_monitoring  is defined
+      - all_cluster_result.clusters[item].ha_host_monitoring  is defined
+      - all_cluster_result.clusters[item].ha_admission_control_enabled  is defined
+      - all_cluster_result.clusters[item].ha_restart_priority  is defined
+      - all_cluster_result.clusters[item].ha_vm_tools_monitoring  is defined
+      - all_cluster_result.clusters[item].ha_vm_min_up_time  is defined
+      - all_cluster_result.clusters[item].ha_vm_max_failures  is defined
+      - all_cluster_result.clusters[item].ha_vm_max_failure_window  is defined
+      - all_cluster_result.clusters[item].ha_vm_failure_interval  is defined
+      - all_cluster_result.clusters[item].enabled_drs  is defined
+      - all_cluster_result.clusters[item].drs_enable_vm_behavior_overrides  is defined
+      - all_cluster_result.clusters[item].drs_default_vm_behavior  is defined
+      - all_cluster_result.clusters[item].drs_vmotion_rate  is defined
+      - all_cluster_result.clusters[item].enabled_vsan  is defined
+      - all_cluster_result.clusters[item].vsan_auto_claim_storage  is defined
+      - all_cluster_result.clusters[item].tags  is defined
+      - all_cluster_result.clusters[item].resource_summary  is defined
+      - all_cluster_result.clusters[item].moid  is defined
+  loop: "{{ all_cluster_result.clusters.keys() }}"
+
 - <<: *vc_all_data
   name: Gather info about all clusters in the given datacenter in check mode
   check_mode: true

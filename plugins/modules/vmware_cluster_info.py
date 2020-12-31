@@ -121,6 +121,7 @@ clusters:
     type: dict
     sample: {
         "DC0_C0": {
+            "datacenter": "DC0",
             "moid": "domain-c9",
             "drs_default_vm_behavior": null,
             "drs_enable_vm_behavior_overrides": null,
@@ -187,7 +188,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves.urllib.parse import unquote
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name,\
+    get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -312,6 +314,7 @@ class VmwreClusterInfoManager(PyVmomi):
                     tags=tag_info,
                     resource_summary=resource_summary,
                     moid=cluster._moId,
+                    datacenter=get_parent_datacenter(cluster).name
                 )
         else:
             for cluster in self.cluster_objs:
