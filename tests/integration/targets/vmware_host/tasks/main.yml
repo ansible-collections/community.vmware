@@ -177,3 +177,87 @@
           # https://github.com/vmware/govmomi/blob/master/govc/USAGE.md#events
           # "govc events ..." need to be callable from
           # https://github.com/ansible/vcenter-test-container/flask_control.py
+
+## Testcase: Disconnect Host
+- when: vcsim is not defined
+  block:
+    - name: disconnect host with check_mode
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      check_mode: true
+      register: disconnect_host_check_mode_result
+
+    - name: ensure to occur the changed
+      assert:
+        that:
+          - disconnect_host_check_mode_result.changed is true
+
+    - name: disconnect host
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      register: disconnect_host_result
+
+    - name: ensure host system has been disconnected
+      assert:
+        that:
+          - disconnect_host_result.changed is true
+
+    - name: disconnect host(idempotency)
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      register: disconnect_host_idempotency_result
+
+    - name: ensure not to occur the changed
+      assert:
+        that:
+          - disconnect_host_idempotency_result.changed is false
+
+    - name: disconnect host with check_mode again
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      check_mode: true
+      register: disconnect_host_check_mode_again_result
+
+    - name: ensure not to occur the changed
+      assert:
+        that:
+          - disconnect_host_check_mode_again_result.changed is false
+
+    - name: reconnect host
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: reconnect
