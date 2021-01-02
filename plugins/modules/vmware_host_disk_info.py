@@ -163,7 +163,7 @@ def main():
     )
 
     host_disk_mgr = HostDiskInfo(module)
-    module.exit_json(changed=False, hosts_disk_facts=host_disk_mgr.gather_host_disk_info())
+    module.exit_json(changed=False, hosts_disk_info=host_disk_mgr.gather_host_disk_info())
 
 
 if __name__ == "__main__":
