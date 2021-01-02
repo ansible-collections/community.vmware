@@ -418,7 +418,9 @@ def main():
         update_on_demand=dict(type='bool', default=False, required=False),
     )
     module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True)
+                           supports_check_mode=True,
+                           required_if=[('library_type', 'subscribed', ['subscription_url'])]
+                          )
 
     vmware_contentlib_create = VmwareContentLibCreate(module)
     vmware_contentlib_create.process_state()
