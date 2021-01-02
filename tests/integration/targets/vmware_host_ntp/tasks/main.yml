@@ -166,3 +166,78 @@
       register: ntp_servers
       check_mode: true
     - debug: var=ntp_servers
+
+# https://github.com/ansible-collections/community.vmware/pull/588
+- name: The integration tests when ESXi disconnected
+  when: vcsim is not defined
+  block:
+    - name: Disconnect ESXi
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: disconnected
+      register: disconnect_esxi_result
+
+    - name: Make sure if ESXi host disconnected
+      assert:
+        that:
+          - disconnect_esxi_result.changed is sameas true
+
+    - name: Add NTP server to disconnected ESXi with check_mode
+      vmware_host_ntp:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: '{{ esxi1 }}'
+        state: present
+        ntp_servers:
+          - 0.pool.ntp.org
+      check_mode: true
+      register: add_ntp_server_disconnected_esxi_check_mode_result
+    - debug: var=add_ntp_server_disconnected_esxi_check_mode_result
+
+    - name: Make sure if the changed doesn't occur
+      assert:
+        that:
+          - add_ntp_server_disconnected_esxi_check_mode_result.changed is sameas false
+
+    - name: Add NTP server to disconnected ESXi
+      vmware_host_ntp:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: '{{ esxi1 }}'
+        state: present
+        ntp_servers:
+          - 0.pool.ntp.org
+      register: add_ntp_server_disconnected_esxi_result
+    - debug: var=add_ntp_server_disconnected_esxi_result
+
+    - name: Make sure if the changed doesn't occur
+      assert:
+        that:
+          - add_ntp_server_disconnected_esxi_result.changed is sameas false
+
+    - name: Reconnect ESXi
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        esxi_hostname: '{{ esxi1 }}'
+        state: reconnect
+      register: reconnect_esxi_result
+
+    - name: Make sure if ESXi host reconnected
+      assert:
+        that:
+          - reconnect_esxi_result.changed is sameas true
