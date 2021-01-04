@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest_file_operation - provide useful error message when exception occurs (https://github.com/ansible-collections/community.vmware/issues/485).

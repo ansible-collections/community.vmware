@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_guest - fix an issue with vSphere 7 when adding several virtual disks and / or vNICs (https://github.com/ansible-collections/community.vmware/issues/545)

@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest_network - add support for private vlan id (https://github.com/ansible-collections/community.vmware/pull/511).

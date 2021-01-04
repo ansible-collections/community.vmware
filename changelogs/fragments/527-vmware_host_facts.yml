@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_host_facts - Add ESXi host current time info in returned host facts(https://github.com/ansible-collections/community.vmware/issues/527)

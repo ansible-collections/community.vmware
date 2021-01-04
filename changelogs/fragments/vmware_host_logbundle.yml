@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_host_logbundle - handle fetch_url status before attempting to read response.

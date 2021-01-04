@@ -5,6 +5,42 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.6.0
+======
+
+Minor Changes
+-------------
+
+- vmware_guest_disk - add new parameters controller_type and controller_number for supporting SATA and NVMe disk (https://github.com/ansible-collections/vmware/issues/196).
+- vmware_guest_file_operation - provide useful error message when exception occurs (https://github.com/ansible-collections/community.vmware/issues/485).
+- vmware_guest_network - add support for private vlan id (https://github.com/ansible-collections/community.vmware/pull/511).
+- vmware_host - added a new state option, the ``disconnected`` (https://github.com/ansible-collections/community.vmware/pull/589).
+- vmware_host_facts - Add ESXi host current time info in returned host facts(https://github.com/ansible-collections/community.vmware/issues/527)
+- vmware_vsan_health_info - add new parameter to support datacenter.
+
+Bugfixes
+--------
+
+- Fix remove hosts from cluster to use cluster name variable
+- Fix vSwitch0 default port group removal to run against all hosts
+- For vSphere 7.0u1, add steps to tests to remove vCLS VMs before removing datastore
+- vmware_cluster - consider datacenter name while creating cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_drs - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_ha - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_cluster_vsan - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+- vmware_dvswitch - fix an issue with vSphere 7 when no switch_version is defined (https://github.com/ansible-collections/community.vmware/issues/576)
+- vmware_guest - fix an issue with vSphere 7 when adding several virtual disks and / or vNICs (https://github.com/ansible-collections/community.vmware/issues/545)
+- vmware_guest - handle computer name in existing VM customization (https://github.com/ansible-collections/community.vmware/issues/570).
+- vmware_guest_disk - fix an issue with vSphere 7 when adding several virtual disks and (https://github.com/ansible-collections/community.vmware/issues/373)
+- vmware_host_logbundle - handle fetch_url status before attempting to read response.
+- vmware_host_ntp - fix an issue with disconnected hosts (https://github.com/ansible-collections/community.vmware/issues/539)
+- vsphere_copy - handle unboundlocalerror when timeout occurs (https://github.com/ansible-collections/community.vmware/issues/554).
+
+New Modules
+-----------
+
+- vcenter_domain_user_group_info - Gather user or group information of a domain
+
 v1.5.1
 ======
 

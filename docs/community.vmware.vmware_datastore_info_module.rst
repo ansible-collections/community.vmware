@@ -326,10 +326,10 @@ Examples
 
     - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
       community.vmware.vmware_datastore_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        datacenter_name: '{{ datacenter_name }}'
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        datacenter_name: "ha-datacenter"
       delegate_to: localhost
       register: info
 

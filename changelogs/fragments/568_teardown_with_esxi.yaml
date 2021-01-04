@@ -1,4 +1,0 @@
-bugfixes:
-- For vSphere 7.0u1, add steps to tests to remove vCLS VMs before removing datastore
-- Fix vSwitch0 default port group removal to run against all hosts
-- Fix remove hosts from cluster to use cluster name variable

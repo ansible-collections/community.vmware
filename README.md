@@ -60,12 +60,18 @@ Name | Description
 --- | ---
 [community.vmware.vmware](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_httpapi.rst)|HttpApi Plugin for VMware REST API
 
+### Inventory plugins
+Name | Description
+--- | ---
+[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
+
 ### Modules
 Name | Description
 --- | ---
 [community.vmware.vca_fw](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vca_fw_module.rst)|add remove firewall rules in a gateway  in a vca
 [community.vmware.vca_nat](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vca_nat_module.rst)|add remove nat rules in a gateway  in a vca
 [community.vmware.vca_vapp](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vca_vapp_module.rst)|Manages vCloud Air vApp instances.
+[community.vmware.vcenter_domain_user_group_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_domain_user_group_info_module.rst)|Gather user or group information of a domain
 [community.vmware.vcenter_extension](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_module.rst)|Register/deregister vCenter Extensions
 [community.vmware.vcenter_extension_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_facts_module.rst)|Gather facts vCenter extensions
 [community.vmware.vcenter_extension_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_info_module.rst)|Gather info vCenter extensions
@@ -236,11 +242,6 @@ Name | Description
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
-
-### Inventory plugins
-Name | Description
---- | ---
-[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 <!--end collection content-->
 
