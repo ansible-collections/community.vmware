@@ -277,18 +277,21 @@ class VmwareContentLibCreate(VmwareRestClient):
         """
         Create or update call and exit cleanly if call completes
         """
-        try:
-            if update:
-                self.library_service.update(library_id, spec)
-                action = "updated"
-            else:
-                library_id = self.library_service.create(create_spec=spec,
-                                                         client_token=str(uuid.uuid4()))
-                action = "created"
-        except ResourceInaccessible as e:
-            message = ("vCenter Failed to make connection to %s with exception: %s    "
-                       "If using https, check that the ssl thumbprint is valid" % (self.subscription_url, str(e)))
-            self.module.fail_json(msg=message)
+        if self.module.check_mode:
+            action = 'would be updated' if update else 'would be created'
+        else:
+            try:
+                if update:
+                    self.library_service.update(library_id, spec)
+                    action = "updated"
+                else:
+                    library_id = self.library_service.create(create_spec=spec,
+                                                            client_token=str(uuid.uuid4()))
+                    action = "created"
+            except ResourceInaccessible as e:
+                message = ("vCenter Failed to make connection to %s with exception: %s    "
+                        "If using https, check that the ssl thumbprint is valid" % (self.subscription_url, str(e)))
+                self.module.fail_json(msg=message)
 
         content_library_info = dict(
             msg="Content Library '%s' %s." % (spec.name, action),
@@ -395,11 +398,15 @@ class VmwareContentLibCreate(VmwareRestClient):
         library_id = self.local_libraries[self.library_name]['lib_id']
         # Setup library service based on existing object type to allow library_type to unspecified
         library_service = self.library_types[self.local_libraries[self.library_name]['lib_type'].lower()]
-        library_service.delete(library_id=library_id)
+        if self.module.check_mode:
+            action = 'would be deleted'
+        else:
+            action = 'deleted'
+            library_service.delete(library_id=library_id)
         self.module.exit_json(
             changed=True,
             content_library_info=dict(
-                msg="Content Library '%s' deleted." % self.library_name,
+                msg="Content Library '%s' %s." % (self.library_name, action),
                 library_id=library_id
             )
         )
