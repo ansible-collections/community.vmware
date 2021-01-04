@@ -1,2 +1,0 @@
-bugfixes:
-- vsphere_copy - handle unboundlocalerror when timeout occurs (https://github.com/ansible-collections/community.vmware/issues/554).

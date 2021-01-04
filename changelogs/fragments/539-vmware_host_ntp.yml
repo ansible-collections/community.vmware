@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_host_ntp - fix an issue with disconnected hosts (https://github.com/ansible-collections/community.vmware/issues/539)

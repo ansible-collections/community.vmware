@@ -16,7 +16,7 @@ community.vmware.vmware_vsan_health_info
 
 Synopsis
 --------
-- Gather information about a VMware vSAN cluster's health
+- Gather information about a VMware vSAN cluster's health.
 
 
 
@@ -53,6 +53,23 @@ Parameters
                 </td>
                 <td>
                         <div>Name of the vSAN cluster.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.6.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the Datacenter.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
                 </td>
             </tr>
             <tr>
@@ -213,14 +230,21 @@ Examples
 .. code-block:: yaml
 
     - name: Gather health info from a vSAN's cluster
-      hosts: localhost
-      gather_facts: false
       community.vmware.vmware_vsan_health_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         cluster_name: 'vSAN01'
         fetch_from_cache: False
+
+    - name: Gather health info from a vSAN's cluster with datacenter
+      community.vmware.vmware_vsan_health_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        cluster_name: 'vSAN01'
+        datacenter: 'Datacenter_01'
+        fetch_from_cache: True
 
 
 

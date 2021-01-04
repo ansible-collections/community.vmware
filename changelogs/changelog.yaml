@@ -450,8 +450,8 @@ releases:
       - vmware_guest - add documentation for networks parameters connected and start_connected
         (https://github.com/ansible-collections/community.vmware/issues/507).
       - vmware_guest_controller - error handling in task exception.
-      - vmware_vm_inventory - skip inaccessible vm configuration.
       - vmware_resource_pool - manage resource pools on ESXi hosts (https://github.com/ansible-collections/community.vmware/issues/492).
+      - vmware_vm_inventory - skip inaccessible vm configuration.
     fragments:
     - 436_vmware_object_role_permission.yml
     - 451_vmware_cluster_ha.yml
@@ -466,5 +466,57 @@ releases:
   1.5.1:
     changes:
       minor_changes:
-      - vmware_resource_pool - relabel the change introduced in 1.5.0 as Minor Changes (https://github.com/ansible-collections/community.vmware/issues/540).
+      - vmware_resource_pool - relabel the change introduced in 1.5.0 as Minor Changes
+        (https://github.com/ansible-collections/community.vmware/issues/540).
     release_date: '2020-12-02'
+  1.6.0:
+    changes:
+      bugfixes:
+      - Fix remove hosts from cluster to use cluster name variable
+      - Fix vSwitch0 default port group removal to run against all hosts
+      - For vSphere 7.0u1, add steps to tests to remove vCLS VMs before removing datastore
+      - vmware_cluster - consider datacenter name while creating cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+      - vmware_cluster_drs - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+      - vmware_cluster_ha - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+      - vmware_cluster_vsan - consider datacenter name while managing cluster (https://github.com/ansible-collections/community.vmware/issues/575).
+      - vmware_dvswitch - fix an issue with vSphere 7 when no switch_version is defined
+        (https://github.com/ansible-collections/community.vmware/issues/576)
+      - vmware_guest - fix an issue with vSphere 7 when adding several virtual disks
+        and / or vNICs (https://github.com/ansible-collections/community.vmware/issues/545)
+      - vmware_guest - handle computer name in existing VM customization (https://github.com/ansible-collections/community.vmware/issues/570).
+      - vmware_guest_disk - fix an issue with vSphere 7 when adding several virtual
+        disks and (https://github.com/ansible-collections/community.vmware/issues/373)
+      - vmware_host_logbundle - handle fetch_url status before attempting to read
+        response.
+      - vmware_host_ntp - fix an issue with disconnected hosts (https://github.com/ansible-collections/community.vmware/issues/539)
+      - vsphere_copy - handle unboundlocalerror when timeout occurs (https://github.com/ansible-collections/community.vmware/issues/554).
+      minor_changes:
+      - vmware_guest_disk - add new parameters controller_type and controller_number
+        for supporting SATA and NVMe disk (https://github.com/ansible-collections/vmware/issues/196).
+      - vmware_guest_file_operation - provide useful error message when exception
+        occurs (https://github.com/ansible-collections/community.vmware/issues/485).
+      - vmware_guest_network - add support for private vlan id (https://github.com/ansible-collections/community.vmware/pull/511).
+      - vmware_host - added a new state option, the ``disconnected`` (https://github.com/ansible-collections/community.vmware/pull/589).
+      - vmware_host_facts - Add ESXi host current time info in returned host facts(https://github.com/ansible-collections/community.vmware/issues/527)
+      - vmware_vsan_health_info - add new parameter to support datacenter.
+    fragments:
+    - 196_vmware_guest_disk.yml
+    - 373-vmware_guest_disk.yml
+    - 485_vmware_file_operation.yml
+    - 527-vmware_host_facts.yml
+    - 539-vmware_host_ntp.yml
+    - 545-vmware_guest.yml
+    - 554_vsphere_copy.yml
+    - 568_teardown_with_esxi.yaml
+    - 570_vmware_guest.yml
+    - 575_vmware_cluster.yml
+    - 576-vmware_dvswitch.yml
+    - 589_vmware_host.yml
+    - pvlan_support.yml
+    - vmware_host_logbundle.yml
+    - vsan_health_info_refactor.yml
+    modules:
+    - description: Gather user or group information of a domain
+      name: vcenter_domain_user_group_info
+      namespace: ''
+    release_date: '2021-01-04'

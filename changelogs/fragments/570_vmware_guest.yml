@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_guest - handle computer name in existing VM customization (https://github.com/ansible-collections/community.vmware/issues/570).

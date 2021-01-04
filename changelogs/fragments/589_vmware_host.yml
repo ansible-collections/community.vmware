@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_host - added a new state option, the ``disconnected`` (https://github.com/ansible-collections/community.vmware/pull/589).

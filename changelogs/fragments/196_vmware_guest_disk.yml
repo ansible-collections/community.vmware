@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_disk - add new parameters controller_type and controller_number for supporting SATA and NVMe disk (https://github.com/ansible-collections/vmware/issues/196).
