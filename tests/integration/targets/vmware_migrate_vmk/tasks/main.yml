@@ -132,8 +132,6 @@
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
             switch_name: "{{ dvswitch1 }}"
-            vmnics:
-              - vmnic1
           register: add_esxi_host_dvswitch_result
 
         - assert:
