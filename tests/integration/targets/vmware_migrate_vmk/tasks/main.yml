@@ -72,26 +72,6 @@
         that:
           - create_new_vswitch_pg_result.changed is sameas true
 
-    - name: "Create a new vmkernel"
-      vmware_vmkernel:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        esxi_hostname: "{{ esxi1 }}"
-        vswitch_name: "{{ switch1 }}"
-        portgroup_name: "{{ vswitch_pg_name_for_test }}"
-        device: "{{ device_name }}"
-        network:
-          type: 'static'
-          ip_address: 192.168.0.254
-          subnet_mask: 255.255.255.0
-      register: prepare_integration_tests_result
-
-    - assert:
-        that:
-          - prepare_integration_tests_result.changed is sameas true
-
     - name: "Gather dvSwitch info"
       vmware_dvswitch_info:
         hostname: "{{ vcenter_hostname }}"
@@ -115,9 +95,11 @@
             username: "{{ vcenter_username }}"
             password: "{{ vcenter_password }}"
             validate_certs: false
-            datacenter: "{{ dc1 }}"
-            switch: "{{ dvswitch1 }}"
-            uplink_quantity: 1
+            datacenter_name: "{{ dc1 }}"
+            switch_name: "{{ dvswitch1 }}"
+            switch_version: 6.5.0
+            uplink_quantity: 2
+            state: present
           register: create_new_dvswitch_result
 
         - assert:
@@ -132,14 +114,12 @@
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
             switch_name: "{{ dvswitch1 }}"
-            vmnics:
-              - vmnic1
+            state: present
           register: add_esxi_host_dvswitch_result
 
         - assert:
             that:
               - add_esxi_host_dvswitch_result.changed is sameas true
-
 
     - name: "Create new a port group of dvSwitch"
       vmware_dvs_portgroup:
@@ -158,6 +138,26 @@
     - assert:
         that:
           - create_new_dvswitch_pg_result.changed is sameas true
+
+    - name: "Create a new vmkernel"
+      vmware_vmkernel:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        vswitch_name: "{{ switch1 }}"
+        portgroup_name: "{{ vswitch_pg_name_for_test }}"
+        device: "{{ device_name }}"
+        network:
+          type: 'static'
+          ip_address: 192.168.0.254
+          subnet_mask: 255.255.255.0
+      register: prepare_integration_tests_result
+
+    - assert:
+        that:
+          - prepare_integration_tests_result.changed is sameas true
 
 - name: "Migrate Management vmk from vSwitch to dvSwitch"
   vmware_migrate_vmk:
@@ -233,22 +233,6 @@
 
 - name: "Delete the used objects for integration test"
   block:
-    - name: "Delete the used dvSwitch for integration test"
-      vmware_dvswitch:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        datacenter: "{{ dc1 }}"
-        switch: "{{ dvswitch1 }}"
-        uplink_quantity: 1
-        state: absent
-      register: delete_dvswitch_result
-
-    - assert:
-        that:
-          - delete_dvswitch_result.changed is sameas true
-
     - name: "Delete the used vmkernel for integration test"
       vmware_vmkernel:
         hostname: "{{ vcenter_hostname }}"
@@ -265,6 +249,22 @@
     - assert:
         that:
           - delete_vmk_result.changed is sameas true
+
+    - name: "Delete the used dvSwitch for integration test"
+      vmware_dvswitch:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        switch: "{{ dvswitch1 }}"
+        uplink_quantity: 1
+        state: absent
+      register: delete_dvswitch_result
+
+    - assert:
+        that:
+          - delete_dvswitch_result.changed is sameas true
 
     - name: "Delete the used port group for integration test"
       vmware_portgroup:
