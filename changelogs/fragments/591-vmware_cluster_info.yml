@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_cluster_info - added a parent datacenter name of Cluster to the return value (https://github.com/ansible-collections/community.vmware/pull/591).
