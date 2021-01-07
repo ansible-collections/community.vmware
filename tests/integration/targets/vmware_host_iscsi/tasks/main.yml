@@ -16,11 +16,6 @@
         validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
-      register: prepare_iscsi_enabled_result
-
-    - assert:
-        that:
-          - prepare_iscsi_enabled_result.changed is sameas true
 
     - vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
