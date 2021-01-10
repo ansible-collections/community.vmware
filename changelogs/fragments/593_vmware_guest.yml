@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - handle NoneType values before passing to ``len`` API (https://github.com/ansible-collections/community.vmware/issues/593).

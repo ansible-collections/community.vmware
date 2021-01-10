@@ -1915,7 +1915,7 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_network(self, vm_obj):
         # Ignore empty networks, this permits to keep networks when deploying a template/cloning a VM
-        if len(self.params['networks']) == 0:
+        if not self.params['networks']:
             return
 
         network_devices = self.sanitize_network_params()
@@ -2074,7 +2074,7 @@ class PyVmomiHelper(PyVmomi):
         return property_info
 
     def configure_vapp_properties(self, vm_obj):
-        if len(self.params['vapp_properties']) == 0:
+        if not self.params['vapp_properties']:
             return
 
         for x in self.params['vapp_properties']:
@@ -2171,7 +2171,7 @@ class PyVmomiHelper(PyVmomi):
             self.change_detected = True
 
     def customize_customvalues(self, vm_obj, config_spec):
-        if len(self.params['customvalues']) == 0:
+        if not self.params['customvalues']:
             return
 
         vm_custom_spec = config_spec
@@ -2577,7 +2577,7 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_disks(self, vm_obj):
         # Ignore empty disk list, this permits to keep disks when deploying a template/cloning a VM
-        if len(self.params['disk']) == 0:
+        if not self.params['disk']:
             return
 
         # if one of 'controller_type', 'controller_number', 'unit_number' parameters set in one of disks' configuration
@@ -2751,7 +2751,7 @@ class PyVmomiHelper(PyVmomi):
         datastore = None
         datastore_name = None
 
-        if len(self.params['disk']) != 0:
+        if self.params['disk']:
             # TODO: really use the datastore for newly created disks
             if 'autoselect_datastore' in self.params['disk'][0] and self.params['disk'][0]['autoselect_datastore']:
                 datastores = []
