@@ -64,7 +64,7 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: False
-      version_added: '1.6.0'
+      version_added: '1.7.0'
     ssl_thumbprint:
       description:
       - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
@@ -74,17 +74,17 @@ options:
         C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
       required: False
-      version_added: '1.6.0'
+      version_added: '1.7.0'
     update_on_demand:
       description:
       - Whether to download all content on demand.
       - If set to C(True), all content will be downloaded on demand.
       - If set to C(False) content will be downloaded ahead of time.
-      - This is required only if Ilibrary_type) is set to C(subscribed).
+      - This is required only if I(library_type) is set to C(subscribed).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: bool
       default: False
-      version_added: '1.6.0'
+      version_added: '1.7.0'
     state:
       description:
       - The state of content library.
@@ -263,7 +263,7 @@ class VmwareContentLibCreate(VmwareRestClient):
 
     def set_subscription_spec(self):
         if "https:" in self.subscription_url and not self.ssl_thumbprint:
-            self.module.fail_json(msg="When https us used, a SSL thumbprint must be provided.")
+            self.module.fail_json(msg="While using HTTPS, a SSL thumbprint must be provided.")
         subscription_info = SubscriptionInfo()
         subscription_info.on_demand = self.update_on_demand
         subscription_info.automatic_sync_enabled = True
@@ -285,12 +285,14 @@ class VmwareContentLibCreate(VmwareRestClient):
                     self.library_service.update(library_id, spec)
                     action = "updated"
                 else:
-                    library_id = self.library_service.create(create_spec=spec,
-                                                            client_token=str(uuid.uuid4()))
+                    library_id = self.library_service.create(
+                        create_spec=spec,
+                        client_token=str(uuid.uuid4())
+                    )
                     action = "created"
             except ResourceInaccessible as e:
-                message = ("vCenter Failed to make connection to %s with exception: %s    "
-                        "If using https, check that the ssl thumbprint is valid" % (self.subscription_url, str(e)))
+                message = ("vCenter Failed to make connection to %s with exception: %s "
+                           "If using HTTPS, check that the SSL thumbprint is valid" % (self.subscription_url, str(e)))
                 self.module.fail_json(msg=message)
 
         content_library_info = dict(
@@ -424,9 +426,12 @@ def main():
         ssl_thumbprint=dict(type='str', default='', required=False),
         update_on_demand=dict(type='bool', default=False, required=False),
     )
-    module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True,
-                           required_if=[('library_type', 'subscribed', ['subscription_url'])]
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[
+            ('library_type', 'subscribed', ['subscription_url']),
+        ],
     )
 
     vmware_contentlib_create = VmwareContentLibCreate(module)
