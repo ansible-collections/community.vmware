@@ -152,7 +152,7 @@ options:
             description:
             - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
             - C(paravirtual) is default.
-            choices: [ buslogic, lsilogic, lsilogicsas, paravirtual ]
+            choices: [ 'buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual' ]
         memory_reservation_lock:
             type: bool
             description:
@@ -169,7 +169,7 @@ options:
         mem_reservation:
             type: int
             description: The amount of memory resource that is guaranteed available to the virtual machine.
-            aliases: ['memory_reservation']
+            aliases: [ 'memory_reservation' ]
         cpu_limit:
             type: int
             description:
@@ -190,7 +190,7 @@ options:
         boot_firmware:
             type: str
             description: Choose which firmware should be used to boot the virtual machine.
-            choices: [ bios, efi ]
+            choices: [ 'bios', 'efi' ]
         nested_virt:
             type: bool
             description:
@@ -2846,8 +2846,7 @@ class PyVmomiHelper(PyVmomi):
         disk_controller_type = self.params['hardware']['scsi']
         if disk_controller_type is not None:
             return disk_controller_type
-        else:
-            return "paravirtual"
+        return "paravirtual"
 
     def find_folder(self, searchpath):
         """ Walk inventory objects one position of the searchpath at a time """
