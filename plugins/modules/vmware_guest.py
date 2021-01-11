@@ -582,7 +582,6 @@ options:
             description:
             - Auto logon after virtual machine customization.
             - Specific to Windows customization.
-            - When not set, it will be treated as C(False).
         autologoncount:
             type: int
             description:
