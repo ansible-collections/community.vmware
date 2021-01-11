@@ -12,10 +12,6 @@
     state: enabled
   register: enable_iscsi_result
 
-- assert:
-    that:
-      - enable_iscsi_result.changed is sameas true
-
 - name: Gather iSCSI configuration for setting vmhba variable
   vmware_host_iscsi_info:
     hostname: "{{ hostname }}"
