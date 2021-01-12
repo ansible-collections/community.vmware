@@ -2246,14 +2246,13 @@ class PyVmomiHelper(PyVmomi):
         # TODO: Maybe list the different domains from the interfaces here by default ?
         dns_suffixes = []
         dns_suffix = self.params['customization']['dns_suffix']
-        if dns_suffix is not None:
-            if dns_suffix:
-                if isinstance(dns_suffix, list):
-                    dns_suffixes += dns_suffix
-                else:
-                    dns_suffixes.append(dns_suffix)
+        if dns_suffix:
+            if isinstance(dns_suffix, list):
+                dns_suffixes += dns_suffix
+            else:
+                dns_suffixes.append(dns_suffix)
 
-                globalip.dnsSuffixList = dns_suffixes
+            globalip.dnsSuffixList = dns_suffixes
 
         if self.params['customization']['domain'] is not None:
             dns_suffixes.insert(0, self.params['customization']['domain'])
