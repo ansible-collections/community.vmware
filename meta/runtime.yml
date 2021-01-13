@@ -3,7 +3,7 @@ requires_ansible: '>=2.9.10'
 
 action_groups:
   vmware:
-  - vmware_dns_config
+  - vcenter_domain_user_group_info
   - vcenter_extension
   - vcenter_extension_info
   - vcenter_folder
@@ -18,14 +18,17 @@ action_groups:
   - vmware_cluster_info
   - vmware_cluster_vsan
   - vmware_content_deploy_template
+  - vmware_content_deploy_ovf_template
   - vmware_content_library_info
   - vmware_content_library_manager
   - vmware_datacenter
+  - vmware_datacenter_info
   - vmware_datastore_cluster
   - vmware_datastore_cluster_manager
   - vmware_datastore_info
   - vmware_datastore_maintenancemode
   - vmware_deploy_ovf
+  - vmware_dns_config
   - vmware_drs_group
   - vmware_drs_group_info
   - vmware_drs_rule_info
@@ -34,6 +37,7 @@ action_groups:
   - vmware_dvs_portgroup_find
   - vmware_dvs_portgroup_info
   - vmware_dvswitch
+  - vmware_dvswitch_info
   - vmware_dvswitch_lacp
   - vmware_dvswitch_nioc
   - vmware_dvswitch_pvlans
@@ -45,6 +49,7 @@ action_groups:
   - vmware_guest_boot_info
   - vmware_guest_boot_manager
   - vmware_guest_controller
+  - vmware_guest_cross_vc_clone
   - vmware_guest_custom_attribute_defs
   - vmware_guest_custom_attributes
   - vmware_guest_customization_info
@@ -75,6 +80,7 @@ action_groups:
   - vmware_host_config_info
   - vmware_host_config_manager
   - vmware_host_datastore
+  - vmware_host_disk_info
   - vmware_host_dns
   - vmware_host_dns_info
   - vmware_host_facts
@@ -83,14 +89,19 @@ action_groups:
   - vmware_host_firewall_manager
   - vmware_host_hyperthreading
   - vmware_host_ipv6
+  - vmware_host_iscsi
+  - vmware_host_iscsi_info
   - vmware_host_kernel_manager
   - vmware_host_lockdown
+  - vmware_host_logbundle
+  - vmware_host_logbundle_info
   - vmware_host_ntp
   - vmware_host_ntp_info
   - vmware_host_package_info
   - vmware_host_powermgmt_policy
   - vmware_host_powerstate
   - vmware_host_scanhba
+  - vmware_host_scsidisk_info
   - vmware_host_service_info
   - vmware_host_service_manager
   - vmware_host_snmp
@@ -104,6 +115,7 @@ action_groups:
   - vmware_local_user_manager
   - vmware_maintenancemode
   - vmware_migrate_vmk
+  - vmware_object_rename
   - vmware_object_role_permission
   - vmware_portgroup
   - vmware_portgroup_info
@@ -114,7 +126,9 @@ action_groups:
   - vmware_tag_manager
   - vmware_target_canonical_info
   - vmware_vcenter_settings
+  - vmware_vcenter_settings_info
   - vmware_vcenter_statistics
+  - vmware_vc_infraprofile_info
   - vmware_vm_host_drs_rule
   - vmware_vm_info
   - vmware_vm_shell
