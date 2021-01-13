@@ -29,7 +29,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Gather iSCSI configuration information of ESXi host
-  community.vmware.vmware.vmware_host_iscsi_info:
+  community.vmware.vmware_host_iscsi_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
