@@ -1558,6 +1558,30 @@ class PyVmomi(object):
 
         self.module.fail_json(msg="No vmdk file found for path specified [%s]" % vmdk_path)
 
+    def find_first_class_disk_by_name(self, disk_name, datastore_obj):
+        """
+        Get first-class disk managed object by name
+        Args:
+            disk_name: Name of the first-class disk
+            datastore_obj: Managed object of datastore
+
+        Returns: First-class disk managed object if found else None
+
+        """
+
+        if self.is_vcenter():
+            for id in self.content.vStorageObjectManager.ListVStorageObject(datastore_obj):
+                disk = self.content.vStorageObjectManager.RetrieveVStorageObject(id, datastore_obj)
+                if disk.config.name == disk_name:
+                    return disk
+        else:
+            for id in self.content.vStorageObjectManager.HostListVStorageObject(datastore_obj):
+                disk = self.content.vStorageObjectManager.HostRetrieveVStorageObject(id, datastore_obj)
+                if disk.config.name == disk_name:
+                    return disk
+
+        return None
+
     #
     # Conversion to JSON
     #

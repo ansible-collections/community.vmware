@@ -44,6 +44,7 @@ action_groups:
   - vmware_dvswitch_uplink_pg
   - vmware_evc_mode
   - vmware_export_ovf
+  - vmware_first_class_disk
   - vmware_folder_info
   - vmware_guest
   - vmware_guest_boot_info
