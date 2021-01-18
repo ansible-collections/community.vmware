@@ -16,6 +16,9 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     state: present
+    contact:
+      name: admin
+      description: some_description
     switch_name: dvswitch_0001
     mtu: 9000
     uplink_quantity: 2
