@@ -46,6 +46,10 @@
     that:
       - enable_iscsi_idempotency_check_result.changed is sameas false
 
+- name: Set an iqn variable for an iSCSI name changing test
+  set_fact:
+    iqn: "iqn.1998-01.com.vmware:{{ hostname }}-012345"
+
 - name: Update a name for iSCSI of ESXi with check_mode
   vmware_host_iscsi:
     hostname: "{{ hostname }}"
@@ -54,7 +58,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
-      iscsi_name: iqn.1998-01.com.vmware:example-012345
+      iscsi_name: "{{ iqn }}"
       vmhba_name: "{{ vmhba_name }}"
     state: present
   check_mode: true
@@ -72,7 +76,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
-      iscsi_name: iqn.1998-01.com.vmware:example-012345
+      iscsi_name: "{{ iqn }}"
       vmhba_name: "{{ vmhba_name }}"
     state: present
   register: update_iscsi_name_result
@@ -80,7 +84,7 @@
 - assert:
     that:
       - update_iscsi_name_result.changed is sameas true
-      - update_iscsi_name_result.iscsi_properties.iscsi_name == 'iqn.1998-01.com.vmware:example-012345'
+      - update_iscsi_name_result.iscsi_properties.iscsi_name == iqn
 
 - name: Update a name for iSCSI of ESXi (idempotency check)
   vmware_host_iscsi:
@@ -90,7 +94,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     iscsi_config:
-      iscsi_name: iqn.1998-01.com.vmware:example-012345
+      iscsi_name: "{{ iqn }}"
       vmhba_name: "{{ vmhba_name }}"
     state: present
   register: update_iscsi_name_idempotency_check_result
