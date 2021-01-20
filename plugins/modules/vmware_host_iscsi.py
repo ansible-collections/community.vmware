@@ -34,6 +34,7 @@ options:
         - The name for the iSCSI HBA adapter.
         - This is iSCSI qualified name.
         type: str
+        version_added: '1.7.0'
         aliases:
         - initiator_iqn
       alias:
