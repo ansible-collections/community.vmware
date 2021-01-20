@@ -194,4 +194,3 @@
   assert:
     that:
       - all_cluster_result.clusters['Cluster/\%']
-

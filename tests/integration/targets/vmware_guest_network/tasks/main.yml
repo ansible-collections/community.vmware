@@ -454,7 +454,6 @@
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: false
           name: test_vm1
           networks:
             - name: "{{ dvpg1 }}"
@@ -472,7 +471,6 @@
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: false
           name: test_vm1
           networks:
             - name: 204dvpg
@@ -490,7 +488,6 @@
           hostname: "{{ vcenter_hostname }}"
           username: "{{ vcenter_username }}"
           password: "{{ vcenter_password }}"
-          validate_certs: false
           name: test_vm1
           networks:
             - name: VM Network
@@ -519,4 +516,3 @@
       - assert:
           that:
             - delete_integration_test_204_result.changed is sameas true
-
