@@ -152,6 +152,7 @@ options:
             description:
             - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
             - C(paravirtual) is default.
+            choices: [ 'buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual' ]
         memory_reservation_lock:
             type: bool
             description:
@@ -168,6 +169,7 @@ options:
         mem_reservation:
             type: int
             description: The amount of memory resource that is guaranteed available to the virtual machine.
+            aliases: [ 'memory_reservation' ]
         cpu_limit:
             type: int
             description:
@@ -177,7 +179,7 @@ options:
             type: int
             description: The amount of CPU resource that is guaranteed available to the virtual machine.
         version:
-            type: int
+            type: str
             description:
             - The Virtual machine hardware versions.
             - Default is 10 (ESXi 5.5 and onwards).
@@ -188,6 +190,11 @@ options:
         boot_firmware:
             type: str
             description: Choose which firmware should be used to boot the virtual machine.
+            choices: [ 'bios', 'efi' ]
+        nested_virt:
+            type: bool
+            description:
+            - Enable nested virtualization.
         virt_based_security:
             type: bool
             description:
@@ -575,13 +582,13 @@ options:
             description:
             - Auto logon after virtual machine customization.
             - Specific to Windows customization.
-            default: False
         autologoncount:
             type: int
             description:
             - Number of autologon after reboot.
             - Specific to Windows customization.
-            default: 1
+            - Ignored if C(autologon) is unset or set to C(False).
+            - If unset, 1 will be used.
         domainadmin:
             type: str
             description:
@@ -599,7 +606,7 @@ options:
             description:
             - Server owner name.
             - Specific to Windows customization.
-            default: Administrator
+            - If unset, "Administrator" will be used as a fall-back.
         joindomain:
             type: str
             description:
@@ -612,13 +619,13 @@ options:
             - Workgroup to join.
             - Not compatible with C(joindomain).
             - Specific to Windows customization.
-            default: WORKGROUP
+            - If unset, "WORKGROUP" will be used as a fall-back.
         orgname:
             type: str
             description:
             - Organisation name.
             - Specific to Windows customization.
-            default: ACME
+            - If unset, "ACME" will be used as a fall-back.
         password:
             type: str
             description:
@@ -1398,51 +1405,33 @@ class PyVmomiHelper(PyVmomi):
         memory_allocation = vim.ResourceAllocationInfo()
         cpu_allocation = vim.ResourceAllocationInfo()
 
-        if 'hardware' in self.params:
-            if 'mem_limit' in self.params['hardware']:
-                mem_limit = None
-                try:
-                    mem_limit = int(self.params['hardware'].get('mem_limit'))
-                except ValueError:
-                    self.module.fail_json(msg="hardware.mem_limit attribute should be an integer value.")
-                memory_allocation.limit = mem_limit
-                if vm_obj is None or memory_allocation.limit != vm_obj.config.memoryAllocation.limit:
-                    rai_change_detected = True
+        mem_limit = self.params['hardware']['mem_limit']
+        if mem_limit is not None:
+            memory_allocation.limit = mem_limit
+            if vm_obj is None or \
+                    memory_allocation.limit != vm_obj.config.memoryAllocation.limit:
+                rai_change_detected = True
 
-            if 'mem_reservation' in self.params['hardware'] or 'memory_reservation' in self.params['hardware']:
-                mem_reservation = self.params['hardware'].get('mem_reservation')
-                if mem_reservation is None:
-                    mem_reservation = self.params['hardware'].get('memory_reservation')
-                try:
-                    mem_reservation = int(mem_reservation)
-                except ValueError:
-                    self.module.fail_json(msg="hardware.mem_reservation or hardware.memory_reservation should be an integer value.")
+        mem_reservation = self.params['hardware']['mem_reservation']
+        if mem_reservation is not None:
+            memory_allocation.reservation = mem_reservation
+            if vm_obj is None or \
+                    memory_allocation.reservation != vm_obj.config.memoryAllocation.reservation:
+                rai_change_detected = True
 
-                memory_allocation.reservation = mem_reservation
-                if vm_obj is None or \
-                        memory_allocation.reservation != vm_obj.config.memoryAllocation.reservation:
-                    rai_change_detected = True
+        cpu_limit = self.params['hardware']['cpu_limit']
+        if cpu_limit is not None:
+            cpu_allocation.limit = cpu_limit
+            if vm_obj is None or \
+                    cpu_allocation.limit != vm_obj.config.cpuAllocation.limit:
+                rai_change_detected = True
 
-            if 'cpu_limit' in self.params['hardware']:
-                cpu_limit = None
-                try:
-                    cpu_limit = int(self.params['hardware'].get('cpu_limit'))
-                except ValueError:
-                    self.module.fail_json(msg="hardware.cpu_limit attribute should be an integer value.")
-                cpu_allocation.limit = cpu_limit
-                if vm_obj is None or cpu_allocation.limit != vm_obj.config.cpuAllocation.limit:
-                    rai_change_detected = True
-
-            if 'cpu_reservation' in self.params['hardware']:
-                cpu_reservation = None
-                try:
-                    cpu_reservation = int(self.params['hardware'].get('cpu_reservation'))
-                except ValueError:
-                    self.module.fail_json(msg="hardware.cpu_reservation should be an integer value.")
-                cpu_allocation.reservation = cpu_reservation
-                if vm_obj is None or \
-                        cpu_allocation.reservation != vm_obj.config.cpuAllocation.reservation:
-                    rai_change_detected = True
+        cpu_reservation = self.params['hardware']['cpu_reservation']
+        if cpu_reservation is not None:
+            cpu_allocation.reservation = cpu_reservation
+            if vm_obj is None or \
+                    cpu_allocation.reservation != vm_obj.config.cpuAllocation.reservation:
+                rai_change_detected = True
 
         if rai_change_detected:
             self.configspec.memoryAllocation = memory_allocation
@@ -1451,100 +1440,88 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_cpu_and_memory(self, vm_obj, vm_creation=False):
         # set cpu/memory/etc
-        if 'hardware' in self.params:
-            if 'num_cpus' in self.params['hardware']:
-                try:
-                    num_cpus = int(self.params['hardware']['num_cpus'])
-                except ValueError:
-                    self.module.fail_json(msg="hardware.num_cpus attribute should be an integer value.")
-                # check VM power state and cpu hot-add/hot-remove state before re-config VM
-                if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-                    if not vm_obj.config.cpuHotRemoveEnabled and num_cpus < vm_obj.config.hardware.numCPU:
-                        self.module.fail_json(msg="Configured cpu number is less than the cpu number of the VM, "
-                                                  "cpuHotRemove is not enabled")
-                    if not vm_obj.config.cpuHotAddEnabled and num_cpus > vm_obj.config.hardware.numCPU:
-                        self.module.fail_json(msg="Configured cpu number is more than the cpu number of the VM, "
-                                                  "cpuHotAdd is not enabled")
+        num_cpus = self.params['hardware']['num_cpus']
+        if num_cpus is not None:
+            # check VM power state and cpu hot-add/hot-remove state before re-config VM
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
+                if not vm_obj.config.cpuHotRemoveEnabled and num_cpus < vm_obj.config.hardware.numCPU:
+                    self.module.fail_json(msg="Configured cpu number is less than the cpu number of the VM, "
+                                              "cpuHotRemove is not enabled")
+                if not vm_obj.config.cpuHotAddEnabled and num_cpus > vm_obj.config.hardware.numCPU:
+                    self.module.fail_json(msg="Configured cpu number is more than the cpu number of the VM, "
+                                              "cpuHotAdd is not enabled")
 
-                if 'num_cpu_cores_per_socket' in self.params['hardware']:
-                    try:
-                        num_cpu_cores_per_socket = int(self.params['hardware']['num_cpu_cores_per_socket'])
-                    except ValueError:
-                        self.module.fail_json(msg="hardware.num_cpu_cores_per_socket attribute "
-                                                  "should be an integer value.")
-                    if num_cpus % num_cpu_cores_per_socket != 0:
-                        self.module.fail_json(msg="hardware.num_cpus attribute should be a multiple "
-                                                  "of hardware.num_cpu_cores_per_socket")
-                    self.configspec.numCoresPerSocket = num_cpu_cores_per_socket
-                    if vm_obj is None or self.configspec.numCoresPerSocket != vm_obj.config.hardware.numCoresPerSocket:
-                        self.change_detected = True
-                self.configspec.numCPUs = num_cpus
-                if vm_obj is None or self.configspec.numCPUs != vm_obj.config.hardware.numCPU:
+            num_cpu_cores_per_socket = self.params['hardware']['num_cpu_cores_per_socket']
+            if num_cpu_cores_per_socket is not None:
+                if num_cpus % num_cpu_cores_per_socket != 0:
+                    self.module.fail_json(msg="hardware.num_cpus attribute should be a multiple "
+                                              "of hardware.num_cpu_cores_per_socket")
+                self.configspec.numCoresPerSocket = num_cpu_cores_per_socket
+                if vm_obj is None or self.configspec.numCoresPerSocket != vm_obj.config.hardware.numCoresPerSocket:
                     self.change_detected = True
-            # num_cpu is mandatory for VM creation
-            elif vm_creation and not self.params['template']:
-                self.module.fail_json(msg="hardware.num_cpus attribute is mandatory for VM creation")
-
-            if 'memory_mb' in self.params['hardware']:
-                try:
-                    memory_mb = int(self.params['hardware']['memory_mb'])
-                except ValueError:
-                    self.module.fail_json(msg="Failed to parse hardware.memory_mb value."
-                                              " Please refer the documentation and provide"
-                                              " correct value.")
-                # check VM power state and memory hotadd state before re-config VM
-                if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-                    if vm_obj.config.memoryHotAddEnabled and memory_mb < vm_obj.config.hardware.memoryMB:
-                        self.module.fail_json(msg="Configured memory is less than memory size of the VM, "
-                                                  "operation is not supported")
-                    elif not vm_obj.config.memoryHotAddEnabled and memory_mb != vm_obj.config.hardware.memoryMB:
-                        self.module.fail_json(msg="memoryHotAdd is not enabled")
-                self.configspec.memoryMB = memory_mb
-                if vm_obj is None or self.configspec.memoryMB != vm_obj.config.hardware.memoryMB:
-                    self.change_detected = True
-            # memory_mb is mandatory for VM creation
-            elif vm_creation and not self.params['template']:
-                self.module.fail_json(msg="hardware.memory_mb attribute is mandatory for VM creation")
-
-            if 'hotadd_memory' in self.params['hardware']:
-                if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                        vm_obj.config.memoryHotAddEnabled != bool(self.params['hardware']['hotadd_memory']):
-                    self.module.fail_json(msg="Configure hotadd memory operation is not supported when VM is power on")
-                self.configspec.memoryHotAddEnabled = bool(self.params['hardware']['hotadd_memory'])
-                if vm_obj is None or self.configspec.memoryHotAddEnabled != vm_obj.config.memoryHotAddEnabled:
-                    self.change_detected = True
-
-            if 'hotadd_cpu' in self.params['hardware']:
-                if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                        vm_obj.config.cpuHotAddEnabled != bool(self.params['hardware']['hotadd_cpu']):
-                    self.module.fail_json(msg="Configure hotadd cpu operation is not supported when VM is power on")
-                self.configspec.cpuHotAddEnabled = bool(self.params['hardware']['hotadd_cpu'])
-                if vm_obj is None or self.configspec.cpuHotAddEnabled != vm_obj.config.cpuHotAddEnabled:
-                    self.change_detected = True
-
-            if 'hotremove_cpu' in self.params['hardware']:
-                if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                        vm_obj.config.cpuHotRemoveEnabled != bool(self.params['hardware']['hotremove_cpu']):
-                    self.module.fail_json(msg="Configure hotremove cpu operation is not supported when VM is power on")
-                self.configspec.cpuHotRemoveEnabled = bool(self.params['hardware']['hotremove_cpu'])
-                if vm_obj is None or self.configspec.cpuHotRemoveEnabled != vm_obj.config.cpuHotRemoveEnabled:
-                    self.change_detected = True
-
-            if 'memory_reservation_lock' in self.params['hardware']:
-                self.configspec.memoryReservationLockedToMax = bool(self.params['hardware']['memory_reservation_lock'])
-                if vm_obj is None or self.configspec.memoryReservationLockedToMax != vm_obj.config.memoryReservationLockedToMax:
-                    self.change_detected = True
-
-            if 'boot_firmware' in self.params['hardware']:
-                # boot firmware re-config can cause boot issue
-                if vm_obj is not None:
-                    return
-                boot_firmware = self.params['hardware']['boot_firmware'].lower()
-                if boot_firmware not in ('bios', 'efi'):
-                    self.module.fail_json(msg="hardware.boot_firmware value is invalid [%s]."
-                                              " Need one of ['bios', 'efi']." % boot_firmware)
-                self.configspec.firmware = boot_firmware
+            self.configspec.numCPUs = num_cpus
+            if vm_obj is None or self.configspec.numCPUs != vm_obj.config.hardware.numCPU:
                 self.change_detected = True
+        # num_cpu is mandatory for VM creation
+        elif vm_creation and not self.params['template']:
+            self.module.fail_json(msg="hardware.num_cpus attribute is mandatory for VM creation")
+
+        memory_mb = self.params['hardware']['memory_mb']
+        if memory_mb is not None:
+            # check VM power state and memory hotadd state before re-config VM
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
+                if vm_obj.config.memoryHotAddEnabled and memory_mb < vm_obj.config.hardware.memoryMB:
+                    self.module.fail_json(msg="Configured memory is less than memory size of the VM, "
+                                              "operation is not supported")
+                elif not vm_obj.config.memoryHotAddEnabled and memory_mb != vm_obj.config.hardware.memoryMB:
+                    self.module.fail_json(msg="memoryHotAdd is not enabled")
+            self.configspec.memoryMB = memory_mb
+            if vm_obj is None or self.configspec.memoryMB != vm_obj.config.hardware.memoryMB:
+                self.change_detected = True
+        # memory_mb is mandatory for VM creation
+        elif vm_creation and not self.params['template']:
+            self.module.fail_json(msg="hardware.memory_mb attribute is mandatory for VM creation")
+
+        hotadd_memory = self.params['hardware']['hotadd_memory']
+        if hotadd_memory is not None:
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    vm_obj.config.memoryHotAddEnabled != hotadd_memory:
+                self.module.fail_json(msg="Configure hotadd memory operation is not supported when VM is power on")
+            self.configspec.memoryHotAddEnabled = hotadd_memory
+            if vm_obj is None or self.configspec.memoryHotAddEnabled != vm_obj.config.memoryHotAddEnabled:
+                self.change_detected = True
+
+        hotadd_cpu = self.params['hardware']['hotadd_cpu']
+        if hotadd_cpu is not None:
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    vm_obj.config.cpuHotAddEnabled != hotadd_cpu:
+                self.module.fail_json(msg="Configure hotadd cpu operation is not supported when VM is power on")
+            self.configspec.cpuHotAddEnabled = hotadd_cpu
+            if vm_obj is None or self.configspec.cpuHotAddEnabled != vm_obj.config.cpuHotAddEnabled:
+                self.change_detected = True
+
+        hotremove_cpu = self.params['hardware']['hotremove_cpu']
+        if hotremove_cpu is not None:
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    vm_obj.config.cpuHotRemoveEnabled != hotremove_cpu:
+                self.module.fail_json(msg="Configure hotremove cpu operation is not supported when VM is power on")
+            self.configspec.cpuHotRemoveEnabled = hotremove_cpu
+            if vm_obj is None or self.configspec.cpuHotRemoveEnabled != vm_obj.config.cpuHotRemoveEnabled:
+                self.change_detected = True
+
+        memory_reservation_lock = self.params['hardware']['memory_reservation_lock']
+        if memory_reservation_lock is not None:
+            self.configspec.memoryReservationLockedToMax = memory_reservation_lock
+            if vm_obj is None or self.configspec.memoryReservationLockedToMax != vm_obj.config.memoryReservationLockedToMax:
+                self.change_detected = True
+
+        boot_firmware = self.params['hardware']['boot_firmware']
+        if boot_firmware is not None:
+            # boot firmware re-config can cause boot issue
+            if vm_obj is not None:
+                return
+            self.configspec.firmware = boot_firmware
+            self.change_detected = True
 
     def sanitize_cdrom_params(self):
         cdrom_specs = []
@@ -1750,82 +1727,82 @@ class PyVmomiHelper(PyVmomi):
         Args:
             vm_obj: virtual machine object
         """
-        if 'hardware' in self.params:
-            if 'max_connections' in self.params['hardware']:
-                # maxMksConnections == max_connections
-                self.configspec.maxMksConnections = int(self.params['hardware']['max_connections'])
-                if vm_obj is None or self.configspec.maxMksConnections != vm_obj.config.maxMksConnections:
-                    self.change_detected = True
+        max_connections = self.params['hardware']['max_connections']
+        if max_connections is not None:
+            self.configspec.maxMksConnections = max_connections
+            if vm_obj is None or self.configspec.maxMksConnections != vm_obj.config.maxMksConnections:
+                self.change_detected = True
 
-            if 'nested_virt' in self.params['hardware']:
-                self.configspec.nestedHVEnabled = bool(self.params['hardware']['nested_virt'])
-                if vm_obj is None or self.configspec.nestedHVEnabled != bool(vm_obj.config.nestedHVEnabled):
-                    self.change_detected = True
+        nested_virt = self.params['hardware']['nested_virt']
+        if nested_virt is not None:
+            self.configspec.nestedHVEnabled = nested_virt
+            if vm_obj is None or self.configspec.nestedHVEnabled != bool(vm_obj.config.nestedHVEnabled):
+                self.change_detected = True
 
-            if 'version' in self.params['hardware']:
-                hw_version_check_failed = False
-                temp_version = self.params['hardware'].get('version', 10)
-                if isinstance(temp_version, str) and temp_version.lower() == 'latest':
-                    # Check is to make sure vm_obj is not of type template
-                    if vm_obj and not vm_obj.config.template:
-                        try:
-                            task = vm_obj.UpgradeVM_Task()
-                            self.wait_for_task(task)
-                            if task.info.state == 'error':
-                                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                        except vim.fault.AlreadyUpgraded:
-                            # Don't fail if VM is already upgraded.
-                            pass
-                else:
+        temp_version = self.params['hardware']['version']
+        if temp_version is not None:
+            hw_version_check_failed = False
+            if temp_version.lower() == 'latest':
+                # Check is to make sure vm_obj is not of type template
+                if vm_obj and not vm_obj.config.template:
                     try:
-                        temp_version = int(temp_version)
-                    except ValueError:
-                        hw_version_check_failed = True
+                        task = vm_obj.UpgradeVM_Task()
+                        self.wait_for_task(task)
+                        if task.info.state == 'error':
+                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
+                    except vim.fault.AlreadyUpgraded:
+                        # Don't fail if VM is already upgraded.
+                        pass
+            else:
+                try:
+                    temp_version = int(temp_version)
+                except ValueError:
+                    hw_version_check_failed = True
 
-                    if temp_version not in range(3, 18):
-                        hw_version_check_failed = True
+                if temp_version not in range(3, 18):
+                    hw_version_check_failed = True
 
-                    if hw_version_check_failed:
-                        self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
-                                              " values range from 3 (ESX 2.x) to 17 (ESXi 7.0)." % temp_version)
-                    # Hardware version is denoted as "vmx-10"
-                    version = "vmx-%02d" % temp_version
-                    self.configspec.version = version
-                    if vm_obj is None or self.configspec.version != vm_obj.config.version:
-                        self.change_detected = True
-                    # Check is to make sure vm_obj is not of type template
-                    if vm_obj and not vm_obj.config.template:
-                        # VM exists and we need to update the hardware version
-                        current_version = vm_obj.config.version
-                        # current_version = "vmx-10"
-                        version_digit = int(current_version.split("-", 1)[-1])
-                        if temp_version < version_digit:
-                            self.module.fail_json(msg="Current hardware version '%d' which is greater than the specified"
-                                                  " version '%d'. Downgrading hardware version is"
-                                                  " not supported. Please specify version greater"
-                                                  " than the current version." % (version_digit,
-                                                                                  temp_version))
-                        new_version = "vmx-%02d" % temp_version
-                        try:
-                            task = vm_obj.UpgradeVM_Task(new_version)
-                            self.wait_for_task(task)
-                            if task.info.state == 'error':
-                                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                        except vim.fault.AlreadyUpgraded:
-                            # Don't fail if VM is already upgraded.
-                            pass
-
-            if 'virt_based_security' in self.params['hardware']:
-                virt_based_security_set = bool(self.params['hardware']['virt_based_security'])
-                if vm_obj is None or vm_obj.config.flags.vbsEnabled != virt_based_security_set:
-                    self.configspec.flags = vim.vm.FlagInfo()
-                    self.configspec.flags.vbsEnabled = virt_based_security_set
-                    if virt_based_security_set:
-                        self.configspec.flags.vvtdEnabled = True
-                        self.configspec.nestedHVEnabled = True
-                        self.configspec.bootOptions = vim.vm.BootOptions()
-                        self.configspec.bootOptions.efiSecureBootEnabled = True
+                if hw_version_check_failed:
+                    self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
+                                          " values range from 3 (ESX 2.x) to 17 (ESXi 7.0)." % temp_version)
+                # Hardware version is denoted as "vmx-10"
+                version = "vmx-%02d" % temp_version
+                self.configspec.version = version
+                if vm_obj is None or self.configspec.version != vm_obj.config.version:
                     self.change_detected = True
+                # Check is to make sure vm_obj is not of type template
+                if vm_obj and not vm_obj.config.template:
+                    # VM exists and we need to update the hardware version
+                    current_version = vm_obj.config.version
+                    # current_version = "vmx-10"
+                    version_digit = int(current_version.split("-", 1)[-1])
+                    if temp_version < version_digit:
+                        self.module.fail_json(msg="Current hardware version '%d' which is greater than the specified"
+                                              " version '%d'. Downgrading hardware version is"
+                                              " not supported. Please specify version greater"
+                                              " than the current version." % (version_digit,
+                                                                              temp_version))
+                    new_version = "vmx-%02d" % temp_version
+                    try:
+                        task = vm_obj.UpgradeVM_Task(new_version)
+                        self.wait_for_task(task)
+                        if task.info.state == 'error':
+                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
+                    except vim.fault.AlreadyUpgraded:
+                        # Don't fail if VM is already upgraded.
+                        pass
+
+        virt_based_security = self.params['hardware']['virt_based_security']
+        if virt_based_security is not None:
+            if vm_obj is None or vm_obj.config.flags.vbsEnabled != virt_based_security:
+                self.configspec.flags = vim.vm.FlagInfo()
+                self.configspec.flags.vbsEnabled = virt_based_security
+                if virt_based_security:
+                    self.configspec.flags.vvtdEnabled = True
+                    self.configspec.nestedHVEnabled = True
+                    self.configspec.bootOptions = vim.vm.BootOptions()
+                    self.configspec.bootOptions.efiSecureBootEnabled = True
+                self.change_detected = True
 
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
@@ -1937,7 +1914,7 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_network(self, vm_obj):
         # Ignore empty networks, this permits to keep networks when deploying a template/cloning a VM
-        if len(self.params['networks']) == 0:
+        if not self.params['networks']:
             return
 
         network_devices = self.sanitize_network_params()
@@ -2096,7 +2073,7 @@ class PyVmomiHelper(PyVmomi):
         return property_info
 
     def configure_vapp_properties(self, vm_obj):
-        if len(self.params['vapp_properties']) == 0:
+        if not self.params['vapp_properties']:
             return
 
         for x in self.params['vapp_properties']:
@@ -2193,7 +2170,7 @@ class PyVmomiHelper(PyVmomi):
             self.change_detected = True
 
     def customize_customvalues(self, vm_obj, config_spec):
-        if len(self.params['customvalues']) == 0:
+        if not self.params['customvalues']:
             return
 
         vm_custom_spec = config_spec
@@ -2251,38 +2228,37 @@ class PyVmomiHelper(PyVmomi):
             # https://pubs.vmware.com/vi3/sdk/ReferenceGuide/vim.vm.customization.IPSettings.html
             if 'domain' in network:
                 guest_map.adapter.dnsDomain = network['domain']
-            elif 'domain' in self.params['customization']:
+            elif self.params['customization']['domain'] is not None:
                 guest_map.adapter.dnsDomain = self.params['customization']['domain']
 
             if 'dns_servers' in network:
                 guest_map.adapter.dnsServerList = network['dns_servers']
-            elif 'dns_servers' in self.params['customization']:
+            elif self.params['customization']['dns_servers'] is not None:
                 guest_map.adapter.dnsServerList = self.params['customization']['dns_servers']
 
             adaptermaps.append(guest_map)
 
         # Global DNS settings
         globalip = vim.vm.customization.GlobalIPSettings()
-        if 'dns_servers' in self.params['customization']:
+        if self.params['customization']['dns_servers'] is not None:
             globalip.dnsServerList = self.params['customization']['dns_servers']
 
         # TODO: Maybe list the different domains from the interfaces here by default ?
         dns_suffixes = []
-        if 'dns_suffix' in self.params['customization']:
-            dns_suffix = self.params['customization']['dns_suffix']
-            if dns_suffix:
-                if isinstance(dns_suffix, list):
-                    dns_suffixes += dns_suffix
-                else:
-                    dns_suffixes.append(dns_suffix)
+        dns_suffix = self.params['customization']['dns_suffix']
+        if dns_suffix:
+            if isinstance(dns_suffix, list):
+                dns_suffixes += dns_suffix
+            else:
+                dns_suffixes.append(dns_suffix)
 
-                globalip.dnsSuffixList = dns_suffixes
+            globalip.dnsSuffixList = dns_suffixes
 
-        if 'domain' in self.params['customization']:
+        if self.params['customization']['domain'] is not None:
             dns_suffixes.insert(0, self.params['customization']['domain'])
             globalip.dnsSuffixList = dns_suffixes
 
-        if self.params['guest_id']:
+        if self.params['guest_id'] is not None:
             guest_id = self.params['guest_id']
         else:
             guest_id = vm_obj.summary.config.guestId
@@ -2308,16 +2284,16 @@ class PyVmomiHelper(PyVmomi):
             ident.userData.fullName = str(self.params['customization'].get('fullname', 'Administrator'))
             ident.userData.orgName = str(self.params['customization'].get('orgname', 'ACME'))
 
-            if 'productid' in self.params['customization']:
+            if self.params['customization']['productid'] is not None:
                 ident.userData.productId = str(self.params['customization']['productid'])
 
             ident.guiUnattended = vim.vm.customization.GuiUnattended()
 
-            if 'autologon' in self.params['customization']:
+            if self.params['customization']['autologon'] is not None:
                 ident.guiUnattended.autoLogon = self.params['customization']['autologon']
                 ident.guiUnattended.autoLogonCount = self.params['customization'].get('autologoncount', 1)
 
-            if 'timezone' in self.params['customization']:
+            if self.params['customization']['timezone'] is not None:
                 # Check if timezone value is a int before proceeding.
                 ident.guiUnattended.timeZone = self.device_helper.integer_value(
                     self.params['customization']['timezone'],
@@ -2330,21 +2306,21 @@ class PyVmomiHelper(PyVmomi):
                 ident.guiUnattended.password.value = str(self.params['customization']['password'])
                 ident.guiUnattended.password.plainText = True
 
-            if 'joindomain' in self.params['customization']:
-                if 'domainadmin' not in self.params['customization'] or 'domainadminpassword' not in self.params['customization']:
+            if self.params['customization']['joindomain'] is not None:
+                if self.params['customization']['domainadmin'] is None or self.params['customization']['domainadminpassword'] is None:
                     self.module.fail_json(msg="'domainadmin' and 'domainadminpassword' entries are mandatory in 'customization' section to use "
                                               "joindomain feature")
 
-                ident.identification.domainAdmin = str(self.params['customization']['domainadmin'])
-                ident.identification.joinDomain = str(self.params['customization']['joindomain'])
+                ident.identification.domainAdmin = self.params['customization']['domainadmin']
+                ident.identification.joinDomain = self.params['customization']['joindomain']
                 ident.identification.domainAdminPassword = vim.vm.customization.Password()
-                ident.identification.domainAdminPassword.value = str(self.params['customization']['domainadminpassword'])
+                ident.identification.domainAdminPassword.value = self.params['customization']['domainadminpassword']
                 ident.identification.domainAdminPassword.plainText = True
 
-            elif 'joinworkgroup' in self.params['customization']:
-                ident.identification.joinWorkgroup = str(self.params['customization']['joinworkgroup'])
+            elif self.params['customization']['joinworkgroup'] is not None:
+                ident.identification.joinWorkgroup = self.params['customization']['joinworkgroup']
 
-            if 'runonce' in self.params['customization']:
+            if self.params['customization']['runonce'] is not None:
                 ident.guiRunOnce = vim.vm.customization.GuiRunOnce()
                 ident.guiRunOnce.commandList = self.params['customization']['runonce']
 
@@ -2356,8 +2332,8 @@ class PyVmomiHelper(PyVmomi):
             ident = vim.vm.customization.LinuxPrep()
 
             # TODO: Maybe add domain from interface if missing ?
-            if 'domain' in self.params['customization']:
-                ident.domain = str(self.params['customization']['domain'])
+            if self.params['customization']['domain'] is not None:
+                ident.domain = self.params['customization']['domain']
 
             ident.hostName = vim.vm.customization.FixedName()
             default_name = ""
@@ -2372,9 +2348,9 @@ class PyVmomiHelper(PyVmomi):
 
             # List of supported time zones for different vSphere versions in Linux/Unix systems
             # https://kb.vmware.com/s/article/2145518
-            if 'timezone' in self.params['customization']:
-                ident.timeZone = str(self.params['customization']['timezone'])
-            if 'hwclockUTC' in self.params['customization']:
+            if self.params['customization']['timezone'] is not None:
+                ident.timeZone = self.params['customization']['timezone']
+            if self.params['customization']['hwclockUTC'] is not None:
                 ident.hwClockUTC = self.params['customization']['hwclockUTC']
 
         self.customspec = vim.vm.customization.Specification()
@@ -2599,7 +2575,7 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_disks(self, vm_obj):
         # Ignore empty disk list, this permits to keep disks when deploying a template/cloning a VM
-        if len(self.params['disk']) == 0:
+        if not self.params['disk']:
             return
 
         # if one of 'controller_type', 'controller_number', 'unit_number' parameters set in one of disks' configuration
@@ -2773,7 +2749,7 @@ class PyVmomiHelper(PyVmomi):
         datastore = None
         datastore_name = None
 
-        if len(self.params['disk']) != 0:
+        if self.params['disk']:
             # TODO: really use the datastore for newly created disks
             if 'autoselect_datastore' in self.params['disk'][0] and self.params['disk'][0]['autoselect_datastore']:
                 datastores = []
@@ -2865,15 +2841,10 @@ class PyVmomiHelper(PyVmomi):
                 return False
 
     def get_scsi_type(self):
-        disk_controller_type = "paravirtual"
-        # set cpu/memory/etc
-        if 'hardware' in self.params:
-            if 'scsi' in self.params['hardware']:
-                if self.params['hardware']['scsi'] in ['buslogic', 'paravirtual', 'lsilogic', 'lsilogicsas']:
-                    disk_controller_type = self.params['hardware']['scsi']
-                else:
-                    self.module.fail_json(msg="hardware.scsi attribute should be 'paravirtual' or 'lsilogic'")
-        return disk_controller_type
+        disk_controller_type = self.params['hardware']['scsi']
+        if disk_controller_type is not None:
+            return disk_controller_type
+        return "paravirtual"
 
     def find_folder(self, searchpath):
         """ Walk inventory objects one position of the searchpath at a time """
@@ -3050,7 +3021,7 @@ class PyVmomiHelper(PyVmomi):
                     network_changes = True
                     break
 
-        if len(self.params['customization']) > 0 or network_changes or self.params.get('customization_spec') is not None:
+        if any(v is not None for v in self.params['customization'].values()) or network_changes or self.params.get('customization_spec') is not None:
             self.customize_vm(vm_obj=vm_obj)
 
         clonespec = None
@@ -3300,7 +3271,7 @@ class PyVmomiHelper(PyVmomi):
             self.change_detected = True
 
         # add customize existing VM after VM re-configure
-        if 'existing_vm' in self.params['customization'] and self.params['customization']['existing_vm']:
+        if self.params['customization']['existing_vm']:
             if self.current_vm_obj.config.template:
                 self.module.fail_json(msg="VM is template, not support guest OS customization.")
             if self.current_vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
@@ -3322,7 +3293,7 @@ class PyVmomiHelper(PyVmomi):
                 if key not in ('device_type', 'mac', 'name', 'vlan', 'type', 'start_connected', 'dvswitch_name'):
                     network_changes = True
                     break
-        if len(self.params['customization']) > 1 or network_changes or self.params.get('customization_spec'):
+        if any(v is not None for v in self.params['customization'].values()) or network_changes or self.params.get('customization_spec'):
             self.customize_vm(vm_obj=self.current_vm_obj)
         try:
             task = self.current_vm_obj.CustomizeVM_Task(self.customspec)
@@ -3421,7 +3392,28 @@ def main():
         guest_id=dict(type='str'),
         disk=dict(type='list', default=[], elements='dict'),
         cdrom=dict(type='raw', default=[]),
-        hardware=dict(type='dict', default={}),
+        hardware=dict(
+            type='dict',
+            default={},
+            options=dict(
+                boot_firmware=dict(type='str', choices=['bios', 'efi']),
+                cpu_limit=dict(type='int'),
+                cpu_reservation=dict(type='int'),
+                hotadd_cpu=dict(type='bool'),
+                hotadd_memory=dict(type='bool'),
+                hotremove_cpu=dict(type='bool'),
+                max_connections=dict(type='int'),
+                mem_limit=dict(type='int'),
+                mem_reservation=dict(type='int', aliases=['memory_reservation']),
+                memory_mb=dict(type='int'),
+                memory_reservation_lock=dict(type='bool'),
+                nested_virt=dict(type='bool'),
+                num_cpu_cores_per_socket=dict(type='int'),
+                num_cpus=dict(type='int'),
+                scsi=dict(type='str', choices=['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']),
+                version=dict(type='str'),
+                virt_based_security=dict(type='bool')
+            )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
         esxi_hostname=dict(type='str'),
@@ -3433,7 +3425,29 @@ def main():
         linked_clone=dict(type='bool', default=False),
         networks=dict(type='list', default=[], elements='dict'),
         resource_pool=dict(type='str'),
-        customization=dict(type='dict', default={}, no_log=True),
+        customization=dict(
+            type='dict',
+            default={},
+            options=dict(
+                autologon=dict(type='bool'),
+                autologoncount=dict(type='int'),
+                dns_servers=dict(type='list', elements='str'),
+                dns_suffix=dict(type='list', elements='str'),
+                domain=dict(type='str'),
+                domainadmin=dict(type='str'),
+                domainadminpassword=dict(type='str', no_log=True),
+                existing_vm=dict(type='bool'),
+                fullname=dict(type='str'),
+                hostname=dict(type='str'),
+                hwclockUTC=dict(type='bool'),
+                joindomain=dict(type='str'),
+                joinworkgroup=dict(type='str'),
+                orgname=dict(type='str'),
+                password=dict(type='str', no_log=True),
+                productid=dict(type='str'),
+                runonce=dict(type='list', elements='str'),
+                timezone=dict(type='str')
+            )),
         customization_spec=dict(type='str', default=None),
         wait_for_customization=dict(type='bool', default=False),
         wait_for_customization_timeout=dict(type='int', default=3600),
