@@ -100,7 +100,6 @@
         validate_certs: false
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi1 }}"
-        state: poweredon
         folder: "{{ f0 }}"
         name: test_vm_slash
         force: true
