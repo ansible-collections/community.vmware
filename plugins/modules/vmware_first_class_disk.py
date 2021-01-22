@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
-# Copyright: (c) 2018, Ansible Project
+# Copyright: (c) 2021, Mario Lenz <m@riolenz.de>
+# Copyright: (c) 2021, Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -11,8 +11,9 @@ DOCUMENTATION = '''
 ---
 module: vmware_first_class_disk
 short_description: Manage VMware vSphere First Class Disks
+version_added: '1.7.0'
 description:
-    - This module can be used to manage (create, delete) VMware vSphere First Class Disks.
+    - This module can be used to manage (create, delete, resize) VMware vSphere First Class Disks.
 author:
 - Mario Lenz (@mariolenz)
 notes:
@@ -73,8 +74,19 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """#
-"""
+RETURN = r'''
+first_class_disk:
+  description: First-class disk returned when created, deleted or changed
+  returned: changed
+  type: dict
+  sample: >
+    {
+      "name": "1GBDisk"
+      "datastore_name": "DS0"
+      "size_mb": "1024"
+      "state": "present"
+    }
+'''
 
 import re
 try:
@@ -119,10 +131,20 @@ class FirstClassDisk(PyVmomi):
 
         self.disk = self.find_first_class_disk_by_name(self.disk_name, self.datastore_obj)
 
+    def create_fcd_result(self, state):
+        result = dict(
+            name=self.disk.config.name,
+            datastore_name=self.disk.config.backing.datastore.name,
+            size_mb=self.disk.config.capacityInMB,
+            state=state
+        )
+
+        return result
+
     def create(self):
-        changed = False
+        result = dict(changed=False)
         if not self.disk:
-            changed = True
+            result['changed'] = True
             if not self.module.check_mode:
                 backing_spec = vim.vslm.CreateSpec.DiskFileBackingSpec()
                 backing_spec.datastore = self.datastore_obj
@@ -137,7 +159,7 @@ class FirstClassDisk(PyVmomi):
                         task = self.content.vStorageObjectManager.CreateDisk_Task(vslm_create_spec)
                     else:
                         task = self.content.vStorageObjectManager.HostCreateDisk_Task(vslm_create_spec)
-                    wait_for_task(task)
+                    changed, self.disk = wait_for_task(task)
                 except vmodl.RuntimeFault as runtime_fault:
                     self.module.fail_json(msg=to_native(runtime_fault.msg))
                 except vmodl.MethodFault as method_fault:
@@ -147,14 +169,21 @@ class FirstClassDisk(PyVmomi):
                 except Exception as generic_exc:
                     self.module.fail_json(msg="Failed to create disk"
                                               " due to generic exception %s" % to_native(generic_exc))
+
+                result['diff'] = {'before': {}, 'after': {}}
+                result['diff']['before']['first_class_disk'] = self.create_fcd_result('absent')
+                result['diff']['after']['first_class_disk'] = self.create_fcd_result('present')
+                result['first_class_disk'] = result['diff']['after']['first_class_disk']
         else:
             if self.size_mb < self.disk.config.capacityInMB:
                 self.module.fail_json(msg="Given disk size is smaller than current size (%dMB < %dMB). "
                                           "Reducing disks is not allowed."
                                           % (self.size_mb, self.disk.config.capacityInMB))
             elif self.size_mb > self.disk.config.capacityInMB:
-                changed = True
+                result['changed'] = True
                 if not self.module.check_mode:
+                    result['diff'] = {'before': {}, 'after': {}}
+                    result['diff']['before']['first_class_disk'] = self.create_fcd_result('present')
                     try:
                         if self.is_vcenter():
                             task = self.content.vStorageObjectManager.ExtendDisk_Task(self.disk.config.id,
@@ -175,13 +204,22 @@ class FirstClassDisk(PyVmomi):
                         self.module.fail_json(msg="Failed to increase disk size"
                                                   " due to generic exception %s" % to_native(generic_exc))
 
-        self.module.exit_json(changed=changed, result=None)
+                    self.disk = self.find_first_class_disk_by_name(self.disk_name, self.datastore_obj)
+                    result['diff']['after']['first_class_disk'] = self.create_fcd_result('present')
+                    result['first_class_disk'] = result['diff']['after']['first_class_disk']
+
+        self.module.exit_json(**result)
 
     def delete(self):
-        changed = False
+        result = dict(changed=False)
         if self.disk:
-            changed = True
+            result['changed'] = True
             if not self.module.check_mode:
+                result['diff'] = {'before': {}, 'after': {}}
+                result['diff']['before']['first_class_disk'] = self.create_fcd_result('present')
+                result['diff']['after']['first_class_disk'] = self.create_fcd_result('absent')
+                result['first_class_disk'] = result['diff']['after']['first_class_disk']
+
                 try:
                     if self.is_vcenter():
                         task = self.content.vStorageObjectManager.DeleteVStorageObject_Task(self.disk.config.id,
@@ -200,7 +238,7 @@ class FirstClassDisk(PyVmomi):
                     self.module.fail_json(msg="Failed to delete disk"
                                               " due to generic exception %s" % to_native(generic_exc))
 
-        self.module.exit_json(changed=changed, result=None)
+        self.module.exit_json(**result)
 
 
 def main():

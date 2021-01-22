@@ -293,6 +293,43 @@ Examples
 
 
 
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>first_class_disk</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>changed</td>
+                <td>
+                            <div>First-class disk returned when created, deleted or changed</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+      &quot;name&quot;: &quot;1GBDisk&quot;
+      &quot;datastore_name&quot;: &quot;DS0&quot;
+      &quot;size_mb&quot;: &quot;1024&quot;
+      &quot;state&quot;: &quot;present&quot;
+    }</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
+
 
 Status
 ------
