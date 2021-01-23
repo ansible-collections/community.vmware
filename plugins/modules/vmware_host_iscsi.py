@@ -29,6 +29,14 @@ options:
     - This parameter is required if I(state=present) or I(state=absent).
     type: dict
     suboptions:
+      iscsi_name:
+        description:
+        - The name for the iSCSI HBA adapter.
+        - This is iSCSI qualified name.
+        type: str
+        version_added: '1.7.0'
+        aliases:
+        - initiator_iqn
       alias:
         description:
         - The new value for the alias of the adapter.
@@ -386,6 +394,7 @@ class VMwareHostiScsiManager(PyVmomi):
         self.state = self.params['state']
 
         if self.iscsi_config:
+            self.iscsi_name = self.iscsi_config['iscsi_name']
             self.alias = self.iscsi_config['alias']
             self.authentication = self.iscsi_config['authentication']
             self.port_bind = self.iscsi_config['port_bind']
@@ -466,6 +475,11 @@ class VMwareHostiScsiManager(PyVmomi):
                             and config['iscsi_name'] == self.static_target['iscsi_name']:
                         self.change_flag = False
                         self.add_static_interface_flag = False
+
+            self.update_iscsi_name_flag = False
+            if self.existing_system_iscsi_config['iscsi_name'] != self.iscsi_name and self.iscsi_name:
+                self.change_flag = True
+                self.update_iscsi_name_flag = True
 
             self.update_alias_flag = False
             if self.existing_system_iscsi_config['iscsi_alias'] != self.alias:
@@ -731,6 +745,15 @@ class VMwareHostiScsiManager(PyVmomi):
                     except Exception as e:
                         self.module.fail_json(msg="Failed to update a CHAP authentication of a static target: %s" % to_native(e))
 
+                # update an iqn in an iSCSI configuration
+                if self.update_iscsi_name_flag:
+                    try:
+                        self.host_obj.configManager.storageSystem.UpdateInternetScsiName(
+                            iScsiHbaDevice=self.vmhba_name, iScsiName=self.iscsi_name)
+                        result['changed'] = True
+                    except Exception as e:
+                        self.module.fail_json(msg="Failed to update an iqn: %s" % to_native(e))
+
                 # update an alias in an iSCSI configuration
                 if self.update_alias_flag:
                     try:
@@ -836,6 +859,7 @@ def main():
         esxi_hostname=dict(type='str', required=True),
         iscsi_config=dict(type='dict',
                           options=dict(
+                              iscsi_name=dict(type='str', default=None, aliases=['initiator_iqn']),
                               alias=dict(type='str', default=''),
                               authentication=authentication,
                               port_bind=dict(type='list', elements='str', default=[]),
