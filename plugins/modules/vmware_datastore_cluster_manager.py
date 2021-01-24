@@ -161,7 +161,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 changed_list = [ds.name for ds in datastore_obj_list]
                 temp_result['current_datastores'] = temp_result['previous_datastores'].extend(changed_list)
                 temp_result['changed_datastores'] = changed_list
-                results['changed'] = True
+                results['changed'] = len(datastore_obj_list) > 0
                 results['datastore_cluster_info'] = temp_result
                 self.module.exit_json(**results)
 
@@ -191,7 +191,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 for ds in changed_list:
                     temp_result['current_datastores'].pop(ds)
                 temp_result['changed_datastores'] = changed_list
-                results['changed'] = True
+                results['changed'] = len(datastore_obj_list) > 0
                 results['datastore_cluster_info'] = temp_result
                 self.module.exit_json(**results)
 

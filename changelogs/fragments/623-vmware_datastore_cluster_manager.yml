@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_datastore_cluster_manager - Fix idempotency in check mode (https://github.com/ansible-collections/community.vmware/issues/623).
