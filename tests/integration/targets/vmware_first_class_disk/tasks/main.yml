@@ -1,0 +1,293 @@
+# Test code for the vmware_first_class_disk module.
+# Copyright: (c) 2021, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_datastore: true
+
+  - name: Create first-class disk through vCenter (check mode)
+    vmware_first_class_disk: &disk_vcenter_create
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      disk_name: "firstclassdisk"
+      size: 1GB
+      datastore_name: "{{ rw_datastore }}"
+      state: present
+      validate_certs: false
+    check_mode: true
+    register: result_create_vcenter_check_mode
+
+  - debug:
+      var: result_create_vcenter_check_mode
+
+  - name: assert that first-class disk would be created
+    assert:
+      that:
+        - result_create_vcenter_check_mode is changed
+
+  - name: Create first-class disk through vCenter
+    vmware_first_class_disk:
+      <<: *disk_vcenter_create
+    register: result_create_vcenter
+
+  - debug:
+      var: result_create_vcenter
+
+  - name: assert that first-class disk is created
+    assert:
+      that:
+        - result_create_vcenter is changed
+
+  - name: Create first-class disk through vCenter again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_vcenter_create
+    register: result_create_vcenter_again
+
+  - debug:
+      var: result_create_vcenter_again
+
+  - name: assert that first-class disk would not be created
+    assert:
+      that:
+        - result_create_vcenter_again is not changed
+
+  - name: Increase disk size through vCenter (check mode)
+    vmware_first_class_disk: &disk_vcenter_increase
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      disk_name: "firstclassdisk"
+      size: 2GB
+      datastore_name: "{{ rw_datastore }}"
+      state: present
+      validate_certs: false
+    check_mode: true
+    register: result_increase_vcenter_check_mode
+
+  - debug:
+      var: result_increase_vcenter_check_mode
+
+  - name: assert that disk size would be increased
+    assert:
+      that:
+        - result_increase_vcenter_check_mode is changed
+
+  - name: Increase disk size through vCenter
+    vmware_first_class_disk:
+      <<: *disk_vcenter_increase
+    register: result_increase_vcenter
+
+  - debug:
+      var: result_increase_vcenter
+
+  - name: assert that disk size was increased
+    assert:
+      that:
+        - result_increase_vcenter is changed
+
+  - name: Increase disk size through vCenter again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_vcenter_increase
+    register: result_increase_vcenter_again
+
+  - debug:
+      var: result_increase_vcenter_again
+
+  - name: assert that disk size would not be increased
+    assert:
+      that:
+        - result_increase_vcenter_again is not changed
+
+
+  - name: Delete first-class disk through vCenter (check mode)
+    vmware_first_class_disk: &disk_vcenter_delete
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      disk_name: "firstclassdisk"
+      datastore_name: "{{ rw_datastore }}"
+      state: absent
+      validate_certs: false
+    check_mode: true
+    register: result_delete_vcenter_check_mode
+
+  - debug:
+      var: result_delete_vcenter_check_mode
+
+  - name: assert that first-class disk would be deleted
+    assert:
+      that:
+        - result_delete_vcenter_check_mode is changed
+
+  - name: Delete first-class disk through vCenter
+    vmware_first_class_disk:
+      <<: *disk_vcenter_delete
+    register: result_delete_vcenter
+
+  - debug:
+      var: result_delete_vcenter
+
+  - name: assert that first-class disk is deleted
+    assert:
+      that:
+        - result_delete_vcenter is changed
+
+  - name: Delete first-class disk through vCenter again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_vcenter_delete
+    register: result_delete_vcenter_again
+
+  - debug:
+      var: result_delete_vcenter_again
+
+  - name: assert that first-class disk would not be deleted
+    assert:
+      that:
+        - result_delete_vcenter_again is not changed
+
+  - name: Create first-class disk through ESXi (check mode)
+    vmware_first_class_disk: &disk_esxi_create
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      disk_name: "firstclassdisk"
+      size: 1GB
+      datastore_name: "{{ rw_datastore }}"
+      state: present
+      validate_certs: false
+    check_mode: true
+    register: result_create_esxi_check_mode
+
+  - debug:
+      var: result_create_esxi_check_mode
+
+  - name: assert that first-class disk would be created
+    assert:
+      that:
+        - result_create_esxi_check_mode is changed
+
+  - name: Create first-class disk through ESXi
+    vmware_first_class_disk:
+      <<: *disk_esxi_create
+    register: result_create_esxi
+
+  - debug:
+      var: result_create_esxi
+
+  - name: assert that first-class disk is created
+    assert:
+      that:
+        - result_create_esxi is changed
+
+  - name: Create first-class disk through ESXi again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_esxi_create
+    register: result_create_esxi_again
+
+  - debug:
+      var: result_create_esxi_again
+
+  - name: assert that first-class disk would not be created
+    assert:
+      that:
+        - result_create_esxi_again is not changed
+
+  - name: Increase disk size through ESXi (check mode)
+    vmware_first_class_disk: &disk_esxi_increase
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      disk_name: "firstclassdisk"
+      size: 2GB
+      datastore_name: "{{ rw_datastore }}"
+      state: present
+      validate_certs: false
+    check_mode: true
+    register: result_increase_esxi_check_mode
+
+  - debug:
+      var: result_increase_esxi_check_mode
+
+  - name: assert that disk size would be increased
+    assert:
+      that:
+        - result_increase_esxi_check_mode is changed
+
+  - name: Increase disk size through ESXi
+    vmware_first_class_disk:
+      <<: *disk_esxi_increase
+    register: result_increase_esxi
+
+  - debug:
+      var: result_increase_esxi
+
+  - name: assert that disk size was increased
+    assert:
+      that:
+        - result_increase_esxi is changed
+
+  - name: Increase disk size through ESXi again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_esxi_increase
+    register: result_increase_esxi_again
+
+  - debug:
+      var: result_increase_esxi_again
+
+  - name: assert that disk size would not be increased
+    assert:
+      that:
+        - result_increase_esxi_again is not changed
+
+
+  - name: Delete first-class disk through ESXi (check mode)
+    vmware_first_class_disk: &disk_esxi_delete
+      hostname: "{{ esxi1 }}"
+      username: "{{ esxi_user }}"
+      password: "{{ esxi_password }}"
+      disk_name: "firstclassdisk"
+      datastore_name: "{{ rw_datastore }}"
+      state: absent
+      validate_certs: false
+    check_mode: true
+    register: result_delete_esxi_check_mode
+
+  - debug:
+      var: result_delete_esxi_check_mode
+
+  - name: assert that first-class disk would be deleted
+    assert:
+      that:
+        - result_delete_esxi_check_mode is changed
+
+  - name: Delete first-class disk through ESXi
+    vmware_first_class_disk:
+      <<: *disk_esxi_delete
+    register: result_delete_esxi
+
+  - debug:
+      var: result_delete_esxi
+
+  - name: assert that first-class disk is deleted
+    assert:
+      that:
+        - result_delete_esxi is changed
+
+  - name: Delete first-class disk through ESXi again (idempotency)
+    vmware_first_class_disk:
+      <<: *disk_esxi_delete
+    register: result_delete_esxi_again
+
+  - debug:
+      var: result_delete_esxi_again
+
+  - name: assert that first-class disk would not be deleted
+    assert:
+      that:
+        - result_delete_esxi_again is not changed
