@@ -191,8 +191,15 @@ class VMwareGuestRegisterOperation(PyVmomi):
                                   details=details)
 
         if self.state == "present":
-            if self.get_vm():
+            vm_obj = self.get_vm()
+            if vm_obj:
+                if self.module.check_mode:
+                    self.module.exit_json(**result)
                 self.module.exit_json(**result)
+            else:
+                if self.module.check_mode:
+                    result['changed'] = True
+                    self.module.exit_json(**result)
 
             if self.esxi_hostname:
                 host_obj = self.find_hostsystem_by_name(self.esxi_hostname)
@@ -228,6 +235,14 @@ class VMwareGuestRegisterOperation(PyVmomi):
 
         if self.state == "absent":
             vm_obj = self.get_vm()
+            if vm_obj:
+                if self.module.check_mode:
+                    result['changed'] = True
+                    self.module.exit_json(**result)
+            else:
+                if self.module.check_mode:
+                    self.module.exit_json(**result)
+
             if vm_obj:
                 try:
                     vm_obj.UnregisterVM()
