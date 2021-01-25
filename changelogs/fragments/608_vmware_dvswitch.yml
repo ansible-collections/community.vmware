@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_dvswitch - correctly add contact information (https://github.com/ansible-collections/community.vmware/issues/608).

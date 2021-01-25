@@ -308,7 +308,7 @@ class VMwareDvSwitch(PyVmomi):
         self.health_check_teaming_interval = self.params['health_check'].get('teaming_failover_interval')
         if self.params['contact']:
             self.contact_name = self.params['contact'].get('name')
-            self.contact_details = self.params['contact'].get('details')
+            self.contact_details = self.params['contact'].get('description')
         else:
             self.contact_name = None
             self.contact_details = None
@@ -365,7 +365,7 @@ class VMwareDvSwitch(PyVmomi):
         results['contact'] = self.contact_name
         results['contact_details'] = self.contact_details
         if self.contact_name or self.contact_details:
-            spec.contact = self.create_contact_spec()
+            spec.configSpec.contact = self.create_contact_spec()
         # Description
         results['description'] = self.description
         if self.description:
