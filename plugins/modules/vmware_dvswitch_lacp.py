@@ -337,7 +337,12 @@ class VMwareDvSwitchLacp(PyVmomi):
         lag_uplink_number = lag.get('uplink_number', None)
         if lag_uplink_number is None:
             self.module.fail_json(msg="Please specify uplink_number in lag options as it's a required parameter")
-        elif lag_uplink_number > 30:
+        try:
+            lag_uplink_number = int(lag_uplink_number)
+        except ValueError:
+            self.module.fail_json(msg="Failed to parse uplink_number in lag options")
+
+        if lag_uplink_number > 30:
             self.module.fail_json(msg="More than 30 uplinks are not supported in a single LAG!")
         lag_load_balancing_mode = lag.get('load_balancing_mode', None)
         supported_lb_modes = ['srcTcpUdpPort', 'srcDestIpTcpUdpPortVlan', 'srcIpVlan', 'srcDestTcpUdpPort',
