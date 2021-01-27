@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_content_deploy_ovf_template - consistent ``eagerZeroedThick`` value (https://github.com/ansible-collections/community.vmware/issues/618).
