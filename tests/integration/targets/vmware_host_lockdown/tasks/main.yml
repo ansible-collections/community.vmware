@@ -1,0 +1,100 @@
+# Test code for the vmware_host_lockdown module.
+# # Copyright: (c) 2021, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+
+  - name: Enable lockdown (check mode)
+    vmware_host_lockdown: &enable_lockdown
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+      state: present
+    check_mode: true
+    register: result_enable_lockdown
+
+  - debug:
+      var: result_enable_lockdown
+
+  - name: assert that lockdown would be enabled
+    assert:
+      that:
+        - result_enable_lockdown is changed
+
+  - name: Enable lockdown
+    vmware_host_lockdown:
+      <<: *enable_lockdown
+    register: result_enable_lockdown
+
+  - debug:
+      var: result_enable_lockdown
+
+  - name: assert that lockdown is enabled
+    assert:
+      that:
+        - result_enable_lockdown is changed
+
+  - name: Enable lockdown again (idempotency)
+    vmware_host_lockdown:
+      <<: *enable_lockdown
+    register: result_enable_lockdown
+
+  - debug:
+      var: result_enable_lockdown
+
+  - name: assert that lockdown is not changed
+    assert:
+      that:
+        - result_enable_lockdown is not changed
+
+  - name: Disable lockdown (check mode)
+    vmware_host_lockdown: &disable_lockdown
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+      state: absent
+    check_mode: true
+    register: result_disable_lockdown
+
+  - debug:
+      var: result_disable_lockdown
+
+  - name: assert that lockdown would be disabled
+    assert:
+      that:
+        - result_disable_lockdown is changed
+
+  - name: Disable lockdown
+    vmware_host_lockdown:
+      <<: *disable_lockdown
+    register: result_disable_lockdown
+
+  - debug:
+      var: result_disable_lockdown
+
+  - name: assert that lockdown is disabled
+    assert:
+      that:
+        - result_disable_lockdown is changed
+
+  - name: Disable lockdown again (idempotency)
+    vmware_host_lockdown:
+      <<: *disable_lockdown
+    register: result_disable_lockdown
+
+  - debug:
+      var: result_disable_lockdown
+
+  - name: assert that lockdown is not changed
+    assert:
+      that:
+        - result_disable_lockdown is not changed

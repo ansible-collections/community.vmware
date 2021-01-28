@@ -158,7 +158,8 @@ class VmwareLockdownManager(PyVmomi):
                 if host.config.adminDisabled:
                     results['host_lockdown_state'][host.name]['previous_state'] = 'present'
                     if desired_state == 'absent':
-                        host.ExitLockdownMode()
+                        if not self.module.check_mode:
+                            host.ExitLockdownMode()
                         results['host_lockdown_state'][host.name]['current_state'] = 'absent'
                         changed = True
                     else:
@@ -166,7 +167,8 @@ class VmwareLockdownManager(PyVmomi):
                 elif not host.config.adminDisabled:
                     results['host_lockdown_state'][host.name]['previous_state'] = 'absent'
                     if desired_state == 'present':
-                        host.EnterLockdownMode()
+                        if not self.module.check_mode:
+                            host.EnterLockdownMode()
                         results['host_lockdown_state'][host.name]['current_state'] = 'present'
                         changed = True
                     else:
@@ -199,6 +201,7 @@ def main():
 
     module = AnsibleModule(
         argument_spec=argument_spec,
+        supports_check_mode=True,
         required_one_of=[
             ['cluster_name', 'esxi_hostname'],
         ]
