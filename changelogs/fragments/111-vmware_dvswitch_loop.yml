@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_dvswitch_lacp - typecast uplink number in lag_options (https://github.com/ansible-collections/community.vmware/issues/111).
