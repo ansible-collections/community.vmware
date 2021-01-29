@@ -75,7 +75,7 @@ options:
       description:
       - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.
       type: str
-      choices: [ thin, thick, eagerZeroedThick ]
+      choices: [ thin, thick, eagerZeroedThick, eagerzeroedthick ]
 extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
 '''
 
@@ -147,6 +147,8 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         self.cluster = self.params.get('cluster')
         self.host = self.params.get('host')
         self.storage_provisioning = self.params.get('storage_provisioning')
+        if self.storage_provisioning == 'eagerzeroedthick':
+            self.storage_provisioning = 'eagerZeroedThick'
 
     def deploy_vm_from_ovf_template(self):
         # Find the datacenter by the given datacenter name
@@ -244,7 +246,7 @@ def main():
         cluster=dict(type='str', required=False),
         storage_provisioning=dict(type='str',
                                   required=False,
-                                  choices=['thin', 'thick', 'eagerZeroedThick'],
+                                  choices=['thin', 'thick', 'eagerZeroedThick', 'eagerzeroedthick'],
                                   default=None),
     )
     module = AnsibleModule(argument_spec=argument_spec,
