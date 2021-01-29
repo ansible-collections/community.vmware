@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_content_library_manager - added support for subscribed library (https://github.com/ansible-collections/community.vmware/pull/569).

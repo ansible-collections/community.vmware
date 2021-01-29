@@ -19,7 +19,7 @@ description:
 author:
 - Pavan Bidkar (@pgbidkar)
 notes:
-- Tested on vSphere 6.5, 6.7
+- Tested on vSphere 6.5, 6.7, and 7.0
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -33,8 +33,8 @@ options:
     library_description:
       description:
       - The content library description.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       - Process of updating content library only allows description change.
       type: str
       required: False
@@ -42,8 +42,8 @@ options:
     library_type:
       description:
       - The content library type.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: False
       default: 'local'
@@ -51,12 +51,40 @@ options:
     datastore_name:
       description:
       - Name of the datastore on which backing content library is created.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
       - Currently only datastore backing creation is supported.
       type: str
       required: False
       aliases: ['datastore']
+    subscription_url:
+      description:
+      - The url of the content library to subscribe to.
+      - This is required only if I(library_type) is set to C(subscribed).
+      - This parameter is ignored, when I(state) is set to C(absent).
+      type: str
+      required: False
+      version_added: '1.7.0'
+    ssl_thumbprint:
+      description:
+      - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
+      - This is required only if I(library_type) is set to C(subscribed) and the library is https.
+      - This parameter is ignored, when I(state) is set to C(absent).
+      - 'The information can be extracted using openssl using the following example:
+        C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
+      type: str
+      required: False
+      version_added: '1.7.0'
+    update_on_demand:
+      description:
+      - Whether to download all content on demand.
+      - If set to C(True), all content will be downloaded on demand.
+      - If set to C(False) content will be downloaded ahead of time.
+      - This is required only if I(library_type) is set to C(subscribed).
+      - This parameter is ignored, when I(state) is set to C(absent).
+      type: bool
+      default: False
+      version_added: '1.7.0'
     state:
       description:
       - The state of content library.
@@ -72,9 +100,8 @@ extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 
 '''
-
 EXAMPLES = r'''
-- name: Create Content Library
+- name: Create Local Content Library
   community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -83,6 +110,21 @@ EXAMPLES = r'''
     library_description: 'Library with Datastore Backing'
     library_type: local
     datastore_name: datastore
+    state: present
+  delegate_to: localhost
+
+- name: Create Subscribed Content Library
+  community.vmware.vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    library_name: test-content-lib
+    library_description: 'Subscribed Library with Datastore Backing'
+    library_type: subscribed
+    datastore_name: datastore
+    subscription_url: 'https://library.url'
+    ssl_thumbprint: 'aa:bb:cc:dd:ee:ff:gg:hh:ii:jj:kk:ll:mm:nn:oo:pp:qq:rr:ss:tt'
+    update_on_demand: true
     state: present
   delegate_to: localhost
 
@@ -127,7 +169,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.content_client import LibraryModel
-    from com.vmware.content.library_client import StorageBacking
+    from com.vmware.content.library_client import StorageBacking, SubscriptionInfo
+    from com.vmware.vapi.std.errors_client import ResourceInaccessible
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
@@ -139,12 +182,27 @@ class VmwareContentLibCreate(VmwareRestClient):
         super(VmwareContentLibCreate, self).__init__(module)
         self.content_service = self.api_client
         self.local_libraries = dict()
+        # Track all existing library names, to  block update/delete if duplicates exist
+        self.existing_library_names = []
         self.library_name = self.params.get('library_name')
         self.library_description = self.params.get('library_description')
         self.library_type = self.params.get('library_type')
         self.library_types = dict()
+        self.subscription_url = self.params.get('subscription_url')
+        self.ssl_thumbprint = self.params.get('ssl_thumbprint')
         self.datastore_name = self.params.get('datastore_name')
-        self.get_all_libraries()
+        self.update_on_demand = self.params.get('update_on_demand')
+        self.library_types = {
+            'local': self.content_service.content.LocalLibrary,
+            'subscribed': self.content_service.content.SubscribedLibrary
+        }
+
+        # Import objects of both types to prevent duplicate names
+        self.get_all_libraries(self.library_types['local'])
+        self.get_all_libraries(self.library_types['subscribed'])
+
+        # Set library type for create/update actions
+        self.library_service = self.library_types[self.library_type]
         self.pyv = PyVmomi(module=module)
 
     def process_state(self):
@@ -164,17 +222,24 @@ class VmwareContentLibCreate(VmwareRestClient):
         }
         library_states[self.desired_state][self.check_content_library_status()]()
 
-    def get_all_libraries(self):
-        content_libs = self.content_service.content.LocalLibrary.list()
+    def get_all_libraries(self, library_service):
+        content_libs = library_service.list()
         if content_libs:
             for content_lib in content_libs:
-                lib_details = self.content_service.content.LocalLibrary.get(content_lib)
-                self.local_libraries[lib_details.name] = dict(
+                lib_details = library_service.get(content_lib)
+                lib_dict = dict(
                     lib_name=lib_details.name,
                     lib_description=lib_details.description,
                     lib_id=lib_details.id,
                     lib_type=lib_details.type
                 )
+                if lib_details.type == "SUBSCRIBED":
+                    lib_dict["lib_sub_url"] = lib_details.subscription_info.subscription_url
+                    lib_dict["lib_sub_on_demand"] = lib_details.subscription_info.on_demand
+                    lib_dict["lib_sub_ssl_thumbprint"] = lib_details.subscription_info.ssl_thumbprint
+
+                self.local_libraries[lib_details.name] = lib_dict
+                self.existing_library_names.append(lib_details.name)
 
     def check_content_library_status(self):
         """
@@ -185,7 +250,70 @@ class VmwareContentLibCreate(VmwareRestClient):
         ret = 'present' if self.library_name in self.local_libraries else 'absent'
         return ret
 
+    def fail_when_duplicated(self):
+        if self.existing_library_names.count(self.library_name) > 1:
+            self.module.fail_json(msg="Operation cannot continue, library [%s] is not unique" % self.library_name)
+
+    def state_exit_unchanged(self):
+        """
+        Return unchanged state
+
+        """
+        self.module.exit_json(changed=False)
+
+    def set_subscription_spec(self):
+        if "https:" in self.subscription_url and not self.ssl_thumbprint:
+            self.module.fail_json(msg="While using HTTPS, a SSL thumbprint must be provided.")
+        subscription_info = SubscriptionInfo()
+        subscription_info.on_demand = self.update_on_demand
+        subscription_info.automatic_sync_enabled = True
+        subscription_info.subscription_url = self.subscription_url
+
+        if "https:" in self.subscription_url:
+            subscription_info.ssl_thumbprint = self.ssl_thumbprint
+        return subscription_info
+
+    def create_update(self, spec, library_id=None, update=False):
+        """
+        Create or update call and exit cleanly if call completes
+        """
+        if self.module.check_mode:
+            action = 'would be updated' if update else 'would be created'
+        else:
+            try:
+                if update:
+                    self.library_service.update(library_id, spec)
+                    action = "updated"
+                else:
+                    library_id = self.library_service.create(
+                        create_spec=spec,
+                        client_token=str(uuid.uuid4())
+                    )
+                    action = "created"
+            except ResourceInaccessible as e:
+                message = ("vCenter Failed to make connection to %s with exception: %s "
+                           "If using HTTPS, check that the SSL thumbprint is valid" % (self.subscription_url, str(e)))
+                self.module.fail_json(msg=message)
+
+        content_library_info = dict(
+            msg="Content Library '%s' %s." % (spec.name, action),
+            library_id=library_id,
+            library_description=self.library_description,
+            library_type=spec.type,
+        )
+        if spec.type == "SUBSCRIBED":
+            content_library_info["library_subscription_url"] = spec.subscription_info.subscription_url
+            content_library_info["library_subscription_on_demand"] = spec.subscription_info.on_demand
+            content_library_info["library_subscription_ssl_thumbprint"] = spec.subscription_info.ssl_thumbprint
+        self.module.exit_json(
+            changed=True,
+            content_library_info=content_library_info
+        )
+
     def state_create_library(self):
+        # Fail if no datastore is specified
+        if not self.datastore_name:
+            self.module.fail_json(msg="datastore_name must be specified for create operations")
         # Find the datastore by the given datastore name
         datastore_id = self.pyv.find_datastore_by_name(datastore_name=self.datastore_name)
         if not datastore_id:
@@ -205,62 +333,85 @@ class VmwareContentLibCreate(VmwareRestClient):
         create_spec.type = self.library_types[self.library_type]
         create_spec.storage_backings = storage_backings
 
-        # Create a local content library backed the VC datastore
-        library_id = self.content_service.content.LocalLibrary.create(create_spec=create_spec,
-                                                                      client_token=str(uuid.uuid4()))
-        if library_id:
-            self.module.exit_json(
-                changed=True,
-                content_library_info=dict(
-                    msg="Content Library '%s' created." % create_spec.name,
-                    library_id=library_id,
-                    library_description=self.library_description,
-                    library_type=create_spec.type,
-                )
-            )
-        self.module.exit_json(changed=False,
-                              content_library_info=dict(msg="Content Library not created. Datastore and library_type required", library_id=''))
+        # Build subscribed specification
+        if self.library_type == "subscribed":
+            subscription_info = self.set_subscription_spec()
+            subscription_info.authentication_method = SubscriptionInfo.AuthenticationMethod.NONE
+            create_spec.subscription_info = subscription_info
+
+        self.create_update(spec=create_spec)
 
     def state_update_library(self):
         """
         Update Content Library
 
         """
+        self.fail_when_duplicated()
         changed = False
         library_id = self.local_libraries[self.library_name]['lib_id']
-        content_library_info = dict(msg="Content Library %s is unchanged." % self.library_name, library_id=library_id)
+
         library_update_spec = LibraryModel()
+
+        # Ensure library types are consistent
+        existing_library_type = self.local_libraries[self.library_name]['lib_type'].lower()
+        if existing_library_type != self.library_type:
+            self.module.fail_json(msg="Library [%s] is of type %s, cannot be changed to %s" %
+                                  (self.library_name, existing_library_type, self.library_type))
+
+        # Compare changeable subscribed attributes
+        if self.library_type == "subscribed":
+            existing_subscription_url = self.local_libraries[self.library_name]['lib_sub_url']
+            sub_url_changed = (existing_subscription_url != self.subscription_url)
+
+            existing_on_demand = self.local_libraries[self.library_name]['lib_sub_on_demand']
+            sub_on_demand_changed = (existing_on_demand != self.update_on_demand)
+
+            sub_ssl_thumbprint_changed = False
+            if "https:" in self.subscription_url and self.ssl_thumbprint:
+                existing_ssl_thumbprint = self.local_libraries[self.library_name]['lib_sub_ssl_thumbprint']
+                sub_ssl_thumbprint_changed = (existing_ssl_thumbprint != self.ssl_thumbprint)
+
+            if sub_url_changed or sub_on_demand_changed or sub_ssl_thumbprint_changed:
+                subscription_info = self.set_subscription_spec()
+                library_update_spec.subscription_info = subscription_info
+                changed = True
+
+        # Compare description
         library_desc = self.local_libraries[self.library_name]['lib_description']
         desired_lib_desc = self.params.get('library_description')
         if library_desc != desired_lib_desc:
             library_update_spec.description = desired_lib_desc
-            self.content_service.content.LocalLibrary.update(library_id, library_update_spec)
-            content_library_info['msg'] = 'Content Library %s updated.' % self.library_name
             changed = True
 
-        self.module.exit_json(changed=changed, content_library_info=content_library_info)
+        if changed:
+            library_update_spec.name = self.library_name
+            self.create_update(spec=library_update_spec, library_id=library_id, update=True)
+
+        content_library_info = dict(msg="Content Library %s is unchanged." % self.library_name, library_id=library_id)
+        self.module.exit_json(changed=False,
+                              content_library_info=dict(msg=content_library_info, library_id=library_id))
 
     def state_destroy_library(self):
         """
         Delete Content Library
 
         """
+        self.fail_when_duplicated()
         library_id = self.local_libraries[self.library_name]['lib_id']
-        self.content_service.content.LocalLibrary.delete(library_id=library_id)
+        # Setup library service based on existing object type to allow library_type to unspecified
+        library_service = self.library_types[self.local_libraries[self.library_name]['lib_type'].lower()]
+        if self.module.check_mode:
+            action = 'would be deleted'
+        else:
+            action = 'deleted'
+            library_service.delete(library_id=library_id)
         self.module.exit_json(
             changed=True,
             content_library_info=dict(
-                msg="Content Library '%s' deleted." % self.library_name,
+                msg="Content Library '%s' %s." % (self.library_name, action),
                 library_id=library_id
             )
         )
-
-    def state_exit_unchanged(self):
-        """
-        Return unchanged state
-
-        """
-        self.module.exit_json(changed=False)
 
 
 def main():
@@ -271,9 +422,17 @@ def main():
         library_type=dict(type='str', required=False, choices=['local', 'subscribed'], default='local'),
         datastore_name=dict(type='str', required=False, aliases=['datastore']),
         state=dict(type='str', choices=['present', 'absent'], default='present', required=False),
+        subscription_url=dict(type='str', default='', required=False),
+        ssl_thumbprint=dict(type='str', default='', required=False),
+        update_on_demand=dict(type='bool', default=False, required=False),
     )
-    module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[
+            ('library_type', 'subscribed', ['subscription_url']),
+        ],
+    )
 
     vmware_contentlib_create = VmwareContentLibCreate(module)
     vmware_contentlib_create.process_state()
