@@ -247,6 +247,8 @@ Examples
         rules:
             - name: vvold
               enabled: True
+              allowed_hosts:
+                all_ip: True
       delegate_to: localhost
 
     - name: Enable vvold rule set for an ESXi Host
@@ -258,6 +260,8 @@ Examples
         rules:
             - name: vvold
               enabled: True
+              allowed_hosts:
+                all_ip: True
       delegate_to: localhost
 
     - name: Manage multiple rule set for an ESXi Host
@@ -269,6 +273,8 @@ Examples
         rules:
             - name: vvold
               enabled: True
+              allowed_hosts:
+                all_ip: True
             - name: CIMHttpServer
               enabled: False
       delegate_to: localhost

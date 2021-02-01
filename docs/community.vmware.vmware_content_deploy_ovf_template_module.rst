@@ -329,7 +329,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Deploy Virtual Machine from OVF template in content library
       community.vmware.vmware_content_deploy_ovf_template:

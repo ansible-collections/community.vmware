@@ -55,8 +55,8 @@ Parameters
                 </td>
                 <td>
                         <div>Name of the datastore on which backing content library is created.</div>
-                        <div>This is required only if <code>state</code> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <code>state</code> is set to <code>absent</code>.</div>
+                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
                         <div>Currently only datastore backing creation is supported.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: datastore</div>
                 </td>
@@ -91,8 +91,8 @@ Parameters
                 </td>
                 <td>
                         <div>The content library description.</div>
-                        <div>This is required only if <code>state</code> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <code>state</code> is set to <code>absent</code>.</div>
+                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
                         <div>Process of updating content library only allows description change.</div>
                 </td>
             </tr>
@@ -129,8 +129,8 @@ Parameters
                 </td>
                 <td>
                         <div>The content library type.</div>
-                        <div>This is required only if <code>state</code> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <code>state</code> is set to <code>absent</code>.</div>
+                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -189,6 +189,25 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ssl_thumbprint</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The SHA1 SSL thumbprint of the subscribed content library to subscribe to.</div>
+                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code> and the library is https.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
+                        <div>The information can be extracted using openssl using the following example: <code>echo | openssl s_client -connect test-library.com:443 |&amp; openssl x509 -fingerprint -noout</code></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -207,6 +226,48 @@ Parameters
                         <div>If set to <code>present</code> and library exists, then content library is updated.</div>
                         <div>If set to <code>absent</code> and library exists, then content library is deleted.</div>
                         <div>If set to <code>absent</code> and library does not exists, no action is taken.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>subscription_url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The url of the content library to subscribe to.</div>
+                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code>.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>update_on_demand</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to download all content on demand.</div>
+                        <div>If set to <code>True</code>, all content will be downloaded on demand.</div>
+                        <div>If set to <code>False</code> content will be downloaded ahead of time.</div>
+                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code>.</div>
+                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -255,7 +316,7 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.5, 6.7
+   - Tested on vSphere 6.5, 6.7, and 7.0
 
 
 
@@ -264,7 +325,7 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Create Content Library
+    - name: Create Local Content Library
       community.vmware.vmware_content_library_manager:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
@@ -273,6 +334,21 @@ Examples
         library_description: 'Library with Datastore Backing'
         library_type: local
         datastore_name: datastore
+        state: present
+      delegate_to: localhost
+
+    - name: Create Subscribed Content Library
+      community.vmware.vmware_content_library_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        library_name: test-content-lib
+        library_description: 'Subscribed Library with Datastore Backing'
+        library_type: subscribed
+        datastore_name: datastore
+        subscription_url: 'https://library.url'
+        ssl_thumbprint: 'aa:bb:cc:dd:ee:ff:gg:hh:ii:jj:kk:ll:mm:nn:oo:pp:qq:rr:ss:tt'
+        update_on_demand: true
         state: present
       delegate_to: localhost
 

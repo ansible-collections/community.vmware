@@ -8,6 +8,7 @@ community.vmware.vmware_first_class_disk
 **Manage VMware vSphere First Class Disks**
 
 
+Version added: 1.7.0
 
 .. contents::
    :local:
@@ -16,7 +17,7 @@ community.vmware.vmware_first_class_disk
 
 Synopsis
 --------
-- This module can be used to manage (create, delete) VMware vSphere First Class Disks.
+- This module can be used to manage (create, delete, resize) VMware vSphere First Class Disks.
 
 
 
