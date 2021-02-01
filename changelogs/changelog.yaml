@@ -520,3 +520,49 @@ releases:
       name: vcenter_domain_user_group_info
       namespace: ''
     release_date: '2021-01-04'
+  1.7.0:
+    changes:
+      bugfixes:
+      - vmware_content_library_manager - added support for subscribed library (https://github.com/ansible-collections/community.vmware/pull/569).
+      - vmware_datastore_cluster_manager - Fix idempotency in check mode (https://github.com/ansible-collections/community.vmware/issues/623).
+      - vmware_dvswitch - correctly add contact information (https://github.com/ansible-collections/community.vmware/issues/608).
+      - vmware_dvswitch_lacp - typecast uplink number in lag_options (https://github.com/ansible-collections/community.vmware/issues/111).
+      - vmware_guest - handle NoneType values before passing to ``len`` API (https://github.com/ansible-collections/community.vmware/issues/593).
+      deprecated_features:
+      - vmware_host_firewall_manager - the creation of new rule with no ``allowed_ip``
+        entry in the ``allowed_hosts`` dictionary won't be allowed after 2.0.0 release.
+      minor_changes:
+      - vmware_cluster_info - added a parent datacenter name of Cluster to the return
+        value (https://github.com/ansible-collections/community.vmware/pull/591).
+      - vmware_content_deploy_ovf_template - consistent ``eagerZeroedThick`` value
+        (https://github.com/ansible-collections/community.vmware/issues/618).
+      - vmware_content_deploy_template - add datastore cluster parameter (https://github.com/ansible-collections/community.vmware/issues/397).
+      - vmware_content_deploy_template - make resource pool, host, cluster, datastore
+        optional parameter and add check (https://github.com/ansible-collections/community.vmware/issues/397).
+      - vmware_guest - Define sub-options of hardware and customization in argument_spec
+        (https://github.com/ansible-collections/community.vmware/issues/555).
+      - vmware_guest_register_operation - supported the check_mode
+      - vmware_host_iscsi - added a name(iqn) changing option for iSCSI (https://github.com/ansible-collections/community.vmware/pull/617).
+      - vmware_host_lockdown - Support check mode (https://github.com/ansible-collections/community.vmware/pull/633).
+    fragments:
+    - 111-vmware_dvswitch_loop.yml
+    - 397_vmware_content.yml
+    - 555-vmware_guest.yml
+    - 569_content_library.yml
+    - 591-vmware_cluster_info.yml
+    - 593_vmware_guest.yml
+    - 608_vmware_dvswitch.yml
+    - 617-vmware_host_iscsi.yml
+    - 618_vmware_content_deploy_ovf_template.yml
+    - 623-vmware_datastore_cluster_manager.yml
+    - 626-vmware_guest_register_operation.yml
+    - 633-vmware_host_lockdown.yml
+    - vmware_host_firewall_manager-prepare-all_ip-transition.yaml
+    modules:
+    - description: Manage VMs and Hosts in DRS group.
+      name: vmware_drs_group_manager
+      namespace: ''
+    - description: Manage VMware vSphere First Class Disks
+      name: vmware_first_class_disk
+      namespace: ''
+    release_date: '2021-02-01'

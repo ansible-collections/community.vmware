@@ -250,7 +250,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
@@ -270,11 +270,12 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Number of autologon after reboot.</div>
                         <div>Specific to Windows customization.</div>
+                        <div>Ignored if <code>autologon</code> is unset or set to <code>False</code>.</div>
+                        <div>If unset, 1 will be used.</div>
                 </td>
             </tr>
             <tr>
@@ -399,11 +400,11 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"Administrator"</div>
                 </td>
                 <td>
                         <div>Server owner name.</div>
                         <div>Specific to Windows customization.</div>
+                        <div>If unset, &quot;Administrator&quot; will be used as a fall-back.</div>
                 </td>
             </tr>
             <tr>
@@ -475,12 +476,12 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"WORKGROUP"</div>
                 </td>
                 <td>
                         <div>Workgroup to join.</div>
                         <div>Not compatible with <code>joindomain</code>.</div>
                         <div>Specific to Windows customization.</div>
+                        <div>If unset, &quot;WORKGROUP&quot; will be used as a fall-back.</div>
                 </td>
             </tr>
             <tr>
@@ -494,11 +495,11 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"ACME"</div>
                 </td>
                 <td>
                         <div>Organisation name.</div>
                         <div>Specific to Windows customization.</div>
+                        <div>If unset, &quot;ACME&quot; will be used as a fall-back.</div>
                 </td>
             </tr>
             <tr>
@@ -1033,6 +1034,10 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>bios</li>
+                                    <li>efi</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Choose which firmware should be used to boot the virtual machine.</div>
@@ -1178,6 +1183,7 @@ Parameters
                 </td>
                 <td>
                         <div>The amount of memory resource that is guaranteed available to the virtual machine.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: memory_reservation</div>
                 </td>
             </tr>
             <tr>
@@ -1214,6 +1220,26 @@ Parameters
                 </td>
                 <td>
                         <div>If set <code>true</code>, memory resource reservation for the virtual machine.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>nested_virt</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable nested virtualization.</div>
                 </td>
             </tr>
             <tr>
@@ -1261,6 +1287,12 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>buslogic</li>
+                                    <li>lsilogic</li>
+                                    <li>lsilogicsas</li>
+                                    <li>paravirtual</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code> and <code>paravirtual</code>.</div>
@@ -1274,7 +1306,7 @@ Parameters
                     <b>version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
