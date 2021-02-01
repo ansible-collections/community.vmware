@@ -18,4 +18,7 @@ dependencies: {}
 repository: https://github.com/ansible-collections/community.vmware.git
 homepage: https://github.com/ansible-collections/community.vmware
 issues: https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
+<<<<<<< HEAD
 version: 1.4.1
+=======
+>>>>>>> parent of bdc176a... Update galaxy.yml
