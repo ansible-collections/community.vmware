@@ -53,8 +53,18 @@ options:
     datastore:
       description:
       - Name of the datastore to store deployed VM and disk.
+      - Required if I(datastore_cluster) is not provided.
       type: str
-      required: True
+      required: False
+    datastore_cluster:
+       description:
+       - Name of the datastore cluster to store deployed VM and disk.
+       - Please make sure Storage DRS is active for recommended datastore from the given datastore cluster.
+       - If Storage DRS is not enabled, datastore with largest free storage space is selected.
+       - Required if I(datastore) is not provided.
+       type: str
+       required: False
+       version_added: '1.7.0'
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.
@@ -63,16 +73,23 @@ options:
     host:
       description:
       - Name of the ESX Host in datacenter in which to place deployed VM.
+      - The host has to be a member of the cluster that contains the resource pool.
+      - Required with I(resource_pool) to find resource pool details. This will be used as additional
+        information when there are resource pools with same name.
       type: str
-      required: True
+      required: False
     resource_pool:
       description:
-      - Name of the resourcepool in datacenter in which to place deployed VM.
+      - Name of the resource pool in datacenter in which to place deployed VM.
+      - Required if I(cluster) is not specified.
+      - For default or non-unique resource pool names, specify I(host) and I(cluster).
+      - C(Resources) is the default name of resource pool.
       type: str
       required: False
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
+      - Required if I(resource_pool) is not specified.
       type: str
       required: False
     state:
@@ -151,12 +168,24 @@ class VmwareContentDeployTemplate(VmwareRestClient):
     def __init__(self, module):
         """Constructor."""
         super(VmwareContentDeployTemplate, self).__init__(module)
+        self.pyv = PyVmomi(module=module)
+        vm = self.pyv.get_vm()
+        if vm:
+            self.module.exit_json(
+                changed=False,
+                vm_deploy_info=dict(
+                    msg="Virtual Machine '%s' already exists." % self.module.params['name'],
+                    vm_id=vm._moId,
+                )
+            )
         self.template_service = self.api_client.vcenter.vm_template.LibraryItems
         self.template_name = self.params.get('template')
         self.content_library_name = self.params.get('content_library')
         self.vm_name = self.params.get('name')
         self.datacenter = self.params.get('datacenter')
         self.datastore = self.params.get('datastore')
+        self.datastore_cluster = self.params.get('datastore_cluster')
+        self.datastore_id = None
         self.folder = self.params.get('folder')
         self.resourcepool = self.params.get('resource_pool')
         self.cluster = self.params.get('cluster')
@@ -167,10 +196,23 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         self.datacenter_id = self.get_datacenter_by_name(datacenter_name=self.datacenter)
         if not self.datacenter_id:
             self.module.fail_json(msg="Failed to find the datacenter %s" % self.datacenter)
-        # Find the datastore by the given datastore name
-        self.datastore_id = self.get_datastore_by_name(self.datacenter, self.datastore)
+
+        if self.datastore:
+            # Find the datastore by the given datastore name
+            self.datastore_id = self.get_datastore_by_name(self.datacenter, self.datastore)
+        if self.datastore_cluster:
+            # Find the datastore by the given datastore cluster name
+            datastore_cluster = self.pyv.find_datastore_cluster_by_name(self.datastore_cluster, folder=self.datastore_id.datastoreFolder)
+            if not datastore_cluster:
+                self.module.fail_json(msg="Failed to find the datastore cluster %s" % self.datastore_cluster)
+            self.datastore_id = self.pyv.get_recommended_datastore(datastore_cluster)
+
         if not self.datastore_id:
-            self.module.fail_json(msg="Failed to find the datastore %s" % self.datastore)
+            if self.datastore:
+                self.module.fail_json(msg="Failed to find the datastore %s" % self.datastore)
+            if self.datastore_cluster:
+                self.module.fail_json(msg="Failed to find the datastore using datastore cluster %s" % self.datastore_cluster)
+
         # Find the LibraryItem (Template) by the given LibraryItem name
         if self.content_library_name:
             self.library_item_id = self.get_library_item_from_content_library_name(
@@ -186,27 +228,36 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         if not self.folder_id:
             self.module.fail_json(msg="Failed to find the folder %s" % self.folder)
         # Find the Host by given HostName
-        self.host_id = self.get_host_by_name(self.datacenter, self.host)
-        if not self.host_id:
-            self.module.fail_json(msg="Failed to find the Host %s" % self.host)
+        self.host_id = None
+        if self.host:
+            self.host_id = self.get_host_by_name(self.datacenter, self.host)
+            if not self.host_id:
+                self.module.fail_json(msg="Failed to find the Host %s" % self.host)
+
         # Find the resourcepool by the given resourcepool name
+        self.cluster_id = None
         self.resourcepool_id = None
+
         if self.resourcepool:
-            self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool)
+            self.resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
             if not self.resourcepool_id:
                 self.module.fail_json(msg="Failed to find the resource_pool %s" % self.resourcepool)
+
         # Find the Cluster by the given Cluster name
-        self.cluster_id = None
         if self.cluster:
             self.cluster_id = self.get_cluster_by_name(self.datacenter, self.cluster)
             if not self.cluster_id:
                 self.module.fail_json(msg="Failed to find the Cluster %s" % self.cluster)
+            cluster_obj = self.api_client.vcenter.Cluster.get(self.cluster_id)
+            self.resourcepool_id = cluster_obj.resource_pool
+
         # Create VM placement specs
-        self.placement_spec = LibraryItems.DeployPlacementSpec(folder=self.folder_id,
-                                                               host=self.host_id
-                                                               )
-        if self.resourcepool_id or self.cluster_id:
+        self.placement_spec = LibraryItems.DeployPlacementSpec(folder=self.folder_id)
+        if self.host_id:
+            self.placement_spec.host = self.host_id
+        if self.resourcepool_id:
             self.placement_spec.resource_pool = self.resourcepool_id
+        if self.cluster_id:
             self.placement_spec.cluster = self.cluster_id
         self.vm_home_storage_spec = LibraryItems.DeploySpecVmHomeStorage(datastore=to_native(self.datastore_id))
         self.disk_storage_spec = LibraryItems.DeploySpecDiskStorage(datastore=to_native(self.datastore_id))
@@ -246,25 +297,22 @@ def main():
                              'content_library_src'], required=False),
         name=dict(type='str', required=True, aliases=['vm_name']),
         datacenter=dict(type='str', required=True),
-        datastore=dict(type='str', required=True),
+        datastore=dict(type='str', required=False),
+        datastore_cluster=dict(type='str', required=False),
         folder=dict(type='str', required=True),
-        host=dict(type='str', required=True),
+        host=dict(type='str', required=False),
         resource_pool=dict(type='str', required=False),
         cluster=dict(type='str', required=False),
     )
-    module = AnsibleModule(argument_spec=argument_spec,
-                           supports_check_mode=True)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_one_of=[
+            ['datastore', 'datastore_cluster'],
+        ],
+    )
     result = {'failed': False, 'changed': False}
-    pyv = PyVmomi(module=module)
-    vm = pyv.get_vm()
-    if vm:
-        module.exit_json(
-            changed=False,
-            vm_deploy_info=dict(
-                msg="Virtual Machine '%s' already Exists." % module.params['name'],
-                vm_id=vm._moId,
-            )
-        )
+
     vmware_contentlib_create = VmwareContentDeployTemplate(module)
     if module.params['state'] in ['present']:
         if module.check_mode:

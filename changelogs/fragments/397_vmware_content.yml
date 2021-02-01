@@ -1,0 +1,3 @@
+minor_changes:
+- vmware_content_deploy_template - make resource pool, host, cluster, datastore optional parameter and add check (https://github.com/ansible-collections/community.vmware/issues/397).
+- vmware_content_deploy_template - add datastore cluster parameter (https://github.com/ansible-collections/community.vmware/issues/397).
