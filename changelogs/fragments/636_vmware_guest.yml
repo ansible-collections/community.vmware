@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_guest - Remove unnecessary hardware version check (https://github.com/ansible-collections/community.vmware/issues/636).
