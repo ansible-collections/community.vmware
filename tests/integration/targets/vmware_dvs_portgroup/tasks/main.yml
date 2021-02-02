@@ -629,3 +629,74 @@
         - assert:
             that:
               - delete_dvswitch_with_special_characters_result.changed is sameas true
+
+    # https://github.com/ansible-collections/community.vmware/issues/637
+    # The test if the vmware_dvs_portgroup has the idempotency when it is configured the multiple VLAN.
+    - name: Create the test dvs port group for the issues 637
+      vmware_dvs_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        portgroup_name: "dvpg637"
+        switch_name: "{{ dvswitch1 }}"
+        vlan_id: "1500,1501"
+        vlan_trunk: true
+        num_ports: 120
+        portgroup_type: earlyBinding
+        network_policy:
+          promiscuous: false
+          forged_transmits: true
+          mac_changes: true
+        state: present
+      register: create_test_dvs_port_group_issues_637_result
+
+    - assert:
+        that:
+          - create_test_dvs_port_group_issues_637_result.changed is sameas true
+
+    - name: Create the test dvs port group for the issues 637(idempotency check)
+      vmware_dvs_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        portgroup_name: "dvpg637"
+        switch_name: "{{ dvswitch1 }}"
+        vlan_id: "1500,1501"
+        vlan_trunk: true
+        num_ports: 120
+        portgroup_type: earlyBinding
+        network_policy:
+          promiscuous: false
+          forged_transmits: true
+          mac_changes: true
+        state: present
+      register: create_test_dvs_port_group_issues_637_idempotency_check_result
+
+    - assert:
+        that:
+          - create_test_dvs_port_group_issues_637_idempotency_check_result.changed is sameas false
+
+    - name: Delete the test dvs port group for the issues 637
+      vmware_dvs_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        portgroup_name: "dvpg637"
+        switch_name: "{{ dvswitch1 }}"
+        vlan_id: "1500,1501"
+        vlan_trunk: true
+        num_ports: 120
+        portgroup_type: earlyBinding
+        network_policy:
+          promiscuous: false
+          forged_transmits: true
+          mac_changes: true
+        state: absent
+      register: delete_test_dvs_port_group_issues_637_idempotency_check_result
+
+    - assert:
+        that:
+          - delete_test_dvs_port_group_issues_637_idempotency_check_result.changed is sameas true
