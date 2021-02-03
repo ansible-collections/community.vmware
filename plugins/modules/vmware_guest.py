@@ -1741,7 +1741,6 @@ class PyVmomiHelper(PyVmomi):
 
         temp_version = self.params['hardware']['version']
         if temp_version is not None:
-            hw_version_check_failed = False
             if temp_version.lower() == 'latest':
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
@@ -1757,14 +1756,10 @@ class PyVmomiHelper(PyVmomi):
                 try:
                     temp_version = int(temp_version)
                 except ValueError:
-                    hw_version_check_failed = True
-
-                if temp_version not in range(3, 18):
-                    hw_version_check_failed = True
-
-                if hw_version_check_failed:
                     self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
-                                          " values range from 3 (ESX 2.x) to 17 (ESXi 7.0)." % temp_version)
+                                          " values are either 'latest' or a number."
+                                          " Please check VMware documentation for valid VM hardware versions." % temp_version)
+
                 # Hardware version is denoted as "vmx-10"
                 version = "vmx-%02d" % temp_version
                 self.configspec.version = version
