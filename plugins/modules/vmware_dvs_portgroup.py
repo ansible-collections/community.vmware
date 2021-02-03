@@ -500,7 +500,7 @@ class VMwareDvsPortgroup(PyVmomi):
         if self.module.params['vlan_trunk']:
             if not isinstance(defaultPortConfig.vlan, vim.dvs.VmwareDistributedVirtualSwitch.TrunkVlanSpec):
                 return 'update'
-            if map(lambda x: (x.start, x.end), defaultPortConfig.vlan.vlanId) != self.create_vlan_list():
+            if list(map(lambda x: (x.start, x.end), defaultPortConfig.vlan.vlanId)) != self.create_vlan_list():
                 return 'update'
         elif self.module.params['vlan_private']:
             if not isinstance(defaultPortConfig.vlan, vim.dvs.VmwareDistributedVirtualSwitch.PvlanSpec):

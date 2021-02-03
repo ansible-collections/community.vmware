@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_dvs_portgroup - fixed the issue that the VLAN configuration isn't compared correctly in the module (https://github.com/ansible-collections/community.vmware/pull/638).
