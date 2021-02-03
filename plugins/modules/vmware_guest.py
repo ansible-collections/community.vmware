@@ -1757,7 +1757,8 @@ class PyVmomiHelper(PyVmomi):
                     temp_version = int(temp_version)
                 except ValueError:
                     self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
-                                          " values are either 'latest' or a number." % temp_version)
+                                          " values are either 'latest' or a number."
+                                          " Please check VMware documentation for valid VM hardware versions." % temp_version)
 
                 # Hardware version is denoted as "vmx-10"
                 version = "vmx-%02d" % temp_version
