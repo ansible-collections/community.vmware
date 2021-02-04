@@ -94,3 +94,72 @@
   register: without_runtime_settings_results
 
 - debug: var=without_runtime_settings_results
+
+- name: Configure settings with check mode and diff mode
+  vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  diff: true
+  check_mode: true
+  register: configure_settings_check_diff_mode_result
+
+- name: Make sure if the change occurred and to exist the diff key
+  assert:
+    that:
+      - configure_settings_check_diff_mode_result.changed is sameas true
+      - configure_settings_check_diff_mode_result.diff is defined
+
+- name: Configure settings without check mode and diff mode
+  vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  register: configure_settings_result
+
+- name: Make sure if the change occurred
+  assert:
+    that:
+      - configure_settings_result.changed is sameas true
+
+- name: Configure settings without check mode and diff mode(idempotency check)
+  vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+  register: configure_settings_idempotency_check_result
+
+- name: Make sure if the change doesn't occur
+  assert:
+    that:
+      - configure_settings_idempotency_check_result.changed is sameas false
