@@ -271,7 +271,9 @@ EXAMPLES = r'''
 
 RETURN = r'''
 results:
-    description: metadata about vCenter settings
+    description:
+      - metadata about vCenter settings
+      - supported diff mode from version 1.8.0
     returned: always
     type: dict
     sample: {
@@ -294,7 +296,81 @@ results:
         "runtime_server_name": "vcenter01.example.com",
         "runtime_unique_id": 1,
         "timeout_long_operations": 120,
-        "timeout_normal_operations": 30
+        "timeout_normal_operations": 30,
+        "diff": {
+           "after": {
+               "db_event_cleanup": true,
+               "db_event_retention": 30,
+               "db_max_connections": 50,
+               "db_task_cleanup": true,
+               "db_task_retention": 30,
+               "directory_query_limit": true,
+               "directory_query_limit_size": 5000,
+               "directory_timeout": 60,
+               "directory_validation": true,
+               "directory_validation_period": 1440,
+               "logging_options": "info",
+               "mail_sender": "vcenter@vcenter01.example.com",
+               "mail_server": "mail.example.com",
+               "runtime_managed_address": "192.168.1.10",
+               "runtime_server_name": "vcenter01.example.com",
+               "runtime_unique_id": 1,
+               "snmp_receiver_1_community": "public",
+               "snmp_receiver_1_enabled": true,
+               "snmp_receiver_1_port": 162,
+               "snmp_receiver_1_url": "localhost",
+               "snmp_receiver_2_community": "",
+               "snmp_receiver_2_enabled": false,
+               "snmp_receiver_2_port": 162,
+               "snmp_receiver_2_url": "",
+               "snmp_receiver_3_community": "",
+               "snmp_receiver_3_enabled": false,
+               "snmp_receiver_3_port": 162,
+               "snmp_receiver_3_url": "",
+               "snmp_receiver_4_community": "",
+               "snmp_receiver_4_enabled": false,
+               "snmp_receiver_4_port": 162,
+               "snmp_receiver_4_url": "",
+               "timeout_long_operations": 120,
+               "timeout_normal_operations": 30
+           },
+           "before": {
+               "db_event_cleanup": true,
+               "db_event_retention": 30,
+               "db_max_connections": 50,
+               "db_task_cleanup": true,
+               "db_task_retention": 30,
+               "directory_query_limit": true,
+               "directory_query_limit_size": 5000,
+               "directory_timeout": 60,
+               "directory_validation": true,
+               "directory_validation_period": 1440,
+               "logging_options": "info",
+               "mail_sender": "vcenter@vcenter01.example.com",
+               "mail_server": "mail.example.com",
+               "runtime_managed_address": "192.168.1.10",
+               "runtime_server_name": "vcenter01.example.com",
+               "runtime_unique_id": 1,
+               "snmp_receiver_1_community": "public",
+               "snmp_receiver_1_enabled": true,
+               "snmp_receiver_1_port": 162,
+               "snmp_receiver_1_url": "localhost",
+               "snmp_receiver_2_community": "",
+               "snmp_receiver_2_enabled": false,
+               "snmp_receiver_2_port": 162,
+               "snmp_receiver_2_url": "",
+               "snmp_receiver_3_community": "",
+               "snmp_receiver_3_enabled": false,
+               "snmp_receiver_3_port": 162,
+               "snmp_receiver_3_url": "",
+               "snmp_receiver_4_community": "",
+               "snmp_receiver_4_enabled": false,
+               "snmp_receiver_4_port": 162,
+               "snmp_receiver_4_url": "",
+               "timeout_long_operations": 120,
+               "timeout_normal_operations": 30
+           }
+        }
     }
 '''
 
@@ -302,6 +378,14 @@ try:
     from pyVmomi import vim, vmodl
 except ImportError:
     pass
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    try:
+        from ordereddict import OrderedDict
+    except ImportError:
+        pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
@@ -394,6 +478,27 @@ class VmwareVcenterSettings(PyVmomi):
         result['timeout_long_operations'] = timeout_long_operations
         result['logging_options'] = logging_options
         change_option_list = []
+
+        # Initialize diff_config variable
+        diff_config = dict(
+            before={},
+            after={}
+        )
+        for key in result.keys():
+            if key != 'changed' and key != 'msg':
+                diff_config['before'][key] = result[key]
+                diff_config['after'][key] = result[key]
+        for n in range(1, 5):
+            exec("diff_config['before']['snmp_receiver_%s_url'] = snmp_receiver_%s_url" % (n, n))
+            exec("diff_config['before']['snmp_receiver_%s_enabled'] = snmp_receiver_%s_enabled" % (n, n))
+            exec("diff_config['before']['snmp_receiver_%s_port'] = snmp_receiver_%s_port" % (n, n))
+            exec("diff_config['before']['snmp_receiver_%s_community'] = snmp_receiver_%s_community" % (n, n))
+            exec("diff_config['after']['snmp_receiver_%s_url'] = snmp_receiver_%s_url" % (n, n))
+            exec("diff_config['after']['snmp_receiver_%s_enabled'] = snmp_receiver_%s_enabled" % (n, n))
+            exec("diff_config['after']['snmp_receiver_%s_port'] = snmp_receiver_%s_port" % (n, n))
+            exec("diff_config['after']['snmp_receiver_%s_community'] = snmp_receiver_%s_community" % (n, n))
+        result['diff'] = {}
+
         for setting in self.option_manager.setting:
             # Database
             if setting.key == 'VirtualCenter.MaxDBConnection' and setting.value != db_max_connections:
@@ -403,6 +508,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='VirtualCenter.MaxDBConnection', value=db_max_connections)
                 )
+                diff_config['before']['db_max_connections'] = setting.value
             if setting.key == 'task.maxAgeEnabled' and setting.value != db_task_cleanup:
                 changed = True
                 changed_list.append("DB task cleanup")
@@ -410,6 +516,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='task.maxAgeEnabled', value=db_task_cleanup)
                 )
+                diff_config['before']['db_task_cleanup'] = setting.value
             if setting.key == 'task.maxAge' and setting.value != db_task_retention:
                 changed = True
                 changed_list.append("DB task retention")
@@ -417,6 +524,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='task.maxAge', value=db_task_retention)
                 )
+                diff_config['before']['db_task_retention'] = setting.value
             if setting.key == 'event.maxAgeEnabled' and setting.value != db_event_cleanup:
                 changed = True
                 changed_list.append("DB event cleanup")
@@ -424,6 +532,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='event.maxAgeEnabled', value=db_event_cleanup)
                 )
+                diff_config['before']['db_event_cleanup'] = setting.value
             if setting.key == 'event.maxAge' and setting.value != db_event_retention:
                 changed = True
                 changed_list.append("DB event retention")
@@ -431,6 +540,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='event.maxAge', value=db_event_retention)
                 )
+                diff_config['before']['db_event_retention'] = setting.value
             # Runtime settings
             if setting.key == 'instance.id' and setting.value != runtime_unique_id:
                 changed = True
@@ -439,6 +549,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='instance.id', value=runtime_unique_id)
                 )
+                diff_config['before']['runtime_unique_id'] = setting.value
             if setting.key == 'VirtualCenter.ManagedIP' and setting.value != runtime_managed_address:
                 changed = True
                 changed_list.append("Managed IP")
@@ -446,6 +557,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='VirtualCenter.ManagedIP', value=runtime_managed_address)
                 )
+                diff_config['before']['runtime_managed_address'] = setting.value
             if setting.key == 'VirtualCenter.InstanceName' and setting.value != runtime_server_name:
                 changed = True
                 changed_list.append("Server name")
@@ -453,6 +565,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='VirtualCenter.InstanceName', value=runtime_server_name)
                 )
+                diff_config['before']['runtime_server_name'] = setting.value
             # User directory
             if setting.key == 'ads.timeout' and setting.value != directory_timeout:
                 changed = True
@@ -461,6 +574,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='ads.timeout', value=directory_timeout)
                 )
+                diff_config['before']['directory_timeout'] = setting.value
             if setting.key == 'ads.maxFetchEnabled' and setting.value != directory_query_limit:
                 changed = True
                 changed_list.append("Query limit")
@@ -468,6 +582,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='ads.maxFetchEnabled', value=directory_query_limit)
                 )
+                diff_config['before']['directory_query_limit'] = setting.value
             if setting.key == 'ads.maxFetch' and setting.value != directory_query_limit_size:
                 changed = True
                 changed_list.append("Query limit size")
@@ -475,6 +590,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='ads.maxFetch', value=directory_query_limit_size)
                 )
+                diff_config['before']['directory_query_limit_size'] = setting.value
             if setting.key == 'ads.checkIntervalEnabled' and setting.value != directory_validation:
                 changed = True
                 changed_list.append("Validation")
@@ -482,6 +598,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='ads.checkIntervalEnabled', value=directory_validation)
                 )
+                diff_config['before']['directory_validation'] = setting.value
             if setting.key == 'ads.checkInterval' and setting.value != directory_validation_period:
                 changed = True
                 changed_list.append("Validation period")
@@ -489,6 +606,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='ads.checkInterval', value=directory_validation_period)
                 )
+                diff_config['before']['directory_validation_period'] = setting.value
             # Mail
             if setting.key == 'mail.smtp.server' and setting.value != mail_server:
                 changed = True
@@ -497,6 +615,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='mail.smtp.server', value=mail_server)
                 )
+                diff_config['before']['mail_server'] = setting.value
             if setting.key == 'mail.sender' and setting.value != mail_sender:
                 changed = True
                 changed_list.append("Mail sender")
@@ -504,6 +623,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='mail.sender', value=mail_sender)
                 )
+                diff_config['before']['mail_sender'] = setting.value
             # SNMP receivers - SNMP receiver #1
             if setting.key == 'snmp.receiver.1.enabled' and setting.value != snmp_receiver_1_enabled:
                 changed = True
@@ -512,6 +632,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.1.enabled', value=snmp_receiver_1_enabled)
                 )
+                diff_config['before']['snmp_receiver_1_enabled'] = setting.value
             if setting.key == 'snmp.receiver.1.name' and setting.value != snmp_receiver_1_url:
                 changed = True
                 changed_list.append("SNMP-1-name")
@@ -519,6 +640,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.1.name', value=snmp_receiver_1_url)
                 )
+                diff_config['before']['snmp_receiver_1_url'] = setting.value
             if setting.key == 'snmp.receiver.1.port' and setting.value != snmp_receiver_1_port:
                 changed = True
                 changed_list.append("SNMP-1-port")
@@ -526,6 +648,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.1.port', value=snmp_receiver_1_port)
                 )
+                diff_config['before']['snmp_receiver_1_port'] = setting.value
             if setting.key == 'snmp.receiver.1.community' and setting.value != snmp_receiver_1_community:
                 changed = True
                 changed_list.append("SNMP-1-community")
@@ -533,6 +656,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.1.community', value=snmp_receiver_1_community)
                 )
+                diff_config['before']['snmp_receiver_1_community'] = setting.value
             # SNMP receivers - SNMP receiver #2
             if setting.key == 'snmp.receiver.2.enabled' and setting.value != snmp_receiver_2_enabled:
                 changed = True
@@ -541,6 +665,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.2.enabled', value=snmp_receiver_2_enabled)
                 )
+                diff_config['before']['snmp_receiver_2_enabled'] = setting.value
             if setting.key == 'snmp.receiver.2.name' and setting.value != snmp_receiver_2_url:
                 changed = True
                 changed_list.append("SNMP-2-name")
@@ -548,6 +673,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.2.name', value=snmp_receiver_2_url)
                 )
+                diff_config['before']['snmp_receiver_2_url'] = setting.value
             if setting.key == 'snmp.receiver.2.port' and setting.value != snmp_receiver_2_port:
                 changed = True
                 changed_list.append("SNMP-2-port")
@@ -555,6 +681,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.2.port', value=snmp_receiver_2_port)
                 )
+                diff_config['before']['snmp_receiver_2_port'] = setting.value
             if setting.key == 'snmp.receiver.2.community' and setting.value != snmp_receiver_2_community:
                 changed = True
                 changed_list.append("SNMP-2-community")
@@ -562,6 +689,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.2.community', value=snmp_receiver_2_community)
                 )
+                diff_config['before']['snmp_receiver_2_community'] = setting.value
             # SNMP receivers - SNMP receiver #3
             if setting.key == 'snmp.receiver.3.enabled' and setting.value != snmp_receiver_3_enabled:
                 changed = True
@@ -570,6 +698,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.3.enabled', value=snmp_receiver_3_enabled)
                 )
+                diff_config['before']['snmp_receiver_3_enabled'] = setting.value
             if setting.key == 'snmp.receiver.3.name' and setting.value != snmp_receiver_3_url:
                 changed = True
                 changed_list.append("SNMP-3-name")
@@ -577,6 +706,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.3.name', value=snmp_receiver_3_url)
                 )
+                diff_config['before']['snmp_receiver_3_url'] = setting.value
             if setting.key == 'snmp.receiver.3.port' and setting.value != snmp_receiver_3_port:
                 changed = True
                 changed_list.append("SNMP-3-port")
@@ -584,6 +714,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.3.port', value=snmp_receiver_3_port)
                 )
+                diff_config['before']['snmp_receiver_3_port'] = setting.value
             if setting.key == 'snmp.receiver.3.community' and setting.value != snmp_receiver_3_community:
                 changed = True
                 changed_list.append("SNMP-3-community")
@@ -591,6 +722,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.3.community', value=snmp_receiver_3_community)
                 )
+                diff_config['before']['snmp_receiver_3_community'] = setting.value
             # SNMP receivers - SNMP receiver #4
             if setting.key == 'snmp.receiver.4.enabled' and setting.value != snmp_receiver_4_enabled:
                 changed = True
@@ -599,6 +731,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.4.enabled', value=snmp_receiver_4_enabled)
                 )
+                diff_config['before']['snmp_receiver_4_enabled'] = setting.value
             if setting.key == 'snmp.receiver.4.name' and setting.value != snmp_receiver_4_url:
                 changed = True
                 changed_list.append("SNMP-4-name")
@@ -606,6 +739,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.4.name', value=snmp_receiver_4_url)
                 )
+                diff_config['before']['snmp_receiver_4_url'] = setting.value
             if setting.key == 'snmp.receiver.4.port' and setting.value != snmp_receiver_4_port:
                 changed = True
                 changed_list.append("SNMP-4-port")
@@ -613,6 +747,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.4.port', value=snmp_receiver_4_port)
                 )
+                diff_config['before']['snmp_receiver_4_port'] = setting.value
             if setting.key == 'snmp.receiver.4.community' and setting.value != snmp_receiver_4_community:
                 changed = True
                 changed_list.append("SNMP-4-community")
@@ -620,6 +755,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='snmp.receiver.4.community', value=snmp_receiver_4_community)
                 )
+                diff_config['before']['snmp_receiver_4_community'] = setting.value
             # Timeout settings
             if setting.key == 'client.timeout.normal' and setting.value != timeout_normal_operations:
                 changed = True
@@ -628,6 +764,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='client.timeout.normal', value=timeout_normal_operations)
                 )
+                diff_config['before']['timeout_normal_operations'] = setting.value
             if setting.key == 'client.timeout.long' and setting.value != timeout_long_operations:
                 changed = True
                 changed_list.append("Timout long")
@@ -635,6 +772,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='client.timeout.long', value=timeout_long_operations)
                 )
+                diff_config['before']['timeout_long_operations'] = setting.value
             # Logging settings
             if setting.key == 'log.level' and setting.value != logging_options:
                 changed = True
@@ -643,6 +781,7 @@ class VmwareVcenterSettings(PyVmomi):
                 change_option_list.append(
                     vim.option.OptionValue(key='log.level', value=logging_options)
                 )
+                diff_config['before']['logging_options'] = setting.value
 
         if changed:
             if self.module.check_mode:
@@ -673,6 +812,9 @@ class VmwareVcenterSettings(PyVmomi):
             message = "vCenter settings already configured properly"
         result['changed'] = changed
         result['msg'] = message
+
+        result['diff']['before'] = OrderedDict(sorted(diff_config['before'].items()))
+        result['diff']['after'] = OrderedDict(sorted(diff_config['after'].items()))
 
         self.module.exit_json(**result)
 
