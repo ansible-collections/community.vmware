@@ -1,2 +1,2 @@
 bugfixes: 
-- vmware_guest - add support for ``advance settings`` in vmware_guest (https://github.com/ansible-collections/community.vmware/issues/602).
+- vmware_guest - add support for ``advanced settings`` in vmware_guest (https://github.com/ansible-collections/community.vmware/issues/602).
