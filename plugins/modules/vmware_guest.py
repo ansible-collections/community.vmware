@@ -428,6 +428,14 @@ options:
     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
     - This parameter is case sensitive.
     type: str
+  advanced_settings:
+    description:
+    - Define a list of advanced settings to be added to the VMX config.
+    - An advanced settings object takes two fields C(key) and C(value).
+    - Incorrect key and values will be ignored.
+    elements: dict
+    type: list
+    version_added: '1.7.0'
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
@@ -2164,8 +2172,8 @@ class PyVmomiHelper(PyVmomi):
             self.configspec.vAppConfig = new_vmconfig_spec
             self.change_detected = True
 
-    def customize_customvalues(self, vm_obj, config_spec):
-        if not self.params['customvalues']:
+    def customize_advanced_settings(self, vm_obj, config_spec):
+        if self.params['advanced_settings']:
             return
 
         vm_custom_spec = config_spec
@@ -2173,20 +2181,50 @@ class PyVmomiHelper(PyVmomi):
 
         changed = False
         facts = self.gather_facts(vm_obj)
-        for kv in self.params['customvalues']:
+        for kv in self.params['advanced_settings']:
             if 'key' not in kv or 'value' not in kv:
-                self.module.exit_json(msg="customvalues items required both 'key' and 'value' fields.")
+                self.module.exit_json(msg="advanced_settings items required both 'key' and 'value' fields.")
 
             # If kv is not kv fetched from facts, change it
-            if kv['key'] not in facts['customvalues'] or facts['customvalues'][kv['key']] != kv['value']:
+            if isinstance(kv['value'], (bool, int)):
+                specifiedvalue = str(kv['value']).upper()
+                comparisonvalue = facts['customvalues'].get(kv['key'], '').upper()
+            else:
+                specifiedvalue = kv['value']
+                comparisonvalue = facts['customvalues'].get(kv['key'], '')
+
+            if (kv['key'] not in facts['customvalues'] and kv['value'] != '') or comparisonvalue != specifiedvalue:
                 option = vim.option.OptionValue()
                 option.key = kv['key']
-                option.value = kv['value']
+                option.value = specifiedvalue
 
                 vm_custom_spec.extraConfig.append(option)
                 changed = True
 
             if changed:
+                self.change_detected = True
+
+    def customize_customvalues(self, vm_obj):
+        if not self.params['customvalues']:
+            return
+
+        facts = self.gather_facts(vm_obj)
+        for kv in self.params['customvalues']:
+            if 'key' not in kv or 'value' not in kv:
+                self.module.exit_json(msg="customvalues items required both 'key' and 'value' fields.")
+
+            key_id = None
+            for field in self.content.customFieldsManager.field:
+                if field.name == kv['key']:
+                    key_id = field.key
+                    break
+
+            if not key_id:
+                self.module.fail_json(msg="Unable to find custom value key %s" % kv['key'])
+
+            # If kv is not kv fetched from facts, change it
+            if kv['key'] not in facts['customvalues'] or facts['customvalues'][kv['key']] != kv['value']:
+                self.content.customFieldsManager.SetField(entity=vm_obj, key=key_id, value=kv['value'])
                 self.change_detected = True
 
     def customize_vm(self, vm_obj):
@@ -3093,9 +3131,9 @@ class PyVmomiHelper(PyVmomi):
                 if task.info.state == 'error':
                     return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'annotation'}
 
-            if self.params['customvalues']:
+            if self.params['advanced_settings']:
                 vm_custom_spec = vim.vm.ConfigSpec()
-                self.customize_customvalues(vm_obj=vm, config_spec=vm_custom_spec)
+                self.customize_advanced_settings(vm_obj=vm, config_spec=vm_custom_spec)
                 task = vm.ReconfigVM_Task(vm_custom_spec)
                 self.wait_for_task(task)
                 if task.info.state == 'error':
@@ -3137,7 +3175,8 @@ class PyVmomiHelper(PyVmomi):
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
-        self.customize_customvalues(vm_obj=self.current_vm_obj, config_spec=self.configspec)
+        self.customize_advanced_settings(vm_obj=self.current_vm_obj, config_spec=self.configspec)
+        self.customize_customvalues(vm_obj=self.current_vm_obj)
         self.configure_resource_alloc_info(vm_obj=self.current_vm_obj)
         self.configure_vapp_properties(vm_obj=self.current_vm_obj)
 
@@ -3337,6 +3376,7 @@ def main():
         is_template=dict(type='bool', default=False),
         annotation=dict(type='str', aliases=['notes']),
         customvalues=dict(type='list', default=[], elements='dict'),
+        advanced_settings=dict(type='list', default=[], elements='dict'),
         name=dict(type='str'),
         name_match=dict(type='str', choices=['first', 'last'], default='first'),
         uuid=dict(type='str'),
