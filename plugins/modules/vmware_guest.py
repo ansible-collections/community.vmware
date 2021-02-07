@@ -249,7 +249,7 @@ options:
             - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
             - If not specified, disk type is thick disk, no eagerzero.
             type: str
-            choices: [ thin, thick, eagerzeroedthick ]
+            choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
         datastore:
             type: str
             description:
