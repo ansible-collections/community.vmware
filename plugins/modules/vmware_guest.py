@@ -74,7 +74,7 @@ options:
     description:
     - If multiple virtual machines matching the name, use the first or last found.
     default: 'first'
-    choices: [ first, last ]
+    choices: [ 'first', 'last' ]
     type: str
   uuid:
     description:
@@ -247,7 +247,7 @@ options:
             - Type of disk.
             - If C(thin) specified, disk type is set to thin disk.
             - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
-            - If not specified, disk type is thick disk, no eagerzero.
+            - If not specified, disk type is inherited from the source VM or template when cloned and thick disk, no eagerzero otherwise.
             type: str
             choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
         datastore:
@@ -694,7 +694,7 @@ options:
   convert:
     description:
     - Specify convert disk type while cloning template or virtual machine.
-    choices: [ thin, thick, eagerzeroedthick ]
+    choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
