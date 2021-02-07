@@ -228,7 +228,7 @@ def main():
                 if 'esx' not in key.editionKey:
                     module.warn('License key "%s" edition "%s" is not suitable for ESXi server' % (license, key.editionKey))
             # backward compatibility - check if it's is a vCenter licence key
-            elif pyv.content.about.name in key.name:
+            elif pyv.content.about.name in key.name or 'vCenter Server' in key.name:
                 entityId = pyv.content.about.instanceUuid
 
         # if we have found a cluster, an esxi or a vCenter object we try to assign the licence
