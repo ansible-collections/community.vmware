@@ -74,7 +74,7 @@ options:
     description:
     - If multiple virtual machines matching the name, use the first or last found.
     default: 'first'
-    choices: [ first, last ]
+    choices: [ 'first', 'last' ]
     type: str
   uuid:
     description:
@@ -229,7 +229,7 @@ options:
             description:
             - Disk storage size.
             - Please specify storage unit like [kb, mb, gb, tb].
-            type: int
+            type: str
         size_kb:
             description: Disk storage size in kb.
             type: int
@@ -247,8 +247,9 @@ options:
             - Type of disk.
             - If C(thin) specified, disk type is set to thin disk.
             - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
-            - If not specified, disk type is thick disk, no eagerzero.
+            - If not specified, disk type is inherited from the source VM or template when cloned and thick disk, no eagerzero otherwise.
             type: str
+            choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
         datastore:
             type: str
             description:
@@ -267,6 +268,7 @@ options:
             - C(disk.datastore) and C(disk.autoselect_datastore) will not be used if C(datastore) is specified outside this C(disk) configuration.
         disk_mode:
             type: str
+            choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
             description:
             - Type of disk mode.
             - Added in Ansible 2.6.
@@ -276,19 +278,19 @@ options:
               but not affected by snapshots.
         controller_type:
             type: str
+            choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme']
             description:
             - Type of disk controller.
-            - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas), C(paravirtual), C(sata) and C(nvme).
             - C(nvme) controller type support starts on ESXi 6.5 with VM hardware version C(version) 13.
               Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.
             - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA CDROMs.
             - If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when C(cdrom) also set to C(sata) type.
         controller_number:
             type: int
+            choices: [0, 1, 2, 3]
             description:
             - Disk controller bus number.
             - The maximum number of same type controller is 4 per VM.
-            - Valid value range from 0 to 3.
         unit_number:
             type: int
             description:
@@ -692,7 +694,7 @@ options:
   convert:
     description:
     - Specify convert disk type while cloning template or virtual machine.
-    choices: [ thin, thick, eagerzeroedthick ]
+    choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -2407,9 +2409,9 @@ class PyVmomiHelper(PyVmomi):
 
     def get_configured_disk_size(self, expected_disk_spec):
         # what size is it?
-        if [x for x in expected_disk_spec.keys() if x.startswith('size_') or x == 'size']:
+        if [x for x in expected_disk_spec.keys() if (x.startswith('size_') or x == 'size') and expected_disk_spec[x]]:
             # size, size_tb, size_gb, size_mb, size_kb
-            if 'size' in expected_disk_spec:
+            if expected_disk_spec['size']:
                 size_regex = re.compile(r'(\d+(?:\.\d+)?)([tgmkTGMK][bB])')
                 disk_size_m = size_regex.match(expected_disk_spec['size'])
                 try:
@@ -2434,10 +2436,9 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="Failed to parse disk size please review value"
                                               " provided using documentation.")
             else:
-                param = [x for x in expected_disk_spec.keys() if x.startswith('size_')][0]
-                unit = param.split('_')[-1].lower()
-                expected = [x[1] for x in expected_disk_spec.items() if x[0].startswith('size_')][0]
-                expected = int(expected)
+                param = [x for x in expected_disk_spec.keys() if x.startswith('size_') and expected_disk_spec[x]][0]
+                unit = param.split('_')[-1]
+                expected = expected_disk_spec[param]
 
             disk_units = dict(tb=3, gb=2, mb=1, kb=0)
             if unit in disk_units:
@@ -2450,7 +2451,7 @@ class PyVmomiHelper(PyVmomi):
 
         # No size found but disk, fail
         self.module.fail_json(
-            msg="No size, size_kb, size_mb, size_gb or size_tb attribute found into disk configuration")
+            msg="No size, size_kb, size_mb, size_gb or size_tb defined in disk configuration")
 
     def add_existing_vmdk(self, vm_obj, expected_disk_spec, diskspec, scsi_ctl):
         """
@@ -2476,22 +2477,15 @@ class PyVmomiHelper(PyVmomi):
         """
         controllers = []
         for disk_spec in self.params.get('disk'):
-            if 'controller_type' not in disk_spec or 'controller_number' not in disk_spec or 'unit_number' not in disk_spec:
+            if not disk_spec['controller_type'] or not disk_spec['controller_number'] or not disk_spec['unit_number']:
                 self.module.fail_json(msg="'disk.controller_type', 'disk.controller_number' and 'disk.unit_number' are"
                                           " mandatory parameters when configure multiple disk controllers and disks.")
-            try:
-                ctl_num = int(disk_spec['controller_number'])
-                ctl_unit_num = int(disk_spec['unit_number'])
-            except ValueError:
-                self.module.fail_json(msg="'disk.controller_number' and 'disk.unit_number' attributes should be integer"
-                                          " values.")
+
+            ctl_num = disk_spec['controller_number']
+            ctl_unit_num = disk_spec['unit_number']
+
             disk_spec['unit_number'] = ctl_unit_num
-            ctl_type = disk_spec['controller_type'].lower()
-            # max number of same type disk controller is 4
-            if ctl_num > 3:
-                self.module.fail_json(msg="'disk.controller_number' value is invalid, valid value is from 0 to 3.")
-            if ctl_type not in ['buslogic', 'paravirtual', 'lsilogic', 'lsilogicsas', 'sata', 'nvme']:
-                self.module.fail_json(msg="Disk controller type: '%s' is not supported or invalid." % disk_spec['controller_type'])
+            ctl_type = disk_spec['controller_type']
 
             if len(controllers) != 0:
                 ctl_exist = False
@@ -2518,12 +2512,8 @@ class PyVmomiHelper(PyVmomi):
 
     def set_disk_parameters(self, disk_spec, expected_disk_spec, reconfigure=False):
         disk_modified = False
-        if 'disk_mode' in expected_disk_spec:
-            disk_mode = expected_disk_spec.get('disk_mode', 'persistent').lower()
-            valid_disk_mode = ['persistent', 'independent_persistent', 'independent_nonpersistent']
-            if disk_mode not in valid_disk_mode:
-                self.module.fail_json(msg="disk_mode specified is not valid."
-                                          " Should be one of ['%s']" % "', '".join(valid_disk_mode))
+        if expected_disk_spec['disk_mode']:
+            disk_mode = expected_disk_spec.get('disk_mode')
             if reconfigure:
                 if disk_spec.device.backing.diskMode != disk_mode:
                     disk_spec.device.backing.diskMode = disk_mode
@@ -2531,7 +2521,7 @@ class PyVmomiHelper(PyVmomi):
             else:
                 disk_spec.device.backing.diskMode = disk_mode
         # default is persistent for new deployed VM
-        elif 'disk_mode' not in expected_disk_spec and not reconfigure:
+        elif not reconfigure:
             disk_spec.device.backing.diskMode = "persistent"
 
         if not reconfigure:
@@ -2616,7 +2606,7 @@ class PyVmomiHelper(PyVmomi):
         # do not support mixed old scsi disks configuration and new multiple controller types of disks configuration
         configure_multiple_ctl = False
         for disk_spec in self.params.get('disk'):
-            if 'controller_type' in disk_spec or 'controller_number' in disk_spec or 'unit_number' in disk_spec:
+            if disk_spec['controller_type'] or disk_spec['controller_number'] or disk_spec['unit_number']:
                 configure_multiple_ctl = True
                 break
         if configure_multiple_ctl:
@@ -2660,12 +2650,8 @@ class PyVmomiHelper(PyVmomi):
             if disk_index == 7:
                 disk_index += 1
 
-            if 'disk_mode' in expected_disk_spec:
-                disk_mode = expected_disk_spec.get('disk_mode', 'persistent').lower()
-                valid_disk_mode = ['persistent', 'independent_persistent', 'independent_nonpersistent']
-                if disk_mode not in valid_disk_mode:
-                    self.module.fail_json(msg="disk_mode specified is not valid."
-                                              " Should be one of ['%s']" % "', '".join(valid_disk_mode))
+            if expected_disk_spec['disk_mode']:
+                disk_mode = expected_disk_spec.get('disk_mode', 'persistent')
 
                 if (vm_obj and diskspec.device.backing.diskMode != disk_mode) or (vm_obj is None):
                     diskspec.device.backing.diskMode = disk_mode
@@ -2674,14 +2660,14 @@ class PyVmomiHelper(PyVmomi):
                 diskspec.device.backing.diskMode = "persistent"
 
             # is it thin?
-            if 'type' in expected_disk_spec:
+            if expected_disk_spec['type']:
                 disk_type = expected_disk_spec.get('type', '').lower()
                 if disk_type == 'thin':
                     diskspec.device.backing.thinProvisioned = True
                 elif disk_type == 'eagerzeroedthick':
                     diskspec.device.backing.eagerlyScrub = True
 
-            if 'filename' in expected_disk_spec and expected_disk_spec['filename'] is not None:
+            if expected_disk_spec['filename']:
                 self.add_existing_vmdk(vm_obj, expected_disk_spec, diskspec, scsi_ctl)
                 continue
             if vm_obj is None or self.params['template']:
@@ -2742,7 +2728,7 @@ class PyVmomiHelper(PyVmomi):
 
         if self.params['disk']:
             # TODO: really use the datastore for newly created disks
-            if 'autoselect_datastore' in self.params['disk'][0] and self.params['disk'][0]['autoselect_datastore']:
+            if self.params['disk'][0]['autoselect_datastore']:
                 datastores = []
 
                 if self.params['cluster']:
@@ -2769,16 +2755,14 @@ class PyVmomiHelper(PyVmomi):
 
                     if (ds.summary.freeSpace > datastore_freespace) or (ds.summary.freeSpace == datastore_freespace and not datastore):
                         # If datastore field is provided, filter destination datastores
-                        if 'datastore' in self.params['disk'][0] and \
-                                isinstance(self.params['disk'][0]['datastore'], str) and \
-                                ds.name.find(self.params['disk'][0]['datastore']) < 0:
+                        if self.params['disk'][0]['datastore'] and ds.name.find(self.params['disk'][0]['datastore']) < 0:
                             continue
 
                         datastore = ds
                         datastore_name = datastore.name
                         datastore_freespace = ds.summary.freeSpace
 
-            elif 'datastore' in self.params['disk'][0]:
+            elif self.params['disk'][0]['datastore']:
                 datastore_name = self.params['disk'][0]['datastore']
                 # Check if user has provided datastore cluster first
                 datastore_cluster = self.cache.find_obj(self.content, [vim.StoragePod], datastore_name)
@@ -3030,11 +3014,11 @@ class PyVmomiHelper(PyVmomi):
                         if isinstance(device, vim.vm.device.VirtualDisk):
                             disk_locator = vim.vm.RelocateSpec.DiskLocator()
                             disk_locator.diskBackingInfo = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
-                            if self.params['convert'] in ['thin']:
+                            if self.params['convert'] == 'thin':
                                 disk_locator.diskBackingInfo.thinProvisioned = True
-                            if self.params['convert'] in ['eagerzeroedthick']:
+                            if self.params['convert'] == 'eagerzeroedthick':
                                 disk_locator.diskBackingInfo.eagerlyScrub = True
-                            if self.params['convert'] in ['thick']:
+                            if self.params['convert'] == 'thick':
                                 disk_locator.diskBackingInfo.diskMode = "persistent"
                             disk_locator.diskId = device.key
                             disk_locator.datastore = datastore
@@ -3383,7 +3367,26 @@ def main():
         use_instance_uuid=dict(type='bool', default=False),
         folder=dict(type='str'),
         guest_id=dict(type='str'),
-        disk=dict(type='list', default=[], elements='dict'),
+        disk=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                autoselect_datastore=dict(type='bool'),
+                controller_number=dict(type='int', choices=[0, 1, 2, 3]),
+                controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme']),
+                datastore=dict(type='str'),
+                disk_mode=dict(type='str', choices=['persistent', 'independent_persistent', 'independent_nonpersistent']),
+                filename=dict(type='str'),
+                size=dict(type='str'),
+                size_gb=dict(type='int'),
+                size_kb=dict(type='int'),
+                size_mb=dict(type='int'),
+                size_tb=dict(type='int'),
+                type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick']),
+                unit_number=dict(type='int'),
+            )
+        ),
         cdrom=dict(type='raw', default=[]),
         hardware=dict(
             type='dict',
