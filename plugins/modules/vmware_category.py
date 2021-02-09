@@ -151,9 +151,17 @@ category_results:
     }
 '''
 
+from distutils.version import LooseVersion
+
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+
+try:
+    from pyVmomi.VmomiSupport import XMLNS_VMODL_BASE
+except ImportError:
+    XMLNS_VMODL_BASE = "urn:vim25"
+
 try:
     from com.vmware.cis.tagging_client import CategoryModel
     from com.vmware.vapi.std.errors_client import Error
@@ -197,39 +205,46 @@ class VmwareCategory(VmwareRestClient):
 
         associable_object_types = self.params.get('associable_object_types')
 
+        def append_namespace(object_name):
+            return '%s:%s' % (XMLNS_VMODL_BASE, object_name)
+
+        associable_data = {
+            # With Namespace
+            'cluster': append_namespace('ClusterComputeResource'),
+            'datastore': append_namespace('Datastore'),
+            'datastore cluster': append_namespace('StoragePod'),
+            'folder': append_namespace('Folder'),
+            'host': append_namespace('HostSystem'),
+            'library item': append_namespace('com.vmware.content.library.Item'),
+
+            # Without Namespace
+            'distributed port group': 'DistributedVirtualPortgroup',
+            'distributed switch': ['VmwareDistributedVirtualSwitch', 'DistributedVirtualSwitch'],
+            'content library': 'com.vmware.content.Library',
+            'resource pool': 'ResourcePool',
+            'vapp': 'VirtualApp',
+            'virtual machine': 'VirtualMachine',
+            'network': ['Network', 'HostNetwork', 'OpaqueNetwork'],
+            'host network': 'HostNetwork',
+            'opaque network': 'OpaqueNetwork',
+        }
         obj_types_set = []
         if associable_object_types:
             for obj_type in associable_object_types:
                 lower_obj_type = obj_type.lower()
                 if lower_obj_type == 'all objects':
-                    obj_types_set = []
-                    break
-                if lower_obj_type == 'cluster':
-                    obj_types_set.append('ClusterComputeResource')
-                elif lower_obj_type == 'content library':
-                    obj_types_set.append('com.vmware.content.Library')
-                elif lower_obj_type == 'datastore cluster':
-                    obj_types_set.append('StoragePod')
-                elif lower_obj_type == 'distributed port group':
-                    obj_types_set.append('DistributedVirtualPortgroup')
-                elif lower_obj_type == 'distributed switch':
-                    obj_types_set.extend(['VmwareDistributedVirtualSwitch', 'DistributedVirtualSwitch'])
-                elif lower_obj_type == 'host':
-                    obj_types_set.append('HostSystem')
-                elif lower_obj_type == 'library item':
-                    obj_types_set.append('com.vmware.content.library.Item')
-                elif lower_obj_type == 'resource pool':
-                    obj_types_set.append('ResourcePool')
-                elif lower_obj_type == 'vapp':
-                    obj_types_set.append('VirtualApp')
-                elif lower_obj_type == 'virtual machine':
-                    obj_types_set.append('VirtualMachine')
-                elif lower_obj_type == 'network':
-                    obj_types_set.extend(['Network', 'HostNetwork', 'OpaqueNetwork'])
-                elif lower_obj_type == 'host network':
-                    obj_types_set.append('HostNetwork')
-                elif lower_obj_type == 'opaque network':
-                    obj_types_set.append('OpaqueNetwork')
+                    if LooseVersion(self.content.about.version) < LooseVersion('7'):
+                        obj_types_set = []
+                        break
+                    else:
+                        obj_types_set = list(associable_data.values())
+                        break
+                if lower_obj_type in associable_data:
+                    value = associable_data.get(lower_obj_type)
+                    if isinstance(value, list):
+                        obj_types_set.extend(value)
+                    else:
+                        obj_types_set.append(value)
                 else:
                     obj_types_set.append(obj_type)
 

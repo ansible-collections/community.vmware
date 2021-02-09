@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_category - append namespace to associable types (https://github.com/ansible-collections/community.vmware/issues/579).
