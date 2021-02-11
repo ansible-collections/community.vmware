@@ -149,12 +149,12 @@ class PyVmomiHelper(PyVmomi):
         for vgpu_VirtualDevice_obj in vm_obj.config.hardware.device:
             if hasattr(vgpu_VirtualDevice_obj.backing, 'vgpu'):
                 vgpu_facts = dict(
-                    Vgpu = vgpu_VirtualDevice_obj.backing.vgpu,
-                    Key = vgpu_VirtualDevice_obj.key,
-                    Summary = vgpu_VirtualDevice_obj.deviceInfo.summary,
-                    Label = vgpu_VirtualDevice_obj.deviceInfo.label,
-                    Unit_Number = vgpu_VirtualDevice_obj.unitNumber,
-                    Controller_Key = vgpu_VirtualDevice_obj.controllerKey,
+                    Vgpu=vgpu_VirtualDevice_obj.backing.vgpu,
+                    Key=vgpu_VirtualDevice_obj.key,
+                    Summary=vgpu_VirtualDevice_obj.deviceInfo.summary,
+                    Label=vgpu_VirtualDevice_obj.deviceInfo.label,
+                    Unit_Number=vgpu_VirtualDevice_obj.unitNumber,
+                    Controller_Key=vgpu_VirtualDevice_obj.controllerKey,
                 )
                 break
         return vgpu_facts
@@ -244,7 +244,7 @@ class PyVmomiHelper(PyVmomi):
             vgpu_p = vgpu_profile_name.vgpu
             backing = vim.VirtualPCIPassthroughVmiopBackingInfo(vgpu=vgpu_p)
             summary = "NVIDIA GRID vGPU " + vgpu_prfl
-            deviceInfo = vim.Description(summary=summary ,label="PCI device 0")
+            deviceInfo = vim.Description(summary=summary, label="PCI device 0")
             hba_object = vim.VirtualPCIPassthrough(backing=backing, deviceInfo=deviceInfo)
             new_device_config = vim.VirtualDeviceConfigSpec(device=hba_object)
             new_device_config.operation = "add"
@@ -309,7 +309,7 @@ class PyVmomiHelper(PyVmomi):
                 break
         return None
 
-def main():
+  def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
@@ -355,5 +355,5 @@ def main():
     else:
         module.exit_json(**result)
 
-if __name__ == '__main__':
+  if __name__ == '__main__':
     main()
