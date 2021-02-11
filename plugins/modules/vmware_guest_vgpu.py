@@ -310,6 +310,7 @@ class PyVmomiHelper(PyVmomi):
                 break
         return None
 
+
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
