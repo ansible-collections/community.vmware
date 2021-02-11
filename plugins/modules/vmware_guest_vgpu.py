@@ -310,7 +310,7 @@ class PyVmomiHelper(PyVmomi):
                 break
         return None
 
-  def main():
+def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
@@ -356,5 +356,5 @@ class PyVmomiHelper(PyVmomi):
     else:
         module.exit_json(**result)
 
-  if __name__ == '__main__':
+if __name__ == '__main__':
     main()
