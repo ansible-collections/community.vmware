@@ -69,12 +69,12 @@ options:
        - vGPU profile state.
        - When C(state=present), the selected vGPU profile will be added if the VM hosted ESXi host Nvidia GPU offer it.
        - When C(state=absent), the selected vGPU profile gets removed from the VM.
-    type: str
-    vgpu:
-      description:
-        - Required for any operation.
-        - 'Possible choices are - grid_m10-8q, grid_m60-4q, grid_m10-2a.'
-      type: str
+     type: str
+   vgpu:
+     description:
+       - Required for any operation.
+       - 'Possible choices are - grid_m10-8q, grid_m60-4q, grid_m10-2a.'
+     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -121,6 +121,7 @@ vgpu_facts:
             "Summary": "NVIDIA GRID vGPU grid_m10-8q",
             "Unit_Number": 18,
             "Vgpu": "grid_m10-8q"
+        }
     }
 '''
 
