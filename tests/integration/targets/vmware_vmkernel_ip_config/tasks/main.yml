@@ -85,6 +85,7 @@
           type: 'static'
           ip_address: 192.168.0.254
           subnet_mask: 255.255.255.0
+          gateway: 192.168.0.1
       register: prepare_integration_tests_result
 
     - assert:
@@ -100,6 +101,7 @@
     vmk_name: "{{ device_name }}"
     ip_address: 192.168.1.254
     subnet_mask: 255.255.255.0
+    gateway: 192.168.1.1
   register: change_ip_address_vmk_result
 
 - assert:
@@ -115,6 +117,7 @@
     vmk_name: "{{ device_name }}"
     ip_address: 192.168.1.254
     subnet_mask: 255.255.255.0
+    gateway: 192.168.1.1
   register: change_ip_address_vmk_idempotency_check_result
 
 - assert:
