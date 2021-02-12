@@ -17,6 +17,7 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Russell Teague (@mtnbikenc)
+- Hannes Ebelt (@hannesebelt)
 notes:
     - Tested on vSphere 5.5
 requirements:
@@ -38,6 +39,11 @@ options:
             - Subnet Mask to assign to VMkernel interface
         required: True
         type: str
+    gateway:
+        description:
+            - Gateway to assign to VMkernel interface
+        required: True
+        type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -54,6 +60,7 @@ EXAMPLES = r'''
     vmk_name: vmk0
     ip_address: 10.0.0.10
     subnet_mask: 255.255.255.0
+    gateway: 10.0.0.1
   delegate_to: localhost
 '''
 
@@ -67,7 +74,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import HAS_PYVMOMI, connect_to_api, get_all_objs, vmware_argument_spec
 
 
-def configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask):
+def configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask, gateway):
 
     host_config_manager = host_system.configManager
     host_network_system = host_config_manager.networkSystem
@@ -81,6 +88,15 @@ def configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask
                 spec.ip.subnetMask = subnet_mask
                 host_network_system.UpdateVirtualNic(vmk_name, spec)
                 return True
+
+            if vnic.spec.ipRouteSpec.ipRouteConfig.defaultGateway != gateway:
+                vnic.spec.ipRouteSpec.ipRouteConfig.defaultGateway = gateway
+                vnic.changeOperation = vim.host.ConfigChange.Operation.edit
+                host_network_system.UpdateNetworkConfig(
+                    changeMode=vim.host.ConfigChange.Mode.modify,
+                    config=vim.host.NetworkConfig(vnic=[vnic]))
+                return True
+
     return False
 
 
@@ -89,7 +105,8 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(vmk_name=dict(required=True, type='str'),
                               ip_address=dict(required=True, type='str'),
-                              subnet_mask=dict(required=True, type='str')))
+                              subnet_mask=dict(required=True, type='str'),
+                              gateway=dict(required=True, type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
 
@@ -99,6 +116,7 @@ def main():
     vmk_name = module.params['vmk_name']
     ip_address = module.params['ip_address']
     subnet_mask = module.params['subnet_mask']
+    gateway = module.params['gateway']
 
     try:
         content = connect_to_api(module, False)
@@ -106,7 +124,7 @@ def main():
         if not host:
             module.fail_json(msg="Unable to locate Physical Host.")
         host_system = list(host)[0]
-        changed = configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask)
+        changed = configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask, gateway)
         module.exit_json(changed=changed)
     except vmodl.RuntimeFault as runtime_fault:
         module.fail_json(msg=runtime_fault.msg)
