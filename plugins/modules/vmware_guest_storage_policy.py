@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# (c) 2021, Tyler Gates <tgates81@gmail.com>
+# Copyright (c) 2021, Tyler Gates <tgates81@gmail.com>
 #
 # Special thanks to:
 #   * Vadim Aleksandrov <valeksandrov@me.com>: Original author of python script
@@ -27,7 +27,7 @@ module: vmware_guest_storage_policy
 short_description: Set VM Home and disk(s) storage policy profiles.
 description:
     - This module can be used to enforce storage policy profiles per disk and/or VM Home on a virtual machine.
-version_added: 1.7.0
+version_added: 1.8.0
 author:
     - Tyler Gates (@tgates81)
 notes:
@@ -97,12 +97,13 @@ options:
          - Name of the storage profile policy to enforce for the disk.
          type: str
          required: True
-extends_documentation_fragment: vmware.documentation
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - name: Enforce storepol1 policy for disk 0 and 1 using UUID
-  vmware_guest_storage_policy:
+  community.vmware.vmware_guest_storage_policy:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -117,7 +118,7 @@ EXAMPLES = '''
   register: policy_status
 
 - name: Enforce storepol1 policy for VM Home using name
-  vmware_guest_storage_policy:
+  community.vmware.vmware_guest_storage_policy:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -127,7 +128,7 @@ EXAMPLES = '''
   delegate_to: localhost
 '''
 
-RETURN = """
+RETURN = r"""
 policy_status:
     description: Information about changed storage profile policies.
     returned: always
@@ -155,7 +156,6 @@ try:
 except ImportError:
     HAS_PYVMOMI = False
     PYVMOMI_IMP_ERR = traceback.format_exc()
-import re
 import ssl
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
@@ -438,9 +438,9 @@ def run_module():
     vm = pyv.get_vm()
     if not vm:
         module.fail_json(msg="Unable to find virtual machine `%s'" %
-                         (module.params.get('name') or
-                          module.params.get('uuid') or
-                          module.params.get('moid')))
+                         (module.params.get('name')
+                          or module.params.get('uuid')
+                          or module.params.get('moid')))
 
     try:
         pyv.ensure_storage_policies(vm)
