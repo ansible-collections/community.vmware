@@ -359,7 +359,7 @@ class VMwareDeployOvf(PyVmomi):
         for key, value in self.params['networks'].items():
             network = find_network_by_name(self.content, value, datacenter_name=self.datacenter)
             if not network:
-                self.module.fail_json(msg='%(network)s could not be located' % self.params)
+                self.module.fail_json(msg='%(networks)s could not be located' % self.params)
             network_mapping = vim.OvfManager.NetworkMapping()
             network_mapping.name = key
             network_mapping.network = network
