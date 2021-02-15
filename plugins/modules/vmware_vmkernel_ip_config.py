@@ -42,7 +42,6 @@ options:
     gateway:
         description:
             - Gateway to assign to VMkernel interface
-        required: True
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -89,7 +88,7 @@ def configure_vmkernel_ip_address(host_system, vmk_name, ip_address, subnet_mask
                 host_network_system.UpdateVirtualNic(vmk_name, spec)
                 return True
 
-            if vnic.spec.ipRouteSpec.ipRouteConfig.defaultGateway != gateway:
+            if gateway and vnic.spec.ipRouteSpec.ipRouteConfig.defaultGateway != gateway:
                 vnic.spec.ipRouteSpec.ipRouteConfig.defaultGateway = gateway
                 vnic.changeOperation = vim.host.ConfigChange.Operation.edit
                 host_network_system.UpdateNetworkConfig(
@@ -106,7 +105,7 @@ def main():
     argument_spec.update(dict(vmk_name=dict(required=True, type='str'),
                               ip_address=dict(required=True, type='str'),
                               subnet_mask=dict(required=True, type='str'),
-                              gateway=dict(required=True, type='str')))
+                              gateway=dict(type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
 
