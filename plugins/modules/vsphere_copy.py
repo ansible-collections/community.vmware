@@ -130,7 +130,7 @@ def main():
         src=dict(required=True, aliases=['name']),
         datacenter=dict(required=False),
         datastore=dict(required=True),
-        dest=dict(required=True, aliases=['path']),
+        path=dict(required=True, aliases=['dest'], type='str'),
         timeout=dict(default=10, type='int'))
     )
 
@@ -151,7 +151,7 @@ def main():
     src = module.params.get('src')
     datacenter = module.params.get('datacenter')
     datastore = module.params.get('datastore')
-    dest = module.params.get('dest')
+    path = module.params.get('path')
     validate_certs = module.params.get('validate_certs')
     timeout = module.params.get('timeout')
 
@@ -167,7 +167,7 @@ def main():
         data = mmap.mmap(fd.fileno(), 0, access=mmap.ACCESS_READ)
         atexit.register(data.close)
 
-    remote_path = vmware_path(datastore, datacenter, dest)
+    remote_path = vmware_path(datastore, datacenter, path)
 
     if not all([hostname, username, password]):
         module.fail_json(msg="One of following parameter is missing - hostname, username, password")
