@@ -40,19 +40,19 @@ options:
      - Name of the virtual machine.
      - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
      type: str
-     required: False
+     required: false
    uuid:
      description:
      - UUID of the virtual machine.
      - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
      type: str
-     required: False
+     required: false
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
      - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
      type: str
-     required: False
+     required: false
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
@@ -69,20 +69,20 @@ options:
      - '   folder: folder1/datacenter1/vm'
      - '   folder: /folder1/datacenter1/vm/folder2'
      type: str
-     required: False
+     required: false
    vm_home:
      description:
      - A storage profile policy to set on VM Home.
      - All values and parameters are case sensitive.
      - At least one of C(disk) or C(vm_home) are required parameters.
-     required: False
+     required: false
      type: str
    disk:
      description:
      - A list of disks with storage profile policies to enforce.
      - All values and parameters are case sensitive.
      - At least one of C(disk) and C(vm_home) are required parameters.
-     required: False
+     required: false
      type: list
      elements: dict
      suboptions:
@@ -91,12 +91,12 @@ options:
          - Disk Unit Number.
          - Valid values range from 0 to 15.
          type: int
-         required: True
+         required: true
        policy:
          description:
          - Name of the storage profile policy to enforce for the disk.
          type: str
-         required: True
+         required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -128,70 +128,45 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-RETURN = r"""
-policy_status:
-    description: Information about changed storage profile policies.
+RETURN = r'''
+msg:
+    description: Informational message on the job result.
+    type: str
     returned: always
+    sample: "Policies successfully set."
+changed_policies:
+    description: Dictionary containing the changed policies of disk (list of dictionaries) and vm_home.
     type: dict
+    returned: always
     sample: {
-        "msg": "",
-        "changed_policies": {
-            "disk": [
-                {
-                    "policy": "storepol1",
-                    "unit_number": 0
-                }
-            ],
-            "vm_home": "storepol1"
-        },
+        "disk": [
+            {
+                "policy": "storepol1",
+                "unit_number": 0
+            }
+        ],
+        "vm_home": "storepol1"
     }
-"""
+'''
 
 import traceback
 from ansible.module_utils.basic import missing_required_lib
 PYVMOMI_IMP_ERR = None
 try:
-    from pyVmomi import pbm, vim, VmomiSupport, SoapStubAdapter
+    from pyVmomi import pbm, vim
     HAS_PYVMOMI = True
 except ImportError:
     HAS_PYVMOMI = False
     PYVMOMI_IMP_ERR = traceback.format_exc()
-import ssl
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
 
-class PyVmomiHelper(PyVmomi):
+class PyVmomiHelper(SPBM):
     def __init__(self, module):
         super().__init__(module)
-
-    def PbmConnect(self, stubAdapter):
-        """
-        Connect to the VMware Storage Policy Server.
-
-        :param stubAdapter: The ServiceInstance stub adapter.
-        :type stubAdapter: SoapStubAdapter
-        :returns: A VMware Storage Policy Service content object.
-        :rtype: ServiceContent
-        """
-
-        sslContext = None
-        if not self.module.params.get('validate_certs'):
-            sslContext = ssl._create_unverified_context()
-
-        VmomiSupport.GetRequestContext()["vcSessionCookie"] = \
-            stubAdapter.cookie.split('"')[1]
-        hostname = stubAdapter.host.split(":")[0]
-        pbmStub = SoapStubAdapter(
-            host=hostname,
-            version="pbm.version.version1",
-            path="/pbm/sdk",
-            poolSize=0,
-            sslContext=sslContext)
-        pbmSi = pbm.ServiceInstance("ServiceInstance", pbmStub)
-        pbmContent = pbmSi.RetrieveContent()
-        return pbmContent
 
     def SearchStorageProfileByName(self, profileManager, name):
         """
@@ -324,8 +299,8 @@ class PyVmomiHelper(PyVmomi):
         )
 
         # Connect into vcenter and get the profile manager for the VM.
-        pbm_content = self.PbmConnect(vm_obj._stub)
-        pm = pbm_content.profileManager
+        self.get_spbm_connection()
+        pm = self.spbm_content.profileManager
 
         #
         # VM HOME
@@ -338,8 +313,8 @@ class PyVmomiHelper(PyVmomi):
             pol_obj = self.SearchStorageProfileByName(pm, policy)
 
             if not pol_obj:
-                self.module.fail_json(msg="Unable to find storage policy `%s' "
-                                          "for vm_home" % policy)
+                result['msg'] = "Unable to find storage policy `%s' for vm_home" % policy
+                self.module.fail_json(**result)
 
             if not self.CheckAssociatedStorageProfile(pm, pmRef, policy):
                 # Existing policy is different than requested. Set, wait for
@@ -364,8 +339,8 @@ class PyVmomiHelper(PyVmomi):
             disk_obj = self.GetVirtualDiskObj(vm_obj, unit_number)
             pol_obj = self.SearchStorageProfileByName(pm, policy)
             if not (disk_obj or policy):
-                self.module.fail_json(msg="Unable to find storage policy `%s' "
-                                          "for disk %s" % (policy, disk))
+                result['msg'] = "Unable to find storage policy `%s' for disk %s" % (policy, disk)
+                self.module.fail_json(**result)
             disks_objs[unit_number] = dict(disk=disk_obj, policy=pol_obj)
 
         # All requested profiles are valid. Iterate through each disk and set
