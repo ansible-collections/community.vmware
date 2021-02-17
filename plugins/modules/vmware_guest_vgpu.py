@@ -23,7 +23,7 @@ notes:
 requirements:
     - "python >= 3.6"
     - PyVmomi
-    - VM must be power off community.vmware.vmware_guest module can perform that task
+    - VM must be power off M(community.vmware.vmware_guest) module can perform that task.
 options:
    name:
      description:
