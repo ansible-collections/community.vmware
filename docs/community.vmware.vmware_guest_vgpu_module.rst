@@ -1,11 +1,11 @@
-.. _community.vmware.vmware_guest_info_module:
+.. _community.vmware.vmware_guest_vgpu_module:
 
 
 **********************************
-community.vmware.vmware_guest_info
+community.vmware.vmware_guest_vgpu
 **********************************
 
-**Gather info about a single VM**
+**Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure**
 
 
 
@@ -16,8 +16,8 @@ community.vmware.vmware_guest_info
 
 Synopsis
 --------
-- Gather information about a single VM on a VMware ESX cluster.
-- This module was called ``vmware_guest_facts`` before Ansible 2.9. The usage did not change.
+- This module is used to reconfigure vGPU card profile of given virtual machine.
+- All parameters and VMware object names are case sensitive.
 
 
 
@@ -25,8 +25,9 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.6
+- python >= 3.6
 - PyVmomi
+- VM must be power off :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module can perform that task.
 
 
 Parameters
@@ -47,13 +48,14 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
                 </td>
                 <td>
-                        <div>Destination datacenter for the deploy operation</div>
+                        <div>The datacenter name to which virtual machine belongs to.</div>
+                        <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
@@ -69,8 +71,8 @@ Parameters
                 </td>
                 <td>
                         <div>Destination folder, absolute or relative path to find an existing guest.</div>
-                        <div>This is required if name is supplied.</div>
-                        <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</div>
+                        <div>This is a required parameter, only if multiple VMs are found with same name.</div>
+                        <div>The folder should include the datacenter. ESXi server&#x27;s datacenter is ha-datacenter.</div>
                         <div>Examples:</div>
                         <div>folder: /ha-datacenter/vm</div>
                         <div>folder: ha-datacenter/vm</div>
@@ -128,27 +130,8 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the VM to work with</div>
-                        <div>This is required if <code>uuid</code> or <code>moid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name_match</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
-                                    <li>last</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If multiple VMs matching the name, use the first or last found</div>
+                        <div>Name of the virtual machine.</div>
+                        <div>This is a required parameter, if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -190,32 +173,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>properties</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specify the properties to retrieve.</div>
-                        <div>If not specified, all properties are retrieved (deeply).</div>
-                        <div>Results are returned in a structure identical to the vsphere API.</div>
-                        <div>Example:</div>
-                        <div>properties: [</div>
-                        <div>&quot;config.hardware.memoryMB&quot;,</div>
-                        <div>&quot;config.hardware.numCPU&quot;,</div>
-                        <div>&quot;guest.disk&quot;,</div>
-                        <div>&quot;overallStatus&quot;</div>
-                        <div>]</div>
-                        <div>Only valid when <code>schema</code> is <code>vsphere</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -250,7 +207,7 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>schema</b>
+                    <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -258,78 +215,14 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>summary</b>&nbsp;&larr;</div></li>
-                                    <li>vsphere</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Specify the output schema desired.</div>
-                        <div>The &#x27;summary&#x27; output schema is the legacy output from the module</div>
-                        <div>The &#x27;vsphere&#x27; output schema is the vSphere API class definition which requires pyvmomi&gt;6.7.1</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>tag_details</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If set <code>True</code>, detail information about &#x27;tags&#x27; returned.</div>
-                        <div>Without this flag, the &#x27;tags&#x27; returns a list of tag names.</div>
-                        <div>With this flag, the &#x27;tags&#x27; returns a list of dict about tag information with additional details like category name, category id, and tag id.</div>
-                        <div>This parameter is added to maintain backward compatability.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>tags</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to show tags or not.</div>
-                        <div>If set <code>True</code>, shows tags information. Returns a list of tag names.</div>
-                        <div>If set <code>False</code>, hides tags information.</div>
-                        <div>vSphere Automation SDK is required.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>use_instance_uuid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
+                        <div>vGPU profile state.</div>
+                        <div>When <code>state=present</code>, the selected vGPU profile will be added if the VM hosted ESXi host Nvidia GPU offer it.</div>
+                        <div>When <code>state=absent</code>, the selected vGPU profile gets removed from the VM.</div>
                 </td>
             </tr>
             <tr>
@@ -362,8 +255,8 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>UUID of the instance to manage if known, this is VMware&#x27;s unique identifier.</div>
-                        <div>This is required if <code>name</code> or <code>moid</code> is not supplied.</div>
+                        <div>UUID of the instance to gather facts if known, this is VMware&#x27;s unique identifier.</div>
+                        <div>This is a required parameter, if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -388,6 +281,26 @@ Parameters
                         <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vgpu</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>grid_m10-8q</li>
+                                    <li>grid_m60-4q</li>
+                                    <li>grid_m10-2a</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Required for any operation.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
@@ -396,7 +309,7 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 5.5, 6.7
+   - Tested on vSphere 6.7
 
 
 
@@ -405,63 +318,31 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
-      community.vmware.vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: ha-datacenter
-        uuid: 421e4592-c069-924d-ce20-7e7533fab926
-      delegate_to: localhost
-      register: info
-
-    - name: Gather some info from a guest using the vSphere API output schema
-      community.vmware.vmware_guest_info:
+    - name: Add vGPU profile to VM
+      community.vmware.vmware_guest_vgpu:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        name: "{{ vm_name }}"
-        schema: "vsphere"
-        properties: ["config.hardware.memoryMB", "guest.disk", "overallStatus"]
+        validate_certs: no
+        name: UbuntuTest
+        vgpu: 'grid_m10-8q'
+        state: present
       delegate_to: localhost
-      register: info
+      register: vgpu_facts
 
-    - name: Gather some information about a guest using MoID
-      community.vmware.vmware_guest_info:
+    - name: Remove vGPU profile to VM
+      community.vmware.vmware_guest_vgpu:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
-        moid: vm-42
-        schema: "vsphere"
-        properties: ["config.hardware.memoryMB", "guest.disk", "overallStatus"]
+        validate_certs: no
+        name: UbuntuTest
+        vgpu: 'grid_m10-8q'
+        state: absent
       delegate_to: localhost
-      register: vm_moid_info
-
-    - name: Gather Managed object ID (moid) from a guest using the vSphere API output schema for REST Calls
-      community.vmware.vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ datacenter_name }}"
-        name: "{{ vm_name }}"
-        schema: "vsphere"
-        properties:
-          - _moId
-      delegate_to: localhost
-      register: moid_info
-
-    - name: Gather detailed information about tags and category associated with the given VM
-      community.vmware.vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ datacenter_name }}"
-        name: "{{ vm_name }}"
-        tags: True
-        tag_details: True
-      register: detailed_tag_info
+      register: vgpu_facts
 
 
 
@@ -480,7 +361,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>instance</b>
+                    <b>vgpu_facts</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
@@ -488,10 +369,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>always</td>
                 <td>
-                            <div>metadata about the virtual machine</div>
+                            <div>metadata about the virtual machine&#x27;s vGPU profile</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;advanced_settings&#x27;: {}, &#x27;annotation&#x27;: &#x27;&#x27;, &#x27;current_snapshot&#x27;: None, &#x27;customvalues&#x27;: {}, &#x27;guest_consolidation_needed&#x27;: False, &#x27;guest_question&#x27;: None, &#x27;guest_tools_status&#x27;: &#x27;guestToolsNotRunning&#x27;, &#x27;guest_tools_version&#x27;: &#x27;10247&#x27;, &#x27;hw_cores_per_socket&#x27;: 1, &#x27;hw_datastores&#x27;: [&#x27;ds_226_3&#x27;], &#x27;hw_esxi_host&#x27;: &#x27;10.76.33.226&#x27;, &#x27;hw_eth0&#x27;: {&#x27;addresstype&#x27;: &#x27;assigned&#x27;, &#x27;ipaddresses&#x27;: None, &#x27;label&#x27;: &#x27;Network adapter 1&#x27;, &#x27;macaddress&#x27;: &#x27;00:50:56:87:a5:9a&#x27;, &#x27;macaddress_dash&#x27;: &#x27;00-50-56-87-a5-9a&#x27;, &#x27;portgroup_key&#x27;: None, &#x27;portgroup_portkey&#x27;: None, &#x27;summary&#x27;: &#x27;VM Network&#x27;}, &#x27;hw_files&#x27;: [&#x27;[ds_226_3] ubuntu_t/ubuntu_t.vmx&#x27;, &#x27;[ds_226_3] ubuntu_t/ubuntu_t.nvram&#x27;, &#x27;[ds_226_3] ubuntu_t/ubuntu_t.vmsd&#x27;, &#x27;[ds_226_3] ubuntu_t/vmware.log&#x27;, &#x27;[ds_226_3] u0001/u0001.vmdk&#x27;], &#x27;hw_folder&#x27;: &#x27;/DC0/vm/Discovered virtual machine&#x27;, &#x27;hw_guest_full_name&#x27;: None, &#x27;hw_guest_ha_state&#x27;: None, &#x27;hw_guest_id&#x27;: None, &#x27;hw_interfaces&#x27;: [&#x27;eth0&#x27;], &#x27;hw_is_template&#x27;: False, &#x27;hw_memtotal_mb&#x27;: 1024, &#x27;hw_name&#x27;: &#x27;ubuntu_t&#x27;, &#x27;hw_power_status&#x27;: &#x27;poweredOff&#x27;, &#x27;hw_processor_count&#x27;: 1, &#x27;hw_product_uuid&#x27;: &#x27;4207072c-edd8-3bd5-64dc-903fd3a0db04&#x27;, &#x27;hw_version&#x27;: &#x27;vmx-13&#x27;, &#x27;instance_uuid&#x27;: &#x27;5007769d-add3-1e12-f1fe-225ae2a07caf&#x27;, &#x27;ipv4&#x27;: None, &#x27;ipv6&#x27;: None, &#x27;module_hw&#x27;: True, &#x27;snapshots&#x27;: [], &#x27;tags&#x27;: [&#x27;backup&#x27;], &#x27;vnc&#x27;: {}, &#x27;moid&#x27;: &#x27;vm-42&#x27;, &#x27;vimref&#x27;: &#x27;vim.VirtualMachine:vm-42&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vgpu&#x27;: {&#x27;Controller_Key&#x27;: 100, &#x27;Key&#x27;: 13000, &#x27;Label&#x27;: &#x27;PCI device 0&#x27;, &#x27;Summary&#x27;: &#x27;NVIDIA GRID vGPU grid_m10-8q&#x27;, &#x27;Unit_Number&#x27;: 18, &#x27;Vgpu&#x27;: &#x27;grid_m10-8q&#x27;}}</div>
                 </td>
             </tr>
     </table>
@@ -505,4 +386,5 @@ Status
 Authors
 ~~~~~~~
 
-- Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
+- Mohamed Alibi (@Medalibi)
+- Unknown (@matancarmeli7)
