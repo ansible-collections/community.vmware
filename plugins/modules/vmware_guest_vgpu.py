@@ -17,7 +17,7 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Mohamed Alibi (@Medalibi) <alibimohamed@gmail.com>
-    - (@matancarmeli7)
+    - Unknown (@matancarmeli7)
 notes:
     - Tested on vSphere 6.7
 requirements:
