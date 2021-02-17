@@ -95,7 +95,7 @@ EXAMPLES = r'''
   register: vgpu_facts
 
 - name: Remove vGPU profile to VM
-  vmware_guest_vgpu:
+  community.vmware.vmware_guest_vgpu:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
