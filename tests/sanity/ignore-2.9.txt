@@ -411,6 +411,9 @@ plugins/modules/vmware_vmkernel_info.py compile-2.6!skip
 plugins/modules/vmware_vmkernel_info.py import-2.6!skip
 plugins/modules/vmware_vmkernel_ip_config.py compile-2.6!skip
 plugins/modules/vmware_vmkernel_ip_config.py import-2.6!skip
+plugins/modules/vmware_vmkernel_ip_config.py pylint:ansible-deprecated-no-version
+plugins/modules/vmware_vmkernel_ip_config.py validate-modules:deprecation-mismatch
+plugins/modules/vmware_vmkernel_ip_config.py validate-modules:invalid-documentation
 plugins/modules/vmware_vmkernel.py compile-2.6!skip
 plugins/modules/vmware_vmkernel.py import-2.6!skip
 plugins/modules/vmware_vmotion.py compile-2.6!skip

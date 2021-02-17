@@ -141,7 +141,6 @@ action_groups:
   - vmware_vm_vss_dvs_migrate
   - vmware_vmkernel
   - vmware_vmkernel_info
-  - vmware_vmkernel_ip_config
   - vmware_vmotion
   - vmware_vsan_cluster
   - vmware_vsan_health_info
@@ -296,6 +295,10 @@ plugin_routing:
     vmware_vmkernel_facts:
       deprecation:
         removal_date: 2021-12-01
+        warning_text: see plugin documentation for details
+    vmware_vmkernel_ip_config:
+      deprecation:
+        removal_date: 2023-03-01
         warning_text: see plugin documentation for details
     vmware_vswitch_facts:
       deprecation:
