@@ -11,7 +11,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_guest_vgpu
-short_description: Modify vGPU video card profile of specified virtual machine in given vCenter infrastructure
+short_description: Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to reconfigure vGPU card profile of given virtual machine.
     - All parameters and VMware object names are case sensitive.
