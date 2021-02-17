@@ -73,7 +73,7 @@ options:
    vgpu:
      description:
        - Required for any operation.
-       - 'Possible choices are - grid_m10-8q, grid_m60-4q, grid_m10-2a.'
+     choices: [ 'grid_m10-8q', 'grid_m60-4q', 'grid_m10-2a' ]
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
