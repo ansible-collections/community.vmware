@@ -60,6 +60,7 @@ action_groups:
   - vmware_guest_file_operation
   - vmware_guest_find
   - vmware_guest_info
+  - vmware_guest_instant_clone 
   - vmware_guest_move
   - vmware_guest_network
   - vmware_guest_powerstate

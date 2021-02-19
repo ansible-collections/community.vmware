@@ -164,6 +164,8 @@ plugins/modules/vmware_guest_find.py compile-2.6!skip
 plugins/modules/vmware_guest_find.py import-2.6!skip
 plugins/modules/vmware_guest_info.py compile-2.6!skip
 plugins/modules/vmware_guest_info.py import-2.6!skip
+plugins/modules/vmware_guest_instant_clone.py compile-2.6!skip
+plugins/modules/vmware_guest_instant_clone.py import-2.6!skip
 plugins/modules/vmware_guest_move.py compile-2.6!skip
 plugins/modules/vmware_guest_move.py import-2.6!skip
 plugins/modules/vmware_guest_network.py compile-2.6!skip
