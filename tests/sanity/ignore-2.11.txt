@@ -16,6 +16,7 @@ plugins/httpapi/vmware.py compile-2.6!skip
 plugins/httpapi/vmware.py import-2.6!skip
 plugins/inventory/__init__.py compile-2.6!skip
 plugins/inventory/__init__.py import-2.6!skip
+plugins/inventory/vmware_host_inventory.py compile-2.6!skip
 plugins/inventory/vmware_vm_inventory.py compile-2.6!skip
 plugins/inventory/vmware_vm_inventory.py import-2.6!skip
 plugins/modules/__init__.py compile-2.6!skip
@@ -397,6 +398,7 @@ plugins/modules/vsphere_file.py compile-2.6!skip
 plugins/modules/vsphere_file.py import-2.6!skip
 plugins/module_utils/__init__.py compile-2.6!skip
 plugins/module_utils/__init__.py import-2.6!skip
+plugins/module_utils/inventory.py pylint:ansible-bad-module-import
 plugins/module_utils/vca.py compile-2.6!skip
 plugins/module_utils/vca.py import-2.6!skip
 plugins/module_utils/vmware.py compile-2.6!skip
