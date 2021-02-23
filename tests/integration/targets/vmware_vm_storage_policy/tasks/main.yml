@@ -105,10 +105,10 @@
     ignore_errors: true
     register: policy_failure_test1
 
-  - name: Make sure if the task failed and an error message showed including tag_category name
+  - name: Make sure if the task failed and an error message displayed including tag_category name
     assert:
       that:
-        - policy_failure_test1.failed is true
+        - policy_failure_test1.failed is sameas true
         - "'issue667 is not found in vCenter Server tag categories' in policy_failure_test1.msg"
 
   - name: The failure test when tag_name not exists
@@ -126,10 +126,10 @@
     ignore_errors: true
     register: policy_failure_test2
 
-  - name: Make sure if the task failed and an error message showed including tag_name name
+  - name: Make sure if the task failed and an error message displayed including tag_name name
     assert:
       that:
-        - policy_failure_test2.failed is true
+        - policy_failure_test2.failed is sameas true
         - "'issue667 is not found in vCenter Server tags' in policy_failure_test2.msg"
 
   always:
