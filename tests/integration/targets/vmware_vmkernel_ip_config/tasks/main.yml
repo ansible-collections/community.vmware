@@ -1,0 +1,172 @@
+# Test code for the vmware_vmkernel_ip_config module.
+# Copyright: (c) 2020, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: "Prepare integration tests for vmware_vmkernel_ip_config module"
+  block:
+    - name: "Gather host facts from ESXi"
+      vmware_host_facts:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+      register: gather_host_facts_from_esxi_result
+
+    - name: "Set variables for integration test"
+      set_fact:
+        vswitch_pg_name_for_test: vSwitchForVMwareVMkernelIpConfig
+        device_name: >-
+          {{ ( gather_host_facts_from_esxi_result.ansible_facts.ansible_interfaces
+            | last
+            | regex_replace('vmk(.*)', '\1')
+            | int + 1 )
+            | regex_replace('(.*)', 'vmk\1')
+          }}
+
+    - name: "Gather vSwitch info"
+      vmware_vswitch_info:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+      register: gather_vswitch_info_result
+
+    - name: "Create a new vSwitch block"
+      when:
+        - "not '{{ switch1 }}' in gather_vswitch_info_result.hosts_vswitch_info[esxi1]"
+      block:
+        - name: "Create a new vSwitch"
+          vmware_vswitch:
+            hostname: "{{ esxi1 }}"
+            username: "{{ esxi_user }}"
+            password: "{{ esxi_password }}"
+            validate_certs: false
+            esxi_hostname: "{{ esxi1 }}"
+            switch: "{{ switch1 }}"
+          register: create_new_vswitch_result
+
+        - assert:
+            that:
+              - create_new_vswitch_result.changed is sameas true
+
+    - name: "Create a new port group of vSwitch"
+      vmware_portgroup:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        switch: "{{ switch1 }}"
+        portgroup: "{{ vswitch_pg_name_for_test }}"
+      register: create_new_vswitch_pg_result
+
+    - assert:
+        that:
+          - create_new_vswitch_pg_result.changed is sameas true
+
+    - name: "Create a new vmkernel"
+      vmware_vmkernel:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        vswitch_name: "{{ switch1 }}"
+        portgroup_name: "{{ vswitch_pg_name_for_test }}"
+        device: "{{ device_name }}"
+        network:
+          type: 'static'
+          ip_address: 192.168.0.254
+          subnet_mask: 255.255.255.0
+      register: prepare_integration_tests_result
+
+    - assert:
+        that:
+          - prepare_integration_tests_result.changed is sameas true
+
+- name: "Change IP Address for vmk of ESXi"
+  vmware_vmkernel_ip_config:
+    hostname: "{{ esxi1 }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: false
+    vmk_name: "{{ device_name }}"
+    ip_address: 192.168.1.254
+    subnet_mask: 255.255.255.0
+  register: change_ip_address_vmk_result
+
+- assert:
+    that:
+      - change_ip_address_vmk_result.changed is sameas true
+
+- name: "Change IP Address for vmk of ESXi (idempotency check)"
+  vmware_vmkernel_ip_config:
+    hostname: "{{ esxi1 }}"
+    username: "{{ esxi_user }}"
+    password: "{{ esxi_password }}"
+    validate_certs: false
+    vmk_name: "{{ device_name }}"
+    ip_address: 192.168.1.254
+    subnet_mask: 255.255.255.0
+  register: change_ip_address_vmk_idempotency_check_result
+
+- assert:
+    that:
+      - change_ip_address_vmk_idempotency_check_result.changed is sameas false
+
+- name: "Delete the used objects for integration test"
+  block:
+    - name: "Delete the used vmkernel for integration test"
+      vmware_vmkernel:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        vswitch_name: "{{ switch1 }}"
+        portgroup_name: "{{ vswitch_pg_name_for_test }}"
+        device: "{{ device_name }}"
+        state: absent
+      register: delete_vmk_result
+
+    - assert:
+        that:
+          - delete_vmk_result.changed is sameas true
+
+    - name: "Delete the used port group for integration test"
+      vmware_portgroup:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        switch: "{{ switch1 }}"
+        portgroup: "{{ vswitch_pg_name_for_test }}"
+        state: absent
+      register: delete_vswitch_pg_result
+
+    - assert:
+        that:
+          - delete_vswitch_pg_result.changed is sameas true
+
+    - name: "Delete the used vSwitch for integration test"
+      vmware_vswitch:
+        hostname: "{{ esxi1 }}"
+        username: "{{ esxi_user }}"
+        password: "{{ esxi_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        switch: "{{ switch1 }}"
+        state: absent
+      register: delete_vswitch_result
+
+    - assert:
+        that:
+          - delete_vswitch_result.changed is sameas true
