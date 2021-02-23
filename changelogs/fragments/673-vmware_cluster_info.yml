@@ -1,0 +1,2 @@
+bugfixes: 
+- vmware_cluster_info - return VSAN status correctly (https://github.com/ansible-collections/community.vmware/issues/673).

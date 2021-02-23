@@ -280,8 +280,8 @@ class VmwreClusterInfoManager(PyVmomi):
                 drs_config = cluster.configurationEx.drsConfig
 
                 # VSAN
-                if hasattr(cluster.configurationEx, 'vsanConfig'):
-                    vsan_config = cluster.configurationEx.vsanConfig
+                if hasattr(cluster.configurationEx, 'vsanConfigInfo'):
+                    vsan_config = cluster.configurationEx.vsanConfigInfo
                     enabled_vsan = vsan_config.enabled,
                     vsan_auto_claim_storage = vsan_config.defaultConfig.autoClaimStorage,
 
