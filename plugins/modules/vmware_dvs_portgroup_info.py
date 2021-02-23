@@ -130,6 +130,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, get_all_objs, find_dvs_by_name
+from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
 class DVSPortgroupInfoManager(PyVmomi):
@@ -228,7 +229,7 @@ class DVSPortgroupInfoManager(PyVmomi):
                     vlan_info = self.get_vlan_info(dvs_pg.config.defaultPortConfig.vlan)
 
                 dvpg_details = dict(
-                    portgroup_name=dvs_pg.name,
+                    portgroup_name=unquote(dvs_pg.name),
                     num_ports=dvs_pg.config.numPorts,
                     dvswitch_name=dvs_pg.config.distributedVirtualSwitch.name,
                     description=dvs_pg.config.description,
