@@ -395,6 +395,10 @@ class VMwareCluster(PyVmomi):
                     das_vm_config.vmComponentProtectionSettings = vim.cluster.VmComponentProtectionSettings()
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForAPD = self.params.get('apd_response')
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForPDL = self.params.get('pdl_response')
+                    if (self.params['apd_response'] != "disabled" or self.params['pdl_response'] != "disabled"):
+                        cluster_config_spec.dasConfig.vmComponentProtecting = 'enabled'
+                    else:
+                        cluster_config_spec.dasConfig.vmComponentProtecting = 'disabled'
 
                     cluster_config_spec.dasConfig.defaultVmSettings = das_vm_config
 

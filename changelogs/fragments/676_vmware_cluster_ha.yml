@@ -1,0 +1,2 @@
+bugfixes: 
+- vmware_cluster_ha - fix enabling APD or PDL response (https://github.com/ansible-collections/community.vmware/issues/676).
