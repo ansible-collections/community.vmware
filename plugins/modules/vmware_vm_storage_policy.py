@@ -116,11 +116,36 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+
+
+class TagCategoryRestClient(VmwareRestClient):
+    def __init__(self, module):
+        super(TagCategoryRestClient, self).__init__(module)
+        self.category_service = self.api_client.tagging.Category
+        self.tag_service = self.api_client.tagging.Tag
+
+    def check_category_exists(self):
+        for category in self.category_service.list():
+            category_obj = self.category_service.get(category)
+            if category_obj.name == self.params.get('tag_category'):
+                return True
+
+        return False
+
+    def check_tag_exists(self):
+        for tag in self.tag_service.list():
+            tag_obj = self.tag_service.get(tag)
+            if tag_obj.name == self.params.get('tag_name'):
+                return True
+
+        return False
 
 
 class VmwareStoragePolicyManager(SPBM):
     def __init__(self, module):
         super(VmwareStoragePolicyManager, self).__init__(module)
+        self.tag_category_rest_client = TagCategoryRestClient(module)
 
     #
     # MOB METHODS
@@ -314,6 +339,16 @@ class VmwareStoragePolicyManager(SPBM):
 
             if self.params.get('tag_name') is None:
                 self.module.fail_json(msg="tag_name is required when 'state' is 'present'")
+
+            # ensure if the category exists
+            category_result = self.tag_category_rest_client.check_category_exists()
+            if category_result is False:
+                self.module.fail_json(msg="%s is not found in vCenter Server tag categories" % self.params.get('tag_category'))
+
+            # ensure if the tag exists
+            tag_result = self.tag_category_rest_client.check_tag_exists()
+            if tag_result is False:
+                self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
 
             # loop through and update the first match
             for policy in policies:
