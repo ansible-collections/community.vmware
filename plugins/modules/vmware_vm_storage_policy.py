@@ -119,33 +119,10 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import vmw
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
-class TagCategoryRestClient(VmwareRestClient):
-    def __init__(self, module):
-        super(TagCategoryRestClient, self).__init__(module)
-        self.category_service = self.api_client.tagging.Category
-        self.tag_service = self.api_client.tagging.Tag
-
-    def check_category_exists(self):
-        for category in self.category_service.list():
-            category_obj = self.category_service.get(category)
-            if category_obj.name == self.params.get('tag_category'):
-                return True
-
-        return False
-
-    def check_tag_exists(self):
-        for tag in self.tag_service.list():
-            tag_obj = self.tag_service.get(tag)
-            if tag_obj.name == self.params.get('tag_name'):
-                return True
-
-        return False
-
-
 class VmwareStoragePolicyManager(SPBM):
     def __init__(self, module):
         super(VmwareStoragePolicyManager, self).__init__(module)
-        self.tag_category_rest_client = TagCategoryRestClient(module)
+        self.rest_client = VmwareRestClient(module)
 
     #
     # MOB METHODS
@@ -341,13 +318,13 @@ class VmwareStoragePolicyManager(SPBM):
                 self.module.fail_json(msg="tag_name is required when 'state' is 'present'")
 
             # ensure if the category exists
-            category_result = self.tag_category_rest_client.check_category_exists()
-            if category_result is False:
+            category_result = self.rest_client.get_category_by_name(self.params.get('tag_category'))
+            if category_result is None:
                 self.module.fail_json(msg="%s is not found in vCenter Server tag categories" % self.params.get('tag_category'))
 
             # ensure if the tag exists
-            tag_result = self.tag_category_rest_client.check_tag_exists()
-            if tag_result is False:
+            tag_result = self.rest_client.get_tag_by_category(self.params.get('tag_name'), self.params.get('tag_category'))
+            if tag_result is None:
                 self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
 
             # loop through and update the first match
