@@ -338,8 +338,11 @@ class PyVmomiHelper(SPBM):
             unit_number = int(disk['unit_number'])
             disk_obj = self.GetVirtualDiskObj(vm_obj, unit_number)
             pol_obj = self.SearchStorageProfileByName(pm, policy)
-            if not (disk_obj or policy):
-                result['msg'] = "Unable to find storage policy `%s' for disk %s" % (policy, disk)
+            if not pol_obj:
+                result['msg'] = "Unable to find storage policy `%s' for disk %s." % (policy, disk)
+                self.module.fail_json(**result)
+            if not disk_obj:
+                result['msg'] = "Unable to find disk for unit_number `%s'. 7 will be reserved for SCSI adapters." % unit_number
                 self.module.fail_json(**result)
             disks_objs[unit_number] = dict(disk=disk_obj, policy=pol_obj)
 
