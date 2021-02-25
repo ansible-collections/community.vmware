@@ -1483,7 +1483,7 @@ class PyVmomi(object):
         return None
 
     # Resource pool
-    def find_resource_pool_by_name(self, resource_pool_name, folder=None):
+    def find_resource_pool_by_name(self, resource_pool_name='Resources', folder=None):
         """
         Get resource pool managed object by name
         Args:
