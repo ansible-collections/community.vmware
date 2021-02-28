@@ -53,20 +53,20 @@ options:
       required: True
     folder:
       description:
-      - Name of the folder in datacenter in which to place deployed VM.
-      type: str
-      required: True
-    host:
-      description:
-      - Name of the folder in datacenter in which to place deployed VM. Either a folder or an absolute path.
+      - Name of the folder in the datacenter in which to place deployed VM. Either a folder or an absolute path.
       - This parameter is case sensitive.
       - 'Examples:'
-	  - '   folder: folder1 , use the first folder with name folder1'
+      - '   folder: folder1 , use the first folder with name folder1'
       - '   folder: /ha-datacenter/vm , use the vm folder in datacenter ha-datacenter'
       - '   folder: ha-datacenter/vm, use the vm folder in datacenter ha-datacenter'
       - '   folder: /datacenter1/vm, use the vm folder in datacenter datacenter1'
       - '   folder: datacenter1/vm, use the vm folder in datacenter datacenter1'
       - '   folder: /datacenter1/vm/folder1/folder2, use folder2 in datacenter ha-datacenter that has as parent folder called folder1'
+      type: str
+      required: True
+    host:
+      description:
+      - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
       type: str
       required: True
     resource_pool:
