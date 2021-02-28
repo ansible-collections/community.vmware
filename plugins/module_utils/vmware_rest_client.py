@@ -348,7 +348,7 @@ class VmwareRestClient(object):
                     if not p_folder_obj:
                         self.module.fail_json(msg="Could not find folder %s" % part)
                 else:
-                    folder_id = p_folder_obj[0].folder if len(p_folder_obj) > 0 else None 
+                    folder_id = p_folder_obj[0].folder if len(p_folder_obj) > 0 else None
                     filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
                                                     names=set([part]),
                                                     datacenters=set([datacenter]),
