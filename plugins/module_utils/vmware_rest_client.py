@@ -333,12 +333,36 @@ class VmwareRestClient(object):
         datacenter = self.get_datacenter_by_name(datacenter_name)
         if not datacenter:
             return None
-        filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
-                                        names=set([folder_name]),
-                                        datacenters=set([datacenter]))
-        folder_summaries = self.api_client.vcenter.Folder.list(filter_spec)
-        folder = folder_summaries[0].folder if len(folder_summaries) > 0 else None
-        return folder
+        if "/" in folder_name:
+            folder_name = folder_name.strip('/').split('/')
+            p_folder_obj = None
+            for part in folder_name:
+                if p_folder_obj is None:
+                    if part == datacenter_name or part == "":
+                        continue
+                    else:
+                        filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,names=set([part]),datacenters=set([datacenter]))
+                    p_folder_obj = self.api_client.vcenter.Folder.list(filter_spec)
+                    if not p_folder_obj:
+                        self.module.fail_json(msg="Could not find folder %s" % part)
+                else:
+                    folder_id = p_folder_obj[0].folder if len(p_folder_obj) > 0 else None 
+                    filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
+                                                    names=set([part]),
+                                                    datacenters=set([datacenter]),
+                                                    parent_folders=set([folder_id]))
+                    p_folder_obj = self.api_client.vcenter.Folder.list(filter_spec)
+                    if not p_folder_obj:
+                        self.module.fail_json(msg="Could not find parent folder %s" % part)
+            folder = p_folder_obj[0].folder if len(p_folder_obj) > 0 else None
+            return folder
+        else:
+            filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
+                                            names=set([folder_name]),
+                                            datacenters=set([datacenter]))
+            folder_summaries = self.api_client.vcenter.Folder.list(filter_spec)
+            folder = folder_summaries[0].folder if len(folder_summaries) > 0 else None
+            return folder
 
     def get_resource_pool_by_name(self, datacenter_name, resourcepool_name, cluster_name=None, host_name=None):
         """
