@@ -341,7 +341,9 @@ class VmwareRestClient(object):
                     if part == datacenter_name or part == "":
                         continue
                     else:
-                        filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,names=set([part]),datacenters=set([datacenter]))
+                        filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
+                                                        names=set([part]),
+                                                        datacenters=set([datacenter]))
                     p_folder_obj = self.api_client.vcenter.Folder.list(filter_spec)
                     if not p_folder_obj:
                         self.module.fail_json(msg="Could not find folder %s" % part)
