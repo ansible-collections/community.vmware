@@ -61,7 +61,7 @@ options:
       - '   folder: ha-datacenter/vm, use the vm folder in datacenter ha-datacenter'
       - '   folder: /datacenter1/vm, use the vm folder in datacenter datacenter1'
       - '   folder: datacenter1/vm, use the vm folder in datacenter datacenter1'
-      - '   folder: /datacenter1/vm/folder1/folder2, use folder2 in datacenter ha-datacenter that has as parent folder called folder1'
+      - '   folder: /datacenter1/vm/folder1/folder2, use folder2 in datacenter ha-datacenter that has as parent folder called folder1 (and folder1 has the default vm parent folder)'
       type: str
       required: True
     host:
