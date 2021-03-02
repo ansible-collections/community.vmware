@@ -1362,7 +1362,7 @@ def main():
                 default=False,
                 removed_in_version='2.0.0',
                 removed_from_collection='community.vmware',
-                ),
+            ),
             portgroup_type=dict(
                 type='str', choices=['earlyBinding', 'lateBinding', 'ephemeral'], removed_in_version='2.0.0',
                 removed_from_collection='community.vmware',
