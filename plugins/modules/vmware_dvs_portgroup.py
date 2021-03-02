@@ -1381,5 +1381,6 @@ def main():
     vmware_dvs_portgroup = VMwareDvsPortgroup(module)
     vmware_dvs_portgroup.process_state()
 
+
 if __name__ == '__main__':
     main()
