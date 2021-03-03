@@ -24,6 +24,7 @@ options:
     - Destination datacenter for the register/unregister operation.
     - This parameter is case sensitive.
     type: str
+    default: ha-datacenter
   cluster:
     description:
     - Specify a cluster name to register VM.
@@ -255,7 +256,7 @@ class VMwareGuestRegisterOperation(PyVmomi):
 
 def main():
     argument_spec = vmware_argument_spec()
-    argument_spec.update(datacenter=dict(type="str"),
+    argument_spec.update(datacenter=dict(type="str", default="ha-datacenter"),
                          cluster=dict(type="str"),
                          folder=dict(type="str"),
                          name=dict(type="str", required=True),
@@ -267,6 +268,13 @@ def main():
                          state=dict(type="str", default="present", choices=["present", "absent"]))
 
     module = AnsibleModule(argument_spec=argument_spec,
+                           mutually_exclusive=[
+                               ['cluster', 'esxi_hostname'],
+                           ],
+                           required_one_of=[
+                               ['name', 'uuid'],
+                               ['cluster', 'esxi_hostname']
+                           ],
                            supports_check_mode=True)
 
     vmware_guest_register_operation = VMwareGuestRegisterOperation(module)
