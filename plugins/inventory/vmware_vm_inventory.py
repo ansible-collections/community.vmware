@@ -167,7 +167,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -238,7 +237,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -305,7 +303,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     hostnames:
      - 'config.name+"."+guest.ipStack.0.dnsConfig.domainName'
      - 'config.name'
@@ -315,7 +312,7 @@ EXAMPLES = r'''
       - 'guest.hostName'
       - 'guest.ipAddress'
       - 'guest.guestFamily'
-      - 'guest.ipStack'      
+      - 'guest.ipStack'
 '''
 
 import ssl

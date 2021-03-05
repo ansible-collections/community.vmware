@@ -689,8 +689,25 @@ Examples
         filters:
         - "tag_category.OS is defined and 'Linux' in tag_category.OS"
 
-
-
+    # customizing hostnames based on VM's FQDN. The second hostnames template acts as a fallback mechanism.
+        plugin: community.vmware.vmware_vm_inventory
+        strict: False
+        hostname: 10.65.223.31
+        username: administrator@vsphere.local
+        password: Esxi@123$%
+        validate_certs: False
+        with_tags: False
+        hostnames:
+         - 'config.name+"."+guest.ipStack.0.dnsConfig.domainName'
+         - 'config.name'
+        properties:
+          - 'config.name'
+          - 'config.guestId'
+          - 'guest.hostName'
+          - 'guest.ipAddress'
+          - 'guest.guestFamily'
+          - 'guest.ipStack'      
+    
 
 Status
 ------
