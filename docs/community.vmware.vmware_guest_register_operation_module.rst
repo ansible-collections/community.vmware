@@ -64,6 +64,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
                 </td>
                 <td>
                         <div>Destination datacenter for the register/unregister operation.</div>

@@ -1,2 +1,0 @@
-minor_changes:
-  - Define sub-options of disk in argument_spec (https://github.com/ansible-collections/community.vmware/pull/640).
