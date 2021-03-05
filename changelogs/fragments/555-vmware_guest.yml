@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest - Define sub-options of hardware and customization in argument_spec (https://github.com/ansible-collections/community.vmware/issues/555).

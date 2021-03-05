@@ -1,2 +1,0 @@
-bugfixes:
-  - vcenter_license - fixed a bug that the license doesn't assign in VCSA 7.0u1c (https://github.com/ansible-collections/community.vmware/pull/643).

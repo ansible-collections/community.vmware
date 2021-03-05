@@ -43,6 +43,25 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>advanced_settings</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Define a list of advanced settings to be added to the VMX config.</div>
+                        <div>An advanced settings object takes two fields <code>key</code> and <code>value</code>.</div>
+                        <div>Incorrect key and values will be ignored.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>annotation</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -715,11 +734,16 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>0</li>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li>3</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Disk controller bus number.</div>
                         <div>The maximum number of same type controller is 4 per VM.</div>
-                        <div>Valid value range from 0 to 3.</div>
                 </td>
             </tr>
             <tr>
@@ -733,10 +757,17 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>buslogic</li>
+                                    <li>lsilogic</li>
+                                    <li>lsilogicsas</li>
+                                    <li>paravirtual</li>
+                                    <li>sata</li>
+                                    <li>nvme</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Type of disk controller.</div>
-                        <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code>, <code>paravirtual</code>, <code>sata</code> and <code>nvme</code>.</div>
                         <div><code>nvme</code> controller type support starts on ESXi 6.5 with VM hardware version <code>version</code> 13. Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.</div>
                         <div>When set to <code>sata</code>, please make sure <code>unit_number</code> is correct and not used by SATA CDROMs.</div>
                         <div>If set to <code>sata</code> type, please make sure <code>controller_number</code> and <code>unit_number</code> are set correctly when <code>cdrom</code> also set to <code>sata</code> type.</div>
@@ -770,6 +801,11 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>persistent</li>
+                                    <li>independent_persistent</li>
+                                    <li>independent_nonpersistent</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Type of disk mode.</div>
@@ -804,7 +840,7 @@ Parameters
                     <b>size</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
@@ -889,12 +925,17 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>thin</li>
+                                    <li>thick</li>
+                                    <li>eagerzeroedthick</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Type of disk.</div>
                         <div>If <code>thin</code> specified, disk type is set to thin disk.</div>
                         <div>If <code>eagerzeroedthick</code> specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.</div>
-                        <div>If not specified, disk type is thick disk, no eagerzero.</div>
+                        <div>If not specified, disk type is inherited from the source VM or template when cloned and thick disk, no eagerzero otherwise.</div>
                 </td>
             </tr>
             <tr>
