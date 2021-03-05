@@ -305,6 +305,8 @@ plugins/modules/vmware_portgroup_info.py compile-2.6!skip
 plugins/modules/vmware_portgroup_info.py import-2.6!skip
 plugins/modules/vmware_portgroup.py compile-2.6!skip
 plugins/modules/vmware_portgroup.py import-2.6!skip
+plugins/modules/vmware_recommended_datastore.py compile-2.6!skip
+plugins/modules/vmware_recommended_datastore.py import-2.6!skip
 plugins/modules/vmware_resource_pool_facts.py compile-2.6!skip
 plugins/modules/vmware_resource_pool_facts.py import-2.6!skip
 plugins/modules/vmware_resource_pool_info.py compile-2.6!skip
