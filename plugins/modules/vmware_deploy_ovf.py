@@ -610,7 +610,7 @@ class VMwareDeployOvf(PyVmomi):
                     self.module.fail_json(msg='Waiting for IP address timed out')
 
         if not facts:
-            facts.update(gather_vm_facts(self.content, self.entity))
+            facts.update(dict(instance=gather_vm_facts(self.content, self.entity)))
 
         return facts
 
