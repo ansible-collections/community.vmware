@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_deploy_ovf - fixed an issue that a return value hasn’t the instance key when the power_on parameter is False (https://github.com/ansible-collections/community.vmware/pull/698).
