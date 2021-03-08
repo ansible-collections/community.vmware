@@ -40,6 +40,7 @@ options:
         - This is a required parameter, if C(cluster) is not set and C(hostname) is set to the vCenter server.
         - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
         - This parameter is case sensitive.
+        version_added: '1.9.0'
         type: str
     datastore:
         default: datastore1
