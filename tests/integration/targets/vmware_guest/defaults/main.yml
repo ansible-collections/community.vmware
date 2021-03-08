@@ -32,3 +32,4 @@ vmware_guest_test_playbooks:
   - reconfig_vm_to_latest_version.yml
   - remove_vm_from_inventory.yml
   - create_vm_using_special_characters.yml
+  - advanced_settings.yml
