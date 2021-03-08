@@ -1,0 +1,13 @@
+strict: false
+with_nested_properties: false
+properties:
+  - config.name
+  - runtime.powerState
+hostnames:
+  - 'skip_undefined_empty_none_var'
+  - 'config.name + "_" + runtime.powerState'
+hostname: 'localhost'
+username: 'user'
+password: 'pass'
+port: '1443'
+validate_certs: false
