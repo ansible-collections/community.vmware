@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - fixed a bug that made the module fail when disk.controller_number or disk.unit_number are 0 (https://github.com/ansible-collections/community.vmware/issues/703).
