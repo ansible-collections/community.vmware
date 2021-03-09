@@ -2175,7 +2175,7 @@ class PyVmomiHelper(PyVmomi):
             self.change_detected = True
 
     def customize_advanced_settings(self, vm_obj, config_spec):
-        if self.params['advanced_settings']:
+        if not self.params['advanced_settings']:
             return
 
         vm_custom_spec = config_spec
@@ -2190,12 +2190,12 @@ class PyVmomiHelper(PyVmomi):
             # If kv is not kv fetched from facts, change it
             if isinstance(kv['value'], (bool, int)):
                 specifiedvalue = str(kv['value']).upper()
-                comparisonvalue = facts['customvalues'].get(kv['key'], '').upper()
+                comparisonvalue = facts['advanced_settings'].get(kv['key'], '').upper()
             else:
                 specifiedvalue = kv['value']
-                comparisonvalue = facts['customvalues'].get(kv['key'], '')
+                comparisonvalue = facts['advanced_settings'].get(kv['key'], '')
 
-            if (kv['key'] not in facts['customvalues'] and kv['value'] != '') or comparisonvalue != specifiedvalue:
+            if (kv['key'] not in facts['advanced_settings'] and kv['value'] != '') or comparisonvalue != specifiedvalue:
                 option = vim.option.OptionValue()
                 option.key = kv['key']
                 option.value = specifiedvalue
