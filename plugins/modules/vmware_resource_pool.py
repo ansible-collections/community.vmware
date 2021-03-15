@@ -41,9 +41,10 @@ options:
         version_added: '1.5.0'
     parent_resource_pool:
         description:
-            - Name of the parent resource pool
+            - Name of the parent resource pool.
             - This parameter is required if C(cluster) or C(esxi_hostname) is not specified.
         type: str
+        version_added: '1.9.0'
     resource_pool:
         description:
             - Resource pool name to manage.
@@ -248,7 +249,7 @@ class VMwareResourcePool(PyVmomi):
         if module.params['parent_resource_pool']:
             self.compute_resource_obj = find_resource_pool_by_name(self.content, module.params['parent_resource_pool'])
             if self.compute_resource_obj is None:
-                self.module.fail_json(msg="Unable to find recourse pool with name %s" % module.params['parent_resource_pool'])
+                self.module.fail_json(msg="Unable to find resource pool with name %s" % module.params['parent_resource_pool'])
 
 
     def select_resource_pool(self):
