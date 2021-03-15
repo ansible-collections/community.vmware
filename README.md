@@ -60,11 +60,6 @@ Name | Description
 --- | ---
 [community.vmware.vmware](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_httpapi.rst)|HttpApi Plugin for VMware REST API
 
-### Inventory plugins
-Name | Description
---- | ---
-[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
-
 ### Modules
 Name | Description
 --- | ---
@@ -137,6 +132,7 @@ Name | Description
 [community.vmware.vmware_guest_file_operation](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_file_operation_module.rst)|Files operation in a VMware guest operating system without network
 [community.vmware.vmware_guest_find](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_find_module.rst)|Find the folder path(s) for a virtual machine by name or UUID
 [community.vmware.vmware_guest_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_info_module.rst)|Gather info about a single VM
+[community.vmware.vmware_guest_instant_clone](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_instant_clone_module.rst)|Instant Clone VM
 [community.vmware.vmware_guest_move](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_move_module.rst)|Moves virtual machines in vCenter
 [community.vmware.vmware_guest_network](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_network_module.rst)|Manage network adapters of specified virtual machine in given vCenter infrastructure
 [community.vmware.vmware_guest_powerstate](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_powerstate_module.rst)|Manages power states of virtual machines in vCenter
@@ -245,6 +241,11 @@ Name | Description
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
+
+### Inventory plugins
+Name | Description
+--- | ---
+[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 <!--end collection content-->
 
