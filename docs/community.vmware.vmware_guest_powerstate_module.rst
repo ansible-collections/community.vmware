@@ -417,7 +417,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Set the state of a virtual machine to poweroff
       community.vmware.vmware_guest_powerstate:

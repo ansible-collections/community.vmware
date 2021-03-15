@@ -252,7 +252,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enter datastore into Maintenance Mode
       community.vmware.vmware_datastore_maintenancemode:

@@ -277,7 +277,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Migrate Management vmk
       community.vmware.vmware_migrate_vmk:

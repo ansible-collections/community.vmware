@@ -233,7 +233,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Manage Log level setting for all ESXi hosts in given Cluster
       community.vmware.vmware_host_config_manager:

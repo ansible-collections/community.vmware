@@ -427,7 +427,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     # Clone template
     - name: clone a template across VC

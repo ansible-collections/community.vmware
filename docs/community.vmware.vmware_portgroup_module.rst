@@ -590,7 +590,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add Management Network VM Portgroup
       community.vmware.vmware_portgroup:

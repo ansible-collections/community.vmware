@@ -401,7 +401,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Change video card settings of virtual machine
       community.vmware.vmware_guest_video:

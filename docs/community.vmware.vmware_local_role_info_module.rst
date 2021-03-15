@@ -183,7 +183,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather info about local role from an ESXi
       community.vmware.vmware_local_role_info:

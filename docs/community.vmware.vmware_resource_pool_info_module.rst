@@ -181,7 +181,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather resource pool info about all resource pools available
       community.vmware.vmware_resource_pool_info:

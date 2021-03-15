@@ -343,7 +343,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Mount VMFS datastores to ESXi
       community.vmware.vmware_host_datastore:

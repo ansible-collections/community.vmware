@@ -167,7 +167,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Get info about tag
       community.vmware.vmware_tag_info:

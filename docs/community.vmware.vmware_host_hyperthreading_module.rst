@@ -236,7 +236,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable Hyperthreading for an host system
       community.vmware.vmware_host_hyperthreading:

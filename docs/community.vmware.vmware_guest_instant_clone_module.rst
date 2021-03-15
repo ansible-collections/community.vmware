@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_host_vmnic_info_module:
+.. _community.vmware.vmware_guest_instant_clone_module:
 
 
-***************************************
-community.vmware.vmware_host_vmnic_info
-***************************************
+*******************************************
+community.vmware.vmware_guest_instant_clone
+*******************************************
 
-**Gathers info about vmnics available on the given ESXi host**
+**Instant Clone VM**
 
 
+Version added: 1.9.0
 
 .. contents::
    :local:
@@ -16,19 +17,14 @@ community.vmware.vmware_host_vmnic_info
 
 Synopsis
 --------
-- This module can be used to gather information about vmnics available on the given ESXi host.
-- If ``cluster_name`` is provided, then vmnic information about all hosts from given cluster will be returned.
-- If ``esxi_hostname`` is provided, then vmnic information about given host system will be returned.
-- Additional details about vswitch and dvswitch with respective vmnic is also provided which is added in 2.7 version.
+- This module can be used for Creating a powered-on Instant Clone of a virtual machine.
+- All variables and VMware object names are case sensitive.
+- :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module is needed for creating a VM with poweredon state which would be used as a parent VM.
+- :ref:`community.vmware.vmware_guest_powerstate <community.vmware.vmware_guest_powerstate_module>` module is also needed to poweroff the instant cloned module.
+- The powered off VM would in turn be deleted by again using :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module.
+- Thus :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module is necessary for removing Instant Cloned VM when VMs being created in testing environment.
 
 
-
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
 
 
 Parameters
@@ -45,26 +41,40 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>capabilities</b>
+                    <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
                 </td>
                 <td>
-                        <div>Gather information about general capabilities (Auto negotiation, Wake On LAN, and Network I/O Control).</div>
+                        <div>Name of the datacenter, where VM to be deployed.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
+                    <b>datastore</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the datastore or the datastore cluster.</div>
+                        <div>If datastore cluster name is specified, module will find the Storage DRS recommended datastore in that cluster.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -73,45 +83,29 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the cluster from which all host systems will be used.</div>
-                        <div>Vmnic information about each ESXi server will be returned for the given cluster.</div>
-                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
+                        <div>Destination folder, absolute path to deploy the cloned vm.</div>
+                        <div>This parameter is case sensitive.</div>
+                        <div>Examples:</div>
+                        <div>folder: ha-datacenter/vm</div>
+                        <div>folder: /datacenter1/vm</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>directpath_io</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Gather information about DirectPath I/O capabilities and configuration.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the host system to work with.</div>
-                        <div>Vmnic information about this ESXi server will be returned.</div>
-                        <div>This parameter is required if <code>cluster_name</code> is not specified.</div>
+                        <div>Name of the ESX Host in datacenter in which to place cloned VM.</div>
+                        <div>The host has to be a member of the cluster that contains the resource pool.</div>
+                        <div>Required with <em>resource_pool</em> to find resource pool details. This will be used as additional information when there are resource pools with same name.</div>
                 </td>
             </tr>
             <tr>
@@ -129,6 +123,55 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Managed Object ID of the vm instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
+                        <div>This is required if <code>parent_vm</code> or <code>uuid</code> is not supplied.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the Cloned virtual machine.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: vm_name</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>parent_vm</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the parent virtual machine.</div>
+                        <div>This is a required parameter, if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -204,7 +247,25 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>sriov</b>
+                    <b>resource_pool</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the resource pool in datacenter in which to place deployed VM.</div>
+                        <div>Required if <em>cluster</em> is not specified.</div>
+                        <div>For default or non-unique resource pool names, specify <em>host</em> and <em>cluster</em>.</div>
+                        <div><code>Resources</code> is the default name of resource pool.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>use_instance_uuid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -217,7 +278,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Gather information about SR-IOV capabilities and configuration.</div>
+                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
                 </td>
             </tr>
             <tr>
@@ -236,6 +297,22 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>UUID of the vm instance to clone from, this is VMware&#x27;s unique identifier.</div>
+                        <div>This is a required parameter, if parameter <code>parent_vm</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -264,12 +341,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-   - Tested on vSphere 6.5
-
 
 
 Examples
@@ -277,23 +348,79 @@ Examples
 
 .. code-block:: yaml+jinja
 
-    - name: Gather info about vmnics of all ESXi Host in the given Cluster
-      community.vmware.vmware_host_vmnic_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
+    - name: Instant Clone a VM
+      community.vmware.vmware_guest_instant_clone:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        folder: "{{ f0 }}"
+        datastore: "{{ rw_datastore }}"
+        datacenter: "{{ dc1 }}"
+        host: "{{ esxi1 }}"
+        name: "{{ Clone_vm }}"
+        parent_vm: "{{ testvm_1 }}"
+        resource_pool: "{{ test_resource_001 }}"
+      register: vm_clone
       delegate_to: localhost
-      register: cluster_host_vmnics
 
-    - name: Gather info about vmnics of an ESXi Host
-      community.vmware.vmware_host_vmnic_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
+    - name: set state to poweroff the Cloned VM
+      community.vmware.vmware_guest_powerstate:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: "cloned_vm_from_vm_cluster"
+        folder: "{{ f0 }}"
+        state: powered-off
+      register: poweroff_instant_clone_from_vm_when_cluster
       delegate_to: localhost
-      register: host_vmnics
+
+    - name: Clean VM
+      community.vmware.vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: "cloned_vm_from_vm_cluster"
+        datacenter: "{{ dc1 }}"
+        state: absent
+      register: delete_instant_clone_from_vm_when_cluster
+      ignore_errors: true
+      delegate_to: localhost
+
+    - name: Instant Clone a VM when skipping optional params
+      community.vmware.vmware_guest_instant_clone:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        name: "{{ Clone_vm }}"
+        parent_vm: "{{ testvm_1 }}"
+        datacenter: "{{ dc1 }}"
+        datastore: "{{ rw_datastore }}"
+        host: "{{ esxi1 }}"
+      register: VM_clone_optional_arguments
+      delegate_to: localhost
+
+    - name: Instant clone in check mode
+      community.vmware.vmware_guest_instant_clone:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: False
+        folder: "{{ f0 }}"
+        datastore: "{{ rw_datastore }}"
+        datacenter: "{{ dc1 }}"
+        host: "{{ esx1 }}"
+        name: "{{ Clone_vm }}"
+        parent_vm: "{{ testvm_2 }}"
+        resource_pool: "{{ test_resource_001 }}"
+      check_mode: true
+      register: check_mode_clone
+      delegate_to: localhost
+    - debug:
+        var: check_mode_clone
 
 
 
@@ -312,21 +439,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>hosts_vmnics_info</b>
+                    <b>vm_info</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
                     </div>
                 </td>
-                <td>hosts_vmnics_info</td>
+                <td>always</td>
                 <td>
-                            <div>dict with hostname as key and dict with vmnics information as value.</div>
-                            <div>for <code>num_vmnics</code>, only NICs starting with vmnic are counted. NICs like vusb* are not counted.</div>
-                            <div>details about vswitch and dvswitch was added in version 2.7.</div>
-                            <div>details about vmnics was added in version 2.8.</div>
+                            <div>metadata about the virtual machine</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.204&#x27;: {&#x27;all&#x27;: [&#x27;vmnic0&#x27;, &#x27;vmnic1&#x27;], &#x27;available&#x27;: [], &#x27;dvswitch&#x27;: {&#x27;dvs_0002&#x27;: [&#x27;vmnic1&#x27;]}, &#x27;num_vmnics&#x27;: 2, &#x27;used&#x27;: [&#x27;vmnic1&#x27;, &#x27;vmnic0&#x27;], &#x27;vmnic_details&#x27;: [{&#x27;actual_duplex&#x27;: &#x27;Full Duplex&#x27;, &#x27;actual_speed&#x27;: 10000, &#x27;adapter&#x27;: &#x27;Intel(R) 82599 10 Gigabit Dual Port Network Connection&#x27;, &#x27;configured_duplex&#x27;: &#x27;Auto negotiate&#x27;, &#x27;configured_speed&#x27;: &#x27;Auto negotiate&#x27;, &#x27;device&#x27;: &#x27;vmnic0&#x27;, &#x27;driver&#x27;: &#x27;ixgbe&#x27;, &#x27;location&#x27;: &#x27;0000:01:00.0&#x27;, &#x27;mac&#x27;: &#x27;aa:bb:cc:dd:ee:ff&#x27;, &#x27;status&#x27;: &#x27;Connected&#x27;}, {&#x27;actual_duplex&#x27;: &#x27;Full Duplex&#x27;, &#x27;actual_speed&#x27;: 10000, &#x27;adapter&#x27;: &#x27;Intel(R) 82599 10 Gigabit Dual Port Network Connection&#x27;, &#x27;configured_duplex&#x27;: &#x27;Auto negotiate&#x27;, &#x27;configured_speed&#x27;: &#x27;Auto negotiate&#x27;, &#x27;device&#x27;: &#x27;vmnic1&#x27;, &#x27;driver&#x27;: &#x27;ixgbe&#x27;, &#x27;location&#x27;: &#x27;0000:01:00.1&#x27;, &#x27;mac&#x27;: &#x27;ab:ba:cc:dd:ee:ff&#x27;, &#x27;status&#x27;: &#x27;Connected&#x27;}], &#x27;vswitch&#x27;: {&#x27;vSwitch0&#x27;: [&#x27;vmnic0&#x27;]}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vm_name&#x27;: &#x27;&#x27;, &#x27;vcenter&#x27;: &#x27;&#x27;, &#x27;host&#x27;: &#x27;&#x27;, &#x27;datastore&#x27;: &#x27;&#x27;, &#x27;vm_folder&#x27;: &#x27;&#x27;}</div>
                 </td>
             </tr>
     </table>
@@ -340,5 +464,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
-- Christian Kotte (@ckotte)
+- Anant Chopra (@Anant99-sys)

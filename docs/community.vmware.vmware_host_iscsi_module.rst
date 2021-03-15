@@ -1010,7 +1010,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable iSCSI of ESXi
       community.vmware.vmware_host_iscsi:

@@ -779,7 +779,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: change network for 00:50:56:11:22:33 on vm01.domain.fake
       community.vmware.vmware_guest_network:

@@ -271,7 +271,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Set the state of a host system to reboot
       community.vmware.vmware_host_powerstate:

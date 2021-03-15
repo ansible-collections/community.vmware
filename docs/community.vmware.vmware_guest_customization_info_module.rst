@@ -197,7 +197,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather info about all customization specification
       community.vmware.vmware_guest_customization_info:

@@ -261,7 +261,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather information about all datacenters
       community.vmware.vmware_datacenter_info:

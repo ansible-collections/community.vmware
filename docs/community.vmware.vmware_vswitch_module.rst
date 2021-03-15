@@ -285,7 +285,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add a VMware vSwitch
       community.vmware.vmware_vswitch:

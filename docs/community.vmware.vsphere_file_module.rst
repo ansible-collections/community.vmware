@@ -205,7 +205,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create an empty file on a datastore
       community.vmware.vsphere_file:

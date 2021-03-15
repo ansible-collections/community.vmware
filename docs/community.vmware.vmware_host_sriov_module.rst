@@ -271,7 +271,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: enable SR-IOV on vmnic0 with 8 functions
       community.vmware.vmware_host_sriov:

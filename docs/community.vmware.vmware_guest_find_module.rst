@@ -232,7 +232,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Find Guest's Folder using name
       community.vmware.vmware_guest_find:

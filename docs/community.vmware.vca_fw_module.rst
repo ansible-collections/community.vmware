@@ -249,7 +249,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     #Add a set of firewall rules
 

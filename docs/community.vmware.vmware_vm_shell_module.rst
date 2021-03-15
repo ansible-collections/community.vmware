@@ -411,7 +411,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Run command inside a virtual machine
       community.vmware.vmware_vm_shell:

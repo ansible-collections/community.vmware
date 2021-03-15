@@ -285,7 +285,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     ---
     - name: Add VMs in an existing DRS VM group
