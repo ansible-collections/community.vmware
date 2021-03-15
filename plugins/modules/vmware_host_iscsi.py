@@ -842,11 +842,11 @@ def main():
                                                             choices=['chapDiscouraged', 'chapPreferred', 'chapRequired',
                                                                      'chapProhibited']),
                               chap_name=dict(type='str', default=''),
-                              chap_secret=dict(type='str'),
+                              chap_secret=dict(type='str', no_log=True),
                               mutual_chap_authentication_type=dict(type='str', default='chapProhibited',
                                                                    choices=['chapProhibited', 'chapRequired']),
                               mutual_chap_name=dict(type='str', default=''),
-                              mutual_chap_secret=dict(type='str')))
+                              mutual_chap_secret=dict(type='str', no_log=True)))
 
     authentication_target = deepcopy(authentication)
     authentication_target['options'].update(

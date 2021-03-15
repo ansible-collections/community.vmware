@@ -238,9 +238,9 @@ class VcenterProfile(VmwareRestClient):
 def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
-        encryption_key=dict(type='str', required=False),
+        encryption_key=dict(type='str', required=False, no_log=True),
         description=dict(type='str', required=False),
-        decryption_key=dict(type='str', required=False),
+        decryption_key=dict(type='str', required=False, no_log=True),
         api=dict(type='str', required=False, choices=['list', 'export', 'import', 'validate']),
         profiles=dict(type='str', required=False),
         config_path=dict(type='str', required=False),
