@@ -357,7 +357,7 @@ def main():
     else:
         module.exit_json(**result)
 
-plugins/modules/vmware_guest_vgpu.py compile-2.6!skip
-plugins/modules/vmware_guest_vgpu.py import-2.6!skip
+#plugins/modules/vmware_guest_vgpu.py compile-2.6!skip
+#plugins/modules/vmware_guest_vgpu.py import-2.6!skip
 if __name__ == '__main__':
     main()
