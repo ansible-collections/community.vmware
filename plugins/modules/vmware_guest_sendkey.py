@@ -376,7 +376,7 @@ def main():
         datacenter=dict(type='str'),
         esxi_hostname=dict(type='str'),
         cluster=dict(type='str'),
-        keys_send=dict(type='list', default=[], elements='str'),
+        keys_send=dict(type='list', default=[], elements='str', no_log=False),
         string_send=dict(type='str'),
         sleep_time=dict(type='int', default=0),
     )

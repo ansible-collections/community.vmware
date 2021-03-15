@@ -134,7 +134,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import con
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
-        extension_key=dict(type='str', required=True),
+        extension_key=dict(type='str', required=True, no_log=False),
         version=dict(type='str', required=True),
         email=dict(type='str', required=False),
         description=dict(type='str', required=False),
