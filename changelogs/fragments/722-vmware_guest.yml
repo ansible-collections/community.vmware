@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - disk controller_type, controller_number, unit_number shoud be check not None(https://github.com/ansible-collections/community.vmware/issues/722).
