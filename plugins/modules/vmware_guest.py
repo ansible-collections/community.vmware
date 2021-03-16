@@ -2477,7 +2477,7 @@ class PyVmomiHelper(PyVmomi):
         """
         controllers = []
         for disk_spec in self.params.get('disk'):
-            if not disk_spec['controller_type'] or not disk_spec['controller_number'] or not disk_spec['unit_number']:
+            if disk_spec['controller_type'] is None or disk_spec['controller_number'] is None or disk_spec['unit_number'] is None:
                 self.module.fail_json(msg="'disk.controller_type', 'disk.controller_number' and 'disk.unit_number' are"
                                           " mandatory parameters when configure multiple disk controllers and disks.")
 
