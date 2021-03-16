@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2021, Tyler Gates <tgates81@gmail.com>
+# Copyright: (c) 2021, Tyler Gates <tgates81@gmail.com>
 #
 # Special thanks to:
 #   * Vadim Aleksandrov <valeksandrov@me.com>: Original author of python script
@@ -27,13 +27,13 @@ module: vmware_guest_storage_policy
 short_description: Set VM Home and disk(s) storage policy profiles.
 description:
     - This module can be used to enforce storage policy profiles per disk and/or VM Home on a virtual machine.
-version_added: 1.8.0
+version_added: 1.9.0
 author:
     - Tyler Gates (@tgates81)
 notes:
     - Tested on vSphere 6.0 and 6.5
 requirements:
-    - PyVmomi
+    - pyVmomi
 options:
    name:
      description:
@@ -160,11 +160,11 @@ except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, wait_for_task
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
 
-class PyVmomiHelper(SPBM):
+class SPBM_helper(SPBM):
     def __init__(self, module):
         super().__init__(module)
 
@@ -411,9 +411,9 @@ def run_module():
         # so we should leave the input folder path unmodified
         module.params['folder'] = module.params['folder'].rstrip('/')
 
-    pyv = PyVmomiHelper(module)
+    spbm_h = SPBM_helper(module)
     # Check if the VM exists before continuing
-    vm = pyv.get_vm()
+    vm = spbm_h.get_vm()
     if not vm:
         module.fail_json(msg="Unable to find virtual machine `%s'" %
                          (module.params.get('name')
@@ -421,7 +421,7 @@ def run_module():
                           or module.params.get('moid')))
 
     try:
-        pyv.ensure_storage_policies(vm)
+        spbm_h.ensure_storage_policies(vm)
     except Exception as e:
         module.fail_json(msg="Failed to set storage policies for virtual"
                              "machine '%s' with exception: %s"
