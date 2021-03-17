@@ -12,7 +12,7 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel_ip_config
 deprecated:
-  removed_at_date: '2023-03-01'
+  removed_at_date: '2021-12-01'
   why: Deprecated in favour of M(community.vmware.vmware_vmkernel) module
   alternative: Use M(community.vmware.vmware_vmkernel) instead.
 short_description: Configure the VMkernel IP Address

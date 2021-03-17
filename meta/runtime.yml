@@ -298,7 +298,7 @@ plugin_routing:
         warning_text: see plugin documentation for details
     vmware_vmkernel_ip_config:
       deprecation:
-        removal_date: 2023-03-01
+        removal_date: 2021-12-01
         warning_text: see plugin documentation for details
     vmware_vswitch_facts:
       deprecation:
