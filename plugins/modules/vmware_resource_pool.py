@@ -222,7 +222,7 @@ class VMwareResourcePool(PyVmomi):
         self.mem_limit = module.params['mem_limit']
         self.mem_reservation = module.params['mem_reservation']
         self.mem_expandable_reservations = module.params[
-            'mem_expandable_reservations']
+            'mem_expandable_reservations']ules/vmware_resource_pool.py#L255
         self.cpu_shares = module.params['cpu_shares']
         self.cpu_allocation_shares = module.params['cpu_allocation_shares']
         self.cpu_limit = module.params['cpu_limit']
@@ -250,7 +250,6 @@ class VMwareResourcePool(PyVmomi):
             self.compute_resource_obj = find_resource_pool_by_name(self.content, module.params['parent_resource_pool'])
             if self.compute_resource_obj is None:
                 self.module.fail_json(msg="Unable to find resource pool with name %s" % module.params['parent_resource_pool'])
-
 
     def select_resource_pool(self):
         pool_obj = None
@@ -435,7 +434,7 @@ class VMwareResourcePool(PyVmomi):
             rootResourcePool = self.compute_resource_obj
         else:
             rootResourcePool = self.compute_resource_obj.resourcePool
-        
+
         rootResourcePool.CreateResourcePool(self.resource_pool, rp_spec)
 
         resource_pool_config = self.generate_rp_config_return_value(True)
