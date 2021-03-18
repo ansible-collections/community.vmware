@@ -33,6 +33,11 @@ options:
     - Name of a dvswitch to look for.
     required: false
     type: str
+  show_mac_learning:
+    description:
+    - Show or hide MAC learning information of the DVS portgroup.
+    type: bool
+    default: False
   show_network_policy:
     description:
     - Show or hide network policies of DVS portgroup.
@@ -46,6 +51,11 @@ options:
   show_teaming_policy:
     description:
     - Show or hide teaming policies of DVS portgroup.
+    type: bool
+    default: True
+  show_uplinks:
+    description:
+    - Show or hide uplinks of DVS portgroup.
     type: bool
     default: True
   show_vlan_info:
@@ -153,6 +163,9 @@ class DVSPortgroupInfoManager(PyVmomi):
             # default behaviour, gather information about all dvswitches
             self.dvsls = get_all_objs(self.content, [vim.DistributedVirtualSwitch], folder=datacenter.networkFolder)
 
+    def supports_mac_learning(self, dvs):
+        return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and self.dv_switch.capability.featuresSupported.macLearningSupported
+
     def get_vlan_info(self, vlan_obj=None):
         """
         Return vlan information from given object
@@ -184,19 +197,51 @@ class DVSPortgroupInfoManager(PyVmomi):
         dvs_lists = self.dvsls
         result = dict()
         for dvs in dvs_lists:
+            switch_supports_mac_learning = self.supports_mac_learning(dvs)
             result[dvs.name] = list()
             for dvs_pg in dvs.portgroup:
+                mac_learning = dict()
                 network_policy = dict()
                 teaming_policy = dict()
                 port_policy = dict()
                 vlan_info = dict()
+                active_uplinks = list()
+                standby_uplinks = list()
 
-                if self.module.params['show_network_policy'] and dvs_pg.config.defaultPortConfig.securityPolicy:
-                    network_policy = dict(
-                        forged_transmits=dvs_pg.config.defaultPortConfig.securityPolicy.forgedTransmits.value,
-                        promiscuous=dvs_pg.config.defaultPortConfig.securityPolicy.allowPromiscuous.value,
-                        mac_changes=dvs_pg.config.defaultPortConfig.securityPolicy.macChanges.value
+                if dvs_pg.config.type == 'ephemeral':
+                    port_binding = 'ephemeral'
+                else:
+                    port_binding = 'static'
+
+                if dvs_pg.config.autoExpand is True:
+                    port_allocation = 'elastic'
+                else:
+                    port_allocation = 'fixed'
+
+                # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
+                if self.module.params['show_network_policy']:
+                    if switch_supports_mac_learning and dvs_pg.config.defaultPortConfig.macManagementPolicy:
+                        network_policy = dict(
+                            forged_transmits=dvs_pg.config.defaultPortConfig.macManagementPolicy.forgedTransmits,
+                            promiscuous=dvs_pg.config.defaultPortConfig.macManagementPolicy.allowPromiscuous,
+                            mac_changes=dvs_pg.config.defaultPortConfig.macManagementPolicy.macChanges
+                        )
+                    elif dvs_pg.config.defaultPortConfig.securityPolicy:
+                        network_policy = dict(
+                            forged_transmits=dvs_pg.config.defaultPortConfig.securityPolicy.forgedTransmits.value,
+                            promiscuous=dvs_pg.config.defaultPortConfig.securityPolicy.allowPromiscuous.value,
+                            mac_changes=dvs_pg.config.defaultPortConfig.securityPolicy.macChanges.value
+                        )
+
+                if self.module.params['show_mac_learning'] and switch_supports_mac_learning:
+                    macLearningPolicy = dvs_pg.config.defaultPortConfig.macManagementPolicy.macLearningPolicy
+                    mac_learning = dict(
+                        allow_unicast_flooding=macLearningPolicy.allowUnicastFlooding,
+                        enabled=macLearningPolicy.enabled,
+                        limit=macLearningPolicy.limit,
+                        limit_policy=macLearningPolicy.limitPolicy
                     )
+
                 if self.module.params['show_teaming_policy']:
                     # govcsim does not have uplinkTeamingPolicy, remove this check once
                     # PR https://github.com/vmware/govmomi/pull/1524 merged.
@@ -207,6 +252,12 @@ class DVSPortgroupInfoManager(PyVmomi):
                             notify_switches=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.notifySwitches.value,
                             rolling_order=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.rollingOrder.value,
                         )
+
+                if self.module.params['show_uplinks'] and \
+                        dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy and \
+                        dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.uplinkPortOrder:
+                    active_uplinks = dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.uplinkPortOrder.activeUplinkPort
+                    standby_uplinks = dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.uplinkPortOrder.standbyUplinkPort
 
                 if self.params['show_port_policy']:
                     # govcsim does not have port policy
@@ -234,11 +285,16 @@ class DVSPortgroupInfoManager(PyVmomi):
                     dvswitch_name=dvs_pg.config.distributedVirtualSwitch.name,
                     description=dvs_pg.config.description,
                     type=dvs_pg.config.type,
+                    port_binding=port_binding,
+                    port_allocation=port_allocation,
                     teaming_policy=teaming_policy,
                     port_policy=port_policy,
+                    mac_learning=mac_learning,
                     network_policy=network_policy,
                     vlan_info=vlan_info,
                     key=dvs_pg.key,
+                    active_uplinks=active_uplinks,
+                    standby_uplinks=standby_uplinks,
                 )
                 result[dvs.name].append(dvpg_details)
 
@@ -249,8 +305,10 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str', required=True),
+        show_mac_learning=dict(type='bool', default=False),
         show_network_policy=dict(type='bool', default=True),
         show_teaming_policy=dict(type='bool', default=True),
+        show_uplinks=dict(type='bool', default=True),
         show_port_policy=dict(type='bool', default=True),
         dvswitch=dict(),
         show_vlan_info=dict(type='bool', default=False),
