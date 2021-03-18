@@ -222,7 +222,7 @@ class VMwareResourcePool(PyVmomi):
         self.mem_limit = module.params['mem_limit']
         self.mem_reservation = module.params['mem_reservation']
         self.mem_expandable_reservations = module.params[
-            'mem_expandable_reservations']ules/vmware_resource_pool.py#L255
+            'mem_expandable_reservations']
         self.cpu_shares = module.params['cpu_shares']
         self.cpu_allocation_shares = module.params['cpu_allocation_shares']
         self.cpu_limit = module.params['cpu_limit']
