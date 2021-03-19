@@ -281,7 +281,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather cluster info from given datacenter
       community.vmware.vmware_cluster_info:

@@ -323,7 +323,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create Local Content Library
       community.vmware.vmware_content_library_manager:

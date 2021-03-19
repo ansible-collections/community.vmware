@@ -227,7 +227,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather health info from a vSAN's cluster
       community.vmware.vmware_vsan_health_info:

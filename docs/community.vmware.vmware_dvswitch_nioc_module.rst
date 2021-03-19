@@ -361,7 +361,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable NIOC
       community.vmware.vmware_dvswitch_nioc:

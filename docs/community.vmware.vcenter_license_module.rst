@@ -283,7 +283,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add a new vCenter license
       community.vmware.vcenter_license:

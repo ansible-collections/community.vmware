@@ -270,7 +270,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add tags to a virtual machine
       community.vmware.vmware_tag_manager:

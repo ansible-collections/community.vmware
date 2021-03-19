@@ -573,7 +573,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Create dvSwitch
       community.vmware.vmware_dvswitch:

@@ -309,7 +309,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather VMware tools info installed in VM specified by uuid
       community.vmware.vmware_guest_tools_info:

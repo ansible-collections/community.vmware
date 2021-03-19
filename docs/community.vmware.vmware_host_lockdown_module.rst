@@ -242,7 +242,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enter host system into lockdown mode
       community.vmware.vmware_host_lockdown:

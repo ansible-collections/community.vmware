@@ -164,7 +164,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather info about tag categories
       community.vmware.vmware_category_info:

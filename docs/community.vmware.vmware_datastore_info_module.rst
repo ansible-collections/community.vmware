@@ -322,7 +322,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
       community.vmware.vmware_datastore_info:

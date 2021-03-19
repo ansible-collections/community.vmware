@@ -425,7 +425,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add disk and USB 3.0 controllers for virtual machine located by name
       community.vmware.vmware_guest_controller:

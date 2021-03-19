@@ -273,7 +273,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enter VSAN-Compliant Maintenance Mode
       community.vmware.vmware_maintenancemode:

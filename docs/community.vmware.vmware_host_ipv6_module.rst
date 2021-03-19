@@ -234,7 +234,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable IPv6 for an host system
       community.vmware.vmware_host_ipv6:

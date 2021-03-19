@@ -263,7 +263,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Get information about VC infraprofile
       vmware_vc_infraprofile_info:

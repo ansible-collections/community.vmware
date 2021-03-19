@@ -823,7 +823,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add disks to virtual machine using UUID
       community.vmware.vmware_guest_disk:

@@ -182,7 +182,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Get SPBM info
       community.vmware.vmware_vm_storage_policy_info:

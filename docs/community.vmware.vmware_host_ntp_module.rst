@@ -274,7 +274,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Configure NTP servers for an ESXi Host
       community.vmware.vmware_host_ntp:
