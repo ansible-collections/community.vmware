@@ -255,6 +255,7 @@ Examples
         username: root
         password: vmware
         local_user_name: foo
+        local_user_password: password
       delegate_to: localhost
 
 
