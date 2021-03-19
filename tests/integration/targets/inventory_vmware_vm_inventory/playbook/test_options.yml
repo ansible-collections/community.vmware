@@ -110,13 +110,50 @@
             - config.name
             - config.uuid
             - runtime.powerState
-
           with_nested_properties: false
           with_sanitized_property_name: true
-    - name: Test 'with_nested_properties' option
+    - name: Test 'with_sanitized_property_name' option
       assert:
         that:
           - test_host.value.runtime_power_state is defined
+
+    - name: Inventory 'property_name_format(snake_case)' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          properties:
+            - config.name
+            - config.uuid
+            - runtime.powerState
+
+          with_nested_properties: true
+          with_sanitized_property_name: false
+          property_name_format: snake_case
+    - name: Test 'property_name_format(snake_case)' option
+      assert:
+        that:
+          - test_host.value.runtime.power_state is defined
+
+    - name: Inventory 'property_name_format(lower_case)' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_vm_inventory
+          strict: False
+          properties:
+            - config.name
+            - config.uuid
+            - runtime.powerState
+
+          with_nested_properties: True
+          with_sanitized_property_name: False
+          property_name_format: lower_case
+    - name: Test 'property_name_format(lower_case)' option
+      assert:
+        that:
+          - test_host.value.runtime.powerstate is defined
 
 
     - name: Inventory 'Constructable' options - keyed_groups
