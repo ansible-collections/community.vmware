@@ -46,6 +46,39 @@
     that:
       - enable_iscsi_idempotency_check_result.changed is sameas false
 
+- name: rescan a host bus adapter with check_mode
+  vmware_host_iscsi:
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    iscsi_config:
+      vmhba_name: "{{ vmhba_name }}"
+    state: rescanned
+  check_mode: true
+  register: rescan_host_bus_adapter_check_mode_result
+
+- assert:
+    that:
+      - rescan_host_bus_adapter_check_mode_result.changed is sameas true
+
+- name: rescan a host bus adapter
+  vmware_host_iscsi:
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    iscsi_config:
+      vmhba_name: "{{ vmhba_name }}"
+    state: rescanned
+  register: rescan_host_bus_adapter_result
+
+- assert:
+    that:
+      - rescan_host_bus_adapter_result.changed is sameas true
+
 - name: Set an iqn variable for an iSCSI name changing test
   set_fact:
     iqn: "iqn.1998-01.com.vmware:{{ hostname }}-012345"

@@ -260,6 +260,7 @@ options:
     - If set to C(absent), remove the iSCSI target or the bind ports if they are existing.
     - If set to (enabled), enable the iSCSI of ESXi if the iSCSI is disabled.
     - If set to (disabled), disable the iSCSI of ESXi if the iSCSI is enabled.
+    - If set to (rescanned), rescan a host bus adapter for new storage devices.
     type: str
     default: present
     choices:
@@ -267,6 +268,7 @@ options:
     - absent
     - enabled
     - disabled
+    - rescanned
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -332,6 +334,16 @@ EXAMPLES = r'''
         chap_name: chap_user_name
         chap_secret: secret
     state: present
+
+- name: Rescan a host bus adapter for new devices
+  community.vmware.vmware_host_iscsi:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: "{{ esxi_hostname }}"
+    iscsi_config:
+      vmhba_name: vmhba65
+    state: rescanned
 
 - name: Remove a dynamic target from iSCSI config of ESXi
   community.vmware.vmware_host_iscsi:
@@ -457,6 +469,9 @@ class VMwareHostiScsiManager(PyVmomi):
             self.change_flag = True
             if self.existing_system_iscsi_config['iscsi_enabled'] == 'false':
                 self.change_flag = False
+
+        if self.state == 'rescanned':
+            self.change_flag = True
 
         if self.state == 'present':
             self.change_flag = True
@@ -687,6 +702,17 @@ class VMwareHostiScsiManager(PyVmomi):
                 except Exception as e:
                     self.module.fail_json(msg="Failed to disable iSCSI: %s" % to_native(e))
 
+        if self.state == 'rescanned':
+            self.diff_iscsi_config()
+            if self.module.check_mode:
+                self.module.exit_json(changed=self.change_flag)
+
+            try:
+                self.host_obj.configManager.storageSystem.RescanHba(self.vmhba_name)
+                result['changed'] = True
+            except Exception as e:
+                self.module.fail_json(msg="Failed to rescan: %s" % to_native(e))
+
         if self.state == 'present':
             self.check_hba_name()
             self.diff_iscsi_config()
@@ -879,10 +905,16 @@ def main():
                                                      authentication=authentication_target
                                                  ))
                           )),
-        state=dict(type='str', choices=['present', 'absent', 'enabled', 'disabled'], default='present')
+        state=dict(type='str', choices=['present', 'absent', 'enabled', 'disabled', 'rescanned'], default='present')
     )
 
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=argument_spec,
+                           required_if=[
+                               ['state', 'present', ['iscsi_config']],
+                               ['state', 'absent', ['iscsi_config']],
+                               ['state', 'rescanned', ['iscsi_config']]
+                           ],
+                           supports_check_mode=True)
 
     vmware_host_iscsi_manager = VMwareHostiScsiManager(module)
     vmware_host_iscsi_manager.execute()

@@ -951,6 +951,7 @@ Parameters
                                     <li>absent</li>
                                     <li>enabled</li>
                                     <li>disabled</li>
+                                    <li>rescanned</li>
                         </ul>
                 </td>
                 <td>
@@ -959,6 +960,7 @@ Parameters
                         <div>If set to <code>absent</code>, remove the iSCSI target or the bind ports if they are existing.</div>
                         <div>If set to (enabled), enable the iSCSI of ESXi if the iSCSI is disabled.</div>
                         <div>If set to (disabled), disable the iSCSI of ESXi if the iSCSI is enabled.</div>
+                        <div>If set to (rescanned), rescan a host bus adapter for new storage devices.</div>
                 </td>
             </tr>
             <tr>
@@ -1072,6 +1074,16 @@ Examples
             chap_name: chap_user_name
             chap_secret: secret
         state: present
+
+    - name: Rescan a host bus adapter for new devices
+      community.vmware.vmware_host_iscsi:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        esxi_hostname: "{{ esxi_hostname }}"
+        iscsi_config:
+          vmhba_name: vmhba65
+        state: rescanned
 
     - name: Remove a dynamic target from iSCSI config of ESXi
       community.vmware.vmware_host_iscsi:
