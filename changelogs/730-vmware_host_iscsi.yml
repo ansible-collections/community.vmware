@@ -1,0 +1,2 @@
+major_changes:
+  - vmware_host_iscsi - added a new state(rescanned) for rescanning a host bus adapter (https://github.com/ansible-collections/community.vmware/pull/730).
