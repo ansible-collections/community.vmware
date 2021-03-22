@@ -162,11 +162,12 @@ class VMwareCluster(PyVmomi):
 
         if module.params['advanced_options'] is not None:
             self.advanced_options = module.params['advanced_options']
-            client_stub = self.si._GetStub()
-            ssl_context = client_stub.schemeArgs.get('context')
-            apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
-            vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
-            self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
+
+        client_stub = self.si._GetStub()
+        ssl_context = client_stub.schemeArgs.get('context')
+        apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
+        vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
+        self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
 
     def check_vsan_config_diff(self):
         """
