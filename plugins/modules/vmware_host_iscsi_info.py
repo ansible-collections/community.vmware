@@ -104,7 +104,7 @@ detected_iscsi_drives:
     - list of detected iSCSI drive
     - added from version 1.9.0
   returned: always
-  type: dict
+  type: list
   sample: >-
     [
         {
