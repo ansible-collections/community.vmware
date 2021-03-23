@@ -825,6 +825,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties['categories'] = []
                 properties['tag_category'] = {}
                 for tag_id in tag_association.list_attached_tags(vm_dynamic_id):
+                    if tag_id not in tags_info:
+                        # Ghost Tags - community.vmware#681
+                        continue
                     # Add tags related to VM
                     properties['tags'].append(tags_info[tag_id][0])
                     # Add categories related to VM
