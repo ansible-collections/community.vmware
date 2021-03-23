@@ -30,15 +30,21 @@ options:
     cluster:
         description:
             - Name of the cluster to configure the resource pool.
-            - This parameter is required if C(esxi_hostname) is not specified.
+            - This parameter is required if C(esxi_hostname) or C(parent_resource_pool) is not specified.
         type: str
     esxi_hostname:
         description:
             - Name of the host to configure the resource pool.
             - The host must not be member of a cluster.
-            - This parameter is required if C(cluster) is not specified.
+            - This parameter is required if C(cluster) or C(parent_resource_pool) is not specified.
         type: str
         version_added: '1.5.0'
+    parent_resource_pool:
+        description:
+            - Name of the parent resource pool.
+            - This parameter is required if C(cluster) or C(esxi_hostname) is not specified.
+        type: str
+        version_added: '1.9.0'
     resource_pool:
         description:
             - Resource pool name to manage.
@@ -197,7 +203,7 @@ except ImportError:
 
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, vmware_argument_spec, find_datacenter_by_name, \
-    find_cluster_by_name, find_object_by_name, wait_for_task, PyVmomi
+    find_cluster_by_name, find_object_by_name, wait_for_task, find_resource_pool_by_name, PyVmomi
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -223,6 +229,7 @@ class VMwareResourcePool(PyVmomi):
         self.cpu_reservation = module.params['cpu_reservation']
         self.cpu_expandable_reservations = module.params[
             'cpu_expandable_reservations']
+        self.parent_resource_pool = module.params['parent_resource_pool']
         self.resource_pool_obj = None
 
         self.dc_obj = find_datacenter_by_name(self.content, self.datacenter)
@@ -239,10 +246,15 @@ class VMwareResourcePool(PyVmomi):
             if self.compute_resource_obj is None:
                 self.module.fail_json(msg="Unable to find host with name %s" % module.params['esxi_hostname'])
 
+        if module.params['parent_resource_pool']:
+            self.compute_resource_obj = find_resource_pool_by_name(self.content, module.params['parent_resource_pool'])
+            if self.compute_resource_obj is None:
+                self.module.fail_json(msg="Unable to find resource pool with name %s" % module.params['parent_resource_pool'])
+
     def select_resource_pool(self):
         pool_obj = None
 
-        resource_pools = get_all_objs(self.content, [vim.ResourcePool])
+        resource_pools = get_all_objs(self.content, [vim.ResourcePool], folder=self.compute_resource_obj)
 
         pool_selections = self.get_obj(
             [vim.ResourcePool],
@@ -254,6 +266,7 @@ class VMwareResourcePool(PyVmomi):
                 if p in resource_pools:
                     pool_obj = p
                     break
+
         return pool_obj
 
     def get_obj(self, vimtype, name, return_all=False):
@@ -417,7 +430,11 @@ class VMwareResourcePool(PyVmomi):
 
         rp_spec = self.generate_rp_config()
 
-        rootResourcePool = self.compute_resource_obj.resourcePool
+        if self.parent_resource_pool:
+            rootResourcePool = self.compute_resource_obj
+        else:
+            rootResourcePool = self.compute_resource_obj.resourcePool
+
         rootResourcePool.CreateResourcePool(self.resource_pool, rp_spec)
 
         resource_pool_config = self.generate_rp_config_return_value(True)
@@ -436,6 +453,7 @@ def main():
     argument_spec.update(dict(datacenter=dict(required=True, type='str'),
                               cluster=dict(type='str', required=False),
                               esxi_hostname=dict(type='str', required=False),
+                              parent_resource_pool=dict(type='str', required=False),
                               resource_pool=dict(required=True, type='str'),
                               mem_shares=dict(type='str', default="normal", choices=[
                                               'high', 'custom', 'normal', 'low']),
@@ -459,10 +477,10 @@ def main():
                                ['cpu_shares', 'custom', ['cpu_allocation_shares']]
                            ],
                            required_one_of=[
-                               ['cluster', 'esxi_hostname'],
+                               ['cluster', 'esxi_hostname', 'parent_resource_pool'],
                            ],
                            mutually_exclusive=[
-                               ['cluster', 'esxi_hostname'],
+                               ['cluster', 'esxi_hostname', 'parent_resource_pool'],
                            ],
                            supports_check_mode=True)
 
