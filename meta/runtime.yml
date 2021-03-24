@@ -121,6 +121,7 @@ action_groups:
   - vmware_migrate_vmk
   - vmware_object_rename
   - vmware_object_role_permission
+  - vmware_object_role_permission_info
   - vmware_portgroup
   - vmware_portgroup_info
   - vmware_resource_pool

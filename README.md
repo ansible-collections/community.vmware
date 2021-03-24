@@ -212,6 +212,7 @@ Name | Description
 [community.vmware.vmware_migrate_vmk](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_migrate_vmk_module.rst)|Migrate a VMK interface from VSS to VDS
 [community.vmware.vmware_object_rename](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_rename_module.rst)|Renames VMware objects
 [community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host
+[community.vmware.vmware_object_role_permission_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_info_module.rst)|Gather information about object's permissions
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
 [community.vmware.vmware_portgroup_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_facts_module.rst)|Gathers facts about an ESXi host's Port Group configuration
 [community.vmware.vmware_portgroup_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_info_module.rst)|Gathers info about an ESXi host's Port Group configuration
