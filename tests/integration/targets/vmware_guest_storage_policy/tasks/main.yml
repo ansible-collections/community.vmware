@@ -108,7 +108,7 @@
     - name: "003: assert that changed_policies.vm_home is not set"
       assert:
         that:
-          - vm_home_sp.changed_policies.vm_home == ""
+          - vm_home_sp_idp.changed_policies.vm_home == ""
 
     - name: "004: Assign storage policy to disk unit {{ unit_number }} check_mode test"
       vmware_guest_storage_policy: &disk_args
