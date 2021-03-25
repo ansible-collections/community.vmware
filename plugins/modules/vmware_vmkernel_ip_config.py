@@ -99,7 +99,7 @@ def main():
 
     module.deprecate(
         msg="The 'vmware_vmkernel_ip_config' is deprecated, please use the 'vmware_vmkernel' module instead.",
-        date="2023-03-01",
+        date="2021-12-01",
         collection_name="community.vmware"
     )
 
