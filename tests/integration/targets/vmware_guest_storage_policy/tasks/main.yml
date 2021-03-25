@@ -15,6 +15,7 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
+        validate_certs: false
       register: existing_profiles
 
     - name: "Setup: Create category"
