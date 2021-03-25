@@ -146,6 +146,7 @@ Name | Description
 [community.vmware.vmware_guest_serial_port](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_serial_port_module.rst)|Manage serial ports on an existing VM
 [community.vmware.vmware_guest_snapshot](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_snapshot_module.rst)|Manages virtual machines snapshots in vCenter
 [community.vmware.vmware_guest_snapshot_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_snapshot_info_module.rst)|Gather info about virtual machine's snapshots in vCenter
+[community.vmware.vmware_guest_storage_policy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_storage_policy_module.rst)|Set VM Home and disk(s) storage policy profiles.
 [community.vmware.vmware_guest_tools_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_info_module.rst)|Gather info about VMware tools installed in VM
 [community.vmware.vmware_guest_tools_upgrade](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_upgrade_module.rst)|Module to upgrade VMTools
 [community.vmware.vmware_guest_tools_wait](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_wait_module.rst)|Wait for VMware tools to become available

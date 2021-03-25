@@ -186,6 +186,8 @@ plugins/modules/vmware_guest_snapshot_info.py compile-2.6!skip
 plugins/modules/vmware_guest_snapshot_info.py import-2.6!skip
 plugins/modules/vmware_guest_snapshot.py compile-2.6!skip
 plugins/modules/vmware_guest_snapshot.py import-2.6!skip
+plugins/modules/vmware_guest_storage_policy.py compile-2.6!skip
+plugins/modules/vmware_guest_storage_policy.py import-2.6!skip
 plugins/modules/vmware_guest_tools_info.py compile-2.6!skip
 plugins/modules/vmware_guest_tools_info.py import-2.6!skip
 plugins/modules/vmware_guest_tools_upgrade.py compile-2.6!skip

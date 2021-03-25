@@ -70,6 +70,7 @@ action_groups:
   - vmware_guest_serial_port
   - vmware_guest_snapshot
   - vmware_guest_snapshot_info
+  - vmware_guest_storage_policy
   - vmware_guest_tools_info
   - vmware_guest_tools_upgrade
   - vmware_guest_tools_wait
