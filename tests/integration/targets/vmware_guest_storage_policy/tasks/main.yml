@@ -63,7 +63,6 @@
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        datacenter: "{{ dc1 }}"
         validate_certs: false
         name: "{{ virtual_machines[0].name }}"
         vm_home: "{{ storage_policy }}"
