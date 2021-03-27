@@ -55,6 +55,7 @@ options:
       - The host has to be a member of the cluster that contains the resource pool.
       - Required with I(resource_pool) to find resource pool details. This will be used as additional information when there are resource pools with same name.
     type: str
+    aliases: ['esxi_hostname']
     required: True
   datastore:
     description:
@@ -350,8 +351,7 @@ def main():
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
         use_instance_uuid=dict(type='bool', default=False),
-        hostname=dict(type='str', aliases=['admin', 'user']),
-        host=dict(type='str', required=True),
+        host=dict(type='str', required=True, aliases=['esxi_hostname']),
         folder=dict(type='str', required=False),
         resource_pool=dict(type='str', required=False),
         parent_vm=dict(type='str')
