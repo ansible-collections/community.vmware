@@ -278,7 +278,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 123
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -292,7 +292,7 @@ EXAMPLES = r'''
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: True
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -306,7 +306,7 @@ EXAMPLES = r'''
     vlan_id: 1001
     vlan_private: True
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -319,7 +319,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 0
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -332,7 +332,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 123
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
