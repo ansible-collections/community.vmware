@@ -11,7 +11,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_host_ntp_info
-short_description: Gathers info about NTP configuration on an ESXi host
+short_description: Gathers information about NTP configuration on an ESXi host
 description:
 - This module can be used to gather information about NTP configurations on an ESXi host.
 author:
