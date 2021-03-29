@@ -106,6 +106,7 @@ Parameters
                         <div>Name of the ESX Host in datacenter in which to place cloned VM.</div>
                         <div>The host has to be a member of the cluster that contains the resource pool.</div>
                         <div>Required with <em>resource_pool</em> to find resource pool details. This will be used as additional information when there are resource pools with same name.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: esxi_hostname</div>
                 </td>
             </tr>
             <tr>
