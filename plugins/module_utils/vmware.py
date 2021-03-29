@@ -179,6 +179,61 @@ def find_folder_by_name(content, folder_name):
     return find_object_by_name(content, folder_name, [vim.Folder])
 
 
+def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=None):
+    """
+    Find the folder by its given fully qualified path name. The FQPN is
+    I(datacenter)/I(folder type)/folder name/... for example
+    Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
+    """
+    # Remove leading/trailing slashes and create list of subfolders
+    folder = folder_name.strip('/')
+    folder_parts = folder.strip('/').split('/')
+
+    # Process datacenter
+    if len(folder_parts) > 0:
+        if not datacenter_name:
+            datacenter_name = folder_parts[0]
+        if datacenter_name == folder_parts[0]:
+            folder_parts.pop(0)
+    datacenter = find_datacenter_by_name(content, datacenter_name)
+    if not datacenter:
+        return None
+
+    # Process folder type
+    if len(folder_parts) > 0:
+        if not folder_type:
+            folder_type = folder_parts[0]
+        if folder_type == folder_parts[0]:
+            folder_parts.pop(0)
+    if folder_type in ['vm', 'host', 'datastore', 'network']:
+        if folder_type == 'vm':
+            parent_obj = datacenter.vmFolder
+        elif folder_type == 'host':
+            parent_obj = datacenter.hostFolder
+        elif folder_type == 'datastore':
+            parent_obj = datacenter.datastoreFolder
+        elif folder_type == 'network':
+            parent_obj = datacenter.networkFolder
+    else:
+        return None
+
+    # Process remaining subfolders
+    if len(folder_parts) > 0:
+        for part in folder_parts:
+            folder_obj = None
+            for part_obj in parent_obj.childEntity:
+                if part_obj.name == part and 'Folder' in part_obj.childType:
+                    folder_obj = part_obj
+                    parent_obj = part_obj
+                    break
+            if not folder_obj:
+                return None
+    else:
+        folder_obj = parent_obj
+    return folder_obj
+
+
+
 def find_dvs_by_name(content, switch_name, folder=None):
     return find_object_by_name(content, switch_name, [vim.DistributedVirtualSwitch], folder=folder)
 
