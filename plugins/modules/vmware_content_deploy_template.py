@@ -27,18 +27,26 @@ requirements:
 - PyVmomi
 - vSphere Automation SDK
 options:
+    log_level:
+      description:
+      - The level of logging desired in this module.
+      type: str
+      required: False
+      default: 'normal'
+      choices: [ 'debug', 'info', 'normal' ]
+      version_added: '1.9.0'
     template:
       description:
       - The name of template from which VM to be deployed.
       type: str
       required: True
       aliases: ['template_src']
-    content_library:
+    library:
       description:
       - The name of the content library from where the template resides.
       type: str
       required: False
-      aliases: ['content_library_src']
+      aliases: ['content_library', 'content_library_src']
     name:
       description:
       - The name of the VM to be deployed.
@@ -69,7 +77,7 @@ options:
       description:
       - Name of the folder in datacenter in which to place deployed VM.
       type: str
-      required: True
+      default: 'vm'
     host:
       description:
       - Name of the ESX Host in datacenter in which to place deployed VM.
@@ -160,13 +168,6 @@ try:
     from com.vmware.vcenter.vm_template_client import LibraryItems
     from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION_PYTHON_SDK = True
-except ImportError:
-    pass
-
-HAS_PYVMOMI = False
-try:
-    from pyVmomi import vim
-    HAS_PYVMOMI = True
 except ImportError:
     pass
 

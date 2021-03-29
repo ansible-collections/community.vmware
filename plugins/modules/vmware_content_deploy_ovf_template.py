@@ -23,17 +23,26 @@ requirements:
 - PyVmomi
 - vSphere Automation SDK
 options:
-    ovf_template:
+    log_level:
+      description:
+      - The level of logging desired in this module.
+      type: str
+      required: False
+      default: 'normal'
+      choices: [ 'debug', 'info', 'normal' ]
+      version_added: '1.9.0'
+    template:
       description:
       - The name of OVF template from which VM to be deployed.
       type: str
       required: True
-      aliases: ['ovf', 'template_src']
-    content_library:
+      aliases: ['ovf', 'ovf_template', 'template_src']
+    library:
       description:
       - The name of the content library from where the template resides.
       type: str
       required: False
+      aliases: ['content_library', 'content_library_src']
       version_added: '1.5.0'
     name:
       description:
@@ -50,22 +59,29 @@ options:
       description:
       - Name of the datastore to store deployed VM and disk.
       type: str
-      required: True
+      required: False
+    datastore_cluster:
+      description:
+      - Name of the datastore cluster housing a datastore to store deployed VM and disk.
+      - If datastore is not specified, the recommended datastore from this cluster will be used.
+      type: str
+      required: False
+      version_added: '1.9.0'
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.
       type: str
-      required: True
+      default: 'vm'
     host:
       description:
       - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
       type: str
-      required: True
+      required: False
     resource_pool:
       description:
       - Name of the resourcepool in datacenter in which to place deployed VM.
       type: str
-      required: True
+      required: False
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
@@ -75,6 +91,7 @@ options:
       description:
       - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.
       type: str
+      default: 'thin'
       choices: [ thin, thick, eagerZeroedThick, eagerzeroedthick ]
 extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
 '''
@@ -129,13 +146,6 @@ try:
     from com.vmware.vcenter.ovf_client import LibraryItem
     from com.vmware.vapi.std.errors_client import Error
     HAS_VAUTOMATION = True
-except ImportError:
-    pass
-
-HAS_PYVMOMI = False
-try:
-    from pyVmomi import vim
-    HAS_PYVMOMI = True
 except ImportError:
     pass
 
@@ -356,7 +366,8 @@ def main():
         library=dict(
             type='str',
             aliases=[
-                'content_library'
+                'content_library',
+                'content_library_src'
             ],
             required=False
         ),

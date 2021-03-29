@@ -233,7 +233,6 @@ def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=
     return folder_obj
 
 
-
 def find_dvs_by_name(content, switch_name, folder=None):
     return find_object_by_name(content, switch_name, [vim.DistributedVirtualSwitch], folder=folder)
 
