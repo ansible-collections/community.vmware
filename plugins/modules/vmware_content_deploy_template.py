@@ -160,7 +160,7 @@ vm_deploy_info:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_folder_by_fqpn
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 from ansible.module_utils._text import to_native
 
 HAS_VAUTOMATION_PYTHON_SDK = False
@@ -258,7 +258,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         # Find the folder by the given FQPN folder name
         # The FQPN is I(datacenter)/I(folder type)/folder name/... for
         # example Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
-        folder_obj = find_folder_by_fqpn(self._pyv.content, self.folder, self.datacenter, folder_type='vm')
+        folder_obj = self.find_folder_by_fqpn(self.folder, self.datacenter, folder_type='vm')
         if folder_obj:
             self._folder_id = folder_obj._moId
         if not self._folder_id:
