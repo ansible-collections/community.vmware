@@ -258,7 +258,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         # Find the folder by the given FQPN folder name
         # The FQPN is I(datacenter)/I(folder type)/folder name/... for
         # example Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
-        folder_obj = self.find_folder_by_fqpn(self.folder, self.datacenter, folder_type='vm')
+        folder_obj = self._pyv.find_folder_by_fqpn(self.folder, self.datacenter, folder_type='vm')
         if folder_obj:
             self._folder_id = folder_obj._moId
         if not self._folder_id:
