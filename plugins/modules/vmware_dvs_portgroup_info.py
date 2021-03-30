@@ -37,7 +37,7 @@ options:
     description:
     - Show or hide MAC learning information of the DVS portgroup.
     type: bool
-    default: False
+    default: True
   show_network_policy:
     description:
     - Show or hide network policies of DVS portgroup.
@@ -305,7 +305,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str', required=True),
-        show_mac_learning=dict(type='bool', default=False),
+        show_mac_learning=dict(type='bool', default=True),
         show_network_policy=dict(type='bool', default=True),
         show_teaming_policy=dict(type='bool', default=True),
         show_uplinks=dict(type='bool', default=True),
