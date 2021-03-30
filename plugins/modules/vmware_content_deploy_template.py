@@ -360,9 +360,9 @@ def main():
                 'debug',
                 'info',
                 'normal',
-                ],
+            ],
             default='normal'
-            ),
+        ),
         state=dict(
             type='str',
             choices=[
