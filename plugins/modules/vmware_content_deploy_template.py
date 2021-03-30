@@ -181,7 +181,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
         self.module = module
         self._pyv = PyVmomi(module=module)
         self._template_service = self.api_client.vcenter.vm_template.LibraryItems
-        self._datacenter_obj = None
+        self._datacenter_id = None
         self._datastore_id = None
         self._library_item_id = None
         self._folder_id = None
@@ -221,8 +221,8 @@ class VmwareContentDeployTemplate(VmwareRestClient):
 
     def deploy_vm_from_template(self, power_on=False):
         # Find the datacenter by the given datacenter name
-        self._datacenter_obj = self.get_datacenter_by_name(self.datacenter)
-        if not self._datacenter_obj:
+        self._datacenter_id = self.get_datacenter_by_name(self.datacenter)
+        if not self._datacenter_id:
             self._fail(msg="Failed to find the datacenter %s" % self.datacenter)
 
         # Find the datastore by the given datastore name

@@ -159,7 +159,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         self.module = module
         self._pyv = PyVmomi(module=module)
         self._template_service = self.api_client.vcenter.vm_template.LibraryItems
-        self._datacenter_obj = None
+        self._datacenter_id = None
         self._datastore_id = None
         self._library_item_id = None
         self._folder_id = None
@@ -202,8 +202,8 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
 
     def deploy_vm_from_ovf_template(self):
         # Find the datacenter by the given datacenter name
-        self._datacenter_obj = self.get_datacenter_by_name(self.datacenter)
-        if not self._datacenter_obj:
+        self._datacenter_id = self.get_datacenter_by_name(self.datacenter)
+        if not self._datacenter_id:
             self._fail(msg="Failed to find the datacenter %s" % self.datacenter)
 
         # Find the datastore by the given datastore name
@@ -239,7 +239,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         # Find the folder by the given FQPN folder name
         # The FQPN is I(datacenter)/I(folder type)/folder name/... for
         # example Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
-        folder_obj = self._pyv.find_folder_by_fqpn(self.folder, self.datacenter, folder_type='vm')
+        folder_obj = self.find_folder_by_fqpn(self.folder, self.datacenter, folder_type='vm')
         if folder_obj:
             self._folder_id = folder_obj._moId
         if not self._folder_id:
@@ -323,7 +323,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
         if self.log_level == 'debug':
             self.result['debug'].update(
                 dict(
-                    datacenter_id=self._datacenter_obj._moId,
+                    datacenter_id=self._datacenter_id,
                     datastore_id=self._datastore_id,
                     library_item_id=self._library_item_id,
                     folder_id=self._folder_id,
