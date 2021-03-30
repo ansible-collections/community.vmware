@@ -2525,7 +2525,7 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.backing.diskMode = "persistent"
 
         if not reconfigure:
-            disk_type = expected_disk_spec.get('type', 'thin').lower()
+            disk_type = expected_disk_spec.get('type', 'thin')
             if disk_type == 'thin':
                 disk_spec.device.backing.thinProvisioned = True
             elif disk_type == 'eagerzeroedthick':
