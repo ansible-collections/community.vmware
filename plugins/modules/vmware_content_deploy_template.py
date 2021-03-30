@@ -160,7 +160,7 @@ vm_deploy_info:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_datacenter_by_name, find_folder_by_fqpn
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_folder_by_fqpn
 from ansible.module_utils._text import to_native
 
 HAS_VAUTOMATION_PYTHON_SDK = False
@@ -221,7 +221,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
 
     def deploy_vm_from_template(self, power_on=False):
         # Find the datacenter by the given datacenter name
-        self._datacenter_obj = find_datacenter_by_name(self._pyv.content, datacenter_name=self.datacenter)
+        self._datacenter_obj = self.get_datacenter_by_name(self.datacenter)
         if not self._datacenter_obj:
             self._fail(msg="Failed to find the datacenter %s" % self.datacenter)
 

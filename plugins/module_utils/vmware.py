@@ -206,14 +206,7 @@ def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=
         if folder_type == folder_parts[0]:
             folder_parts.pop(0)
     if folder_type in ['vm', 'host', 'datastore', 'network']:
-        if folder_type == 'vm':
-            parent_obj = datacenter.vmFolder
-        elif folder_type == 'host':
-            parent_obj = datacenter.hostFolder
-        elif folder_type == 'datastore':
-            parent_obj = datacenter.datastoreFolder
-        elif folder_type == 'network':
-            parent_obj = datacenter.networkFolder
+        parent_obj = getattr(datacenter, "%sFolder" % folder_type.lower())
     else:
         return None
 
@@ -1470,6 +1463,19 @@ class PyVmomi(object):
 
         """
         return find_folder_by_name(self.content, folder_name=folder_name)
+
+    def find_folder_by_fqpn(self, folder_name, datacenter_name=None, folder_type=None):
+        """
+        Get a unique folder managed object by specifying its FQPN as datacenter/folder_type/sub1/sub2...
+        Args:
+            folder_name: FQPN folder name
+            datacenter_name: Name of the datacenter, taken from FQPN if not defined
+            folder_type: Type of folder, vm, host, datastore or network, taken from FQPN if not defined
+
+        Returns: folder managed object if found, else None
+
+        """
+        return find_folder_by_fqpn(self.content, folder_name=folder_name, datacenter_name=datacenter_name, folder_type=folder_type)
 
     # Datastore cluster
     def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None, folder=None):
