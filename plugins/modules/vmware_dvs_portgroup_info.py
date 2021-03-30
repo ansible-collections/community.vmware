@@ -164,7 +164,7 @@ class DVSPortgroupInfoManager(PyVmomi):
             self.dvsls = get_all_objs(self.content, [vim.DistributedVirtualSwitch], folder=datacenter.networkFolder)
 
     def supports_mac_learning(self, dvs):
-        return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and self.dv_switch.capability.featuresSupported.macLearningSupported
+        return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and dvs.capability.featuresSupported.macLearningSupported
 
     def get_vlan_info(self, vlan_obj=None):
         """
