@@ -166,7 +166,6 @@ options:
                 description:
                 - Indicate whether or not the teaming policy is applied to inbound frames as well.
                 type: bool
-                default: False
             rolling_order:
                 description:
                 - Indicate whether or not to use a rolling policy when restoring links.
@@ -185,7 +184,6 @@ options:
         default: {
             'notify_switches': True,
             'load_balance_policy': 'loadbalance_srcid',
-            'inbound_policy': False,
             'rolling_order': False
         }
         type: dict
@@ -475,7 +473,8 @@ class VMwareDvsPortgroup(PyVmomi):
         # Teaming Policy
         teamingPolicy = vim.dvs.VmwareDistributedVirtualSwitch.UplinkPortTeamingPolicy()
         teamingPolicy.policy = vim.StringPolicy(value=self.module.params['teaming_policy']['load_balance_policy'])
-        teamingPolicy.reversePolicy = vim.BoolPolicy(value=self.module.params['teaming_policy']['inbound_policy'])
+        if self.module.params['teaming_policy']['inbound_policy'] is not None:
+            teamingPolicy.reversePolicy = vim.BoolPolicy(value=self.module.params['teaming_policy']['inbound_policy'])
         teamingPolicy.notifySwitches = vim.BoolPolicy(value=self.module.params['teaming_policy']['notify_switches'])
         teamingPolicy.rollingOrder = vim.BoolPolicy(value=self.module.params['teaming_policy']['rolling_order'])
 
@@ -648,8 +647,12 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # Teaming Policy
         teamingPolicy = self.dvs_portgroup.config.defaultPortConfig.uplinkTeamingPolicy
+
+        if self.module.params['teaming_policy']['inbound_policy'] is not None and \
+                teamingPolicy.reversePolicy.value != self.module.params['teaming_policy']['inbound_policy']:
+            return 'update'
+
         if teamingPolicy.policy.value != self.module.params['teaming_policy']['load_balance_policy'] or \
-                teamingPolicy.reversePolicy.value != self.module.params['teaming_policy']['inbound_policy'] or \
                 teamingPolicy.notifySwitches.value != self.module.params['teaming_policy']['notify_switches'] or \
                 teamingPolicy.rollingOrder.value != self.module.params['teaming_policy']['rolling_order']:
             return 'update'
@@ -733,7 +736,7 @@ def main():
             teaming_policy=dict(
                 type='dict',
                 options=dict(
-                    inbound_policy=dict(type='bool', default=False),
+                    inbound_policy=dict(type='bool'),
                     notify_switches=dict(type='bool', default=True),
                     rolling_order=dict(type='bool', default=False),
                     load_balance_policy=dict(type='str',
@@ -750,7 +753,6 @@ def main():
                     standby_uplinks=dict(type='list', elements='str'),
                 ),
                 default=dict(
-                    inbound_policy=False,
                     notify_switches=True,
                     rolling_order=False,
                     load_balance_policy='loadbalance_srcid',
