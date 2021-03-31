@@ -126,7 +126,6 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       name: "cloned_vm_from_vm_optional"
-      folder: "{{ f0 }}"
       state: powered-off
     register: poweroff_instant_clone_from_vm_optional_arguments
 
