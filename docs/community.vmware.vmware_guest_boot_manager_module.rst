@@ -395,7 +395,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Change virtual machine's boot order and related parameters
       community.vmware.vmware_guest_boot_manager:

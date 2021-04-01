@@ -403,7 +403,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather info from standalone ESXi server having datacenter as 'ha-datacenter'
       community.vmware.vmware_guest_info:

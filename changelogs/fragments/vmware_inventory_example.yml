@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_vm_inventory - add an example of FQDN as hostname (https://github.com/ansible-collections/community.vmware/issues/678).

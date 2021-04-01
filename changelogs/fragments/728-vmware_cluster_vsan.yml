@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_cluster_vsan - fixed a bug that made the module fail when advanced_options is not set (https://github.com/ansible-collections/community.vmware/issues/728).

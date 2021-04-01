@@ -236,7 +236,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable vvold rule set for all ESXi Host in given Cluster
       community.vmware.vmware_host_firewall_manager:

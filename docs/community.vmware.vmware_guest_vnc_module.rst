@@ -345,7 +345,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable VNC remote display on the VM
       community.vmware.vmware_guest_vnc:

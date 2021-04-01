@@ -302,7 +302,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Perform vMotion of virtual machine
       community.vmware.vmware_vmotion:

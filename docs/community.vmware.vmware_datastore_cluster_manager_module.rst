@@ -252,7 +252,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add datastore to the given datastore cluster
       community.vmware.vmware_datastore_cluster_manager:

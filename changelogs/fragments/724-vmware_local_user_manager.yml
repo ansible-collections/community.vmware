@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_local_user_manager - fixed to require local_user_password when the state is present (https://github.com/ansible-collections/community.vmware/pull/724).

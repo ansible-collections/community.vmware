@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_vm_inventory - Skip over ghost tags attached to virtual machines (https://github.com/ansible-collections/community.vmware/issues/681).

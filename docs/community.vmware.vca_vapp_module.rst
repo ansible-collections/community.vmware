@@ -383,7 +383,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Creates a new vApp in a VCA instance
       community.vmware.vca_vapp:

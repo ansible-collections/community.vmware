@@ -215,7 +215,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather info about vmhbas of all ESXi Host in the given Cluster
       community.vmware.vmware_host_disk_info:

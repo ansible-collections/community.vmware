@@ -294,7 +294,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather disk info from virtual machine using UUID
       community.vmware.vmware_guest_disk_info:

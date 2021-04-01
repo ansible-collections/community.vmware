@@ -213,7 +213,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather feature capability info about all ESXi Hosts in given Cluster
       community.vmware.vmware_host_feature_info:

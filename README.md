@@ -138,6 +138,7 @@ Name | Description
 [community.vmware.vmware_guest_file_operation](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_file_operation_module.rst)|Files operation in a VMware guest operating system without network
 [community.vmware.vmware_guest_find](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_find_module.rst)|Find the folder path(s) for a virtual machine by name or UUID
 [community.vmware.vmware_guest_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_info_module.rst)|Gather info about a single VM
+[community.vmware.vmware_guest_instant_clone](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_instant_clone_module.rst)|Instant Clone VM
 [community.vmware.vmware_guest_move](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_move_module.rst)|Moves virtual machines in vCenter
 [community.vmware.vmware_guest_network](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_network_module.rst)|Manage network adapters of specified virtual machine in given vCenter infrastructure
 [community.vmware.vmware_guest_powerstate](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_powerstate_module.rst)|Manages power states of virtual machines in vCenter
