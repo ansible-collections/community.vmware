@@ -24,7 +24,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: true
+    enable: true
   register: enable_ha_result
 
 - name: Ensure HA is enabled
@@ -42,7 +42,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       apd_response: 'restartAggressive'
     check_mode: true
     register: change_apd_response_check
@@ -59,7 +59,7 @@
       that:
         - change_apd_response.changed
 
-  - name: Change APD response to "restartAggressive" again
+  - name: Change APD response to "restartAggressive" again (idempotency)
     vmware_cluster_ha: *change_apd_response
     register: change_apd_response_again
 
@@ -75,7 +75,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
 
   - name: Change PDL response to "restartAggressive" (check-mode)
     vmware_cluster_ha: &change_pdl_response
@@ -85,7 +85,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       pdl_response: 'restartAggressive'
     check_mode: true
     register: change_pdl_response_check
@@ -118,7 +118,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
 
   - name: Enable Slot based Admission Control
     vmware_cluster_ha:
@@ -128,7 +128,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       slot_based_admission_control:
         failover_level: 1
     register: enable_slot_based_admission_control_result
@@ -146,7 +146,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       reservation_based_admission_control:
         auto_compute_percentages: false
         failover_level: 1
@@ -167,7 +167,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       host_isolation_response: 'powerOff'
     register: isolation_response_poweroff_result
 
@@ -184,7 +184,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       host_isolation_response: 'shutdown'
     register: isolation_response_shutdown_result
 
@@ -201,7 +201,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       advanced_settings:
           'das.heartbeatDsPerHost': '4'
     check_mode: true
@@ -235,7 +235,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: true
+      enable: true
       advanced_settings:
           'das.includeFTcomplianceChecks': 'False'
     check_mode: true
@@ -269,7 +269,7 @@
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
       cluster_name: test_cluster_ha
-      enable_ha: false
+      enable: false
     register: disable_ha_result
 
   - name: Ensure HA is disabled

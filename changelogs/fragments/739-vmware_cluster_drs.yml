@@ -1,0 +1,4 @@
+minor_changes:
+  - vmware_cluster_drs - Make enable_drs an alias of enable and remove the default value making it a required parameter (https://github.com/ansible-collections/community.vmware/issues/739)
+  - vmware_cluster_ha - Make enable_ha an alias of enable and remove the default value making it a required parameter (https://github.com/ansible-collections/community.vmware/issues/739)
+  - vmware_cluster_vsan - Make enable_vsan an alias of enable and remove the default value making it a required parameter (https://github.com/ansible-collections/community.vmware/issues/739)
