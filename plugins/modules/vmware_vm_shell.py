@@ -211,9 +211,9 @@ class VMwareShellManager(PyVmomi):
         cluster_name = module.params['cluster']
         folder = module.params['folder']
         try:
-          self.pm = self.content.guestOperationsManager.processManager
-        except vmodl.fault.ManagedObjectNotFound as bad_object:
-          pass
+            self.pm = self.content.guestOperationsManager.processManager
+        except vmodl.fault.ManagedObjectNotFound:
+            pass
         self.timeout = self.params.get('timeout', 3600)
         self.wait_for_pid = self.params.get('wait_for_process', False)
 

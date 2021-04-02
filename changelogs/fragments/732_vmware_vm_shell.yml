@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_vm_shell - handle exception raised while performing the operation (https://github.com/ansible-collections/community.vmware/issues/732).
