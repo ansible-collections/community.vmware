@@ -2185,7 +2185,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create a virtual machine on given ESXi hostname
       community.vmware.vmware_guest:

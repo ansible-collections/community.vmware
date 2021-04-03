@@ -347,7 +347,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Instant Clone a VM
       community.vmware.vmware_guest_instant_clone:

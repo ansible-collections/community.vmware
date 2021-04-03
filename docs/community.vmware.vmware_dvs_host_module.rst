@@ -299,7 +299,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add Host to dVS
       community.vmware.vmware_dvs_host:

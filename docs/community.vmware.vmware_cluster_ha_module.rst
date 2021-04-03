@@ -611,7 +611,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable HA without admission control
       community.vmware.vmware_cluster_ha:

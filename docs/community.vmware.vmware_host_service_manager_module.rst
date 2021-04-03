@@ -281,7 +281,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Start ntpd service setting for all ESXi Host in given Cluster
       community.vmware.vmware_host_service_manager:

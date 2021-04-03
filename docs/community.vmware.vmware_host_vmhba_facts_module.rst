@@ -224,7 +224,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather facts about vmhbas of all ESXi Host in the given Cluster
       community.vmware.vmware_host_vmhba_facts:

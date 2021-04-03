@@ -199,7 +199,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Provide information about vCenter folders
       community.vmware.vmware_folder_info:

@@ -1,2 +1,0 @@
-deprecated_features:
-- vmware_vmkernel_ip_config - deprecate in favor of vmware_vmkernel (https://github.com/ansible-collections/community.vmware/pull/667).

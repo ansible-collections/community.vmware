@@ -291,7 +291,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create or update a vSphere tag-based storage policy
       community.vmware.vmware_vm_storage_policy:

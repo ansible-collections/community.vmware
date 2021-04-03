@@ -278,7 +278,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add local role to ESXi
       community.vmware.vmware_local_role_manager:

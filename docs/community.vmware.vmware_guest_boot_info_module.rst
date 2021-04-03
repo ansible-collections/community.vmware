@@ -267,7 +267,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather info about virtual machine's boot order and related parameters
       community.vmware.vmware_guest_boot_info:

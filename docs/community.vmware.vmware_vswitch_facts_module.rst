@@ -224,7 +224,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather vswitch facts about all ESXi Host in given Cluster
       community.vmware.vmware_vswitch_facts:

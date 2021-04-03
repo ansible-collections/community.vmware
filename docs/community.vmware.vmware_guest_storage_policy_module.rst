@@ -327,7 +327,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enforce storepol1 policy for disk 0 and 1 using UUID
       community.vmware.vmware_guest_storage_policy:

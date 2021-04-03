@@ -217,7 +217,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: "Gather info about vCenter settings"
       community.vmware.vmware_vcenter_settings_info:

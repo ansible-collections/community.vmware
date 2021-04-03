@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_instant_clone - supported esxi_hostname parameter as an alias (https://github.com/ansible-collections/community.vmware/pull/745).

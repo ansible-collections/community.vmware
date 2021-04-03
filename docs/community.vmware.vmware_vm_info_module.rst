@@ -270,7 +270,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather all registered virtual machines
       community.vmware.vmware_vm_info:

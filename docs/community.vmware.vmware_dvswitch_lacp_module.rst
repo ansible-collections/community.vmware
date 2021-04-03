@@ -329,7 +329,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable enhanced mode on a Distributed Switch
       community.vmware.vmware_dvswitch_lacp:
