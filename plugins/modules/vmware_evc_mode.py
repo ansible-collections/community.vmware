@@ -220,7 +220,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['state', 'present', ['cluster_name', 'datacenter_name', 'evc_mode']]
+            ['state', 'present', ['evc_mode']]
         ]
     )
 
