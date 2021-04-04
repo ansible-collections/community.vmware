@@ -167,24 +167,6 @@
           - disk_sp_idp.changed_policies.disk == []
 
   always:
-    - name: "007: Cleanup: Rollback storage policy profile"
-      vmware_guest_storage_policy:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
-        vm_home: "{{ existing_profiles.spbm_profiles[0].name }}"
-        disk:
-          - unit_number: "{{ unit_number }}"
-            policy: "{{ existing_profiles.spbm_profiles[0].name }}"
-      register: rollback_storage_policy
-
-    - name: "007: assert that changes were made"
-      assert:
-        that:
-          - rollback_storage_policy is changed
-
     - name: "Cleanup: Delete Tag"
       vmware_tag:
         hostname: "{{ vcenter_hostname }}"
