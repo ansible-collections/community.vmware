@@ -5,7 +5,9 @@
 - import_role:
     name: prepare_vmware_tests
   vars:
+    setup_attach_host: true
     setup_datacenter: true
+    setup_datastore: true
     setup_resource_pool: true
 
 - name: Create VM
