@@ -43,7 +43,6 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     name: "{{ virtual_machines[0].name }}"
     state: absent
   check_mode: true
@@ -62,13 +61,12 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     name: "{{ virtual_machines[0].name }}"
     state: absent
   register: unregister_vm_inventory_result1
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -125,7 +123,7 @@
   register: register_vm_inventory_result
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -151,13 +149,12 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     name: "{{ virtual_machines[0].name }}"
     state: absent
   register: unregister_vm_inventory_result2
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -209,7 +206,7 @@
   register: register_vm_cluster_result
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -235,13 +232,12 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     name: "{{ virtual_machines[0].name }}"
     state: absent
   register: unregister_vm_inventory_result3
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -266,7 +262,6 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     resource_pool: DC0_C0_RP1
     name: "{{ virtual_machines[0].name }}"
     path: "{{ vm_vmx_file_path }}"
@@ -287,7 +282,6 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     resource_pool: DC0_C0_RP1
     name: "{{ virtual_machines[0].name }}"
     path: "{{ vm_vmx_file_path }}"
@@ -295,7 +289,7 @@
   register: register_vm_resource_pool_result
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -334,14 +328,13 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "/vm"
-    cluster: "{{ ccr1 }}"
     name: "{{ virtual_machines[0].name }}"
     uuid: "{{ vm_uuid }}"
     state: absent
   register: unregister_vm_inventory_result4
 
 - name: Gather all registered virtual machines
-  vmware_vm_info:
+  vmware_vm_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
