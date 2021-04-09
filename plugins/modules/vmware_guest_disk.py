@@ -93,7 +93,7 @@ options:
        type:
          description: The type of disk, if not specified then use C(thick) type for new disk, no eagerzero.
          type: str
-         choices: ['thin', 'eagerzeroedthick', 'thick']
+         choices: ['thin', 'eagerzeroedthick', 'thick', 'rdm' ]
        disk_mode:
          description:
            - Type of disk mode. If not specified then use C(persistent) mode for new disk.
@@ -103,6 +103,13 @@ options:
              at power off, but not affected by snapshots.
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
+       rdm_path:
+         description: Path of LUN for Raw Device Mapping required for disk type 'rdm'
+         type: str
+       compatibility_mode:
+         description: Compatibility mode for raw devices. Required for disk typ 'rdm'
+         type: str
+         choices: ['physicalMode','virtualMode']
        sharing:
          description:
            - The sharing mode of the virtual disk.
@@ -409,7 +416,6 @@ disk_status:
 '''
 
 import re
-
 try:
     from pyVmomi import vim
 except ImportError:
