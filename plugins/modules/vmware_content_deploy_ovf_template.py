@@ -30,7 +30,7 @@ options:
       required: False
       default: 'normal'
       choices: [ 'debug', 'info', 'normal' ]
-      version_added: '1.9.0'
+      version_added: '1.12.0'
     template:
       description:
       - The name of OVF template from which VM to be deployed.

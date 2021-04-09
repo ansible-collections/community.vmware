@@ -181,9 +181,9 @@ def find_folder_by_name(content, folder_name):
 
 def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=None):
     """
-    Find the folder by its given fully qualified path name. The FQPN is
-    I(datacenter)/I(folder type)/folder name/... for example
-    Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
+    Find the folder by its given fully qualified path name.
+    The Fully Qualified Path Name is I(datacenter)/I(folder type)/folder name/
+    for example - Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
     """
     # Remove leading/trailing slashes and create list of subfolders
     folder = folder_name.strip('/')
@@ -1466,11 +1466,13 @@ class PyVmomi(object):
 
     def find_folder_by_fqpn(self, folder_name, datacenter_name=None, folder_type=None):
         """
-        Get a unique folder managed object by specifying its FQPN as datacenter/folder_type/sub1/sub2...
+        Get a unique folder managed object by specifying its Fully Qualified Path Name
+        as datacenter/folder_type/sub1/sub2
         Args:
-            folder_name: FQPN folder name
-            datacenter_name: Name of the datacenter, taken from FQPN if not defined
-            folder_type: Type of folder, vm, host, datastore or network, taken from FQPN if not defined
+            folder_name: Fully Qualified Path Name folder name
+            datacenter_name: Name of the datacenter, taken from Fully Qualified Path Name if not defined
+            folder_type: Type of folder, vm, host, datastore or network,
+                         taken from Fully Qualified Path Name if not defined
 
         Returns: folder managed object if found, else None
 
