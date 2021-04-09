@@ -409,7 +409,7 @@ disk_status:
 '''
 
 import re
-import q
+
 try:
     from pyVmomi import vim
 except ImportError:

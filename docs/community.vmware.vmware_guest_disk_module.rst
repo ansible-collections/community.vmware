@@ -75,41 +75,6 @@ Parameters
                         <div>A list of disks to add or remove.</div>
                         <div>The virtual disk related information is provided using this list.</div>
                         <div>All values and parameters are case sensitive.</div>
-                        <div>Valid attributes are:</div>
-                        <div>- <code>size[_tb,_gb,_mb,_kb]</code> (integer): Disk storage size in specified unit.</div>
-                        <div>If <code>size</code> specified then unit must be specified. There is no space allowed in between size number and unit.</div>
-                        <div>Only first occurrence in disk element will be considered, even if there are multiple size* parameters available.</div>
-                        <div>- <code>type</code> (string): Valid values are:</div>
-                        <div>- <code>thin</code> thin disk</div>
-                        <div>- <code>eagerzeroedthick</code> eagerzeroedthick disk</div>
-                        <div>- <code>thick</code> thick disk</div>
-                        <div>Default: <code>thick</code> thick disk, no eagerzero.</div>
-                        <div>- <code>disk_mode</code> (string): Type of disk mode. Valid values are:</div>
-                        <div>- <code>persistent</code> Changes are immediately and permanently written to the virtual disk. This is default.</div>
-                        <div>- <code>independent_persistent</code> Same as persistent, but not affected by snapshots.</div>
-                        <div>- <code>independent_nonpersistent</code> Changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
-                        <div>- <code>sharing</code> (bool): The sharing mode of the virtual disk. The default value is no sharing.</div>
-                        <div>Setting <code>sharing</code> means that multiple virtual machines can write to the virtual disk.</div>
-                        <div>Sharing can only be set if <code>type</code> is <code>eagerzeroedthick</code>.</div>
-                        <div>- <code>datastore</code> (string): Name of datastore or datastore cluster to be used for the disk.</div>
-                        <div>- <code>autoselect_datastore</code> (bool): Select the less used datastore. Specify only if <code>datastore</code> is not specified.</div>
-                        <div>- <code>scsi_controller</code> (integer): SCSI controller number. Valid value range from 0 to 3.</div>
-                        <div>Only 4 SCSI controllers are allowed per VM.</div>
-                        <div>Care should be taken while specifying <code>scsi_controller</code> is 0 and <code>unit_number</code> as 0 as this disk may contain OS.</div>
-                        <div>- <code>unit_number</code> (integer): Disk Unit Number. Valid value range from 0 to 15. Only 15 disks are allowed per SCSI Controller.</div>
-                        <div>- <code>scsi_type</code> (string): Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.</div>
-                        <div>This value is ignored, if SCSI Controller is already present or <code>state</code> is <code>absent</code>.</div>
-                        <div>Valid values are <code>buslogic</code>, <code>lsilogic</code>, <code>lsilogicsas</code> and <code>paravirtual</code>.</div>
-                        <div><code>paravirtual</code> is default value for this parameter.</div>
-                        <div>- <code>destroy</code> (bool): If <code>state</code> is <code>absent</code>, make sure the disk file is deleted from the datastore (default <code>yes</code>).</div>
-                        <div>Added in version 2.10.</div>
-                        <div>- <code>filename</code> (string): Existing disk image to be used. Filename must already exist on the datastore.</div>
-                        <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in version 2.10.</div>
-                        <div>- <code>state</code> (string): State of disk. This is either &quot;absent&quot; or &quot;present&quot;.</div>
-                        <div>If <code>state</code> is set to <code>absent</code>, disk will be removed permanently from virtual machine configuration and from VMware storage.</div>
-                        <div>If <code>state</code> is set to <code>present</code>, disk will be added if not present at given SCSI Controller and Unit Number.</div>
-                        <div>If <code>state</code> is set to <code>present</code> and disk exists with different size, disk size is increased.</div>
-                        <div>Reducing disk size is not allowed.</div>
                 </td>
             </tr>
                                 <tr>
