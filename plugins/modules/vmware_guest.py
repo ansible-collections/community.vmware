@@ -22,7 +22,7 @@ author:
 - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
 requirements:
-- python >= 2.6
+- python >= 2.7
 - PyVmomi
 notes:
     - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
