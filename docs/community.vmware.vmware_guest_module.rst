@@ -1420,6 +1420,9 @@ Parameters
                 <td>
                         <div>Flag the instance as a template.</div>
                         <div>This will mark the given virtual machine as template.</div>
+                        <div>This may need to be done in a dedicated task invocation that is not making</div>
+                        <div>any other changes, e.g. you cannot change the state from powered-on to </div>
+                        <div>powered-off AND save as template in the same task.</div>
                 </td>
             </tr>
             <tr>
