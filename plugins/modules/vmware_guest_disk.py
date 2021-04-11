@@ -514,7 +514,7 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.backing = vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo()
         else:
             disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
-        
+
         disk_spec.device.backing.diskMode = disk['disk_mode']
         disk_spec.device.backing.sharing = disk['sharing']
         disk_spec.device.controllerKey = ctl_key
@@ -546,7 +546,7 @@ class PyVmomiHelper(PyVmomi):
         except vim.fault.InvalidDeviceSpec as invalid_device_spec:
             self.module.fail_json(msg="Failed to manage '%s' on given virtual machine due to invalid"
                                   " device spec : %s" % (device_type, to_native(invalid_device_spec.msg)),
-                                    details="Please check ESXi server logs for more details.")
+                                  details="Please check ESXi server logs for more details.")
         except vim.fault.RestrictedVersion as e:
             self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
                                       " product versioning restrictions: %s" % to_native(e.msg))
@@ -931,19 +931,19 @@ class PyVmomiHelper(PyVmomi):
                 if disk['iolimit'] is not None:
                     current_disk['iolimit'] = disk['iolimit']
 
-                # Deal with RDM disk needs. RDMS require different values compared to Virtual Disks
+                # Deal with RDM disk needs. RDMS require some different values compared to Virtual Disks
                 if disk['type'] == 'rdm':
                     compatibility_mode = disk.get('compatibility_mode', 'physicalMode')
-                if compatibility_mode not in ['physicalMode', 'virtualMode']:
-                    self.module.fail_json(msg="Invalid 'compatibility_mode' specified for disk index [%s]. Please specify"
-                                          "'compatibility_mode' value from ['physicalMode', 'virtualMode']." % disk_index)
+                    if compatibility_mode not in ['physicalMode', 'virtualMode']:
+                        self.module.fail_json(msg="Invalid 'compatibility_mode' specified for disk index [%s]. Please specify"
+                                              "'compatibility_mode' value from ['physicalMode', 'virtualMode']." % disk_index)
+                    current_disk['compatibility_mode'] = compatibility_mode
 
-                current_disk['compatibility_mode'] = compatibility_mode
-                # RDMs need a path
-                if 'rdm_path' not in disk:
-                    self.module.fail_json(msg="rdm_path needs must be specified when using disk type 'rdm' for disk index [%s]" % disk_index)
-                else:
-                    current_disk['rdm_path'] = disk.get('rdm_path')
+                    # RDMs need a path
+                    if 'rdm_path' not in disk:
+                        self.module.fail_json(msg="rdm_path needs must be specified when using disk type 'rdm' for disk index [%s]" % disk_index)
+                    else:
+                        current_disk['rdm_path'] = disk.get('rdm_path')
 
             disks_data.append(current_disk)
         return disks_data
