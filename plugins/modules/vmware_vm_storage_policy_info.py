@@ -135,9 +135,15 @@ class SPBMClient(SPBM):
                 subprofiles = profile.constraints.subProfiles
                 temp_sub_profiles = []
                 for subprofile in subprofiles:
+                    rule_set_info = self.show_capabilities(subprofile.capability)
+                    # if a storage policy set tag base placement rules, the tags are set into the value.
+                    # https://github.com/ansible-collections/community.vmware/issues/742
+                    for _rule_set_info in rule_set_info:
+                        if isinstance(_rule_set_info['value'], pbm.capability.types.DiscreteSet):
+                            _rule_set_info['value'] = _rule_set_info['value'].values
                     temp_sub_profiles.append({
                         'rule_set_name': subprofile.name,
-                        'rule_set_info': self.show_capabilities(subprofile.capability),
+                        'rule_set_info': rule_set_info,
                     })
                 temp_profile_info['constraints_sub_profiles'] = temp_sub_profiles
 
