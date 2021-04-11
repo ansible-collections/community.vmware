@@ -545,7 +545,7 @@ class PyVmomiHelper(PyVmomi):
             changed, results = wait_for_task(task)
         except vim.fault.InvalidDeviceSpec as invalid_device_spec:
             self.module.fail_json(msg="Failed to manage '%s' on given virtual machine due to invalid"
-                                    " device spec : %s" % (device_type, to_native(invalid_device_spec.msg)),
+                                  " device spec : %s" % (device_type, to_native(invalid_device_spec.msg)),
                                     details="Please check ESXi server logs for more details.")
         except vim.fault.RestrictedVersion as e:
             self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
@@ -665,20 +665,20 @@ class PyVmomiHelper(PyVmomi):
                                 disk_spec.device = disk_device
                                 # If this is an RDM ignore disk size
                                 if disk['disk_type'] != 'rdm':
-                                  # Edit and no resizing allowed
-                                  if disk['size'] < disk_spec.device.capacityInKB:
-                                      self.module.fail_json(msg="Given disk size at disk index [%s] is smaller than found"
-                                                                " (%d < %d). Reducing disks is not allowed."
-                                                                % (disk['disk_index'], disk['size'],
-                                                                    disk_spec.device.capacityInKB))
-                                  if disk['size'] != disk_spec.device.capacityInKB:
-                                      disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-                                      disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
-                                      disk_spec.device.capacityInKB = disk['size']
-                                      self.config_spec.deviceChange.append(disk_spec)
-                                      disk_change = True
-                                      disk_change_list.append(disk_change)
-                                      results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
+                                    # Edit and no resizing allowed
+                                    if disk['size'] < disk_spec.device.capacityInKB:
+                                        self.module.fail_json(msg="Given disk size at disk index [%s] is smaller than found"
+                                                                  " (%d < %d). Reducing disks is not allowed."
+                                                                  % (disk['disk_index'], disk['size'],
+                                                                      disk_spec.device.capacityInKB))
+                                    if disk['size'] != disk_spec.device.capacityInKB:
+                                        disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                                        disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                                        disk_spec.device.capacityInKB = disk['size']
+                                        self.config_spec.deviceChange.append(disk_spec)
+                                        disk_change = True
+                                        disk_change_list.append(disk_change)
+                                        results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
 
                             elif disk['state'] == 'absent':
                                 # Disk already exists, deleting
@@ -930,10 +930,10 @@ class PyVmomiHelper(PyVmomi):
                     current_disk['shares'] = disk['shares']
                 if disk['iolimit'] is not None:
                     current_disk['iolimit'] = disk['iolimit']
-              
-              # Deal with RDM disk needs. RDMS require different values compared to Virtual Disks
+
+                # Deal with RDM disk needs. RDMS require different values compared to Virtual Disks
                 if disk['type'] == 'rdm':
-                  compatibility_mode = disk.get('compatibility_mode', 'physicalMode')
+                    compatibility_mode = disk.get('compatibility_mode', 'physicalMode')
                 if compatibility_mode not in ['physicalMode', 'virtualMode']:
                     self.module.fail_json(msg="Invalid 'compatibility_mode' specified for disk index [%s]. Please specify"
                                           "'compatibility_mode' value from ['physicalMode', 'virtualMode']." % disk_index)
@@ -944,7 +944,7 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="rdm_path needs must be specified when using disk type 'rdm' for disk index [%s]" % disk_index)
                 else:
                     current_disk['rdm_path'] = disk.get('rdm_path')
-              
+
             disks_data.append(current_disk)
         return disks_data
 
@@ -1071,7 +1071,7 @@ def main():
                 type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick', 'rdm']),
                 disk_mode=dict(type='str', choices=['persistent', 'independent_persistent', 'independent_nonpersistent']),
                 compatibility_mode=dict(type='str', choices=['physicalMode', 'virtualMode']),
-                rdm_path=dict(type='str', default=False),
+                rdm_path=dict(type='str'),
                 sharing=dict(type='bool', default=False),
                 datastore=dict(type='str'),
                 autoselect_datastore=dict(type='bool'),
