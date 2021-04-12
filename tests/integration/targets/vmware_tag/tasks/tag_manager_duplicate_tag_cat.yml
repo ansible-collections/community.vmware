@@ -131,18 +131,45 @@
         that:
           - vm_tag_info.changed
 
-    - name: Delete Tags
+    - name: Delete Tags for category_1001
       vmware_tag:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         validate_certs: false
         tag_name: "{{ item }}"
+        category_id: "{{ cat_one_id }}"
         state: absent
-      register: delete_tag
+      register: delete_tag_category_1001
       with_items:
         - "{{ tag_one }}"
         - "{{ tag_two }}"
+
+    - name: Check if the tags are deleted for category_1001
+      assert:
+        that:
+          - item.changed
+      loop: "{{ delete_tag_category_1001.results }}"
+
+    - name: Delete Tags for category_1002
+      vmware_tag:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        tag_name: "{{ item }}"
+        category_id: "{{ cat_two_id }}"
+        state: absent
+      register: delete_tag_category_1002
+      with_items:
+        - "{{ tag_one }}"
+        - "{{ tag_two }}"
+
+    - name: Check if the tags are deleted for category_1002
+      assert:
+        that:
+          - item.changed
+      loop: "{{ delete_tag_category_1002.results }}"
 
     - name: Delete Categories
       vmware_category:
