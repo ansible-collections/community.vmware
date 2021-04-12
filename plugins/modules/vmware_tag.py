@@ -149,7 +149,7 @@ class VmwareTag(VmwareRestClient):
         tag_spec = self.tag_service.CreateSpec()
         tag_spec.name = self.tag_name
         tag_spec.description = self.params.get('tag_description')
-        category_id = self.params.get('category_id', None)
+        category_id = self.params.get('category_id')
 
         category_found = False
         for category in self.category_service.list():
