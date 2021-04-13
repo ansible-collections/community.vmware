@@ -141,6 +141,7 @@
       password: '{{ vcenter_password }}'
       validate_certs: false
       tag_name: "{{ item }}"
+      category_id: "{{ cat_one_id }}"
       state: absent
     register: delete_tag
     with_items:
