@@ -70,6 +70,7 @@
         password: '{{ vcenter_password }}'
         validate_certs: false
         tag_name: Sample_Tag_0001
+        category_id: "{{ Cat_ID }}"
         tag_description: Some fancy description
         state: present
       register: update_tag_desc
@@ -96,6 +97,7 @@
         password: '{{ vcenter_password }}'
         validate_certs: false
         tag_name: Sample_Tag_0001
+        category_id: "{{ Cat_ID }}"
         state: absent
       register: delete_tag
 

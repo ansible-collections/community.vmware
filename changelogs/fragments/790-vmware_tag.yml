@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_tag - modified the category_id parameter to required (https://github.com/ansible-collections/community.vmware/pull/790).
