@@ -1,0 +1,2 @@
+bugfixes:
+- vmware - handle exception raised in ``get_all_objs`` which occurs due to multiple parallel operations (https://github.com/ansible-collections/community.vmware/issues/791).
