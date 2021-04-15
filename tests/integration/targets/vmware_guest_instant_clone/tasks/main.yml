@@ -54,6 +54,64 @@
       that:
           - instant_clone_from_vm_parent is changed
 
+  - name: Instant Clone a VM with GuestOS customization
+    vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      datacenter: "{{ dc1 }}"
+      host: "{{ esxi1 }}"
+      guestinfo_vars:
+        - hostname: "guestinfo_ic_hostname"
+          ipaddress: "guestinfo_ic_ipaddress"
+          netmask: "guestinfo_ic_netmask"
+          gateway: "guestinfo_ic_gateway"
+          dns: "guestinfo_ic_dns"
+          networktype: "guestinfo_ic_networktype"
+          uuid: "guestinfo_ic_uuid"
+          uuidHex: "guestinfo_ic_uuidHex"
+      name: "Instant_clone_guest_customize"
+      parent_vm: "test_vm1"
+      resource_pool: DC0_C0_RP1
+    register: Instant_cloned_guest_customize
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - Instant_cloned_guest_customize is changed
+
+  - name: set state to poweroff the Instant Cloned VM
+    vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_clone_guest_customize"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_guest_customize
+
+  - debug:
+      var: poweroff_instant_clone_guest_customize
+
+  - name: Clean VM
+    vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_clone_guest_customize"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_guest_customize
+    ignore_errors: true
+
+  - debug:
+      var: delete_instant_clone_guest_customize
+
   - name: Instant Clone a VM when datastore cluster is specified
     vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
