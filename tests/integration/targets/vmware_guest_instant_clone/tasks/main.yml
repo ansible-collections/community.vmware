@@ -11,7 +11,7 @@
     setup_resource_pool: true
 
 - name: Create VM
-  vmware_guest:
+  community.vmware.vmware_guest:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -35,7 +35,7 @@
 - when: vcsim is not defined
   block:
   - name: Instant Clone a VM with parent VM
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -55,7 +55,7 @@
           - instant_clone_from_vm_parent is changed
 
   - name: Instant Clone a VM when datastore cluster is specified
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -75,7 +75,7 @@
           - instant_clone_from_vm_when_cluster_is_specified is changed
 
   - name: set state to poweroff the Cloned VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -89,7 +89,7 @@
       var: poweroff_instant_clone_from_vm_when_cluster
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -104,7 +104,7 @@
 
 
   - name: Instant Clone a VM when skipping optional params
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -122,7 +122,7 @@
           - instant_clone_from_vm_optional_arguments is changed
 
   - name: set state to poweroff the Cloned VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -135,7 +135,7 @@
       var: poweroff_instant_clone_from_vm_optional_arguments
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -149,7 +149,7 @@
   - debug: var=delete_instant_clone_from_vm_optional_arguments
 
   - name: Instant Clone a VM with moid
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -169,7 +169,7 @@
           - instant_clone_from_vm_moid is changed
 
   - name: set state to poweroff the Cloned VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -183,7 +183,7 @@
       var: poweroff_instant_clone_from_vm_moid
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -197,7 +197,7 @@
   - debug: var=delete_instant_clone_from_vm_moid
 
   - name: Instant Clone a VM with instance_uuid
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -218,7 +218,7 @@
           - instant_clone_from_vm_instance_uuid is changed
 
   - name: set state to poweroff the Cloned VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -232,7 +232,7 @@
       var: poweroff_instant_clone_from_vm_instance_uuid
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -246,7 +246,7 @@
   - debug: var=delete_instant_clone_from_vm_instance_uuid
 
   - name: Instant Clone a VM with uuid
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -266,7 +266,7 @@
           - instant_clone_from_vm_uuid is changed
 
   - name: set state to poweroff the VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -280,7 +280,7 @@
       var: poweroff_instant_clone_from_vm_uuid
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -294,7 +294,7 @@
   - debug: var=delete_instant_clone_from_vm_uuid
 
   - name: Instant clone in check mode
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -313,7 +313,7 @@
       var: check_mode_instant_clone
 
   - name:  idempotency check - VM name already exists
-    vmware_guest_instant_clone:
+    community.vmware.vmware_guest_instant_clone:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -331,7 +331,7 @@
       var: idempotency_check
 
   - name: set state to poweroff the Cloned VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -345,7 +345,7 @@
       var: poweroff_instant_clone_from_vm_parent
 
   - name: Clean VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -359,7 +359,7 @@
   - debug: var=delete_instant_clone_from_vm_parent
 
   - name: set state to poweroff the parent VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -373,7 +373,7 @@
       var: poweroff_instant_clone_from_vm_parent
 
   - name: Clean parent VM
-    vmware_guest:
+    community.vmware.vmware_guest:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
