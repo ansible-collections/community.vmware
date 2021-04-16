@@ -1,0 +1,3 @@
+deprecated_features:
+- vmware_dvs_portgroup - the ``portgroup_type`` option will be replaced by ``port_binding`` option. It is now deprecated, and will be removed in 2.0.0 (https://github.com/ansible-collections/community.vmware/pull/531).
+- vmware_dvs_portgroup - the ``vlan_trunk`` option is obsolete because the trunk range is specified with the ``vlan_trunk_range`` option. It is now deprecated, and will be removed in 2.0.0 (https://github.com/ansible-collections/community.vmware/pull/531).
