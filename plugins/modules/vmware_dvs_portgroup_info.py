@@ -38,6 +38,7 @@ options:
     - Show or hide MAC learning information of the DVS portgroup.
     type: bool
     default: True
+    version_added: '1.10.0'
   show_network_policy:
     description:
     - Show or hide network policies of DVS portgroup.
@@ -58,6 +59,7 @@ options:
     - Show or hide uplinks of DVS portgroup.
     type: bool
     default: True
+    version_added: '1.10.0'
   show_vlan_info:
     description:
     - Show or hide vlan information of the DVS portgroup.
