@@ -19,7 +19,7 @@ author:
     - Joseph Callen (@jcpowermac)
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 notes:
-    - Tested on vSphere 5.5, 6.5
+    - Tested on vSphere 7.0
 requirements:
     - "python >= 2.6"
     - PyVmomi
