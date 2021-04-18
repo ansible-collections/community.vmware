@@ -319,6 +319,18 @@ Examples
 
 .. code-block:: yaml
 
+    - name: Assing Admin permission to local user in ESXi without vCenter
+      community.vmware.vmware_object_role_permission:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        role: Admin
+        principal: user_bob
+        object_name: rootFolder
+        object_type: Folder
+        state: present
+      delegate_to: localhost
+
     - name: Assign user to VM folder
       community.vmware.vmware_object_role_permission:
         hostname: '{{ esxi_hostname }}'
