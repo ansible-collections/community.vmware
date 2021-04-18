@@ -7,4 +7,4 @@
   vmware_cluster_drs:
     datacenter_name: '{{ dc1 }}'
     cluster_name: '{{ ccr1 }}'
-    enable_drs: true
+    enable: true

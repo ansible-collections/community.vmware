@@ -39,7 +39,7 @@ options:
       description:
       - Whether to enable DRS.
       type: bool
-      required: true
+      default: false
       aliases: [ enable_drs ]
     drs_enable_vm_behavior_overrides:
       description:
@@ -153,6 +153,8 @@ class VMwareCluster(PyVmomi):
         else:
             self.changed_advanced_settings = None
 
+        self.module.warn("The default value for enable will change from false to true in a future version in order to make the behavior more consistent with other modules. Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
+
     def check_drs_config_diff(self):
         """
         Check DRS configuration diff
@@ -215,7 +217,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         # DRS
-        enable=dict(type='bool', required=True, aliases=['enable_drs']),
+        enable=dict(type='bool', default=False, aliases=['enable_drs']),
         drs_enable_vm_behavior_overrides=dict(type='bool', default=True),
         drs_default_vm_behavior=dict(type='str',
                                      choices=['fullyAutomated', 'manual', 'partiallyAutomated'],
