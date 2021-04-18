@@ -22,6 +22,7 @@ author:
 notes:
     - Tested on ESXi 6.5, vSphere 6.7
     - The ESXi login user must have the appropriate rights to administer permissions.
+    - If you want to assign permission to a user on ESXi without vCenter, you need I(object_name) set to C(rootFolder) and I(object_type) set to C(Folder).
     - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
 requirements:
     - "python >= 2.7"
