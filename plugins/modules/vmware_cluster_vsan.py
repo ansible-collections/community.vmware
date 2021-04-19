@@ -170,7 +170,7 @@ class VMwareCluster(PyVmomi):
         vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
         self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
 
-        self.module.warn("The default value for enable will change from false to true in a future version in order to make the behavior more consistent with other modules."
+        self.module.warn("The default for enable will change from false to true in a future version to make the behavior more consistent with other modules."
                          "Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
 
     def check_vsan_config_diff(self):
