@@ -114,7 +114,7 @@ options:
                 required: False
             limit_policy:
                 type: str
-                description: The maximum number of MAC addresses that can be learned.
+                description: The default switching policy after MAC limit is exceeded.
                 required: False
                 choices:
                     - 'allow'
