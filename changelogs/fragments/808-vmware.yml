@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware - added a new function for finding a hostsystem by datacenter (https://github.com/ansible-collections/community.vmware/pull/808).
