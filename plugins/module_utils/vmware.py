@@ -1240,6 +1240,59 @@ class PyVmomi(object):
         """
         return find_hostsystem_by_name(self.content, hostname=host_name)
 
+    def find_hostsystem_by_datacenter(self, datacenter_name, host_name):
+        """
+        Find HostSystem by Datacenter
+        Args:
+            datacenter_name: Name of datacenter
+            host_name: Name of ESXi server
+
+        Return: host if found, else None
+        """
+        dc = find_datacenter_by_name(self.content, datacenter_name=datacenter_name)
+        if dc is None:
+            self.module.fail_json(msg="Unable to find datacenter with name %s" % datacenter_name)
+
+        hosts = self._find_recursively_hostsytem_by_datacenter(dc.hostFolder.childEntity)
+        flatten_hosts = list(self._flatten_list(hosts))
+        if not flatten_hosts:
+            self.module.fail_json(msg="ESXi hosts not found in %s" % datacenter_name)
+
+        for host in flatten_hosts:
+            if host.name == host_name:
+                return host
+
+        return None
+
+    def _find_recursively_hostsytem_by_datacenter(self, objs, hosts=[]):
+        """
+        Find Recursively Hostsystem by Datacenter
+        Args:
+            objs: List of Management Object
+            hosts: List to store HostSystem
+
+        Return: List of hosts
+        """
+        for obj in objs:
+            if isinstance(obj, vim.Folder):
+                self._find_recursively_hostsytem_by_datacenter(obj.childEntity, hosts)
+            if isinstance(obj, vim.ComputeResource) or isinstance(obj, vim.ClusterComputeResource):
+                hosts.append(obj.host)
+
+        return hosts
+
+    def _flatten_list(self, objs):
+        """
+        Flatten List
+        Args:
+            objs: List of Management Object
+        """
+        for obj in objs:
+            if isinstance(obj, list):
+                yield from self._flatten_list(obj)
+            else:
+                yield obj
+
     def get_all_host_objs(self, cluster_name=None, esxi_host_name=None):
         """
         Get all host system managed object
