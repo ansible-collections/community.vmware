@@ -1254,11 +1254,10 @@ class PyVmomi(object):
             self.module.fail_json(msg="Unable to find datacenter with name %s" % datacenter_name)
 
         hosts = self._find_recursively_hostsytem_by_datacenter(dc.hostFolder.childEntity)
-        flatten_hosts = list(self._flatten_list(hosts))
-        if not flatten_hosts:
+        if not hosts:
             self.module.fail_json(msg="ESXi hosts not found in %s" % datacenter_name)
 
-        for host in flatten_hosts:
+        for host in hosts:
             if host.name == host_name:
                 return host
 
@@ -1277,21 +1276,10 @@ class PyVmomi(object):
             if isinstance(obj, vim.Folder):
                 self._find_recursively_hostsytem_by_datacenter(obj.childEntity, hosts)
             if isinstance(obj, vim.ComputeResource) or isinstance(obj, vim.ClusterComputeResource):
-                hosts.append(obj.host)
+                for host in obj.host:
+                    hosts.append(host)
 
         return hosts
-
-    def _flatten_list(self, objs):
-        """
-        Flatten List
-        Args:
-            objs: List of Management Object
-        """
-        for obj in objs:
-            if isinstance(obj, list):
-                yield from self._flatten_list(obj)
-            else:
-                yield obj
 
     def get_all_host_objs(self, cluster_name=None, esxi_host_name=None):
         """
