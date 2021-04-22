@@ -554,8 +554,8 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Modify the TCP/IP stack configuration of the default
-      vmware_host_tcpip_stacks:
+    - name: Update the TCP/IP stack configuration of the default
+      community.vmware.vmware_host_tcpip_stacks:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -573,8 +573,8 @@ Examples
           congestion_algorithm: cubic
           max_num_connections: 12000
 
-    - name: Modify the TCP/IP stack configuration of the provisioning
-      vmware_host_tcpip_stacks:
+    - name: Update the TCP/IP stack configuration of the provisioning
+      community.vmware.vmware_host_tcpip_stacks:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -585,8 +585,8 @@ Examples
           max_num_connections: 12000
           gateway: 10.10.10.254
 
-    - name: Modify the TCP/IP stack configuration of the default and provisioning
-      vmware_host_tcpip_stacks:
+    - name: Update the TCP/IP stack configuration of the default and provisioning
+      community.vmware.vmware_host_tcpip_stacks:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

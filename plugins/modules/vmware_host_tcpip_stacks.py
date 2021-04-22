@@ -143,7 +143,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Update the TCP/IP stack configuration of the default
-  vmware_host_tcpip_stacks:
+  community.vmware.vmware_host_tcpip_stacks:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -162,7 +162,7 @@ EXAMPLES = r'''
       max_num_connections: 12000
 
 - name: Update the TCP/IP stack configuration of the provisioning
-  vmware_host_tcpip_stacks:
+  community.vmware.vmware_host_tcpip_stacks:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -174,7 +174,7 @@ EXAMPLES = r'''
       gateway: 10.10.10.254
 
 - name: Update the TCP/IP stack configuration of the default and provisioning
-  vmware_host_tcpip_stacks:
+  community.vmware.vmware_host_tcpip_stacks:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
