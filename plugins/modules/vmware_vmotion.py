@@ -169,7 +169,6 @@ class VmotionManager(PyVmomi):
             if self.host_object is None:
                 self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
 
-
         # Get Destination Datastore if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
         self.datastore_object = None
