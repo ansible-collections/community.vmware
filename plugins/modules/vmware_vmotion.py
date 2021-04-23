@@ -166,6 +166,8 @@ class VmotionManager(PyVmomi):
         if dest_host_name is not None:
             self.host_object = find_hostsystem_by_name(content=self.content,
                                                        hostname=dest_host_name)
+            if self.host_object is None:
+                self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
 
         # Get Destination Datastore if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
@@ -189,7 +191,7 @@ class VmotionManager(PyVmomi):
             self.resourcepool_object = self.host_object.parent.resourcePool
         # Fail if resourcePool object is not found
         if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to destination resource pool object which is required")
+            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
