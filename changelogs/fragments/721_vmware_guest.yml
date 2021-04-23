@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_guest - skip customvalues while deploying VM on a standalone ESXi (https://github.com/ansible-collections/community.vmware/issues/721).

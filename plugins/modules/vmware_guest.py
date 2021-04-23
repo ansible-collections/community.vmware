@@ -2214,6 +2214,11 @@ class PyVmomiHelper(PyVmomi):
         if not self.params['customvalues']:
             return
 
+        if not self.is_vcenter():
+            self.module.warn("Currently connected to ESXi. "
+                             "customvalues are a vCenter feature, this parameter will be ignored.")
+            return
+
         facts = self.gather_facts(vm_obj)
         for kv in self.params['customvalues']:
             if 'key' not in kv or 'value' not in kv:
