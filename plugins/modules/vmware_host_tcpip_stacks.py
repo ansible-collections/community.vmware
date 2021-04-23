@@ -263,7 +263,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_host_by_cluster_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 
 class VmwareHostTcpipStack(PyVmomi):
