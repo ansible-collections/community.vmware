@@ -101,6 +101,10 @@ options:
     description:
     - Flag the instance as a template.
     - This will mark the given virtual machine as template.
+    - Note, this may need to be done in a dedicated task invocation that is not making
+      any other changes. For example, user cannot change the state from powered-on to
+      powered-off AND save as template in the same task.
+    - See M(community.vmware.vmware_guest) source for more details.
     default: false
     type: bool
   folder:
