@@ -164,7 +164,7 @@ def get_parent_datacenter(obj):
     while True:
         if not hasattr(obj, 'parent'):
             break
-        obj = obj.parent
+        obj = obj.parent or obj.parentVApp
         if isinstance(obj, vim.Datacenter):
             datacenter = obj
             break
