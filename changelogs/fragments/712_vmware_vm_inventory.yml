@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_vm_inventory - set default to ``True`` for ``with_nested_properties`` (https://github.com/ansible-collections/community.vmware/issues/712).
