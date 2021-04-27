@@ -358,10 +358,10 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 host_filters, host_properties, strict=strict
             ):
                 hostvars[host] = host_properties
+                self._populate_host_properties(host_properties, host)
                 self.inventory.set_variable(
                     host, "ansible_host", self.get_management_ip(host_obj.obj)
                 )
-                self._populate_host_properties(host_properties, host)
 
         return hostvars
 

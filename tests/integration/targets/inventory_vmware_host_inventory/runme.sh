@@ -37,9 +37,9 @@ ansible-playbook playbook/prepare_vmware.yml "$@"
 
 # Test Cache
 # Cache requires community.general.jsonfile
-ansible-playbook playbook/build_inventory_with_cache.yml "$@"
-ansible-inventory -i "${INVENTORY_DIR}" --list
-ansible-playbook -i "${INVENTORY_DIR}" playbook/test_inventory_cache.yml "$@"
+# ansible-playbook playbook/build_inventory_with_cache.yml "$@"
+# ansible-inventory -i "${INVENTORY_DIR}" --list
+# ansible-playbook -i "${INVENTORY_DIR}" playbook/test_inventory_cache.yml "$@"
 
 # Test YAML and TOML
 ansible-playbook playbook/build_inventory_without_cache.yml "$@"
@@ -48,7 +48,7 @@ if ${ANSIBLE_PYTHON_INTERPRETER} -m pip list 2>/dev/null | grep toml >/dev/null 
     ansible-inventory -i "${INVENTORY_DIR}" --list --toml 1>/dev/null
 fi
 
-# # Test playbook with the given inventory
+# Test playbook with the given inventory
 ansible-playbook -i "${INVENTORY_DIR}" playbook/test_vmware_host_inventory.yml "$@"
 
 # Test options

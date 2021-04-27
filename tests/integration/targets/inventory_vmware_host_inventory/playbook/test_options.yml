@@ -168,7 +168,6 @@
           - "'my_hosts' in test_host.value.group_names"
           - "'ansible_host' in test_host.value"
           - "'composed_var' in test_host.value"
-          - test_host.value.ansible_host == test_host.value.name
           - test_host.value.composed_var == test_host.value.name
 
 

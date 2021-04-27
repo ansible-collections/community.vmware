@@ -1,12 +1,12 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Inventory with 'cache' option
+    - name: Inventory without 'cache' option
       include_tasks: build_inventory.yml
       vars:
         content: |-
           plugin: community.vmware.vmware_host_inventory
-          strict: false
+          strict: true
           cache: false
           properties:
             - name
