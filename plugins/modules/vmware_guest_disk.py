@@ -107,11 +107,12 @@ options:
          description: Path of LUN for Raw Device Mapping required for disk type 'rdm'
          type: str
        compatibility_mode:
-         description: Compatibility mode for raw devices. Required for disk typ 'rdm'
+         description: Compatibility mode for raw devices. Required for disk type 'rdm'
          type: str
          choices: ['physicalMode','virtualMode']
        sharing:
          description:
+           - Not available for Raw Device Mapping(RDM)
            - The sharing mode of the virtual disk.
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
            - Sharing can only be set if C(type) is set to C(eagerzeroedthick).
@@ -770,7 +771,7 @@ class PyVmomiHelper(PyVmomi):
                                 autoselect_datastore=True,
                                 disk_unit_number=0,
                                 controller_number=0,
-                                disk_mode='independent_persistent',
+                                disk_mode='persistent',
                                 disk_type='thick',
                                 sharing=False)
             # Check state
