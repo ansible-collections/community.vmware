@@ -62,6 +62,12 @@ options:
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
       type: int
       required: False
+    ssl_proxy_path:
+      description:
+      - Path to use when tunneling through VC's reverse proxy.
+      - If the value is not specified in the task, the value of environment variable C(VMWARE_SSL_PROXY_PATH) will be used instead.
+      type: str
+      required: False
 '''
 
     # This doc fragment is specific to vcenter modules like vcenter_license
