@@ -725,7 +725,7 @@ class PyVmomiHelper(PyVmomi):
                                                                                                       str(randint(1, 10000)))
                             elif disk['filename'] is not None:
                                 disk_spec.device.backing.fileName = disk['filename']
-                                disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                            disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
 
                         self.config_spec.deviceChange.append(disk_spec)
                         disk_change = True
