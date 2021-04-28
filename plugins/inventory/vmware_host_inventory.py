@@ -130,6 +130,24 @@ DOCUMENTATION = r"""
                 - Also, transforms property name to snake case.
             type: bool
             default: False
+        proxy_host:
+          description:
+          - Address of a proxy that will receive all HTTPS requests and relay them.
+          - The format is a hostname or a IP.
+          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
+          type: str
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_HOST
+        proxy_port:
+          description:
+          - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+          type: int
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_PORT
 """
 
 EXAMPLES = r"""
@@ -236,7 +254,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             port=self.get_option("port"),
             with_tags=self.get_option("with_tags"),
             validate_certs=self.get_option("validate_certs"),
-            display=self.display,
+            http_proxy_host=self.get_option("proxy_host"),
+            http_proxy_port=self.get_option("proxy_port")
         )
 
         self.pyv.do_login()
