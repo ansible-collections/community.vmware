@@ -152,14 +152,6 @@ DOCUMENTATION = r'''
           required: False
           env:
             - name: VMWARE_PROXY_PORT
-        ssl_proxy_path:
-          description:
-          - Path to use when tunneling through VC's reverse proxy.
-          - If the value is not specified in the task, the value of environment variable C(VMWARE_SSL_PROXY_PATH) will be used instead.
-          type: str
-          required: False
-          env:
-            - name: VMWARE_SSL_PROXY_PATH
 '''
 
 EXAMPLES = r'''
@@ -340,8 +332,6 @@ EXAMPLES = r'''
       - 'guest.ipStack'
 '''
 
-import ssl
-import atexit
 import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
@@ -360,7 +350,6 @@ except ImportError:
     HAS_REQUESTS = False
 
 try:
-    from pyVim import connect
     from pyVmomi import vim, vmodl
     from pyVmomi.VmomiSupport import DataObject
     from pyVmomi import Iso8601
@@ -383,7 +372,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import con
 
 class BaseVMwareInventory:
     def __init__(self, hostname, username, password, port, validate_certs, with_tags,
-                 httpProxyHost, httpProxyPort, sslProxyPath):
+                 httpProxyHost, httpProxyPort):
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -394,7 +383,6 @@ class BaseVMwareInventory:
         self.rest_content = None
         self.proxy_host = httpProxyHost
         self.proxy_port = httpProxyPort
-        self.sslproxy = sslProxyPath
 
     def do_login(self):
         """
@@ -446,7 +434,7 @@ class BaseVMwareInventory:
         return connect_to_api(module=None, disconnect_atexit=True, return_si=True,
                               hostname=self.hostname, username=self.username, password=self.password,
                               port=self.port, validate_certs=self.validate_certs, httpProxyHost=self.proxy_host,
-                              httpProxyPort=self.proxy_port, sslProxyPath=self.sslproxy)
+                              httpProxyPort=self.proxy_port)
 
     def check_requirements(self):
         """ Check all requirements for this inventory are satisfied"""
@@ -728,8 +716,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             with_tags=self.get_option('with_tags'),
             validate_certs=self.get_option('validate_certs'),
             httpProxyHost=self.get_option('proxy_host'),
-            httpProxyPort=self.get_option('proxy_port'),
-            sslProxyPath=self.get_option('ssl_proxy_path')
+            httpProxyPort=self.get_option('proxy_port')
         )
         self.pyv.do_login()
 

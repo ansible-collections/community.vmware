@@ -554,15 +554,11 @@ def vmware_argument_spec():
                         required=False,
                         default=None,
                         fallback=(env_fallback, ['VMWARE_PROXY_PORT'])),
-        ssl_proxy_path=dict(type='str',
-                            required=False,
-                            default=None,
-                            fallback=(env_fallback, ['VMWARE_SSL_PROXY_PATH'])),
     )
 
 
 def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None,
-                   httpProxyHost=None, httpProxyPort=None, sslProxyPath=None):
+                   httpProxyHost=None, httpProxyPort=None):
     if module:
         if not hostname:
             hostname = module.params['hostname']
@@ -574,8 +570,6 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
             httpProxyHost = module.params.get('proxy_host')
         if not httpProxyPort:
             httpProxyPort = module.params.get('proxy_port')
-        if not sslProxyPath:
-            sslProxyPath = module.params['ssl_proxy_path']
         if not port:
             port = module.params.get('port', 443)
         if not validate_certs:
@@ -630,8 +624,6 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
         if httpProxyHost:
             msg_suffix = " [proxy: %s:%d]" % (httpProxyHost, httpProxyPort)
             connect_args.update(httpProxyHost=httpProxyHost, httpProxyPort=httpProxyPort)
-            if sslProxyPath:
-                connect_args.update(sslProxyPath=sslProxyPath)
             smart_stub = connect.SmartStubAdapter(**connect_args)
             session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(username, password))
             service_instance = vim.ServiceInstance('ServiceInstance', session_stub)
