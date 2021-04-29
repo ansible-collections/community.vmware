@@ -371,8 +371,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import con
 
 
 class BaseVMwareInventory:
-    def __init__(self, hostname, username, password, port, validate_certs, with_tags,
-                 httpProxyHost, httpProxyPort):
+    def __init__(self, hostname, username, password, port, validate_certs, with_tags, http_proxy_host, http_proxy_port):
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -381,8 +380,8 @@ class BaseVMwareInventory:
         self.validate_certs = validate_certs
         self.content = None
         self.rest_content = None
-        self.proxy_host = httpProxyHost
-        self.proxy_port = httpProxyPort
+        self.proxy_host = http_proxy_host
+        self.proxy_port = http_proxy_port
 
     def do_login(self):
         """
