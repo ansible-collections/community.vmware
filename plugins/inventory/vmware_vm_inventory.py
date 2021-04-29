@@ -140,7 +140,7 @@ DOCUMENTATION = r'''
           description:
           - Address of a proxy that will receive all HTTPS requests and relay them.
           - The format is a hostname or a IP.
-          - This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
           type: str
           required: False
           env:
