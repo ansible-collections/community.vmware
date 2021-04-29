@@ -211,9 +211,9 @@ options:
             - The firmware of virtual machine must be EFI and secure boot must be enabled.
             - Virtualization Based Security depends on nested virtualization and Intel Virtualization Technology for Directed I/O.
             - Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.
-        vvtd:
+        iommu:
             type: bool
-            description: Flag to specify if Intel Virtualization Technology for Directed I/O is enabled for this virtual machine.
+            description: Flag to specify if I/O MMU is enabled for this virtual machine.
             version_added: '1.10.0'
   guest_id:
     type: str
@@ -1817,11 +1817,11 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj is None or self.configspec.bootOptions.efiSecureBootEnabled != vm_obj.config.bootOptions.efiSecureBootEnabled:
                 self.change_detected = True
 
-        vvtd = self.params['hardware']['vvtd']
-        if vvtd is not None:
+        iommu = self.params['hardware']['iommu']
+        if iommu is not None:
             if self.configspec.flags is None:
                 self.configspec.flags = vim.vm.FlagInfo()
-            self.configspec.flags.vvtdEnabled = vvtd
+            self.configspec.flags.vvtdEnabled = iommu
             if vm_obj is None or self.configspec.flags.vvtdEnabled != vm_obj.config.flags.vvtdEnabled:
                 self.change_detected = True
 
@@ -3439,7 +3439,7 @@ def main():
                 secure_boot=dict(type='bool'),
                 version=dict(type='str'),
                 virt_based_security=dict(type='bool'),
-                vvtd=dict(type='bool')
+                iommu=dict(type='bool')
             )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
@@ -3510,11 +3510,10 @@ def main():
                             "Please consider enabling this explicitly because this behavior might change in the future.")
             pyv.params['hardware']['secure_boot'] = True
 
-        if not pyv.params['hardware']['vvtd']:
-            pyv.module.warn("Virtualization based security requires Intel Virtualization Technology for Directed I/O."
-                            "At the moment, this modules enables this implicitly. "
-                            "Please consider enabling vvtd explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['vvtd'] = True
+        if not pyv.params['hardware']['iommu']:
+            pyv.module.warn("Virtualization based security requires I/O MMU. At the moment, this modules enables this implicitly. "
+                            "Please consider enabling iommu explicitly because this behavior might change in the future.")
+            pyv.params['hardware']['iommu'] = True
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()
