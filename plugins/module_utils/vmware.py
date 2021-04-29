@@ -45,10 +45,6 @@ from ansible.module_utils.six import integer_types, iteritems, string_types, rai
 from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils.six.moves.urllib.parse import unquote
 from ansible.errors import AnsibleParserError
-from ansible.utils.display import Display
-
-
-display = Display()
 
 
 class TaskError(Exception):
