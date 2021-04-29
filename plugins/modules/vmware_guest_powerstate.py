@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: vmware_guest_powerstate
 short_description: Manages power states of virtual machines in vCenter
@@ -104,12 +104,21 @@ options:
     - The value sets a timeout in seconds for the module to wait for the state change.
     default: 0
     type: int
+  answer:
+    description:
+    - The I(answer) is required in the vm starting process if the vm is blocked after you copied or moved the vm.
+    - The I(answer) can be used if I(state) is C(powered-on).
+    - If I(answer) is set to C(moved), answer as a moved vm.
+    - If I(answer) is set to C(copied), answer as a copied vm.
+    type: str
+    choices:
+    - moved
+    - copied
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
+"""
 
-'''
-
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: Set the state of a virtual machine to poweroff
   community.vmware.vmware_guest_powerstate:
     hostname: "{{ vcenter_hostname }}"
@@ -157,9 +166,9 @@ EXAMPLES = r'''
     state_change_timeout: 200
   delegate_to: localhost
   register: deploy
-'''
+"""
 
-RETURN = r''' # '''
+RETURN = r""" # """
 
 try:
     from pyVmomi import vim, vmodl
@@ -190,6 +199,7 @@ def main():
         schedule_task_description=dict(),
         schedule_task_enabled=dict(type='bool', default=True),
         state_change_timeout=dict(type='int', default=0),
+        answer=dict(type='str', choices=['moved', 'copied'])
     )
 
     module = AnsibleModule(
@@ -197,6 +207,7 @@ def main():
         supports_check_mode=False,
         mutually_exclusive=[
             ['name', 'uuid', 'moid'],
+            ['scheduled_at', 'answer']
         ],
     )
 
@@ -258,7 +269,8 @@ def main():
                                      "given are invalid: %s" % (module.params.get('state'),
                                                                 to_native(e.msg)))
         else:
-            result = set_vm_power_state(pyv.content, vm, module.params['state'], module.params['force'], module.params['state_change_timeout'])
+            result = set_vm_power_state(pyv.content, vm, module.params['state'], module.params['force'], module.params['state_change_timeout'],
+                                        module.params['answer'])
     else:
         id = module.params.get('uuid') or module.params.get('moid') or module.params.get('name')
         module.fail_json(msg="Unable to set power state for non-existing virtual machine : '%s'" % id)

@@ -780,7 +780,7 @@ def find_host_by_cluster_datacenter(module, content, datacenter_name, cluster_na
     return None, cluster
 
 
-def set_vm_power_state(content, vm, state, force, timeout=0):
+def set_vm_power_state(content, vm, state, force, timeout=0, answer=None):
     """
     Set the power status for a VM determined by the current and
     requested states. force is forceful
@@ -809,6 +809,15 @@ def set_vm_power_state(content, vm, state, force, timeout=0):
 
             elif expected_state == 'poweredon':
                 task = vm.PowerOn()
+                if answer:
+                    answers = {
+                        "moved": "1",
+                        "copied": "2"
+                    }
+                    while task.info.state not in [vim.TaskInfo.State.success, vim.TaskInfo.State.error]:
+                        if vm.runtime.question is not None:
+                            question_id = vm.runtime.question.id
+                            vm.AnswerVM(question_id, answers[answer])
 
             elif expected_state == 'restarted':
                 if current_state in ('poweredon', 'poweringon', 'resetting', 'poweredoff'):
