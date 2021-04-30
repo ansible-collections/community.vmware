@@ -309,16 +309,16 @@ class VMwareObjectRolePermission(PyVmomi):
         if self.params['object_moid']:
             moid = self.params['object_moid']
             all_objects = find_obj(content=self.content,
-                                    vimtype=[getattr(vim, self.params['object_type'])],
-                                    name=None,
-                                    first=False)
+                                   vimtype=[getattr(vim, self.params['object_type'])],
+                                   name=None,
+                                   first=False)
             found_obj = [obj for obj in all_objects if moid == obj._moId]
             self.current_obj = found_obj[0] if found_obj else None
 
         else:
             self.current_obj = find_obj(content=self.content,
-                                    vimtype=[getattr(vim, self.params['object_type'])],
-                                    name=self.params['object_name'])
+                                        vimtype=[getattr(vim, self.params['object_type'])],
+                                        name=self.params['object_name'])
 
         if self.current_obj is None:
             self.module.fail_json(
@@ -368,11 +368,11 @@ def main():
         supports_check_mode=True,
         mutually_exclusive=[
             ['principal', 'group'],
-            ['object_name','object_moid']
+            ['object_name', 'object_moid']
         ],
         required_one_of=[
             ['principal', 'group'],
-            ['object_name','object_moid']
+            ['object_name', 'object_moid']
         ],
     )
 
