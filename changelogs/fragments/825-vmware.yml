@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware - fixed a bug that doesn't convert to JSON of the guest_guestion in the facts (https://github.com/ansible-collections/community.vmware/pull/825).
