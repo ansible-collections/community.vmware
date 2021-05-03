@@ -210,7 +210,7 @@ class HostVmnicMgr(PyVmomi):
                             network_hint = host_nw_system.QueryNetworkHint(pnic.device)
                             for hint in self.to_json(network_hint):
                                 if hint.get('lldpInfo'):
-                                    pnic_info['lldp_info'] = {x['key']:x['value'] for x in hint['lldpInfo'].get('parameter')}
+                                    pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
                                 else:
                                     pnic_info['lldp_info'] = 'N/A'
                         else:
