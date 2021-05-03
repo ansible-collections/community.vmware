@@ -714,8 +714,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
             validate_certs=self.get_option('validate_certs'),
-            httpProxyHost=self.get_option('proxy_host'),
-            httpProxyPort=self.get_option('proxy_port')
+            http_proxy_host=self.get_option('proxy_host'),
+            http_proxy_port=self.get_option('proxy_port')
         )
         self.pyv.do_login()
 
