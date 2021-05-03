@@ -1,43 +1,15 @@
-plugins/connection/__init__.py compile-2.6!skip
-plugins/connection/__init__.py import-2.6!skip
-plugins/connection/vmware_tools.py compile-2.6!skip
-plugins/connection/vmware_tools.py import-2.6!skip
-plugins/doc_fragments/__init__.py compile-2.6!skip
-plugins/doc_fragments/__init__.py import-2.6!skip
-plugins/doc_fragments/vca.py compile-2.6!skip
-plugins/doc_fragments/vca.py import-2.6!skip
-plugins/doc_fragments/vmware.py compile-2.6!skip
-plugins/doc_fragments/vmware.py import-2.6!skip
-plugins/doc_fragments/vmware_rest_client.py compile-2.6!skip
-plugins/doc_fragments/vmware_rest_client.py import-2.6!skip
-plugins/httpapi/__init__.py compile-2.6!skip
-plugins/httpapi/__init__.py import-2.6!skip
-plugins/httpapi/vmware.py compile-2.6!skip
-plugins/httpapi/vmware.py import-2.6!skip
-plugins/inventory/__init__.py compile-2.6!skip
-plugins/inventory/__init__.py import-2.6!skip
-plugins/inventory/vmware_vm_inventory.py compile-2.6!skip
-plugins/inventory/vmware_vm_inventory.py import-2.6!skip
-plugins/modules/__init__.py compile-2.6!skip
-plugins/modules/__init__.py import-2.6!skip
-plugins/modules/vca_fw.py compile-2.6!skip
-plugins/modules/vca_fw.py import-2.6!skip
 plugins/modules/vca_fw.py validate-modules:doc-default-does-not-match-spec # deprecated
 plugins/modules/vca_fw.py validate-modules:doc-missing-type # deprecated
 plugins/modules/vca_fw.py validate-modules:doc-required-mismatch # deprecated
 plugins/modules/vca_fw.py validate-modules:parameter-list-no-elements # deprecated
 plugins/modules/vca_fw.py validate-modules:parameter-type-not-in-doc # deprecated
 plugins/modules/vca_fw.py validate-modules:undocumented-parameter # deprecated
-plugins/modules/vca_nat.py compile-2.6!skip
-plugins/modules/vca_nat.py import-2.6!skip
 plugins/modules/vca_nat.py validate-modules:doc-default-does-not-match-spec # deprecated
 plugins/modules/vca_nat.py validate-modules:doc-missing-type # deprecated
 plugins/modules/vca_nat.py validate-modules:doc-required-mismatch # deprecated
 plugins/modules/vca_nat.py validate-modules:parameter-list-no-elements # deprecated
 plugins/modules/vca_nat.py validate-modules:parameter-type-not-in-doc # deprecated
 plugins/modules/vca_nat.py validate-modules:undocumented-parameter # deprecated
-plugins/modules/vca_vapp.py compile-2.6!skip
-plugins/modules/vca_vapp.py import-2.6!skip
 plugins/modules/vca_vapp.py validate-modules:doc-default-does-not-match-spec # deprecated
 plugins/modules/vca_vapp.py validate-modules:doc-missing-type # deprecated
 plugins/modules/vca_vapp.py validate-modules:doc-required-mismatch # deprecated
