@@ -136,11 +136,8 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
 
     objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
     for obj in objects:
-        try:
-            if unquote(obj.name) == name:
-                return obj
-        except vmodl.fault.ManagedObjectNotFound:
-            pass
+        if unquote(obj.name) == name:
+            return obj
 
     return None
 
@@ -651,10 +648,7 @@ def get_all_objs(content, vimtype, folder=None, recurse=True):
     obj = {}
     container = content.viewManager.CreateContainerView(folder, vimtype, recurse)
     for managed_object_ref in container.view:
-        try:
-            obj.update({managed_object_ref: managed_object_ref.name})
-        except vmodl.fault.ManagedObjectNotFound:
-            pass
+        obj.update({managed_object_ref: managed_object_ref.name})
     return obj
 
 
