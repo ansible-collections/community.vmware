@@ -44,12 +44,16 @@ from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils.six.moves.urllib.parse import unquote
-from ansible.errors import AnsibleParserError
 
 
 class TaskError(Exception):
     def __init__(self, *args, **kwargs):
         super(TaskError, self).__init__(*args, **kwargs)
+
+
+class ApiAccessError(Exception):
+    def __init__(self, *args, **kwargs):
+        super(ApiAccessError, self).__init__(*args, **kwargs)
 
 
 def wait_for_task(task, max_backoff=64, timeout=3600):
@@ -574,7 +578,7 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
     def _raise_or_fail(msg):
         if module is not None:
             module.fail_json(msg=msg)
-        raise AnsibleParserError(msg)
+        raise ApiAccessError(msg)
 
     if not hostname:
         _raise_or_fail(msg="Hostname parameter is missing."
