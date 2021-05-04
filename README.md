@@ -198,6 +198,7 @@ Name | Description
 [community.vmware.vmware_host_sriov](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_sriov_module.rst)|Manage SR-IOV settings on host
 [community.vmware.vmware_host_ssl_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_facts_module.rst)|Gather facts of ESXi host system about SSL
 [community.vmware.vmware_host_ssl_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_info_module.rst)|Gather info of ESXi host system about SSL
+[community.vmware.vmware_host_tcpip_stacks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_tcpip_stacks_module.rst)|Manage the TCP/IP Stacks configuration of ESXi host
 [community.vmware.vmware_host_vmhba_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_facts_module.rst)|Gathers facts about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmhba_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_info_module.rst)|Gathers info about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmnic_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmnic_facts_module.rst)|Gathers facts about vmnics available on the given ESXi host

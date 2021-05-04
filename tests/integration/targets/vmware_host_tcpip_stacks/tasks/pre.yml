@@ -1,0 +1,95 @@
+# Test code for the vmware_host_tcpip_stacks module.
+# Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: add portgroups for the test
+  vmware_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    hosts: "{{ esxi_hosts }}"
+    switch: "{{ switch1 }}"
+    portgroup: "{{ item }}"
+    state: present
+  register: portgroups_result
+  loop:
+    - provisioning
+    - vmotion
+
+- name: Make sure if the portgroups are created
+  assert:
+    that:
+      - portgroups_result.changed is sameas true
+
+- name: add vmkernel for provisioning
+  vmware_vmkernel:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    vswitch_name: "{{ switch1 }}"
+    portgroup_name: provisioning
+    network:
+      type: static
+      ip_address: 100.64.0.1
+      subnet_mask: 255.255.255.0
+      tcpip_stack: provisioning
+    state: present
+  register: vmkernel_provisioning_result
+
+- name: Make sure if the vmkernel is created for provisioning
+  assert:
+    that:
+      - vmkernel_provisioning_result.changed is sameas true
+
+- name: add vmkernel for vmotion
+  vmware_vmkernel:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    vswitch_name: "{{ switch1 }}"
+    portgroup_name: vmotion
+    network:
+      type: static
+      ip_address: 100.64.1.1
+      subnet_mask: 255.255.255.0
+      tcpip_stack: vmotion
+    state: present
+  register: vmkernel_vmotion_result
+
+- name: Make sure if the vmkernel is created for vmotion
+  assert:
+    that:
+      - vmkernel_vmotion_result.changed is sameas true
+
+- name: Gather vmk info
+  vmware_vmkernel_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+  register: vmk0_info_result
+
+- name: set the variable of vmk0 ipaddr
+  set_fact:
+    vmk0_ipaddr: "{{ item.ipv4_address }}"
+  loop: "{{ vmk0_info_result.host_vmk_info[esxi_hosts[0]] }}"
+  when:
+    - item.device == "vmk0"
+
+- name: set the variable for each vmk
+  set_fact:
+    provisioning_vmk: "{{ vmkernel_provisioning_result.device }}"
+    vmotion_vmk: "{{ vmkernel_vmotion_result.device }}"
+
+- name: Make sure if defined the variables
+  assert:
+    that:
+      - vmk0_ipaddr is defined
+      - provisioning_vmk is defined
+      - vmotion_vmk is defined

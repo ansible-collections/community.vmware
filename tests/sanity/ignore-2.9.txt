@@ -329,6 +329,8 @@ plugins/modules/vmware_host_ssl_facts.py validate-modules:deprecation-mismatch
 plugins/modules/vmware_host_ssl_facts.py validate-modules:invalid-documentation
 plugins/modules/vmware_host_ssl_info.py compile-2.6!skip
 plugins/modules/vmware_host_ssl_info.py import-2.6!skip
+plugins/modules/vmware_host_tcpip_stacks.py compile-2.6!skip
+plugins/modules/vmware_host_tcpip_stacks.py import-2.6!skip
 plugins/modules/vmware_host_vmhba_facts.py compile-2.6!skip
 plugins/modules/vmware_host_vmhba_facts.py import-2.6!skip
 plugins/modules/vmware_host_vmhba_facts.py validate-modules:deprecation-mismatch
