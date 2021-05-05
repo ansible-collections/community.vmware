@@ -59,6 +59,99 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac_learning</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Dictionary which configures MAC learning for portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>allow_unicast_flooding</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The flag to allow flooding of unlearned MAC for ingress traffic.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The flag to indicate if source MAC address learning is allowed.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>limit</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of MAC addresses that can be learned.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>limit_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>allow</li>
+                                    <li>drop</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The default switching policy after MAC limit is exceeded.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>network_policy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -140,7 +233,6 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
@@ -183,6 +275,49 @@ Parameters
                         <div>The port number of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_allocation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>elastic</li>
+                                    <li>fixed</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Elastic port groups automatically increase or decrease the number of ports as needed.</div>
+                        <div>Only valid if <em>port_binding</em> is set to <code>static</code>.</div>
+                        <div>Will be <code>elastic</code> if not specified and <em>port_binding</em> is set to <code>static</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_binding</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>static</li>
+                                    <li>ephemeral</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The type of port binding determines when ports in a port group are assigned to virtual machines.</div>
+                        <div>See VMware KB 1022312 <a href='https://kb.vmware.com/s/article/1022312'>https://kb.vmware.com/s/article/1022312</a> for more details.</div>
                 </td>
             </tr>
             <tr>
@@ -445,7 +580,6 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
@@ -457,6 +591,7 @@ Parameters
                 </td>
                 <td>
                         <div>See VMware KB 1022312 regarding portgroup types.</div>
+                        <div>Deprecated. Will be removed 2021-12-01.</div>
                 </td>
             </tr>
             <tr>
@@ -539,13 +674,31 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">{"inbound_policy": false, "load_balance_policy": "loadbalance_srcid", "notify_switches": true, "rolling_order": false}</div>
+                        <b>Default:</b><br/><div style="color: blue">{"load_balance_policy": "loadbalance_srcid", "notify_switches": true, "rolling_order": false}</div>
                 </td>
                 <td>
                         <div>Dictionary which configures the different teaming values for portgroup.</div>
                 </td>
             </tr>
                                 <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>active_uplinks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of active uplinks used for load balancing.</div>
+                </td>
+            </tr>
+            <tr>
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -557,7 +710,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
@@ -627,6 +780,24 @@ Parameters
                 </td>
                 <td>
                         <div>Indicate whether or not to use a rolling policy when restoring links.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>standby_uplinks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of standby uplinks used for failover.</div>
                 </td>
             </tr>
 
@@ -737,7 +908,7 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 5.5, 6.5
+   - Tested on vSphere 7.0
 
 
 
@@ -755,7 +926,7 @@ Examples
         switch_name: dvSwitch
         vlan_id: 123
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
       delegate_to: localhost
 
@@ -769,7 +940,7 @@ Examples
         vlan_id: 1-1000, 1005, 1100-1200
         vlan_trunk: True
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
       delegate_to: localhost
 
@@ -783,7 +954,7 @@ Examples
         vlan_id: 1001
         vlan_private: True
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
       delegate_to: localhost
 
@@ -796,7 +967,7 @@ Examples
         switch_name: dvSwitch
         vlan_id: 0
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
       delegate_to: localhost
 
@@ -809,7 +980,7 @@ Examples
         switch_name: dvSwitch
         vlan_id: 123
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         network_policy:
           promiscuous: true

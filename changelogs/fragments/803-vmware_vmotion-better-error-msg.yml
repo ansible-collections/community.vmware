@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_vmotion - Provide an meaningful error message when providing a bad ESXi node as ``destination_host``
-    (https://github.com/ansible-collections/vmware/pull/804).

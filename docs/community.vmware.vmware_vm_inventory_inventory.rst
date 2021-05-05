@@ -440,14 +440,15 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                     <td>
                     </td>
                 <td>
                         <div>This option transform flatten properties name to nested dictionary.</div>
+                        <div>From 1.10.0 and onwards, default value is set to <code>True</code>.</div>
                 </td>
             </tr>
             <tr>

@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_guest - add more documentation about ``is_template`` (https://github.com/ansible-collections/community.vmware/pull/794).

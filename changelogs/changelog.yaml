@@ -317,6 +317,68 @@ releases:
     - vmware_pg_options.yml
     - vmware_vm_storage_policy_module.yml
     release_date: '2020-08-01'
+  1.10.0:
+    changes:
+      bugfixes:
+      - vmware - fixed a bug that the guest_guestion in the facts doesn't convert
+        to the dictionary (https://github.com/ansible-collections/community.vmware/pull/825).
+      - vmware - handle exception raised in ``get_all_objs`` and ``find_object_by_name``
+        which occurs due to multiple parallel operations (https://github.com/ansible-collections/community.vmware/issues/791).
+      - vmware_cluster_info - Fix a bug that returned enabled_vsan and vsan_auto_claim_storage
+        as lists instead of just true or false (https://github.com/ansible-collections/community.vmware/issues/805).
+      - vmware_evc_mode - fixed an issue that evc_mode is required when the state
+        parameter set to absent (https://github.com/ansible-collections/community.vmware/pull/764).
+      - vmware_guest - skip customvalues while deploying VM on a standalone ESXi (https://github.com/ansible-collections/community.vmware/issues/721).
+      - vmware_host_iscsi_info - fixed an issue that an error occurs gathering iSCSI
+        information against an ESXi Host with iSCSI disabled (https://github.com/ansible-collections/community.vmware/pull/729).
+      - vmware_vm_info - handle vApp parent logic (https://github.com/ansible-collections/community.vmware/issues/777).
+      - vmware_vm_shell - handle exception raised while performing the operation (https://github.com/ansible-collections/community.vmware/issues/732).
+      - vmware_vm_storage_policy_info - fixed an issue that the module can't get storage
+        policy info when the policy has the tag base rules (https://github.com/ansible-collections/community.vmware/pull/788).
+      - vmware_vmotion - Provide an meaningful error message when providing a bad
+        ESXi node as ``destination_host`` (https://github.com/ansible-collections/vmware/pull/804).
+      minor_changes:
+      - vmware_cluster_drs - Make enable_drs an alias of enable and add a warning
+        that the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_cluster_ha - Make enable_ha an alias of enable and add a warning that
+        the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_cluster_vsan - Make enable_vsan an alias of enable and add a warning
+        that the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_dvs_portgroup - Implement 'elastic' port group configuration (https://github.com/ansible-collections/community.vmware/issues/410).
+      - vmware_dvs_portgroup - Implement MAC learning configuration (https://github.com/ansible-collections/community.vmware/issues/644).
+      - vmware_dvs_portgroup - Implement configuration of active and standby uplinks
+        (https://github.com/ansible-collections/community.vmware/issues/709).
+      - vmware_dvs_portgroup - Remove default for teaming_policy.inbound_policy (https://github.com/ansible-collections/community.vmware/pull/743).
+      - vmware_dvs_portgroup_info - Return information about MAC learning configuration
+        (https://github.com/ansible-collections/community.vmware/issues/644).
+      - vmware_dvs_portgroup_info - Return information about uplinks (https://github.com/ansible-collections/community.vmware/issues/709).
+      - vmware_guest - add more documentation about ``is_template`` (https://github.com/ansible-collections/community.vmware/pull/794).
+      - vmware_host_iscsi_info - added a list(detected_iscsi_drives) of detected iscsi
+        drives to the return value after set an iscsi config (https://github.com/ansible-collections/community.vmware/pull/729).
+      - vmware_tag - modified the category_id parameter to required (https://github.com/ansible-collections/community.vmware/pull/790).
+      - vmware_vm_inventory - set default to ``True`` for ``with_nested_properties``
+        (https://github.com/ansible-collections/community.vmware/issues/712).
+    fragments:
+    - 644-vmware_dvs_portgroup.yml
+    - 712_vmware_vm_inventory.yml
+    - 721_vmware_guest.yml
+    - 729-vmware_host_iscsi_info.yml
+    - 732_vmware_vm_shell.yml
+    - 739-vmware_cluster_drs.yml
+    - 764-vmware_evc_mode.yml
+    - 777_vapp_info.yml
+    - 788-vmware_vm_storage_policy_info.yml
+    - 790-vmware_tag.yml
+    - 791_vmware.yml
+    - 803-vmware_vmotion-better-error-msg.yml
+    - 805-vmware_cluster_info.yml
+    - 825-vmware.yml
+    - is_template.yml
+    modules:
+    - description: Manage the TCP/IP Stacks configuration of ESXi host
+      name: vmware_host_tcpip_stacks
+      namespace: ''
+    release_date: '2021-05-05'
   1.2.0:
     changes:
       bugfixes:
