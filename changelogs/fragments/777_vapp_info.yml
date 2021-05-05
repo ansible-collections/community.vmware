@@ -1,2 +1,0 @@
-bugfixes:
-- vmware_vm_info - handle vApp parent logic (https://github.com/ansible-collections/community.vmware/issues/777).

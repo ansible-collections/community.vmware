@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_evc_mode - fixed an issue that evc_mode is required when the state parameter set to absent (https://github.com/ansible-collections/community.vmware/pull/764).

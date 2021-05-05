@@ -157,7 +157,7 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable_drs</b>
+                    <b>enable</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -171,6 +171,7 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to enable DRS.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: enable_drs</div>
                 </td>
             </tr>
             <tr>
@@ -318,7 +319,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: true
+        enable: true
       delegate_to: localhost
 
     - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
@@ -328,7 +329,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_drs: true
+        enable: true
         advanced_settings:
           'TryBalanceVmsPerHost': '1'
       delegate_to: localhost
@@ -340,7 +341,7 @@ Examples
         password: "{{ vcenter_password }}"
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
-        enable_drs: True
+        enable: True
         drs_default_vm_behavior: partiallyAutomated
       delegate_to: localhost
 
