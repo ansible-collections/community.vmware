@@ -18,6 +18,7 @@ description:
 - If C(cluster_name) is provided, then vmnic information about all hosts from given cluster will be returned.
 - If C(esxi_hostname) is provided, then vmnic information about given host system will be returned.
 - Additional details about vswitch and dvswitch with respective vmnic is also provided which is added in 2.7 version.
+- Additional details about lldp added in 1.10.0
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
@@ -86,6 +87,7 @@ hosts_vmnics_info:
     - for C(num_vmnics), only NICs starting with vmnic are counted. NICs like vusb* are not counted.
     - details about vswitch and dvswitch was added in version 2.7.
     - details about vmnics was added in version 2.8.
+    - details about lldp was added in version 1.10.0
     returned: hosts_vmnics_info
     type: dict
     sample:
@@ -115,6 +117,27 @@ hosts_vmnics_info:
                         "configured_speed": "Auto negotiate",
                         "device": "vmnic0",
                         "driver": "ixgbe",
+                        "lldp_info": {
+                            "Aggregated Port ID": "0",
+                            "Aggregation Status": "1",
+                            "Enabled Capabilities": {
+                                "_vimtype": "vim.host.PhysicalNic.CdpDeviceCapability",
+                                "host": false,
+                                "igmpEnabled": false,
+                                "networkSwitch": false,
+                                "repeater": false,
+                                "router": true,
+                                "sourceRouteBridge": false,
+                                "transparentBridge": true
+                            },
+                            "MTU": "9216",
+                            "Port Description": "switch port description",
+                            "Samples": 18814,
+                            "System Description": "omitted from output",
+                            "System Name": "sw1",
+                            "TimeOut": 30,
+                            "Vlan ID": "1"
+                        },
                         "location": "0000:01:00.0",
                         "mac": "aa:bb:cc:dd:ee:ff",
                         "status": "Connected",
@@ -127,6 +150,7 @@ hosts_vmnics_info:
                         "configured_speed": "Auto negotiate",
                         "device": "vmnic1",
                         "driver": "ixgbe",
+                        "lldp_info": "N/A",
                         "location": "0000:01:00.1",
                         "mac": "ab:ba:cc:dd:ee:ff",
                         "status": "Connected",
