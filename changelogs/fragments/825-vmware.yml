@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware - fixed a bug that the guest_guestion in the facts doesn't convert to the dictionary (https://github.com/ansible-collections/community.vmware/pull/825).
