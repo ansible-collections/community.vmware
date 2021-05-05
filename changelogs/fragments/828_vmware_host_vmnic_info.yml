@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_host_vmnic_info - add LLDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/828).
