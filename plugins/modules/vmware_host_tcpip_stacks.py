@@ -55,8 +55,13 @@ options:
         type: list
       gateway:
         description:
-          - The gateway address.
+          - The ipv4 gateway address.
         type: str
+      ipv6_gateway:
+        description:
+          - The ipv6 gateway address.
+        type: str
+        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -77,8 +82,13 @@ options:
     suboptions:
       gateway:
         description:
-          - The gateway address.
+          - The ipv4 gateway address.
         type: str
+      ipv6_gateway:
+        description:
+          - The ipv6 gateway address.
+        type: str
+        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -99,8 +109,13 @@ options:
     suboptions:
       gateway:
         description:
-          - The gateway address.
+          - The ipv4 gateway address.
         type: str
+      ipv6_gateway:
+        description:
+          - The ipv6 gateway address.
+        type: str
+        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -121,8 +136,13 @@ options:
     suboptions:
       gateway:
         description:
-          - The gateway address.
+          - The ipv4 gateway address.
         type: str
+      ipv6_gateway:
+        description:
+          - The ipv6 gateway address.
+        type: str
+        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -137,6 +157,8 @@ options:
         default: 11000
         type: int
     type: dict
+    aliases:
+      - nsx_overlay
 extends_documentation_fragment:
   - community.vmware.vmware.documentation
 '''
@@ -195,6 +217,16 @@ EXAMPLES = r'''
       congestion_algorithm: newreno
       max_num_connections: 12000
       gateway: 10.10.10.254
+
+- name: Update the ipv6 gateway of the provisioning
+  community.vmware.vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hostname }}"
+    provisioning:
+      ipv6_gateway: ::ffff:6440:301
 '''
 
 RETURN = r'''
@@ -208,6 +240,7 @@ default:
         "congestion_algorithm": "cubic",
         "domain": "example.com",
         "gateway": "192.168.10.1",
+        "ipv6_gateway", null,
         "hostname": "esxi-test03",
         "max_num_connections": 12000,
         "preferred_dns": "192.168.10.1",
@@ -224,6 +257,7 @@ provisioning:
     {
         "congestion_algorithm": "newreno",
         "gateway": "10.10.10.254",
+        "ipv6_gateway": null,
         "max_num_connections": 12000
     }
 vmotion:
@@ -234,6 +268,7 @@ vmotion:
     {
         "congestion_algorithm": "newreno",
         "gateway": null,
+        "ipv6_gateway": null,
         "max_num_connections": 11000
     }
 vxlan:
@@ -244,6 +279,7 @@ vxlan:
     {
         "congestion_algorithm": "newreno",
         "gateway": null,
+        "ipv6_gateway": null,
         "max_num_connections": 11000
     }
 '''
@@ -339,6 +375,7 @@ class VmwareHostTcpipStack(PyVmomi):
                     alternate_dns=exist_dns_servers[1] if [dns for dns in exist_dns_servers if exist_dns_servers.index(dns) == 1] else None,
                     search_domains=self.exist_net_stack_instance_config['default'].dnsConfig.searchDomain,
                     gateway=self.exist_net_stack_instance_config['default'].ipRouteConfig.defaultGateway,
+                    ipv6_gateway=self.exist_net_stack_instance_config['default'].ipRouteConfig.ipV6DefaultGateway,
                     congestion_algorithm=self.exist_net_stack_instance_config['default'].congestionControlAlgorithm,
                     max_num_connections=self.exist_net_stack_instance_config['default'].requestedMaxNumberOfConnections
                 )
@@ -361,6 +398,9 @@ class VmwareHostTcpipStack(PyVmomi):
                     if self.diff_config['before']['default']['gateway'] != self.default['gateway']:
                         self.change_flag = True
                         self.diff_config['after']['default']['gateway'] = self.default['gateway']
+                    if self.diff_config['before']['default']['ipv6_gateway'] != self.default['ipv6_gateway']:
+                        self.change_flag = True
+                        self.diff_config['after']['default']['ipv6_gateway'] = self.default['ipv6_gateway']
                     if self.diff_config['before']['default']['congestion_algorithm'] != self.default['congestion_algorithm']:
                         self.change_flag = True
                         self.diff_config['after']['default']['congestion_algorithm'] = self.default['congestion_algorithm']
@@ -372,6 +412,7 @@ class VmwareHostTcpipStack(PyVmomi):
             for key in 'before', 'after':
                 self.diff_config[key]['provisioning'] = dict(
                     gateway=self.exist_net_stack_instance_config['provisioning'].ipRouteConfig.defaultGateway,
+                    ipv6_gateway=self.exist_net_stack_instance_config['provisioning'].ipRouteConfig.ipV6DefaultGateway,
                     congestion_algorithm=self.exist_net_stack_instance_config['provisioning'].congestionControlAlgorithm,
                     max_num_connections=self.exist_net_stack_instance_config['provisioning'].requestedMaxNumberOfConnections
                 )
@@ -379,6 +420,9 @@ class VmwareHostTcpipStack(PyVmomi):
                 if self.diff_config['before']['provisioning']['gateway'] != self.provisioning['gateway']:
                     self.change_flag = True
                     self.diff_config['after']['provisioning']['gateway'] = self.provisioning['gateway']
+                if self.diff_config['before']['provisioning']['ipv6_gateway'] != self.provisioning['ipv6_gateway']:
+                    self.change_flag = True
+                    self.diff_config['after']['provisioning']['ipv6_gateway'] = self.provisioning['ipv6_gateway']
                 if self.diff_config['before']['provisioning']['max_num_connections'] != self.provisioning['max_num_connections']:
                     self.change_flag = True
                     self.diff_config['after']['provisioning']['max_num_connections'] = self.provisioning['max_num_connections']
@@ -390,6 +434,7 @@ class VmwareHostTcpipStack(PyVmomi):
             for key in 'before', 'after':
                 self.diff_config[key]['vmotion'] = dict(
                     gateway=self.exist_net_stack_instance_config['vmotion'].ipRouteConfig.defaultGateway,
+                    ipv6_gateway=self.exist_net_stack_instance_config['vmotion'].ipRouteConfig.ipV6DefaultGateway,
                     congestion_algorithm=self.exist_net_stack_instance_config['vmotion'].congestionControlAlgorithm,
                     max_num_connections=self.exist_net_stack_instance_config['vmotion'].requestedMaxNumberOfConnections
                 )
@@ -397,6 +442,9 @@ class VmwareHostTcpipStack(PyVmomi):
                 if self.diff_config['before']['vmotion']['gateway'] != self.vmotion['gateway']:
                     self.change_flag = True
                     self.diff_config['after']['vmotion']['gateway'] = self.vmotion['gateway']
+                if self.diff_config['before']['vmotion']['ipv6_gateway'] != self.vmotion['ipv6_gateway']:
+                    self.change_flag = True
+                    self.diff_config['after']['vmotion']['ipv6_gateway'] = self.vmotion['ipv6_gateway']
                 if self.diff_config['before']['vmotion']['max_num_connections'] != self.vmotion['max_num_connections']:
                     self.change_flag = True
                     self.diff_config['after']['vmotion']['max_num_connections'] = self.vmotion['max_num_connections']
@@ -408,6 +456,7 @@ class VmwareHostTcpipStack(PyVmomi):
             for key in 'before', 'after':
                 self.diff_config[key]['vxlan'] = dict(
                     gateway=self.exist_net_stack_instance_config['vxlan'].ipRouteConfig.defaultGateway,
+                    ipv6_gateway=self.exist_net_stack_instance_config['vxlan'].ipRouteConfig.ipV6DefaultGateway,
                     congestion_algorithm=self.exist_net_stack_instance_config['vxlan'].congestionControlAlgorithm,
                     max_num_connections=self.exist_net_stack_instance_config['vxlan'].requestedMaxNumberOfConnections
                 )
@@ -415,6 +464,9 @@ class VmwareHostTcpipStack(PyVmomi):
                 if self.diff_config['before']['vxlan']['gateway'] != self.vxlan['gateway']:
                     self.change_flag = True
                     self.diff_config['after']['vxlan']['gateway'] = self.vxlan['gateway']
+                if self.diff_config['before']['vxlan']['ipv6_gateway'] != self.vxlan['ipv6_gateway']:
+                    self.change_flag = True
+                    self.diff_config['after']['vxlan']['ipv6_gateway'] = self.vxlan['ipv6_gateway']
                 if self.diff_config['before']['vxlan']['max_num_connections'] != self.vxlan['max_num_connections']:
                     self.change_flag = True
                     self.diff_config['after']['vxlan']['max_num_connections'] = self.vxlan['max_num_connections']
@@ -436,6 +488,7 @@ class VmwareHostTcpipStack(PyVmomi):
             default_config.netStackInstance.key = self.net_stack_instance_keys['default']
             default_config.netStackInstance.ipRouteConfig = vim.host.IpRouteConfig()
             default_config.netStackInstance.ipRouteConfig.defaultGateway = self.default['gateway']
+            default_config.netStackInstance.ipRouteConfig.ipV6DefaultGateway = self.default['ipv6_gateway']
             default_config.netStackInstance.dnsConfig = vim.host.DnsConfig()
             default_config.netStackInstance.dnsConfig.hostName = self.default['hostname']
             default_config.netStackInstance.dnsConfig.domainName = self.default['domain']
@@ -457,6 +510,7 @@ class VmwareHostTcpipStack(PyVmomi):
             provisioning_config.netStackInstance.key = self.net_stack_instance_keys['provisioning']
             provisioning_config.netStackInstance.ipRouteConfig = vim.host.IpRouteConfig()
             provisioning_config.netStackInstance.ipRouteConfig.defaultGateway = self.provisioning['gateway']
+            provisioning_config.netStackInstance.ipRouteConfig.ipV6DefaultGateway = self.provisioning['ipv6_gateway']
             provisioning_config.netStackInstance.congestionControlAlgorithm = self.provisioning['congestion_algorithm']
             provisioning_config.netStackInstance.requestedMaxNumberOfConnections = self.provisioning['max_num_connections']
             self.new_net_stack_instance_configs.netStackSpec.append(provisioning_config)
@@ -468,6 +522,7 @@ class VmwareHostTcpipStack(PyVmomi):
             vmotion_config.netStackInstance.key = self.net_stack_instance_keys['vmotion']
             vmotion_config.netStackInstance.ipRouteConfig = vim.host.IpRouteConfig()
             vmotion_config.netStackInstance.ipRouteConfig.defaultGateway = self.vmotion['gateway']
+            vmotion_config.netStackInstance.ipRouteConfig.ipV6DefaultGateway = self.vmotion['ipv6_gateway']
             vmotion_config.netStackInstance.congestionControlAlgorithm = self.vmotion['congestion_algorithm']
             vmotion_config.netStackInstance.requestedMaxNumberOfConnections = self.vmotion['max_num_connections']
             self.new_net_stack_instance_configs.netStackSpec.append(vmotion_config)
@@ -479,6 +534,7 @@ class VmwareHostTcpipStack(PyVmomi):
             vxlan_config.netStackInstance.key = self.net_stack_instance_keys['vxlan']
             vxlan_config.netStackInstance.ipRouteConfig = vim.host.IpRouteConfig()
             vxlan_config.netStackInstance.ipRouteConfig.defaultGateway = self.vxlan['gateway']
+            vxlan_config.netStackInstance.ipRouteConfig.ipV6DefaultGateway = self.vxlan['ipv6_gateway']
             vxlan_config.netStackInstance.congestionControlAlgorithm = self.vxlan['congestion_algorithm']
             vxlan_config.netStackInstance.requestedMaxNumberOfConnections = self.vxlan['max_num_connections']
             self.new_net_stack_instance_configs.netStackSpec.append(vxlan_config)
@@ -497,6 +553,8 @@ class VmwareHostTcpipStack(PyVmomi):
                 self.generate_net_stack_instance_config()
                 try:
                     self.host_obj.configManager.networkSystem.UpdateNetworkConfig(self.new_net_stack_instance_configs, 'modify')
+                except vim.fault.PlatformConfigFault as e:
+                    self.module.fail_json(msg="cannot modify tcpip stack config: %s" % to_text(e.faultMessage[0].message))
                 except Exception as e:
                     self.module.fail_json(msg="cannot modify tcpip stack config: %s" % to_text(e.msg))
 
@@ -533,6 +591,7 @@ def main():
                          alternate_dns=dict(type='str'),
                          search_domains=dict(type='list', elements='str', default=[]),
                          gateway=dict(type='str'),
+                         ipv6_gateway=dict(type='str'),
                          congestion_algorithm=dict(type='str', choices=['newreno', 'cubic'], default='newreno'),
                          max_num_connections=dict(type='int', default=11000)
 
@@ -540,18 +599,22 @@ def main():
         provisioning=dict(type='dict',
                           options=dict(
                               gateway=dict(type='str'),
+                              ipv6_gateway=dict(type='str'),
                               congestion_algorithm=dict(type='str', choices=['newreno', 'cubic'], default='newreno'),
                               max_num_connections=dict(type='int', default=11000)
                           )),
         vmotion=dict(type='dict',
                      options=dict(
                          gateway=dict(type='str'),
+                         ipv6_gateway=dict(type='str'),
                          congestion_algorithm=dict(type='str', choices=['newreno', 'cubic'], default='newreno'),
                          max_num_connections=dict(type='int', default=11000)
                      )),
         vxlan=dict(type='dict',
+                   aliases=['nsx_overlay'],
                    options=dict(
                        gateway=dict(type='str'),
+                       ipv6_gateway=dict(type='str'),
                        congestion_algorithm=dict(type='str', choices=['newreno', 'cubic'], default='newreno'),
                        max_num_connections=dict(type='int', default=11000)
                    ))
