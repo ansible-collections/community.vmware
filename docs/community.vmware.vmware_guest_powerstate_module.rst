@@ -42,6 +42,28 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>answer</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>moved</li>
+                                    <li>copied</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The <em>answer</em> is required in the vm starting process if the vm is blocked after you copied or moved the vm.</div>
+                        <div>The <em>answer</em> can be used if <em>state</em> is <code>powered-on</code>.</div>
+                        <div>If <em>answer</em> is set to <code>moved</code>, answer as a moved vm.</div>
+                        <div>If <em>answer</em> is set to <code>copied</code>, answer as a copied vm.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
