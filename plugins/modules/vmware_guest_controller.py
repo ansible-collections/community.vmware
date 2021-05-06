@@ -108,6 +108,13 @@ options:
          choices:
            - present
            - absent
+       bus_sharing:
+         description:
+         - Bus sharing type for SCSI controller.
+         required: false
+         type: str
+         choices: ['noSharing', 'physicalSharing', 'virtualSharing' ]
+         version_added: '1.8.0'
      type: list
      elements: dict
    gather_disk_controller_facts:
@@ -125,7 +132,6 @@ options:
      type: int
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -145,7 +151,6 @@ EXAMPLES = r'''
         type: usb3
   delegate_to: localhost
   register: disk_controller_facts
-
 - name: Remove disk controllers and USB 2.0 from virtual machine located by moid
   community.vmware.vmware_guest_controller:
     hostname: "{{ vcenter_hostname }}"
@@ -207,7 +212,8 @@ disk_controller_status:
                 ],
                 "controller_label": "SCSI controller 0",
                 "controller_summary": "LSI Logic SAS",
-                "controller_unitnumber": 3
+                "controller_unitnumber": 3,
+                "controller_sharedbus": 'noSharing'
             },
             "1": {
                 "controller_busnumber": 1,
@@ -216,7 +222,8 @@ disk_controller_status:
                 "controller_disks_devicekey": [],
                 "controller_label": "SCSI controller 1",
                 "controller_summary": "VMware paravirtual SCSI",
-                "controller_unitnumber": 4
+                "controller_unitnumber": 4,
+                "controller_sharedbus": 'physicalSharing'
             }
         },
         "usb2": {
@@ -302,13 +309,13 @@ class PyVmomiHelper(PyVmomi):
 
         return ctl_specified, disks_attached_exist
 
-    def create_controller(self, ctl_type, bus_number=0):
+    def create_controller(self, ctl_type, bus_number=0, bus_sharing='noSharing'):
         """
         Create new disk or USB controller with specified type
         Args:
             ctl_type: controller type
             bus_number: disk controller bus number
-
+            bus_sharing: noSharing, virtualSharing, physicalSharing
         Return: Virtual device spec for virtual controller
         """
         disk_ctl = vim.vm.device.VirtualDeviceSpec()
@@ -323,7 +330,7 @@ class PyVmomiHelper(PyVmomi):
             disk_ctl.device = self.scsi_device_type.get(ctl_type)()
             disk_ctl.device.key = -randint(1000, 6999)
             disk_ctl.device.hotAddRemove = True
-            disk_ctl.device.sharedBus = 'noSharing'
+            disk_ctl.device.sharedBus = '%s' % bus_sharing
             disk_ctl.device.scsiCtlrUnitNumber = 7
         elif ctl_type in self.usb_device_type.keys():
             disk_ctl.device = self.usb_device_type.get(ctl_type)()
@@ -340,7 +347,6 @@ class PyVmomiHelper(PyVmomi):
     def gather_disk_controller_facts(self):
         """
         Gather existing controller facts
-
         Return: A dictionary of each type controller facts
         """
         disk_ctl_facts = dict(
@@ -361,6 +367,7 @@ class PyVmomiHelper(PyVmomi):
                     controller_devicekey=device.key,
                     controller_unitnumber=device.unitNumber,
                     controller_disks_devicekey=device.device,
+                    controller_sharedbus=device.sharedBus
                 )
                 if isinstance(device, tuple(self.scsi_device_type.values())):
                     disk_ctl_facts['scsi'].update(ctl_facts_dict)
@@ -378,7 +385,6 @@ class PyVmomiHelper(PyVmomi):
     def sanitize_disk_controller_config(self):
         """
         Check correctness of controller configuration provided by user
-
         Return: A list of dictionary with checked controller configured
         """
         if not self.params.get('controllers'):
@@ -410,6 +416,12 @@ class PyVmomiHelper(PyVmomi):
                             ctl_config['controller_number'] = self.disk_ctl_bus_num_list['scsi'].pop(0)
                         else:
                             ctl_config['controller_number'] = None
+
+                        # Set default value for bus_sharing if not given at
+                        # all.
+                        if ctl_config.get('bus_sharing') is None:
+                            ctl_config['bus_sharing'] = 'noSharing'
+
                     elif ctl_config['type'] == 'sata' or ctl_config['type'] == 'nvme':
                         if len(self.disk_ctl_bus_num_list.get(ctl_config['type'])) != 0:
                             ctl_config['controller_number'] = self.disk_ctl_bus_num_list.get(ctl_config['type']).pop(0)
@@ -421,7 +433,6 @@ class PyVmomiHelper(PyVmomi):
     def configure_disk_controllers(self):
         """
         Do disk controller management, add or remove
-
         Return: Operation result
         """
         if self.params['gather_disk_controller_facts']:
@@ -443,7 +454,14 @@ class PyVmomiHelper(PyVmomi):
                 # create other disk controller
                 else:
                     if disk_ctl_config.get('controller_number') is not None:
-                        disk_controller_new = self.create_controller(disk_ctl_config['type'], disk_ctl_config.get('controller_number'))
+                        disk_controller_new = (
+                            self.create_controller(
+                                disk_ctl_config['type'],
+                                disk_ctl_config.get('controller_number'),
+                                disk_ctl_config.get('bus_sharing'),
+                            )
+                        )
+
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
                     else:
@@ -464,8 +482,13 @@ class PyVmomiHelper(PyVmomi):
                         self.module.warn("Can not remove specified controller, type '%s', bus number '%s',"
                                          " there are disks attaching to it." % (disk_ctl_config['type'], disk_ctl_config.get('controller_number')))
                 else:
-                    self.module.warn("Not find specified controller to remove, type '%s', bus number '%s'."
-                                     % (disk_ctl_config['type'], disk_ctl_config.get('controller_number')))
+                    self.module.warn(
+                        "Specified controller to remove, type '%s', "
+                        "bus number '%s not found'." % (
+                            disk_ctl_config['type'],
+                            disk_ctl_config.get('controller_number')
+                        )
+                    )
 
         try:
             task = self.current_vm_obj.ReconfigVM_Task(spec=self.config_spec)
@@ -510,6 +533,11 @@ def main():
                     choices=['sata', 'nvme', 'lsilogic', 'buslogic', 'lsilogicsas', 'paravirtual', 'usb2', 'usb3'],
                     required=True,
                 ),
+                bus_sharing=dict(
+                    type='str',
+                    choices=['noSharing', 'physicalSharing', 'virtualSharing'],
+                    required=False
+                )
             ),
         ),
         use_instance_uuid=dict(type='bool', default=False),
