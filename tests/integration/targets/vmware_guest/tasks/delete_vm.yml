@@ -76,7 +76,7 @@
   register: delete_vm
   ignore_errors: true
 
-- name: assert that changes were not made
+- name: assert that VM was deleted
   assert:
     that:
         - delete_vm.changed
