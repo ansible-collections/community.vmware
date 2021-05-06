@@ -1,0 +1,7 @@
+---
+- name: Install dependencies
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - pip:
+        name: toml
