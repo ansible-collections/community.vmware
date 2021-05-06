@@ -21,7 +21,7 @@ description:
 - M(community.vmware.vmware_guest_powerstate) module is also needed to poweroff the instant cloned module.
 - The powered off VM would in turn be deleted by again using M(community.vmware.vmware_guest) module.
 - Thus M(community.vmware.vmware_guest) module is necessary for removing Instant Cloned VM when VMs being created in testing environment.
-
+- Also GuestOS Customization has now been added with guestinfo_vars parameter.
 options:
   name:
     description:
@@ -84,7 +84,48 @@ options:
       - C(Resources) is the default name of resource pool.
     type: str
     required: False
-
+  guestinfo_vars:
+    description:
+      - Provides GuestOS Customization functionality in instant cloned VM.
+      - A list of key value pairs that will be passed to the destination VM.
+      - These pairs should be used to provide user-defined customization to differentiate the destination VM from the source VM.
+    suboptions:
+      hostname:
+        description:
+          - User specific hostname value which is child of guestinfo.ic option.
+        type: str
+      ipaddress:
+        description:
+          - User specific ipaddress value which is child of guestinfo.ic option.
+        type: str
+      netmask:
+        description:
+          - User specific netmask value which is child of guestinfo.ic option.
+        type: str
+      gateway:
+        description:
+          - User specific gateway value which is child of guestinfo.ic option.
+        type: str
+      dns:
+        description:
+          - User specific dns value which is child of guestinfo.ic option.
+        type: str
+      networktype:
+        description:
+          - User specific networktype value which is child of guestinfo.ic option.
+        type: str
+      uuid:
+        description:
+          - User specific uuid value which is child of guestinfo.ic option.
+        type: str
+      uuidHex:
+        description:
+          - User specific uuidHex value which is child of guestinfo.ic option.
+        type: str
+    version_added: '1.10.0'
+    default: []
+    type: list
+    elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -134,6 +175,31 @@ EXAMPLES = r'''
     state: absent
   register: delete_instant_clone_from_vm_when_cluster
   ignore_errors: true
+  delegate_to: localhost
+
+- name: Instant Clone a VM with guest_customization
+  community.vmware.vmware_guest_instant_clone:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    folder: "{{ f0 }}"
+    datastore: "{{ rw_datastore }}"
+    datacenter: "{{ dc1 }}"
+    host: "{{ esxi1 }}"
+    guestinfo_vars:
+      - hostname: "{{ guestinfo.ic.hostname }}"
+        ipaddress: "{{ guestinfo.ic.ipaddress }}"
+        netmask: "{{ guestinfo.ic.netmask }}"
+        gateway: "{{ guestinfo.ic.gateway }}"
+        dns: "{{ guestinfo.ic.dns }}"
+        networktype: "{{ guestinfo.ic.networktype }}"
+        uuid: "{{ guestinfo.ic.uuid }}"
+        uuidHex: "{{ guestinfo.ic.uuidHex }}"
+    name: "Instant_clone_guest_customize"
+    parent_vm: "test_vm1"
+    resource_pool: DC0_C0_RP1
+  register: Instant_cloned_guest_customize
   delegate_to: localhost
 
 - name: Instant Clone a VM when skipping optional params
@@ -225,6 +291,7 @@ class VmwareGuestInstantClone(PyVmomi):
         self.uuid = self.params.get('uuid')
         self.port = self.params.get('port')
         self.use_instance_uuid = self.params.get('use_instance_uuid')
+        self.guestinfo_vars = self.params.get('guestinfo_vars')
 
     def get_new_vm_info(self, vm):
         # to check if vm has been cloned in the destination vc
@@ -331,6 +398,21 @@ class VmwareGuestInstantClone(PyVmomi):
         else:
             self.resource_pool = self.host.parent.resourcePool
 
+        if self.params['guestinfo_vars']:
+            self.guestinfo_vars = self.dict_to_optionvalues()
+        else:
+            self.guestinfo_vars = None
+
+    def dict_to_optionvalues(self):
+        optionvalues = []
+        for dictionary in self.params['guestinfo_vars']:
+            for key, value in dictionary.items():
+                opt = vim.option.OptionValue()
+                (opt.key, opt.value) = ("guestinfo.ic." + key, value)
+                optionvalues.append(opt)
+
+        return optionvalues
+
     def populate_specs(self):
 
         # populate relocate spec
@@ -340,6 +422,7 @@ class VmwareGuestInstantClone(PyVmomi):
         # populate Instant clone spec
         self.instant_clone_spec.name = self.vm_name
         self.instant_clone_spec.location = self.relocate_spec
+        self.instant_clone_spec.config = self.guestinfo_vars
 
 
 def main():
@@ -354,7 +437,22 @@ def main():
         host=dict(type='str', required=True, aliases=['esxi_hostname']),
         folder=dict(type='str', required=False),
         resource_pool=dict(type='str', required=False),
-        parent_vm=dict(type='str')
+        parent_vm=dict(type='str'),
+        guestinfo_vars=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                ipaddress=dict(type='str'),
+                netmask=dict(type='str'),
+                gateway=dict(type='str'),
+                dns=dict(type='str'),
+                hostname=dict(type='str'),
+                networktype=dict(type='str'),
+                uuid=dict(type='str'),
+                uuidHex=dict(type='str'),
+            ),
+        ),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
