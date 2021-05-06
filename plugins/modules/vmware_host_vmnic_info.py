@@ -18,7 +18,7 @@ description:
 - If C(cluster_name) is provided, then vmnic information about all hosts from given cluster will be returned.
 - If C(esxi_hostname) is provided, then vmnic information about given host system will be returned.
 - Additional details about vswitch and dvswitch with respective vmnic is also provided which is added in 2.7 version.
-- Additional details about lldp added in 1.10.0
+- Additional details about lldp added in 1.11.0
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
@@ -87,7 +87,7 @@ hosts_vmnics_info:
     - for C(num_vmnics), only NICs starting with vmnic are counted. NICs like vusb* are not counted.
     - details about vswitch and dvswitch was added in version 2.7.
     - details about vmnics was added in version 2.8.
-    - details about lldp was added in version 1.10.0
+    - details about lldp was added in version 1.11.0
     returned: hosts_vmnics_info
     type: dict
     sample:
