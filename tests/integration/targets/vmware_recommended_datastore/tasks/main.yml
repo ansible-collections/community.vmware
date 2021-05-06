@@ -1,0 +1,92 @@
+# Test code for the vmware_recommended_datastore module.
+# Copyright: (c) 2021, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Set Datastore cluster name
+  set_fact:
+    dsc: "DSC1"
+
+- when: vcsim is not defined
+  block:
+  - import_role:
+      name: prepare_vmware_tests
+    vars:
+      setup_attach_host: true
+      setup_datastore: true
+
+  - name: Get list of info about datastores
+    vmware_datastore_info:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ dc1 }}"
+      gather_nfs_mount_info: true
+    register: datastore_info_0001
+
+  - name: Get datastore name for adding in datastore cluster
+    set_fact:
+      datastore_name: "{{ datastore_info_0001['datastores'][0]['name'] }}"
+
+  - name: Add a datastore cluster to datacenter
+    vmware_datastore_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ dsc }}"
+      enable_sdrs: true
+      state: present
+    register: add_dsc
+
+  - name: Check if datastore cluster is added successfully
+    assert:
+      that:
+       - add_dsc.changed
+
+  - name: Add a datastore in the given datastore cluster
+    vmware_datastore_cluster_manager:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ dsc }}"
+      datastores:
+      - "{{ datastore_name }}"
+    register: add_ds
+
+  - name: Check if datastore is added in datastore cluster
+    assert:
+      that:
+        - add_ds.changed
+
+  - name: Gather information about recommended datastore
+    vmware_recommended_datastore:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      datastore_cluster: DSC1
+    register: dsc_info
+
+  - name: Check if datastore information is returned
+    assert:
+      that:
+        - dsc_info.recommended_datastore is defined
+        - dsc_info.recommended_datastore == datastore_name
+
+  always:
+  - name: Delete a datastore cluster to datacenter
+    vmware_datastore_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: "{{ dsc }}"
+      state: absent
+    register: delete_dsc
+    ignore_errors: true
