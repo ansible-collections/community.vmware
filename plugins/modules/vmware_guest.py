@@ -160,7 +160,7 @@ options:
         secure_boot:
             type: bool
             description: Whether to enable or disable (U)EFI secure boot.
-            version_added: '1.10.0'
+            version_added: '1.11.0'
         memory_reservation_lock:
             type: bool
             description:
@@ -214,7 +214,7 @@ options:
         iommu:
             type: bool
             description: Flag to specify if I/O MMU is enabled for this virtual machine.
-            version_added: '1.10.0'
+            version_added: '1.11.0'
   guest_id:
     type: str
     description:
