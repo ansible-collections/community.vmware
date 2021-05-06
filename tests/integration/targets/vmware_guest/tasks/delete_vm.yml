@@ -20,3 +20,63 @@
   assert:
     that:
       - "not delete_vm.changed"
+
+- name: create new VMs
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_delete_vm
+    guest_id: centos64Guest
+    datacenter: "{{ dc1 }}"
+    hardware:
+        num_cpus: 1
+        num_cpu_cores_per_socket: 1
+        memory_mb: 128
+        hotadd_memory: true
+        hotadd_cpu: false
+        max_connections: 10
+    disk:
+        - size: 1gb
+          type: thin
+          datastore: "{{ rw_datastore }}"
+    state: poweredoff
+    folder: '{{ f0 }}'
+  register: clone_d1_c1_f0
+
+- name: Delete VM using different datacenter and folder
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_delete_vm
+    datacenter: "{{ dc1 }}-fake"
+    folder: '{{ f0 }}-fake'
+    state: absent
+  register: delete_vm
+  ignore_errors: true
+
+- name: assert that VM was not deleted
+  assert:
+    that:
+        - not delete_vm.changed
+
+- name: Delete VM using right parameters value
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_delete_vm
+    datacenter: "{{ dc1 }}"
+    folder: '{{ f0 }}'
+    state: absent
+  register: delete_vm
+  ignore_errors: true
+
+- name: assert that VM was deleted
+  assert:
+    that:
+        - delete_vm.changed
