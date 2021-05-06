@@ -53,7 +53,15 @@ options:
       required: True
     folder:
       description:
-      - Name of the folder in datacenter in which to place deployed VM.
+      - Name of the folder in the datacenter in which to place deployed VM. Either a folder or an absolute path.
+      - This parameter is case sensitive.
+      - 'Examples:'
+      - '   folder: folder1 , use the first folder with name folder1'
+      - '   folder: /ha-datacenter/vm , use the vm folder in datacenter ha-datacenter'
+      - '   folder: ha-datacenter/vm, use the vm folder in datacenter ha-datacenter'
+      - '   folder: /datacenter1/vm, use the vm folder in datacenter datacenter1'
+      - '   folder: datacenter1/vm, use the vm folder in datacenter datacenter1'
+      - '   folder: /datacenter1/vm/folder1/folder2, use folder2 in datacenter datacenter1 that has as parent folder called folder1'
       type: str
       required: True
     host:
