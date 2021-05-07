@@ -31,7 +31,7 @@
     that:
       - dvs_result_0001.changed
 
-- name: Create a VM folder on given Datacenter
+- name: Create a network folder on given Datacenter
   vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -76,6 +76,102 @@
       that:
         - not dvs_result_0002.changed
 
+  - name: Add distributed vSwitch with network policy
+    vmware_dvswitch:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      state: present
+      switch_name: dvswitch_network_policy
+      mtu: 9000
+      uplink_quantity: 2
+      discovery_proto: lldp
+      discovery_operation: both
+      network_policy:
+        promiscuous: false
+        forged_transmits: false
+        mac_changes: false
+    register: dvs_with_network_policy_result
+
+  - name: Ensure distributed vswitch is present
+    assert:
+      that:
+        - dvs_with_network_policy_result.changed
+
+  - name: Add distributed vSwitch with network policy again (idempotency)
+    vmware_dvswitch:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      state: present
+      switch_name: dvswitch_network_policy
+      mtu: 9000
+      uplink_quantity: 2
+      discovery_proto: lldp
+      discovery_operation: both
+      network_policy:
+        promiscuous: false
+        forged_transmits: false
+        mac_changes: false
+    register: dvs_with_network_policy_again_result
+
+  - name: Ensure distributed vswitch is present
+    assert:
+      that:
+        - not dvs_with_network_policy_again_result.changed
+
+  - name: Change network policy
+    vmware_dvswitch:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      state: present
+      switch_name: dvswitch_network_policy
+      mtu: 9000
+      uplink_quantity: 2
+      discovery_proto: lldp
+      discovery_operation: both
+      network_policy:
+        promiscuous: true
+        forged_transmits: false
+        mac_changes: false
+    register: dvs_change_network_policy_result
+
+  - name: Ensure network policy is changed
+    assert:
+      that:
+        - dvs_change_network_policy_result.changed
+
+  - name: Change network policy again (idempotency)
+    vmware_dvswitch:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      state: present
+      switch_name: dvswitch_network_policy
+      mtu: 9000
+      uplink_quantity: 2
+      discovery_proto: lldp
+      discovery_operation: both
+      network_policy:
+        promiscuous: true
+        forged_transmits: false
+        mac_changes: false
+    register: dvs_change_network_policy_again_result
+
+  - name: Ensure network policy is not changed
+    assert:
+      that:
+        - not dvs_change_network_policy_again_result.changed
+
 # FIXME: Remove this testcase from block once vcsim supports distributed vswitch delete method
 # Currently, vcsim does not support distributed vswitch delete option,
 # Once this feature is available we can move this out of this block
@@ -93,6 +189,7 @@
     loop:
       - dvswitch_0001
       - dvswitch_0002
+      - dvswitch_network_policy
     register: dvswitch_delete
   - debug: var=dvswitch_delete
 
@@ -101,6 +198,7 @@
       that:
         - dvswitch_delete.results[0] is changed
         - dvswitch_delete.results[1] is changed
+        - dvswitch_delete.results[2] is changed
 
   - name: Create dvSwitch with special characters
     vmware_dvswitch:
