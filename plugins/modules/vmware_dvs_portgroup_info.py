@@ -141,7 +141,12 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, get_all_objs, find_dvs_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    vmware_argument_spec,
+    PyVmomi,
+    dvs_supports_mac_learning,
+    get_all_objs,
+    find_dvs_by_name)
 from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
@@ -164,9 +169,6 @@ class DVSPortgroupInfoManager(PyVmomi):
         else:
             # default behaviour, gather information about all dvswitches
             self.dvsls = get_all_objs(self.content, [vim.DistributedVirtualSwitch], folder=datacenter.networkFolder)
-
-    def supports_mac_learning(self, dvs):
-        return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and dvs.capability.featuresSupported.macLearningSupported
 
     def get_vlan_info(self, vlan_obj=None):
         """
@@ -199,7 +201,7 @@ class DVSPortgroupInfoManager(PyVmomi):
         dvs_lists = self.dvsls
         result = dict()
         for dvs in dvs_lists:
-            switch_supports_mac_learning = self.supports_mac_learning(dvs)
+            switch_supports_mac_learning = dvs_supports_mac_learning(dvs)
             result[dvs.name] = list()
             for dvs_pg in dvs.portgroup:
                 mac_learning = dict()

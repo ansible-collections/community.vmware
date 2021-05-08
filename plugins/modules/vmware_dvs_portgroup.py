@@ -364,6 +364,7 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
+    dvs_supports_mac_learning,
     find_dvs_by_name,
     find_dvspg_by_name,
     vmware_argument_spec,
@@ -387,9 +388,6 @@ class VMwareDvsPortgroup(PyVmomi):
                 self.module.fail_json(
                     msg="The number of ports cannot be configured when port allocation is set to 'elastic'."
                 )
-
-    def supports_mac_learning(self):
-        return hasattr(self.dv_switch.capability.featuresSupported, 'macLearningSupported') and self.dv_switch.capability.featuresSupported.macLearningSupported
 
     def create_vlan_list(self):
         vlan_id_list = []
@@ -451,7 +449,7 @@ class VMwareDvsPortgroup(PyVmomi):
         config.defaultPortConfig.vlan.inherited = False
 
         # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
-        if self.supports_mac_learning():
+        if dvs_supports_mac_learning(self.dv_switch):
             config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
             config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
             config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
@@ -627,7 +625,7 @@ class VMwareDvsPortgroup(PyVmomi):
                 return 'update'
 
         # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
-        if self.supports_mac_learning():
+        if dvs_supports_mac_learning(self.dv_switch):
             if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
                     defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
                     defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:

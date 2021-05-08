@@ -31,7 +31,7 @@
     that:
       - dvs_result_0001.changed
 
-- name: Create a VM folder on given Datacenter
+- name: Create a network folder on given Datacenter
   vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
