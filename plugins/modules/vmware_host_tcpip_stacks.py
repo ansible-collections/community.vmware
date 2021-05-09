@@ -218,7 +218,7 @@ EXAMPLES = r'''
       max_num_connections: 12000
       gateway: 10.10.10.254
 
-- name: Update the ipv6 gateway of the provisioning
+- name: Update the ipv6 gateway of the provisioning TCP/IP stack
   community.vmware.vmware_host_tcpip_stacks:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
