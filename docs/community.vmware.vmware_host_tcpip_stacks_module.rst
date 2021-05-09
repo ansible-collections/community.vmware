@@ -121,7 +121,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The gateway address.</div>
+                        <div>The ipv4 gateway address.</div>
                 </td>
             </tr>
             <tr>
@@ -139,6 +139,23 @@ Parameters
                 </td>
                 <td>
                         <div>The host name of the ESXi host.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ipv6_gateway</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ipv6 gateway address.</div>
                 </td>
             </tr>
             <tr>
@@ -310,7 +327,24 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The gateway address.</div>
+                        <div>The ipv4 gateway address.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ipv6_gateway</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ipv6 gateway address.</div>
                 </td>
             </tr>
             <tr>
@@ -453,7 +487,24 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The gateway address.</div>
+                        <div>The ipv4 gateway address.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ipv6_gateway</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ipv6 gateway address.</div>
                 </td>
             </tr>
             <tr>
@@ -487,6 +538,7 @@ Parameters
                 </td>
                 <td>
                         <div>The TCP/IP stacks configuration of the <em>vxlan</em>.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: nsx_overlay</div>
                 </td>
             </tr>
                                 <tr>
@@ -522,7 +574,24 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The gateway address.</div>
+                        <div>The ipv4 gateway address.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ipv6_gateway</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ipv6 gateway address.</div>
                 </td>
             </tr>
             <tr>
@@ -608,6 +677,16 @@ Examples
           max_num_connections: 12000
           gateway: 10.10.10.254
 
+    - name: Update the ipv6 gateway of the provisioning TCP/IP stack
+      community.vmware.vmware_host_tcpip_stacks:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi_hostname }}"
+        provisioning:
+          ipv6_gateway: ::ffff:6440:301
+
 
 
 Return Values
@@ -641,6 +720,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
         &quot;congestion_algorithm&quot;: &quot;cubic&quot;,
         &quot;domain&quot;: &quot;example.com&quot;,
         &quot;gateway&quot;: &quot;192.168.10.1&quot;,
+        &quot;ipv6_gateway&quot;, null,
         &quot;hostname&quot;: &quot;esxi-test03&quot;,
         &quot;max_num_connections&quot;: 12000,
         &quot;preferred_dns&quot;: &quot;192.168.10.1&quot;,
@@ -668,6 +748,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
         &quot;congestion_algorithm&quot;: &quot;newreno&quot;,
         &quot;gateway&quot;: &quot;10.10.10.254&quot;,
+        &quot;ipv6_gateway&quot;: null,
         &quot;max_num_connections&quot;: 12000
     }</div>
                 </td>
@@ -689,6 +770,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
         &quot;congestion_algorithm&quot;: &quot;newreno&quot;,
         &quot;gateway&quot;: null,
+        &quot;ipv6_gateway&quot;: null,
         &quot;max_num_connections&quot;: 11000
     }</div>
                 </td>
@@ -710,6 +792,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
         &quot;congestion_algorithm&quot;: &quot;newreno&quot;,
         &quot;gateway&quot;: null,
+        &quot;ipv6_gateway&quot;: null,
         &quot;max_num_connections&quot;: 11000
     }</div>
                 </td>
