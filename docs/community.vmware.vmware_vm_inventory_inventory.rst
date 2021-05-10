@@ -38,13 +38,13 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
                 <th>Configuration</th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cache</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -69,7 +69,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cache_connection</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -92,7 +92,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cache_plugin</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -116,7 +116,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cache_prefix</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -130,6 +130,7 @@ Parameters
                     <td>
                             <div> ini entries:
                                     <p>[default]<br>fact_caching_prefix = ansible_inventory_</p>
+                                    <p>[defaults]<br>fact_caching_prefix = ansible_inventory_</p>
                                     <p>[inventory]<br>cache_prefix = ansible_inventory_</p>
                             </div>
                                 <div>env:ANSIBLE_CACHE_PLUGIN_PREFIX</div>
@@ -140,7 +141,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cache_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -164,7 +165,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>compose</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -182,7 +183,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>filters</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -202,7 +203,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>groups</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -220,7 +221,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -240,7 +241,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostnames</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -260,12 +261,13 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>keyed_groups</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -277,8 +279,151 @@ Parameters
                         <div>Add hosts to group based on the values of a variable.</div>
                 </td>
             </tr>
-            <tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>default_value</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.12</div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>The default value when the host variable&#x27;s value is an empty string.</div>
+                        <div>This option is mutually exclusive with <code>trailing_separator</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>key</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>The key from input dictionary used to generate groups</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>parent_group</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>parent group for keyed group</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>prefix</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>A keyed group name will start with this prefix</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>separator</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"_"</div>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>separator used to build the keyed group name</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>trailing_separator</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.12</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>Set this option to <em>False</em> to omit the <code>separator</code> after the host variable when the value is an empty string.</div>
+                        <div>This option is mutually exclusive with <code>default_value</code>.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>leading_separator</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
+                </td>
+                    <td>
+                    </td>
+                <td>
+                        <div>Use in conjunction with keyed_groups.</div>
+                        <div>By default, a keyed group that does not have a prefix or a separator provided will have a name that starts with an underscore.</div>
+                        <div>This is because the default prefix is &quot;&quot; and the default separator is &quot;_&quot;.</div>
+                        <div>Set this option to False to omit the leading underscore (or other separator) if no prefix is given.</div>
+                        <div>If the group name is derived from a mapping the separator is still used to concatenate the items.</div>
+                        <div>To not use a separator in the group name at all, set the separator for the keyed group to an empty string instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -297,7 +442,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -316,7 +461,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>properties</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -343,7 +488,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>resources</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -365,7 +510,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>strict</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -387,7 +532,33 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>use_extra_vars</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                    <td>
+                            <div> ini entries:
+                                    <p>[inventory_plugins]<br>use_extra_vars = no</p>
+                            </div>
+                                <div>env:ANSIBLE_INVENTORY_USE_EXTRA_VARS</div>
+                    </td>
+                <td>
+                        <div>Merge extra vars into the available variables for composition (highest precedence).</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -407,7 +578,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -430,7 +601,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>with_nested_properties</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -440,18 +611,19 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                     <td>
                     </td>
                 <td>
                         <div>This option transform flatten properties name to nested dictionary.</div>
+                        <div>From 1.10.0 and onwards, default value is set to <code>True</code>.</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>with_path</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -473,7 +645,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>with_sanitized_property_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -495,7 +667,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>with_tags</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
