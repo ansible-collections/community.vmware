@@ -436,9 +436,9 @@ class VMwareDvSwitch(PyVmomi):
                 results['network_policy'] = {}
                 if 'promiscuous' in network_policy:
                     results['network_policy']['promiscuous'] = network_policy['promiscuous']
-                if network_policy['forged_transmits'] is not None:
+                if 'forged_transmits' in network_policy:
                     results['network_policy']['forged_transmits'] = network_policy['forged_transmits']
-                if network_policy['mac_changes'] is not None:
+                if 'mac_changes' in network_policy:
                     results['network_policy']['mac_changes'] = network_policy['mac_changes']
 
                 result = self.check_network_policy_config()
@@ -739,6 +739,12 @@ class VMwareDvSwitch(PyVmomi):
         # Check Network Policy
         if 'promiscuous' in self.network_policy or 'forged_transmits' in self.network_policy or 'mac_changes' in self.network_policy:
             results['network_policy'] = {}
+            if 'promiscuous' in self.network_policy:
+                results['network_policy']['promiscuous'] = self.network_policy['promiscuous']
+            if 'forged_transmits' in self.network_policy:
+                results['network_policy']['forged_transmits'] = self.network_policy['forged_transmits']
+            if 'mac_changes' in self.network_policy:
+                results['network_policy']['mac_changes'] = self.network_policy['mac_changes']
 
             (policy, changed_network_policy, changed_promiscuous, promiscuous_previous, changed_forged_transmits,
              forged_transmits_previous, changed_mac_changes, mac_changes_previous) = \
@@ -750,15 +756,12 @@ class VMwareDvSwitch(PyVmomi):
                 results['network_policy_previous'] = {}
                 if changed_promiscuous:
                     results['network_policy_previous']['promiscuous'] = promiscuous_previous
-                    results['network_policy']['promiscuous'] = self.network_policy['promiscuous']
 
                 if changed_forged_transmits:
                     results['network_policy_previous']['forged_transmits'] = forged_transmits_previous
-                    results['network_policy']['forged_transmits'] = self.network_policy['forged_transmits']
 
                 if changed_mac_changes:
                     results['network_policy_previous']['mac_changes'] = mac_changes_previous
-                    results['network_policy']['mac_changes'] = self.network_policy['mac_changes']
 
                 if config_spec.defaultPortConfig is None:
                     config_spec.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
