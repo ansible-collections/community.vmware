@@ -215,6 +215,8 @@ plugins/modules/vmware_host_config_info.py compile-2.6!skip
 plugins/modules/vmware_host_config_info.py import-2.6!skip
 plugins/modules/vmware_host_config_manager.py compile-2.6!skip
 plugins/modules/vmware_host_config_manager.py import-2.6!skip
+plugins/modules/vmware_host_custom_attributes.py compile-2.6!skip
+plugins/modules/vmware_host_custom_attributes.py import-2.6!skip
 plugins/modules/vmware_host_datastore.py compile-2.6!skip
 plugins/modules/vmware_host_datastore.py import-2.6!skip
 plugins/modules/vmware_host_disk_info.py compile-2.6!skip
