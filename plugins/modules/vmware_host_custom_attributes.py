@@ -15,6 +15,7 @@ description:
     - This module can be used to add, remove and update custom attributes for the given ESXi host.
 author:
     - Hunter Christain (@exp-hc)
+version_added: '1.11.0'
 notes:
     - Tested on vSphere 6.7
 requirements:
