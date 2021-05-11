@@ -25,6 +25,7 @@ options:
      description:
      - Name of the ESXi host to work with.
      - This is a required parameter
+     required: True
      type: str
    state:
      description:
