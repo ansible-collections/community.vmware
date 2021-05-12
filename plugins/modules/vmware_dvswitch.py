@@ -45,13 +45,9 @@ options:
     switch_version:
         description:
             - The version of the Distributed Switch to create.
-            - Can be 6.0.0, 5.5.0, 5.1.0, 5.0.0 with a vCenter running vSphere 6.0 and 6.5.
-            - Can be 6.6.0, 6.5.0, 6.0.0 with a vCenter running vSphere 6.7.
-            - Can be 7.0.0, 6.6.0, 6.5.0 with a vCenter running vSphere 7.0.
             - The version must match the version of the ESXi hosts you want to connect.
             - The version of the vCenter server is used if not specified.
             - Required only if C(state) is set to C(present).
-        choices: ['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0', '7.0.0']
         aliases: ['version']
         type: str
     mtu:
@@ -296,6 +292,12 @@ class VMwareDvSwitch(PyVmomi):
 
         self.switch_name = self.module.params['switch_name']
         self.switch_version = self.module.params['switch_version']
+
+        if self.switch_version is not None:
+            available_dvs_versions = self.available_dvs_versions()
+            if self.switch_version not in available_dvs_versions:
+                self.module.fail_json(msg="Unsupported version '%s'. Supported versions are: %s." % (self.switch_version, ', '.join(available_dvs_versions)))
+
         folder = self.params['folder']
         if folder:
             self.folder_obj = self.content.searchIndex.FindByInventoryPath(folder)
@@ -338,6 +340,17 @@ class VMwareDvSwitch(PyVmomi):
             self.network_policy = {}
 
         self.state = self.module.params['state']
+
+    def available_dvs_versions(self):
+        """Get the DVS version supported by the vCenter"""
+        dvs_mng = self.content.dvSwitchManager
+        available_dvs_specs = dvs_mng.QueryAvailableDvsSpec(recommended=True)
+
+        available_dvs_versions = []
+        for available_dvs_spec in available_dvs_specs:
+            available_dvs_versions.append(available_dvs_spec.version)
+
+        return available_dvs_versions
 
     def process_state(self):
         """Process the current state of the DVS"""
@@ -828,7 +841,7 @@ def main():
             mtu=dict(type='int', default=1500),
             multicast_filtering_mode=dict(type='str', default='basic', choices=['basic', 'snooping']),
             switch_version=dict(
-                choices=['5.0.0', '5.1.0', '5.5.0', '6.0.0', '6.5.0', '6.6.0', '7.0.0'],
+                type='str',
                 aliases=['version'],
                 default=None
             ),
