@@ -34,7 +34,7 @@ options:
     type: str
   nics:
     description:
-    - A list of vmnic names or vmnic name to use in vSwitch.
+    - A list of vmnic names or vmnic name to attach to vSwitch.
     - Alias C(nics) is added in version 2.4.
     aliases: [ nic_name ]
     default: []
