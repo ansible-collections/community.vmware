@@ -227,6 +227,11 @@ options:
         type: str
         choices: ['none', 'error', 'warning', 'info', 'verbose', 'trivia']
         default: 'info'
+    advanced_settings:
+      description:
+      - A dictionary of advanced HA settings.
+      default: {}
+      type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -388,7 +393,7 @@ except ImportError:
         pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, option_diff, vmware_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -455,6 +460,7 @@ class VmwareVcenterSettings(PyVmomi):
         timeout_normal_operations = self.params['timeout_settings'].get('normal_operations')
         timeout_long_operations = self.params['timeout_settings'].get('long_operations')
         logging_options = self.params.get('logging_options')
+
         changed = False
         changed_list = []
 
@@ -498,6 +504,18 @@ class VmwareVcenterSettings(PyVmomi):
             exec("diff_config['after']['snmp_receiver_%s_port'] = snmp_receiver_%s_port" % (n, n))
             exec("diff_config['after']['snmp_receiver_%s_community'] = snmp_receiver_%s_community" % (n, n))
         result['diff'] = {}
+
+        advanced_settings = self.params['advanced_settings']
+        changed_advanced_settings = option_diff(advanced_settings, self.option_manager.setting, False)
+
+        if changed_advanced_settings:
+            changed = True
+            change_option_list += changed_advanced_settings
+
+        for advanced_setting in advanced_settings:
+            result[advanced_setting] = advanced_settings[advanced_setting]
+            diff_config['before'][advanced_setting] = result[advanced_setting]
+            diff_config['after'][advanced_setting] = result[advanced_setting]
 
         for setting in self.option_manager.setting:
             # Database
@@ -783,6 +801,19 @@ class VmwareVcenterSettings(PyVmomi):
                 )
                 diff_config['before']['logging_options'] = setting.value
 
+            # Advanced settings
+            for advanced_setting in changed_advanced_settings:
+                if setting.key == advanced_setting.key and setting.value != advanced_setting.value:
+                    changed_list.append(advanced_setting.key)
+                    result[advanced_setting.key + '_previous'] = advanced_setting.value
+                    diff_config['before'][advanced_setting.key] = advanced_setting.value
+
+        for advanced_setting in changed_advanced_settings:
+            if advanced_setting.key not in changed_list:
+                changed_list.append(advanced_setting.key)
+                result[advanced_setting.key + '_previous'] = "N/A"
+                diff_config['before'][advanced_setting.key] = "N/A"
+
         if changed:
             if self.module.check_mode:
                 changed_suffix = ' would be changed'
@@ -927,6 +958,7 @@ def main():
             ),
         ),
         logging_options=dict(default='info', choices=['none', 'error', 'warning', 'info', 'verbose', 'trivia']),
+        advanced_settings=dict(type='dict', default=dict(), required=False),
     )
 
     module = AnsibleModule(
