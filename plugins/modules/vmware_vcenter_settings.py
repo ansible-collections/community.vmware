@@ -229,7 +229,7 @@ options:
         default: 'info'
     advanced_settings:
       description:
-      - A dictionary of advanced HA settings.
+      - A dictionary of advanced settings.
       default: {}
       type: dict
 extends_documentation_fragment:
