@@ -358,6 +358,7 @@ Parameters
                 </td>
                 <td>
                         <div>Dictionary which configures the different default security values for portgroups.</div>
+                        <div>If set, these options are inherited by the portgroups of the DVS.</div>
                 </td>
             </tr>
                                 <tr>

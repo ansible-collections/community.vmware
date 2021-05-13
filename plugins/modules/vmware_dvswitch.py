@@ -150,6 +150,7 @@ options:
         version_added: '1.11.0'
         description:
             - Dictionary which configures the different default security values for portgroups.
+            - If set, these options are inherited by the portgroups of the DVS.
         suboptions:
             promiscuous:
                 type: bool
