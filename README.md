@@ -1,4 +1,4 @@
-# Ansible Collection: community.vmware
+# Ansible Collection: community.vmware 
 
 This repo hosts the `community.vmware` Ansible Collection.
 
