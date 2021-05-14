@@ -26,7 +26,7 @@ DOCUMENTATION = r"""
       - "PyVmomi"
       - "requests >= 2.3"
       - "vSphere Automation SDK - For tag feature"
-    version_added: "1.10.0"
+    version_added: "1.11.0"
     options:
         hostname:
             description: Name of vCenter or ESXi server.
