@@ -166,6 +166,18 @@
 
 - when: vcsim is not defined
   block:
+  - name: Get Cluster Managed Object ID
+    vmware_vcenter_settings:
+      cluster_name: "{{ c1 }}"
+      schema: vsphere
+      properties:
+      - name
+      - _moId
+    register: r
+
+  - set_fact:
+      key: "config.vcls.clusters.{{ r.clusters[c1]['moid'] }}.enabled"
+
   - name: Configure advanced settings
     vmware_vcenter_settings:
       hostname: "{{ vcenter_hostname }}"
@@ -182,7 +194,7 @@
         server: mail.example.local
         sender: vcenter@{{ inventory_hostname }}
       advanced_settings:
-        'config.vcls.clusters.domain-c8.enabled': 'false'
+        "{{ key }}:" 'false'
     register: configure_advanced_settings
 
   - name: Make sure that advanced settings are configured
@@ -206,7 +218,7 @@
         server: mail.example.local
         sender: vcenter@{{ inventory_hostname }}
       advanced_settings:
-        'config.vcls.clusters.domain-c8.enabled': 'false'
+        "{{ key }}": 'false'
     register: configure_advanced_settings_again
 
   - name: Make sure that advanced settings are not configured (idempotency)
