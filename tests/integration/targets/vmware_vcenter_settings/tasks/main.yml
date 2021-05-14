@@ -194,7 +194,7 @@
         server: mail.example.local
         sender: vcenter@{{ inventory_hostname }}
       advanced_settings:
-        "{{ key }}:" 'false'
+        "{{ key }}": 'false'
     register: configure_advanced_settings
 
   - name: Make sure that advanced settings are configured
