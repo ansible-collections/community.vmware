@@ -946,6 +946,13 @@ def quote_obj_name(object_name=None):
     return object_name
 
 
+def dvs_supports_mac_learning(dvs):
+    """
+    Test if the switch supports MAC learning
+    """
+    return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and dvs.capability.featuresSupported.macLearningSupported
+
+
 class PyVmomi(object):
     def __init__(self, module):
         """
