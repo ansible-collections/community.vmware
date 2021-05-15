@@ -525,9 +525,9 @@ Examples
       block:
         - name: Power on a virtual machine without the answer param
           vmware_guest_powerstate:
-            hostname: "{{ ansible_host }}"
-            username: "{{ ansible_user }}"
-            password: "{{ ansible_password }}"
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
             validate_certs: false
             folder: "{{ f1 }}"
             name: "{{ vm_name }}"
@@ -535,9 +535,9 @@ Examples
       rescue:
         - name: Power on a virtual machine with the answer param
           vmware_guest_powerstate:
-            hostname: "{{ ansible_host }}"
-            username: "{{ ansible_user }}"
-            password: "{{ ansible_password }}"
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
             validate_certs: false
             folder: "{{ f1 }}"
             name: "{{ vm_name }}"
