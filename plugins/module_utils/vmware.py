@@ -51,7 +51,66 @@ class TaskError(Exception):
         super(TaskError, self).__init__(*args, **kwargs)
 
 
-def wait_for_task(task, max_backoff=64, timeout=3600):
+def check_answer_question_status(vm):
+    """Check whether locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+
+    Returns: bool
+    """
+    if hasattr(vm, "runtime") and vm.runtime.question:
+        return True
+
+    return False
+
+
+def make_answer_response(vm, answers):
+    """Make the response contents to answer against locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        answers: Answer contents
+
+    Returns: Dict with answer id and number
+    Raises: TaskError on failure
+    """
+    response_list = {}
+    for message in vm.runtime.question.message:
+        response_list[message.id] = {}
+        for choice in vm.runtime.question.choice.choiceInfo:
+            response_list[message.id].update({
+                choice.label: choice.key
+            })
+
+    responses = []
+    try:
+        for answer in answers:
+            responses.append({
+                "id": vm.runtime.question.id,
+                "response_num": response_list[answer["question"]][answer["response"]]
+            })
+    except Exception:
+        raise TaskError("not found %s or %s or both in the response list" % (answer["question"], answer["response"]))
+
+    return responses
+
+
+def answer_question(vm, responses):
+    """Answer against the question for unlocking a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        responses: Answer contents to unlock a virtual machine
+    """
+    for response in responses:
+        try:
+            vm.AnswerVM(response["id"], response["response_num"])
+        except Exception as e:
+            raise TaskError("answer failed: %s" % to_text(e))
+
+
+def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
     """Wait for given task using exponential back-off algorithm.
 
     Args:
@@ -66,6 +125,12 @@ def wait_for_task(task, max_backoff=64, timeout=3600):
     start_time = time.time()
 
     while True:
+        if check_answer_question_status(vm):
+            if answers:
+                responses = make_answer_response(vm, answers)
+                answer_question(vm, responses)
+            else:
+                raise TaskError("%s" % to_text(vm.runtime.question.text))
         if time.time() - start_time >= timeout:
             raise TaskError("Timeout")
         if task.info.state == vim.TaskInfo.State.success:
@@ -780,7 +845,7 @@ def find_host_by_cluster_datacenter(module, content, datacenter_name, cluster_na
     return None, cluster
 
 
-def set_vm_power_state(content, vm, state, force, timeout=0, answer=None):
+def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
     """
     Set the power status for a VM determined by the current and
     requested states. force is forceful
@@ -809,15 +874,6 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answer=None):
 
             elif expected_state == 'poweredon':
                 task = vm.PowerOn()
-                if answer:
-                    answers = {
-                        "moved": "1",
-                        "copied": "2"
-                    }
-                    while task.info.state not in [vim.TaskInfo.State.success, vim.TaskInfo.State.error]:
-                        if vm.runtime.question is not None:
-                            question_id = vm.runtime.question.id
-                            vm.AnswerVM(question_id, answers[answer])
 
             elif expected_state == 'restarted':
                 if current_state in ('poweredon', 'poweringon', 'resetting', 'poweredoff'):
@@ -861,12 +917,17 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answer=None):
             result['msg'] = to_text(e)
 
         if task:
-            wait_for_task(task)
-            if task.info.state == 'error':
+            try:
+                wait_for_task(task, vm=vm, answers=answers)
+            except TaskError as e:
                 result['failed'] = True
-                result['msg'] = task.info.error.msg
-            else:
-                result['changed'] = True
+                result['msg'] = to_text(e)
+            finally:
+                if task.info.state == 'error':
+                    result['failed'] = True
+                    result['msg'] = task.info.error.msg
+                else:
+                    result['changed'] = True
 
     # need to get new metadata if changed
     result['instance'] = gather_vm_facts(content, vm)

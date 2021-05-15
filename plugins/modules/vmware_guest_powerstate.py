@@ -106,14 +106,23 @@ options:
     type: int
   answer:
     description:
-    - The I(answer) is required in the vm starting process if the vm is blocked after you copied or moved the vm.
+    - A list of questions to answer, should one or more arise while waiting for the task to complete.
+    - Some common uses are to allow a cdrom to be changed even if locked, or to answer the question as to whether a VM was copied or moved.
     - The I(answer) can be used if I(state) is C(powered-on).
-    - If I(answer) is set to C(moved), answer as a moved vm.
-    - If I(answer) is set to C(copied), answer as a copied vm.
-    type: str
-    choices:
-    - moved
-    - copied
+    suboptions:
+      question:
+        description:
+        - The message id, for example C(msg.uuid.altered).
+        type: str
+        required: True
+      response:
+        description:
+        - The choice key, for example C(button.uuid.copiedTheVM).
+        type: str
+        required: True
+    type: list
+    elements: dict
+    version_added: '1.11.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 """
@@ -166,6 +175,31 @@ EXAMPLES = r"""
     state_change_timeout: 200
   delegate_to: localhost
   register: deploy
+
+- name: Automatically answer if a question locked a virtual machine
+  block:
+    - name: Power on a virtual machine without the answer param
+      vmware_guest_powerstate:
+        hostname: "{{ ansible_host }}"
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+        validate_certs: false
+        folder: "{{ f1 }}"
+        name: "{{ vm_name }}"
+        state: powered-on
+  rescue:
+    - name: Power on a virtual machine with the answer param
+      vmware_guest_powerstate:
+        hostname: "{{ ansible_host }}"
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+        validate_certs: false
+        folder: "{{ f1 }}"
+        name: "{{ vm_name }}"
+        answer:
+          - question: "msg.uuid.altered"
+            response: "button.uuid.copiedTheVM"
+        state: powered-on
 """
 
 RETURN = r""" # """
@@ -178,7 +212,8 @@ except ImportError:
 from random import randint
 from datetime import datetime
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, set_vm_power_state, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, set_vm_power_state, vmware_argument_spec, \
+    check_answer_question_status, make_answer_response, answer_question, gather_vm_facts
 from ansible.module_utils._text import to_native
 
 
@@ -199,7 +234,12 @@ def main():
         schedule_task_description=dict(),
         schedule_task_enabled=dict(type='bool', default=True),
         state_change_timeout=dict(type='int', default=0),
-        answer=dict(type='str', choices=['moved', 'copied'])
+        answer=dict(type='list',
+                    elements='dict',
+                    options=dict(
+                        question=dict(type='str', required=True),
+                        response=dict(type='str', required=True)
+                    ))
     )
 
     module = AnsibleModule(
@@ -269,8 +309,25 @@ def main():
                                      "given are invalid: %s" % (module.params.get('state'),
                                                                 to_native(e.msg)))
         else:
-            result = set_vm_power_state(pyv.content, vm, module.params['state'], module.params['force'], module.params['state_change_timeout'],
-                                        module.params['answer'])
+            # Check if a virtual machine is locked by a question
+            if check_answer_question_status(vm) and module.params['answer']:
+                try:
+                    responses = make_answer_response(vm, module.params['answer'])
+                    answer_question(vm, responses)
+                except Exception as e:
+                    module.fail_json(msg="%s" % e)
+
+                # Wait until a virtual machine is unlocked
+                while True:
+                    if check_answer_question_status(vm) is False:
+                        break
+
+                result['changed'] = True
+                result['instance'] = gather_vm_facts(pyv.content, vm)
+            else:
+                result = set_vm_power_state(pyv.content, vm, module.params['state'], module.params['force'], module.params['state_change_timeout'],
+                                            module.params['answer'])
+            result['answer'] = module.params['answer']
     else:
         id = module.params.get('uuid') or module.params.get('moid') or module.params.get('name')
         module.fail_json(msg="Unable to set power state for non-existing virtual machine : '%s'" % id)
