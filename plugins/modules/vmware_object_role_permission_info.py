@@ -47,7 +47,7 @@ options:
     type: 'str'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: "1.10.0"
+version_added: "1.11.0"
 """
 
 EXAMPLES = r"""
