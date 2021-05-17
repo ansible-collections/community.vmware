@@ -4,6 +4,7 @@
 # Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
 
 from __future__ import absolute_import, division, print_function
+from sys import modules
 __metaclass__ = type
 
 import traceback
@@ -111,6 +112,14 @@ class VmwareRestClient(object):
             validate_certs=dict(type='bool',
                                 fallback=(env_fallback, ['VMWARE_VALIDATE_CERTS']),
                                 default=True),
+            proxy_host=dict(type='str',
+                            required=False,
+                            default=None,
+                            fallback=(env_fallback, ['VMWARE_PROXY_HOST'])),
+            proxy_port=dict(type='int',
+                            required=False,
+                            default=None,
+                            fallback=(env_fallback, ['VMWARE_PROXY_PORT'])),
         )
 
     def connect_to_vsphere_client(self):
@@ -124,6 +133,14 @@ class VmwareRestClient(object):
         port = self.params.get('port')
         session = requests.Session()
         session.verify = self.params.get('validate_certs')
+
+        if self.params.get('protocol') and self.params.get('proxy_host') and self.params.proxy_port:
+            proxy_host = "{protocol}://{host}:{port}".format(
+                         host=self.params.get('proxy_host'),
+                         port=self.params.get('proxy_port'),
+                         protocol=self.params.get('protocol'))
+            proxies = {self.params.get('protocol'): proxy_host}
+            session.proxies.update(proxies)
 
         if not all([hostname, username, password]):
             self.module.fail_json(msg="Missing one of the following : hostname, username, password."
