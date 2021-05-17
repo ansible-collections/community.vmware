@@ -134,7 +134,7 @@ class VmwareRestClient(object):
         session = requests.Session()
         session.verify = self.params.get('validate_certs')
 
-        if self.params.get('protocol') and self.params.get('proxy_host') and self.params.proxy_port:
+        if self.params.get('protocol') and self.params.get('proxy_host') and self.params.get('proxy_port'):
             proxy_host = "{protocol}://{host}:{port}".format(
                          host=self.params.get('proxy_host'),
                          port=self.params.get('proxy_port'),
