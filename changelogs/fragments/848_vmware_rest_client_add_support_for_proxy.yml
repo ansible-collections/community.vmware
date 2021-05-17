@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_rest_client - support proxy feature for module using this API (https://github.com/ansible-collections/community.vmware/pull/848).
