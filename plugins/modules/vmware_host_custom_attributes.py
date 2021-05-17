@@ -88,7 +88,7 @@ EXAMPLES = r'''
 RETURN = r'''
 custom_attributes:
     description: metadata about the ESXi host attributes
-    returned: always
+    returned: changed
     type: dict
     sample: {
         "mycustom": "my_custom_value",
