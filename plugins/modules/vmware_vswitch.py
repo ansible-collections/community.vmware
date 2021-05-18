@@ -307,7 +307,7 @@ class VMwareHostVirtualSwitch(PyVmomi):
             diff = True
             if pnic_add:
                 all_nics += pnic_add
-            elif pnic_remove:
+            if pnic_remove:
                 for pnic in pnic_remove:
                     all_nics.remove(pnic)
 
