@@ -212,6 +212,7 @@ Name | Description
 [community.vmware.vmware_local_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_user_manager_module.rst)|Manage local users on an ESXi host
 [community.vmware.vmware_maintenancemode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_maintenancemode_module.rst)|Place a host into maintenance mode
 [community.vmware.vmware_migrate_vmk](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_migrate_vmk_module.rst)|Migrate a VMK interface from VSS to VDS
+[community.vmware.vmware_object_custom_attributes_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_custom_attributes_info_module.rst)|Gather custom attributes of an object
 [community.vmware.vmware_object_rename](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_rename_module.rst)|Renames VMware objects
 [community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
