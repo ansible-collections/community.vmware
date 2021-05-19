@@ -1,0 +1,2 @@
+major_changes:
+  - vmware_object_custom_attributes_info - added a new module to gather custom attributes of an object (https://github.com/ansible-collections/community.vmware/pull/851).
