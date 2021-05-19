@@ -92,7 +92,6 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_text
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
 
 
@@ -119,39 +118,39 @@ class VmwareCustomAttributesInfo(PyVmomi):
 
         obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
         if not obj:
-            self.module.fail_json(msg="didn't found the object: %s" % self.object_name)
+            self.module.fail_json(msg="can't found the object: %s" % self.object_name)
 
         custom_attributes = []
-        if obj:
-            available_fields = {}
-            for available_custom_attribute in obj.availableField:
-                available_fields.update({
-                    available_custom_attribute.key: {
-                        'name': available_custom_attribute.name,
-                        'type': available_custom_attribute.managedObjectType
-                    }
-                })
-
-            custom_values = {}
-            for custom_value in obj.customValue:
-                custom_values.update({
-                    custom_value.key: custom_value.value
-                })
-
-            for key, value in available_fields.items():
-                attribute_result = {
-                    'attribute': value['name'],
-                    'type': self.to_json(value['type']).replace('vim.', ''),
-                    'key': key,
-                    'value': None
+        available_fields = {}
+        for available_custom_attribute in obj.availableField:
+            available_fields.update({
+                available_custom_attribute.key: {
+                    'name': available_custom_attribute.name,
+                    'type': available_custom_attribute.managedObjectType
                 }
+            })
 
-                if key in custom_values:
-                    attribute_result['value'] = custom_values[key]
+        custom_values = {}
+        for custom_value in obj.customValue:
+            custom_values.update({
+                custom_value.key: custom_value.value
+            })
 
-                custom_attributes.append(attribute_result)
+        for key, value in available_fields.items():
+            attribute_result = {
+                'attribute': value['name'],
+                'type': self.to_json(value['type']).replace('vim.', ''),
+                'key': key,
+                'value': None
+            }
 
-        self.module.exit_json(changed=False, custom_attributes=custom_attributes)
+            if key in custom_values:
+                attribute_result['value'] = custom_values[key]
+
+            custom_attributes.append(attribute_result)
+
+        result['custom_attributes'] = custom_attributes
+        self.module.exit_json(**result)
 
 
 def main():
