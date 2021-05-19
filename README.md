@@ -163,6 +163,7 @@ Name | Description
 [community.vmware.vmware_host_config_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_facts_module.rst)|Gathers facts about an ESXi host's advance configuration information
 [community.vmware.vmware_host_config_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_info_module.rst)|Gathers info about an ESXi host's advance configuration information
 [community.vmware.vmware_host_config_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_manager_module.rst)|Manage advanced system settings of an ESXi host
+[community.vmware.vmware_host_custom_attributes](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_custom_attributes_module.rst)|Manage custom attributes from VMware for the given ESXi host
 [community.vmware.vmware_host_datastore](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_datastore_module.rst)|Manage a datastore on ESXi host
 [community.vmware.vmware_host_disk_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_disk_info_module.rst)|Gathers information about disks attached to given ESXi host/s.
 [community.vmware.vmware_host_dns](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_dns_module.rst)|Manage DNS configuration of an ESXi host system
