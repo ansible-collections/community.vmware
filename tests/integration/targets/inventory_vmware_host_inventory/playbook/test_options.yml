@@ -1,0 +1,209 @@
+---
+- name: Test Hostnames option
+  hosts: localhost
+  tasks:
+    - name: Inventory with 'hostnames' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: false
+          properties:
+            - runtime.powerState
+          hostnames:
+            - 'skip_undefined_empty_none_var'
+            - 'runtime.powerState'
+
+    - name: Test properties option are populate
+      assert:
+        that:
+          - "'runtime.powerState' in test_host.value"
+
+    - name: Test hostnames option
+      assert:
+        that:
+          - test_host.key == (test_host.value['runtime.powerState'])
+
+    - name: Inventory with 'config' root properties
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: false
+          properties:
+            - config.lockdownMode
+            - name
+            - summary
+    - name: Test properties(config) option are populate
+      assert:
+        that:
+          - "'name' in test_host.value"
+          - "'summary.runtime.powerState' in test_host.value"
+          - "'config.lockdownMode' in test_host.value"
+
+    - name: Inventory with 'with_path' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_path: true
+          properties:
+          - name
+          - summary.runtime.powerState
+    - name: Test path option
+      assert:
+        that:
+          - "'path' in test_host.value"
+
+    - name: Inventory with rooted 'with_path' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_path: my_center
+    - name: Test path option with rooted path
+      assert:
+        that:
+          - "'path' in test_host.value"
+          - "'my_center' in test_host.value.group_names"
+
+    - name: Inventory 'with_nested_properties' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          properties:
+            - name
+            - summary.runtime.powerState
+            - config.lockdownMode
+          with_nested_properties: true
+    - name: Test 'with_nested_properties' option
+      assert:
+        that:
+          - test_host.value.config.lockdownMode is defined
+
+
+    - name: Inventory 'sanitize_property_name' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          properties:
+            - name
+            - summary.runtime.powerState
+            - config.lockdownMode
+          with_sanitized_property_name: true
+    - name: Test 'with_nested_properties' option
+      assert:
+        that:
+          - test_host.value.config_lockdown_mode is defined
+
+
+    - name: Inventory 'Constructable' options - keyed_groups
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: true
+          properties:
+            - name
+            - summary.runtime.powerState
+            - config.lockdownMode
+          keyed_groups:
+            - key: 'config.lockdownMode'
+              separator: ''
+    - name: Test 'Constructable' options - keyed_groups
+      assert:
+        that:
+          - "'lockdownDisabled' in test_host.value.group_names"
+
+
+    - name: Inventory filters options
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: true
+          properties:
+            - name
+            - summary.runtime.powerState
+          filters:
+            - summary.runtime.powerState == "poweredOn"
+
+    - debug:
+        msg: "{{ test_host.value.groups }}"
+
+    - name: Test filters options
+      assert:
+        that:
+          - "test_host.key in test_host.value.groups.all"
+
+
+    - name: Inventory 'Constructable' options - compose, groups
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: true
+          properties:
+            - name
+            - summary.runtime.powerState
+          compose:
+            ansible_host: 'name'
+            composed_var: 'name'
+          groups:
+            my_hosts: true
+    - name: Test 'Constructable' options - compose, groups
+      assert:
+        that:
+          - "'my_hosts' in test_host.value.group_names"
+          - "'ansible_host' in test_host.value"
+          - "'composed_var' in test_host.value"
+          - test_host.value.composed_var == test_host.value.name
+
+
+    - name: Inventory 'with_tag' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          with_nested_properties: true
+          with_tags: true
+          properties:
+            - name
+            - summary.runtime.powerState
+    - name: Test 'with_tags' options
+      assert:
+        that:
+          - "'tags' in test_host.value"
+          - "'categories' in test_host.value"
+          - "'tag_category' in test_host.value"
+      when: not (vcsim is defined)
+
+
+    - name: Inventory 'resources' option
+      include_tasks: build_inventory.yml
+      vars:
+        content: |-
+          plugin: community.vmware.vmware_host_inventory
+          strict: false
+          resources:
+            - datacenter:
+                - DC0
+              resources:
+                - compute_resource:
+                    - DC0_C0_NOT_EXIST
+    - name: Test 'resources' options with 'DC0_C0_NOT_EXIST'
+      assert:
+        that:
+          - hostvars | length == 0
