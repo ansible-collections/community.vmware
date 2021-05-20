@@ -17,8 +17,7 @@
     state: present
 
 - name: Add custom attributes to an ESXi
-  #vmware_host_custom_attributes:
-  community.vmware.vmware_host_custom_attributes:
+  vmware_host_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
