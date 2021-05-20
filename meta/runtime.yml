@@ -120,6 +120,7 @@ action_groups:
   - vmware_local_user_manager
   - vmware_maintenancemode
   - vmware_migrate_vmk
+  - vmware_object_custom_attributes_info
   - vmware_object_rename
   - vmware_object_role_permission
   - vmware_portgroup
