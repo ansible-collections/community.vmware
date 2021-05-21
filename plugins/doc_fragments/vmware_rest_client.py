@@ -61,4 +61,5 @@ options:
     - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
     type: int
     required: False
+    version_added: '1.11.0'
 '''
