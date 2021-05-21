@@ -55,12 +55,12 @@ options:
     - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_HOST) will be used instead.
     type: str
     required: False
-    version_added: '1.11.0'
+    version_added: '1.12.0'
   proxy_port:
     description:
     - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
     - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
     type: int
     required: False
-    version_added: '1.11.0'
+    version_added: '1.12.0'
 '''

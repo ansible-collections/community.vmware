@@ -132,13 +132,12 @@ class VmwareRestClient(object):
         port = self.params.get('port')
         session = requests.Session()
         session.verify = self.params.get('validate_certs')
+        protocol = self.params.get('protocol')
+        proxy_host = self.params.get('proxy_host')
+        proxy_port = self.params.get('proxy_port')
 
-        if self.params.get('protocol') and self.params.get('proxy_host') and self.params.get('proxy_port'):
-            proxy_host = "{protocol}://{host}:{port}".format(
-                         host=self.params.get('proxy_host'),
-                         port=self.params.get('proxy_port'),
-                         protocol=self.params.get('protocol'))
-            proxies = {self.params.get('protocol'): proxy_host}
+        if all([protocol, proxy_host, proxy_port]):
+            proxies = {protocol: "{0}://{1}:{2}".format(protocol, proxy_host, proxy_port)}
             session.proxies.update(proxies)
 
         if not all([hostname, username, password]):
