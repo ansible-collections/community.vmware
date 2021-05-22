@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_vcenter_settings.py - Add advanced_settings parameter (https://github.com/ansible-collections/community.vmware/pull/819).

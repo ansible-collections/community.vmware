@@ -6,7 +6,7 @@
     name: prepare_vmware_tests
 
 - name: Configure general settings in check mode
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -45,7 +45,7 @@
 - debug: var=all_settings_results_check_mode
 
 - name: Configure general settings
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -83,7 +83,7 @@
 - debug: var=all_settings_results
 
 - name: Configure settings with out runtime_settings parameter
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -96,7 +96,7 @@
 - debug: var=without_runtime_settings_results
 
 - name: Configure settings with check mode and diff mode
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -121,7 +121,7 @@
       - configure_settings_check_diff_mode_result.diff is defined
 
 - name: Configure settings without check mode and diff mode
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -143,7 +143,7 @@
       - configure_settings_result.changed is sameas true
 
 - name: Configure settings without check mode and diff mode(idempotency check)
-  vmware_vcenter_settings:
+  community.vmware.vmware_vcenter_settings:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -163,3 +163,53 @@
   assert:
     that:
       - configure_settings_idempotency_check_result.changed is sameas false
+
+- when: vcsim is not defined
+  block:
+  - name: Configure advanced settings
+    community.vmware.vmware_vcenter_settings:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      database:
+        max_connections: 50
+        task_cleanup: true
+        task_retention: 180
+        event_cleanup: true
+        event_retention: 180
+      mail:
+        server: mail.example.local
+        sender: vcenter@{{ inventory_hostname }}
+      advanced_settings:
+        'config.vcls.clusters.domain-c8.enabled': 'false'
+    register: configure_advanced_settings
+
+  - name: Make sure that advanced settings are configured
+    assert:
+      that:
+        - configure_advanced_settings.changed
+
+  - name: Configure advanced settings again (idempotency)
+    community.vmware.vmware_vcenter_settings:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      database:
+        max_connections: 50
+        task_cleanup: true
+        task_retention: 180
+        event_cleanup: true
+        event_retention: 180
+      mail:
+        server: mail.example.local
+        sender: vcenter@{{ inventory_hostname }}
+      advanced_settings:
+        'config.vcls.clusters.domain-c8.enabled': 'false'
+    register: configure_advanced_settings_again
+
+  - name: Make sure that advanced settings are not configured (idempotency)
+    assert:
+      that:
+        - not configure_advanced_settings_again.changed
