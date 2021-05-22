@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 - name: Add custom attributes to a virtual machine
-  vmware_guest_custom_attributes:
+  community.vmware.vmware_guest_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -17,7 +17,7 @@
     state: present
 
 - name: Add custom attributes to an ESXi
-  vmware_host_custom_attributes:
+  community.vmware.vmware_host_custom_attributes:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

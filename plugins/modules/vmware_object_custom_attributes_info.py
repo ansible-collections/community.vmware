@@ -48,7 +48,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Gather custom attributes of a virtual machine
-  vmware_object_custom_attributes_info:
+  community.vmware.vmware_object_custom_attributes_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -118,7 +118,7 @@ class VmwareCustomAttributesInfo(PyVmomi):
 
         obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
         if not obj:
-            self.module.fail_json(msg="can't found the object: %s" % self.object_name)
+            self.module.fail_json(msg="can't find the object: %s" % self.object_name)
 
         custom_attributes = []
         available_fields = {}

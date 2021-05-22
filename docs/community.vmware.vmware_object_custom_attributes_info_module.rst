@@ -25,7 +25,7 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.7
+- python >= 3.6
 - PyVmomi
 
 
@@ -215,6 +215,12 @@ Parameters
     <br/>
 
 
+Notes
+-----
+
+.. note::
+   - Supports ``check_mode``.
+
 
 
 Examples
@@ -223,7 +229,7 @@ Examples
 .. code-block:: yaml
 
     - name: Gather custom attributes of a virtual machine
-      vmware_object_custom_attributes_info:
+      community.vmware.vmware_object_custom_attributes_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

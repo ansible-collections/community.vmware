@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 - name: Gather custom attributes of a virtual machine
-  vmware_object_custom_attributes_info:
+  community.vmware.vmware_object_custom_attributes_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -11,6 +11,8 @@
     object_type: VirtualMachine
     object_name: "{{ virtual_machines.0.name }}"
   register: vm_custom_attributes_result
+
+- debug: msg="{{ vm_custom_attributes_result }}"
 
 - name: Make sure if custom attributes exist
   assert:
@@ -21,7 +23,7 @@
       - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')
 
 - name: Gather custom attributes of an ESXi
-  vmware_object_custom_attributes_info:
+  community.vmware.vmware_object_custom_attributes_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
