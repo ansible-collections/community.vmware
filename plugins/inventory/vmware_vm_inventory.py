@@ -33,7 +33,7 @@ DOCUMENTATION = r'''
               - name: VMWARE_HOST
               - name: VMWARE_SERVER
         username:
-            description: 
+            description:
             - Name of vSphere user.
             - Accepts vault encrypted variable.
             required: True
@@ -41,7 +41,7 @@ DOCUMENTATION = r'''
               - name: VMWARE_USER
               - name: VMWARE_USERNAME
         password:
-            description: 
+            description:
             - Password of vSphere user.
             - Accepts vault encrypted variable.
             required: True
