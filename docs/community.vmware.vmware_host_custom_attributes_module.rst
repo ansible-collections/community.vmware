@@ -210,6 +210,7 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>The action to take.</div>
@@ -249,6 +250,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -322,7 +324,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">dictionary</span>
                     </div>
                 </td>
-                <td>always</td>
+                <td>changed</td>
                 <td>
                             <div>metadata about the ESXi host attributes</div>
                     <br/>

@@ -180,6 +180,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether forged transmits are allowed.</div>
@@ -200,6 +201,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether mac changes are allowed.</div>
@@ -220,6 +222,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether promiscuous mode is allowed.</div>
@@ -351,6 +354,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Indicates if the block policy can be changed per port.</div>
@@ -371,6 +375,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the ipfix policy can be changed per port.</div>
@@ -391,6 +396,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if a live port can be moved in or out of the portgroup.</div>
@@ -411,6 +417,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the network resource pool can be changed per port.</div>
@@ -431,6 +438,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Indicates if the configuration of a port is reset automatically after disconnect.</div>
@@ -451,6 +459,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the security policy can be changed per port.</div>
@@ -471,6 +480,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the shaping policy can be changed per port.</div>
@@ -491,6 +501,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the traffic filter can be changed per port.</div>
@@ -511,6 +522,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the uplink teaming policy can be changed per port.</div>
@@ -531,6 +543,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the vendor config can be changed per port.</div>
@@ -551,6 +564,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates if the vlan can be changed per port.</div>
@@ -736,6 +750,7 @@ Parameters
                                     <li>loadbalance_loadbased</li>
                                     <li>failover_explicit</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"loadbalance_srcid"</div>
                 </td>
                 <td>
                         <div>Network adapter teaming policy.</div>
@@ -757,6 +772,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Indicate whether or not to notify the physical switch if a link fails.</div>
@@ -777,6 +793,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicate whether or not to use a rolling policy when restoring links.</div>
@@ -833,6 +850,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -874,6 +892,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether this is for a private VLAN or not.</div>
@@ -894,6 +913,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether this is a VLAN trunk or not.</div>

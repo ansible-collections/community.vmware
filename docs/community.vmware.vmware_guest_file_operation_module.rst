@@ -103,6 +103,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Overwrite or not.</div>
@@ -231,6 +232,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Not required.</div>
@@ -453,6 +455,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -494,6 +497,7 @@ Parameters
                                     <li>inventory_path</li>
                                     <li><div style="color: blue"><b>vm_name</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"vm_name"</div>
                 </td>
                 <td>
                         <div>The VMware identification method by which the virtual machine will be identified.</div>

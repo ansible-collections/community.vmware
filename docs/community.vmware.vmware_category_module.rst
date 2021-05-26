@@ -91,6 +91,7 @@ Parameters
                                     <li><div style="color: blue"><b>multiple</b>&nbsp;&larr;</div></li>
                                     <li>single</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"multiple"</div>
                 </td>
                 <td>
                         <div>The category cardinality.</div>
@@ -211,6 +212,7 @@ Parameters
                                     <li>http</li>
                                     <li><div style="color: blue"><b>https</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"https"</div>
                 </td>
                 <td>
                         <div>The connection to protocol.</div>
@@ -230,6 +232,7 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>The state of category.</div>
@@ -271,6 +274,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>

@@ -175,6 +175,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>If <code>state</code> is <code>absent</code>, make sure the disk file is deleted from the datastore. Added in version 2.10.</div>
@@ -433,6 +434,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>The sharing mode of the virtual disk.</div>
@@ -537,6 +539,7 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>State of disk.</div>
@@ -747,6 +750,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
@@ -800,6 +804,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

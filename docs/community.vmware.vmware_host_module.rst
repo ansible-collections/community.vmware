@@ -57,6 +57,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code>, then the host should be connected as soon as it is added.</div>
@@ -187,6 +188,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Fetch the thumbprint of the host&#x27;s SSL certificate.</div>
@@ -233,6 +235,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Force the connection if the host is already being managed by another vCenter server.</div>
@@ -339,6 +342,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Reconnect disconnected hosts.</div>
@@ -362,6 +366,7 @@ Parameters
                                     <li>reconnect</li>
                                     <li>disconnected</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>If set to <code>present</code>, add the host if host is absent.</div>
@@ -405,6 +410,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

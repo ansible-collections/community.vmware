@@ -132,6 +132,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether the session is enabled.</div>
@@ -326,6 +327,7 @@ Parameters
                                     <li>remoteMirrorSource</li>
                                     <li><div style="color: blue"><b>dvPortMirror</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"dvPortMirror"</div>
                 </td>
                 <td>
                         <div>Select the mirroring type.</div>
@@ -551,6 +553,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

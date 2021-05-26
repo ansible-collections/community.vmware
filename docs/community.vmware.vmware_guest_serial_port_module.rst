@@ -100,6 +100,7 @@ Parameters
                                     <li><div style="color: blue"><b>client</b>&nbsp;&larr;</div></li>
                                     <li>server</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"client"</div>
                 </td>
                 <td>
                         <div>The direction of the connection.</div>
@@ -121,6 +122,7 @@ Parameters
                                     <li><div style="color: blue"><b>client</b>&nbsp;&larr;</div></li>
                                     <li>server</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"client"</div>
                 </td>
                 <td>
                         <div>When you use serial port pipe backing to connect a virtual machine to another process, you must define the endpoints.</div>
@@ -159,6 +161,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enables optimized data transfer over the pipe.</div>
@@ -217,6 +220,7 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div><code>state</code> is required to identify whether we are adding, modifying or removing the serial port.</div>
@@ -240,6 +244,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Enables CPU yield behavior.</div>
@@ -379,6 +384,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
@@ -432,6 +438,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

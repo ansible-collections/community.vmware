@@ -96,6 +96,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>This flag overrides the guest operating system detection and forcibly upgrade VMware tools or open-vm-tools.</div>
@@ -167,6 +168,7 @@ Parameters
                                     <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
                                     <li>last</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"first"</div>
                 </td>
                 <td>
                         <div>If multiple virtual machines matching the name, use the first or last found.</div>
@@ -290,6 +292,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

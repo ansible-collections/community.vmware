@@ -130,6 +130,7 @@ Parameters
                                     <li><div style="color: blue"><b>file</b>&nbsp;&larr;</div></li>
                                     <li>touch</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"file"</div>
                 </td>
                 <td>
                         <div>The state of or the action on the provided path.</div>
@@ -185,6 +186,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>If <code>false</code>, SSL certificates will not be validated. This should only be set to <code>false</code> when no other option exists.</div>

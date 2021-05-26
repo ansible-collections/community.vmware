@@ -172,6 +172,7 @@ Parameters
                                     <li><div style="color: blue"><b>none</b>&nbsp;&larr;</div></li>
                                     <li>powerOn</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"none"</div>
                 </td>
                 <td>
                         <div>Whether to start the virtual machine when the host startup.</div>
@@ -230,6 +231,7 @@ Parameters
                                     <li>powerOff</li>
                                     <li>suspend</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"systemDefault"</div>
                 </td>
                 <td>
                         <div>Stop action executed on the virtual machine when the system stops of virtual machine.</div>
@@ -268,6 +270,7 @@ Parameters
                                     <li>yes</li>
                                     <li><div style="color: blue"><b>systemDefault</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"systemDefault"</div>
                 </td>
                 <td>
                         <div>Continue power on processing when VMware Tools started.</div>
@@ -338,6 +341,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable automatically start or stop of virtual machines.</div>
@@ -377,6 +381,7 @@ Parameters
                                     <li><div style="color: blue"><b>powerOff</b>&nbsp;&larr;</div></li>
                                     <li>suspend</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"powerOff"</div>
                 </td>
                 <td>
                         <div>Default stop action executed on the virtual machine when the system stops.</div>
@@ -414,6 +419,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Continue power on processing when VMware Tools started.</div>
@@ -436,6 +442,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
@@ -490,6 +497,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

@@ -109,6 +109,7 @@ Parameters
                                     <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
                                     <li>last</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"first"</div>
                 </td>
                 <td>
                         <div>If multiple virtual machines matching the name, use the first or last found.</div>
@@ -198,6 +199,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
@@ -251,6 +253,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

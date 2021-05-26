@@ -89,6 +89,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Gather mount information of NFS datastores.</div>
@@ -110,6 +111,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Gather mount information of VMFS datastores.</div>
@@ -260,6 +262,7 @@ Parameters
                                     <li><div style="color: blue"><b>summary</b>&nbsp;&larr;</div></li>
                                     <li>vsphere</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"summary"</div>
                 </td>
                 <td>
                         <div>Specify the output schema desired.</div>
@@ -299,6 +302,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

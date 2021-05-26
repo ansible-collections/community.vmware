@@ -87,6 +87,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Past day statistics collection enabled.</div>
@@ -110,6 +111,7 @@ Parameters
                                     <li>4</li>
                                     <li><div style="color: blue"><b>5</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">5</div>
                 </td>
                 <td>
                         <div>Interval duration in minutes.</div>
@@ -132,6 +134,7 @@ Parameters
                                     <li>3</li>
                                     <li>4</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Statistics level.</div>
@@ -155,6 +158,7 @@ Parameters
                                     <li>4</li>
                                     <li>5</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Save for value in days.</div>
@@ -191,6 +195,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Past month statistics collection enabled.</div>
@@ -210,6 +215,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li><div style="color: blue"><b>2</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">2</div>
                 </td>
                 <td>
                         <div>Interval duration in hours.</div>
@@ -232,6 +238,7 @@ Parameters
                                     <li>3</li>
                                     <li>4</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Statistics level.</div>
@@ -251,6 +258,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li><div style="color: blue"><b>1</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Save for value in months.</div>
@@ -287,6 +295,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Past week statistics collection enabled.</div>
@@ -306,6 +315,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li><div style="color: blue"><b>30</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">30</div>
                 </td>
                 <td>
                         <div>Interval duration in minutes.</div>
@@ -328,6 +338,7 @@ Parameters
                                     <li>3</li>
                                     <li>4</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Statistics level.</div>
@@ -347,6 +358,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li><div style="color: blue"><b>1</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Save for value in weeks.</div>
@@ -383,6 +395,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Past month statistics collection enabled.</div>
@@ -402,6 +415,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li><div style="color: blue"><b>1</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Interval duration in days.</div>
@@ -424,6 +438,7 @@ Parameters
                                     <li>3</li>
                                     <li>4</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Statistics level.</div>
@@ -447,6 +462,7 @@ Parameters
                                     <li>4</li>
                                     <li>5</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">1</div>
                 </td>
                 <td>
                         <div>Save for value in years.</div>
@@ -555,6 +571,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

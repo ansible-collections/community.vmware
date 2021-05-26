@@ -84,6 +84,7 @@ Parameters
                                     <li>present</li>
                                     <li><div style="color: blue"><b>absent</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"absent"</div>
                 </td>
                 <td>
                         <div>Whether the ESXi host is joined to an AD domain or not.</div>
@@ -256,6 +257,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

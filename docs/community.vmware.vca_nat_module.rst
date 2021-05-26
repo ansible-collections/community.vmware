@@ -164,6 +164,7 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to true, it will delete all rules in the gateway that are not given as parameter to this module.</div>
@@ -184,6 +185,7 @@ Parameters
                                     <li>vcd</li>
                                     <li>vchs</li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"vca"</div>
                 </td>
                 <td>
                         <div>The type of service we are authenticating against.</div>
@@ -203,6 +205,7 @@ Parameters
                                     <li>absent</li>
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>Whether the object should be added or removed.</div>
@@ -238,6 +241,7 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>If the certificates of the authentication is to be verified.</div>
