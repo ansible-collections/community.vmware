@@ -65,7 +65,7 @@ options:
     destination_datacenter:
       description:
       - Name of the destination datacenter the datastore is located on.
-      - Optional, used only when datastores share the same names between datacenters.
+      - Optional, required only when datastores are shared across datacenters.
       type: str
     destination_resourcepool:
       description:
