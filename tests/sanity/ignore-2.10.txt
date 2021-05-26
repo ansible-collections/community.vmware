@@ -316,6 +316,8 @@ plugins/modules/vmware_maintenancemode.py compile-2.6!skip
 plugins/modules/vmware_maintenancemode.py import-2.6!skip
 plugins/modules/vmware_migrate_vmk.py compile-2.6!skip
 plugins/modules/vmware_migrate_vmk.py import-2.6!skip
+plugins/modules/vmware_object_custom_attributes_info.py compile-2.6!skip
+plugins/modules/vmware_object_custom_attributes_info.py import-2.6!skip
 plugins/modules/vmware_object_rename.py compile-2.6!skip
 plugins/modules/vmware_object_rename.py import-2.6!skip
 plugins/modules/vmware_object_role_permission_info.py compile-2.6!skip
