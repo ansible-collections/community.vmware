@@ -73,7 +73,6 @@ Parameters
                                     <li>restartConservative</li>
                                     <li>restartAggressive</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"warning"</div>
                 </td>
                 <td>
                         <div>VM storage protection setting for storage failures categorized as All Paths Down (APD).</div>
@@ -126,7 +125,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to enable HA.</div>
@@ -182,7 +180,6 @@ Parameters
                                     <li><div style="color: blue"><b>enabled</b>&nbsp;&larr;</div></li>
                                     <li>disabled</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"enabled"</div>
                 </td>
                 <td>
                         <div>Whether HA restarts virtual machines after a host fails.</div>
@@ -207,7 +204,6 @@ Parameters
                                     <li>low</li>
                                     <li><div style="color: blue"><b>medium</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"medium"</div>
                 </td>
                 <td>
                         <div>Priority HA gives to a virtual machine if sufficient capacity is not available to power on all failed virtual machines.</div>
@@ -305,7 +301,6 @@ Parameters
                                     <li>vmMonitoringOnly</li>
                                     <li><div style="color: blue"><b>vmMonitoringDisabled</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"vmMonitoringDisabled"</div>
                 </td>
                 <td>
                         <div>State of virtual machine health monitoring service.</div>
@@ -330,7 +325,6 @@ Parameters
                                     <li>powerOff</li>
                                     <li>shutdown</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"none"</div>
                 </td>
                 <td>
                         <div>Indicates whether or VMs should be powered off if a host determines that it is isolated from the rest of the compute resource.</div>
@@ -390,7 +384,6 @@ Parameters
                                     <li><div style="color: blue"><b>warning</b>&nbsp;&larr;</div></li>
                                     <li>restartAggressive</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"warning"</div>
                 </td>
                 <td>
                         <div>VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).</div>
@@ -479,7 +472,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>By default, <code>failover_level</code> is used to calculate <code>cpu_failover_resources_percent</code> and <code>memory_failover_resources_percent</code>. If a user wants to override the percentage values, he has to set this field to false.</div>
@@ -603,7 +595,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

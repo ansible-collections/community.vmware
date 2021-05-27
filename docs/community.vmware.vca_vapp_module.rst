@@ -122,7 +122,6 @@ Parameters
                                     <li>dhcp</li>
                                     <li>static</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"pool"</div>
                 </td>
                 <td>
                         <div>Configures the mode of the network connection.</div>
@@ -162,7 +161,6 @@ Parameters
                                     <li>reboot</li>
                                     <li>reset</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"noop"</div>
                 </td>
                 <td>
                         <div>Specifies an operation to be performed on the vApp.</div>
@@ -214,7 +212,6 @@ Parameters
                                     <li>vchs</li>
                                     <li>vcd</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"vca"</div>
                 </td>
                 <td>
                         <div>The type of service we are authenticating against</div>
@@ -236,7 +233,6 @@ Parameters
                                     <li>deployed</li>
                                     <li>undeployed</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>Configures the state of the vApp.</div>
@@ -287,7 +283,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>If the certificates of the authentication is to be verified.</div>

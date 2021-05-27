@@ -87,7 +87,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>This parameter specify if the host should be proceeding with user defined powerstate regardless of whether it is in maintenance mode.</div>
@@ -200,7 +199,6 @@ Parameters
                                     <li><div style="color: blue"><b>shutdown-host</b>&nbsp;&larr;</div></li>
                                     <li>reboot-host</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"shutdown-host"</div>
                 </td>
                 <td>
                         <div>Set the state of the host system.</div>
@@ -256,7 +254,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

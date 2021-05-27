@@ -677,7 +677,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to delete Virtual machine from inventory or delete from disk.</div>
@@ -1021,7 +1020,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Ignore warnings and complete the actions.</div>
@@ -1461,7 +1459,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Flag the instance as a template.</div>
@@ -1484,7 +1481,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to create a linked clone from the snapshot specified.</div>
@@ -1524,7 +1520,6 @@ Parameters
                                     <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
                                     <li>last</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"first"</div>
                 </td>
                 <td>
                         <div>If multiple virtual machines matching the name, use the first or last found.</div>
@@ -1919,7 +1914,6 @@ Parameters
                                     <li>shutdownguest</li>
                                     <li>shutdown-guest</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>Specify the state the virtual machine should be in.</div>
@@ -1987,7 +1981,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
@@ -2043,7 +2036,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -2149,7 +2141,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Wait until vCenter detects all guest customizations as successfully completed.</div>
@@ -2188,7 +2179,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Wait until vCenter detects an IP address for the virtual machine.</div>

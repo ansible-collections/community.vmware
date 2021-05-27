@@ -87,7 +87,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.</div>
@@ -142,7 +141,6 @@ Parameters
                                     <li>low</li>
                                     <li><div style="color: blue"><b>normal</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"normal"</div>
                 </td>
                 <td>
                         <div>Memory shares are used in case of resource contention.</div>
@@ -231,7 +229,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.</div>
@@ -286,7 +283,6 @@ Parameters
                                     <li>low</li>
                                     <li><div style="color: blue"><b>normal</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"normal"</div>
                 </td>
                 <td>
                         <div>Memory shares are used in case of resource contention.</div>
@@ -409,7 +405,6 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>Add or remove the resource pool</div>
@@ -447,7 +442,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

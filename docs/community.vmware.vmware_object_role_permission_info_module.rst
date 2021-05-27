@@ -8,7 +8,7 @@ community.vmware.vmware_object_role_permission_info
 **Gather information about object's permissions**
 
 
-Version added: 1.11.0
+Version added: 1.10.0
 
 .. contents::
    :local:
@@ -112,7 +112,6 @@ Parameters
                                     <li>ClusterComputeResource</li>
                                     <li>DistributedVirtualSwitch</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"Folder"</div>
                 </td>
                 <td>
                         <div>The object type being targeted.</div>
@@ -220,7 +219,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -246,7 +244,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather permission information about Datastore
       community.vmware.vmware_object_role_permission_info:

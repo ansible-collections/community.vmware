@@ -137,7 +137,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to enable CHAP authentication.</div>
@@ -161,7 +160,6 @@ Parameters
                                     <li>chapRequired</li>
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.</div>
@@ -218,7 +216,6 @@ Parameters
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                                     <li>chapRequired</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of Mutual-CHAP if CHAP is enabled.</div>
@@ -275,7 +272,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Force port bind VMkernels to be removed.</div>
@@ -386,7 +382,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to enable CHAP authentication.</div>
@@ -411,7 +406,6 @@ Parameters
                                     <li>chapRequired</li>
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.</div>
@@ -434,7 +428,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether or not to inherit CHAP settings from the parent settings.</div>
@@ -494,7 +487,6 @@ Parameters
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                                     <li>chapRequired</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of Mutual-CHAP if CHAP is enabled.</div>
@@ -517,7 +509,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether or not to inherit Mutual-CHAP settings from the parent settings.</div>
@@ -649,7 +640,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to enable CHAP authentication.</div>
@@ -674,7 +664,6 @@ Parameters
                                     <li>chapRequired</li>
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.</div>
@@ -697,7 +686,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether or not to inherit CHAP settings from the parent settings.</div>
@@ -757,7 +745,6 @@ Parameters
                                     <li><div style="color: blue"><b>chapProhibited</b>&nbsp;&larr;</div></li>
                                     <li>chapRequired</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"chapProhibited"</div>
                 </td>
                 <td>
                         <div>The preference for CHAP or non-CHAP protocol of Mutual-CHAP if CHAP is enabled.</div>
@@ -780,7 +767,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether or not to inherit Mutual-CHAP settings from the parent settings.</div>
@@ -966,7 +952,6 @@ Parameters
                                     <li>enabled</li>
                                     <li>disabled</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>If set to <code>present</code>, add the iSCSI target or the bind ports if they are not existing.</div>
@@ -1008,7 +993,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

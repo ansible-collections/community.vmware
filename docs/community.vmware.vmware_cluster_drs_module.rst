@@ -104,7 +104,6 @@ Parameters
                                     <li>manual</li>
                                     <li>partiallyAutomated</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"fullyAutomated"</div>
                 </td>
                 <td>
                         <div>Specifies the cluster-wide default DRS behavior for virtual machines.</div>
@@ -127,7 +126,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Whether DRS Behavior overrides for individual virtual machines are enabled.</div>
@@ -151,7 +149,6 @@ Parameters
                                     <li>4</li>
                                     <li>5</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">3</div>
                 </td>
                 <td>
                         <div>Threshold for generated ClusterRecommendations.</div>
@@ -171,7 +168,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to enable DRS.</div>
@@ -297,7 +293,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

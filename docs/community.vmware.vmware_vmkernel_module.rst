@@ -90,7 +90,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable Fault Tolerance traffic on the VMKernel adapter.</div>
@@ -111,7 +110,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable Management traffic on the VMKernel adapter.</div>
@@ -132,7 +130,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable Provisioning traffic on the VMKernel adapter.</div>
@@ -153,7 +150,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable vSphere Replication traffic on the VMKernel adapter.</div>
@@ -174,7 +170,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable vSphere Replication NFC traffic on the VMKernel adapter.</div>
@@ -195,7 +190,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable vMotion traffic on the VMKernel adapter.</div>
@@ -217,7 +211,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Enable VSAN traffic on the VMKernel adapter.</div>
@@ -358,7 +351,6 @@ Parameters
                                     <li>vmotion</li>
                                     <li>vxlan</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"default"</div>
                 </td>
                 <td>
                         <div>The TCP/IP stack for the VMKernel interface.</div>
@@ -379,7 +371,6 @@ Parameters
                                     <li><div style="color: blue"><b>static</b>&nbsp;&larr;</div></li>
                                     <li>dhcp</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"static"</div>
                 </td>
                 <td>
                         <div>Type of IP assignment.</div>
@@ -487,7 +478,6 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>If set to <code>present</code>, the VMKernel adapter will be created with the given specifications.</div>
@@ -527,7 +517,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

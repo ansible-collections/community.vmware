@@ -86,7 +86,6 @@ Parameters
                                     <li><div style="color: blue"><b>indications</b>&nbsp;&larr;</div></li>
                                     <li>sensors</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"indications"</div>
                 </td>
                 <td>
                         <div>Source hardware events from IPMI sensors or CIM Indications.</div>
@@ -109,7 +108,6 @@ Parameters
                                     <li>warning</li>
                                     <li>error</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"info"</div>
                 </td>
                 <td>
                         <div>Syslog logging level.</div>
@@ -199,7 +197,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Send a test trap to validate the configuration.</div>
@@ -236,7 +233,6 @@ Parameters
                                     <li>enabled</li>
                                     <li>reset</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"disabled"</div>
                 </td>
                 <td>
                         <div>Enable, disable, or reset the SNMP agent.</div>
@@ -309,7 +305,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

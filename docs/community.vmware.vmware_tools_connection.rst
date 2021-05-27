@@ -119,7 +119,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                     <td>
                                 <div>env:VMWARE_VALIDATE_CERTS</div>

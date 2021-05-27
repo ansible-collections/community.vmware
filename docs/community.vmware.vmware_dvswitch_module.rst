@@ -135,7 +135,6 @@ Parameters
                                     <li>advertise</li>
                                     <li><div style="color: blue"><b>listen</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"listen"</div>
                 </td>
                 <td>
                         <div>Select the discovery operation.</div>
@@ -158,7 +157,6 @@ Parameters
                                     <li>lldp</li>
                                     <li>disabled</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"cdp"</div>
                 </td>
                 <td>
                         <div>Link discovery protocol between Cisco and Link Layer discovery.</div>
@@ -227,7 +225,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Teaming and failover health check.</div>
@@ -266,7 +263,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>VLAN and MTU health check.</div>
@@ -341,7 +337,6 @@ Parameters
                                     <li><div style="color: blue"><b>basic</b>&nbsp;&larr;</div></li>
                                     <li>snooping</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"basic"</div>
                 </td>
                 <td>
                         <div>The multicast filtering mode.</div>
@@ -381,7 +376,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether forged transmits are allowed.</div>
@@ -402,7 +396,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether mac changes are allowed.</div>
@@ -423,7 +416,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Indicates whether promiscuous mode is allowed.</div>
@@ -514,7 +506,6 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>If set to <code>present</code> and the Distributed Switch does not exist, the Distributed Switch will be created.</div>
@@ -625,7 +616,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>

@@ -90,7 +90,6 @@ Parameters
                                     <li>manual</li>
                                     <li>partiallyAutomated</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"fullyAutomated"</div>
                 </td>
                 <td>
                         <div>Specifies the cluster-wide default DRS behavior for virtual machines.</div>
@@ -115,7 +114,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Determines whether DRS Behavior overrides for individual virtual machines are enabled.</div>
@@ -141,7 +139,6 @@ Parameters
                                     <li>4</li>
                                     <li>5</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">3</div>
                 </td>
                 <td>
                         <div>Threshold for generated ClusterRecommendations.</div>
@@ -163,7 +160,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code>, will enable DRS when the cluster is created.</div>
@@ -185,7 +181,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code> will enable HA when the cluster is created.</div>
@@ -207,7 +202,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code> will enable vSAN when the cluster is created.</div>
@@ -229,7 +223,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Determines if strict admission control is enabled.</div>
@@ -271,7 +264,6 @@ Parameters
                                     <li><div style="color: blue"><b>enabled</b>&nbsp;&larr;</div></li>
                                     <li>disabled</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"enabled"</div>
                 </td>
                 <td>
                         <div>Indicates whether HA restarts virtual machines after a host fails.</div>
@@ -298,7 +290,6 @@ Parameters
                                     <li>low</li>
                                     <li><div style="color: blue"><b>medium</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"medium"</div>
                 </td>
                 <td>
                         <div>Determines the preference that HA gives to a virtual machine if sufficient capacity is not available to power on all failed virtual machines.</div>
@@ -406,7 +397,6 @@ Parameters
                                     <li>vmMonitoringOnly</li>
                                     <li><div style="color: blue"><b>vmMonitoringDisabled</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"vmMonitoringDisabled"</div>
                 </td>
                 <td>
                         <div>Indicates the state of virtual machine health monitoring service.</div>
@@ -449,7 +439,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code>, DRS will not be configured; all explicit and default DRS related configurations will be ignored.</div>
@@ -469,7 +458,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code>, HA will not be configured; all explicit and default HA related configurations will be ignored.</div>
@@ -489,7 +477,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>If set to <code>True</code>, VSAN will not be configured; all explicit and default VSAN related configurations will be ignored.</div>
@@ -579,7 +566,6 @@ Parameters
                                     <li>absent</li>
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>Create <code>present</code> or remove <code>absent</code> a VMware vSphere cluster.</div>
@@ -617,7 +603,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
@@ -640,7 +625,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Determines whether the VSAN service is configured to automatically claim local storage on VSAN-enabled hosts in the cluster.</div>

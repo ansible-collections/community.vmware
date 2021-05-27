@@ -126,7 +126,6 @@ Parameters
                                     <li><div style="color: blue"><b>local</b>&nbsp;&larr;</div></li>
                                     <li>subscribed</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"local"</div>
                 </td>
                 <td>
                         <div>The content library type.</div>
@@ -182,7 +181,6 @@ Parameters
                                     <li>http</li>
                                     <li><div style="color: blue"><b>https</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"https"</div>
                 </td>
                 <td>
                         <div>The connection to protocol.</div>
@@ -221,7 +219,6 @@ Parameters
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"present"</div>
                 </td>
                 <td>
                         <div>The state of content library.</div>
@@ -264,7 +261,6 @@ Parameters
                                     <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
                                     <li>yes</li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"no"</div>
                 </td>
                 <td>
                         <div>Whether to download all content on demand.</div>
@@ -305,7 +301,6 @@ Parameters
                                     <li>no</li>
                                     <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
