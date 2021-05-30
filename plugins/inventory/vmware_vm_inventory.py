@@ -33,13 +33,17 @@ DOCUMENTATION = r'''
               - name: VMWARE_HOST
               - name: VMWARE_SERVER
         username:
-            description: Name of vSphere user.
+            description:
+            - Name of vSphere user.
+            - Accepts vault encrypted variable.
             required: True
             env:
               - name: VMWARE_USER
               - name: VMWARE_USERNAME
         password:
-            description: Password of vSphere user.
+            description:
+            - Password of vSphere user.
+            - Accepts vault encrypted variable.
             required: True
             env:
               - name: VMWARE_PASSWORD
@@ -716,14 +720,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # set _options from config data
         self._consume_options(config_data)
 
+        username = self.get_option('username')
         password = self.get_option('password')
+
+        if isinstance(username, AnsibleVaultEncryptedUnicode):
+            username = username.data
 
         if isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
 
         self.pyv = BaseVMwareInventory(
             hostname=self.get_option('hostname'),
-            username=self.get_option('username'),
+            username=username,
             password=password,
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
