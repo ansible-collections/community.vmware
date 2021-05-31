@@ -279,7 +279,7 @@ Push the release:
 ## Communication
 
 We have a dedicated Working Group for VMware.
-You can find other people interested in this in `#ansible-vmware` on Freenode IRC.
+You can find other people interested in this in the `#ansible-vmware` channel on [libera.chat](https://libera.chat/) IRC.
 For more information about communities, meetings and agendas see https://github.com/ansible/community/wiki/VMware.
 
 ## License
