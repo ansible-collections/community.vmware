@@ -1128,7 +1128,7 @@ class PyVmomi(object):
         elif 'moid' in self.params and self.params['moid']:
             vm_obj = VmomiSupport.templateOf('VirtualMachine')(self.params['moid'], self.si._stub)
             try:
-                _ = getattr(vm_obj, 'name')
+                getattr(vm_obj, 'name')
             except vmodl.fault.ManagedObjectNotFound:
                 vm_obj = None
 
