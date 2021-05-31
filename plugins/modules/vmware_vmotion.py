@@ -67,6 +67,7 @@ options:
       - Name of the destination datacenter the datastore is located on.
       - Optional, required only when datastores are shared across datacenters.
       type: str
+      version_added: '1.11.0'
     destination_resourcepool:
       description:
       - Name of the destination resource pool where the virtual machine should be running.
