@@ -102,6 +102,7 @@ action_groups:
   - vmware_host_ntp
   - vmware_host_ntp_info
   - vmware_host_package_info
+  - vmware_host_passthrough
   - vmware_host_powermgmt_policy
   - vmware_host_powerstate
   - vmware_host_scanhba
