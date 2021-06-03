@@ -1,0 +1,3 @@
+---
+bugfixes:
+- vmware_guest_tools_wait - add documentation about datacenter parameter (https://github.com/ansible-collections/community.vmware/pull/870).
