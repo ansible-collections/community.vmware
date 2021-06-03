@@ -1,0 +1,229 @@
+# Test code for the vmware_host_passthrough module.
+# Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Set the target_pci_device variable to execute the integration tests
+  set_fact:
+    target_pci_device: "{{ list_of_pci_devices_that_can_be_enabled_passthrough.0.deviceName }}"
+
+- name: Enable passthrough of PCI device with check_mode and diff without the cluster
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  check_mode: true
+  diff: true
+  register: enable_passthrough_check_mode_diff_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_check_mode_diff_result.changed is sameas true
+
+- name: Enable passthrough of PCI device with check_mode without the cluster
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  check_mode: true
+  register: enable_passthrough_check_mode_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_check_mode_result.changed is sameas true
+
+- name: Enable passthrough of PCI device without the cluster
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  register: enable_passthrough_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_result.changed is sameas true
+      - enable_passthrough_result.passthrough_configs is defined
+      - enable_passthrough_result.passthrough_configs | length >= 1
+
+- name: Wait 10 sec because need a little time to enable completely passthrough of PCI device
+  pause:
+    seconds: 10
+
+- name: Enable passthrough of PCI device without the cluster (idempotency)
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  register: enable_passthrough_indempotency_result
+
+- name: Make sure if the change hasn't occurred
+  assert:
+    that:
+      - enable_passthrough_indempotency_result.changed is sameas false
+
+- name: Disable passthrough of PCI device without the cluster
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+    state: absent
+  register: disable_passthrough_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - disable_passthrough_result.changed is sameas true
+
+- name: Wait 10 sec because need a little time to disable completely passthrough of PCI device
+  pause:
+    seconds: 10
+
+- name: Disable passthrough of PCI device without the cluster (idempotency)
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+    state: absent
+  register: disable_passthrough_idempotency_result
+
+- name: Make sure if the change hasn't occurred
+  assert:
+    that:
+      - disable_passthrough_idempotency_result.changed is sameas false
+
+- name: Enable passthrough of PCI device with check_mode and diff without the esxi_hostname
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  check_mode: true
+  diff: true
+  register: enable_passthrough_cluster_check_mode_diff_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_cluster_check_mode_diff_result.changed is sameas true
+
+- name: Enable passthrough of PCI device with check_mode without the esxi_hostname
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  check_mode: true
+  register: enable_passthrough_cluster_check_mode_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_cluster_check_mode_result.changed is sameas true
+
+- name: Enable passthrough of PCI device without the esxi_hostname
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  register: enable_passthrough_cluster_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - enable_passthrough_cluster_result.changed is sameas true
+      - enable_passthrough_cluster_result.passthrough_configs is defined
+      - enable_passthrough_cluster_result.passthrough_configs | length >= 1
+
+- name: Wait 10 sec because need a little time to enable completely passthrough of PCI device
+  pause:
+    seconds: 10
+
+- name: Enable passthrough of PCI device without the esxi_hostname (idempotency)
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+  register: enable_passthrough_cluster_indempotency_result
+
+- name: Make sure if the change hasn't occurred
+  assert:
+    that:
+      - enable_passthrough_cluster_indempotency_result.changed is sameas false
+
+- name: Disable passthrough of PCI device without the esxi_hostname
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+    state: absent
+  register: disable_passthrough_cluster_result
+
+- name: Make sure if the change has occurred
+  assert:
+    that:
+      - disable_passthrough_cluster_result.changed is sameas true
+
+- name: Wait 10 sec because need a little time to disable completely passthrough of PCI device
+  pause:
+    seconds: 10
+
+- name: Disable passthrough of PCI device without the esxi_hostname (idempotency)
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster: "{{ ccr1 }}"
+    devices:
+      - device_name: "{{ target_pci_device }}"
+    state: absent
+  register: disable_passthrough_cluster_idempotency_result
+
+- name: Make sure if the change hasn't occurred
+  assert:
+    that:
+      - disable_passthrough_cluster_idempotency_result.changed is sameas false
