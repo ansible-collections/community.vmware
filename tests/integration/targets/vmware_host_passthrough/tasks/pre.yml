@@ -25,7 +25,7 @@
   when:
     - item.passthruCapable is sameas true
 
-- name: The block task is collected PCI devices that can be enable passthrough if the device_ids variable is defined
+- name: The block task is collected PCI devices that can be enabled passthrough if the device_ids variable is defined
   when:
     - device_ids is defined
   block:
