@@ -8,7 +8,7 @@ community.vmware.vmware_object_role_permission_info
 **Gather information about object's permissions**
 
 
-Version added: 1.10.0
+Version added: 1.11.0
 
 .. contents::
    :local:
@@ -244,7 +244,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather permission information about Datastore
       community.vmware.vmware_object_role_permission_info:
