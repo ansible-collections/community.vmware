@@ -219,6 +219,7 @@ Name | Description
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
 [community.vmware.vmware_portgroup_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_facts_module.rst)|Gathers facts about an ESXi host's Port Group configuration
 [community.vmware.vmware_portgroup_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_info_module.rst)|Gathers info about an ESXi host's Port Group configuration
+[community.vmware.vmware_recommended_datastore](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_recommended_datastore_module.rst)|Returns the recommended datastore from a SDRS-enabled datastore cluster
 [community.vmware.vmware_resource_pool](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_module.rst)|Add/remove resource pools to/from vCenter
 [community.vmware.vmware_resource_pool_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_facts_module.rst)|Gathers facts about resource pool information
 [community.vmware.vmware_resource_pool_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_info_module.rst)|Gathers info about resource pool information

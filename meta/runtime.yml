@@ -126,6 +126,7 @@ action_groups:
   - vmware_object_role_permission_info
   - vmware_portgroup
   - vmware_portgroup_info
+  - vmware_recommended_datastore
   - vmware_resource_pool
   - vmware_resource_pool_info
   - vmware_tag
