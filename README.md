@@ -64,6 +64,7 @@ Name | Description
 ### Inventory plugins
 Name | Description
 --- | ---
+[community.vmware.vmware_host_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_inventory_inventory.rst)|VMware ESXi hostsystem inventory source
 [community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 ### Modules

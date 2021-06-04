@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_vm_inventory_inventory:
+.. _community.vmware.vmware_host_inventory_inventory:
 
 
-************************************
-community.vmware.vmware_vm_inventory
-************************************
+**************************************
+community.vmware.vmware_host_inventory
+**************************************
 
-**VMware Guest inventory source**
+**VMware ESXi hostsystem inventory source**
 
 
+Version added: 1.11.0
 
 .. contents::
    :local:
@@ -16,8 +17,8 @@ community.vmware.vmware_vm_inventory
 
 Synopsis
 --------
-- Get virtual machines as inventory hosts from VMware environment.
-- Uses any file which ends with vmware.yml, vmware.yaml, vmware_vm_inventory.yml, or vmware_vm_inventory.yaml as a YAML configuration file.
+- Get VMware ESXi hostsystem as inventory hosts from VMware environment.
+- Uses any file which ends with vmware.yml, vmware.yaml, vmware_host_inventory.yml, or vmware_host_inventory.yaml as a YAML configuration file.
 
 
 
@@ -250,7 +251,7 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">["config.name + \"_\" + config.uuid"]</div>
+                        <b>Default:</b><br/><div style="color: blue">["name"]</div>
                 </td>
                     <td>
                     </td>
@@ -271,7 +272,7 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">[{"key": "config.guestId", "separator": ""}, {"key": "summary.runtime.powerState", "separator": ""}]</div>
+                        <b>Default:</b><br/><div style="color: blue">[{"key": "summary.runtime.powerState", "separator": ""}]</div>
                 </td>
                     <td>
                     </td>
@@ -471,21 +472,19 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">["name", "config.cpuHotAddEnabled", "config.cpuHotRemoveEnabled", "config.instanceUuid", "config.hardware.numCPU", "config.template", "config.name", "config.uuid", "guest.hostName", "guest.ipAddress", "guest.guestId", "guest.guestState", "runtime.maxMemoryUsage", "customValue", "summary.runtime.powerState", "config.guestId"]</div>
+                        <b>Default:</b><br/><div style="color: blue">["name", "customValue", "summary.runtime.powerState"]</div>
                 </td>
                     <td>
                     </td>
                 <td>
-                        <div>Specify the list of VMware schema properties associated with the VM.</div>
-                        <div>These properties will be populated in hostvars of the given VM.</div>
-                        <div>Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.</div>
-                        <div><code>config.name</code>, <code>config.uuid</code> are required properties if <code>hostnames</code> is set to default.</div>
-                        <div><code>config.guestId</code>, <code>summary.runtime.powerState</code> are required if <code>keyed_groups</code> is set to default.</div>
+                        <div>Specify the list of VMware schema properties associated with the ESXi hostsystem.</div>
+                        <div>These properties will be populated in hostvars of the given ESXi hostsystem.</div>
+                        <div>Each value in the list can be a path to a specific property in hostsystem object or a path to a collection of hostsystem objects.</div>
+                        <div><code>summary.runtime.powerState</code> are required if <code>keyed_groups</code> is set to default.</div>
                         <div>Please make sure that all the properties that are used in other parameters are included in this options.</div>
-                        <div>In addition to VM properties, the following are special values</div>
-                        <div>Use <code>customValue</code> to populate virtual machine&#x27;s custom attributes. <code>customValue</code> is only supported by vCenter and not by ESXi.</div>
+                        <div>In addition to ESXi hostsystem&#x27;s properties, the following are special values</div>
+                        <div>Use <code>customValue</code> to populate ESXi hostsystem&#x27;s custom attributes. <code>customValue</code> is only supported by vCenter and not by ESXi.</div>
                         <div>Use <code>all</code> to populate all the properties of the virtual machine. The value <code>all</code> is time consuming operation, do not use unless required absolutely.</div>
-                        <div>Please refer more VMware guest attributes which can be used as properties <a href='https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst'>https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst</a></div>
                 </td>
             </tr>
             <tr>
@@ -496,7 +495,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.10</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">[]</div>
@@ -507,7 +505,6 @@ Parameters
                         <div>A list of resources to limit search scope.</div>
                         <div>Each resource item is represented by exactly one <code>&#x27;vim_type_snake_case</code>:<code>list of resource names</code> pair and optional nested <em>resources</em></div>
                         <div>Key name is based on snake case of a vim type name; e.g <code>host_system</code> correspond to <code>vim.HostSystem</code></div>
-                        <div>See  <a href='https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html'>VIM Types</a></div>
                 </td>
             </tr>
             <tr>
@@ -621,7 +618,6 @@ Parameters
                     </td>
                 <td>
                         <div>This option transform flatten properties name to nested dictionary.</div>
-                        <div>From 1.10.0 and onwards, default value is set to <code>True</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -642,7 +638,7 @@ Parameters
                     <td>
                     </td>
                 <td>
-                        <div>Include virtual machines path.</div>
+                        <div>Include ESXi hostsystem&#x27;s path.</div>
                         <div>Set this option to a string value to replace root name from <em>&#x27;Datacenters&#x27;</em>.</div>
                 </td>
             </tr>
@@ -686,7 +682,7 @@ Parameters
                     <td>
                     </td>
                 <td>
-                        <div>Include tags and associated virtual machines.</div>
+                        <div>Include tags and associated hosts.</div>
                         <div>Requires &#x27;vSphere Automation SDK&#x27; library to be installed on the given controller machine.</div>
                         <div>Please refer following URLs for installation steps</div>
                         <div><a href='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'>https://code.vmware.com/web/sdk/7.0/vsphere-automation-python</a></div>
@@ -703,181 +699,14 @@ Examples
 
 .. code-block:: yaml
 
-    # Sample configuration file for VMware Guest dynamic inventory
-        plugin: community.vmware.vmware_vm_inventory
+    # Sample configuration file for VMware Host dynamic inventory
+        plugin: community.vmware.vmware_host_inventory
         strict: False
         hostname: 10.65.223.31
         username: administrator@vsphere.local
         password: Esxi@123$%
         validate_certs: False
         with_tags: True
-
-    # Gather minimum set of properties for VMware guest
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'name'
-        - 'guest.ipAddress'
-        - 'config.name'
-        - 'config.uuid'
-
-    # Create Groups based upon VMware Tools status
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'name'
-        - 'config.name'
-        - 'guest.toolsStatus'
-        - 'guest.toolsRunningStatus'
-        hostnames:
-        - config.name
-        keyed_groups:
-        - key: guest.toolsStatus
-          separator: ''
-        - key: guest.toolsRunningStatus
-          separator: ''
-
-    # Filter VMs based upon condition
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'runtime.powerState'
-        - 'config.name'
-        filters:
-        - runtime.powerState == "poweredOn"
-        hostnames:
-        - config.name
-
-    # Filter VM's based on OR conditions
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'name'
-        - 'config.name'
-        - 'guest.ipAddress'
-        - 'guest.toolsStatus'
-        - 'guest.toolsRunningStatus'
-        - 'config.guestFullName'
-        - 'config.guestId'
-        hostnames:
-        - 'config.name'
-        filters:
-        - config.guestId == "rhel7_64Guest" or config.name == "rhel_20_04_empty"
-
-    # Filter VM's based on regex conditions
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'config.name'
-        - 'config.guestId'
-        - 'guest.ipAddress'
-        - 'summary.runtime.powerState'
-        filters:
-        - guest.ipAddress is defined and (guest.ipAddress is match('192.168.*') or guest.ipAddress is match('192.169.*'))
-
-    # Using compose and groups
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        properties:
-        - 'name'
-        - 'config.name'
-        - 'guest.ipAddress'
-        compose:
-          # This will populate the IP address of virtual machine if available
-          # and will be used while communicating to the given virtual machine
-          ansible_host: 'guest.ipAddress'
-          composed_var: 'config.name'
-        groups:
-          VMs: True
-        hostnames:
-        - config.name
-
-    # Use Datacenter, Cluster and Folder value to list VMs
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.200.241
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        with_tags: True
-        resources:
-          - datacenter:
-            - Asia-Datacenter1
-            - Asia-Datacenter2
-            resources:
-            - compute_resource:
-              - Asia-Cluster1
-              resources:
-              - host_system:
-                - Asia-ESXI4
-            - folder:
-              - dev
-              - prod
-
-    # Use Category and it's relation with Tag
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.201.128
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        hostnames:
-        - 'config.name'
-        properties:
-        - 'config.name'
-        - 'config.guestId'
-        - 'guest.ipAddress'
-        - 'summary.runtime.powerState'
-        with_tags: True
-        keyed_groups:
-        - key: tag_category.OS
-          prefix: "vmware_tag_os_category_"
-          separator: ""
-        with_nested_properties: True
-        filters:
-        - "tag_category.OS is defined and 'Linux' in tag_category.OS"
-
-    # customizing hostnames based on VM's FQDN. The second hostnames template acts as a fallback mechanism.
-        plugin: community.vmware.vmware_vm_inventory
-        strict: False
-        hostname: 10.65.223.31
-        username: administrator@vsphere.local
-        password: Esxi@123$%
-        validate_certs: False
-        hostnames:
-         - 'config.name+"."+guest.ipStack.0.dnsConfig.domainName'
-         - 'config.name'
-        properties:
-          - 'config.name'
-          - 'config.guestId'
-          - 'guest.hostName'
-          - 'guest.ipAddress'
-          - 'guest.guestFamily'
-          - 'guest.ipStack'
 
 
 

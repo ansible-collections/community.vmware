@@ -322,7 +322,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">dictionary</span>
                     </div>
                 </td>
-                <td>always</td>
+                <td>changed</td>
                 <td>
                             <div>metadata about the ESXi host attributes</div>
                     <br/>
