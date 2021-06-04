@@ -181,8 +181,10 @@ class VMwareObjectRolePermission(PyVmomi):
                 self.current_obj, True
             )
         else:
+            moid_list = []
+            moid_list.append(self.current_obj)
             self.current_perms = self.auth_manager.FetchUserPrivilegeOnEntities(
-                self.current_obj, self.principal
+                moid_list, self.principal
             )
 
     def get_object(self):
