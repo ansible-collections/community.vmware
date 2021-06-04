@@ -7,6 +7,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+from typing_extensions import Required
 
 __metaclass__ = type
 
@@ -26,6 +27,12 @@ requirements:
     - "python >= 2.7"
     - PyVmomi
 options:
+  principal:
+    description:
+    - The optional name of an entity, such as a user, assigned permissions on an object.
+    - If provided, actual permissions on the specified object are returned for the principal, instead of roles.
+    type: str
+    required: False
   object_name:
     description:
     - The object name to assigned permission.
@@ -51,7 +58,7 @@ version_added: "1.11.0"
 """
 
 EXAMPLES = r"""
-- name: Gather permission information about Datastore
+- name: Gather role information about Datastore
   community.vmware.vmware_object_role_permission_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -59,10 +66,20 @@ EXAMPLES = r"""
     validate_certs: false
     object_name: ds_200
     object_type: Datastore
+
+- name: Gather permissions on Datastore for a User
+  community.vmware.vmware_object_role_permission_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    principal: some.user@company.com
+    object_name: ds_200
+    object_type: Datastore
 """
 
 RETURN = r"""
-permission_info:
+role_info:
     description: information about object's permission
     returned: always
     type: list
@@ -97,6 +114,7 @@ class VMwareObjectRolePermission(PyVmomi):
         self.role_list = {}
         self.auth_manager = self.content.authorizationManager
 
+        self.principal = self.params.get('principal')
         self.get_object()
         self.get_perms()
         self.populate_role_list()
@@ -104,15 +122,18 @@ class VMwareObjectRolePermission(PyVmomi):
 
     def populate_permission_list(self):
         results = []
-        for permission in self.current_perms:
-            results.append(
-                {
-                    "principal": permission.principal,
-                    "role_name": self.role_list.get(permission.roleId, ""),
-                    "role_id": permission.roleId,
-                    "propagate": permission.propagate,
-                }
-            )
+        if self.principal is None:
+            for permission in self.current_perms:
+                results.append(
+                    {
+                        "principal": permission.principal,
+                        "role_name": self.role_list.get(permission.roleId, ""),
+                        "role_id": permission.roleId,
+                        "propagate": permission.propagate,
+                    }
+                )
+        else:
+            results = self.to_json(self.current_perms)
         self.module.exit_json(changed=False, permission_info=results)
 
     def populate_role_list(self):
@@ -156,9 +177,14 @@ class VMwareObjectRolePermission(PyVmomi):
                     self.role_list[role.roleId] = role_name
 
     def get_perms(self):
-        self.current_perms = self.auth_manager.RetrieveEntityPermissions(
-            self.current_obj, True
-        )
+        if self.principal is None:
+            self.current_perms = self.auth_manager.RetrieveEntityPermissions(
+                self.current_obj, True
+            )
+        else:
+            self.current_perms = self.auth_manager.FetchUserPrivilegeOnEntities(
+                self.current_obj, self.principal
+            )
 
     def get_object(self):
         # find_obj doesn't include rootFolder
@@ -205,6 +231,10 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         dict(
+            principal=dict(
+                type="str",
+                required=False
+            ),
             object_name=dict(type="str"),
             object_type=dict(
                 type="str",
