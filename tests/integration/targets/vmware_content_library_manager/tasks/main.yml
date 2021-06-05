@@ -117,6 +117,9 @@
         datastore_name: '{{ rw_datastore }}'
         state: present
       register: subscribed_content_lib_create_result
+      until: subscribed_content_lib_create_result.failed is sameas false
+      retries: 10
+      delay: 10
 
     - name: Check content library is created
       assert:
@@ -147,6 +150,9 @@
         ssl_thumbprint: ba:c6:4e:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
         state: present
       register: subscribed_content_lib_update_result
+      until: subscribed_content_lib_update_result.failed is sameas false
+      retries: 10
+      delay: 10
 
     - name: Check subscribed content library is updated
       assert:
