@@ -536,6 +536,7 @@ def main():
                     choices=['noSharing', 'physicalSharing', 'virtualSharing'],
                     required=False,
                     default='noSharing',
+                ),
             ),
         ),
         use_instance_uuid=dict(type='bool', default=False),
