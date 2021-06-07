@@ -60,11 +60,26 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Managed Object ID of the instance to get if known, this is a unique identifier only within a single vCenter instance.</div>
+                        <div>This is required if <code>object_name</code> is not supplied.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>object_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
@@ -236,6 +251,16 @@ Examples
         validate_certs: false
         object_type: VirtualMachine
         object_name: "{{ object_name }}"
+      register: vm_attributes
+
+    - name: Gather custom attributes of a virtual machine with moid
+      community.vmware.vmware_object_custom_attributes_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        object_type: VirtualMachine
+        moid: "{{ moid }}"
       register: vm_attributes
 
 

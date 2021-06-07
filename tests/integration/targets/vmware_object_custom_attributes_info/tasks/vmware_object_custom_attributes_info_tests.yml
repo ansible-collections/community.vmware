@@ -12,8 +12,6 @@
     object_name: "{{ virtual_machines.0.name }}"
   register: vm_custom_attributes_result
 
-- debug: msg="{{ vm_custom_attributes_result }}"
-
 - name: Make sure if custom attributes exist
   assert:
     that:
@@ -30,6 +28,42 @@
     validate_certs: false
     object_type: HostSystem
     object_name: "{{ esxi1 }}"
+  register: esxi_custom_attributes_result
+
+- name: Make sure if custom attributes exist
+  assert:
+    that:
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')
+
+- name: Gather custom attributes of a virtual machine with moid
+  community.vmware.vmware_object_custom_attributes_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    object_type: VirtualMachine
+    moid: "{{ vm_moid }}"
+  register: vm_custom_attributes_with_moid_result
+
+- name: Make sure if custom attributes exist
+  assert:
+    that:
+      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
+      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
+      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('value', 'equalto', 'test2')
+
+- name: Gather custom attributes of an ESXi with moid
+  community.vmware.vmware_object_custom_attributes_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    object_type: HostSystem
+    moid: "{{ esxi_moid }}"
   register: esxi_custom_attributes_result
 
 - name: Make sure if custom attributes exist

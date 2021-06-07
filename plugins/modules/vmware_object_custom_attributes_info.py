@@ -43,7 +43,11 @@ options:
     type: str
     aliases:
       - name
-    required: True
+  moid:
+    description:
+      - Managed Object ID of the instance to get if known, this is a unique identifier only within a single vCenter instance.
+      - This is required if C(object_name) is not supplied.
+    type: str
 extends_documentation_fragment:
   - community.vmware.vmware.documentation
 """
@@ -57,6 +61,16 @@ EXAMPLES = r"""
     validate_certs: false
     object_type: VirtualMachine
     object_name: "{{ object_name }}"
+  register: vm_attributes
+
+- name: Gather custom attributes of a virtual machine with moid
+  community.vmware.vmware_object_custom_attributes_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    object_type: VirtualMachine
+    moid: "{{ moid }}"
   register: vm_attributes
 """
 
@@ -102,6 +116,7 @@ class VmwareCustomAttributesInfo(PyVmomi):
         super(VmwareCustomAttributesInfo, self).__init__(module)
         self.object_type = self.params['object_type']
         self.object_name = self.params['object_name']
+        self.moid = self.params['moid']
 
         self.valid_object_types = {
             'Datacenter': vim.Datacenter,
@@ -118,9 +133,12 @@ class VmwareCustomAttributesInfo(PyVmomi):
     def execute(self):
         result = {'changed': False}
 
-        obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
+        if self.object_name:
+            obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
+        elif self.moid:
+            obj = self.find_obj_by_moid(self.object_type, self.moid)
         if not obj:
-            self.module.fail_json(msg="can't find the object: %s" % self.object_name)
+            self.module.fail_json(msg="can't find the object: %s" % self.object_name if self.object_name else self.moid)
 
         custom_attributes = []
         available_fields = {}
@@ -169,10 +187,18 @@ def main():
             'DistributedVirtualPortgroup',
             'Datastore'
         ]),
-        object_name=dict(type='str', required=True, aliases=['name']),
+        object_name=dict(type='str', aliases=['name']),
+        moid=dict(type='str')
     )
 
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=argument_spec,
+                           mutually_exclusive=[
+                               ['object_name', 'moid']
+                           ],
+                           required_one_of=[
+                               ['object_name', 'moid']
+                           ],
+                           supports_check_mode=True)
 
     vmware_custom_attributes_info = VmwareCustomAttributesInfo(module)
     vmware_custom_attributes_info.execute()
