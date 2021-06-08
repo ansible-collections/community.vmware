@@ -312,7 +312,7 @@ class PyVmomiHelper(PyVmomi):
 
         return ctl_specified, disks_attached_exist
 
-    def create_controller(self, ctl_type, bus_number=0, bus_sharing='noSharing'):
+    def create_controller(self, ctl_type, bus_sharing, bus_number=0):
         """
         Create new disk or USB controller with specified type
         Args:
@@ -334,7 +334,7 @@ class PyVmomiHelper(PyVmomi):
             disk_ctl.device = self.scsi_device_type.get(ctl_type)()
             disk_ctl.device.key = -randint(1000, 6999)
             disk_ctl.device.hotAddRemove = True
-            disk_ctl.device.sharedBus = '%s' % bus_sharing
+            disk_ctl.device.sharedBus = bus_sharing
             disk_ctl.device.scsiCtlrUnitNumber = 7
         elif ctl_type in self.usb_device_type.keys():
             disk_ctl.device = self.usb_device_type.get(ctl_type)()
@@ -372,7 +372,7 @@ class PyVmomiHelper(PyVmomi):
                     controller_devicekey=device.key,
                     controller_unitnumber=device.unitNumber,
                     controller_disks_devicekey=device.device,
-                    ontroller_sharedbus=device.sharedBus,
+                    controller_sharedbus=device.sharedBus,
                 )
                 if isinstance(device, tuple(self.scsi_device_type.values())):
                     disk_ctl_facts['scsi'].update(ctl_facts_dict)
@@ -423,10 +423,6 @@ class PyVmomiHelper(PyVmomi):
                         else:
                             ctl_config['controller_number'] = None
 
-                        # Set default value for bus_sharing if not given
-                        if ctl_config.get('bus_sharing') is None:
-                            ctl_config['bus_sharing'] = 'noSharing'
-
                     elif ctl_config['type'] == 'sata' or ctl_config['type'] == 'nvme':
                         if len(self.disk_ctl_bus_num_list.get(ctl_config['type'])) != 0:
                             ctl_config['controller_number'] = self.disk_ctl_bus_num_list.get(ctl_config['type']).pop(0)
@@ -454,7 +450,7 @@ class PyVmomiHelper(PyVmomi):
                     if usb_exists:
                         self.module.warn("'%s' USB controller already exists, can not add more." % disk_ctl_config['type'])
                     else:
-                        disk_controller_new = self.create_controller(disk_ctl_config['type'])
+                        disk_controller_new = self.create_controller(disk_ctl_config['type'], disk_ctl_config.get('bus_sharing'))
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
                 # create other disk controller
@@ -462,8 +458,8 @@ class PyVmomiHelper(PyVmomi):
                     if disk_ctl_config.get('controller_number') is not None:
                         disk_controller_new = self.create_controller(
                                 disk_ctl_config['type'],
-                                disk_ctl_config.get('controller_number'),
-                                disk_ctl_config.get('bus_sharing')
+                                disk_ctl_config.get('bus_sharing'),
+                                disk_ctl_config.get('controller_number')
                         )
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
