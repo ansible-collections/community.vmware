@@ -109,13 +109,13 @@ options:
            - present
            - absent
        bus_sharing:
-       description:
-       - Bus sharing type for SCSI controller.
-       required: False
-       type: str
-       choices: ['noSharing', 'physicalSharing', 'virtualSharing' ]
-       default: 'noSharing'
-       version_added: 1.11.0
+         description:
+         - Bus sharing type for SCSI controller.
+         required: False
+         type: str
+         choices: ['noSharing', 'physicalSharing', 'virtualSharing' ]
+         default: 'noSharing'
+         version_added: 1.11.0
      type: list
      elements: dict
    gather_disk_controller_facts:
