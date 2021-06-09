@@ -216,7 +216,7 @@ disk_controller_status:
                 "controller_label": "SCSI controller 0",
                 "controller_summary": "LSI Logic SAS",
                 "controller_unitnumber": 3,
-                "controller_sharedbus": 'noSharing'
+                "controller_bus_sharing": 'noSharing'
             },
             "1": {
                 "controller_busnumber": 1,
@@ -226,7 +226,7 @@ disk_controller_status:
                 "controller_label": "SCSI controller 1",
                 "controller_summary": "VMware paravirtual SCSI",
                 "controller_unitnumber": 4,
-                "controller_sharedbus": 'physicalSharing'
+                "controller_bus_sharing": 'physicalSharing'
             }
         },
         "usb2": {
@@ -372,7 +372,7 @@ class PyVmomiHelper(PyVmomi):
                     controller_devicekey=device.key,
                     controller_unitnumber=device.unitNumber,
                     controller_disks_devicekey=device.device,
-                    controller_sharedbus=device.sharedBus,
+                    controller_bus_sharing=device.sharedBus,
                 )
                 if isinstance(device, tuple(self.scsi_device_type.values())):
                     disk_ctl_facts['scsi'].update(ctl_facts_dict)
@@ -457,9 +457,9 @@ class PyVmomiHelper(PyVmomi):
                 else:
                     if disk_ctl_config.get('controller_number') is not None:
                         disk_controller_new = self.create_controller(
-                                disk_ctl_config['type'],
-                                disk_ctl_config.get('bus_sharing'),
-                                disk_ctl_config.get('controller_number')
+                            disk_ctl_config['type'],
+                            disk_ctl_config.get('bus_sharing'),
+                            disk_ctl_config.get('controller_number')
                         )
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
