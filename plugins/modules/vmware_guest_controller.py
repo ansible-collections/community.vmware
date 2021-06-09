@@ -372,8 +372,9 @@ class PyVmomiHelper(PyVmomi):
                     controller_devicekey=device.key,
                     controller_unitnumber=device.unitNumber,
                     controller_disks_devicekey=device.device,
-                    controller_bus_sharing=device.sharedBus,
                 )
+                if hasattr(device, 'sharedBus'):
+                    ctl_facts_dict[device.busNumber]['controller_bus_sharing'] = device.sharedBus
                 if isinstance(device, tuple(self.scsi_device_type.values())):
                     disk_ctl_facts['scsi'].update(ctl_facts_dict)
                 if isinstance(device, self.nvme_device_type):
