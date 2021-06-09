@@ -1770,3 +1770,25 @@ class PyVmomi(object):
             cur = cur.parent
             full_path = '/' + cur.name + full_path
         return full_path
+
+    def find_obj_by_moid(self, object_type, moid):
+        """
+        Get Managed Object based on an object type and moid.
+        If you'd like to search for a virtual machine, recommended you use get_vm method.
+
+        Args:
+          - object_type: Managed Object type
+                It is possible to specify types the following.
+                ["Datacenter", "ClusterComputeResource", "ResourcePool", "Folder", "HostSystem",
+                 "VirtualMachine", "DistributedVirtualSwitch", "DistributedVirtualPortgroup", "Datastore"]
+          - moid: moid of Managed Object
+        :return: Managed Object if it exists else None
+        """
+
+        obj = VmomiSupport.templateOf(object_type)(moid, self.si._stub)
+        try:
+            getattr(obj, 'name')
+        except vmodl.fault.ManagedObjectNotFound:
+            obj = None
+
+        return obj
