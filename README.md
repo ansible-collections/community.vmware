@@ -189,6 +189,7 @@ Name | Description
 [community.vmware.vmware_host_ntp_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ntp_info_module.rst)|Gathers info about NTP configuration on an ESXi host
 [community.vmware.vmware_host_package_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_package_facts_module.rst)|Gathers facts about available packages on an ESXi host
 [community.vmware.vmware_host_package_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_package_info_module.rst)|Gathers info about available packages on an ESXi host
+[community.vmware.vmware_host_passthrough](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_passthrough_module.rst)|Manage PCI device passthrough settings on host
 [community.vmware.vmware_host_powermgmt_policy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powermgmt_policy_module.rst)|Manages the Power Management Policy of an ESXI host system
 [community.vmware.vmware_host_powerstate](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powerstate_module.rst)|Manages power states of host systems in vCenter
 [community.vmware.vmware_host_scanhba](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_scanhba_module.rst)|Rescan host HBA's and optionally refresh the storage system

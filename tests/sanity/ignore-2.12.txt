@@ -247,6 +247,8 @@ plugins/modules/vmware_host_package_facts.py compile-2.6!skip
 plugins/modules/vmware_host_package_facts.py import-2.6!skip
 plugins/modules/vmware_host_package_info.py compile-2.6!skip
 plugins/modules/vmware_host_package_info.py import-2.6!skip
+plugins/modules/vmware_host_passthrough.py compile-2.6!skip
+plugins/modules/vmware_host_passthrough.py import-2.6!skip
 plugins/modules/vmware_host_powermgmt_policy.py compile-2.6!skip
 plugins/modules/vmware_host_powermgmt_policy.py import-2.6!skip
 plugins/modules/vmware_host_powerstate.py compile-2.6!skip

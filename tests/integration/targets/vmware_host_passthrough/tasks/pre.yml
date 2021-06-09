@@ -1,0 +1,40 @@
+# Test code for the vmware_host_passthrough module.
+# Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Gather PCI devices info from ESXi host
+  community.vmware.vmware_host_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    schema: vsphere
+    properties:
+      - config.pciPassthruInfo
+      - hardware.pciDevice
+  register: pci_devices_result
+
+- name: Set the device_ids variable that includes to be enabled passthrough devices only
+  set_fact:
+    device_ids: >-
+      {{ device_ids | default([])
+        + [item]
+      }}
+  loop: "{{ pci_devices_result.ansible_facts.config.pciPassthruInfo }}"
+  when:
+    - item.passthruCapable is sameas true
+
+- name: The block task is collected PCI devices that can be enabled passthrough if the device_ids variable is defined
+  when:
+    - device_ids is defined
+  block:
+    - name: Set the list_of_pci_devices_that_can_be_enabled_passthrough variable
+      set_fact:
+        list_of_pci_devices_that_can_be_enabled_passthrough: >-
+          {{ list_of_pci_devices_that_can_be_enabled_passthrough | default([])
+            + [item.1]
+          }}
+      loop: "{{ device_ids | product(pci_devices_result.ansible_facts.hardware.pciDevice) | list }}"
+      when:
+        - item.0.id == item.1.id
