@@ -2,5 +2,3 @@ cloud/vcenter
 needs/target/prepare_vmware_tests
 zuul/vmware/vcenter_1esxi
 zuul/vmware/govcsim
-# see: https://github.com/ansible-collections/community.vmware/issues/875
-disabled
