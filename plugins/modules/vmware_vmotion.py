@@ -168,6 +168,7 @@ class VmotionManager(PyVmomi):
         self.use_instance_uuid = self.params.get('use_instance_uuid', False)
         self.vm_name = self.params.get('vm_name', None)
         self.moid = self.params.get('moid') or None
+        self.destination_datacenter = self.params.get('destination_datacenter', None)
         result = dict()
 
         self.get_vm()
