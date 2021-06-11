@@ -141,6 +141,20 @@ EXAMPLES = r"""
     password: Esxi@123$%
     validate_certs: False
     with_tags: True
+
+# Using compose
+    plugin: community.vmware.vmware_host_inventory
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    properties:
+    - name
+    - summary
+    - config.lockdownMode
+    compose:
+        ansible_user: "'root'"
+        ansible_connection: "'ssh'"
 """
 
 try:

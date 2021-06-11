@@ -251,6 +251,9 @@ EXAMPLES = r'''
       # and will be used while communicating to the given virtual machine
       ansible_host: 'guest.ipAddress'
       composed_var: 'config.name'
+      # This will populate a host variable with a string value
+      ansible_user: "'admin'"
+      ansible_connection: "'ssh'"
     groups:
       VMs: True
     hostnames:
