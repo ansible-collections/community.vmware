@@ -62,18 +62,20 @@ options:
       - Name of the destination datastore the virtual machine's vmdk should be moved on.
       aliases: ['datastore']
       type: str
-    destination_datacenter:
-      description:
-      - Name of the destination datacenter the datastore is located on.
-      - Optional, required only when datastores are shared across datacenters.
-      type: str
-      version_added: '1.11.0'
     destination_resourcepool:
       description:
       - Name of the destination resource pool where the virtual machine should be running.
       - Resource pool is required if vmotion is done between hosts which are part of different clusters or datacenters.
       - if not passed, resource_pool object will be retrived from host_obj parent.
       aliases: ['resource_pool']
+      type: str
+    destination_disk_type:
+      description:
+      - The type to convert all VM disks to when doing the vmotion.
+      - destination_datastore is required if destination_disk_type is set if not the destination_disk_type does nothing.
+      - if desination_datastore does not change the location of the VM disks this value will not take affect.
+      aliases: ['disk_type']
+      choices: ['thin', 'eagerzeroedthick', 'thick']
       type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -148,7 +150,6 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi, find_hostsystem_by_name,
     find_vm_by_id, find_datastore_by_name,
     find_resource_pool_by_name,
-    find_datacenter_by_name,
     vmware_argument_spec, wait_for_task, TaskError)
 
 
@@ -160,7 +161,6 @@ class VmotionManager(PyVmomi):
         self.use_instance_uuid = self.params.get('use_instance_uuid', False)
         self.vm_name = self.params.get('vm_name', None)
         self.moid = self.params.get('moid') or None
-        self.destination_datacenter = self.params.get('destination_datacenter', None)
         result = dict()
 
         self.get_vm()
@@ -177,19 +177,12 @@ class VmotionManager(PyVmomi):
             if self.host_object is None:
                 self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
 
-        # Get Datacenter if specified by user
-        dest_datacenter = self.destination_datacenter
-        if dest_datacenter is not None:
-            datacenter_object = find_datacenter_by_name(content=self.content, datacenter_name=dest_datacenter)
-            if datacenter_object:
-                dest_datacenter = datacenter_object
-
         # Get Destination Datastore if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
         self.datastore_object = None
         if dest_datastore is not None:
             self.datastore_object = find_datastore_by_name(content=self.content,
-                                                           datastore_name=dest_datastore, datacenter_name=dest_datacenter)
+                                                           datastore_name=dest_datastore)
 
         # At-least one of datastore, host system is required to migrate
         if self.datastore_object is None and self.host_object is None:
@@ -204,9 +197,6 @@ class VmotionManager(PyVmomi):
                                                                   resource_pool_name=dest_resourcepool)
         elif not dest_resourcepool and dest_host_name:
             self.resourcepool_object = self.host_object.parent.resourcePool
-        # Fail if resourcePool object is not found
-        if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
@@ -308,6 +298,20 @@ class VmotionManager(PyVmomi):
         relocate_spec = vim.vm.RelocateSpec(host=self.host_object,
                                             datastore=self.datastore_object,
                                             pool=self.resourcepool_object)
+        if self.datastore_object:
+            for device in self.vm.config.hardware.device:
+                if isinstance(device, vim.vm.device.VirtualDisk):
+                    disk_locator = vim.vm.RelocateSpec.DiskLocator()
+                    disk_locator.diskBackingInfo = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
+                    disk_locator.diskId = device.key
+                    if self.params['destination_disk_type'] == 'thin':
+                        disk_locator.diskBackingInfo.thinProvisioned = True
+                    elif self.params['destination_disk_type'] == 'eagerzeroedthick':
+                        disk_locator.diskBackingInfo.eagerlyScrub = True
+                    elif self.params['destination_disk_type'] == 'thick':
+                        disk_locator.diskBackingInfo.diskMode = "persistent"
+                    disk_locator.datastore = self.datastore_object
+                    relocate_spec.disk.append(disk_locator)
         task_object = self.vm.Relocate(relocate_spec)
         return task_object
 
@@ -356,7 +360,7 @@ def main():
             destination_host=dict(aliases=['destination']),
             destination_resourcepool=dict(aliases=['resource_pool']),
             destination_datastore=dict(aliases=['datastore']),
-            destination_datacenter=dict(type='str')
+            destination_disk_type=dict(aliases=['disk_type'])
         )
     )
 
@@ -371,7 +375,6 @@ def main():
             ['vm_uuid', 'vm_name', 'moid'],
         ],
     )
-
     VmotionManager(module)
 
 
