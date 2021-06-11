@@ -61,7 +61,13 @@ options:
       description:
       - Name of the destination datastore the virtual machine's vmdk should be moved on.
       aliases: ['datastore']
+      type: str    
+    destination_datacenter:
+      description:
+      - Name of the destination datacenter the datastore is located on.
+      - Optional, required only when datastores are shared across datacenters.
       type: str
+      version_added: '1.11.0'
     destination_resourcepool:
       description:
       - Name of the destination resource pool where the virtual machine should be running.
@@ -150,6 +156,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi, find_hostsystem_by_name,
     find_vm_by_id, find_datastore_by_name,
     find_resource_pool_by_name,
+    find_datacenter_by_name,
     vmware_argument_spec, wait_for_task, TaskError)
 
 
@@ -177,12 +184,19 @@ class VmotionManager(PyVmomi):
             if self.host_object is None:
                 self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
 
+        # Get Datacenter if specified by user
+        dest_datacenter = self.destination_datacenter
+        if dest_datacenter is not None:
+            datacenter_object = find_datacenter_by_name(content=self.content, datacenter_name=dest_datacenter)
+            if datacenter_object:
+                dest_datacenter = datacenter_object
+
         # Get Destination Datastore if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
         self.datastore_object = None
         if dest_datastore is not None:
             self.datastore_object = find_datastore_by_name(content=self.content,
-                                                           datastore_name=dest_datastore)
+                                                           datastore_name=dest_datastore, datacenter_name=dest_datacenter)
 
         # At-least one of datastore, host system is required to migrate
         if self.datastore_object is None and self.host_object is None:
@@ -360,6 +374,7 @@ def main():
             destination_host=dict(aliases=['destination']),
             destination_resourcepool=dict(aliases=['resource_pool']),
             destination_datastore=dict(aliases=['datastore']),
+            destination_datacenter=dict(type='str'),
             destination_disk_type=dict(aliases=['disk_type'])
         )
     )
@@ -375,6 +390,7 @@ def main():
             ['vm_uuid', 'vm_name', 'moid'],
         ],
     )
+
     VmotionManager(module)
 
 
