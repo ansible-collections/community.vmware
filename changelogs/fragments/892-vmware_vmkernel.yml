@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vmkernel - manage vSAN service configuration on vmk interfaces so that it is possible to define multiple vSAN interfaces at the same, along with merely explicitly adding/removing interfaces, instead of applying a configuration that only enables the last specified vmk interface (https://github.com/ansible-collections/community.vmware/issues/891)
