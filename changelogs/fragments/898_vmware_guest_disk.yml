@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_disk - allow the creation of the vmdk if a custom filename is provided
