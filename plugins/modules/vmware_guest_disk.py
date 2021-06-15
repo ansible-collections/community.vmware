@@ -1019,7 +1019,7 @@ def main():
                 scsi_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas']),
                 destroy=dict(type='bool', default=True),
                 filename=dict(type='str'),
-                force_create=dictt(type='bool', default=False),
+                force_create=dict(type='bool', default=False),
                 state=dict(type='str', default='present', choices=['present', 'absent']),
                 controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme']),
                 controller_number=dict(type='int', choices=[0, 1, 2, 3]),
