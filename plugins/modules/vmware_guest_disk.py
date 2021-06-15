@@ -142,9 +142,15 @@ options:
          default: True
        filename:
          description:
-           - Existing disk image to be used. Filename must already exist on the datastore.
+           - Existing disk image to be used. Filename must already exist on the datastore. Can be overriden by specifying C(force_create)
            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in version 2.10.
          type: str
+       force_create:
+         description:
+           - Force the creation of the file specified in C(filename) if it does not exist.
+         type: bool
+         default: False
+         version_added: 1.12.0
        state:
          description:
            - State of disk.
@@ -648,7 +654,7 @@ class PyVmomiHelper(PyVmomi):
                         # Add new disk
                         disk_spec = self.create_disk(device.key, disk)
                         # get Storage DRS recommended datastore from the datastore cluster
-                        if disk['filename'] is None:
+                        if disk['filename'] is None or (disk['filename'] is not None and disk['force_create']):
                             if disk['datastore_cluster'] is not None:
                                 datastore_name = self.get_recommended_datastore(datastore_cluster_obj=disk['datastore_cluster'], disk_spec_obj=disk_spec)
                                 disk['datastore'] = find_obj(self.content, [vim.Datastore], datastore_name)
@@ -658,14 +664,19 @@ class PyVmomiHelper(PyVmomi):
                             # If datastore is not configured or backing filename is not set, default is VM datastore
                             if disk['datastore'] is not None and disk['datastore'].name != vm_files_datastore:
                                 disk_spec.device.backing.datastore = disk['datastore']
-                                disk_spec.device.backing.fileName = "[%s] %s/%s_%s_%s_%s.vmdk" % (disk['datastore'].name,
-                                                                                                  self.vm.name,
-                                                                                                  self.vm.name,
-                                                                                                  device.key,
-                                                                                                  str(disk['disk_unit_number']),
-                                                                                                  str(randint(1, 10000)))
-                        elif disk['filename'] is not None:
+                                if disk['filename'] is None:
+                                    disk_spec.device.backing.fileName = "[%s] %s/%s_%s_%s_%s.vmdk" % (disk['datastore'].name,
+                                                                                                      self.vm.name,
+                                                                                                      self.vm.name,
+                                                                                                      device.key,
+                                                                                                      str(disk['disk_unit_number']),
+                                                                                                      str(randint(1, 10000)))
+                            if disk['filename'] is not None and disk['force_create']:
+                                disk_spec.device.backing.fileName = disk['filename']
+
+                        elif disk['filename'] is not None and not disk['force_create']:
                             disk_spec.device.backing.fileName = disk['filename']
+
                         disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
                         self.config_spec.deviceChange.append(disk_spec)
                         disk_change = True
@@ -809,6 +820,8 @@ class PyVmomiHelper(PyVmomi):
 
                 if disk['filename'] is not None:
                     current_disk['filename'] = disk['filename']
+
+                current_disk['force_create'] = disk['force_create']
 
                 if [x for x in disk.keys() if ((x.startswith('size_') or x == 'size') and disk[x] is not None)]:
                     # size, size_tb, size_gb, size_mb, size_kb
@@ -1006,6 +1019,7 @@ def main():
                 scsi_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas']),
                 destroy=dict(type='bool', default=True),
                 filename=dict(type='str'),
+                force_create=dictt(type='bool', default=False),
                 state=dict(type='str', default='present', choices=['present', 'absent']),
                 controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme']),
                 controller_number=dict(type='int', choices=[0, 1, 2, 3]),
