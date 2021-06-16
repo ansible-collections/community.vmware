@@ -43,6 +43,24 @@ options:
         required: False
         type: list
         elements: str
+    lag_uplinks:
+        required: False
+        type: list
+        elements: dict
+        description:
+        - The ESXi hosts vmnics to use with specific LAGs.
+        suboptions:
+            lag:
+                description:
+                - Name of the LAG.
+                type: str
+                required: True
+            vmnics:
+                description:
+                - The ESXi hosts vmnics to use with the LAG.
+                required: False
+                type: list
+                elements: str
     state:
         description:
         - If the host should be present or absent attached to the vSwitch.
@@ -284,6 +302,24 @@ def main():
                 options=dict(
                     key=dict(type='str', required=True, no_log=False),
                     value=dict(type='str', required=True),
+                ),
+            ),
+            lag_uplinks=dict(
+                type='list',
+                default=[],
+                required=False,
+                elements='dict',
+                options=dict(
+                    lag=dict(
+                        type='str',
+                        required=True,
+                    ),
+                    vmnics=dict(
+                        type='list',
+                        required=False,
+                        elements='str',
+                        default=[],
+                    ),
                 ),
             ),
         )
