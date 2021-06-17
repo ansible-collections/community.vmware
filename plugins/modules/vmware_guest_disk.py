@@ -142,7 +142,7 @@ options:
          default: True
        filename:
          description:
-           - Existing disk image to be used. Filename must already exist on the datastore. Can be overriden by specifying C(force_create)
+           - Existing disk image to be used. Filename must already exist on the datastore. Can be overridden by specifying C(force_create).
            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in version 2.10.
          type: str
        force_create:
