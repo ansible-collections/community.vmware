@@ -83,6 +83,7 @@ options:
       aliases: ['disk_type']
       choices: ['thin', 'eagerzeroedthick', 'thick']
       type: str
+      version_added: '1.12.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
