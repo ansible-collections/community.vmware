@@ -61,7 +61,7 @@ options:
       description:
       - Name of the destination datastore the virtual machine's vmdk should be moved on.
       aliases: ['datastore']
-      type: str    
+      type: str
     destination_datacenter:
       description:
       - Name of the destination datacenter the datastore is located on.
