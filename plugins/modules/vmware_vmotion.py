@@ -79,7 +79,7 @@ options:
       description:
       - The type to convert all VM disks to when doing the vmotion.
       - C(destination_datastore) is required if C(destination_disk_type) is set, if not the C(destination_disk_type) does nothing.
-      - if desination_datastore does not change the location of the VM disks this value will not take affect.
+      - If C(desination_datastore) does not change the location of the VM disks this value will not take effect.
       aliases: ['disk_type']
       choices: ['thin', 'eagerzeroedthick', 'thick']
       type: str
