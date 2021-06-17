@@ -2344,7 +2344,12 @@ class PyVmomiHelper(PyVmomi):
                 default_name = vm_obj.name.replace(' ', '')
             punctuation = string.punctuation.replace('-', '')
             default_name = ''.join([c for c in default_name if c not in punctuation])
-            ident.userData.computerName.name = str(self.params['customization'].get('hostname', default_name[0:15]))
+
+            if self.params['customization']['hostname'] is not None:
+                ident.userData.computerName.name = self.params['customization']['hostname'][0:15]
+            else:
+                ident.userData.computerName.name = default_name[0:15]
+
             ident.userData.fullName = str(self.params['customization'].get('fullname', 'Administrator'))
             ident.userData.orgName = str(self.params['customization'].get('orgname', 'ACME'))
 
@@ -2405,7 +2410,12 @@ class PyVmomiHelper(PyVmomi):
                 default_name = self.params['name']
             elif vm_obj:
                 default_name = vm_obj.name
-            hostname = str(self.params['customization'].get('hostname', default_name.split('.')[0]))
+
+            if self.params['customization']['hostname'] is not None:
+                hostname = self.params['customization']['hostname'].split('.')[0]
+            else:
+                hostname = default_name.split('.')[0]
+
             # Remove all characters except alphanumeric and minus which is allowed by RFC 952
             valid_hostname = re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
             ident.hostName.name = valid_hostname
