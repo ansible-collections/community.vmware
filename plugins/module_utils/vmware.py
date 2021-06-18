@@ -182,6 +182,53 @@ def find_folder_by_name(content, folder_name):
     return find_object_by_name(content, folder_name, [vim.Folder])
 
 
+def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=None):
+    """
+    Find the folder by its given fully qualified path name.
+    The Fully Qualified Path Name is I(datacenter)/I(folder type)/folder name/
+    for example - Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
+    """
+    # Remove leading/trailing slashes and create list of subfolders
+    folder = folder_name.strip('/')
+    folder_parts = folder.strip('/').split('/')
+
+    # Process datacenter
+    if len(folder_parts) > 0:
+        if not datacenter_name:
+            datacenter_name = folder_parts[0]
+        if datacenter_name == folder_parts[0]:
+            folder_parts.pop(0)
+    datacenter = find_datacenter_by_name(content, datacenter_name)
+    if not datacenter:
+        return None
+
+    # Process folder type
+    if len(folder_parts) > 0:
+        if not folder_type:
+            folder_type = folder_parts[0]
+        if folder_type == folder_parts[0]:
+            folder_parts.pop(0)
+    if folder_type in ['vm', 'host', 'datastore', 'network']:
+        parent_obj = getattr(datacenter, "%sFolder" % folder_type.lower())
+    else:
+        return None
+
+    # Process remaining subfolders
+    if len(folder_parts) > 0:
+        for part in folder_parts:
+            folder_obj = None
+            for part_obj in parent_obj.childEntity:
+                if part_obj.name == part and 'Folder' in part_obj.childType:
+                    folder_obj = part_obj
+                    parent_obj = part_obj
+                    break
+            if not folder_obj:
+                return None
+    else:
+        folder_obj = parent_obj
+    return folder_obj
+
+
 def find_dvs_by_name(content, switch_name, folder=None):
     return find_object_by_name(content, switch_name, [vim.DistributedVirtualSwitch], folder=folder)
 
@@ -1434,6 +1481,21 @@ class PyVmomi(object):
 
         """
         return find_folder_by_name(self.content, folder_name=folder_name)
+
+    def find_folder_by_fqpn(self, folder_name, datacenter_name=None, folder_type=None):
+        """
+        Get a unique folder managed object by specifying its Fully Qualified Path Name
+        as datacenter/folder_type/sub1/sub2
+        Args:
+            folder_name: Fully Qualified Path Name folder name
+            datacenter_name: Name of the datacenter, taken from Fully Qualified Path Name if not defined
+            folder_type: Type of folder, vm, host, datastore or network,
+                         taken from Fully Qualified Path Name if not defined
+
+        Returns: folder managed object if found, else None
+
+        """
+        return find_folder_by_fqpn(self.content, folder_name=folder_name, datacenter_name=datacenter_name, folder_type=folder_type)
 
     # Datastore cluster
     def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None, folder=None):
