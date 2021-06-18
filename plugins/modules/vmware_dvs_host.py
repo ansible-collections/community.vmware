@@ -44,6 +44,7 @@ options:
         type: list
         elements: str
     lag_uplinks:
+        version_added: '1.12.0'
         required: False
         type: list
         elements: dict
@@ -58,7 +59,7 @@ options:
             vmnics:
                 description:
                 - The ESXi hosts vmnics to use with the LAG.
-                required: False
+                required: True
                 type: list
                 elements: str
     state:
@@ -100,6 +101,25 @@ EXAMPLES = r'''
     vmnics:
         - vmnic0
         - vmnic1
+    state: present
+  delegate_to: localhost
+
+- name: Add vmnics to LAGs
+  community.vmware.vmware_dvs_host:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi_hostname }}'
+    switch_name: dvSwitch
+    lag_uplinks:
+        - lag: lag1
+          vmnics:
+              - vmnic0
+              - vmnic1
+        - lag: lag2
+          vmnics:
+              - vmnic2
+              - vmnic3
     state: present
   delegate_to: localhost
 
@@ -373,7 +393,7 @@ def main():
                     ),
                     vmnics=dict(
                         type='list',
-                        required=False,
+                        required=True,
                         elements='str',
                         default=[],
                     ),
