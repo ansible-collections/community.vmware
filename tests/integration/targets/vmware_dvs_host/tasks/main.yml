@@ -17,7 +17,7 @@
       state: present
 
   - name: Create LAG
-    vmware_dvswitch:
+    vmware_dvswitch_lacp:
       switch: 'dvs_host_test_switch'
       support_mode: enhanced
       link_aggregation_groups:

@@ -59,7 +59,7 @@ options:
             vmnics:
                 description:
                 - The ESXi hosts vmnics to use with the LAG.
-                required: True
+                required: False
                 type: list
                 elements: str
     state:
@@ -393,7 +393,7 @@ def main():
                     ),
                     vmnics=dict(
                         type='list',
-                        required=True,
+                        required=False,
                         elements='str',
                         default=[],
                     ),
