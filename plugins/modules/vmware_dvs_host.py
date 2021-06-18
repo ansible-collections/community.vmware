@@ -121,12 +121,6 @@ EXAMPLES = r'''
 '''
 
 try:
-    from collections import Counter
-    HAS_COLLECTIONS_COUNTER = True
-except ImportError:
-    HAS_COLLECTIONS_COUNTER = False
-
-try:
     from pyVmomi import vim, vmodl
 except ImportError:
     pass
@@ -390,9 +384,6 @@ def main():
 
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
-
-    if not HAS_COLLECTIONS_COUNTER:
-        module.fail_json(msg='collections.Counter from Python-2.7 is required for this module')
 
     vmware_dvs_host = VMwareDvsHost(module)
     vmware_dvs_host.process_state()
