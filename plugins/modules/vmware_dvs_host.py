@@ -357,6 +357,9 @@ class VMwareDvsHost(PyVmomi):
                 self.module.fail_json(msg="The esxi_hostname %s does not exist "
                                           "in vCenter" % self.esxi_hostname)
             return 'absent'
+        # Skip checking uplinks if the host should be absent, anyway
+        elif self.state == 'absent':
+            return 'present'
         else:
             if self.check_uplinks():
                 return 'present'
