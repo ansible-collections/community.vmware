@@ -228,14 +228,13 @@ class VMwareDvsHost(PyVmomi):
 
         if operation == "edit":
             spec.host[0].backing = vim.dvs.HostMember.PnicBacking()
-            count = 0
 
             for nic, uplinkPortKey in self.desired_state.items():
-                spec.host[0].backing.pnicSpec.append(vim.dvs.HostMember.PnicSpec())
-                spec.host[0].backing.pnicSpec[count].pnicDevice = nic
-                spec.host[0].backing.pnicSpec[count].uplinkPortgroupKey = self.uplink_portgroup.key
-                spec.host[0].backing.pnicSpec[count].uplinkPortKey = uplinkPortKey
-                count += 1
+                pnicSpec = vim.dvs.HostMember.PnicSpec()
+                pnicSpec.pnicDevice = nic
+                pnicSpec.uplinkPortgroupKey = self.uplink_portgroup.key
+                pnicSpec.uplinkPortKey = uplinkPortKey
+                spec.host[0].backing.pnicSpec.append(pnicSpec)
 
         try:
             task = self.dv_switch.ReconfigureDvs_Task(spec)
@@ -295,27 +294,25 @@ class VMwareDvsHost(PyVmomi):
 
         for name, lag in self.lags.items():
             switch_uplink_ports[name] = []
-            count = 0
-            while count < len(lag.uplinkName):
+            for uplinkName in lag.uplinkName:
                 for port in ports:
-                    if port.config.name == lag.uplinkName[count]:
+                    if port.config.name == uplinkName:
                         switch_uplink_ports[name].append(port.key)
                         lag_uplinks.append(port.key)
-                count += 1
 
         for port in ports:
             if port.key in self.uplink_portgroup.portKeys and port.key not in lag_uplinks:
                 switch_uplink_ports['non_lag'].append(port.key)
 
         count = 0
-        while count < len(self.vmnics):
-            self.desired_state[self.vmnics[count]] = switch_uplink_ports['non_lag'][count]
+        for vmnic in self.vmnics:
+            self.desired_state[vmnic] = switch_uplink_ports['non_lag'][count]
             count += 1
 
         for lag in self.lag_uplinks:
             count = 0
-            while count < len(lag['vmnics']):
-                self.desired_state[lag['vmnics'][count]] = switch_uplink_ports[lag['lag']][count]
+            for vmnic in lag['vmnics']:
+                self.desired_state[vmnic] = switch_uplink_ports[lag['lag']][count]
                 count += 1
 
     def check_uplinks(self):
