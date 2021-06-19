@@ -24,6 +24,7 @@
           - name: lag1
             mode: active
             uplink_number: 2
+            load_balancing_mode: srcDestIpTcpUdpPortVlan
 
   - name: 'Attach host to the DVSwitch without specifying any vmnics (Issue #185)'
     vmware_dvs_host:
