@@ -490,6 +490,26 @@ Parameters
                         <div>Only required when using guest customization feature.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>wait_vm_tools</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether waiting until vm tools start after rebooting an instant clone vm.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
@@ -626,9 +646,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 <td>always</td>
                 <td>
                             <div>metadata about the virtual machine</div>
+                            <div>added instance_uuid from version 1.12.0</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vm_name&#x27;: &#x27;&#x27;, &#x27;vcenter&#x27;: &#x27;&#x27;, &#x27;host&#x27;: &#x27;&#x27;, &#x27;datastore&#x27;: &#x27;&#x27;, &#x27;vm_folder&#x27;: &#x27;&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vm_name&#x27;: &#x27;&#x27;, &#x27;vcenter&#x27;: &#x27;&#x27;, &#x27;host&#x27;: &#x27;&#x27;, &#x27;datastore&#x27;: &#x27;&#x27;, &#x27;vm_folder&#x27;: &#x27;&#x27;, &#x27;instance_uuid&#x27;: &#x27;&#x27;}</div>
                 </td>
             </tr>
     </table>
