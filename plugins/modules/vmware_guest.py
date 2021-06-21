@@ -101,6 +101,10 @@ options:
     description:
     - Flag the instance as a template.
     - This will mark the given virtual machine as template.
+    - Note, this may need to be done in a dedicated task invocation that is not making
+      any other changes. For example, user cannot change the state from powered-on to
+      powered-off AND save as template in the same task.
+    - See M(community.vmware.vmware_guest) source for more details.
     default: false
     type: bool
   folder:
@@ -153,6 +157,10 @@ options:
             - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
             - C(paravirtual) is default.
             choices: [ 'buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual' ]
+        secure_boot:
+            type: bool
+            description: Whether to enable or disable (U)EFI secure boot.
+            version_added: '1.11.0'
         memory_reservation_lock:
             type: bool
             description:
@@ -200,8 +208,13 @@ options:
             description:
             - Enable Virtualization Based Security feature for Windows on ESXi 6.7 and later, from hardware version 14.
             - Supported Guest OS are Windows 10 64 bit, Windows Server 2016, Windows Server 2019 and later.
-            - The firmware of virtual machine must be EFI.
+            - The firmware of virtual machine must be EFI and secure boot must be enabled.
+            - Virtualization Based Security depends on nested virtualization and Intel Virtualization Technology for Directed I/O.
             - Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.
+        iommu:
+            type: bool
+            description: Flag to specify if I/O MMU is enabled for this virtual machine.
+            version_added: '1.11.0'
   guest_id:
     type: str
     description:
@@ -1797,16 +1810,27 @@ class PyVmomiHelper(PyVmomi):
                         # Don't fail if VM is already upgraded.
                         pass
 
+        secure_boot = self.params['hardware']['secure_boot']
+        if secure_boot is not None:
+            self.configspec.bootOptions = vim.vm.BootOptions()
+            self.configspec.bootOptions.efiSecureBootEnabled = True
+            if vm_obj is None or self.configspec.bootOptions.efiSecureBootEnabled != vm_obj.config.bootOptions.efiSecureBootEnabled:
+                self.change_detected = True
+
+        iommu = self.params['hardware']['iommu']
+        if iommu is not None:
+            if self.configspec.flags is None:
+                self.configspec.flags = vim.vm.FlagInfo()
+            self.configspec.flags.vvtdEnabled = iommu
+            if vm_obj is None or self.configspec.flags.vvtdEnabled != vm_obj.config.flags.vvtdEnabled:
+                self.change_detected = True
+
         virt_based_security = self.params['hardware']['virt_based_security']
         if virt_based_security is not None:
-            if vm_obj is None or vm_obj.config.flags.vbsEnabled != virt_based_security:
+            if self.configspec.flags is None:
                 self.configspec.flags = vim.vm.FlagInfo()
-                self.configspec.flags.vbsEnabled = virt_based_security
-                if virt_based_security:
-                    self.configspec.flags.vvtdEnabled = True
-                    self.configspec.nestedHVEnabled = True
-                    self.configspec.bootOptions = vim.vm.BootOptions()
-                    self.configspec.bootOptions.efiSecureBootEnabled = True
+            self.configspec.flags.vbsEnabled = virt_based_security
+            if vm_obj is None or vm_obj.config.flags.vbsEnabled != self.configspec.flags.vbsEnabled:
                 self.change_detected = True
 
     def get_device_by_type(self, vm=None, type=None):
@@ -2210,6 +2234,11 @@ class PyVmomiHelper(PyVmomi):
         if not self.params['customvalues']:
             return
 
+        if not self.is_vcenter():
+            self.module.warn("Currently connected to ESXi. "
+                             "customvalues are a vCenter feature, this parameter will be ignored.")
+            return
+
         facts = self.gather_facts(vm_obj)
         for kv in self.params['customvalues']:
             if 'key' not in kv or 'value' not in kv:
@@ -2315,7 +2344,12 @@ class PyVmomiHelper(PyVmomi):
                 default_name = vm_obj.name.replace(' ', '')
             punctuation = string.punctuation.replace('-', '')
             default_name = ''.join([c for c in default_name if c not in punctuation])
-            ident.userData.computerName.name = str(self.params['customization'].get('hostname', default_name[0:15]))
+
+            if self.params['customization']['hostname'] is not None:
+                ident.userData.computerName.name = self.params['customization']['hostname'][0:15]
+            else:
+                ident.userData.computerName.name = default_name[0:15]
+
             ident.userData.fullName = str(self.params['customization'].get('fullname', 'Administrator'))
             ident.userData.orgName = str(self.params['customization'].get('orgname', 'ACME'))
 
@@ -2376,7 +2410,12 @@ class PyVmomiHelper(PyVmomi):
                 default_name = self.params['name']
             elif vm_obj:
                 default_name = vm_obj.name
-            hostname = str(self.params['customization'].get('hostname', default_name.split('.')[0]))
+
+            if self.params['customization']['hostname'] is not None:
+                hostname = self.params['customization']['hostname'].split('.')[0]
+            else:
+                hostname = default_name.split('.')[0]
+
             # Remove all characters except alphanumeric and minus which is allowed by RFC 952
             valid_hostname = re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
             ident.hostName.name = valid_hostname
@@ -2525,7 +2564,7 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.backing.diskMode = "persistent"
 
         if not reconfigure:
-            disk_type = expected_disk_spec.get('type', 'thin').lower()
+            disk_type = expected_disk_spec.get('type', 'thin')
             if disk_type == 'thin':
                 disk_spec.device.backing.thinProvisioned = True
             elif disk_type == 'eagerzeroedthick':
@@ -3407,8 +3446,10 @@ def main():
                 num_cpu_cores_per_socket=dict(type='int'),
                 num_cpus=dict(type='int'),
                 scsi=dict(type='str', choices=['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']),
+                secure_boot=dict(type='bool'),
                 version=dict(type='str'),
-                virt_based_security=dict(type='bool')
+                virt_based_security=dict(type='bool'),
+                iommu=dict(type='bool')
             )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
@@ -3466,6 +3507,23 @@ def main():
     result = {'failed': False, 'changed': False}
 
     pyv = PyVmomiHelper(module)
+
+    # Check requirements for virtualization based security
+    if pyv.params['hardware']['virt_based_security']:
+        if not pyv.params['hardware']['nested_virt']:
+            pyv.module.warn("Virtualization based security requires nested virtualization. At the moment, this modules enables this implicitly. "
+                            "Please consider enabling this explicitly because this behavior might change in the future.")
+            pyv.params['hardware']['nested_virt'] = True
+
+        if not pyv.params['hardware']['secure_boot']:
+            pyv.module.warn("Virtualization based security requires (U)EFI secure boot. At the moment, this modules enables this implicitly. "
+                            "Please consider enabling this explicitly because this behavior might change in the future.")
+            pyv.params['hardware']['secure_boot'] = True
+
+        if not pyv.params['hardware']['iommu']:
+            pyv.module.warn("Virtualization based security requires I/O MMU. At the moment, this modules enables this implicitly. "
+                            "Please consider enabling iommu explicitly because this behavior might change in the future.")
+            pyv.params['hardware']['iommu'] = True
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()

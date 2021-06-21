@@ -316,7 +316,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Assign user to VM folder
       community.vmware.vmware_object_role_permission:

@@ -282,8 +282,8 @@ class VmwreClusterInfoManager(PyVmomi):
                 # VSAN
                 if hasattr(cluster.configurationEx, 'vsanConfigInfo'):
                     vsan_config = cluster.configurationEx.vsanConfigInfo
-                    enabled_vsan = vsan_config.enabled,
-                    vsan_auto_claim_storage = vsan_config.defaultConfig.autoClaimStorage,
+                    enabled_vsan = vsan_config.enabled
+                    vsan_auto_claim_storage = vsan_config.defaultConfig.autoClaimStorage
 
                 tag_info = []
                 if self.params.get('show_tag'):

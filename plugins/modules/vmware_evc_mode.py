@@ -27,16 +27,19 @@ options:
     - The name of the datacenter the cluster belongs to that you want to enable or disable EVC mode on.
     required: True
     type: str
+    aliases:
+      - datacenter
   cluster_name:
     description:
     - The name of the cluster to enable or disable EVC mode on.
     required: True
     type: str
+    aliases:
+      - cluster
   evc_mode:
     description:
     - Required for C(state=present).
     - The EVC mode to enable or disable on the cluster. (intel-broadwell, intel-nehalem, intel-merom, etc.).
-    required: True
     type: str
   state:
     description:
@@ -207,9 +210,9 @@ class VMwareEVC(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
-        cluster_name=dict(type='str', required=True),
-        datacenter_name=dict(type='str', required=True),
-        evc_mode=dict(type='str', required=True),
+        cluster_name=dict(type='str', required=True, aliases=['cluster']),
+        datacenter_name=dict(type='str', required=True, aliases=['datacenter']),
+        evc_mode=dict(type='str'),
         state=dict(type='str', default='present', choices=['absent', 'present']),
     ))
 
@@ -217,7 +220,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[
-            ['state', 'present', ['cluster_name', 'datacenter_name', 'evc_mode']]
+            ['state', 'present', ['evc_mode']]
         ]
     )
 

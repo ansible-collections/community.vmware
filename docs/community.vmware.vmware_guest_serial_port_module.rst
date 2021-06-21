@@ -449,7 +449,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Create serial ports
     - name: Create multiple serial ports with Backing type - network, pipe, device and file

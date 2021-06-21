@@ -65,7 +65,7 @@
           assert:
             that:
               - >-
-               dvs_results.dvs_portgroup_info.DVSwitch
+               dvs_results.dvs_portgroup_info.{{ dvswitch1 }}
                | map(attribute='portgroup_name')
                | select('==', 'dvportgroup\/%')
                | list

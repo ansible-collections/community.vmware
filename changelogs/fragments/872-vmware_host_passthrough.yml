@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_host_passthrough - added a new module to enable or disable passthrough of PCI devices with ESXi host has (https://github.com/ansible-collections/community.vmware/pull/872).

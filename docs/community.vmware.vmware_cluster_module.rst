@@ -653,7 +653,7 @@ See Also
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create Cluster
       community.vmware.vmware_cluster:

@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_guest_controller - added bus_sharing property to scsi controllers (https://github.com/ansible-collections/community.vmware/pull/878).

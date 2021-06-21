@@ -234,7 +234,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Recan HBA's for a given ESXi host and refresh storage system objects
       community.vmware.vmware_host_scanhba:

@@ -296,7 +296,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Gather all domain user and group of vsphere.local
       community.vmware.vcenter_domain_user_group_info:

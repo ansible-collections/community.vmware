@@ -58,6 +58,7 @@ EXAMPLES = r'''
     username: root
     password: vmware
     local_user_name: foo
+    local_user_password: password
   delegate_to: localhost
 '''
 
@@ -173,6 +174,9 @@ def main():
                               state=dict(default='present', choices=['present', 'absent'], type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec,
+                           required_if=[
+                               ['state', 'present', ['local_user_password']]
+                           ],
                            supports_check_mode=False)
 
     vmware_local_user_manager = VMwareLocalUserManager(module)

@@ -310,7 +310,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Wait for VMware tools to become available by UUID
       vmware_guest_facts:

@@ -1,0 +1,205 @@
+# Test code for the vmware_guest_storage_policy module.
+# Copyright: (c) 2020, @tgates81 <tgates81@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- when: vcsim is not defined
+  block:
+    - import_role:
+        name: prepare_vmware_tests
+      vars:
+        setup_attach_host: true
+        setup_datastore: true
+        setup_virtualmachines: true
+
+    - name: "Setup: find existing storage profile(s) for later rollback"
+      vmware_vm_storage_policy_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+      register: existing_profiles
+
+    - name: "Setup: Create category"
+      vmware_category:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        category_name: "{{ category }}"
+        category_cardinality: "multiple"
+        state: "present"
+      register: category_create
+
+    - name: "Setup: Set category id"
+      set_fact:
+        category_id: "{{ category_create['category_results']['category_id'] }}"
+
+    - name: "Setup: Create tag"
+      vmware_tag:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        tag_name: "{{ tag }}"
+        category_id: "{{ category_id }}"
+        state: "present"
+      register: tag_create
+
+    - name: "Setup: Create vSphere tag-based storage policy: {{ storage_policy }}"
+      vmware_vm_storage_policy:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        name: "{{ storage_policy }}"
+        description: "test storage policy for vmware_guest_storage_policy"
+        tag_category: "{{ category }}"
+        tag_name: "{{ tag }}"
+        tag_affinity: true
+        state: "present"
+      register: new_sp
+
+    - name: "001: Assign storage policy to VM check_mode test"
+      vmware_guest_storage_policy: &vm_home_args
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        vm_home: "{{ storage_policy }}"
+      register: vm_home_sp_cm
+      check_mode: true
+
+    - name: "001: assert that changes were made"
+      assert:
+        that:
+          - vm_home_sp_cm is changed
+
+    - name: "001: assert that changed_policies.vm_home is properly set"
+      assert:
+        that:
+          - vm_home_sp_cm.changed_policies.vm_home == storage_policy
+
+    - name: "002: Assign storage policy to VM"
+      vmware_guest_storage_policy:
+        <<: *vm_home_args
+      register: vm_home_sp
+
+    - name: "002: assert that changes were made"
+      assert:
+        that:
+          - vm_home_sp is changed
+
+    - name: "002: assert that changed_policies.vm_home is properly set"
+      assert:
+        that:
+          - vm_home_sp.changed_policies.vm_home == storage_policy
+
+
+    - name: "003: Assign storage policy to VM idempotence test"
+      vmware_guest_storage_policy:
+        <<: *vm_home_args
+      register: vm_home_sp_idp
+
+    - name: "003: assert that changes were not made"
+      assert:
+        that:
+          - vm_home_sp_idp is not changed
+
+    - name: "003: assert that changed_policies.vm_home is not set"
+      assert:
+        that:
+          - vm_home_sp_idp.changed_policies.vm_home == ""
+
+    - name: "004: Assign storage policy to disk unit {{ unit_number }} check_mode test"
+      vmware_guest_storage_policy: &disk_args
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - unit_number: "{{ unit_number }}"
+            policy: "{{ storage_policy }}"
+      register: disk_sp_cm
+      check_mode: true
+
+    - name: "004: assert that changes were made"
+      assert:
+        that:
+          - disk_sp_cm is changed
+
+    - name: "004: assert that changed_policies.disk is properly set"
+      assert:
+        that:
+          - disk_sp_cm.changed_policies.disk[0].unit_number == unit_number
+          - disk_sp_cm.changed_policies.disk[0].policy == storage_policy
+
+    - name: "005: Assign storage policy to disk unit {{ unit_number }}"
+      vmware_guest_storage_policy:
+        <<: *disk_args
+      register: disk_sp
+
+    - name: "005: assert that changes were made"
+      assert:
+        that:
+          - disk_sp is changed
+
+    - name: "005: assert that changed_policies.disk is properly set"
+      assert:
+        that:
+          - disk_sp.changed_policies.disk[0].unit_number == unit_number
+          - disk_sp.changed_policies.disk[0].policy == storage_policy
+
+    - name: "006: Assign storage policy to disk unit {{ unit_number }} idempotence test"
+      vmware_guest_storage_policy:
+        <<: *disk_args
+      register: disk_sp_idp
+
+    - name: "006: assert that changes were not made"
+      assert:
+        that:
+          - disk_sp_idp is not changed
+
+    - name: "006: assert that changed_policies.disk is not set"
+      assert:
+        that:
+          - disk_sp_idp.changed_policies.disk == []
+
+  always:
+    - name: "Cleanup: Delete Tag"
+      vmware_tag:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        tag_name: "{{ tag }}"
+        category_id: "{{ category_id }}"
+        state: "absent"
+      register: delete_tag
+
+    - name: "Cleanup: Delete Category"
+      vmware_category:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        category_name: "{{ category }}"
+        state: "absent"
+      register: delete_category
+
+    - name: "Cleanup: Remove storage policy"
+      vmware_vm_storage_policy:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        name: "{{ storage_policy }}"
+        state: "absent"
+      register: policy_delete
+
+  vars:
+    storage_policy: "vm_guest_storage_profile_policy001"
+    category: "vm_guest_storage_profile_cat001"
+    tag: "vm_guest_storage_profile_tag001"
+    unit_number: 0

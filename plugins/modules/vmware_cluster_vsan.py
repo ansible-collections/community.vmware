@@ -37,11 +37,12 @@ options:
       type: str
       required: true
       aliases: [ datacenter_name ]
-    enable_vsan:
+    enable:
       description:
       - Whether to enable vSAN.
       type: bool
       default: false
+      aliases: [ enable_vsan ]
     vsan_auto_claim_storage:
       description:
       - Whether the VSAN service is configured to automatically claim local storage
@@ -88,7 +89,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_vsan: true
+    enable: true
   delegate_to: localhost
 
 - name: Enable vSAN and automatic rebalancing
@@ -98,7 +99,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_vsan: true
+    enable: true
     advanced_options:
       automatic_rebalance: True
   delegate_to: localhost
@@ -110,7 +111,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
-    enable_vsan: True
+    enable: True
     vsan_auto_claim_storage: True
   delegate_to: localhost
 '''
@@ -147,7 +148,7 @@ class VMwareCluster(PyVmomi):
         super(VMwareCluster, self).__init__(module)
         self.cluster_name = module.params['cluster_name']
         self.datacenter_name = module.params['datacenter']
-        self.enable_vsan = module.params['enable_vsan']
+        self.enable_vsan = module.params['enable']
         self.datacenter = None
         self.cluster = None
         self.advanced_options = None
@@ -162,11 +163,15 @@ class VMwareCluster(PyVmomi):
 
         if module.params['advanced_options'] is not None:
             self.advanced_options = module.params['advanced_options']
-            client_stub = self.si._GetStub()
-            ssl_context = client_stub.schemeArgs.get('context')
-            apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
-            vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
-            self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
+
+        client_stub = self.si._GetStub()
+        ssl_context = client_stub.schemeArgs.get('context')
+        apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
+        vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
+        self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
+
+        self.module.warn("The default for enable will change from false to true in a future version to make the behavior more consistent with other modules."
+                         "Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
 
     def check_vsan_config_diff(self):
         """
@@ -256,7 +261,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         # VSAN
-        enable_vsan=dict(type='bool', default=False),
+        enable=dict(type='bool', default=False, aliases=['enable_vsan']),
         vsan_auto_claim_storage=dict(type='bool', default=False),
         advanced_options=dict(type='dict', options=dict(
             automatic_rebalance=dict(type='bool', required=False),

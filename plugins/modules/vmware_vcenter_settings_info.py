@@ -5,10 +5,11 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 module: vmware_vcenter_settings_info
 short_description: Gather info vCenter settings
 description:
@@ -39,9 +40,9 @@ options:
     elements: str
 extends_documentation_fragment:
   - community.vmware.vmware.documentation
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 - name: "Gather info about vCenter settings"
   community.vmware.vmware_vcenter_settings_info:
     hostname: "{{ vcenter_hostname }}"
@@ -58,9 +59,9 @@ EXAMPLES = r'''
     properties:
       - config.workflow.port
   register: vcenter_settings_info_vsphere_api
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 vcenter_config_info:
   description: dict of vCenter settings
   returned: success
@@ -102,17 +103,20 @@ vcenter_config_info:
         "timeout_long_operations_previous": 120,
         "timeout_normal_operations_previous": 30
     }
-'''
+"""
 
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    vmware_argument_spec,
+)
 from ansible.module_utils.basic import AnsibleModule
 
 
 class VmwareVcenterSettingsInfo(PyVmomi):
     def __init__(self, module):
         super(VmwareVcenterSettingsInfo, self).__init__(module)
-        self.schema = self.params['schema']
-        self.properties = self.params['properties']
+        self.schema = self.params["schema"]
+        self.properties = self.params["properties"]
 
         if not self.is_vcenter():
             self.module.fail_json(msg="You have to connect to a vCenter server!")
@@ -125,118 +129,57 @@ class VmwareVcenterSettingsInfo(PyVmomi):
         for setting in option_manager.setting:
             exists_vcenter_config[setting.key] = setting.value
 
-        if self.schema == 'summary':
-            # Database
-            if 'VirtualCenter.MaxDBConnection' in exists_vcenter_config:
-                result['db_max_connections_previous'] = setting.value
+        if self.schema == "summary":
+            common_name_value_map = {
+                # Database
+                "VirtualCenter.MaxDBConnection": "db_max_connections_previous",
+                "task.maxAgeEnabled": "db_task_cleanup_previous",
+                "task.maxAge": "db_task_retention_previous",
+                "event.maxAgeEnabled": "db_event_cleanup_previous",
+                "event.maxAge": "db_event_retention_previous",
+                # Runtime settings
+                "instance.id": "runtime_unique_id_previous",
+                "VirtualCenter.ManagedIP": "runtime_managed_address_previous",
+                "VirtualCenter.InstanceName": "runtime_server_name_previous",
+                # User directory
+                "ads.timeout": "directory_timeout_previous",
+                "ads.maxFetchEnabled": "directory_query_limit_previous",
+                "ads.maxFetch": "directory_query_limit_size_previous",
+                "ads.checkIntervalEnabled": "directory_validation_previous",
+                "ads.checkInterval": "directory_validation_period_previous",
+                # Mail
+                "mail.smtp.server": "mail_server_previous",
+                "mail.sender": "mail_sender_previous",
+                # SNMP receivers - SNMP receiver #1
+                "snmp.receiver.1.enabled": "snmp_1_enabled_previous",
+                "snmp.receiver.1.name": "snmp_1_url_previous",
+                "snmp.receiver.1.port": "snmp_receiver_1_port_previous",
+                "snmp.receiver.1.community": "snmp_1_community_previous",
+                # SNMP receivers - SNMP receiver #2
+                "snmp.receiver.2.enabled": "snmp_2_enabled_previous",
+                "snmp.receiver.2.name": "snmp_2_url_previous",
+                "snmp.receiver.2.port": "snmp_receiver_2_port_previous",
+                "snmp.receiver.2.community": "snmp_2_community_previous",
+                # SNMP receivers - SNMP receiver #3
+                "snmp.receiver.3.enabled": "snmp_3_enabled_previous",
+                "snmp.receiver.3.name": "snmp_3_url_previous",
+                "snmp.receiver.3.port": "snmp_receiver_3_port_previous",
+                "snmp.receiver.3.community": "snmp_3_community_previous",
+                # SNMP receivers - SNMP receiver #4
+                "snmp.receiver.4.enabled": "snmp_4_enabled_previous",
+                "snmp.receiver.4.name": "snmp_4_url_previous",
+                "snmp.receiver.4.port": "snmp_receiver_4_port_previous",
+                "snmp.receiver.4.community": "snmp_4_community_previous",
+                # Timeout settings
+                "client.timeout.normal": "timeout_normal_operations_previous",
+                "client.timeout.long": "timeout_long_operations_previous",
+                # Logging settings
+                "log.level": "logging_options_previous",
+            }
 
-            if 'task.maxAgeEnabled' in exists_vcenter_config:
-                result['db_task_cleanup_previous'] = setting.value
-
-            if 'task.maxAge' in exists_vcenter_config:
-                result['db_task_retention_previous'] = setting.value
-
-            if 'event.maxAgeEnabled' in exists_vcenter_config:
-                result['db_event_cleanup_previous'] = setting.value
-
-            if 'event.maxAge' in exists_vcenter_config:
-                result['db_event_retention_previous'] = setting.value
-
-            # Runtime settings
-            if 'instance.id' in exists_vcenter_config:
-                result['runtime_unique_id_previous'] = setting.value
-
-            if 'VirtualCenter.ManagedIP' in exists_vcenter_config:
-                result['runtime_managed_address_previous'] = setting.value
-
-            if 'VirtualCenter.InstanceName' in exists_vcenter_config:
-                result['runtime_server_name_previous'] = setting.value
-
-            # User directory
-            if 'ads.timeout' in exists_vcenter_config:
-                result['directory_timeout_previous'] = setting.value
-
-            if 'ads.maxFetchEnabled' in exists_vcenter_config:
-                result['directory_query_limit_previous'] = setting.value
-
-            if 'ads.maxFetch' in exists_vcenter_config:
-                result['directory_query_limit_size_previous'] = setting.value
-
-            if 'ads.checkIntervalEnabled' in exists_vcenter_config:
-                result['directory_validation_previous'] = setting.value
-
-            if 'ads.checkInterval' in exists_vcenter_config:
-                result['directory_validation_period_previous'] = setting.value
-
-            # Mail
-            if 'mail.smtp.server' in exists_vcenter_config:
-                result['mail_server_previous'] = setting.value
-
-            if 'mail.sender' in exists_vcenter_config:
-                result['mail_sender_previous'] = setting.value
-
-            # SNMP receivers - SNMP receiver #1
-            if 'snmp.receiver.1.enabled' in exists_vcenter_config:
-                result['snmp_1_enabled_previous'] = setting.value
-
-            if 'snmp.receiver.1.name' in exists_vcenter_config:
-                result['snmp_1_url_previous'] = setting.value
-
-            if 'snmp.receiver.1.port' in exists_vcenter_config:
-                result['snmp_receiver_1_port_previous'] = setting.value
-
-            if 'snmp.receiver.1.community' in exists_vcenter_config:
-                result['snmp_1_community_previous'] = setting.value
-
-            # SNMP receivers - SNMP receiver #2
-            if 'snmp.receiver.2.enabled' in exists_vcenter_config:
-                result['snmp_2_enabled_previous'] = setting.value
-
-            if 'snmp.receiver.2.name' in exists_vcenter_config:
-                result['snmp_2_url_previous'] = setting.value
-
-            if 'snmp.receiver.2.port' in exists_vcenter_config:
-                result['snmp_receiver_2_port_previous'] = setting.value
-
-            if 'snmp.receiver.2.community' in exists_vcenter_config:
-                result['snmp_2_community_previous'] = setting.value
-
-            # SNMP receivers - SNMP receiver #3
-            if 'snmp.receiver.3.enabled' in exists_vcenter_config:
-                result['snmp_3_enabled_previous'] = setting.value
-
-            if 'snmp.receiver.3.name' in exists_vcenter_config:
-                result['snmp_3_url_previous'] = setting.value
-
-            if 'snmp.receiver.3.port' in exists_vcenter_config:
-                result['snmp_receiver_3_port_previous'] = setting.value
-
-            if 'snmp.receiver.3.community' in exists_vcenter_config:
-                result['snmp_3_community_previous'] = setting.value
-
-            # SNMP receivers - SNMP receiver #4
-            if 'snmp.receiver.4.enabled' in exists_vcenter_config:
-                result['snmp_4_enabled_previous'] = setting.value
-
-            if 'snmp.receiver.4.name' in exists_vcenter_config:
-                result['snmp_4_url_previous'] = setting.value
-
-            if 'snmp.receiver.4.port' in exists_vcenter_config:
-                result['snmp_receiver_4_port_previous'] = setting.value
-
-            if 'snmp.receiver.4.community' in exists_vcenter_config:
-                result['snmp_4_community_previous'] = setting.value
-
-            # Timeout settings
-            if 'client.timeout.normal' in exists_vcenter_config:
-                result['timeout_normal_operations_previous'] = setting.value
-
-            if 'client.timeout.long' in exists_vcenter_config:
-                result['timeout_long_operations_previous'] = setting.value
-
-            # Logging settings
-            if 'log.level' in exists_vcenter_config:
-                result['logging_options_previous'] = setting.value
+            for key, value in common_name_value_map.items():
+                if key in exists_vcenter_config:
+                    result[value] = setting.value
         else:
             for property in self.properties:
                 if property in exists_vcenter_config:
@@ -250,8 +193,8 @@ class VmwareVcenterSettingsInfo(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list', elements='str')
+        schema=dict(type="str", choices=["summary", "vsphere"], default="summary"),
+        properties=dict(type="list", elements="str"),
     )
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
@@ -260,5 +203,5 @@ def main():
     vmware_vcenter_settings_info.ensure()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

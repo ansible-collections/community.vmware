@@ -33,13 +33,17 @@ DOCUMENTATION = r'''
               - name: VMWARE_HOST
               - name: VMWARE_SERVER
         username:
-            description: Name of vSphere user.
+            description:
+            - Name of vSphere user.
+            - Accepts vault encrypted variable.
             required: True
             env:
               - name: VMWARE_USER
               - name: VMWARE_USERNAME
         password:
-            description: Password of vSphere user.
+            description:
+            - Password of vSphere user.
+            - Accepts vault encrypted variable.
             required: True
             env:
               - name: VMWARE_PASSWORD
@@ -96,8 +100,9 @@ DOCUMENTATION = r'''
         with_nested_properties:
             description:
             - This option transform flatten properties name to nested dictionary.
+            - From 1.10.0 and onwards, default value is set to C(True).
             type: bool
-            default: False
+            default: True
         keyed_groups:
             description:
             - Add hosts to group based on the values of a variable.
@@ -167,7 +172,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -238,7 +242,6 @@ EXAMPLES = r'''
     username: administrator@vsphere.local
     password: Esxi@123$%
     validate_certs: False
-    with_tags: False
     properties:
     - 'name'
     - 'config.name'
@@ -248,6 +251,9 @@ EXAMPLES = r'''
       # and will be used while communicating to the given virtual machine
       ansible_host: 'guest.ipAddress'
       composed_var: 'config.name'
+      # This will populate a host variable with a string value
+      ansible_user: "'admin'"
+      ansible_connection: "'ssh'"
     groups:
       VMs: True
     hostnames:
@@ -297,6 +303,24 @@ EXAMPLES = r'''
     with_nested_properties: True
     filters:
     - "tag_category.OS is defined and 'Linux' in tag_category.OS"
+
+# customizing hostnames based on VM's FQDN. The second hostnames template acts as a fallback mechanism.
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    hostnames:
+     - 'config.name+"."+guest.ipStack.0.dnsConfig.domainName'
+     - 'config.name'
+    properties:
+      - 'config.name'
+      - 'config.guestId'
+      - 'guest.hostName'
+      - 'guest.ipAddress'
+      - 'guest.guestFamily'
+      - 'guest.ipStack'
 '''
 
 import ssl
@@ -699,14 +723,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # set _options from config data
         self._consume_options(config_data)
 
+        username = self.get_option('username')
         password = self.get_option('password')
+
+        if isinstance(username, AnsibleVaultEncryptedUnicode):
+            username = username.data
 
         if isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
 
         self.pyv = BaseVMwareInventory(
             hostname=self.get_option('hostname'),
-            username=self.get_option('username'),
+            username=username,
             password=password,
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
@@ -788,7 +816,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             for vm_obj_property in vm_obj.propSet:
                 properties[vm_obj_property.name] = vm_obj_property.val
 
-            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) in ('orphaned', 'inaccessible'):
+            if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) in ('orphaned', 'inaccessible', 'disconnected'):
                 continue
 
             # Custom values
@@ -809,6 +837,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties['categories'] = []
                 properties['tag_category'] = {}
                 for tag_id in tag_association.list_attached_tags(vm_dynamic_id):
+                    if tag_id not in tags_info:
+                        # Ghost Tags - community.vmware#681
+                        continue
                     # Add tags related to VM
                     properties['tags'].append(tags_info[tag_id][0])
                     # Add categories related to VM

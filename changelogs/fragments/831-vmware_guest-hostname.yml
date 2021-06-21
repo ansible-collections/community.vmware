@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - Use hostname parameter in customization only if value is not None (https://github.com/ansible-collections/community.vmware/issues/655)

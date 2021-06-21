@@ -248,7 +248,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Get all portgroups in dvswitch vDS
       community.vmware.vmware_dvs_portgroup_find:

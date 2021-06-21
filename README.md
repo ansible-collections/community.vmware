@@ -35,6 +35,7 @@ VMware community collection depends upon following third party libraries:
 
 * [`Pyvmomi`](https://github.com/vmware/pyvmomi) >= 6.7.1.2018.12
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
+* [`vSAN Management SDK for Python`](https://code.vmware.com/web/sdk/vsan-python)
 
 ### Installing required libraries and SDK
 
@@ -59,6 +60,12 @@ Name | Description
 Name | Description
 --- | ---
 [community.vmware.vmware](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_httpapi.rst)|HttpApi Plugin for VMware REST API
+
+### Inventory plugins
+Name | Description
+--- | ---
+[community.vmware.vmware_host_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_inventory_inventory.rst)|VMware ESXi hostsystem inventory source
+[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
 
 ### Modules
 Name | Description
@@ -142,10 +149,10 @@ Name | Description
 [community.vmware.vmware_guest_serial_port](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_serial_port_module.rst)|Manage serial ports on an existing VM
 [community.vmware.vmware_guest_snapshot](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_snapshot_module.rst)|Manages virtual machines snapshots in vCenter
 [community.vmware.vmware_guest_snapshot_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_snapshot_info_module.rst)|Gather info about virtual machine's snapshots in vCenter
+[community.vmware.vmware_guest_storage_policy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_storage_policy_module.rst)|Set VM Home and disk(s) storage policy profiles.
 [community.vmware.vmware_guest_tools_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_info_module.rst)|Gather info about VMware tools installed in VM
 [community.vmware.vmware_guest_tools_upgrade](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_upgrade_module.rst)|Module to upgrade VMTools
 [community.vmware.vmware_guest_tools_wait](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_wait_module.rst)|Wait for VMware tools to become available
-[community.vmware.vmware_guest_vgpu](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_vgpu_module.rst)|Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 [community.vmware.vmware_guest_video](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_video_module.rst)|Modify video card configurations of specified virtual machine in given vCenter infrastructure
 [community.vmware.vmware_guest_vnc](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_vnc_module.rst)|Manages VNC remote display on virtual machines in vCenter
 [community.vmware.vmware_host](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_module.rst)|Add, remove, or move an ESXi host to, from, or within vCenter
@@ -157,6 +164,7 @@ Name | Description
 [community.vmware.vmware_host_config_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_facts_module.rst)|Gathers facts about an ESXi host's advance configuration information
 [community.vmware.vmware_host_config_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_info_module.rst)|Gathers info about an ESXi host's advance configuration information
 [community.vmware.vmware_host_config_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_config_manager_module.rst)|Manage advanced system settings of an ESXi host
+[community.vmware.vmware_host_custom_attributes](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_custom_attributes_module.rst)|Manage custom attributes from VMware for the given ESXi host
 [community.vmware.vmware_host_datastore](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_datastore_module.rst)|Manage a datastore on ESXi host
 [community.vmware.vmware_host_disk_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_disk_info_module.rst)|Gathers information about disks attached to given ESXi host/s.
 [community.vmware.vmware_host_dns](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_dns_module.rst)|Manage DNS configuration of an ESXi host system
@@ -181,6 +189,7 @@ Name | Description
 [community.vmware.vmware_host_ntp_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ntp_info_module.rst)|Gathers info about NTP configuration on an ESXi host
 [community.vmware.vmware_host_package_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_package_facts_module.rst)|Gathers facts about available packages on an ESXi host
 [community.vmware.vmware_host_package_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_package_info_module.rst)|Gathers info about available packages on an ESXi host
+[community.vmware.vmware_host_passthrough](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_passthrough_module.rst)|Manage PCI device passthrough settings on host
 [community.vmware.vmware_host_powermgmt_policy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powermgmt_policy_module.rst)|Manages the Power Management Policy of an ESXI host system
 [community.vmware.vmware_host_powerstate](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_powerstate_module.rst)|Manages power states of host systems in vCenter
 [community.vmware.vmware_host_scanhba](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_scanhba_module.rst)|Rescan host HBA's and optionally refresh the storage system
@@ -192,6 +201,7 @@ Name | Description
 [community.vmware.vmware_host_sriov](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_sriov_module.rst)|Manage SR-IOV settings on host
 [community.vmware.vmware_host_ssl_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_facts_module.rst)|Gather facts of ESXi host system about SSL
 [community.vmware.vmware_host_ssl_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_info_module.rst)|Gather info of ESXi host system about SSL
+[community.vmware.vmware_host_tcpip_stacks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_tcpip_stacks_module.rst)|Manage the TCP/IP Stacks configuration of ESXi host
 [community.vmware.vmware_host_vmhba_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_facts_module.rst)|Gathers facts about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmhba_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_info_module.rst)|Gathers info about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmnic_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmnic_facts_module.rst)|Gathers facts about vmnics available on the given ESXi host
@@ -204,11 +214,14 @@ Name | Description
 [community.vmware.vmware_local_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_user_manager_module.rst)|Manage local users on an ESXi host
 [community.vmware.vmware_maintenancemode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_maintenancemode_module.rst)|Place a host into maintenance mode
 [community.vmware.vmware_migrate_vmk](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_migrate_vmk_module.rst)|Migrate a VMK interface from VSS to VDS
+[community.vmware.vmware_object_custom_attributes_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_custom_attributes_info_module.rst)|Gather custom attributes of an object
 [community.vmware.vmware_object_rename](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_rename_module.rst)|Renames VMware objects
 [community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host
+[community.vmware.vmware_object_role_permission_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_info_module.rst)|Gather information about object's permissions
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
 [community.vmware.vmware_portgroup_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_facts_module.rst)|Gathers facts about an ESXi host's Port Group configuration
 [community.vmware.vmware_portgroup_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_info_module.rst)|Gathers info about an ESXi host's Port Group configuration
+[community.vmware.vmware_recommended_datastore](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_recommended_datastore_module.rst)|Returns the recommended datastore from a SDRS-enabled datastore cluster
 [community.vmware.vmware_resource_pool](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_module.rst)|Add/remove resource pools to/from vCenter
 [community.vmware.vmware_resource_pool_facts](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_facts_module.rst)|Gathers facts about resource pool information
 [community.vmware.vmware_resource_pool_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_resource_pool_info_module.rst)|Gathers info about resource pool information
@@ -242,11 +255,6 @@ Name | Description
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
 
-### Inventory plugins
-Name | Description
---- | ---
-[community.vmware.vmware_vm_inventory](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_inventory_inventory.rst)|VMware Guest inventory source
-
 <!--end collection content-->
 
 ## Testing and Development
@@ -274,7 +282,7 @@ Push the release:
 ## Communication
 
 We have a dedicated Working Group for VMware.
-You can find other people interested in this in `#ansible-vmware` on Freenode IRC.
+You can find other people interested in this in the `#ansible-vmware` channel on [libera.chat](https://libera.chat/) IRC.
 For more information about communities, meetings and agendas see https://github.com/ansible/community/wiki/VMware.
 
 ## License

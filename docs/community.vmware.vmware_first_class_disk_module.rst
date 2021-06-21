@@ -269,7 +269,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create Disk
       community.vmware.vmware_first_class_disk:

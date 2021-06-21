@@ -1,0 +1,2 @@
+minor_changes:
+- vmware_object_role_permission_info - added principal to provide list of individual permissions on specified entity (https://github.com/ansible-collections/community.vmware/issues/868).

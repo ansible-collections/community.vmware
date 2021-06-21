@@ -21,7 +21,9 @@ description:
 - M(community.vmware.vmware_guest_powerstate) module is also needed to poweroff the instant cloned module.
 - The powered off VM would in turn be deleted by again using M(community.vmware.vmware_guest) module.
 - Thus M(community.vmware.vmware_guest) module is necessary for removing Instant Cloned VM when VMs being created in testing environment.
-
+- Also GuestOS Customization has now been added with guestinfo_vars parameter.
+- The Parent VM must have The Guest customization Engine for instant Clone to customize Guest OS.
+- Only Linux Os in Parent VM enable support for native vSphere Guest Customization for Instant Clone in vSphere 7.
 options:
   name:
     description:
@@ -55,6 +57,7 @@ options:
       - The host has to be a member of the cluster that contains the resource pool.
       - Required with I(resource_pool) to find resource pool details. This will be used as additional information when there are resource pools with same name.
     type: str
+    aliases: ['esxi_hostname']
     required: True
   datastore:
     description:
@@ -83,7 +86,52 @@ options:
       - C(Resources) is the default name of resource pool.
     type: str
     required: False
-
+  vm_username:
+    description:
+      - The user to login-in to the virtual machine.
+      - Only required when using guest customization feature.
+    required: False
+    type: str
+  vm_password:
+    description:
+      - The password used to login-in to the virtual machine.
+      - Only required when using guest customization feature.
+    required: False
+    type: str
+  guestinfo_vars:
+    description:
+      - Provides GuestOS Customization functionality in instant cloned VM.
+      - A list of key value pairs that will be passed to the destination VM.
+      - These pairs should be used to provide user-defined customization to differentiate the destination VM from the source VM.
+    suboptions:
+      hostname:
+        description:
+          - hostname is used to obtain the DNS(Domain Name System) name and set the Guest system's hostname.
+        type: str
+      ipaddress:
+        description:
+          - ipaddress is used to set the ipaddress in Instant Cloned Guest Operating System.
+        type: str
+      netmask:
+        description:
+          - netmask is used to set the netmask in Instant Cloned Guest Operating System.
+        type: str
+      gateway:
+        description:
+          - netmask is used to set the netmask in Instant Cloned Guest Operating System.
+        type: str
+      dns:
+        description:
+          - dns is used to set the dns in Instant Cloned Guest Operating System..
+        type: str
+      domain:
+        description:
+          - domain is used to set A fully qualified domain name (FQDN) or complete domain name for Instant Cloned Guest operating System.
+        type: str
+    version_added: '1.11.0'
+    default: []
+    type: list
+    elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -133,6 +181,31 @@ EXAMPLES = r'''
     state: absent
   register: delete_instant_clone_from_vm_when_cluster
   ignore_errors: true
+  delegate_to: localhost
+
+- name: Instant Clone a VM with guest_customization
+  community.vmware.vmware_guest_instant_clone:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    vm_username: "root"
+    vm_password: "SuperSecret"
+    validate_certs: False
+    folder: "{{ f0 }}"
+    datastore: "{{ rw_datastore }}"
+    datacenter: "{{ dc1 }}"
+    host: "{{ esxi1 }}"
+    guestinfo_vars:
+      - hostname: "{{ guestinfo.ic.hostname }}"
+        ipaddress: "{{ guestinfo.ic.ipaddress }}"
+        netmask: "{{ guestinfo.ic.netmask }}"
+        gateway: "{{ guestinfo.ic.gateway }}"
+        dns: "{{ guestinfo.ic.dns }}"
+        domain: "{{ guestinfo.ic.domain }}"
+    name: "Instant_clone_guest_customize"
+    parent_vm: "test_vm1"
+    resource_pool: DC0_C0_RP1
+  register: Instant_cloned_guest_customize
   delegate_to: localhost
 
 - name: Instant Clone a VM when skipping optional params
@@ -224,6 +297,7 @@ class VmwareGuestInstantClone(PyVmomi):
         self.uuid = self.params.get('uuid')
         self.port = self.params.get('port')
         self.use_instance_uuid = self.params.get('use_instance_uuid')
+        self.guestinfo_vars = self.params.get('guestinfo_vars')
 
     def get_new_vm_info(self, vm):
         # to check if vm has been cloned in the destination vc
@@ -254,6 +328,56 @@ class VmwareGuestInstantClone(PyVmomi):
             result = {'changed': True, 'failed': False, 'vm_info': vm_info}
         except TaskError as task_e:
             self.module.fail_json(msg=to_native(task_e))
+
+        self.destination_content = connect_to_api(
+            self.module,
+            hostname=self.hostname,
+            username=self.username,
+            password=self.password,
+            port=self.port,
+            validate_certs=self.validate_certs)
+
+        vm_IC = find_vm_by_name(content=self.destination_content, vm_name=self.params['name'])
+        if vm_IC and self.params.get('guestinfo_vars'):
+            guest_custom_mng = self.destination_content.guestCustomizationManager
+            # Make an object for authentication in a guest OS
+            auth_obj = vim.vm.guest.NamePasswordAuthentication()
+
+            guest_user = self.params.get('vm_username')
+            guest_password = self.params.get('vm_password')
+            auth_obj.username = guest_user
+            auth_obj.password = guest_password
+
+            guestinfo_vars = self.params.get('guestinfo_vars')
+            # Make a spec object to customize Guest OS
+            customization_spec = vim.vm.customization.Specification()
+            customization_spec.globalIPSettings = vim.vm.customization.GlobalIPSettings()
+            customization_spec.globalIPSettings.dnsServerList = [guestinfo_vars[0]['dns']]
+            # Make an identity object to do linux prep
+            # The params are reflected the specified following after rebooting OS
+            customization_spec.identity = vim.vm.customization.LinuxPrep()
+            customization_spec.identity.domain = guestinfo_vars[0]['domain']
+            customization_spec.identity.hostName = vim.vm.customization.FixedName()
+            customization_spec.identity.hostName.name = guestinfo_vars[0]['hostname']
+
+            customization_spec.nicSettingMap = []
+            adapter_mapping_obj = vim.vm.customization.AdapterMapping()
+            adapter_mapping_obj.adapter = vim.vm.customization.IPSettings()
+            adapter_mapping_obj.adapter.ip = vim.vm.customization.FixedIp()
+            adapter_mapping_obj.adapter.ip.ipAddress = guestinfo_vars[0]['ipaddress']
+            adapter_mapping_obj.adapter.subnetMask = guestinfo_vars[0]['netmask']
+            adapter_mapping_obj.adapter.gateway = [guestinfo_vars[0]['gateway']]
+
+            customization_spec.nicSettingMap.append(adapter_mapping_obj)
+
+            task_guest = guest_custom_mng.CustomizeGuest_Task(vm_IC, auth_obj, customization_spec)
+            try:
+                wait_for_task(task_guest)
+                vm_info = self.get_new_vm_info(self.vm_name)
+                result = {'changed': True, 'failed': False, 'vm_info': vm_info}
+            except TaskError as task_e:
+                self.module.fail_json(msg=to_native(task_e))
+
         return result
 
     def sanitize_params(self):
@@ -330,6 +454,21 @@ class VmwareGuestInstantClone(PyVmomi):
         else:
             self.resource_pool = self.host.parent.resourcePool
 
+        if self.params['guestinfo_vars']:
+            self.guestinfo_vars = self.dict_to_optionvalues()
+        else:
+            self.guestinfo_vars = None
+
+    def dict_to_optionvalues(self):
+        optionvalues = []
+        for dictionary in self.params['guestinfo_vars']:
+            for key, value in dictionary.items():
+                opt = vim.option.OptionValue()
+                (opt.key, opt.value) = ("guestinfo.ic." + key, value)
+                optionvalues.append(opt)
+
+        return optionvalues
+
     def populate_specs(self):
 
         # populate relocate spec
@@ -339,6 +478,7 @@ class VmwareGuestInstantClone(PyVmomi):
         # populate Instant clone spec
         self.instant_clone_spec.name = self.vm_name
         self.instant_clone_spec.location = self.relocate_spec
+        self.instant_clone_spec.config = self.guestinfo_vars
 
 
 def main():
@@ -347,14 +487,28 @@ def main():
         name=dict(type='str', required=True, aliases=['vm_name']),
         uuid=dict(type='str'),
         moid=dict(type='str'),
+        vm_username=dict(type='str', required=False),
+        vm_password=dict(type='str', no_log=True, required=False),
         datacenter=dict(type='str', required=True),
         datastore=dict(type='str', required=True),
         use_instance_uuid=dict(type='bool', default=False),
-        hostname=dict(type='str', aliases=['admin', 'user']),
-        host=dict(type='str', required=True),
+        host=dict(type='str', required=True, aliases=['esxi_hostname']),
         folder=dict(type='str', required=False),
         resource_pool=dict(type='str', required=False),
-        parent_vm=dict(type='str')
+        parent_vm=dict(type='str'),
+        guestinfo_vars=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                ipaddress=dict(type='str'),
+                netmask=dict(type='str'),
+                gateway=dict(type='str'),
+                dns=dict(type='str'),
+                domain=dict(type='str'),
+                hostname=dict(type='str'),
+            ),
+        ),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,

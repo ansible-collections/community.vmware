@@ -191,7 +191,7 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable_vsan</b>
+                    <b>enable</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -205,6 +205,7 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to enable vSAN.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: enable_vsan</div>
                 </td>
             </tr>
             <tr>
@@ -362,7 +363,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable vSAN
       community.vmware.vmware_cluster_vsan:
@@ -371,7 +372,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_vsan: true
+        enable: true
       delegate_to: localhost
 
     - name: Enable vSAN and automatic rebalancing
@@ -381,7 +382,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_vsan: true
+        enable: true
         advanced_options:
           automatic_rebalance: True
       delegate_to: localhost
@@ -393,7 +394,7 @@ Examples
         password: "{{ vcenter_password }}"
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
-        enable_vsan: True
+        enable: True
         vsan_auto_claim_storage: True
       delegate_to: localhost
 

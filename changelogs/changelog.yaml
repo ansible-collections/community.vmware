@@ -317,6 +317,147 @@ releases:
     - vmware_pg_options.yml
     - vmware_vm_storage_policy_module.yml
     release_date: '2020-08-01'
+  1.10.0:
+    changes:
+      bugfixes:
+      - vmware - fixed a bug that the guest_guestion in the facts doesn't convert
+        to the dictionary (https://github.com/ansible-collections/community.vmware/pull/825).
+      - vmware - handle exception raised in ``get_all_objs`` and ``find_object_by_name``
+        which occurs due to multiple parallel operations (https://github.com/ansible-collections/community.vmware/issues/791).
+      - vmware_cluster_info - Fix a bug that returned enabled_vsan and vsan_auto_claim_storage
+        as lists instead of just true or false (https://github.com/ansible-collections/community.vmware/issues/805).
+      - vmware_evc_mode - fixed an issue that evc_mode is required when the state
+        parameter set to absent (https://github.com/ansible-collections/community.vmware/pull/764).
+      - vmware_guest - skip customvalues while deploying VM on a standalone ESXi (https://github.com/ansible-collections/community.vmware/issues/721).
+      - vmware_host_iscsi_info - fixed an issue that an error occurs gathering iSCSI
+        information against an ESXi Host with iSCSI disabled (https://github.com/ansible-collections/community.vmware/pull/729).
+      - vmware_vm_info - handle vApp parent logic (https://github.com/ansible-collections/community.vmware/issues/777).
+      - vmware_vm_shell - handle exception raised while performing the operation (https://github.com/ansible-collections/community.vmware/issues/732).
+      - vmware_vm_storage_policy_info - fixed an issue that the module can't get storage
+        policy info when the policy has the tag base rules (https://github.com/ansible-collections/community.vmware/pull/788).
+      - vmware_vmotion - Provide an meaningful error message when providing a bad
+        ESXi node as ``destination_host`` (https://github.com/ansible-collections/vmware/pull/804).
+      minor_changes:
+      - vmware_cluster_drs - Make enable_drs an alias of enable and add a warning
+        that the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_cluster_ha - Make enable_ha an alias of enable and add a warning that
+        the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_cluster_vsan - Make enable_vsan an alias of enable and add a warning
+        that the default will change from false to true in a future version (https://github.com/ansible-collections/community.vmware/pull/766)
+      - vmware_dvs_portgroup - Implement 'elastic' port group configuration (https://github.com/ansible-collections/community.vmware/issues/410).
+      - vmware_dvs_portgroup - Implement MAC learning configuration (https://github.com/ansible-collections/community.vmware/issues/644).
+      - vmware_dvs_portgroup - Implement configuration of active and standby uplinks
+        (https://github.com/ansible-collections/community.vmware/issues/709).
+      - vmware_dvs_portgroup - Remove default for teaming_policy.inbound_policy (https://github.com/ansible-collections/community.vmware/pull/743).
+      - vmware_dvs_portgroup_info - Return information about MAC learning configuration
+        (https://github.com/ansible-collections/community.vmware/issues/644).
+      - vmware_dvs_portgroup_info - Return information about uplinks (https://github.com/ansible-collections/community.vmware/issues/709).
+      - vmware_guest - add more documentation about ``is_template`` (https://github.com/ansible-collections/community.vmware/pull/794).
+      - vmware_host_iscsi_info - added a list(detected_iscsi_drives) of detected iscsi
+        drives to the return value after set an iscsi config (https://github.com/ansible-collections/community.vmware/pull/729).
+      - vmware_tag - modified the category_id parameter to required (https://github.com/ansible-collections/community.vmware/pull/790).
+      - vmware_vm_inventory - set default to ``True`` for ``with_nested_properties``
+        (https://github.com/ansible-collections/community.vmware/issues/712).
+    fragments:
+    - 644-vmware_dvs_portgroup.yml
+    - 712_vmware_vm_inventory.yml
+    - 721_vmware_guest.yml
+    - 729-vmware_host_iscsi_info.yml
+    - 732_vmware_vm_shell.yml
+    - 739-vmware_cluster_drs.yml
+    - 764-vmware_evc_mode.yml
+    - 777_vapp_info.yml
+    - 788-vmware_vm_storage_policy_info.yml
+    - 790-vmware_tag.yml
+    - 791_vmware.yml
+    - 803-vmware_vmotion-better-error-msg.yml
+    - 805-vmware_cluster_info.yml
+    - 825-vmware.yml
+    - is_template.yml
+    modules:
+    - description: Manage the TCP/IP Stacks configuration of ESXi host
+      name: vmware_host_tcpip_stacks
+      namespace: ''
+    release_date: '2021-05-05'
+  1.11.0:
+    changes:
+      bugfixes:
+      - vmware - fix that the return value should be returned None if moId doesn't
+        exist of a virtual machine (https://github.com/ansible-collections/community.vmware/pull/867).
+      - vmware_vmotion - implement new parameter named destination_datacenter to fix
+        failure to move storage when datastores are shared across datacenters (https://github.com/ansible-collections/community.vmware/issues/858)
+      major_changes:
+      - vmware_object_custom_attributes_info - added a new module to gather custom
+        attributes of an object (https://github.com/ansible-collections/community.vmware/pull/851).
+      minor_changes:
+      - vmware - added a new method to search Managed Object based on moid and object
+        type (https://github.com/ansible-collections/community.vmware/pull/879).
+      - vmware_dvswitch - Dynamically check the DVS versions vCenter supports (https://github.com/ansible-collections/community.vmware/issues/839).
+      - vmware_dvswitch - Implement network_policy parameter with suboptions promiscuous,
+        forged_transmits and mac_changes (https://github.com/ansible-collections/community.vmware/issues/833).
+      - vmware_guest - Make the requirements for Virtualization Based Security explicit
+        (https://github.com/ansible-collections/community.vmware/pull/816).
+      - vmware_guest - New parameter ``secure_boot`` to manage (U)EFI secure boot
+        on VMs (https://github.com/ansible-collections/community.vmware/pull/816).
+      - vmware_guest - New parameter ``vvtd`` to manage Intel Virtualization Technology
+        for Directed I/O on VMs (https://github.com/ansible-collections/community.vmware/pull/816).
+      - vmware_guest_controller - added bus_sharing property to scsi controllers (https://github.com/ansible-collections/community.vmware/pull/878).
+      - vmware_guest_instant_clone - added the the guestinfo_vars parameter to provide
+        GuestOS Customization functionality in instant cloned VM (https://github.com/ansible-collections/community.vmware/pull/796).
+      - vmware_host_custom_attributes - new module (https://github.com/ansible-collections/community.vmware/pull/838).
+      - vmware_host_inventory - added ability for username to be a vault encrypted
+        variable, and updated documentation to reflect ability for username and password
+        to be vaulted. (https://github.com/ansible-collections/community.vmware/issues/854).
+      - vmware_host_passthrough - added a new module to enable or disable passthrough
+        of PCI devices with ESXi host has (https://github.com/ansible-collections/community.vmware/pull/872).
+      - vmware_host_tcpip_stacks - added ipv6_gateway parameter and nsx_overlay as
+        an alias of vxlan (https://github.com/ansible-collections/community.vmware/pull/834).
+      - vmware_host_vmnic_info - add LLDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/828).
+      - vmware_object_custom_attributes_info - added a new parameter to support moid
+        (https://github.com/ansible-collections/community.vmware/pull/879).
+      - vmware_vcenter_settings.py - Add advanced_settings parameter (https://github.com/ansible-collections/community.vmware/pull/819).
+      - vmware_vm_inventory - added ability for username to be a vault encrypted variable,
+        and updated documentation to reflect ability for username and password to
+        be vaulted. (https://github.com/ansible-collections/community.vmware/issues/854).
+    fragments:
+    - 796-vmware_guest_instant_clone.yml
+    - 816-vmware_guest.yml
+    - 819-vmware_vcenter_settings-advanced_setting.yml
+    - 828_vmware_host_vmnic_info.yml
+    - 833-vmware_dvswitch-network_policy.yml
+    - 834-vmware_host_tcpip_stacks.yml
+    - 838_vmware_host_custom_attributes.yml
+    - 851-vmware_object_custom_attributes_info.yml
+    - 855_vmware_host_inventory.yml
+    - 855_vmware_vm_inventory.yml
+    - 858_vmware_vmotion_add_destination_datacenter_parameter.yml
+    - 867-vmware.yml
+    - 872-vmware_host_passthrough.yml
+    - 878_vmware_guest_controller.yml
+    - 879-vmware_object_custom_attributes_info.yml
+    modules:
+    - description: Manage custom attributes from VMware for the given ESXi host
+      name: vmware_host_custom_attributes
+      namespace: ''
+    - description: Manage PCI device passthrough settings on host
+      name: vmware_host_passthrough
+      namespace: ''
+    - description: Gather custom attributes of an object
+      name: vmware_object_custom_attributes_info
+      namespace: ''
+    - description: Gather information about object's permissions
+      name: vmware_object_role_permission_info
+      namespace: ''
+    - description: Returns the recommended datastore from a SDRS-enabled datastore
+        cluster
+      name: vmware_recommended_datastore
+      namespace: ''
+    plugins:
+      inventory:
+      - description: VMware ESXi hostsystem inventory source
+        name: vmware_host_inventory
+        namespace: null
+    release_date: '2021-06-11'
   1.2.0:
     changes:
       bugfixes:
@@ -608,3 +749,58 @@ releases:
     - 682-vmware_vm_storage_policy.yml
     - 693-vmware_guest_register_operation.yml
     release_date: '2021-03-05'
+  1.9.0:
+    changes:
+      bugfixes:
+      - vmware - add the default value of parameter resource_pool_name in the find_resource_pool_by_name
+        function (https://github.com/ansible-collections/community.vmware/pull/670).
+      - vmware_cluster_vsan - fixed a bug that made the module fail when advanced_options
+        is not set (https://github.com/ansible-collections/community.vmware/issues/728).
+      - vmware_deploy_ovf - fixed an issue that a return value hasn't the instance
+        key when the power_on parameter is False (https://github.com/ansible-collections/community.vmware/pull/698).
+      - vmware_deploy_ovf - fixed an issue that deploy template in datacenter with
+        more than one standalone hosts (https://github.com/ansible-collections/community.vmware/pull/670).
+      - vmware_guest - fixed a bug that made the module fail when disk.controller_number
+        or disk.unit_number are 0 (https://github.com/ansible-collections/community.vmware/issues/703).
+      - vmware_local_user_manager - fixed to require local_user_password when the
+        state is present (https://github.com/ansible-collections/community.vmware/pull/724).
+      - vmware_vm_inventory - Skip over ghost tags attached to virtual machines (https://github.com/ansible-collections/community.vmware/issues/681).
+      deprecated_features:
+      - vmware_vmkernel_ip_config - deprecate in favor of vmware_vmkernel (https://github.com/ansible-collections/community.vmware/pull/667).
+      minor_changes:
+      - vmware_guest_instant_clone - supported esxi_hostname parameter as an alias
+        (https://github.com/ansible-collections/community.vmware/pull/745).
+      - vmware_resource_pool - Add parent_resource_pool parameter which is mutually
+        exclusive with cluster and esxi_hostname (https://github.com/ansible-collections/community.vmware/issues/717)
+      - vmware_vm_inventory - add an example of FQDN as hostname (https://github.com/ansible-collections/community.vmware/issues/678).
+      - vmware_vm_inventory - skip disconnected VMs.
+      security_fixes:
+      - vmware_host_iscsi - mark the ``chap_secret`` parameter as ``no_log`` to avoid
+        accidental leaking of secrets in logs (https://github.com/ansible-collections/community.vmware/pull/715).
+      - vmware_host_iscsi - mark the ``mutual_chap_secret`` parameter as ``no_log``
+        to avoid accidental leaking of secrets in logs (https://github.com/ansible-collections/community.vmware/pull/715).
+      - vmware_vc_infraprofile_info - mark the ``decryption_key`` parameter as ``no_log``
+        to avoid accidental leaking of secrets in logs (https://github.com/ansible-collections/community.vmware/pull/715).
+      - vmware_vc_infraprofile_info - mark the ``encryption_key`` parameter as ``no_log``
+        to avoid accidental leaking of secrets in logs (https://github.com/ansible-collections/community.vmware/pull/715).
+    fragments:
+    - 667-vmware_vmkernel_ip_config.yml
+    - 670-vmware_deploy_ovf_and_vmware.yml
+    - 681_vmware_inventory.yml
+    - 698-vmware_deploy_ovf.yml
+    - 703-vmware_guest.yml
+    - 717-vmware_resource_pool.yml
+    - 724-vmware_local_user_manager.yml
+    - 728-vmware_cluster_vsan.yml
+    - 745-vmware_guest_instant_clone.yml
+    - disconnect_inventory.yml
+    - no_log_sanity.yml
+    - vmware_inventory_example.yml
+    modules:
+    - description: Instant Clone VM
+      name: vmware_guest_instant_clone
+      namespace: ''
+    - description: Set VM Home and disk(s) storage policy profiles.
+      name: vmware_guest_storage_policy
+      namespace: ''
+    release_date: '2021-04-01'
