@@ -510,6 +510,23 @@ Parameters
                         <div>Whether waiting until vm tools start after rebooting an instant clone vm.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>wait_vm_tools_timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">300</div>
+                </td>
+                <td>
+                        <div>Define a timeout (in seconds) for <em>the wait_vm_tools</em> parameter.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
