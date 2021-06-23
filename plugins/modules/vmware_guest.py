@@ -1005,7 +1005,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_vm_ip,
     quote_obj_name,
 )
-from ansible_collections.community.vmware.plugins.module_utils.vmware_guest import PyVmomiDeviceHelper
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiCache(object):
