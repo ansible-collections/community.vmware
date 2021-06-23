@@ -182,7 +182,7 @@ class VMwareDvsHost(PyVmomi):
 
         for lag_uplink in self.lag_uplinks:
             if lag_uplink['lag'] not in self.lags:
-                self.module.fail_json(msg="LAG %s not found" % lag_uplink.lag)
+                self.module.fail_json(msg="LAG %s not found" % lag_uplink['lag'])
 
     def process_state(self):
         dvs_host_states = {
