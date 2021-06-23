@@ -5,15 +5,28 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from pyVmomi import vim
+import traceback
 from random import randint
 from ansible.module_utils.common.network import is_mac
+from ansible.module_utils.basic import missing_required_lib
+
+PYVMOMI_IMP_ERR = None
+try:
+    from pyVmomi import vim
+    HAS_PYVMOMI = True
+except ImportError:
+    PYVMOMI_IMP_ERR = traceback.format_exc()
+    HAS_PYVMOMI = False
 
 
 class PyVmomiDeviceHelper(object):
     """ This class is a helper to create easily VMware Objects for PyVmomiHelper """
 
     def __init__(self, module):
+        if not HAS_PYVMOMI:
+            module.fail_json(msg=missing_required_lib('PyVmomi'),
+                             exception=PYVMOMI_IMP_ERR)
+
         self.module = module
         # This is not used for the multiple controller with multiple disks scenario,
         # disk unit number can not be None
