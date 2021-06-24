@@ -115,7 +115,7 @@ def answer_question(vm, responses):
             raise TaskError("answer failed: %s" % to_text(e))
 
 
-def wait_for_task(task, max_backoff=64, timeout=3600):
+def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
     """Wait for given task using exponential back-off algorithm.
 
     Args:
