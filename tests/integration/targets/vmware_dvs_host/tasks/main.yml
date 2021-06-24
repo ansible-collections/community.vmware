@@ -3,8 +3,8 @@
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
-- name: 'Attach the hosts to the DVSwitch without specifying any vnics (Issue #185)'
-  when: vcsim is not defined
+
+- when: vcsim is not defined
   block:
   - name: Create the DVSwitch
     vmware_dvswitch:
@@ -16,7 +16,17 @@
       discovery_operation: both
       state: present
 
-  - name: 'Attach the hosts to the DVSwitch without specifying any vnics'
+  - name: Create LAG
+    vmware_dvswitch_lacp:
+      switch: 'dvs_host_test_switch'
+      support_mode: enhanced
+      link_aggregation_groups:
+          - name: lag1
+            mode: active
+            uplink_number: 2
+            load_balancing_mode: srcDestIpTcpUdpPortVlan
+
+  - name: 'Attach host to the DVSwitch without specifying any vmnics (Issue #185)'
     vmware_dvs_host:
       esxi_hostname: '{{ esxi1 }}'
       switch_name: 'dvs_host_test_switch'
@@ -26,9 +36,71 @@
       that:
         - host_dvs_attachment is changed
 
+  - name: 'Attach hosts to the DVSwitch without specifying any vmnics again (idempotency)'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      state: present
+    register: host_dvs_attachment_again
+  - assert:
+      that:
+        - host_dvs_attachment_again is not changed
+
+  - name: 'Add vmnic to uplink'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      vmnics:
+          - vmnic1
+      state: present
+    register: host_dvs_uplink
+  - assert:
+      that:
+        - host_dvs_uplink is changed
+
+  - name: 'Add vmnic to uplink again (idempotency)'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      vmnics:
+          - vmnic1
+      state: present
+    register: host_dvs_uplink_again
+  - assert:
+      that:
+        - host_dvs_uplink_again is not changed
+
+  - name: 'Add vmnic to LAG uplink'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      lag_uplinks:
+          - lag: lag1
+            vmnics:
+                - vmnic1
+      state: present
+    register: host_dvs_lag_uplink
+  - assert:
+      that:
+        - host_dvs_lag_uplink is changed
+
+  - name: 'Add vmnic to LAG uplink again (idempotency)'
+    vmware_dvs_host:
+      esxi_hostname: '{{ esxi1 }}'
+      switch_name: 'dvs_host_test_switch'
+      lag_uplinks:
+          - lag: lag1
+            vmnics:
+                - vmnic1
+      state: present
+    register: host_dvs_lag_uplink_again
+  - assert:
+      that:
+        - host_dvs_lag_uplink_again is not changed
+
 # Cleanup
   always:
-    - name: 'Cleanup: detaching hosts from dvs'
+    - name: 'Cleanup: detaching host from dvs'
       vmware_dvs_host:
         esxi_hostname: "{{ esxi1 }}"
         switch_name: 'dvs_host_test_switch'
