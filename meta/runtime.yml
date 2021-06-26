@@ -84,6 +84,7 @@ action_groups:
   - vmware_host_config_info
   - vmware_host_config_manager
   - vmware_host_datastore
+  - vmware_host_datastore_resize
   - vmware_host_disk_info
   - vmware_host_dns
   - vmware_host_dns_info

@@ -1,0 +1,63 @@
+# Test code for the vmware_host_datastore_resize module.
+# Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Expand the partition number 1 in the datastore capacity using free all capacity up to with check_mode
+  community.vmware.vmware_host_datastore_resize:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    datastore: "{{ rw_datastore }}"
+    expand:
+      partition_number: 1
+      resize_gb: all
+  check_mode: true
+  register: resized_datastore_info_check_mode
+
+- name: Make sure if change has been occurred with check_mode
+  assert:
+    that:
+      - resized_datastore_info_check_mode.changed is sameas true
+
+- name: Expand the partition number 1 in the datastore capacity using free all capacity up to
+  community.vmware.vmware_host_datastore_resize:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    datastore: "{{ rw_datastore }}"
+    expand:
+      partition_number: 1
+      resize_gb: all
+  register: resized_datastore_info
+
+- name: Make sure if change hasn't been occurred(Maybe CI environment hasn’t the free capacity to resize)
+  assert:
+    that:
+      - resized_datastore_info.changed is sameas false
+
+- name: Expand the partition number 1 in the datastore capacity using free all capacity up to (idempotency)
+  community.vmware.vmware_host_datastore_resize:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    datastore: "{{ rw_datastore }}"
+    expand:
+      partition_number: 1
+      resize_gb: all
+  register: resized_datastore_info_idempotency
+
+- name: Make sure if change has been occurred
+  assert:
+    that:
+      - resized_datastore_info_idempotency.changed is sameas false
