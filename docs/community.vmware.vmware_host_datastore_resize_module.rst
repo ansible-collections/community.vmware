@@ -86,7 +86,7 @@ Parameters
                 </td>
                 <td>
                         <div>Expand the capacity base on existing datastore free capacity.</div>
-                        <div>If not free capacity, the datastore capacity can&#x27;t be expand.</div>
+                        <div>If not free capacity, the datastore capacity can&#x27;t be expanded.</div>
                 </td>
             </tr>
                                 <tr>

@@ -41,7 +41,7 @@ options:
   expand:
     description:
       - Expand the capacity base on existing datastore free capacity.
-      - If not free capacity, the datastore capacity can't be expand.
+      - If not free capacity, the datastore capacity can't be expanded.
     suboptions:
       partition_number:
         description:
