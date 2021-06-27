@@ -386,43 +386,19 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec,\
     wait_for_task, find_obj, get_all_objs, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
+        self.device_helper = PyVmomiDeviceHelper(self.module)
         self.desired_disks = self.params['disk']  # Match with vmware_guest parameter
         self.vm = None
-        self.scsi_device_type = dict(lsilogic=vim.vm.device.VirtualLsiLogicController,
-                                     paravirtual=vim.vm.device.ParaVirtualSCSIController,
-                                     buslogic=vim.vm.device.VirtualBusLogicController,
-                                     lsilogicsas=vim.vm.device.VirtualLsiLogicSASController)
-        self.ctl_device_type = self.scsi_device_type.copy()
+        self.ctl_device_type = self.device_helper.scsi_device_type.copy()
         self.ctl_device_type.update({'sata': vim.vm.device.VirtualAHCIController, 'nvme': vim.vm.device.VirtualNVMEController})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
-
-    def create_scsi_controller(self, scsi_type, scsi_bus_number):
-        """
-        Create SCSI Controller with given SCSI Type and SCSI Bus Number
-        Args:
-            scsi_type: Type of SCSI
-            scsi_bus_number: SCSI Bus number to be assigned
-
-        Returns: Virtual device spec for SCSI Controller
-
-        """
-        scsi_ctl = vim.vm.device.VirtualDeviceSpec()
-        scsi_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        scsi_ctl.device = self.scsi_device_type[scsi_type]()
-        scsi_ctl.device.deviceInfo = vim.Description()
-        scsi_ctl.device.busNumber = scsi_bus_number
-        scsi_ctl.device.sharedBus = 'noSharing'
-        scsi_ctl.device.hotAddRemove = True
-        scsi_ctl.device.key = -randint(1000, 9999)
-        scsi_ctl.device.scsiCtlrUnitNumber = 7
-
-        return scsi_ctl
 
     def create_sata_controller(self, sata_bus_number):
         sata_ctl = vim.vm.device.VirtualDeviceSpec()
@@ -583,8 +559,8 @@ class PyVmomiHelper(PyVmomi):
             # create disk controller when not found and disk state is present
             if not ctl_found and disk['state'] == 'present':
                 # Create new controller
-                if disk['controller_type'] in self.scsi_device_type.keys():
-                    ctl_spec = self.create_scsi_controller(disk['controller_type'], disk['controller_number'])
+                if disk['controller_type'] in self.device_helper.scsi_device_type.keys():
+                    ctl_spec = self.device_helper.create_scsi_controller(disk['controller_type'], disk['controller_number'])
                 elif disk['controller_type'] == 'sata':
                     ctl_spec = self.create_sata_controller(disk['controller_number'])
                 elif disk['controller_type'] == 'nvme':
@@ -748,7 +724,7 @@ class PyVmomiHelper(PyVmomi):
             except ValueError:
                 self.module.fail_json(msg="Invalid Disk unit number ID '%s' specified at index [%s]."
                                           % (disk['unit_number'], disk_index))
-            if current_disk['controller_type'] in self.scsi_device_type.keys():
+            if current_disk['controller_type'] in self.device_helper.scsi_device_type.keys():
                 if temp_disk_unit_number not in range(0, 16):
                     self.module.fail_json(msg="Invalid Disk unit number ID specified for disk [%s] at index [%s],"
                                               " please specify value between 0 to 15 only (excluding 7)."
