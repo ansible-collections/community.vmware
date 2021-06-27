@@ -39,7 +39,7 @@
       resize_gb: all
   register: resized_datastore_info
 
-- name: Make sure if change hasn't been occurred(Maybe CI environment hasn’t the free capacity to resize)
+- name: Make sure if change hasn't been occurred(Maybe CI environment hasn't the free capacity to resize)
   assert:
     that:
       - resized_datastore_info.changed is sameas false
