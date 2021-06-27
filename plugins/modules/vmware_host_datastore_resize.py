@@ -108,11 +108,6 @@ resized_datastore_info:
     }
 """
 
-try:
-    from pyVmomi import vim
-except ImportError:
-    pass
-
 import math
 import re
 from ansible.module_utils._text import to_native
