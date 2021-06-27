@@ -71,6 +71,7 @@ class PyVmomiDeviceHelper(object):
         sata_ctl = vim.vm.device.VirtualDeviceSpec()
         sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         sata_ctl.device = vim.vm.device.VirtualAHCIController()
+        sata_ctl.device.deviceInfo = vim.Description()
         sata_ctl.device.busNumber = bus_number
         sata_ctl.device.key = -randint(15000, 19999)
 

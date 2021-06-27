@@ -400,16 +400,6 @@ class PyVmomiHelper(PyVmomi):
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
 
-    def create_sata_controller(self, sata_bus_number):
-        sata_ctl = vim.vm.device.VirtualDeviceSpec()
-        sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        sata_ctl.device = vim.vm.device.VirtualAHCIController()
-        sata_ctl.device.deviceInfo = vim.Description()
-        sata_ctl.device.busNumber = sata_bus_number
-        sata_ctl.device.key = -randint(15000, 19999)
-
-        return sata_ctl
-
     def create_nvme_controller(self, nvme_bus_number):
         nvme_ctl = vim.vm.device.VirtualDeviceSpec()
         nvme_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
@@ -562,7 +552,7 @@ class PyVmomiHelper(PyVmomi):
                 if disk['controller_type'] in self.device_helper.scsi_device_type.keys():
                     ctl_spec = self.device_helper.create_scsi_controller(disk['controller_type'], disk['controller_number'])
                 elif disk['controller_type'] == 'sata':
-                    ctl_spec = self.create_sata_controller(disk['controller_number'])
+                    ctl_spec = self.device_helper.create_sata_controller(disk['controller_number'])
                 elif disk['controller_type'] == 'nvme':
                     ctl_spec = self.create_nvme_controller(disk['controller_number'])
                 new_added_disk_ctl.append({'controller_type': disk['controller_type'], 'controller_number': disk['controller_number']})
