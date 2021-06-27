@@ -247,7 +247,7 @@ class VMwareHostDatastoreResize(PyVmomi):
                     vmfs_datastore_expand_spec.partition = host_disk_partition_info.spec
                     resized_datastore = self.expand_datastore(vmfs_datastore_expand_spec)
                 else:
-                    self.module.fail_json(msg="The specified the value can't expand in existing datastore: %s" % self.expand["resize_gb"])
+                    self.module.fail_json(msg="The specified value can't expand in the existing datastore: %s" % self.expand["resize_gb"])
             else:
                 vmfs_datastore_expand_spec = expand_disk_info["vmfs_datastore_expand_spec"]
                 resized_datastore = self.expand_datastore(vmfs_datastore_expand_spec)
