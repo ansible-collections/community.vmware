@@ -192,10 +192,10 @@ from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.six import text_type
 from ansible_collections.community.vmware.plugins.module_utils.inventory import (
-    BaseVMwareInventory,
     to_nested_dict,
     to_flatten_dict,
 )
+from ansible_collections.community.vmware.plugins.inventory.vmware_vm_inventory import BaseVMwareInventory
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
 
