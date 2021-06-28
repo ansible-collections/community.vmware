@@ -204,7 +204,7 @@ class VMwareHostDatastore(PyVmomi):
         except Exception as e:
             self.module.fail_json(msg=to_native(e))
 
-    def expand_datastore_to_full(self):
+    def expand_datastore_up_to_full(self):
         """
         Expand a datastore capacity up to full if there is free capacity.
         """
@@ -236,7 +236,7 @@ class VMwareHostDatastore(PyVmomi):
         for host_mount_info in host_file_sys_vol_mount_info:
             if host_mount_info.volume.name == self.datastore_name:
                 if self.auto_expand and host_mount_info.volume.type == "VMFS":
-                    self.expand_datastore_to_full()
+                    self.expand_datastore_up_to_full()
                 return 'present'
         return 'absent'
 
