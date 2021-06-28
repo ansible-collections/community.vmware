@@ -206,7 +206,7 @@ class VMwareHostDatastore(PyVmomi):
 
     def expand_datastore_to_full(self):
         """
-        Expand a datastore capacity to full if there is free capacity.
+        Expand a datastore capacity up to full if there is free capacity.
         """
         cnf_mng = self.esxi.configManager
 
