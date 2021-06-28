@@ -140,6 +140,24 @@ DOCUMENTATION = r'''
                 - Also, transforms property name to snake case.
             type: bool
             default: False
+        proxy_host:
+          description:
+          - Address of a proxy that will receive all HTTPS requests and relay them.
+          - The format is a hostname or a IP.
+          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
+          type: str
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_HOST
+        proxy_port:
+          description:
+          - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+          type: int
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_PORT
 '''
 
 EXAMPLES = r'''
@@ -323,8 +341,6 @@ EXAMPLES = r'''
       - 'guest.ipStack'
 '''
 
-import ssl
-import atexit
 import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
@@ -343,7 +359,6 @@ except ImportError:
     HAS_REQUESTS = False
 
 try:
-    from pyVim import connect
     from pyVmomi import vim, vmodl
     from pyVmomi.VmomiSupport import DataObject
     from pyVmomi import Iso8601
@@ -361,10 +376,11 @@ except ImportError:
 
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
+from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 
 
 class BaseVMwareInventory:
-    def __init__(self, hostname, username, password, port, validate_certs, with_tags):
+    def __init__(self, hostname, username, password, port, validate_certs, with_tags, http_proxy_host, http_proxy_port):
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -373,6 +389,8 @@ class BaseVMwareInventory:
         self.validate_certs = validate_certs
         self.content = None
         self.rest_content = None
+        self.proxy_host = http_proxy_host
+        self.proxy_port = http_proxy_port
 
     def do_login(self):
         """
@@ -421,40 +439,10 @@ class BaseVMwareInventory:
         Returns: connection object
 
         """
-        if self.validate_certs and not hasattr(ssl, 'SSLContext'):
-            raise AnsibleError('pyVim does not support changing verification mode with python < 2.7.9. Either update '
-                               'python or set validate_certs to false in configuration YAML file.')
-
-        ssl_context = None
-        if not self.validate_certs and hasattr(ssl, 'SSLContext'):
-            ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-            ssl_context.verify_mode = ssl.CERT_NONE
-
-        service_instance = None
-        try:
-            service_instance = connect.SmartConnect(host=self.hostname, user=self.username,
-                                                    pwd=self.password, sslContext=ssl_context,
-                                                    port=self.port)
-
-        except vim.fault.InvalidLogin as e:
-            raise AnsibleParserError("Unable to log on to vCenter or ESXi API at %s:%s as %s: %s" % (self.hostname, self.port, self.username, e.msg))
-        except vim.fault.NoPermission as e:
-            raise AnsibleParserError("User %s does not have required permission"
-                                     " to log on to vCenter or ESXi API at %s:%s : %s" % (self.username, self.hostname, self.port, e.msg))
-        except (requests.ConnectionError, ssl.SSLError) as e:
-            raise AnsibleParserError("Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (self.hostname, self.port, e))
-        except vmodl.fault.InvalidRequest as e:
-            # Request is malformed
-            raise AnsibleParserError("Failed to get a response from server %s:%s as "
-                                     "request is malformed: %s" % (self.hostname, self.port, e.msg))
-        except Exception as e:
-            raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s : %s" % (self.hostname, self.port, e))
-
-        if service_instance is None:
-            raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s" % (self.hostname, self.port))
-
-        atexit.register(connect.Disconnect, service_instance)
-        return service_instance, service_instance.RetrieveContent()
+        return connect_to_api(module=None, disconnect_atexit=True, return_si=True,
+                              hostname=self.hostname, username=self.username, password=self.password,
+                              port=self.port, validate_certs=self.validate_certs, httpProxyHost=self.proxy_host,
+                              httpProxyPort=self.proxy_port)
 
     def check_requirements(self):
         """ Check all requirements for this inventory are satisfied"""
@@ -738,9 +726,10 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             password=password,
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
-            validate_certs=self.get_option('validate_certs')
+            validate_certs=self.get_option('validate_certs'),
+            http_proxy_host=self.get_option('proxy_host'),
+            http_proxy_port=self.get_option('proxy_port')
         )
-
         self.pyv.do_login()
 
         if cache:
