@@ -219,11 +219,12 @@ class VMwareHostDatastore(PyVmomi):
         # Check that whether the datastore has free capacity to expand.
         vmfs_ds_options = cnf_mng.datastoreSystem.QueryVmfsDatastoreExpandOptions(expand_datastore_obj)
         if vmfs_ds_options:
-            try:
-                cnf_mng.datastoreSystem.ExpandVmfsDatastore(datastore=expand_datastore_obj,
-                                                            spec=vmfs_ds_options[0].spec)
-            except Exception as e:
-                self.module.fail_json(msg="%s can not expand the datastore: %s" % (to_native(e.msg), self.datastore_name))
+            if self.module.check_mode is False:
+                try:
+                    cnf_mng.datastoreSystem.ExpandVmfsDatastore(datastore=expand_datastore_obj,
+                                                                spec=vmfs_ds_options[0].spec)
+                except Exception as e:
+                    self.module.fail_json(msg="%s can not expand the datastore: %s" % (to_native(e.msg), self.datastore_name))
 
             self.module.exit_json(changed=True)
 
