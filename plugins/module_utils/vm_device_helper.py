@@ -39,10 +39,20 @@ class PyVmomiDeviceHelper(object):
         }
 
     def create_scsi_controller(self, scsi_type, bus_number):
+        """
+        Create SCSI Controller with given SCSI Type and SCSI Bus Number
+        Args:
+            scsi_type: Type of SCSI
+            scsi_bus_number: SCSI Bus number to be assigned
+
+        Returns: Virtual device spec for SCSI Controller
+
+        """
         scsi_ctl = vim.vm.device.VirtualDeviceSpec()
         scsi_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         scsi_device = self.scsi_device_type.get(scsi_type, vim.vm.device.ParaVirtualSCSIController)
         scsi_ctl.device = scsi_device()
+        scsi_ctl.device.deviceInfo = vim.Description()
         scsi_ctl.device.busNumber = bus_number
         # While creating a new SCSI controller, temporary key value
         # should be unique negative integers
@@ -61,6 +71,7 @@ class PyVmomiDeviceHelper(object):
         sata_ctl = vim.vm.device.VirtualDeviceSpec()
         sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         sata_ctl.device = vim.vm.device.VirtualAHCIController()
+        sata_ctl.device.deviceInfo = vim.Description()
         sata_ctl.device.busNumber = bus_number
         sata_ctl.device.key = -randint(15000, 19999)
 
