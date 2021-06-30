@@ -37,6 +37,12 @@ class PyVmomiDeviceHelper(object):
             'buslogic': vim.vm.device.VirtualBusLogicController,
             'lsilogicsas': vim.vm.device.VirtualLsiLogicSASController,
         }
+        self.sata_device_type = vim.vm.device.VirtualAHCIController
+        self.nvme_device_type = vim.vm.device.VirtualNVMEController
+        self.usb_device_type = {
+                'usb2': vim.vm.device.VirtualUSBController,
+                'usb3': vim.vm.device.VirtualUSBXHCIController,
+        }
 
     def create_scsi_controller(self, scsi_type, bus_number):
         """
