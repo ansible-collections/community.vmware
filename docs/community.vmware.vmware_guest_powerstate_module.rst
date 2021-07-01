@@ -96,6 +96,24 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
+                </td>
+                <td>
+                        <div>The <em>datacenter</em> where the VM you&#x27;d like to operate the power.</div>
+                        <div>This parameter is case sensitive.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
