@@ -40,16 +40,17 @@ class PyVmomiDeviceHelper(object):
         self.sata_device_type = vim.vm.device.VirtualAHCIController
         self.nvme_device_type = vim.vm.device.VirtualNVMEController
         self.usb_device_type = {
-                'usb2': vim.vm.device.VirtualUSBController,
-                'usb3': vim.vm.device.VirtualUSBXHCIController,
+            'usb2': vim.vm.device.VirtualUSBController,
+            'usb3': vim.vm.device.VirtualUSBXHCIController,
         }
 
-    def create_scsi_controller(self, scsi_type, bus_number):
+    def create_scsi_controller(self, scsi_type, bus_number, bus_sharing='noSharing'):
         """
         Create SCSI Controller with given SCSI Type and SCSI Bus Number
         Args:
             scsi_type: Type of SCSI
             scsi_bus_number: SCSI Bus number to be assigned
+            bus_sharing: noSharing, virtualSharing, physicalSharing
 
         Returns: Virtual device spec for SCSI Controller
 
@@ -64,7 +65,7 @@ class PyVmomiDeviceHelper(object):
         # should be unique negative integers
         scsi_ctl.device.key = -randint(1000, 9999)
         scsi_ctl.device.hotAddRemove = True
-        scsi_ctl.device.sharedBus = 'noSharing'
+        scsi_ctl.device.sharedBus = bus_sharing
         scsi_ctl.device.scsiCtlrUnitNumber = 7
 
         return scsi_ctl
@@ -102,10 +103,10 @@ class PyVmomiDeviceHelper(object):
     def is_nvme_controller(device):
         return isinstance(device, vim.vm.device.VirtualNVMEController)
 
-    def create_disk_controller(self, ctl_type, ctl_number):
+    def create_disk_controller(self, ctl_type, ctl_number, bus_sharing='noSharing'):
         disk_ctl = None
-        if ctl_type in ['buslogic', 'paravirtual', 'lsilogic', 'lsilogicsas']:
-            disk_ctl = self.create_scsi_controller(ctl_type, ctl_number)
+        if ctl_type in self.scsi_device_typekeys():
+            disk_ctl = self.create_scsi_controller(ctl_type, ctl_number, bus_sharing)
         if ctl_type == 'sata':
             disk_ctl = self.create_sata_controller(ctl_number)
         if ctl_type == 'nvme':
