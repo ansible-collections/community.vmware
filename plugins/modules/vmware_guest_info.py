@@ -308,7 +308,7 @@ def main():
                 if not HAS_VSPHERE:
                     module.fail_json(msg="Unable to find 'vCloud Suite SDK' Python library which is required."
                                          " Please refer this URL for installation steps"
-                                         " - https://code.vmware.com/web/sdk/6.5/vsphere-automation-python")
+                                         " - https://code.vmware.com/web/sdk/vsphere-automation-python")
 
                 vm_rest_client = VmwareTag(module)
                 tags = []
