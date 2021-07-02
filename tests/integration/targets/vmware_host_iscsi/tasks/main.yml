@@ -48,7 +48,8 @@
   loop: "{{ gather_facts_host_bus_adapters_result.ansible_facts.config.storageDevice.hostBusAdapter }}"
   when:
     - "'device' in item"
-    - "'isSoftwareBased' in item and item.isSoftwareBased is sameas true"
+# See: https://github.com/ansible-collections/community.vmware/issues/927
+#    - "'isSoftwareBased' in item and item.isSoftwareBased is sameas true"
 
 - name: vmware_host_iscsi module test - connect to vCenter
   include_tasks: iscsi_module_test_tasks.yml
