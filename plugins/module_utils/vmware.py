@@ -51,11 +51,6 @@ class TaskError(Exception):
         super(TaskError, self).__init__(*args, **kwargs)
 
 
-class ApiAccessError(Exception):
-    def __init__(self, *args, **kwargs):
-        super(ApiAccessError, self).__init__(*args, **kwargs)
-
-
 def check_answer_question_status(vm):
     """Check whether locked a virtual machine.
 
@@ -673,47 +668,31 @@ def vmware_argument_spec():
     )
 
 
-def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None,
-                   httpProxyHost=None, httpProxyPort=None):
-    if module:
-        if not hostname:
-            hostname = module.params['hostname']
-        if not username:
-            username = module.params['username']
-        if not password:
-            password = module.params['password']
-        if not httpProxyHost:
-            httpProxyHost = module.params.get('proxy_host')
-        if not httpProxyPort:
-            httpProxyPort = module.params.get('proxy_port')
-        if not port:
-            port = module.params.get('port', 443)
-        if not validate_certs:
-            validate_certs = module.params['validate_certs']
-
-    def _raise_or_fail(msg):
-        if module is not None:
-            module.fail_json(msg=msg)
-        raise ApiAccessError(msg)
+def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None):
+    hostname = hostname if hostname else module.params['hostname']
+    username = username if username else module.params['username']
+    password = password if password else module.params['password']
+    port = port if port else module.params.get('port', 443)
+    validate_certs = validate_certs if validate_certs else module.params['validate_certs']
 
     if not hostname:
-        _raise_or_fail(msg="Hostname parameter is missing."
-                       " Please specify this parameter in task or"
-                       " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
+        module.fail_json(msg="Hostname parameter is missing."
+                             " Please specify this parameter in task or"
+                             " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
 
     if not username:
-        _raise_or_fail(msg="Username parameter is missing."
-                       " Please specify this parameter in task or"
-                       " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
+        module.fail_json(msg="Username parameter is missing."
+                             " Please specify this parameter in task or"
+                             " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
 
     if not password:
-        _raise_or_fail(msg="Password parameter is missing."
-                       " Please specify this parameter in task or"
-                       " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
+        module.fail_json(msg="Password parameter is missing."
+                             " Please specify this parameter in task or"
+                             " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
 
     if validate_certs and not hasattr(ssl, 'SSLContext'):
-        _raise_or_fail(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
-                           'python or use validate_certs=false.')
+        module.fail_json(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
+                             'python or use validate_certs=false.')
     elif validate_certs:
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         ssl_context.verify_mode = ssl.CERT_REQUIRED
@@ -727,6 +706,8 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
         ssl_context = None
 
     service_instance = None
+    proxy_host = module.params.get('proxy_host')
+    proxy_port = module.params.get('proxy_port')
 
     connect_args = dict(
         host=hostname,
@@ -737,9 +718,9 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
 
     msg_suffix = ''
     try:
-        if httpProxyHost:
-            msg_suffix = " [proxy: %s:%d]" % (httpProxyHost, httpProxyPort)
-            connect_args.update(httpProxyHost=httpProxyHost, httpProxyPort=httpProxyPort)
+        if proxy_host:
+            msg_suffix = " [proxy: %s:%d]" % (proxy_host, proxy_port)
+            connect_args.update(httpProxyHost=proxy_host, httpProxyPort=proxy_port)
             smart_stub = connect.SmartStubAdapter(**connect_args)
             session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(username, password))
             service_instance = vim.ServiceInstance('ServiceInstance', session_stub)
@@ -748,23 +729,23 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
             service_instance = connect.SmartConnect(**connect_args)
     except vim.fault.InvalidLogin as invalid_login:
         msg = "Unable to log on to vCenter or ESXi API at %s:%s " % (hostname, port)
-        _raise_or_fail(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
+        module.fail_json(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
     except vim.fault.NoPermission as no_permission:
-        _raise_or_fail(msg="User %s does not have required permission"
-                           " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
+        module.fail_json(msg="User %s does not have required permission"
+                             " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
     except (requests.ConnectionError, ssl.SSLError) as generic_req_exc:
-        _raise_or_fail(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
+        module.fail_json(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
     except vmodl.fault.InvalidRequest as invalid_request:
         # Request is malformed
         msg = "Failed to get a response from server %s:%s " % (hostname, port)
-        _raise_or_fail(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
+        module.fail_json(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
     except Exception as generic_exc:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port) + msg_suffix
-        _raise_or_fail(msg="%s : %s" % (msg, generic_exc))
+        module.fail_json(msg="%s : %s" % (msg, generic_exc))
 
     if service_instance is None:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port)
-        _raise_or_fail(msg=msg + msg_suffix)
+        module.fail_json(msg=msg + msg_suffix)
 
     # Disabling atexit should be used in special cases only.
     # Such as IP change of the ESXi host which removes the connection anyway.
