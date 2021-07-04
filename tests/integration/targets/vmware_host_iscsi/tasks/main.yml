@@ -9,7 +9,8 @@
 
 - name: prepare of integration test for iSCSI - connect to vCenter
   block:
-    - vmware_host_iscsi:
+    - name: Enable iSCSI
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -17,7 +18,8 @@
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
 
-    - vmware_host_iscsi:
+    - name: Disable iSCSI
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -30,7 +32,8 @@
         that:
           - prepare_iscsi_disabled_result.changed is sameas true
 
-    - vmware_host_iscsi:
+    - name: Re-enable iSCSI
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
