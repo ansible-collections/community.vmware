@@ -46,6 +46,19 @@
     that:
       - enable_iscsi_idempotency_check_result.changed is sameas false
 
+- name: Gather iSCSI info
+  community.vmware.vmware_host_iscsi_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+  register: gather_iscsi_info
+
+- name: Set iSCSI hba name to vmhba_name variable
+  set_fact:
+    vmhba_name: "{{ gather_iscsi_info.iscsi_properties.vmhba_name }}"
+
 - name: Set an iqn variable for an iSCSI name changing test
   set_fact:
     iqn: "iqn.1998-01.com.vmware:{{ hostname }}-012345"
