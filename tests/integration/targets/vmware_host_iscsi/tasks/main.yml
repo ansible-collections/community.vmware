@@ -30,6 +30,14 @@
         that:
           - prepare_iscsi_disabled_result.changed is sameas true
 
+    - vmware_host_iscsi:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        state: enabled
+
 - name: Gather iSCSI info
   community.vmware.vmware_host_iscsi_info:
     hostname: "{{ vcenter_hostname }}"
