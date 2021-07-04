@@ -48,9 +48,9 @@
 
 - name: Gather iSCSI info
   community.vmware.vmware_host_iscsi_info:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
   register: gather_iscsi_info
