@@ -17,6 +17,11 @@
         validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
+      register: create_iscsi_device_result
+
+    - name: Set iSCSI hba name to vmhba_name variable
+      set_fact:
+        vmhba_name: "{{ create_iscsi_device_result.iscsi_properties.vmhba_name }}"
 
     - name: Disable iSCSI
       community.vmware.vmware_host_iscsi:
