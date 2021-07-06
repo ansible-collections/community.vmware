@@ -2891,7 +2891,9 @@ class PyVmomiHelper(PyVmomi):
                     is_customization_ok = self.wait_for_customization(vm=vm, timeout=self.params['wait_for_customization_timeout'])
                     if not is_customization_ok:
                         vm_facts = self.gather_facts(vm)
-                        return {'changed': self.change_applied, 'failed': True, 'instance': vm_facts, 'op': 'customization'}
+                        return {'changed': self.change_applied, 'failed': True,
+                                'msg': 'Customization failed. For detailed information see warnings',
+                                'instance': vm_facts, 'op': 'customization'}
 
             vm_facts = self.gather_facts(vm)
             return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
@@ -3046,7 +3048,8 @@ class PyVmomiHelper(PyVmomi):
             is_customization_ok = self.wait_for_customization(vm=self.current_vm_obj, timeout=self.params['wait_for_customization_timeout'])
             if not is_customization_ok:
                 return {'changed': self.change_applied, 'failed': True,
-                        'msg': 'Wait for customization failed due to timeout', 'op': 'wait_for_customize_exist'}
+                        'msg': 'Customization failed. For detailed information see warnings',
+                        'op': 'wait_for_customize_exist'}
 
         return {'changed': self.change_applied, 'failed': False}
 
