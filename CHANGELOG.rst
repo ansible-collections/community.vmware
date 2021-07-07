@@ -5,6 +5,33 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.12.0
+=======
+
+Minor Changes
+-------------
+
+- vmware - add processing to answer if the answer question is occurred in starting the vm (https://github.com/ansible-collections/community.vmware/pull/821).
+- vmware - find_folder_by_fqpn added to support specifying folders by their fully qualified path name, defined as I(datacenter)/I(folder_type)/subfolder1/subfolder2/.
+- vmware - folder field default changed from None to vm.
+- vmware_content_deploy_ovf_template - storage_provisioning default changed from None to thin, in keeping with VMware best practices for flash storage.
+- vmware_dvs_host - implement adding pNICs to LAGs (https://github.com/ansible-collections/community.vmware/issues/112).
+- vmware_guest_instant_clone - added a new option to wait until the vmware tools start (https://github.com/ansible-collections/community.vmware/pull/904).
+- vmware_guest_instant_clone - added a reboot processing to reflect the customization parameters to an instant clone vm (https://github.com/ansible-collections/community.vmware/pull/904).
+- vmware_guest_powerstate - Add an option that answers whether it was copied or moved the vm if the vm is blocked (https://github.com/ansible-collections/community.vmware/pull/821).
+- vmware_host_inventory - support api access via proxy (https://github.com/ansible-collections/community.vmware/pull/817).
+- vmware_object_role_permission_info - added principal to provide list of individual permissions on specified entity (https://github.com/ansible-collections/community.vmware/issues/868).
+- vmware_rest_client - support proxy feature for module using this API (https://github.com/ansible-collections/community.vmware/pull/848).
+- vmware_vm_inventory - support api access via proxy (https://github.com/ansible-collections/community.vmware/pull/817).
+
+Bugfixes
+--------
+
+- vmware_content_deploy_ovf_template - no longer requires host, datastore, resource_pool.
+- vmware_content_deploy_xxx - deploys to recommended datastore in specified datastore_cluster.
+- vmware_content_deploy_xxx - honors folder specified by fully qualified path name.
+- vmware_guest - Use hostname parameter in customization only if value is not None (https://github.com/ansible-collections/community.vmware/issues/655)
+
 v1.11.0
 =======
 
