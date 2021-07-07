@@ -6,6 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
+    setup_switch: true
 
 - name: include tasks pre.yml
   include_tasks: pre.yml
