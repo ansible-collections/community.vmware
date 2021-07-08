@@ -1,14 +1,27 @@
+- name: Get Tags
+  community.vmware.vmware_tag_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  
+- set_fact:
+    tag_category_id: "{{ item.tag_category_id }}"
+  loop: "{{ tag_results.tag_info|community.general.json_query(query) }}"
+  vars:
+    query: "[?tag_name==`{{ tag_one }}`]"
+
 - name: Delete Tags
   vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    tag_name: "{{ item }}"
+    tag_name: "{{ tag_one }}"
+    category_id: "{{ tag_category_id }}"
     state: absent
+  when: tag_category_id is defined
   register: delete_tag
-  with_items:
-    - "{{ tag_one }}"
 
 - name: Delete Categories
   vmware_category:
@@ -16,8 +29,6 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    category_name: "{{ item }}"
+    category_name: "{{ cat_one }}"
     state: absent
   register: delete_categories
-  with_items:
-    - "{{ cat_one }}"
