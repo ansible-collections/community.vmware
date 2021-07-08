@@ -26,7 +26,7 @@ options:
       - This parameter is case sensitive.
     default: ha-datacenter
     type: str
-    version_added: '1.12.0'
+    version_added: '1.13.0'
   state:
     description:
     - Set the state of the virtual machine.
