@@ -1,7 +1,11 @@
 ---
 - name: Install dependencies
   hosts: localhost
-  gather_facts: false
   tasks:
     - pip:
         name: toml
+
+    - name: Install the Python bindings for SELinux
+      yum:
+        name: libselinux-python
+        state: present

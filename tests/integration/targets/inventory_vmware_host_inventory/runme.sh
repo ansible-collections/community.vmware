@@ -35,6 +35,9 @@ trap cleanup INT TERM EXIT
 # Prepare tests
 ansible-playbook playbook/prepare_vmware.yml "$@"
 
+# Install dependencies
+ansible-playbook playbook/install_dependencies.yml "$@"
+
 # Test Cache
 # Cache requires community.general.jsonfile
 # ansible-playbook playbook/build_inventory_with_cache.yml "$@"
