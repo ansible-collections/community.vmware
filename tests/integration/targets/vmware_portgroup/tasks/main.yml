@@ -81,7 +81,7 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
-            switch: 'Switch\/%'
+            switch: 'Switch\%'
             state: present
           register: create_switch_with_special_characters_result
 
@@ -96,8 +96,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             security:
               promiscuous_mode: false
               mac_changes: false
@@ -116,8 +116,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             security:
               promiscuous_mode: false
               mac_changes: false
@@ -136,8 +136,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             state: absent
           register: delete_portgroup_with_special_characters_result
 
@@ -152,8 +152,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             state: absent
           register: delete_portgroup_with_special_characters_idempotency_check_result
 
@@ -168,7 +168,7 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
-            switch: 'Switch\/%'
+            switch: 'Switch\%'
             state: absent
           register: delete_switch_with_special_characters_result
 
