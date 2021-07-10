@@ -1,6 +1,6 @@
 coverage==4.5.4
 flake8
-selinux
+selinux_please_lie_to_me
 mock ; python_version < '3.5'
 pytest-xdist
 # We should avoid these two modules with py3
