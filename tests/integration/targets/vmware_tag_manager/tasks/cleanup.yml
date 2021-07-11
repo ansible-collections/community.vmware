@@ -4,11 +4,10 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    tag_name: "{{ item }}"
+    tag_name: "{{ tag_one }}"
+    category_id: "{{ cat_one_id }}"
     state: absent
   register: delete_tag
-  with_items:
-    - "{{ tag_one }}"
 
 - name: Delete Categories
   vmware_category:
@@ -16,8 +15,6 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    category_name: "{{ item }}"
+    category_name: "{{ cat_one }}"
     state: absent
   register: delete_categories
-  with_items:
-    - "{{ cat_one }}"

@@ -4,145 +4,131 @@
 
 # Testcase for https://github.com/ansible/ansible/issues/65765
 
-  - name: Create first category
-    vmware_category:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      category_name: "{{ cat_one }}"
-      category_cardinality: 'multiple'
-      state: present
-    register: category_one_create
+- name: Create tag with colon in name
+  vmware_tag:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_name: "{{ tag_one }}"
+    category_id: "{{ cat_one_id }}"
+    state: present
+  register: tag_one_create
 
-  - name: Set category one id
-    set_fact: cat_one_id={{ category_one_create['category_results']['category_id'] }}
+- name: Check tag is created
+  assert:
+    that:
+      - tag_one_create.changed
 
-  - name: Create tag with colon in name
-    vmware_tag:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_name: "{{ tag_one }}"
-      category_id: "{{ cat_one_id }}"
-      state: present
-    register: tag_one_create
+- name: Get VM Facts
+  vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  register: vm_info
 
-  - name: Check tag is created
-    assert:
-      that:
-        - tag_one_create.changed
+- set_fact:
+    vm_name: "{{ vm_info['virtual_machines'][0]['guest_name'] }}"
+    vm_moid: "{{ vm_info['virtual_machines'][0]['moid'] }}"
 
-  - name: Get VM Facts
-    vmware_vm_info:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-    register: vm_info
+- name: Assign tag to given virtual machine
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    object_name: "{{ vm_name }}"
+    object_type: VirtualMachine
+    state: add
+  register: vm_tag_info
 
-  - set_fact:
-      vm_name: "{{ vm_info['virtual_machines'][0]['guest_name'] }}"
-      vm_moid: "{{ vm_info['virtual_machines'][0]['moid'] }}"
+- name: Assign tag to rw_datastore
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    object_name: "{{ rw_datastore }}"
+    object_type: Datastore
+    state: add
+  register: datastore_tag_info
 
-  - name: Assign tag to given virtual machine
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      object_name: "{{ vm_name }}"
-      object_type: VirtualMachine
-      state: add
-    register: vm_tag_info
+- name: Check if we assigned correct tags
+  assert:
+    that:
+      - vm_tag_info.changed
+      - datastore_tag_info.changed
 
-  - name: Assign tag to rw_datastore
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      object_name: "{{ rw_datastore }}"
-      object_type: Datastore
-      state: add
-    register: datastore_tag_info
+- name: Remove tag to given virtual machine
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    object_name: "{{ vm_name }}"
+    object_type: VirtualMachine
+    state: remove
+  register: vm_tag_info
 
-  - name: Check if we assigned correct tags
-    assert:
-      that:
-        - vm_tag_info.changed
-        - datastore_tag_info.changed
+- name: Assign tag to given virtual machine using moid
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    moid: "{{ vm_moid }}"
+    object_type: VirtualMachine
+    state: add
+  register: vm_tag_info
 
-  - name: Remove tag to given virtual machine
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      object_name: "{{ vm_name }}"
-      object_type: VirtualMachine
-      state: remove
-    register: vm_tag_info
+- name: Check if we assigned correct tags
+  assert:
+    that:
+      - vm_tag_info.changed
 
-  - name: Assign tag to given virtual machine using moid
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      moid: "{{ vm_moid }}"
-      object_type: VirtualMachine
-      state: add
-    register: vm_tag_info
+- name: Remove tag to datastore
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    object_name: "{{ rw_datastore }}"
+    object_type: Datastore
+    state: remove
+  register: datastore_tag_info
 
-  - name: Check if we assigned correct tags
-    assert:
-      that:
-        - vm_tag_info.changed
+- name: Remove tag to given virtual machine
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - category: "{{ cat_one }}"
+        tag: "{{ tag_one }}"
+    object_name: "{{ vm_name }}"
+    object_type: VirtualMachine
+    state: remove
+  register: vm_tag_info
 
-  - name: Remove tag to datastore
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      object_name: "{{ rw_datastore }}"
-      object_type: Datastore
-      state: remove
-    register: datastore_tag_info
-
-  - name: Remove tag to given virtual machine
-    vmware_tag_manager:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      tag_names:
-        - category: "{{ cat_one }}"
-          tag: "{{ tag_one }}"
-      object_name: "{{ vm_name }}"
-      object_type: VirtualMachine
-      state: remove
-    register: vm_tag_info
-
-  - name: Check if we removed correct tag
-    assert:
-      that:
-        - vm_tag_info.changed
-        - datastore_tag_info.changed
+- name: Check if we removed correct tag
+  assert:
+    that:
+      - vm_tag_info.changed
+      - datastore_tag_info.changed
