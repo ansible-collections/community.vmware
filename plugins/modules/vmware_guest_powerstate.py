@@ -20,6 +20,13 @@ requirements:
 - python >= 2.6
 - PyVmomi
 options:
+  datacenter:
+    description:
+      - The I(datacenter) where the VM you'd like to operate the power.
+      - This parameter is case sensitive.
+    default: ha-datacenter
+    type: str
+    version_added: '1.13.0'
   state:
     description:
     - Set the state of the virtual machine.
@@ -220,6 +227,7 @@ from ansible.module_utils._text import to_native
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
+        datacenter=dict(type='str', default='ha-datacenter'),
         state=dict(type='str', default='present',
                    choices=['present', 'powered-off', 'powered-on', 'reboot-guest', 'restarted', 'shutdown-guest', 'suspended']),
         name=dict(type='str'),
