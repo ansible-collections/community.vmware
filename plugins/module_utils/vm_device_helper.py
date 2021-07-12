@@ -105,7 +105,7 @@ class PyVmomiDeviceHelper(object):
 
     def create_disk_controller(self, ctl_type, ctl_number, bus_sharing='noSharing'):
         disk_ctl = None
-        if ctl_type in self.scsi_device_typekeys():
+        if ctl_type in self.scsi_device_type.keys():
             disk_ctl = self.create_scsi_controller(ctl_type, ctl_number, bus_sharing)
         if ctl_type == 'sata':
             disk_ctl = self.create_sata_controller(ctl_number)
