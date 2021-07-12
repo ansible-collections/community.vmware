@@ -17,6 +17,11 @@
   command: "systemd-run --unit=ansible-vmware-govcsim --remain-after-exit /usr/local/bin/vcsim -l 127.0.0.1:443 -app=0 -cluster=1 -dc=1 -ds=2 -folder=1 -host=3 -pg=1 -pod=1 -pool=1 -vm=2"
   become: true
 
+- name: Wait a bit for govcsim
+  wait_for:
+    host: 127.0.0.1
+    port: 443
+
 - set_fact:
     vcenter_hostname: "localhost"
     vcenter_port: 443
