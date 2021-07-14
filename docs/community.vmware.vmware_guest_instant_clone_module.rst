@@ -105,7 +105,6 @@ Parameters
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Provides GuestOS Customization functionality in instant cloned VM.</div>
