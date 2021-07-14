@@ -71,6 +71,14 @@ options:
     - Required when used with a vcenter
     type: str
     required: false
+  auto_expand:
+    description:
+    - Expand a datastore capacity to full if it has free capacity.
+    - This parameter can't be extend using another datastore.
+    - A use case example in I(auto_expand), it can be used to expand a datastore capacity after increasing LUN volume.
+    type: bool
+    default: True
+    version_added: '1.13.0'
   state:
     description:
     - "present: Mount datastore on host if datastore is absent else do nothing."
@@ -166,6 +174,7 @@ class VMwareHostDatastore(PyVmomi):
         self.vmfs_device_name = module.params['vmfs_device_name']
         self.vmfs_version = module.params['vmfs_version']
         self.esxi_hostname = module.params['esxi_hostname']
+        self.auto_expand = module.params['auto_expand']
         self.state = module.params['state']
 
         if self.is_vcenter():
@@ -195,6 +204,30 @@ class VMwareHostDatastore(PyVmomi):
         except Exception as e:
             self.module.fail_json(msg=to_native(e))
 
+    def expand_datastore_up_to_full(self):
+        """
+        Expand a datastore capacity up to full if there is free capacity.
+        """
+        cnf_mng = self.esxi.configManager
+
+        # Find attached datastore at host.
+        for datastore_obj in self.esxi.datastore:
+            if datastore_obj.name == self.datastore_name:
+                expand_datastore_obj = datastore_obj
+                break
+
+        # Check that whether the datastore has free capacity to expand.
+        vmfs_ds_options = cnf_mng.datastoreSystem.QueryVmfsDatastoreExpandOptions(expand_datastore_obj)
+        if vmfs_ds_options:
+            if self.module.check_mode is False:
+                try:
+                    cnf_mng.datastoreSystem.ExpandVmfsDatastore(datastore=expand_datastore_obj,
+                                                                spec=vmfs_ds_options[0].spec)
+                except Exception as e:
+                    self.module.fail_json(msg="%s can not expand the datastore: %s" % (to_native(e.msg), self.datastore_name))
+
+            self.module.exit_json(changed=True)
+
     def state_exit_unchanged(self):
         self.module.exit_json(changed=False)
 
@@ -203,6 +236,8 @@ class VMwareHostDatastore(PyVmomi):
         host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo
         for host_mount_info in host_file_sys_vol_mount_info:
             if host_mount_info.volume.name == self.datastore_name:
+                if self.auto_expand and host_mount_info.volume.type == "VMFS":
+                    self.expand_datastore_up_to_full()
                 return 'present'
         return 'absent'
 
@@ -304,6 +339,7 @@ def main():
         vmfs_device_name=dict(type='str'),
         vmfs_version=dict(type='int'),
         esxi_hostname=dict(type='str', required=False),
+        auto_expand=dict(type='bool', default=True),
         state=dict(type='str', default='present', choices=['absent', 'present'])
     )
 
