@@ -260,10 +260,9 @@ class PyVmomiHelper(PyVmomi):
         super(PyVmomiHelper, self).__init__(module)
         self.device_helper = PyVmomiDeviceHelper(self.module)
         self.sleep_time = 10
-        self.controller_types = dict(self.device_helper.scsi_device_type,
-                                     self.device_helper.usb_device_type,
-                                     sata=self.device_helper.sata_device_type,
-                                     nvme=self.device_helper.nvme_device_type)
+        self.controller_types = self.device_helper.scsi_device_type.copy()
+        self.controller_types.update(self.device_helper.usb_device_type)
+        self.controller_types.update({'sata': self.device_helper.sata_device_type, 'nvme': self.device_helper.nvme_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
         self.change_detected = False
