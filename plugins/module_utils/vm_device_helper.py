@@ -313,3 +313,60 @@ class PyVmomiDeviceHelper(object):
         else:
             self.module.fail_json(msg='"%s" attribute should be an'
                                   ' integer value.' % name)
+
+    def create_nvdimm_controller(self):
+        nvdimm_ctl = vim.vm.device.VirtualDeviceSpec()
+        nvdimm_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+        nvdimm_ctl.device = vim.vm.device.VirtualNVDIMMController()
+        nvdimm_ctl.device.deviceInfo = vim.Description()
+        nvdimm_ctl.device.key = -randint(27000, 27999)
+
+        return nvdimm_ctl
+
+    @staticmethod
+    def is_nvdimm_controller(device):
+        return isinstance(device, vim.vm.device.VirtualNVDIMMController)
+
+    def create_nvdimm_device(self, nvdimm_ctl_dev_key, pmem_profile_id, nvdimm_dev_size_mb=1024):
+        nvdimm_dev_spec = vim.vm.device.VirtualDeviceSpec()
+        nvdimm_dev_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+        nvdimm_dev_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+        nvdimm_dev_spec.device = vim.vm.device.VirtualNVDIMM()
+        nvdimm_dev_spec.device.controllerKey = nvdimm_ctl_dev_key
+        nvdimm_dev_spec.device.key = -randint(28000, 28999)
+        nvdimm_dev_spec.device.capacityInMB = nvdimm_dev_size_mb
+        nvdimm_dev_spec.device.deviceInfo = vim.Description()
+        nvdimm_dev_spec.device.backing = vim.vm.device.VirtualNVDIMM.BackingInfo()
+        profile = vim.vm.DefinedProfileSpec()
+        profile.profileId = pmem_profile_id
+        nvdimm_dev_spec.profile = [profile]
+
+        return nvdimm_dev_spec
+
+    @staticmethod
+    def is_nvdimm_device(device):
+        return isinstance(device, vim.vm.device.VirtualNVDIMM)
+
+    def find_nvdimm_by_label(self, nvdimm_label, nvdimm_devices):
+        nvdimm_dev = None
+        for nvdimm in nvdimm_devices:
+            if nvdimm.deviceInfo.label == nvdimm_label:
+                nvdimm_dev = nvdimm
+
+        return nvdimm_dev
+
+    def remove_nvdimm(self, nvdimm_device):
+        nvdimm_spec = vim.vm.device.VirtualDeviceSpec()
+        nvdimm_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
+        nvdimm_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.destroy
+        nvdimm_spec.device = nvdimm_device
+
+        return nvdimm_spec
+
+    def update_nvdimm_config(self, nvdimm_device, nvdimm_size):
+        nvdimm_spec = vim.vm.device.VirtualDeviceSpec()
+        nvdimm_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+        nvdimm_spec.device = nvdimm_device
+        nvdimm_device.capacityInMB = nvdimm_size
+
+        return nvdimm_spec
