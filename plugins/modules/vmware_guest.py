@@ -1054,7 +1054,6 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_dvspg_by_name,
     wait_for_vm_ip,
     quote_obj_name,
-    find_datastore_by_type,
 )
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
