@@ -67,16 +67,6 @@
   - isolated_vSwitch
   - vSwitch0
 
-- name: Remove any potential existing "VM Network" on vSwitch0
-  vmware_portgroup:
-    esxi_hostname: '{{ item }}'
-    switch: vSwitch0
-    portgroup: VM Network
-    validate_certs: false
-    state: absent
-  ignore_errors: true
-  with_items: "{{ esxi_hosts }}"
-
 - name: Remove the vSwitches
   vmware_vswitch:
     hostname: '{{ item }}'
