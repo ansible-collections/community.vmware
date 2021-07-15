@@ -39,10 +39,7 @@ try:
 except ImportError:
     HAS_VSPHERE = False
 
-try:
-    from ansible.errors import AnsibleError, AnsibleParserError
-except ImportError:
-    pass
+from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.module_utils._text import to_text, to_native
 
