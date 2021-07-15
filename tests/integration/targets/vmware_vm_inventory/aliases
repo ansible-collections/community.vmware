@@ -1,2 +1,2 @@
 cloud/vcenter
-zuul/vmware/vcenter_1esxi
+zuul/vmware/vcenter_1esxi_with_nested
