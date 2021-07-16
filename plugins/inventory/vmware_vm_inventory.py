@@ -341,7 +341,6 @@ EXAMPLES = r'''
       - 'guest.ipStack'
 '''
 
-import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
@@ -364,8 +363,6 @@ except ImportError:
 
 try:
     from pyVmomi import vim, vmodl
-    from pyVmomi.VmomiSupport import DataObject
-    from pyVmomi import Iso8601
     HAS_PYVMOMI = True
 except ImportError:
     HAS_PYVMOMI = False
