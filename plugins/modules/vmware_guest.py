@@ -329,7 +329,6 @@ options:
              description:
              - Valid value is C(present) or C(absent).
              - If set to C(absent), then the NVDIMM device with specified C(label) will be removed.
-             required: true
              choices: ['present', 'absent']
         size_mb:
             type: int
@@ -3279,7 +3278,7 @@ def main():
             type='dict',
             default={},
             options=dict(
-                state=dict(type='str', choices=['present', 'absent'], required=True),
+                state=dict(type='str', choices=['present', 'absent']),
                 label=dict(type='str'),
                 size_mb=dict(type='int', default=1024),
             )
