@@ -396,7 +396,7 @@ class PyVmomiHelper(PyVmomi):
         self.desired_disks = self.params['disk']  # Match with vmware_guest parameter
         self.vm = None
         self.ctl_device_type = self.device_helper.scsi_device_type.copy()
-        self.ctl_device_type.update({'sata': vim.vm.device.VirtualAHCIController, 'nvme': vim.vm.device.VirtualNVMEController})
+        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type, 'nvme': self.device_helper.nvme_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
 
