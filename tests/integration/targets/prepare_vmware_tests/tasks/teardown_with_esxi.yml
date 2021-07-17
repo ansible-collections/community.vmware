@@ -87,6 +87,28 @@
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
 
+- include_tasks: move_host_out_of_cluster.yml
+
+- name: Umount NFS datastores from ESXi (1/2)
+  vmware_host_datastore:
+      hostname: '{{ item }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      datastore_name: '{{ ro_datastore }}'
+      state: absent
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
+
+- name: Umount NFS datastores from ESXi (2/2)
+  vmware_host_datastore:
+      hostname: '{{ item }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      datastore_name: '{{ rw_datastore }}'
+      state: absent
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
+
 - name: Remove ESXi Hosts from vCenter
   vmware_host:
     datacenter_name: '{{ dc1 }}'
@@ -97,21 +119,3 @@
     state: absent
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
-
-- name: Umount NFS datastores from ESXi (1/2)
-  vmware_host_datastore:
-      hostname: '{{ item }}'
-      username: '{{ esxi_user }}'
-      password: '{{ esxi_password }}'
-      datastore_name: '{{ ro_datastore }}'
-      state: absent
-  with_items: "{{ esxi_hosts }}"
-
-- name: Umount NFS datastores from ESXi (2/2)
-  vmware_host_datastore:
-      hostname: '{{ item }}'
-      username: '{{ esxi_user }}'
-      password: '{{ esxi_password }}'
-      datastore_name: '{{ rw_datastore }}'
-      state: absent
-  with_items: "{{ esxi_hosts }}"
