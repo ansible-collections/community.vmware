@@ -8,6 +8,7 @@
     esxi_hostname: "{{ item }}"
     state: present
   with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
 
 - name: Move ESXi out of Cluster
   vmware_host:
@@ -20,6 +21,7 @@
     esxi_hostname: "{{ item }}"
     state: reconnect
   with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
 
 - name: Exit maintenance mode
   vmware_maintenancemode:
@@ -30,3 +32,4 @@
     esxi_hostname: "{{ item }}"
     state: absent
   with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
