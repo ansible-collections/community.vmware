@@ -7,7 +7,6 @@
   vars:
     setup_attach_host: true
     setup_resource_pool: true
-    move_host_out_of_cluster: true
 
 - name: set the vmware_resource_pool module default values
   module_defaults:
