@@ -341,13 +341,16 @@ EXAMPLES = r'''
       - 'guest.ipStack'
 '''
 
-import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
 from ansible.module_utils.six import text_type
+from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
+    to_nested_dict,
+    to_flatten_dict,
+)
 
 display = Display()
 
@@ -360,8 +363,6 @@ except ImportError:
 
 try:
     from pyVmomi import vim, vmodl
-    from pyVmomi.VmomiSupport import DataObject
-    from pyVmomi import Iso8601
     HAS_PYVMOMI = True
 except ImportError:
     HAS_PYVMOMI = False
@@ -588,96 +589,6 @@ class BaseVMwareInventory:
         except Exception as err:  # pylint: disable=broad-except
             _handle_error("Couldn't retrieve contents from host: %s" % to_native(err))
         return []
-
-
-def in_place_merge(a, b):
-    """
-        Recursively merges second dict into the first.
-
-    """
-    if not isinstance(b, dict):
-        return b
-    for k, v in b.items():
-        if k in a and isinstance(a[k], dict):
-            a[k] = in_place_merge(a[k], v)
-        else:
-            a[k] = v
-    return a
-
-
-def to_nested_dict(vm_properties):
-    """
-    Parse properties from dot notation to dict
-
-    """
-
-    host_properties = {}
-
-    for vm_prop_name, vm_prop_val in vm_properties.items():
-        prop_parents = reversed(vm_prop_name.split("."))
-        prop_dict = parse_vim_property(vm_prop_val)
-
-        for k in prop_parents:
-            prop_dict = {k: prop_dict}
-        host_properties = in_place_merge(host_properties, prop_dict)
-
-    return host_properties
-
-
-def to_flatten_dict(d, parent_key='', sep='.'):
-    """
-    Parse properties dict to dot notation
-
-    """
-    items = []
-    for k, v in d.items():
-        new_key = parent_key + sep + k if parent_key else k
-        if v and isinstance(v, dict):
-            items.extend(to_flatten_dict(v, new_key, sep=sep).items())
-        else:
-            items.append((new_key, v))
-    return dict(items)
-
-
-def parse_vim_property(vim_prop):
-    """
-    Helper method to parse VIM properties of virtual machine
-    """
-    prop_type = type(vim_prop).__name__
-    if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
-        if isinstance(vim_prop, DataObject):
-            r = {}
-            for prop in vim_prop._GetPropertyList():  # pylint: disable=protected-access
-                if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
-                    sub_prop = getattr(vim_prop, prop.name)
-                    r[prop.name] = parse_vim_property(sub_prop)
-            return r
-
-        elif isinstance(vim_prop, list):
-            r = []
-            for prop in vim_prop:
-                r.append(parse_vim_property(prop))
-            return r
-        return vim_prop.__str__()
-
-    elif prop_type == "datetime":
-        return Iso8601.ISO8601Format(vim_prop)
-
-    elif prop_type == "long":
-        return int(vim_prop)
-    elif prop_type == "long[]":
-        return [int(x) for x in vim_prop]
-
-    elif isinstance(vim_prop, list):
-        return [parse_vim_property(x) for x in vim_prop]
-
-    elif prop_type in ['bool', 'int', 'NoneType', 'dict']:
-        return vim_prop
-
-    elif prop_type in ['binary']:
-        return to_text(base64.b64encode(vim_prop))
-
-    return to_text(vim_prop)
 
 
 class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
