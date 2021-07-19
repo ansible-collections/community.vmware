@@ -19,7 +19,7 @@
       scsi: paravirtual
     cdrom:
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
     networks:
     - name: VM Network
 

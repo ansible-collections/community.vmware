@@ -43,7 +43,7 @@
     datacenter: "{{ dc1 }}"
     cdrom:
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
     state: present
   register: cdrom_vm
 
@@ -137,7 +137,7 @@
       datastore: "{{ rw_datastore }}"
     cdrom:
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
   register: cdrom_vm
 
 - debug: var=cdrom_vm

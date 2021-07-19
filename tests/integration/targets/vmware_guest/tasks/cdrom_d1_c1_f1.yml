@@ -63,7 +63,7 @@
       controller_number: 0
       unit_number: 1
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
     - controller_type: ide
       controller_number: 1
       unit_number: 0
@@ -155,7 +155,7 @@
       controller_number: 3
       unit_number: 1
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
     state: present
   register: cdrom_vm
 
@@ -231,7 +231,7 @@
       controller_number: 0
       unit_number: 0
       type: iso
-      iso_path: "[{{ ro_datastore }}] fedora.iso"
+      iso_path: "[{{ ro_datastore }}] freebsd13.iso"
     - controller_type: ide
       controller_number: 1
       unit_number: 0
