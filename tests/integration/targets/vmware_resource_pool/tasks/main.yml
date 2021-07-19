@@ -8,6 +8,7 @@
     setup_attach_host: true
     setup_resource_pool: true
 
+# Tests on cluster
 - name: set the vmware_resource_pool module default values
   module_defaults:
     vmware_resource_pool:
@@ -216,6 +217,7 @@
           - resource_result_014.changed is sameas false
           - resource_result_014.resource_pool_config is defined
 
+# Tests on ESXi host
 - name: set the vmware_resource_pool module default values without cluster parameter
   module_defaults:
     vmware_resource_pool:
@@ -227,6 +229,36 @@
       esxi_hostname: "{{ esxi2 }}"
 
   block:
+    # Remove ESXi host from cluster for tests
+    - name: Enter maintenance mode
+      vmware_maintenancemode:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi2 }}"
+        state: present
+
+    - name: Move ESXi out of Cluster
+      vmware_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: "{{ dc1 }}/host"
+        esxi_hostname: "{{ esxi2 }}"
+        state: reconnect
+
+    - name: Exit maintenance mode
+      vmware_maintenancemode:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi2 }}"
+        state: absent
+
     - name: add resource pool to ESXi with check_mode
       vmware_resource_pool:
         resource_pool: test_resource_015
