@@ -11,8 +11,7 @@
 - name: include tasks pre.yml
   include_tasks: pre.yml
 
-- name: include tasks vmware_host_tcpip_stacks_tests.yml
-  include_tasks: vmware_host_tcpip_stacks_tests.yml
-
-- name: include tasks destroy.
-  include_tasks: destroy.yml
+- block:
+  - include_tasks: vmware_host_tcpip_stacks_tests.yml
+  always:
+  - include_tasks: destroy.yml
