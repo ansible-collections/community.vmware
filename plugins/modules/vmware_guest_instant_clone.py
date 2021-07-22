@@ -129,7 +129,6 @@ options:
           - domain is used to set A fully qualified domain name (FQDN) or complete domain name for Instant Cloned Guest operating System.
         type: str
     version_added: '1.11.0'
-    default: []
     type: list
     elements: dict
   wait_vm_tools:
@@ -543,7 +542,6 @@ def main():
         wait_vm_tools_timeout=dict(type='int', default=300),
         guestinfo_vars=dict(
             type='list',
-            default=[],
             elements='dict',
             options=dict(
                 ipaddress=dict(type='str'),
