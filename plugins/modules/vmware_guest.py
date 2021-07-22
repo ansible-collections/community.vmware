@@ -1633,8 +1633,7 @@ class PyVmomiHelper(PyVmomi):
         Args:
             vm_obj: virtual machine object
         """
-        # self.module.fail_json(msg="%s" % self.params['nvdimm'])
-        if self.params['nvdimm']:
+        if self.params['nvdimm']['state']:
             if self.params['nvdimm']['state'] == 'absent' and not self.params['nvdimm']['label']:
                 self.module.fail_json(msg="Please specify the label of virtual NVDIMM device using 'label' parameter"
                                           " when state is set to 'absent'.")
