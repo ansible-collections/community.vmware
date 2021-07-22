@@ -6,6 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
+    setup_switch: true
 
 - name: "Prepare integration tests for vmware_vmkernel_ip_config module"
   block:
@@ -37,24 +38,6 @@
         validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
       register: gather_vswitch_info_result
-
-    - name: "Create a new vSwitch block"
-      when:
-        - "not '{{ switch1 }}' in gather_vswitch_info_result.hosts_vswitch_info[esxi1]"
-      block:
-        - name: "Create a new vSwitch"
-          vmware_vswitch:
-            hostname: "{{ esxi1 }}"
-            username: "{{ esxi_user }}"
-            password: "{{ esxi_password }}"
-            validate_certs: false
-            esxi_hostname: "{{ esxi1 }}"
-            switch: "{{ switch1 }}"
-          register: create_new_vswitch_result
-
-        - assert:
-            that:
-              - create_new_vswitch_result.changed is sameas true
 
     - name: "Create a new port group of vSwitch"
       vmware_portgroup:
