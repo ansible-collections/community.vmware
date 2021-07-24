@@ -349,21 +349,11 @@ def main():
         required_together=[
             ['nfs_server', 'nfs_path']
         ],
+        required_if=[
+            ['state', 'present', ['datastore_type']],
+            ['datastore_type', 'vmfs', ['vmfs_device_name']]
+        ]
     )
-
-    # more complex required_if
-    if module.params['state'] == 'present':
-        if module.params['datastore_type'] == 'nfs' and not module.params['nfs_server']:
-            msg = "Missing nfs_server with datastore_type = nfs"
-            module.fail_json(msg=msg)
-
-        if module.params['datastore_type'] == 'nfs41' and not module.params['nfs_server']:
-            msg = "Missing nfs_server with datastore_type = nfs41"
-            module.fail_json(msg=msg)
-
-        if module.params['datastore_type'] == 'vmfs' and not module.params['vmfs_device_name']:
-            msg = "Missing vmfs_device_name with datastore_type = vmfs"
-            module.fail_json(msg=msg)
 
     vmware_host_datastore = VMwareHostDatastore(module)
     vmware_host_datastore.process_state()
