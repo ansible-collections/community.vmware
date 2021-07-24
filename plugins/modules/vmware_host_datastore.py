@@ -346,12 +346,11 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_together=[
-            ['nfs_server', 'nfs_path']
-        ],
         required_if=[
             ['state', 'present', ['datastore_type']],
-            ['datastore_type', 'vmfs', ['vmfs_device_name']]
+            ['datastore_type', 'vmfs', ['vmfs_device_name']],
+            ['datastore_type', 'nfs', ['nfs_server', 'nfs_path']],
+            ['datastore_type', 'nfs41', ['nfs_server', 'nfs_path']],
         ]
     )
 
