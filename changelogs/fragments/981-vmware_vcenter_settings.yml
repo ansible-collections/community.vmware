@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vcenter_settings - fixed an issue that the value converts to integer when it is bool (https://github.com/ansible-collections/community.vmware/pull/981).
