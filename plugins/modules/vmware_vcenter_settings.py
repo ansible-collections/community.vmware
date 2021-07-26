@@ -516,7 +516,7 @@ class VmwareVcenterSettings(PyVmomi):
         result['diff'] = {}
 
         advanced_settings = self.params['advanced_settings']
-        changed_advanced_settings = option_diff(advanced_settings, self.option_manager.setting, False)
+        changed_advanced_settings = option_diff(advanced_settings, self.option_manager.setting)
 
         if changed_advanced_settings:
             changed = True
