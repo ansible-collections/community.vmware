@@ -592,7 +592,8 @@ def deserialize_snapshot_obj(obj):
             'name': obj.name,
             'description': obj.description,
             'creation_time': obj.createTime,
-            'state': obj.state}
+            'state': obj.state,
+            'quiesced': obj.quiesced}
 
 
 def list_snapshots_recursively(snapshots):
