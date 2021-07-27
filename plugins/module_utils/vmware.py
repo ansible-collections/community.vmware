@@ -1048,11 +1048,11 @@ def option_diff(options, current_options, truthy_strings_as_bool=True):
     for option_key, option_value in options.items():
         if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
-        elif isinstance(option_value, int):
+        elif type(option_value) is int:
             option_value = VmomiSupport.vmodlTypes['int'](option_value)
-        elif isinstance(option_value, float):
+        elif type(option_value) is float:
             option_value = VmomiSupport.vmodlTypes['float'](option_value)
-        elif isinstance(option_value, str):
+        elif type(option_value) is str:
             option_value = VmomiSupport.vmodlTypes['string'](option_value)
 
         if option_key not in current_options_dict or current_options_dict[option_key] != option_value:
