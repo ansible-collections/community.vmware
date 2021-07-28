@@ -1,0 +1,3 @@
+---
+bugfixes:
+- vmware_vm_inventory - remove erroneous ``ansible_host`` condition (https://github.com/ansible-collections/community.vmware/issues/975).
