@@ -150,7 +150,7 @@ options:
            - Force the creation of the file specified in C(filename) if it does not exist.
          type: bool
          default: False
-         version_added: 1.12.0
+         version_added: 1.13.0
        state:
          description:
            - State of disk.
