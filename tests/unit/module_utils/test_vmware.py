@@ -13,6 +13,7 @@ import pytest
 pyvmomi = pytest.importorskip('pyVmomi')
 
 from ansible_collections.community.vmware.tests.unit.compat import mock
+from ansible_collections.community.vmware.plugins.module_utils.vmware import option_diff
 
 import ansible_collections.community.vmware.plugins.module_utils.vmware as vmware_module_utils
 
@@ -227,3 +228,12 @@ def test_connect_to_api_validate_certs(monkeypatch, fake_ansible_module):
         port=443,
         pwd='Esxi@123$%',
         user='Administrator@vsphere.local')
+
+@pytest.mark.parametrize("test_options, test_current_options", [
+    ({"data": True}, []),
+    ({"data": 1}, []),
+    ({"data": 1.2}, []),
+    ({"data": 'string'}, []),
+])
+def test_option_diff(test_options, test_current_options):
+    assert option_diff(test_options, test_current_options)[0].value == test_options["data"]
