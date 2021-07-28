@@ -110,7 +110,7 @@
 
     - assert:
         that:
-          - delete_portgroup_with_traffic_shaping_result.changed
+          - disable_traffic_shaping_result.changed
 
     - name: Integration test a PortGroup name with special characters
       block:
