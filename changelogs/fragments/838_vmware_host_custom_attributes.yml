@@ -1,2 +1,0 @@
-minor_changes:
-- vmware_host_custom_attributes - new module (https://github.com/ansible-collections/community.vmware/pull/838).

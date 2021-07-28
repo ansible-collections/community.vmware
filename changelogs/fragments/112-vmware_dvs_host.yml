@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_dvs_host - implement adding pNICs to LAGs (https://github.com/ansible-collections/community.vmware/issues/112).
- 
