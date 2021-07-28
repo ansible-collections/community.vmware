@@ -229,6 +229,7 @@ def test_connect_to_api_validate_certs(monkeypatch, fake_ansible_module):
         pwd='Esxi@123$%',
         user='Administrator@vsphere.local')
 
+
 @pytest.mark.parametrize("test_options, test_current_options, test_truthy_strings_as_bool", [
     ({"data": True}, [], True),
     ({"data": 1}, [], True),
