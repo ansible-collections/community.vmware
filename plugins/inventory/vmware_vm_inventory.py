@@ -762,11 +762,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_properties = to_nested_dict(properties)
 
+            # Check if we can add host as per filters
+            host_filters = self.get_option('filters')
+            if not self._can_add_host(host_filters, host_properties, strict=strict):
+                continue
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
-            host_filters = self.get_option('filters')
-
-            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
+            if host not in hostvars:
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
@@ -795,7 +798,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             )
         )
 
-    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+    def _can_add_host(self, host_filters, host_properties, strict=False):
         can_add_host = True
         for host_filter in host_filters:
             try:
@@ -823,6 +826,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if not compose.get('ansible_host', None):
             raise AnsibleError('"ansible_host" not found in "compose". '
                                'Without this inventory will be useless.')
+
         self._set_composite_vars(compose, host_properties, host, strict=strict)
         # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
         self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)

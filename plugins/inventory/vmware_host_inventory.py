@@ -391,13 +391,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_properties = to_nested_dict(properties)
 
+            # Check if we can add host as per filters
+            host_filters = self.get_option("filters")
+            if not self._can_add_host(host_filters, host_properties, strict=strict):
+                continue
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
-            host_filters = self.get_option("filters")
-
-            if host not in hostvars and self._can_add_host(
-                host_filters, host_properties, strict=strict
-            ):
+            if host not in hostvars:
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
                 self.inventory.set_variable(
