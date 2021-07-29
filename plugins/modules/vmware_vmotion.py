@@ -377,7 +377,7 @@ def main():
             destination_resourcepool=dict(aliases=['resource_pool']),
             destination_datastore=dict(aliases=['datastore']),
             destination_datacenter=dict(type='str'),
-            destination_disk_type=dict(aliases=['disk_type'])
+            destination_disk_type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick'], aliases=['disk_type'])
         )
     )
 
