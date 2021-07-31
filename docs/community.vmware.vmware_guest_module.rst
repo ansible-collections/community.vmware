@@ -27,7 +27,7 @@ The below requirements are needed on the host that executes this module.
 
 - python >= 2.6
 - PyVmomi
-
+- You will also need a paid version of ESXi Essentials or a licensed version VMware VCenter. The free version of ESXi is NOT supported.
 
 Parameters
 ----------
