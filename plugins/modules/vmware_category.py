@@ -244,7 +244,7 @@ class VmwareCategory(VmwareRestClient):
                         # If it will not be flatten, an error occurs in the set processing.
                         obj_types_set = []
                         for category in list(associable_data.values()):
-                            if type(category) == list:
+                            if isinstance(category, list):
                                 for tmp_category in category:
                                     obj_types_set.append(tmp_category)
                             else:
