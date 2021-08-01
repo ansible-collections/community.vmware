@@ -241,7 +241,7 @@ class VmwareCategory(VmwareRestClient):
                         break
                     else:
                         # obj_types_set should be required to be flatten.
-                        # If it will not be flatten, an error occurs in the set processing.
+                        # If it will not flatten, an error occurs in the set processing.
                         obj_types_set = []
                         for category in list(associable_data.values()):
                             if isinstance(category, list):
