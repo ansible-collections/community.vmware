@@ -53,7 +53,7 @@ def vca_argument_spec():
         instance_id=dict(),
         host=dict(),
         api_version=dict(default=DEFAULT_VERSION),
-        service_type=dict(default=DEFAULT_SERVICE_TYPE, choices=SERVICE_MAP.keys()),
+        service_type=dict(default=DEFAULT_SERVICE_TYPE, choices=list(SERVICE_MAP.keys())),
         vdc_name=dict(),
         gateway_name=dict(default='gateway'),
         validate_certs=dict(type='bool', default=True, aliases=['verify_certs'])
