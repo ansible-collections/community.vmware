@@ -54,6 +54,6 @@ class SPBM(PyVmomi):
                 if profile.name == profile_name:
                     storage_profile = profile
         else:
-            self.module.warn("Not get storage profile IDs with STORAGE resource type and REQUIREMENT profile category.")
+            self.module.warn("Unable to get storage profile IDs with STORAGE resource type and REQUIREMENT profile category.")
 
         return storage_profile
