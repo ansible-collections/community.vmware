@@ -1,4 +1,4 @@
 minor_changes:
   - vmware_guest - Add new parameter 'nvdimm' for add, remove or reconfigure virutal NVDIMM device of virtual machine (https://github.com/ansible-collections/community.vmware/issues/853).
-  - vmware_spbm - Add a new function 'find_storage_profile_by_name'.
+  - vmware_spbm - Add a new function 'find_storage_profile_by_name' (https://github.com/ansible-collections/community.vmware/issues/853).
   - vm_device_helper - Add new functions for create, remove or reconfigure virutal NVDIMM device.
