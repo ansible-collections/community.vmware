@@ -1629,7 +1629,7 @@ class PyVmomiHelper(PyVmomi):
 
     def configure_nvdimm(self, vm_obj):
         """
-        Function to add, configure, remove virtual NVDIMM device to virtual machine
+        Manage virtual NVDIMM device to the virtual machine
         Args:
             vm_obj: virtual machine object
         """
