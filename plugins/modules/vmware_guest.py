@@ -319,7 +319,7 @@ options:
     - Add or remove a virtual NVDIMM device to the virtual machine.
     - VM virtual hardware version must be 14 or higher on vSphere 6.7 or later.
     - Verify that guest OS of the virtual machine supports PMem before adding virtual NVDIMM device.
-    - Verify that you have the Datastore.Allocate space privilege on the virtual machine.
+    - Verify that you have the I(Datastore.Allocate) space privilege on the virtual machine.
     - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
     - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
     type: dict
