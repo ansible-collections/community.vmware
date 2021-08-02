@@ -332,7 +332,7 @@ options:
              choices: ['present', 'absent']
         size_mb:
             type: int
-            description: Virtual NVDIMM device size in mb.
+            description: Virtual NVDIMM device size in MB.
             default: 1024
         label:
              type: str
