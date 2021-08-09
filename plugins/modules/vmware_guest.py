@@ -323,6 +323,7 @@ options:
     - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
     - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
     type: dict
+    version_added: '1.13.0'
     suboptions:
         state:
              type: str
