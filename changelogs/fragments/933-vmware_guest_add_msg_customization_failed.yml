@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - add message for `deploy_vm` method when it fails with timeout error while customizing the VM (https://github.com/ansible-collections/community.vmware/pull/933).
