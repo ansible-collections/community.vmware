@@ -314,6 +314,33 @@ options:
             - C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
               with multiple types of disk controllers and disks.
             - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
+  nvdimm:
+    description:
+    - Add or remove a virtual NVDIMM device to the virtual machine.
+    - VM virtual hardware version must be 14 or higher on vSphere 6.7 or later.
+    - Verify that guest OS of the virtual machine supports PMem before adding virtual NVDIMM device.
+    - Verify that you have the I(Datastore.Allocate) space privilege on the virtual machine.
+    - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
+    - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
+    type: dict
+    version_added: '1.13.0'
+    suboptions:
+        state:
+             type: str
+             description:
+             - Valid value is C(present) or C(absent).
+             - If set to C(absent), then the NVDIMM device with specified C(label) will be removed.
+             choices: ['present', 'absent']
+        size_mb:
+            type: int
+            description: Virtual NVDIMM device size in MB.
+            default: 1024
+        label:
+             type: str
+             description:
+             - The label of the virtual NVDIMM device to be removed or configured, e.g., "NVDIMM 1".
+             - 'This parameter is required when C(state) is set to C(absent), or C(present) to reconfigure NVDIMM device
+               size. When add a new device, please do not set C(label).'
   cdrom:
     description:
     - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
@@ -967,6 +994,29 @@ EXAMPLES = r'''
       device_type: vmxnet3
   delegate_to: localhost
   register: deploy_vm
+
+- name: Create a VM with NVDIMM device
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: /DC1/vm/
+    name: test_vm_nvdimm
+    state: poweredoff
+    guest_id: centos7_64Guest
+    datastore: datastore1
+    hardware:
+      memory_mb: 512
+      num_cpus: 4
+      version: 14
+    networks:
+    - name: VM Network
+      device_type: vmxnet3
+    nvdimm:
+      state: present
+      size_mb: 2048
+  delegate_to: localhost
+  register: deploy_vm
 '''
 
 RETURN = r'''
@@ -1006,6 +1056,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     quote_obj_name,
 )
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
+from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
 
 class PyVmomiCache(object):
@@ -1570,6 +1621,84 @@ class PyVmomiHelper(PyVmomi):
 
     def get_vm_sata_devices(self, vm=None):
         return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualAHCIController)
+
+    def get_vm_nvdimm_ctl_device(self, vm=None):
+        return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualNVDIMMController)
+
+    def get_vm_nvdimm_devices(self, vm=None):
+        return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualNVDIMM)
+
+    def configure_nvdimm(self, vm_obj):
+        """
+        Manage virtual NVDIMM device to the virtual machine
+        Args:
+            vm_obj: virtual machine object
+        """
+        if self.params['nvdimm']['state']:
+            # Label is required when remove device
+            if self.params['nvdimm']['state'] == 'absent' and not self.params['nvdimm']['label']:
+                self.module.fail_json(msg="Please specify the label of virtual NVDIMM device using 'label' parameter"
+                                          " when state is set to 'absent'.")
+            # Reconfigure device requires VM in power off state
+            if vm_obj and not vm_obj.config.template:
+                if vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+                    self.module.fail_json(msg="VM is not in power off state, can not do virtual NVDIMM configuration.")
+
+            nvdimm_ctl_exists = False
+            if vm_obj and not vm_obj.config.template:
+                # Get existing NVDIMM controller
+                nvdimm_ctl = self.get_vm_nvdimm_ctl_device(vm=vm_obj)
+                if len(nvdimm_ctl) != 0:
+                    nvdimm_ctl_exists = True
+                    nvdimm_ctl_key = nvdimm_ctl[0].key
+                    if self.params['nvdimm']['label'] is not None:
+                        nvdimm_devices = self.get_vm_nvdimm_devices(vm=vm_obj)
+                        if len(nvdimm_devices) != 0:
+                            existing_nvdimm_dev = self.device_helper.find_nvdimm_by_label(
+                                nvdimm_label=self.params['nvdimm']['label'],
+                                nvdimm_devices=nvdimm_devices
+                            )
+                            if existing_nvdimm_dev is not None:
+                                if self.params['nvdimm']['state'] == 'absent':
+                                    nvdimm_remove_spec = self.device_helper.remove_nvdimm(
+                                        nvdimm_device=existing_nvdimm_dev
+                                    )
+                                    self.change_detected = True
+                                    self.configspec.deviceChange.append(nvdimm_remove_spec)
+                                else:
+                                    if existing_nvdimm_dev.capacityInMB < self.params['nvdimm']['size_mb']:
+                                        nvdimm_config_spec = self.device_helper.update_nvdimm_config(
+                                            nvdimm_device=existing_nvdimm_dev,
+                                            nvdimm_size=self.params['nvdimm']['size_mb']
+                                        )
+                                        self.change_detected = True
+                                        self.configspec.deviceChange.append(nvdimm_config_spec)
+                                    elif existing_nvdimm_dev.capacityInMB > self.params['nvdimm']['size_mb']:
+                                        self.module.fail_json(msg="Can not change NVDIMM device size to %s MB, which is"
+                                                                  " smaller than the current size %s MB."
+                                                                  % (self.params['nvdimm']['size_mb'],
+                                                                     existing_nvdimm_dev.capacityInMB))
+            # New VM or existing VM without label specified, add new NVDIMM device
+            if vm_obj is None or (vm_obj and not vm_obj.config.template and self.params['nvdimm']['label'] is None):
+                if self.params['nvdimm']['state'] == 'present':
+                    # Get host default PMem storage policy
+                    storage_profile_name = "Host-local PMem Default Storage Policy"
+                    spbm = SPBM(self.module)
+                    pmem_profile = spbm.find_storage_profile_by_name(profile_name=storage_profile_name)
+                    if pmem_profile is None:
+                        self.module.fail_json(msg="Can not find PMem storage policy with name '%s'." % storage_profile_name)
+                    if not nvdimm_ctl_exists:
+                        nvdimm_ctl_spec = self.device_helper.create_nvdimm_controller()
+                        self.configspec.deviceChange.append(nvdimm_ctl_spec)
+                        nvdimm_ctl_key = nvdimm_ctl_spec.device.key
+
+                    nvdimm_dev_spec = self.device_helper.create_nvdimm_device(
+                        nvdimm_ctl_dev_key=nvdimm_ctl_key,
+                        pmem_profile_id=pmem_profile.profileId.uniqueId,
+                        nvdimm_dev_size_mb=self.params['nvdimm']['size_mb']
+                    )
+                    self.change_detected = True
+                    self.configspec.deviceChange.append(nvdimm_dev_spec)
 
     def get_vm_network_interfaces(self, vm=None):
         device_list = []
@@ -2741,6 +2870,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_disks(vm_obj=vm_obj)
         self.configure_network(vm_obj=vm_obj)
         self.configure_cdrom(vm_obj=vm_obj)
+        self.configure_nvdimm(vm_obj=vm_obj)
 
         # Find if we need network customizations (find keys in dictionary that requires customizations)
         network_changes = False
@@ -2917,6 +3047,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
+        self.configure_nvdimm(vm_obj=self.current_vm_obj)
         self.customize_advanced_settings(vm_obj=self.current_vm_obj, config_spec=self.configspec)
         self.customize_customvalues(vm_obj=self.current_vm_obj)
         self.configure_resource_alloc_info(vm_obj=self.current_vm_obj)
@@ -3145,6 +3276,15 @@ def main():
                 unit_number=dict(type='int'),
             )
         ),
+        nvdimm=dict(
+            type='dict',
+            default={},
+            options=dict(
+                state=dict(type='str', choices=['present', 'absent']),
+                label=dict(type='str'),
+                size_mb=dict(type='int', default=1024),
+            )
+        ),
         cdrom=dict(type='raw', default=[]),
         hardware=dict(
             type='dict',
@@ -3222,9 +3362,7 @@ def main():
                                ['name', 'uuid'],
                            ],
                            )
-
     result = {'failed': False, 'changed': False}
-
     pyv = PyVmomiHelper(module)
 
     # Check requirements for virtualization based security
