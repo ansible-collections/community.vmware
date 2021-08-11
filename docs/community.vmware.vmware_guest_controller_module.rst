@@ -63,6 +63,28 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>bus_sharing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>noSharing</b>&nbsp;&larr;</div></li>
+                                    <li>physicalSharing</li>
+                                    <li>virtualSharing</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Bus sharing type for SCSI controller.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>controller_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -491,7 +513,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the virtual machine&#x27;s existing disk controllers or after adding or removing operation</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;nvme&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 31000, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;NVME controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;NVME controller 0&#x27;, &#x27;controller_unitnumber&#x27;: 30}}, &#x27;sata&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 15000, &#x27;controller_disks_devicekey&#x27;: [16000, 16001], &#x27;controller_label&#x27;: &#x27;SATA controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;AHCI&#x27;, &#x27;controller_unitnumber&#x27;: 24}}, &#x27;scsi&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 1000, &#x27;controller_disks_devicekey&#x27;: [2000], &#x27;controller_label&#x27;: &#x27;SCSI controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;LSI Logic SAS&#x27;, &#x27;controller_unitnumber&#x27;: 3}, &#x27;1&#x27;: {&#x27;controller_busnumber&#x27;: 1, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 1001, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;SCSI controller 1&#x27;, &#x27;controller_summary&#x27;: &#x27;VMware paravirtual SCSI&#x27;, &#x27;controller_unitnumber&#x27;: 4}}, &#x27;usb2&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 7000, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;USB Controller&#x27;, &#x27;controller_summary&#x27;: &#x27;Auto connect Disabled&#x27;, &#x27;controller_unitnumber&#x27;: 22}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;nvme&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 31000, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;NVME controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;NVME controller 0&#x27;, &#x27;controller_unitnumber&#x27;: 30}}, &#x27;sata&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 15000, &#x27;controller_disks_devicekey&#x27;: [16000, 16001], &#x27;controller_label&#x27;: &#x27;SATA controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;AHCI&#x27;, &#x27;controller_unitnumber&#x27;: 24}}, &#x27;scsi&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 1000, &#x27;controller_disks_devicekey&#x27;: [2000], &#x27;controller_label&#x27;: &#x27;SCSI controller 0&#x27;, &#x27;controller_summary&#x27;: &#x27;LSI Logic SAS&#x27;, &#x27;controller_unitnumber&#x27;: 3, &#x27;controller_bus_sharing&#x27;: &#x27;noSharing&#x27;}, &#x27;1&#x27;: {&#x27;controller_busnumber&#x27;: 1, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 1001, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;SCSI controller 1&#x27;, &#x27;controller_summary&#x27;: &#x27;VMware paravirtual SCSI&#x27;, &#x27;controller_unitnumber&#x27;: 4, &#x27;controller_bus_sharing&#x27;: &#x27;physicalSharing&#x27;}}, &#x27;usb2&#x27;: {&#x27;0&#x27;: {&#x27;controller_busnumber&#x27;: 0, &#x27;controller_controllerkey&#x27;: 100, &#x27;controller_devicekey&#x27;: 7000, &#x27;controller_disks_devicekey&#x27;: [], &#x27;controller_label&#x27;: &#x27;USB Controller&#x27;, &#x27;controller_summary&#x27;: &#x27;Auto connect Disabled&#x27;, &#x27;controller_unitnumber&#x27;: 22}}}</div>
                 </td>
             </tr>
     </table>

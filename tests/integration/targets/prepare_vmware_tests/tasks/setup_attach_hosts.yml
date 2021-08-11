@@ -23,6 +23,16 @@
 # be visible by the external switch port. Depending on the
 # antispoofing policy in place, the switch may just decide to block
 # the port.
+- name: Remove any potential existing "VM Network" on vSwitch0
+  vmware_portgroup:
+    esxi_hostname: '{{ item }}'
+    switch: vSwitch0
+    portgroup: VM Network
+    validate_certs: false
+    state: absent
+  ignore_errors: true
+  with_items: "{{ esxi_hosts }}"
+
 - name: Add an isolated VMware vSwitch
   vmware_vswitch:
     hostname: '{{ item }}'

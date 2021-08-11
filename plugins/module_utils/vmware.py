@@ -51,7 +51,71 @@ class TaskError(Exception):
         super(TaskError, self).__init__(*args, **kwargs)
 
 
-def wait_for_task(task, max_backoff=64, timeout=3600):
+class ApiAccessError(Exception):
+    def __init__(self, *args, **kwargs):
+        super(ApiAccessError, self).__init__(*args, **kwargs)
+
+
+def check_answer_question_status(vm):
+    """Check whether locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+
+    Returns: bool
+    """
+    if hasattr(vm, "runtime") and vm.runtime.question:
+        return True
+
+    return False
+
+
+def make_answer_response(vm, answers):
+    """Make the response contents to answer against locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        answers: Answer contents
+
+    Returns: Dict with answer id and number
+    Raises: TaskError on failure
+    """
+    response_list = {}
+    for message in vm.runtime.question.message:
+        response_list[message.id] = {}
+        for choice in vm.runtime.question.choice.choiceInfo:
+            response_list[message.id].update({
+                choice.label: choice.key
+            })
+
+    responses = []
+    try:
+        for answer in answers:
+            responses.append({
+                "id": vm.runtime.question.id,
+                "response_num": response_list[answer["question"]][answer["response"]]
+            })
+    except Exception:
+        raise TaskError("not found %s or %s or both in the response list" % (answer["question"], answer["response"]))
+
+    return responses
+
+
+def answer_question(vm, responses):
+    """Answer against the question for unlocking a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        responses: Answer contents to unlock a virtual machine
+    """
+    for response in responses:
+        try:
+            vm.AnswerVM(response["id"], response["response_num"])
+        except Exception as e:
+            raise TaskError("answer failed: %s" % to_text(e))
+
+
+def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
     """Wait for given task using exponential back-off algorithm.
 
     Args:
@@ -66,6 +130,12 @@ def wait_for_task(task, max_backoff=64, timeout=3600):
     start_time = time.time()
 
     while True:
+        if check_answer_question_status(vm):
+            if answers:
+                responses = make_answer_response(vm, answers)
+                answer_question(vm, responses)
+            else:
+                raise TaskError("%s" % to_text(vm.runtime.question.text))
         if time.time() - start_time >= timeout:
             raise TaskError("Timeout")
         if task.info.state == vim.TaskInfo.State.success:
@@ -180,6 +250,53 @@ def find_datastore_by_name(content, datastore_name, datacenter_name=None):
 
 def find_folder_by_name(content, folder_name):
     return find_object_by_name(content, folder_name, [vim.Folder])
+
+
+def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=None):
+    """
+    Find the folder by its given fully qualified path name.
+    The Fully Qualified Path Name is I(datacenter)/I(folder type)/folder name/
+    for example - Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
+    """
+    # Remove leading/trailing slashes and create list of subfolders
+    folder = folder_name.strip('/')
+    folder_parts = folder.strip('/').split('/')
+
+    # Process datacenter
+    if len(folder_parts) > 0:
+        if not datacenter_name:
+            datacenter_name = folder_parts[0]
+        if datacenter_name == folder_parts[0]:
+            folder_parts.pop(0)
+    datacenter = find_datacenter_by_name(content, datacenter_name)
+    if not datacenter:
+        return None
+
+    # Process folder type
+    if len(folder_parts) > 0:
+        if not folder_type:
+            folder_type = folder_parts[0]
+        if folder_type == folder_parts[0]:
+            folder_parts.pop(0)
+    if folder_type in ['vm', 'host', 'datastore', 'network']:
+        parent_obj = getattr(datacenter, "%sFolder" % folder_type.lower())
+    else:
+        return None
+
+    # Process remaining subfolders
+    if len(folder_parts) > 0:
+        for part in folder_parts:
+            folder_obj = None
+            for part_obj in parent_obj.childEntity:
+                if part_obj.name == part and 'Folder' in part_obj.childType:
+                    folder_obj = part_obj
+                    parent_obj = part_obj
+                    break
+            if not folder_obj:
+                return None
+    else:
+        folder_obj = parent_obj
+    return folder_obj
 
 
 def find_dvs_by_name(content, switch_name, folder=None):
@@ -475,7 +592,8 @@ def deserialize_snapshot_obj(obj):
             'name': obj.name,
             'description': obj.description,
             'creation_time': obj.createTime,
-            'state': obj.state}
+            'state': obj.state,
+            'quiesced': obj.quiesced}
 
 
 def list_snapshots_recursively(snapshots):
@@ -556,31 +674,47 @@ def vmware_argument_spec():
     )
 
 
-def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None):
-    hostname = hostname if hostname else module.params['hostname']
-    username = username if username else module.params['username']
-    password = password if password else module.params['password']
-    port = port if port else module.params.get('port', 443)
-    validate_certs = validate_certs if validate_certs else module.params['validate_certs']
+def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None,
+                   httpProxyHost=None, httpProxyPort=None):
+    if module:
+        if not hostname:
+            hostname = module.params['hostname']
+        if not username:
+            username = module.params['username']
+        if not password:
+            password = module.params['password']
+        if not httpProxyHost:
+            httpProxyHost = module.params.get('proxy_host')
+        if not httpProxyPort:
+            httpProxyPort = module.params.get('proxy_port')
+        if not port:
+            port = module.params.get('port', 443)
+        if not validate_certs:
+            validate_certs = module.params['validate_certs']
+
+    def _raise_or_fail(msg):
+        if module is not None:
+            module.fail_json(msg=msg)
+        raise ApiAccessError(msg)
 
     if not hostname:
-        module.fail_json(msg="Hostname parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
+        _raise_or_fail(msg="Hostname parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
 
     if not username:
-        module.fail_json(msg="Username parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
+        _raise_or_fail(msg="Username parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
 
     if not password:
-        module.fail_json(msg="Password parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
+        _raise_or_fail(msg="Password parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
 
     if validate_certs and not hasattr(ssl, 'SSLContext'):
-        module.fail_json(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
-                             'python or use validate_certs=false.')
+        _raise_or_fail(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
+                           'python or use validate_certs=false.')
     elif validate_certs:
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         ssl_context.verify_mode = ssl.CERT_REQUIRED
@@ -594,8 +728,6 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
         ssl_context = None
 
     service_instance = None
-    proxy_host = module.params.get('proxy_host')
-    proxy_port = module.params.get('proxy_port')
 
     connect_args = dict(
         host=hostname,
@@ -606,9 +738,9 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
 
     msg_suffix = ''
     try:
-        if proxy_host:
-            msg_suffix = " [proxy: %s:%d]" % (proxy_host, proxy_port)
-            connect_args.update(httpProxyHost=proxy_host, httpProxyPort=proxy_port)
+        if httpProxyHost:
+            msg_suffix = " [proxy: %s:%d]" % (httpProxyHost, httpProxyPort)
+            connect_args.update(httpProxyHost=httpProxyHost, httpProxyPort=httpProxyPort)
             smart_stub = connect.SmartStubAdapter(**connect_args)
             session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(username, password))
             service_instance = vim.ServiceInstance('ServiceInstance', session_stub)
@@ -617,23 +749,23 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
             service_instance = connect.SmartConnect(**connect_args)
     except vim.fault.InvalidLogin as invalid_login:
         msg = "Unable to log on to vCenter or ESXi API at %s:%s " % (hostname, port)
-        module.fail_json(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
+        _raise_or_fail(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
     except vim.fault.NoPermission as no_permission:
-        module.fail_json(msg="User %s does not have required permission"
-                             " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
+        _raise_or_fail(msg="User %s does not have required permission"
+                           " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
     except (requests.ConnectionError, ssl.SSLError) as generic_req_exc:
-        module.fail_json(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
+        _raise_or_fail(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
     except vmodl.fault.InvalidRequest as invalid_request:
         # Request is malformed
         msg = "Failed to get a response from server %s:%s " % (hostname, port)
-        module.fail_json(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
+        _raise_or_fail(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
     except Exception as generic_exc:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port) + msg_suffix
-        module.fail_json(msg="%s : %s" % (msg, generic_exc))
+        _raise_or_fail(msg="%s : %s" % (msg, generic_exc))
 
     if service_instance is None:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port)
-        module.fail_json(msg=msg + msg_suffix)
+        _raise_or_fail(msg=msg + msg_suffix)
 
     # Disabling atexit should be used in special cases only.
     # Such as IP change of the ESXi host which removes the connection anyway.
@@ -780,7 +912,7 @@ def find_host_by_cluster_datacenter(module, content, datacenter_name, cluster_na
     return None, cluster
 
 
-def set_vm_power_state(content, vm, state, force, timeout=0):
+def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
     """
     Set the power status for a VM determined by the current and
     requested states. force is forceful
@@ -852,12 +984,17 @@ def set_vm_power_state(content, vm, state, force, timeout=0):
             result['msg'] = to_text(e)
 
         if task:
-            wait_for_task(task)
-            if task.info.state == 'error':
+            try:
+                wait_for_task(task, vm=vm, answers=answers)
+            except TaskError as e:
                 result['failed'] = True
-                result['msg'] = task.info.error.msg
-            else:
-                result['changed'] = True
+                result['msg'] = to_text(e)
+            finally:
+                if task.info.state == 'error':
+                    result['failed'] = True
+                    result['msg'] = task.info.error.msg
+                else:
+                    result['changed'] = True
 
     # need to get new metadata if changed
     result['instance'] = gather_vm_facts(content, vm)
@@ -912,11 +1049,11 @@ def option_diff(options, current_options, truthy_strings_as_bool=True):
     for option_key, option_value in options.items():
         if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
-        elif isinstance(option_value, int):
+        elif type(option_value) is int:
             option_value = VmomiSupport.vmodlTypes['int'](option_value)
-        elif isinstance(option_value, float):
+        elif type(option_value) is float:
             option_value = VmomiSupport.vmodlTypes['float'](option_value)
-        elif isinstance(option_value, str):
+        elif type(option_value) is str:
             option_value = VmomiSupport.vmodlTypes['string'](option_value)
 
         if option_key not in current_options_dict or current_options_dict[option_key] != option_value:
@@ -1434,6 +1571,21 @@ class PyVmomi(object):
 
         """
         return find_folder_by_name(self.content, folder_name=folder_name)
+
+    def find_folder_by_fqpn(self, folder_name, datacenter_name=None, folder_type=None):
+        """
+        Get a unique folder managed object by specifying its Fully Qualified Path Name
+        as datacenter/folder_type/sub1/sub2
+        Args:
+            folder_name: Fully Qualified Path Name folder name
+            datacenter_name: Name of the datacenter, taken from Fully Qualified Path Name if not defined
+            folder_type: Type of folder, vm, host, datastore or network,
+                         taken from Fully Qualified Path Name if not defined
+
+        Returns: folder managed object if found, else None
+
+        """
+        return find_folder_by_fqpn(self.content, folder_name=folder_name, datacenter_name=datacenter_name, folder_type=folder_type)
 
     # Datastore cluster
     def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None, folder=None):

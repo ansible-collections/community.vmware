@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_host_datastore - fixed an issue that the right error message isn't displayed (https://github.com/ansible-collections/community.vmware/pull/976).

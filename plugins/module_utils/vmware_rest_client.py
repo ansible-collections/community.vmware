@@ -111,6 +111,14 @@ class VmwareRestClient(object):
             validate_certs=dict(type='bool',
                                 fallback=(env_fallback, ['VMWARE_VALIDATE_CERTS']),
                                 default=True),
+            proxy_host=dict(type='str',
+                            required=False,
+                            default=None,
+                            fallback=(env_fallback, ['VMWARE_PROXY_HOST'])),
+            proxy_port=dict(type='int',
+                            required=False,
+                            default=None,
+                            fallback=(env_fallback, ['VMWARE_PROXY_PORT'])),
         )
 
     def connect_to_vsphere_client(self):
@@ -124,6 +132,13 @@ class VmwareRestClient(object):
         port = self.params.get('port')
         session = requests.Session()
         session.verify = self.params.get('validate_certs')
+        protocol = self.params.get('protocol')
+        proxy_host = self.params.get('proxy_host')
+        proxy_port = self.params.get('proxy_port')
+
+        if all([protocol, proxy_host, proxy_port]):
+            proxies = {protocol: "{0}://{1}:{2}".format(protocol, proxy_host, proxy_port)}
+            session.proxies.update(proxies)
 
         if not all([hostname, username, password]):
             self.module.fail_json(msg="Missing one of the following : hostname, username, password."

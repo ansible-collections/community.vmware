@@ -11,168 +11,193 @@
         setup_attach_host: true
 
     - name: Add NTP server to a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 0.pool.ntp.org
+          - 192.0.2.1
         validate_certs: false
       register: present
-    - debug: var=present
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - present.changed is sameas true
 
     - name: Add another NTP server to a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 1.pool.ntp.org
+          - 198.51.100.1
         validate_certs: false
       register: present
-    - debug: var=present
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - present.changed is sameas true
 
     - name: Remove NTP server from a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: absent
         ntp_servers:
-          - 1.pool.ntp.org
+          - 198.51.100.1
         validate_certs: false
       register: absent_one
-    - debug: var=absent_one
 
-    - name: Remove NTP server from a host
-      vmware_host_ntp:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        esxi_hostname: '{{ esxi1 }}'
-        state: present
-        ntp_servers:
-          - 1.pool.ntp.org
-        validate_certs: false
-      register: present
-    - debug: var=present
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - absent_one.changed is sameas true
 
     - name: Add more NTP servers to a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 2.pool.ntp.org
-          - 3.pool.ntp.org
-          - 4.pool.ntp.org
+          - 203.0.113.1
+          - 192.0.2.2
+          - 198.51.100.2
         validate_certs: false
       register: present
-    - debug: var=present
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - present.changed is sameas true
 
     - name: Remove all NTP servers from a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: absent
         ntp_servers:
-          - 0.pool.ntp.org
-          - 1.pool.ntp.org
-          - 2.pool.ntp.org
-          - 3.pool.ntp.org
-          - 4.pool.ntp.org
-          - 6.pool.ntp.org
+          - 192.0.2.1
+          - 203.0.113.1
+          - 192.0.2.2
+          - 198.51.100.2
         validate_certs: false
       register: absent_all
-    - debug: var=absent_all
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - absent_all.changed is sameas true
 
     - name: Configure NTP servers for a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         ntp_servers:
-          - 0.pool.ntp.org
-          - 1.pool.ntp.org
-          - 2.pool.ntp.org
+          - 192.0.2.1
+          - 198.51.100.1
+          - 203.0.113.1
         validate_certs: false
       register: ntp_servers
-    - debug: var=ntp_servers
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - ntp_servers.changed is sameas true
 
     - name: Configure NTP servers for a host
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         ntp_servers:
-          - 3.pool.ntp.org
-          - 4.pool.ntp.org
-          - 5.pool.ntp.org
+          - 192.0.2.2
+          - 198.51.100.2
+          - 203.0.113.2
         verbose: true
         validate_certs: false
       register: ntp_servers
-    - debug: var=ntp_servers
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - ntp_servers.changed is sameas true
 
     - name: Add NTP server to a host in check mode
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 0.pool.ntp.org
+          - 192.0.2.1
         validate_certs: false
       register: present
       check_mode: true
-    - debug: var=present
+
+    - name: Make sure that NTP setting has been changed
+      assert:
+        that:
+          - present.changed is sameas true
 
     - name: Remove NTP server to a host in check mode
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         state: absent
         ntp_servers:
-          - 0.pool.ntp.org
+          - 192.0.2.1
         validate_certs: false
       register: present
       check_mode: true
-    - debug: var=present
+
+    - name: Make sure that NTP setting hasn't been changed
+      assert:
+        that:
+          - present.changed is sameas false
 
     - name: Configure NTP servers for a host in check mode
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: '{{ esxi1 }}'
         ntp_servers:
-          - 0.pool.ntp.org
-          - 1.pool.ntp.org
-          - 2.pool.ntp.org
+          - 192.0.2.1
+          - 198.51.100.1
+          - 203.0.113.1
         validate_certs: false
       register: ntp_servers
       check_mode: true
-    - debug: var=ntp_servers
+
+    - name: Make sure that NTP setting will be changed
+      assert:
+        that:
+          - ntp_servers.changed is sameas true
 
 # https://github.com/ansible-collections/community.vmware/pull/588
 - name: The integration tests when ESXi disconnected
   when: vcsim is not defined
   block:
     - name: Disconnect ESXi
-      vmware_host:
+      community.vmware.vmware_host:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -189,7 +214,7 @@
           - disconnect_esxi_result.changed is sameas true
 
     - name: Add NTP server to disconnected ESXi with check_mode
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -197,10 +222,9 @@
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 0.pool.ntp.org
+          - 192.0.2.1
       check_mode: true
       register: add_ntp_server_disconnected_esxi_check_mode_result
-    - debug: var=add_ntp_server_disconnected_esxi_check_mode_result
 
     - name: Make sure if the changed doesn't occur
       assert:
@@ -208,7 +232,7 @@
           - add_ntp_server_disconnected_esxi_check_mode_result.changed is sameas false
 
     - name: Add NTP server to disconnected ESXi
-      vmware_host_ntp:
+      community.vmware.vmware_host_ntp:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -216,9 +240,8 @@
         esxi_hostname: '{{ esxi1 }}'
         state: present
         ntp_servers:
-          - 0.pool.ntp.org
+          - 192.0.2.1
       register: add_ntp_server_disconnected_esxi_result
-    - debug: var=add_ntp_server_disconnected_esxi_result
 
     - name: Make sure if the changed doesn't occur
       assert:
@@ -226,7 +249,7 @@
           - add_ntp_server_disconnected_esxi_result.changed is sameas false
 
     - name: Reconnect ESXi
-      vmware_host:
+      community.vmware.vmware_host:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"

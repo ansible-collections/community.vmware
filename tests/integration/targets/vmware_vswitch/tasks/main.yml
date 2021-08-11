@@ -91,7 +91,7 @@
       username: "{{ esxi_user }}"
       password: "{{ esxi_password }}"
       validate_certs: false
-      switch: 'Switch\/%'
+      switch: 'Switch\%'
       state: present
     register: create_switch_with_special_characters_result
 
@@ -105,7 +105,7 @@
       username: "{{ esxi_user }}"
       password: "{{ esxi_password }}"
       validate_certs: false
-      switch: 'Switch\/%'
+      switch: 'Switch\%'
       state: present
     register: create_switch_with_special_characters_idempotency_check_result
 
@@ -119,7 +119,7 @@
       username: "{{ esxi_user }}"
       password: "{{ esxi_password }}"
       validate_certs: false
-      switch: 'Switch\/%'
+      switch: 'Switch\%'
       state: absent
     register: delete_switch_with_special_characters_result
 
@@ -133,7 +133,7 @@
       username: "{{ esxi_user }}"
       password: "{{ esxi_password }}"
       validate_certs: false
-      switch: 'Switch\/%'
+      switch: 'Switch\%'
       state: absent
     register: delete_switch_with_special_characters_idempotency_check_result
 

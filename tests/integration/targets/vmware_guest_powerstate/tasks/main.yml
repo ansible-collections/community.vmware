@@ -9,7 +9,7 @@
     setup_datastore: true
 
 - name: Create a VM with the state poweredoff
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -34,7 +34,7 @@
     - name: VM Network
 
 - name: set state to poweroff the first VM
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -52,10 +52,27 @@
     that:
         - not (poweroff_d1_c1_f0 is changed)
 
+- name: set state to poweroff the first VM with datacenter
+  community.vmware.vmware_guest_powerstate:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: test_vm1
+    folder: '{{ f0 }}'
+    state: powered-off
+  register: poweroff_d1_c1_f0_datacenter
+
+- name: make sure change was made
+  assert:
+    that:
+        - not (poweroff_d1_c1_f0_datacenter is changed)
+
 - when: vcsim is not defined
   block:
   - name: Set a schedule task for first VM
-    vmware_guest_powerstate:
+    community.vmware.vmware_guest_powerstate:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"

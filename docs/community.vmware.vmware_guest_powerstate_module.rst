@@ -35,12 +35,84 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>answer</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A list of questions to answer, should one or more arise while waiting for the task to complete.</div>
+                        <div>Some common uses are to allow a cdrom to be changed even if locked, or to answer the question as to whether a VM was copied or moved.</div>
+                        <div>The <em>answer</em> can be used if <em>state</em> is <code>powered-on</code>.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>question</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The message id, for example <code>msg.uuid.altered</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>response</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The choice key, for example <code>button.uuid.copiedTheVM</code>.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.13.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
+                </td>
+                <td>
+                        <div>The <em>datacenter</em> where the VM you&#x27;d like to operate the power.</div>
+                        <div>This parameter is case sensitive.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -66,7 +138,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>force</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -86,7 +158,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -103,7 +175,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>moid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -119,7 +191,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -135,7 +207,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name_match</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -154,7 +226,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -172,7 +244,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -190,7 +262,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -208,7 +280,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -224,7 +296,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>schedule_task_description</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -240,7 +312,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>schedule_task_enabled</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -259,7 +331,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>schedule_task_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -275,7 +347,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>scheduled_at</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -292,7 +364,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -316,7 +388,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state_change_timeout</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -334,7 +406,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>use_instance_uuid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -353,7 +425,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -371,7 +443,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>uuid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -387,7 +459,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -466,6 +538,31 @@ Examples
         state_change_timeout: 200
       delegate_to: localhost
       register: deploy
+
+    - name: Automatically answer if a question locked a virtual machine
+      block:
+        - name: Power on a virtual machine without the answer param
+          vmware_guest_powerstate:
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
+            validate_certs: false
+            folder: "{{ f1 }}"
+            name: "{{ vm_name }}"
+            state: powered-on
+      rescue:
+        - name: Power on a virtual machine with the answer param
+          vmware_guest_powerstate:
+            hostname: "{{ esxi_hostname }}"
+            username: "{{ esxi_username }}"
+            password: "{{ esxi_password }}"
+            validate_certs: false
+            folder: "{{ f1 }}"
+            name: "{{ vm_name }}"
+            answer:
+              - question: "msg.uuid.altered"
+                response: "button.uuid.copiedTheVM"
+            state: powered-on
 
 
 

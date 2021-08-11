@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware - changed to use from isinstance to type in the if condition of option_diff method (https://github.com/ansible-collections/community.vmware/pull/983).

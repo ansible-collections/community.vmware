@@ -13,7 +13,6 @@ plugins/modules/vca_nat.py validate-modules:undocumented-parameter # deprecated
 plugins/modules/vca_vapp.py validate-modules:doc-default-does-not-match-spec # deprecated
 plugins/modules/vca_vapp.py validate-modules:doc-missing-type # deprecated
 plugins/modules/vca_vapp.py validate-modules:doc-required-mismatch # deprecated
-plugins/modules/vca_vapp.py validate-modules:invalid-ansiblemodule-schema # deprecated
 plugins/modules/vca_vapp.py validate-modules:undocumented-parameter # deprecated
 plugins/modules/vcenter_domain_user_group_info.py compile-2.6!skip
 plugins/modules/vcenter_domain_user_group_info.py import-2.6!skip
@@ -381,7 +380,6 @@ plugins/modules/vsphere_file.py compile-2.6!skip
 plugins/modules/vsphere_file.py import-2.6!skip
 plugins/module_utils/__init__.py compile-2.6!skip
 plugins/module_utils/__init__.py import-2.6!skip
-plugins/module_utils/inventory.py pylint:ansible-bad-module-import
 plugins/module_utils/vca.py compile-2.6!skip
 plugins/module_utils/vca.py import-2.6!skip
 plugins/module_utils/vmware.py compile-2.6!skip

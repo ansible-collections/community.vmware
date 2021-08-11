@@ -13,8 +13,21 @@
     cat_one: category_1003
     tag_one: tag:1003
 
-- include: cleanup.yml
 - block:
+  - name: Create first category
+    vmware_category:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      category_name: "{{ cat_one }}"
+      category_cardinality: 'multiple'
+      state: present
+    register: category_one_create
+
+  - name: Set category one id
+    set_fact: cat_one_id={{ category_one_create['category_results']['category_id'] }}
+
   - include: tag_manager_dict.yml
   always:
   - include: cleanup.yml

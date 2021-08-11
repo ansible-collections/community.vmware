@@ -108,6 +108,14 @@ options:
          choices:
            - present
            - absent
+       bus_sharing:
+         description:
+         - Bus sharing type for SCSI controller.
+         required: False
+         type: str
+         choices: ['noSharing', 'physicalSharing', 'virtualSharing' ]
+         default: 'noSharing'
+         version_added: 1.11.0
      type: list
      elements: dict
    gather_disk_controller_facts:
@@ -207,7 +215,8 @@ disk_controller_status:
                 ],
                 "controller_label": "SCSI controller 0",
                 "controller_summary": "LSI Logic SAS",
-                "controller_unitnumber": 3
+                "controller_unitnumber": 3,
+                "controller_bus_sharing": 'noSharing'
             },
             "1": {
                 "controller_busnumber": 1,
@@ -216,7 +225,8 @@ disk_controller_status:
                 "controller_disks_devicekey": [],
                 "controller_label": "SCSI controller 1",
                 "controller_summary": "VMware paravirtual SCSI",
-                "controller_unitnumber": 4
+                "controller_unitnumber": 4,
+                "controller_bus_sharing": 'physicalSharing'
             }
         },
         "usb2": {
@@ -238,27 +248,21 @@ try:
 except ImportError:
     pass
 
-from random import randint
 import time
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, TaskError
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
+        self.device_helper = PyVmomiDeviceHelper(self.module)
         self.sleep_time = 10
-        self.scsi_device_type = dict(lsilogic=vim.vm.device.VirtualLsiLogicController,
-                                     paravirtual=vim.vm.device.ParaVirtualSCSIController,
-                                     buslogic=vim.vm.device.VirtualBusLogicController,
-                                     lsilogicsas=vim.vm.device.VirtualLsiLogicSASController)
-        self.sata_device_type = vim.vm.device.VirtualAHCIController
-        self.nvme_device_type = vim.vm.device.VirtualNVMEController
-        self.usb_device_type = dict(usb2=vim.vm.device.VirtualUSBController,
-                                    usb3=vim.vm.device.VirtualUSBXHCIController)
-        self.controller_types = dict(self.scsi_device_type, sata=self.sata_device_type, nvme=self.nvme_device_type)
-        self.controller_types.update(self.usb_device_type)
+        self.controller_types = self.device_helper.scsi_device_type.copy()
+        self.controller_types.update(self.device_helper.usb_device_type)
+        self.controller_types.update({'sata': self.device_helper.sata_device_type, 'nvme': self.device_helper.nvme_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
         self.change_detected = False
@@ -271,13 +275,13 @@ class PyVmomiHelper(PyVmomi):
         Get gid of occupied bus numbers of each type of disk controller, update the available bus number list
         """
         for device in self.current_vm_obj.config.hardware.device:
-            if isinstance(device, self.sata_device_type):
+            if isinstance(device, self.device_helper.sata_device_type):
                 if len(self.disk_ctl_bus_num_list['sata']) != 0:
                     self.disk_ctl_bus_num_list['sata'].remove(device.busNumber)
-            if isinstance(device, self.nvme_device_type):
+            if isinstance(device, self.device_helper.nvme_device_type):
                 if len(self.disk_ctl_bus_num_list['nvme']) != 0:
                     self.disk_ctl_bus_num_list['nvme'].remove(device.busNumber)
-            if isinstance(device, tuple(self.scsi_device_type.values())):
+            if isinstance(device, tuple(self.device_helper.scsi_device_type.values())):
                 if len(self.disk_ctl_bus_num_list['scsi']) != 0:
                     self.disk_ctl_bus_num_list['scsi'].remove(device.busNumber)
 
@@ -302,38 +306,30 @@ class PyVmomiHelper(PyVmomi):
 
         return ctl_specified, disks_attached_exist
 
-    def create_controller(self, ctl_type, bus_number=0):
+    def create_controller(self, ctl_type, bus_sharing, bus_number=0):
         """
         Create new disk or USB controller with specified type
         Args:
             ctl_type: controller type
             bus_number: disk controller bus number
+            bus_sharing: noSharing, virtualSharing, physicalSharing
 
         Return: Virtual device spec for virtual controller
         """
-        disk_ctl = vim.vm.device.VirtualDeviceSpec()
-        disk_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        if ctl_type == 'sata':
-            disk_ctl.device = self.sata_device_type()
-            disk_ctl.device.key = -randint(15000, 19999)
-        elif ctl_type == 'nvme':
-            disk_ctl.device = self.nvme_device_type()
-            disk_ctl.device.key = -randint(31000, 39999)
-        elif ctl_type in self.scsi_device_type.keys():
-            disk_ctl.device = self.scsi_device_type.get(ctl_type)()
-            disk_ctl.device.key = -randint(1000, 6999)
-            disk_ctl.device.hotAddRemove = True
-            disk_ctl.device.sharedBus = 'noSharing'
-            disk_ctl.device.scsiCtlrUnitNumber = 7
-        elif ctl_type in self.usb_device_type.keys():
-            disk_ctl.device = self.usb_device_type.get(ctl_type)()
+        if ctl_type == 'sata' or ctl_type == 'nvme' or ctl_type in self.device_helper.scsi_device_type.keys():
+            disk_ctl = self.device_helper.create_disk_controller(ctl_type, bus_number, bus_sharing)
+        elif ctl_type in self.device_helper.usb_device_type.keys():
+            disk_ctl = vim.vm.device.VirtualDeviceSpec()
+            disk_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+            disk_ctl.device = self.device_helper.usb_device_type.get(ctl_type)()
+
             if ctl_type == 'usb2':
                 disk_ctl.device.key = 7000
             elif ctl_type == 'usb3':
                 disk_ctl.device.key = 14000
 
-        disk_ctl.device.deviceInfo = vim.Description()
-        disk_ctl.device.busNumber = bus_number
+            disk_ctl.device.deviceInfo = vim.Description()
+            disk_ctl.device.busNumber = bus_number
 
         return disk_ctl
 
@@ -362,15 +358,17 @@ class PyVmomiHelper(PyVmomi):
                     controller_unitnumber=device.unitNumber,
                     controller_disks_devicekey=device.device,
                 )
-                if isinstance(device, tuple(self.scsi_device_type.values())):
+                if hasattr(device, 'sharedBus'):
+                    ctl_facts_dict[device.busNumber]['controller_bus_sharing'] = device.sharedBus
+                if isinstance(device, tuple(self.device_helper.scsi_device_type.values())):
                     disk_ctl_facts['scsi'].update(ctl_facts_dict)
-                if isinstance(device, self.nvme_device_type):
+                if isinstance(device, self.device_helper.nvme_device_type):
                     disk_ctl_facts['nvme'].update(ctl_facts_dict)
-                if isinstance(device, self.sata_device_type):
+                if isinstance(device, self.device_helper.sata_device_type):
                     disk_ctl_facts['sata'].update(ctl_facts_dict)
-                if isinstance(device, self.usb_device_type.get('usb2')):
+                if isinstance(device, self.device_helper.usb_device_type.get('usb2')):
                     disk_ctl_facts['usb2'].update(ctl_facts_dict)
-                if isinstance(device, self.usb_device_type.get('usb3')):
+                if isinstance(device, self.device_helper.usb_device_type.get('usb3')):
                     disk_ctl_facts['usb3'].update(ctl_facts_dict)
 
         return disk_ctl_facts
@@ -390,7 +388,7 @@ class PyVmomiHelper(PyVmomi):
         controller_config = self.params.get('controllers')
         for ctl_config in controller_config:
             if ctl_config:
-                if ctl_config['type'] not in self.usb_device_type.keys():
+                if ctl_config['type'] not in self.device_helper.usb_device_type.keys():
                     if ctl_config['state'] == 'absent' and ctl_config.get('controller_number') is None:
                         self.module.fail_json(msg="Disk controller number is required when removing it.")
                     if ctl_config['state'] == 'present' and not exec_get_unused_ctl_bus_number:
@@ -404,12 +402,13 @@ class PyVmomiHelper(PyVmomi):
                                                   " is '%s', not >= 13." % vm_hwv)
         if exec_get_unused_ctl_bus_number:
             for ctl_config in controller_config:
-                if ctl_config and ctl_config['state'] == 'present' and ctl_config['type'] not in self.usb_device_type.keys():
-                    if ctl_config['type'] in self.scsi_device_type.keys():
+                if ctl_config and ctl_config['state'] == 'present' and ctl_config['type'] not in self.device_helper.usb_device_type.keys():
+                    if ctl_config['type'] in self.device_helper.scsi_device_type.keys():
                         if len(self.disk_ctl_bus_num_list['scsi']) != 0:
                             ctl_config['controller_number'] = self.disk_ctl_bus_num_list['scsi'].pop(0)
                         else:
                             ctl_config['controller_number'] = None
+
                     elif ctl_config['type'] == 'sata' or ctl_config['type'] == 'nvme':
                         if len(self.disk_ctl_bus_num_list.get(ctl_config['type'])) != 0:
                             ctl_config['controller_number'] = self.disk_ctl_bus_num_list.get(ctl_config['type']).pop(0)
@@ -432,22 +431,26 @@ class PyVmomiHelper(PyVmomi):
         for disk_ctl_config in controller_config:
             if disk_ctl_config and disk_ctl_config['state'] == 'present':
                 # create new USB controller, bus number is 0
-                if disk_ctl_config['type'] in self.usb_device_type.keys():
+                if disk_ctl_config['type'] in self.device_helper.usb_device_type.keys():
                     usb_exists, has_disks_attached = self.check_ctl_disk_exist(disk_ctl_config['type'])
                     if usb_exists:
                         self.module.warn("'%s' USB controller already exists, can not add more." % disk_ctl_config['type'])
                     else:
-                        disk_controller_new = self.create_controller(disk_ctl_config['type'])
+                        disk_controller_new = self.create_controller(disk_ctl_config['type'], disk_ctl_config.get('bus_sharing'))
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
                 # create other disk controller
                 else:
                     if disk_ctl_config.get('controller_number') is not None:
-                        disk_controller_new = self.create_controller(disk_ctl_config['type'], disk_ctl_config.get('controller_number'))
+                        disk_controller_new = self.create_controller(
+                            disk_ctl_config['type'],
+                            disk_ctl_config.get('bus_sharing'),
+                            disk_ctl_config.get('controller_number')
+                        )
                         self.config_spec.deviceChange.append(disk_controller_new)
                         self.change_detected = True
                     else:
-                        if disk_ctl_config['type'] in self.scsi_device_type.keys():
+                        if disk_ctl_config['type'] in self.device_helper.scsi_device_type.keys():
                             self.module.warn("Already 4 SCSI controllers, can not add new '%s' controller." % disk_ctl_config['type'])
                         else:
                             self.module.warn("Already 4 '%s' controllers, can not add new one." % disk_ctl_config['type'])
@@ -464,7 +467,7 @@ class PyVmomiHelper(PyVmomi):
                         self.module.warn("Can not remove specified controller, type '%s', bus number '%s',"
                                          " there are disks attaching to it." % (disk_ctl_config['type'], disk_ctl_config.get('controller_number')))
                 else:
-                    self.module.warn("Not find specified controller to remove, type '%s', bus number '%s'."
+                    self.module.warn("Can not find specified controller to remove, type '%s', bus number '%s'."
                                      % (disk_ctl_config['type'], disk_ctl_config.get('controller_number')))
 
         try:
@@ -509,6 +512,12 @@ def main():
                     type='str',
                     choices=['sata', 'nvme', 'lsilogic', 'buslogic', 'lsilogicsas', 'paravirtual', 'usb2', 'usb3'],
                     required=True,
+                ),
+                bus_sharing=dict(
+                    type='str',
+                    choices=['noSharing', 'physicalSharing', 'virtualSharing'],
+                    required=False,
+                    default='noSharing',
                 ),
             ),
         ),

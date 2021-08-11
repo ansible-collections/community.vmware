@@ -5,13 +5,10 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    esxi_hostname: "{{ esxi_hosts.1 }}"
+    esxi_hostname: "{{ item }}"
     state: present
-  register: enter_maintenance_mode_result
-
-- assert:
-    that:
-      - enter_maintenance_mode_result.changed is sameas true
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
 
 - name: Move ESXi out of Cluster
   vmware_host:
@@ -21,13 +18,10 @@
     validate_certs: false
     datacenter: "{{ dc1 }}"
     folder: "{{ dc1 }}/host"
-    esxi_hostname: "{{ esxi_hosts.1 }}"
+    esxi_hostname: "{{ item }}"
     state: reconnect
-  register: move_esxi_out_of_cluster_result
-
-- assert:
-    that:
-      - move_esxi_out_of_cluster_result.changed is sameas true
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
 
 - name: Exit maintenance mode
   vmware_maintenancemode:
@@ -35,10 +29,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    esxi_hostname: "{{ esxi_hosts.1 }}"
+    esxi_hostname: "{{ item }}"
     state: absent
-  register: exit_maintenance_mode_result
-
-- assert:
-    that:
-      - exit_maintenance_mode_result.changed is sameas true
+  with_items: "{{ esxi_hosts }}"
+  ignore_errors: true
