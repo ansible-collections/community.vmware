@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_vm_config_option - add new module to get ESXi supported config option keys(hardware versions), supported guest IDs and VM recommended config options for specified guest ID (https://github.com/ansible-collections/community.vmware/issues/993).

@@ -43,13 +43,21 @@ class PyVmomiDeviceHelper(object):
             'usb2': vim.vm.device.VirtualUSBController,
             'usb3': vim.vm.device.VirtualUSBXHCIController,
         }
+        self.nic_device_type = {
+            'pcnet32': vim.vm.device.VirtualPCNet32,
+            'vmxnet2': vim.vm.device.VirtualVmxnet2,
+            'vmxnet3': vim.vm.device.VirtualVmxnet3,
+            'e1000': vim.vm.device.VirtualE1000,
+            'e1000e': vim.vm.device.VirtualE1000e(),
+            'sriov': vim.vm.device.VirtualSriovEthernetCard()
+        }
 
     def create_scsi_controller(self, scsi_type, bus_number, bus_sharing='noSharing'):
         """
         Create SCSI Controller with given SCSI Type and SCSI Bus Number
         Args:
             scsi_type: Type of SCSI
-            scsi_bus_number: SCSI Bus number to be assigned
+            bus_number: SCSI Bus number to be assigned
             bus_sharing: noSharing, virtualSharing, physicalSharing
 
         Returns: Virtual device spec for SCSI Controller
@@ -271,23 +279,10 @@ class PyVmomiDeviceHelper(object):
 
         return diskspec
 
-    def get_device(self, device_type, name):
-        nic_dict = dict(pcnet32=vim.vm.device.VirtualPCNet32(),
-                        vmxnet2=vim.vm.device.VirtualVmxnet2(),
-                        vmxnet3=vim.vm.device.VirtualVmxnet3(),
-                        e1000=vim.vm.device.VirtualE1000(),
-                        e1000e=vim.vm.device.VirtualE1000e(),
-                        sriov=vim.vm.device.VirtualSriovEthernetCard(),
-                        )
-        if device_type in nic_dict:
-            return nic_dict[device_type]
-        else:
-            self.module.fail_json(msg='Invalid device_type "%s"'
-                                      ' for network "%s"' % (device_type, name))
-
     def create_nic(self, device_type, device_label, device_infos):
         nic = vim.vm.device.VirtualDeviceSpec()
-        nic.device = self.get_device(device_type, device_infos['name'])
+        nic_device = self.nic_device_type.get(device_type)
+        nic.device = nic_device()
         nic.device.key = -randint(25000, 29999)
         nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
         nic.device.deviceInfo = vim.Description()
@@ -320,60 +315,3 @@ class PyVmomiDeviceHelper(object):
         else:
             self.module.fail_json(msg='"%s" attribute should be an'
                                   ' integer value.' % name)
-
-    def create_nvdimm_controller(self):
-        nvdimm_ctl = vim.vm.device.VirtualDeviceSpec()
-        nvdimm_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        nvdimm_ctl.device = vim.vm.device.VirtualNVDIMMController()
-        nvdimm_ctl.device.deviceInfo = vim.Description()
-        nvdimm_ctl.device.key = -randint(27000, 27999)
-
-        return nvdimm_ctl
-
-    @staticmethod
-    def is_nvdimm_controller(device):
-        return isinstance(device, vim.vm.device.VirtualNVDIMMController)
-
-    def create_nvdimm_device(self, nvdimm_ctl_dev_key, pmem_profile_id, nvdimm_dev_size_mb=1024):
-        nvdimm_dev_spec = vim.vm.device.VirtualDeviceSpec()
-        nvdimm_dev_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        nvdimm_dev_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
-        nvdimm_dev_spec.device = vim.vm.device.VirtualNVDIMM()
-        nvdimm_dev_spec.device.controllerKey = nvdimm_ctl_dev_key
-        nvdimm_dev_spec.device.key = -randint(28000, 28999)
-        nvdimm_dev_spec.device.capacityInMB = nvdimm_dev_size_mb
-        nvdimm_dev_spec.device.deviceInfo = vim.Description()
-        nvdimm_dev_spec.device.backing = vim.vm.device.VirtualNVDIMM.BackingInfo()
-        profile = vim.vm.DefinedProfileSpec()
-        profile.profileId = pmem_profile_id
-        nvdimm_dev_spec.profile = [profile]
-
-        return nvdimm_dev_spec
-
-    @staticmethod
-    def is_nvdimm_device(device):
-        return isinstance(device, vim.vm.device.VirtualNVDIMM)
-
-    def find_nvdimm_by_label(self, nvdimm_label, nvdimm_devices):
-        nvdimm_dev = None
-        for nvdimm in nvdimm_devices:
-            if nvdimm.deviceInfo.label == nvdimm_label:
-                nvdimm_dev = nvdimm
-
-        return nvdimm_dev
-
-    def remove_nvdimm(self, nvdimm_device):
-        nvdimm_spec = vim.vm.device.VirtualDeviceSpec()
-        nvdimm_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
-        nvdimm_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.destroy
-        nvdimm_spec.device = nvdimm_device
-
-        return nvdimm_spec
-
-    def update_nvdimm_config(self, nvdimm_device, nvdimm_size):
-        nvdimm_spec = vim.vm.device.VirtualDeviceSpec()
-        nvdimm_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-        nvdimm_spec.device = nvdimm_device
-        nvdimm_device.capacityInMB = nvdimm_size
-
-        return nvdimm_spec
