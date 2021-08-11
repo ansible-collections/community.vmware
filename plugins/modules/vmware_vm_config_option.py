@@ -12,19 +12,20 @@ DOCUMENTATION = r'''
 ---
 module: vmware_vm_config_option
 short_description: Return supported guest ID list and VM recommended config option for specific guest OS
-description:
-- Return the config option keys supported for creation.
-- Return the guest ID list supported by ESXi host for the most recent virtual hardware supported.
-- Return the VM recommended config option for specific guest OS.
-- Required Privileges: System.View
+description: >
+   This module is used for getting the hardware versions supported for creation, the guest ID list supported by ESXi
+   host for the most recent virtual hardware supported or specified hardware version, the VM recommended config options
+   for specified guest OS ID.
 author:
-- Diane Wang (@Tomorrow9)
+- Diane Wang (@Tomorrow9) <dianew@vmware.com>
 notes:
-- Tested on vSphere 6.5, 6.7
+- Tested on vSphere 6.5
+- Tested on vSphere 6.7
 - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
 requirements:
 - python >= 2.6
 - PyVmomi
+- System.View privilege
 options:
   datacenter:
     description:
@@ -36,48 +37,45 @@ options:
     description:
     - Name of the cluster.
     - If C(esxi_hostname) is not given, this parameter is required.
-    required: false
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Obtain VM configure options on this ESXi host.
     - If C(cluster_name) is not given, this parameter is required.
-    required: false
     type: str
-  get_config_option_keys
+  get_hardware_versions:
     description:
-    - 'Return the list of VM config option keys supported for creation and the default config option key on the
-      specified entity.'
+    - Return the list of VM hardware versions supported for creation and the default hardware version on the
+      specified entity.
     type: bool
     default: false
   get_guest_os_ids:
     description:
     - Return the list of guest OS IDs supported on the specified entity.
-    - 'If C(config_option_key) is set, will return the corresponding guest OS ID list supported, or will return the
-      guest OS ID list for the default config option key.'
+    - If C(hardware_version) is set, will return the corresponding guest OS ID list supported, or will return the
+      guest OS ID list for the default hardware version.
     type: bool
     default: false
-  get_config_option:
+  get_config_options:
     description:
-    - 'Return the dict of VM recommended config options for guest ID specified by C(guest_id) with config key specified
-      by C(config_option_key) or by default.'
+    - Return the dict of VM recommended config options for guest ID specified by C(guest_id) with hardware version
+      specified by C(hardware_version) or the default hardware version.
     - When set to True, C(guest_id) must be set.
     type: bool
     default: false
   guest_id:
     description:
     - The guest OS ID from the returned list when C(get_guest_os_ids) is set to C(True), e.g., 'rhel8_64Guest'.
-    - This parameter must be set when C(get_config_option) is set to C(True).
-    required: false
+    - This parameter must be set when C(get_config_options) is set to C(True).
     type: str
-  config_option_key:
+  hardware_version:
     description:
-    - The config option key from the returned list when C(get_config_option_keys) is set to C(True), e.g., 'vmx-19'.
+    - The hardware version from the returned list when C(get_hardware_versions) is set to C(True), e.g., 'vmx-19'.
     type: str
-    required: false 
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
+
 '''
 
 EXAMPLES = r'''
@@ -96,7 +94,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: "{{ esxi_hostname }}"
-    get_config_option: True
+    get_config_options: True
     guest_id: "windows9_64Guest"
   delegate_to: localhost
 '''
@@ -133,7 +131,7 @@ class VmConfigOption(PyVmomi):
         self.ctl_device_type.update(self.device_helper.usb_device_type)
         self.ctl_device_type.update(self.device_helper.nic_device_type)
 
-    def get_config_option_keys(self, env_browser):
+    def get_hardware_versions(self, env_browser):
         support_create = []
         default_config = ''
         try:
@@ -151,8 +149,10 @@ class VmConfigOption(PyVmomi):
 
         return support_create, default_config
 
-    def get_config_option_by_spec(self, env_browser, guest_id=[], host=None, key=''):
+    def get_config_option_by_spec(self, env_browser, guest_id=None, host=None, key=''):
         vm_config_option = None
+        if guest_id is None:
+            guest_id = []
         config_query_spec = vim.EnvironmentBrowser.ConfigOptionQuerySpec(guestId=guest_id, host=host, key=key)
         try:
             vm_config_option = env_browser.QueryConfigOptionEx(spec=config_query_spec)
@@ -213,12 +213,12 @@ class VmConfigOption(PyVmomi):
         if self.params.get('guest_id'):
             guest_id = [self.params.get('guest_id')]
 
-        if not self.params.get('get_config_option_keys') and not self.params.get('get_guest_os_ids') \
-                and not self.params.get('get_config_option'):
-            self.module.exit_json(msg="Please set at least one of these parameters 'get_config_option_keys',"
-                                      " 'get_guest_os_ids', 'get_config_option' to True to get the desired info.")
-        if self.params.get('get_config_option') and len(guest_id) == 0:
-            self.module.fail_json(msg="Please set 'guest_id' when 'get_config_option' is set to True,"
+        if not self.params.get('get_hardware_versions') and not self.params.get('get_guest_os_ids') \
+                and not self.params.get('get_config_options'):
+            self.module.exit_json(msg="Please set at least one of these parameters 'get_hardware_versions',"
+                                      " 'get_guest_os_ids', 'get_config_options' to True to get the desired info.")
+        if self.params.get('get_config_options') and len(guest_id) == 0:
+            self.module.fail_json(msg="Please set 'guest_id' when 'get_config_options' is set to True,"
                                       " to get the VM recommended config option for specific guest OS.")
 
         # Get the datacenter object
@@ -241,31 +241,31 @@ class VmConfigOption(PyVmomi):
         if env_browser is None:
             self.module.fail_json(msg="The environmentBrowser of the ComputeResource is None, so can not get the"
                                       " desired config option info, please check your vSphere environment.")
-        # Get config option keys list
-        support_create_list, default_config = self.get_config_option_keys(env_browser=env_browser)
-        if self.params.get('get_config_option_keys'):
+        # Get supported hardware versions list
+        support_create_list, default_config = self.get_hardware_versions(env_browser=env_browser)
+        if self.params.get('get_hardware_versions'):
             results.update({'Supported hardware versions': support_create_list,
                             'Default hardware version': default_config})
 
-        if self.params.get('get_guest_os_ids') or self.params.get('get_config_option'):
+        if self.params.get('get_guest_os_ids') or self.params.get('get_config_options'):
             # Get supported guest ID list
-            config_option_key = self.params.get('config_option_key', '')
-            if config_option_key and len(support_create_list) != 0 and config_option_key not in support_create_list:
-                self.module.fail_json(msg="Specified config option key '%s' is not in the supported create list: %s"
-                                          % (config_option_key, support_create_list))
+            hardware_version = self.params.get('hardware_version', '')
+            if hardware_version and len(support_create_list) != 0 and hardware_version not in support_create_list:
+                self.module.fail_json(msg="Specified hardware version '%s' is not in the supported create list: %s"
+                                          % (hardware_version, support_create_list))
             vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, host=host,
-                                                                  key=config_option_key)
+                                                                  key=hardware_version)
             supported_gos_list = self.get_guest_id_list(guest_os_desc=vm_config_option_all)
             if self.params.get('get_guest_os_ids'):
                 info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
                 results.update({info_key: supported_gos_list})
 
-            if self.params.get('get_config_option') and len(guest_id) != 0:
+            if self.params.get('get_config_options') and len(guest_id) != 0:
                 if supported_gos_list and guest_id[0] not in supported_gos_list:
                     self.module.fail_json(msg="Specified guest ID '%s' is not in the supported guest ID list: '%s'"
                                               % (guest_id[0], supported_gos_list))
                 vm_config_option_guest = self.get_config_option_by_spec(env_browser=env_browser, host=host,
-                                                                        guest_id=guest_id, key=config_option_key)
+                                                                        guest_id=guest_id, key=hardware_version)
                 guest_os_options = vm_config_option_guest.guestOSDescriptor
                 guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options,
                                                                           hwv_version=vm_config_option_guest.version)
@@ -278,13 +278,13 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str', default='ha-datacenter'),
-        cluster_name=dict(type='str', required=False),
-        esxi_hostname=dict(type='str', required=False),
-        get_config_option_keys=dict(type='bool', default=False),
+        cluster_name=dict(type='str'),
+        esxi_hostname=dict(type='str'),
+        get_hardware_versions=dict(type='bool', default=False),
         get_guest_os_ids=dict(type='bool', default=False),
-        get_config_option=dict(type='bool', default=False),
-        guest_id=dict(type='str', required=False),
-        config_option_key=dict(type='str', required=False),
+        get_config_options=dict(type='bool', default=False),
+        guest_id=dict(type='str'),
+        hardware_version=dict(type='str'),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
