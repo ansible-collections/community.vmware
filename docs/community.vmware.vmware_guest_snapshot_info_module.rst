@@ -344,7 +344,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the snapshot information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;current_snapshot&#x27;: {&#x27;creation_time&#x27;: &#x27;2018-02-10T14:48:31.999459+00:00&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: 28, &#x27;name&#x27;: &#x27;snap_0003&#x27;, &#x27;state&#x27;: &#x27;poweredOff&#x27;}, &#x27;snapshots&#x27;: [{&#x27;creation_time&#x27;: &#x27;2018-02-10T14:48:31.999459+00:00&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: 28, &#x27;name&#x27;: &#x27;snap_0003&#x27;, &#x27;state&#x27;: &#x27;poweredOff&#x27;}]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;current_snapshot&#x27;: {&#x27;creation_time&#x27;: &#x27;2018-02-10T14:48:31.999459+00:00&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: 28, &#x27;name&#x27;: &#x27;snap_0003&#x27;, &#x27;state&#x27;: &#x27;poweredOff&#x27;, &#x27;quiesced&#x27;: False}, &#x27;snapshots&#x27;: [{&#x27;creation_time&#x27;: &#x27;2018-02-10T14:48:31.999459+00:00&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: 28, &#x27;name&#x27;: &#x27;snap_0003&#x27;, &#x27;state&#x27;: &#x27;poweredOff&#x27;, &#x27;quiesced&#x27;: False}]}</div>
                 </td>
             </tr>
     </table>

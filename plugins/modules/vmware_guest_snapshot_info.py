@@ -105,7 +105,8 @@ guest_snapshots:
             "description": "",
             "id": 28,
             "name": "snap_0003",
-            "state": "poweredOff"
+            "state": "poweredOff",
+            "quiesced": false
         },
         "snapshots": [
             {
@@ -113,7 +114,8 @@ guest_snapshots:
                 "description": "",
                 "id": 28,
                 "name": "snap_0003",
-                "state": "poweredOff"
+                "state": "poweredOff",
+                "quiesced": false
             }
         ]
     }

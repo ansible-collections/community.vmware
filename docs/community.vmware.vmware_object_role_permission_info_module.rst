@@ -25,7 +25,7 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.7
+- python >= 3
 - PyVmomi
 
 
@@ -156,6 +156,23 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>principal</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The optional name of an entity, such as a user, assigned permissions on an object.</div>
+                        <div>If provided, actual permissions on the specified object are returned for the principal, instead of roles.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -246,12 +263,22 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather permission information about Datastore
+    - name: Gather role information about Datastore
       community.vmware.vmware_object_role_permission_info:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
+        object_name: ds_200
+        object_type: Datastore
+
+    - name: Gather permissions on Datastore for a User
+      community.vmware.vmware_object_role_permission_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        principal: some.user@company.com
         object_name: ds_200
         object_type: Datastore
 

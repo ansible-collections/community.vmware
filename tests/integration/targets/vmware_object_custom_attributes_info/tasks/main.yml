@@ -6,6 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
+    setup_datastore: true 
     setup_virtualmachines: true
 
 - name: Include tasks pre.yml

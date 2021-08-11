@@ -129,9 +129,20 @@ options:
           - domain is used to set A fully qualified domain name (FQDN) or complete domain name for Instant Cloned Guest operating System.
         type: str
     version_added: '1.11.0'
-    default: []
     type: list
     elements: dict
+  wait_vm_tools:
+    description:
+      - Whether waiting until vm tools start after rebooting an instant clone vm.
+    type: bool
+    default: True
+    version_added: '1.12.0'
+  wait_vm_tools_timeout:
+    description:
+      - Define a timeout (in seconds) for I(the wait_vm_tools) parameter.
+    type: int
+    default: 300
+    version_added: '1.12.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -245,7 +256,9 @@ EXAMPLES = r'''
 
 RETURN = r'''
 vm_info:
-    description: metadata about the virtual machine
+    description:
+      - metadata about the virtual machine
+      - added instance_uuid from version 1.12.0
     returned: always
     type: dict
     sample: {
@@ -253,9 +266,12 @@ vm_info:
         "vcenter": "",
         "host": "",
         "datastore": "",
-        "vm_folder": ""
+        "vm_folder": "",
+        "instance_uuid": ""
     }
 '''
+
+import time
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 
@@ -268,6 +284,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec,
     find_obj,
     wait_for_task,
+    set_vm_power_state
 )
 
 try:
@@ -297,6 +314,8 @@ class VmwareGuestInstantClone(PyVmomi):
         self.uuid = self.params.get('uuid')
         self.port = self.params.get('port')
         self.use_instance_uuid = self.params.get('use_instance_uuid')
+        self.wait_vm_tools = self.params.get('wait_vm_tools')
+        self.wait_vm_tools_timeout = self.params.get('wait_vm_tools_timeout')
         self.guestinfo_vars = self.params.get('guestinfo_vars')
 
     def get_new_vm_info(self, vm):
@@ -314,6 +333,7 @@ class VmwareGuestInstantClone(PyVmomi):
         info['host'] = vm_facts['hw_esxi_host']
         info['datastore'] = vm_facts['hw_datastores']
         info['vm_folder'] = vm_facts['hw_folder']
+        info['instance_uuid'] = vm_facts['instance_uuid']
         return info
 
     def Instant_clone(self):
@@ -321,8 +341,8 @@ class VmwareGuestInstantClone(PyVmomi):
         if self.vm_obj is None:
             vm_id = self.parent_vm or self.uuid or self.moid
             self.module.fail_json(msg="Failed to find the VM/template with %s" % vm_id)
-        task = self.vm_obj.InstantClone_Task(spec=self.instant_clone_spec)
         try:
+            task = self.vm_obj.InstantClone_Task(spec=self.instant_clone_spec)
             wait_for_task(task)
             vm_info = self.get_new_vm_info(self.vm_name)
             result = {'changed': True, 'failed': False, 'vm_info': vm_info}
@@ -370,13 +390,35 @@ class VmwareGuestInstantClone(PyVmomi):
 
             customization_spec.nicSettingMap.append(adapter_mapping_obj)
 
-            task_guest = guest_custom_mng.CustomizeGuest_Task(vm_IC, auth_obj, customization_spec)
             try:
+                task_guest = guest_custom_mng.CustomizeGuest_Task(vm_IC, auth_obj, customization_spec)
                 wait_for_task(task_guest)
                 vm_info = self.get_new_vm_info(self.vm_name)
                 result = {'changed': True, 'failed': False, 'vm_info': vm_info}
             except TaskError as task_e:
                 self.module.fail_json(msg=to_native(task_e))
+
+            # Should require rebooting to reflect customization parameters to instant clone vm.
+            instant_vm_obj = find_vm_by_id(content=self.content, vm_id=vm_info['instance_uuid'], vm_id_type='instance_uuid')
+            set_vm_power_state(content=self.content, vm=instant_vm_obj, state='rebootguest', force=False)
+
+            if self.wait_vm_tools:
+                interval = 15
+                # Wait vm tools is started after rebooting.
+                while self.wait_vm_tools_timeout > 0:
+                    if instant_vm_obj.guest.toolsRunningStatus != 'guestToolsRunning':
+                        break
+                    self.wait_vm_tools_timeout -= interval
+                    time.sleep(interval)
+
+                while self.wait_vm_tools_timeout > 0:
+                    if instant_vm_obj.guest.toolsRunningStatus == 'guestToolsRunning':
+                        break
+                    self.wait_vm_tools_timeout -= interval
+                    time.sleep(interval)
+
+                if self.wait_vm_tools_timeout <= 0:
+                    self.module.fail_json(msg="Timeout has been reached for waiting to start the vm tools.")
 
         return result
 
@@ -496,9 +538,10 @@ def main():
         folder=dict(type='str', required=False),
         resource_pool=dict(type='str', required=False),
         parent_vm=dict(type='str'),
+        wait_vm_tools=dict(type='bool', default=True),
+        wait_vm_tools_timeout=dict(type='int', default=300),
         guestinfo_vars=dict(
             type='list',
-            default=[],
             elements='dict',
             options=dict(
                 ipaddress=dict(type='str'),
@@ -519,6 +562,9 @@ def main():
         mutually_exclusive=[
             ['uuid', 'parent_vm', 'moid'],
         ],
+        required_together=[
+            ['vm_username', 'vm_password', 'guestinfo_vars']
+        ]
     )
     result = {'failed': False, 'changed': False}
 

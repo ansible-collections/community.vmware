@@ -72,6 +72,46 @@
         that:
           - pg_info.changed
 
+    - name: Create portgroup with traffic shaping
+      vmware_portgroup:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        vswitch: '{{ switch1 }}'
+        portgroup: 'pg_ts'
+        cluster_name: "{{ ccr1 }}"
+        traffic_shaping:
+          enabled: true
+          average_bandwidth: 100000
+          peak_bandwidth: 100000
+          burst_size: 102400
+        validate_certs: false
+        state: present
+      register: create_portgroup_with_traffic_shaping_result
+
+    - assert:
+        that:
+          - create_portgroup_with_traffic_shaping_result.changed
+
+    # Issue 955
+    - name: Disable traffic shaping
+      vmware_portgroup:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        vswitch: '{{ switch1 }}'
+        portgroup: 'pg_ts'
+        cluster_name: "{{ ccr1 }}"
+        traffic_shaping:
+          enabled: false
+        validate_certs: false
+        state: present
+      register: disable_traffic_shaping_result
+
+    - assert:
+        that:
+          - disable_traffic_shaping_result.changed
+
     - name: Integration test a PortGroup name with special characters
       block:
         - name: Create Switch with special characters
@@ -81,7 +121,7 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
-            switch: 'Switch\/%'
+            switch: 'Switch\%'
             state: present
           register: create_switch_with_special_characters_result
 
@@ -96,8 +136,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             security:
               promiscuous_mode: false
               mac_changes: false
@@ -116,8 +156,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             security:
               promiscuous_mode: false
               mac_changes: false
@@ -136,8 +176,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             state: absent
           register: delete_portgroup_with_special_characters_result
 
@@ -152,8 +192,8 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             hosts: "{{ esxi1 }}"
-            switch: 'Switch\/%'
-            portgroup: 'PortGroup\/%'
+            switch: 'Switch\%'
+            portgroup: 'PortGroup\%'
             state: absent
           register: delete_portgroup_with_special_characters_idempotency_check_result
 
@@ -168,7 +208,7 @@
             password: "{{ vcenter_password }}"
             validate_certs: false
             esxi_hostname: "{{ esxi1 }}"
-            switch: 'Switch\/%'
+            switch: 'Switch\%'
             state: absent
           register: delete_switch_with_special_characters_result
 

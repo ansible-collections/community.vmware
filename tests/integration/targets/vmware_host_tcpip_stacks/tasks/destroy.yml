@@ -18,12 +18,7 @@
       subnet_mask: 255.255.255.0
       tcpip_stack: provisioning
     state: absent
-  register: vmkernel_provisioning_result
-
-- name: Make sure if the provisioning vmkernel is destroyed
-  assert:
-    that:
-      - vmkernel_provisioning_result.changed is sameas true
+  ignore_errors: true
 
 - name: destroy vmkernel for vmotion
   vmware_vmkernel:
@@ -41,12 +36,7 @@
       subnet_mask: 255.255.255.0
       tcpip_stack: vmotion
     state: absent
-  register: vmkernel_vmotion_result
-
-- name: Make sure if the vmotion vmkernel is destroyed
-  assert:
-    that:
-      - vmkernel_vmotion_result.changed is sameas true
+  ignore_errors: true
 
 - name: destroy portgroups for the test
   vmware_portgroup:
@@ -58,12 +48,7 @@
     switch: "{{ switch1 }}"
     portgroup: "{{ item }}"
     state: absent
-  register: portgroups_result
+  ignore_errors: true
   loop:
     - provisioning
     - vmotion
-
-- name: Make sure if the portgroups are destroyed
-  assert:
-    that:
-      - portgroups_result.changed is sameas true
