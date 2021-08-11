@@ -101,6 +101,26 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>compatibility_mode</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>physicalMode</li>
+                                    <li>virtualMode</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Compatibility mode for raw devices. Required for disk type &#x27;rdm&#x27;</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>controller_number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -319,6 +339,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>rdm_path</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Path of LUN for Raw Device Mapping required for disk type <code>rdm</code>.</div>
+                        <div>Only valid is <code>type</code> is set to <code>rdm</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>scsi_controller</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -435,6 +473,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
+                        <div>This parameter is not available for Raw Device Mapping(RDM).</div>
                         <div>The sharing mode of the virtual disk.</div>
                         <div>Setting sharing means that multiple virtual machines can write to the virtual disk.</div>
                         <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code>.</div>
@@ -560,10 +599,12 @@ Parameters
                                     <li>thin</li>
                                     <li>eagerzeroedthick</li>
                                     <li>thick</li>
+                                    <li>rdm</li>
                         </ul>
                 </td>
                 <td>
                         <div>The type of disk, if not specified then use <code>thick</code> type for new disk, no eagerzero.</div>
+                        <div>The disk type <code>rdm</code> is added in version 1.13.0.</div>
                 </td>
             </tr>
             <tr>
@@ -880,6 +921,39 @@ Examples
               level_value: 1300
       delegate_to: localhost
       register: test_custom_shares
+
+    - name: Add physical raw device mapping to virtual machine using name
+      community.vmware.vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: "Test_VM"
+        disk:
+          - type: rdm
+            state: present
+            scsi_controller: 1
+            unit_number: 5
+            rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+            compatibility_mode: 'physicalMode'
+
+    - name: Add virtual raw device mapping to virtual machine using name and virtual mode
+      community.vmware.vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: "Test_VM"
+        disk:
+          - type: rdm
+            state: present
+            scsi_controller: 1
+            unit_number: 5
+            rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+            compatibility_mode: 'virtualMode'
+            disk_mode: 'persistent'
 
     - name: create new disk with custom IO limits and shares in IO Limits
       community.vmware.vmware_guest_disk:
