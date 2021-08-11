@@ -211,6 +211,9 @@ class VmotionManager(PyVmomi):
         if dest_resourcepool:
             self.resourcepool_object = find_resource_pool_by_name(content=self.content,
                                                                   resource_pool_name=dest_resourcepool)
+            # Fail if user supplied resourcePool object is not found
+            if self.resourcepool_object is None:
+                self.module.fail_json(msg="Unable to find destination resource pool object %s" % dest_resourcepool)
         elif not dest_resourcepool and dest_host_name:
             self.resourcepool_object = self.host_object.parent.resourcePool
 
@@ -311,9 +314,13 @@ class VmotionManager(PyVmomi):
         """
         Migrate virtual machine and return the task.
         """
-        relocate_spec = vim.vm.RelocateSpec(host=self.host_object,
-                                            datastore=self.datastore_object,
-                                            pool=self.resourcepool_object)
+        if self.resourcepool_object:
+            relocate_spec = vim.vm.RelocateSpec(host=self.host_object,
+                                                datastore=self.datastore_object,
+                                                pool=self.resourcepool_object)
+        else:
+            relocate_spec = vim.vm.RelocateSpec(host=self.host_object,
+                                                datastore=self.datastore_object)
         if self.datastore_object:
             for device in self.vm.config.hardware.device:
                 if isinstance(device, vim.vm.device.VirtualDisk):
