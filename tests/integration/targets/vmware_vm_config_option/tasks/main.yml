@@ -17,7 +17,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi_hosts[0] }}"
-        get_hardware_versions: True
+        get_hardware_versions: true
       register: config_option_keys_1
 
     - debug:
@@ -31,7 +31,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         cluster_name: "{{ ccr1 }}"
-        get_hardware_versions: True
+        get_hardware_versions: true
       register: config_option_keys_2
 
     - debug:
@@ -47,9 +47,9 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi_hosts[0] }}"
-        get_guest_os_ids: True
+        get_guest_os_ids: true
       register: guest_ids_1
-      ignore_errors: True
+      ignore_errors: true
 
     - debug:
         var: guest_ids_1
@@ -73,10 +73,10 @@
             password: "{{ vcenter_password }}"
             datacenter: "{{ dc1 }}"
             esxi_hostname: "{{ esxi_hosts[0] }}"
-            get_guest_os_ids: True
+            get_guest_os_ids: true
             hardware_version: "{{ config_option_keys_1['instance']['Supported hardware versions'][0] }}"
           register: guest_ids_2
-          ignore_errors: True
+          ignore_errors: true
 
         - debug:
             var: guest_ids_2
@@ -101,10 +101,10 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi_hosts[0] }}"
-        get_config_options: True
+        get_config_options: true
         guest_id: "rhel6_64Guest"
       register: recommended_configs
-      ignore_errors: True
+      ignore_errors: true
 
     - debug:
         var: recommended_configs
