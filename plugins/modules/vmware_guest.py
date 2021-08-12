@@ -1706,8 +1706,9 @@ class PyVmomiHelper(PyVmomi):
             return device_list
 
         for device in vm.config.hardware.device:
-            if isinstance(device, self.device_helper.nic_device_type.values()):
-                device_list.append(device)
+            for device_type in self.device_helper.nic_device_type.values():
+                if isinstance(device, device_type):
+                    device_list.append(device)
 
         return device_list
 

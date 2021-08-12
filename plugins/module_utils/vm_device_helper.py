@@ -35,21 +35,21 @@ class PyVmomiDeviceHelper(object):
             'lsilogic': vim.vm.device.VirtualLsiLogicController,
             'paravirtual': vim.vm.device.ParaVirtualSCSIController,
             'buslogic': vim.vm.device.VirtualBusLogicController,
-            'lsilogicsas': vim.vm.device.VirtualLsiLogicSASController,
+            'lsilogicsas': vim.vm.device.VirtualLsiLogicSASController
         }
         self.sata_device_type = vim.vm.device.VirtualAHCIController
         self.nvme_device_type = vim.vm.device.VirtualNVMEController
         self.usb_device_type = {
             'usb2': vim.vm.device.VirtualUSBController,
-            'usb3': vim.vm.device.VirtualUSBXHCIController,
+            'usb3': vim.vm.device.VirtualUSBXHCIController
         }
         self.nic_device_type = {
             'pcnet32': vim.vm.device.VirtualPCNet32,
             'vmxnet2': vim.vm.device.VirtualVmxnet2,
             'vmxnet3': vim.vm.device.VirtualVmxnet3,
             'e1000': vim.vm.device.VirtualE1000,
-            'e1000e': vim.vm.device.VirtualE1000e(),
-            'sriov': vim.vm.device.VirtualSriovEthernetCard()
+            'e1000e': vim.vm.device.VirtualE1000e,
+            'sriov': vim.vm.device.VirtualSriovEthernetCard
         }
 
     def create_scsi_controller(self, scsi_type, bus_number, bus_sharing='noSharing'):
