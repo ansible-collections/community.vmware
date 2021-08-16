@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_guest_powerstate - added the datacenter parameter to fix an issue that datacenter key error has been occurring (https://github.com/ansible-collections/community.vmware/pull/924).

@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_snapshot_info - add quiesced status in VM snapshot info (https://github.com/ansible-collections/community.vmware/pull/978)
