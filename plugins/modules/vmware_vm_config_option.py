@@ -18,6 +18,7 @@ description: >
    for specified guest OS ID.
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
+version_added: '1.13.0'
 notes:
 - Tested on vSphere 6.5
 - Tested on vSphere 6.7
