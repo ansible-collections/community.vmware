@@ -1,2 +1,2 @@
 minor_changes:
-  - vmware_vm_config_option - add new module to get ESXi supported config option keys(hardware versions), supported guest IDs and VM recommended config options for specified guest ID (https://github.com/ansible-collections/community.vmware/issues/993).
+  - vm_device_helper - move NIC device types from vmware_guest module to vm_device_helper (https://github.com/ansible-collections/community.vmware/pull/998).
