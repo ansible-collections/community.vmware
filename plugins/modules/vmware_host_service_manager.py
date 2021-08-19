@@ -41,7 +41,7 @@ options:
     - Desired state of service.
     - "State value 'start' and 'present' has same effect."
     - "State value 'stop' and 'absent' has same effect."
-    choices: [ absent, present, restart, start, stop ]
+    choices: [ absent, present, restart, start, stop, unchanged ]
     type: str
     default: 'start'
   service_policy:
@@ -201,7 +201,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        state=dict(type='str', default='start', choices=['absent', 'present', 'restart', 'start', 'stop']),
+        state=dict(type='str', default='start', choices=['absent', 'present', 'restart', 'start', 'stop', 'unchanged']),
         service_name=dict(type='str', required=True),
         service_policy=dict(type='str', choices=['automatic', 'off', 'on']),
     )
