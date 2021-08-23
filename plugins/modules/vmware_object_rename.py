@@ -46,6 +46,34 @@ options:
       required: True
       aliases: ['object_new_name']
       type: str
+    filter:
+      description:
+      - Filter an object to search.
+      - This module can't get over 1,000 objects at onece, so you should use the I(filter) parameter
+        if VCSA has over 1,000 objects with the specified object type.
+      type: dict
+      default:
+        datacenters: []
+        folders: []
+        names: []
+      version_added: '1.14.0'
+      suboptions:
+        datacenters:
+          description:
+          - Specify moid of the datacenter where objects exist.
+          type: list
+          elements: str
+        folders:
+          description:
+          - Specify moid of the folder where objects exist.
+          - When I(object_type) is C(ResourcePool), the I(folders) parameter will be ignored.
+          type: list
+          elements: str
+        names:
+          description:
+          - Specify object name to filter.
+          type: list
+          elements: str
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 '''
@@ -100,6 +128,23 @@ EXAMPLES = r'''
     object_moid: domain-c33
     object_type: Cluster
   delegate_to: localhost
+
+- name: Rename a virtual machine is RHEL to RHEL_8 with filter parameter
+  vmware_object_rename:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    new_name: RHEL_8
+    object_moid: vm-2514
+    object_type: VirtualMachine
+    filter:
+      datacenters:
+        - datacenter-3
+      folders:
+        - group-v4
+      names:
+        - RHEL
 '''
 
 RETURN = r'''
@@ -137,6 +182,7 @@ class VmwareObjectRename(VmwareRestClient):
         self.object_name = self.params.get('object_name')
         self.object_new_name = self.params.get('new_name')
         self.object_moid = self.params.get('object_moid')
+        self.filter = self.params.get('filter')
 
         self.managed_object = None
 
@@ -209,7 +255,20 @@ class VmwareObjectRename(VmwareRestClient):
             ],
         }
 
-        all_vmware_objs = valid_object_types[self.object_type][0].list()
+        # Generate filter spec
+        # List method can get only up to a max of 1,000 objects.
+        # If VCSA has than 1,000 vm, the following error will occur.
+        # Error: Too many virtual machines. Add more filter criteria to reduce the number.
+        # To resolve the error, the list method should use the filter spec, to be less than 1,000 objects.
+        filter_spec = valid_object_types[self.object_type][0].FilterSpec(
+            datacenters=set(self.filter['datacenters']) if self.filter['datacenters'] else None,
+            names=set(self.filter['names']) if self.filter['names'] else None,
+        )
+        # folders parameter will ignore because it doesn't support in ResourcePool.Filter.
+        if self.object_type != "ResourcePool":
+            filter_spec.folders = set(self.filter['folders']) if self.filter['folders'] else None
+
+        all_vmware_objs = valid_object_types[self.object_type][0].list(filter_spec)
         existing_obj_moid = [obj for obj in all_vmware_objs if obj.name == self.object_new_name]
         if existing_obj_moid:
             # Object with same name already exists
@@ -271,6 +330,17 @@ def main():
         object_moid=dict(),
         new_name=dict(aliases=['object_new_name'], required=True),
         object_type=dict(type='str', required=True),
+        filter=dict(type='dict',
+                    options=dict(
+                        datacenters=dict(type='list', elements='str'),
+                        folders=dict(type='list', elements='str'),
+                        names=dict(type='list', elements='str')
+                    ),
+                    default=dict(
+                        datacenters=[],
+                        folders=[],
+                        names=[],
+                    ))
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
