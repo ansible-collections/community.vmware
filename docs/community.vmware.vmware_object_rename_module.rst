@@ -57,7 +57,7 @@ Parameters
                 </td>
                 <td>
                         <div>Filter an object to search.</div>
-                        <div>This module can&#x27;t get over 1,000 objects at onece, so you should use the <em>filter</em> parameter if VCSA has over 1,000 objects with the specified object type.</div>
+                        <div>This module can not get over 1,000 objects at once, so you should use the <em>filter</em> parameter if VCSA has over 1,000 objects with the specified object type.</div>
                 </td>
             </tr>
                                 <tr>

@@ -49,7 +49,7 @@ options:
     filter:
       description:
       - Filter an object to search.
-      - This module can't get over 1,000 objects at onece, so you should use the I(filter) parameter
+      - This module can not get over 1,000 objects at once, so you should use the I(filter) parameter
         if VCSA has over 1,000 objects with the specified object type.
       type: dict
       default:
