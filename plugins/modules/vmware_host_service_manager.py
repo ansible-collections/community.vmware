@@ -41,6 +41,7 @@ options:
     - Desired state of service.
     - "State value 'start' and 'present' has same effect."
     - "State value 'stop' and 'absent' has same effect."
+    - State value C(unchanged) is added in version 1.14.0.
     choices: [ absent, present, restart, start, stop, unchanged ]
     type: str
     default: 'start'
