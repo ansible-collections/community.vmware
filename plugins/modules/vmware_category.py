@@ -237,19 +237,14 @@ class VmwareCategory(VmwareRestClient):
                 lower_obj_type = obj_type.lower()
                 if lower_obj_type == 'all objects':
                     if LooseVersion(self.content.about.version) < LooseVersion('7'):
-                        obj_types_set = []
                         break
-                    else:
-                        # obj_types_set should be required to be flatten.
-                        # If it will not flatten, an error occurs in the set processing.
-                        obj_types_set = []
-                        for category in list(associable_data.values()):
-                            if isinstance(category, list):
-                                for tmp_category in category:
-                                    obj_types_set.append(tmp_category)
-                            else:
-                                obj_types_set.append(category)
-                        break
+
+                    for category in list(associable_data.values()):
+                        if isinstance(category, list):
+                            obj_types_set.extend(category)
+                        else:
+                            obj_types_set.append(category)
+                    break
                 if lower_obj_type in associable_data:
                     value = associable_data.get(lower_obj_type)
                     if isinstance(value, list):
