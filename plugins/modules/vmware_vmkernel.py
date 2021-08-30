@@ -787,7 +787,7 @@ class PyVmomiHelper(PyVmomi):
 
         return None
 
-    def set_vsan_service_type(self, enable_vsan=True):
+    def set_vsan_service_type(self, enable_vsan=False):
         """
         Set VSAN service type
         Returns: result of UpdateVsan_Task
@@ -927,7 +927,7 @@ class PyVmomiHelper(PyVmomi):
 
             # VSAN
             if self.enable_vsan:
-                results['vsan'] = self.set_vsan_service_type()
+                results['vsan'] = self.set_vsan_service_type(self.enable_vsan)
 
             # Other service type
             host_vnic_manager = self.esxi_host_obj.configManager.virtualNicManager
