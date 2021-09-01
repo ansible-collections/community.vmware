@@ -1,0 +1,40 @@
+- hosts: localhost
+  pre_tasks:
+    - name: Get the next release version
+      ansible.builtin.shell: git tag --sort=-creatordate|head -n1|perl -pe 's/(\d+\.)(\d+)\.\d+/"$1" . ($2+1) . ".0"/e'
+      register: result
+
+    - name: Set the release version
+      ansible.builtin.set_fact:
+        version: "{{ result.stdout }}"
+
+    - name: Install tox
+      ansible.builtin.pip:
+        name: tox
+
+  tasks:
+    - name: Create release branch
+      ansible.builtin.shell: git checkout -b "prepare_{{ version }}_release"
+
+    - name: Rescue docs/docsite
+      ansible.builtin.shell: 'mv ../docs/docsite /tmp'
+
+    - name: Refresh the README.md
+      ansible.builtin.shell: tox -e add_docs
+
+    - name: Refresh the changelog
+      ansible.builtin.shell: 'tox -e antsibull-changelog -- release --verbose --version {{ version }}'
+
+    - name: Clean up the changelog fragments
+      ansible.builtin.file:
+        path: changelogs/fragments
+        state: absent
+
+    - name: Restore docs/docsite
+      ansible.builtin.shell: 'mv /tmp/docsite ../docs'
+
+    - name: Add everything
+      ansible.builtin.shell: git add --all
+
+    - name: Commit everything
+      ansible.builtin.shell: 'git commit -m "prepare {{ version }} release"'
