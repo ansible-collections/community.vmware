@@ -787,7 +787,7 @@ class PyVmomiHelper(PyVmomi):
 
         return None
 
-    def set_vsan_service_type(self, enable_vsan=False):
+    def set_vsan_service_type(self, enable_vsan):
         """
         Set VSAN service type
         Returns: result of UpdateVsan_Task
@@ -816,7 +816,7 @@ class PyVmomiHelper(PyVmomi):
                     vsan_config.networkInfo = vim.vsan.host.ConfigInfo.NetworkInfo()
                     vsan_config.networkInfo.port = [vsan_port_config]
                 else:
-                    vsan_config.networkInfo.port += [vsan_port_config]
+                    vsan_config.networkInfo.port.append(vsan_port_config)
                 changed = True
 
         if not self.module.check_mode and changed:
