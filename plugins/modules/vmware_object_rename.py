@@ -56,7 +56,7 @@ options:
         datacenters: []
         folders: []
         names: []
-      version_added: '1.14.0'
+      version_added: '1.15.0'
       suboptions:
         datacenters:
           description:

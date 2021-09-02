@@ -50,7 +50,7 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.14.0</div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.15.0</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">{"datacenters": [], "folders": [], "names": []}</div>
