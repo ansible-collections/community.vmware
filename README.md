@@ -267,17 +267,31 @@ If you want to develop new content for this collection or improve what is alread
 
 Refer [testing](testing.md) for more information.
 
+### Updating documentation
+
+- Backup `docs/docsite` (for example `mv docs/docsite /tmp`)
+- Refresh documentation: `tox -e add_docs`
+- Restore docs/docsite (for example `mv /tmp/docsite docs`)
+
 ## Publishing New Version
 
 Prepare the release:
-- Refresh the README.md: `tox -e add_docs`
-- Refresh the changelog: `tox -e antsibull-changelog -- release --verbose --version 1.2.0`
-- Clean up the changelog fragments.
-- Commit everything and push a PR for review
+- Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`
+- Create a feature branch (for example `git checkout -b "prepare_1.2.0_release"`)
+- Update the documentation (see above)
+- Update the changelog: `tox -e antsibull-changelog -- release --verbose --version 1.2.0`
+- Clean up the changelog fragments (`rm -rf changelogs/fragments`)
+- Commit everything, push the branch to your GitHub repository and open a PR
 
 Push the release:
 - Tag the release: `git tag -s 1.0.0`
 - Push the tag: `git push origin 1.0.`
+
+### Use a playbook to automate creating a new minor release
+
+We have a playbook to create minor releases which you can run with `ansible-playbook tools/prepare_minor_release.yml`.
+
+You still have to make sure that your fork is up to date, push the branch to your own repo, open a PR and tag the release (see above).
 
 ## Communication
 
