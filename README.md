@@ -269,15 +269,13 @@ Refer [testing](testing.md) for more information.
 
 ### Updating documentation
 
-- Backup `docs/docsite` (for example `mv docs/docsite /tmp`)
-- Refresh documentation: `tox -e add_docs`
-- Restore docs/docsite (for example `mv /tmp/docsite docs`)
+`ansible-playbook tools/update_documentation.yml`
 
 ## Publishing New Version
 
 Prepare the release:
 - Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
-- Run `ansible-playbook tools/prepare_minor_release.yml`. The playbook tries to generate the next minor release automatically, but you can also set the version explicitly with `--extra-vars "version=$VERSION"`. You *will* have to set the version explicitly when publishing a new major release.
+- Run `ansible-playbook tools/prepare_release.yml`. The playbook tries to generate the next minor release automatically, but you can also set the version explicitly with `--extra-vars "version=$VERSION"`. You *will* have to set the version explicitly when publishing a new major release.
 - Push the created release branch `prepare_$VERSION_release` to your GitHub repo and open a PR for review.
 
 Push the release:
