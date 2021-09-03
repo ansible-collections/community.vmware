@@ -1,16 +1,19 @@
 - hosts: localhost
   pre_tasks:
-    - name: Get the next release version
-      ansible.builtin.shell: git tag --sort=-creatordate|head -n1|perl -pe 's/(\d+\.)(\d+)\.\d+/"$1" . ($2+1) . ".0"/e'
-      register: result
-
-    - name: Set the release version
-      ansible.builtin.set_fact:
-        version: "{{ result.stdout }}"
-
     - name: Install tox
       ansible.builtin.pip:
         name: tox
+
+    - name: Generate version
+      block:
+        - name: Get the next release version
+          ansible.builtin.shell: git tag --sort=-creatordate|head -n1|perl -pe 's/(\d+\.)(\d+)\.\d+/"$1" . ($2+1) . ".0"/e'
+          register: result
+
+        - name: Set the release version
+          ansible.builtin.set_fact:
+            version: "{{ result.stdout }}"
+      when: version is not defined
 
   tasks:
     - name: Create release branch

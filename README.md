@@ -276,22 +276,13 @@ Refer [testing](testing.md) for more information.
 ## Publishing New Version
 
 Prepare the release:
-- Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`
-- Create a feature branch (for example `git checkout -b "prepare_1.2.0_release"`)
-- Update the documentation (see above)
-- Update the changelog: `tox -e antsibull-changelog -- release --verbose --version 1.2.0`
-- Clean up the changelog fragments (`rm -rf changelogs/fragments`)
-- Commit everything, push the branch to your GitHub repository and open a PR
+- Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
+- Run `ansible-playbook tools/prepare_minor_release.yml`. The playbook tries to generate the next minor release automatically, but you can also set the version explicitly with `--extra-vars "version=$VERSION"`. You *will* have to set the version explicitly when publishing a new major release.
+- Push the created release branch `prepare_$VERSION_release` to your GitHub repo and open a PR for review.
 
 Push the release:
-- Tag the release: `git tag -s 1.0.0`
-- Push the tag: `git push origin 1.0.`
-
-### Use a playbook to automate creating a new minor release
-
-We have a playbook to create minor releases which you can run with `ansible-playbook tools/prepare_minor_release.yml`.
-
-You still have to make sure that your fork is up to date, push the branch to your own repo, open a PR and tag the release (see above).
+- Tag the release: `git tag -s $VERSION`
+- Push the tag: `git push origin $VERSION`
 
 ## Communication
 
