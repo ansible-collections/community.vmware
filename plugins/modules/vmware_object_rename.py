@@ -147,7 +147,6 @@ class VmwareObjectRename(VmwareRestClient):
         self.object_name = self.params.get('object_name')
         self.object_new_name = self.params.get('new_name')
         self.object_moid = self.params.get('object_moid')
-        self.filter = self.params.get('filter')
 
         self.managed_object = None
 
