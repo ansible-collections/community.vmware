@@ -30,6 +30,16 @@ options:
       - Valid options are Cluster, ClusterComputeResource, Datacenter, Datastore, Folder, ResourcePool, VM or VirtualMachine.
       required: True
       type: str
+      choices:
+        - 'ClusterComputeResource'
+        - 'Cluster'
+        - 'Datacenter'
+        - 'Datastore'
+        - 'Folder'
+        - 'Network'
+        - 'ResourcePool'
+        - 'VM'
+        - 'VirtualMachine'
     object_name:
       description:
       - Name of the object to work with.
@@ -46,34 +56,6 @@ options:
       required: True
       aliases: ['object_new_name']
       type: str
-    filter:
-      description:
-      - Filter an object to search.
-      - This module can not get over 1,000 objects at once, so you should use the I(filter) parameter
-        if VCSA has over 1,000 objects with the specified object type.
-      type: dict
-      default:
-        datacenters: []
-        folders: []
-        names: []
-      version_added: '1.15.0'
-      suboptions:
-        datacenters:
-          description:
-          - Specify moid of the datacenter where objects exist.
-          type: list
-          elements: str
-        folders:
-          description:
-          - Specify moid of the folder where objects exist.
-          - When I(object_type) is C(ResourcePool), the I(folders) parameter will be ignored.
-          type: list
-          elements: str
-        names:
-          description:
-          - Specify object name to filter.
-          type: list
-          elements: str
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 '''
@@ -128,23 +110,6 @@ EXAMPLES = r'''
     object_moid: domain-c33
     object_type: Cluster
   delegate_to: localhost
-
-- name: Rename a virtual machine is RHEL to RHEL_8 with filter parameter
-  vmware_object_rename:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    validate_certs: false
-    new_name: RHEL_8
-    object_moid: vm-2514
-    object_type: VirtualMachine
-    filter:
-      datacenters:
-        - datacenter-3
-      folders:
-        - group-v4
-      names:
-        - RHEL
 '''
 
 RETURN = r'''
@@ -255,39 +220,61 @@ class VmwareObjectRename(VmwareRestClient):
             ],
         }
 
-        # Generate filter spec
+        target_object = valid_object_types[self.object_type][0]
+
+        # Generate filter spec.
+        # List method will be used in getting objects.
         # List method can get only up to a max of 1,000 objects.
-        # If VCSA has than 1,000 vm, the following error will occur.
+        # If VCSA has than 1,000 objects with the specified object_type, the following error will occur.
         # Error: Too many virtual machines. Add more filter criteria to reduce the number.
         # To resolve the error, the list method should use the filter spec, to be less than 1,000 objects.
-        filter_spec = valid_object_types[self.object_type][0].FilterSpec(
-            datacenters=set(self.filter['datacenters']) if self.filter['datacenters'] else None,
-            names=set(self.filter['names']) if self.filter['names'] else None,
-        )
-        # folders parameter will ignore because it doesn't support in ResourcePool.Filter.
-        if self.object_type != "ResourcePool":
-            filter_spec.folders = set(self.filter['folders']) if self.filter['folders'] else None
+        filter_spec = target_object.FilterSpec()
+        if self.object_moid:
+            # Make a filter for moid if you specify object_moid.
+            # The moid is a unique id, so get one object if target moid object exists in the vSphere environment.
+            if target_object is vcenter_obj.Datacenter:
+                filter_spec.datacenters = set([self.object_moid])
 
-        all_vmware_objs = valid_object_types[self.object_type][0].list(filter_spec)
-        existing_obj_moid = [obj for obj in all_vmware_objs if obj.name == self.object_new_name]
+            if target_object is vcenter_obj.Cluster:
+                filter_spec.clusters = set([self.object_moid])
+
+            if target_object is vcenter_obj.ResourcePool:
+                filter_spec.resource_pools = set([self.object_moid])
+
+            if target_object is vcenter_obj.Folder:
+                filter_spec.folders = set([self.object_moid])
+
+            if target_object is vcenter_obj.VM:
+                filter_spec.vms = set([self.object_moid])
+
+            if target_object is vcenter_obj.Network:
+                filter_spec.networks = set([self.object_moid])
+
+            if target_object is vcenter_obj.Datastore:
+                filter_spec.datastores = set([self.object_moid])
+        else:
+            # If you use object_name parameter, an object will filter with names.
+            filter_spec.names = set([self.object_name])
+
+        # Get an object for changing the object name.
+        all_vmware_objs = target_object.list(filter_spec)
+
+        # Ensure whether already exists an object in the same object_new_name name.
+        existing_obj_moid = None
+        if self.object_moid:
+            if all_vmware_objs:
+                # Ensure whether the same object name as object_new_name.
+                if all_vmware_objs[0].name == self.object_new_name:
+                    existing_obj_moid = all_vmware_objs
+        else:
+            existing_obj_moid = target_object.list(target_object.FilterSpec(names=set([self.object_new_name])))
         if existing_obj_moid:
             # Object with same name already exists
             results['rename_status']['current_name'] = results['rename_status']['previous_name'] = self.object_new_name
             results['changed'] = False
             self.module.exit_json(**results)
 
-        obj_moid = None
-        if self.object_name:
-            obj_moid = [obj for obj in all_vmware_objs if obj.name == self.object_name]
-            if not obj_moid:
-                self.module.fail_json(msg="Failed to find object '%s'"
-                                      " with '%s' object type" % (self.object_name, self.object_type))
-        elif self.object_moid:
-            obj_moid = [obj
-                        for obj in all_vmware_objs
-                        if getattr(obj, valid_object_types[self.object_type][2]) == self.object_moid]
-
-        if not obj_moid:
+        if not all_vmware_objs:
             msg = "Failed to find object with %s '%s' and %s' object type"
             if self.object_name:
                 msg = msg % ('name', self.object_name, self.object_type)
@@ -295,7 +282,7 @@ class VmwareObjectRename(VmwareRestClient):
                 msg = msg % ('moid', self.object_moid, self.object_type)
             self.module.fail_json(msg=msg)
 
-        obj_moid = getattr(obj_moid[0], valid_object_types[self.object_type][2])
+        obj_moid = getattr(all_vmware_objs[0], valid_object_types[self.object_type][2])
         vmware_obj = valid_object_types[self.object_type][1](obj_moid, self.soap_stub)
 
         if not vmware_obj:
@@ -329,18 +316,9 @@ def main():
         object_name=dict(),
         object_moid=dict(),
         new_name=dict(aliases=['object_new_name'], required=True),
-        object_type=dict(type='str', required=True),
-        filter=dict(type='dict',
-                    options=dict(
-                        datacenters=dict(type='list', elements='str'),
-                        folders=dict(type='list', elements='str'),
-                        names=dict(type='list', elements='str')
-                    ),
-                    default=dict(
-                        datacenters=[],
-                        folders=[],
-                        names=[],
-                    ))
+        object_type=dict(type='str', required=True, choices=['ClusterComputeResource', 'Cluster', 'Datacenter',
+                                                             'Datastore', 'Folder', 'Network', 'ResourcePool', 'VM',
+                                                             'VirtualMachine'])
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
