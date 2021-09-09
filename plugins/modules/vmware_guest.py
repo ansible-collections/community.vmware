@@ -2219,7 +2219,7 @@ class PyVmomiHelper(PyVmomi):
 
             ident.identification = vim.vm.customization.Identification()
 
-            if self.params['customization'].get('password', '') is None:
+            if self.params['customization']['password'] is None:
                 self.module.fail_json(msg="'password' entry is required in 'customization' section")
 
             else:
