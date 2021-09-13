@@ -918,6 +918,8 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
     requested states. force is forceful
     """
     facts = gather_vm_facts(content, vm)
+    if state == 'present':
+        state = 'poweredon'
     expected_state = state.replace('_', '').replace('-', '').lower()
     current_state = facts['hw_power_status'].lower()
     result = dict(
