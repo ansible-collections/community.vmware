@@ -1943,6 +1943,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">"Resources"</div>
                 </td>
                 <td>
                         <div>Use the given resource pool for virtual machine operation.</div>
