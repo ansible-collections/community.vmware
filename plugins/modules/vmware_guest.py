@@ -390,6 +390,7 @@ options:
     - Use the given resource pool for virtual machine operation.
     - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
+    - When not specified I(Resources) is taken as default value.
     type: str
   wait_for_ip_address:
     description:
