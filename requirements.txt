@@ -1,2 +1,2 @@
-pyvmomi
-git+https://github.com/vmware/vsphere-automation-sdk-python.git ; python_version >= '2.7'  # Python 2.6 is not supported
+pyvmomi>=6.7
+git+https://github.com/mariolenz/vsphere-automation-sdk-python.git@remove_suds-jurko_dependency ; python_version >= '2.7'  # Python 2.6 is not supported
