@@ -136,7 +136,6 @@ class VmwareVmHostRuleDrs(PyVmomi):
         self.__enabled = module.params['enabled']
         self.__mandatory = module.params['mandatory']
         self.__affinity_rule = module.params['affinity_rule']
-        self.__state = module.params['state']
         self.__msg = 'Nothing to see here...'
         self.__result = dict()
         self.__changed = False
@@ -155,12 +154,6 @@ class VmwareVmHostRuleDrs(PyVmomi):
         # Throw error if cluster does not exist
         if self.__cluster_obj is None and module.check_mode is False:
             raise Exception("Cluster '%s' not found" % self.__cluster_name)
-
-        # Dont populate lists if we are deleting group
-        if self.__state == 'present':
-            # Get list of vm groups only if state is present
-            self.__vm_group_obj = self.__get_group_by_name(group_name=self.__vm_group_name)
-            self.__host_group_obj = self.__get_group_by_name(group_name=self.__host_group_name, host_group=True)
 
     def get_msg(self):
         """
@@ -188,30 +181,6 @@ class VmwareVmHostRuleDrs(PyVmomi):
         Returns: boolean
         """
         return self.__changed
-
-    def __get_group_by_name(self, group_name, cluster_obj=None, host_group=False):
-        """
-        Return group
-        Args:
-            group_name: Group name
-            cluster_obj: Cluster managed object
-
-        Returns: cluster_obj.configurationEx.group
-
-        """
-        if cluster_obj is None:
-            cluster_obj = self.__cluster_obj
-
-        for group in cluster_obj.configurationEx.group:
-
-            if not host_group and isinstance(group, vim.cluster.VmGroup):
-                if group.name == group_name:
-                    return group
-            elif host_group and isinstance(group, vim.cluster.HostGroup):
-                if group.name == group_name:
-                    return group
-
-        raise Exception("Failed to find the group %s in given cluster %s" % (group_name, cluster_obj.name))
 
     def __get_rule_key_by_name(self, cluster_obj=None, rule_name=None):
         """
