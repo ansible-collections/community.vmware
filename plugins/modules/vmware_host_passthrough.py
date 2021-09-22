@@ -177,7 +177,7 @@ class VMwareHostPassthrough(PyVmomi):
         for esxi_hostname, value in self.hosts_passthrough_pci_device_id.items():
             pci_devices = []
             for device_id in value['pci_device_ids']:
-                for device in self.value['host_obj'].hardware.pciDevice:
+                for device in value['host_obj'].hardware.pciDevice:
                     if device.id == device_id.id:
                         pci_devices.append({
                             'device_name': device.deviceName,
