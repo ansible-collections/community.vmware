@@ -128,29 +128,27 @@ class VmwareDrsGroupInfoManager(PyVmomi):
         self.__datacenter_obj = None
         self.__cluster_name = cluster_name
         self.__cluster_obj = None
-        self.__msg = 'Nothing to see here...'
         self.__result = dict()
-        self.__changed = False
 
-        if datacenter_name:
+        if self.__datacenter_name:
 
-            datacenter_obj = find_datacenter_by_name(self.content, datacenter_name=datacenter_name)
+            self.__datacenter_obj = find_datacenter_by_name(self.content, datacenter_name=self.__datacenter_name)
             self.cluster_obj_list = []
 
-            if datacenter_obj:
-                folder = datacenter_obj.hostFolder
+            if self.__datacenter_obj:
+                folder = self.__datacenter_obj.hostFolder
                 self.cluster_obj_list = get_all_objs(self.content, [vim.ClusterComputeResource], folder)
             else:
                 raise Exception("Datacenter '%s' not found" % self.__datacenter_name)
 
-        if cluster_name:
+        if self.__cluster_name:
 
-            cluster_obj = self.find_cluster_by_name(cluster_name=self.__cluster_name)
+            self.__cluster_obj = self.find_cluster_by_name(cluster_name=self.__cluster_name)
 
-            if cluster_obj is None:
+            if self.__cluster_obj is None:
                 raise Exception("Cluster '%s' not found" % self.__cluster_name)
             else:
-                self.cluster_obj_list = [cluster_obj]
+                self.cluster_obj_list = [self.__cluster_obj]
 
     def get_result(self):
         """
