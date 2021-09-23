@@ -203,7 +203,7 @@ class VmwareDrsGroupManager(PyVmomi):
             self.__set_result(self.__group_obj)
 
         # Do not populate lists if we are deleting group
-        if state == 'present':
+        if self.__state == 'present':
 
             if self.__group_obj:
                 self.__operation = 'edit'
