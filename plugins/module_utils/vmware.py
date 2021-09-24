@@ -216,7 +216,6 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
 
 
 def find_cluster_by_name(content, cluster_name, datacenter=None):
-
     if datacenter and hasattr(datacenter, 'hostFolder'):
         folder = datacenter.hostFolder
     else:
@@ -303,8 +302,12 @@ def find_dvs_by_name(content, switch_name, folder=None):
     return find_object_by_name(content, switch_name, [vim.DistributedVirtualSwitch], folder=folder)
 
 
-def find_hostsystem_by_name(content, hostname):
-    return find_object_by_name(content, hostname, [vim.HostSystem])
+def find_hostsystem_by_name(content, hostname, datacenter=None):
+    if datacenter and hasattr(datacenter, 'hostFolder'):
+        folder = datacenter.hostFolder
+    else:
+        folder = content.rootFolder
+    return find_object_by_name(content, hostname, [vim.HostSystem], folder=folder)
 
 
 def find_resource_pool_by_name(content, resource_pool_name):
@@ -1386,16 +1389,17 @@ class PyVmomi(object):
             return []
 
     # Hosts related functions
-    def find_hostsystem_by_name(self, host_name):
+    def find_hostsystem_by_name(self, host_name, datacenter=None):
         """
         Find Host by name
         Args:
             host_name: Name of ESXi host
+            datacenter: (optional) Datacenter of ESXi resides
 
         Returns: True if found
 
         """
-        return find_hostsystem_by_name(self.content, hostname=host_name)
+        return find_hostsystem_by_name(self.content, hostname=host_name, datacenter=datacenter)
 
     def get_all_host_objs(self, cluster_name=None, esxi_host_name=None):
         """
