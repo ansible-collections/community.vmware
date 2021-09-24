@@ -17,7 +17,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
-notes:
 requirements:
     - Tested on vSphere 5.5 and 6.5
     - PyVmomi installed
