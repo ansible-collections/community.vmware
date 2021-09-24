@@ -823,10 +823,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if not compose:
             compose['ansible_host'] = 'guest.ipAddress'
 
-        if not compose.get('ansible_host', None):
-            raise AnsibleError('"ansible_host" not found in "compose". '
-                               'Without this inventory will be useless.')
-
         self._set_composite_vars(compose, host_properties, host, strict=strict)
         # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
         self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)
