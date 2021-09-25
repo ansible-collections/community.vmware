@@ -7,6 +7,15 @@ VMware Prerequisites
 .. contents::
    :local:
 
+ESXi License
+============
+
+Access to the vSphere API is governed by the various vSphere Editions which provides both read and write access to the API.
+If you are using vSphere Hypervisor (free edition of ESXi), the vSphere API will only be available as read-only.
+All modules requires API write access to perform various actions. Hence, a free ESXi license will not be supported.
+Please check `this blog post <https://blogs.vmware.com/vsphere/2012/02/introduction-to-the-vsphere-api-part-1.html>`_ for more details.
+
+
 Installing SSL Certificates
 ===========================
 

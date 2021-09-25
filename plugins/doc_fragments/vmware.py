@@ -12,6 +12,8 @@ __metaclass__ = type
 class ModuleDocFragment(object):
     # Parameters for VMware modules
     DOCUMENTATION = r'''
+notes:
+  - All modules requires API write access and hence is not supported on a free ESXi license.
 options:
     hostname:
       description:
@@ -66,6 +68,8 @@ options:
 
     # This doc fragment is specific to vcenter modules like vcenter_license
     VCENTER_DOCUMENTATION = r'''
+notes:
+  - All modules requires API write access and hence is not supported on a free ESXi license.
 options:
     hostname:
       description:
