@@ -11,6 +11,9 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_guest_vnc
+deprecated:
+  removed_at_date: '2022-10-15'
+  why: In vSphere 7.0, the ESXi built-in VNC server has been removed U(https://docs.vmware.com/en/VMware-vSphere/7.0/rn/vsphere-esxi-vcenter-server-70-release-notes.html#productsupport).
 short_description: Manages VNC remote display on virtual machines in vCenter
 description:
   - This module can be used to enable and disable VNC remote display on virtual machine.
@@ -233,6 +236,12 @@ def main():
         mutually_exclusive=[
             ['name', 'uuid', 'moid']
         ]
+    )
+
+    module.deprecate(
+        msg="The 'vmware_guest_vnc' module is deprecated because vSphere 7.0 removed the built-in VNC server",
+        date="2022-10-15",
+        collection_name="community.vmware"
     )
 
     result = dict(changed=False, failed=False)
