@@ -18,7 +18,7 @@
 - assert:
     that:
       - gather_info_about_vcenter_settings_result.vcenter_config_info is defined
-      - gather_info_about_vcenter_settings_result.vcenter_config_info | length == 34
+      - gather_info_about_vcenter_settings_result.vcenter_config_info | length == 32
 
 - name: "Get a list of information about vCenter settings by specifying the properties"
   community.vmware.vmware_vcenter_settings_info:
