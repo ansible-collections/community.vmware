@@ -224,6 +224,7 @@ plugins/modules/vmware_guest_video.py compile-2.6!skip
 plugins/modules/vmware_guest_video.py import-2.6!skip
 plugins/modules/vmware_guest_vnc.py compile-2.6!skip
 plugins/modules/vmware_guest_vnc.py import-2.6!skip
+plugins/modules/vmware_guest_vnc.py validate-modules:deprecation-mismatch
 plugins/modules/vmware_guest_vnc.py validate-modules:invalid-documentation
 plugins/modules/vmware_host_acceptance.py compile-2.6!skip
 plugins/modules/vmware_host_acceptance.py import-2.6!skip
