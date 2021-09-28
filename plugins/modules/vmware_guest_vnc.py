@@ -15,6 +15,7 @@ deprecated:
   removed_at_date: '2022-10-15'
   why: VNC has been removed in 7.0 U(https://docs.vmware.com/en/VMware-vSphere/7.0/rn/vsphere-esxi-vcenter-server-70-release-notes.html#productsupport).
   alternative: Users should use the VM Console via the vSphere Client, the ESXi Host Client, or the VMware Remote Console, to connect virtual machines.
+  removed_from_collection: 'community.vmware'
 short_description: Manages VNC remote display on virtual machines in vCenter
 description:
   - This module can be used to enable and disable VNC remote display on virtual machine.
