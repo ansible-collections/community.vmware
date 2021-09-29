@@ -69,6 +69,12 @@ options:
      - Max duration of the waiting period (seconds).
      default: 500
      type: int
+   datacenter:
+     description:
+     - Name of the datacenter.
+     - The datacenter to search for a virtual machine.
+     type: str
+     version_added: '1.15.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -112,6 +118,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     name: test-vm
     folder: "/{{datacenter}}/vm"
+    datacenter: "{{ datacenter }}"
   delegate_to: localhost
   register: facts
 '''
@@ -165,6 +172,7 @@ def main():
         moid=dict(type='str'),
         use_instance_uuid=dict(type='bool', default=False),
         timeout=dict(type='int', default=500),
+        datacenter=dict(type='str'),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
