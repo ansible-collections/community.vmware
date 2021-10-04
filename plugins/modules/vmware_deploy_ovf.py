@@ -399,6 +399,12 @@ class VMwareDeployOvf(PyVmomi):
         return self.datastore, self.datacenter, self.resource_pool, self.network_mappings
 
     def get_ovf_descriptor(self):
+        # Check whether ovf/ova file exists
+        try:
+            path_exists(self.params['ovf'])
+        except ValueError as e:
+            self.module.fail_json(msg="%s" % e)
+
         if tarfile.is_tarfile(self.params['ovf']):
             self.tar = tarfile.open(self.params['ovf'])
             ovf = None
