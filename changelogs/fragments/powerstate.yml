@@ -1,3 +1,0 @@
----
-bugfixes:
-- vmware_guest_powerstate - handle 'present' state as 'poweredon' (https://github.com/ansible-collections/community.vmware/pull/1033).

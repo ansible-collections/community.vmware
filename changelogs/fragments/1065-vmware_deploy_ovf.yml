@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - fixed to display suitable the error when not exist an ovf file path (https://github.com/ansible-collections/community.vmware/pull/1065).
