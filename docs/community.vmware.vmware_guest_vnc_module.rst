@@ -13,6 +13,13 @@ community.vmware.vmware_guest_vnc
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2022-10-15
+:Why: VNC has been removed in 7.0 and 2022-10-15 is the End of General Support date for 6.5 / 6.7.
+:Alternative: Users should use the VM Console via the vSphere Client, the ESXi Host Client, or the VMware Remote Console to connect to virtual machines.
+
+
 
 Synopsis
 --------
@@ -340,6 +347,12 @@ Parameters
     <br/>
 
 
+Notes
+-----
+
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
+
 
 
 Examples
@@ -448,6 +461,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
+
+
+- This module will be removed in a release after 2022-10-15. *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

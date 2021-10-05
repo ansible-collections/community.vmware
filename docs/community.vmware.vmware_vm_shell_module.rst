@@ -405,6 +405,7 @@ Notes
 .. note::
    - Tested on vSphere 5.5, 6.0 and 6.5.
    - Only the first match against vm_id is used, even if there are multiple matches.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

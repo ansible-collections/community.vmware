@@ -288,6 +288,7 @@ Notes
    - Tested on vSphere 6.0 and 6.5.
    - Disk UUID information is added in version 2.8.
    - Additional information about guest disk backings added in version 2.8.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

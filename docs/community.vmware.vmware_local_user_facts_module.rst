@@ -185,6 +185,7 @@ Notes
 .. note::
    - Tested on ESXi 6.5
    - The ``full_name``, ``principal``, and ``user_group`` properties are deprecated starting from Ansible v2.12
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -240,7 +241,7 @@ Status
 ------
 
 
-- This module will be removed in version . *[deprecated]*
+- This module will be removed in a release after 2021-12-01. *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

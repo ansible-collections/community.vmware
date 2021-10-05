@@ -359,6 +359,7 @@ Notes
    - Tested on vSphere 6.0, 6.5 and ESXi 6.7
    - NFS v4.1 tested on vSphere 6.5
    - Kerberos authentication with NFS v4.1 isn't implemented
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

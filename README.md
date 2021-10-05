@@ -234,6 +234,7 @@ Name | Description
 [community.vmware.vmware_vcenter_settings](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vcenter_settings_module.rst)|Configures general settings on a vCenter server
 [community.vmware.vmware_vcenter_settings_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vcenter_settings_info_module.rst)|Gather info vCenter settings
 [community.vmware.vmware_vcenter_statistics](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vcenter_statistics_module.rst)|Configures statistics on a vCenter server
+[community.vmware.vmware_vm_config_option](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_config_option_module.rst)|Return supported guest ID list and VM recommended config option for specific guest OS
 [community.vmware.vmware_vm_host_drs_rule](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_host_drs_rule_module.rst)|Creates vm/host group in a given cluster
 [community.vmware.vmware_vm_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_info_module.rst)|Return basic info pertaining to a VMware machine guest
 [community.vmware.vmware_vm_shell](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vm_shell_module.rst)|Run commands in a VMware guest operating system

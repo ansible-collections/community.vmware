@@ -332,6 +332,7 @@ Notes
 .. note::
    - This module is a replacement for the module ``vmware_dns_config``
    - Tested on vSphere 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

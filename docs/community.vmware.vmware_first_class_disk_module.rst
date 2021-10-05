@@ -263,6 +263,7 @@ Notes
 
 .. note::
    - Tested on vSphere 7.0
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

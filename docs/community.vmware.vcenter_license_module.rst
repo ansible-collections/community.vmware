@@ -277,6 +277,7 @@ Notes
    - The evaluation license (00000-00000-00000-00000-00000) is not listed when unused.
    - If ``esxi_hostname`` is specified, then will assign the ``license`` key to the ESXi host.
    - If ``esxi_hostname`` is not specified, then will just register the ``license`` key to vCenter inventory without assigning it to an ESXi host.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
