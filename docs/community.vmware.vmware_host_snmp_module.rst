@@ -324,6 +324,7 @@ Notes
    - Tested on vSphere 6.5
    - You need to reset the agent (to factory defaults) if you want to clear all community strings, trap targets, or filters
    - SNMP v3 configuration isn't implemented yet
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

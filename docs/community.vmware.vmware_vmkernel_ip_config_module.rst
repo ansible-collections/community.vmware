@@ -230,6 +230,7 @@ Notes
 
 .. note::
    - Tested on vSphere 5.5
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -257,7 +258,7 @@ Status
 ------
 
 
-- This module will be removed in version . *[deprecated]*
+- This module will be removed in a release after 2021-12-01. *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

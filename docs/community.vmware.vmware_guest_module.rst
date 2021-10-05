@@ -1948,6 +1948,7 @@ Parameters
                         <div>Use the given resource pool for virtual machine operation.</div>
                         <div>This parameter is case sensitive.</div>
                         <div>Resource pool should be child of the selected host parent.</div>
+                        <div>When not specified <em>Resources</em> is taken as default value.</div>
                 </td>
             </tr>
             <tr>
@@ -2301,6 +2302,7 @@ Notes
    - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
    - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the ``state=present`` must be used to apply the changes.
    - For additional information please visit Ansible VMware community wiki - https://github.com/ansible/community/wiki/VMware.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

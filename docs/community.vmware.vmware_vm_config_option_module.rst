@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_export_ovf_module:
+.. _community.vmware.vmware_vm_config_option_module:
 
 
-**********************************
-community.vmware.vmware_export_ovf
-**********************************
+****************************************
+community.vmware.vmware_vm_config_option
+****************************************
 
-**Exports a VMware virtual machine to an OVF file, device files and a manifest file**
+**Return supported guest ID list and VM recommended config option for specific guest OS**
 
 
+Version added: 1.15.0
 
 .. contents::
    :local:
@@ -16,7 +17,7 @@ community.vmware.vmware_export_ovf
 
 Synopsis
 --------
-- This module can be used to export a VMware virtual machine to OVF template from vCenter server or ESXi host.
+- This module is used for getting the hardware versions supported for creation, the guest ID list supported by ESXi host for the most recent virtual hardware supported or specified hardware version, the VM recommended config options for specified guest OS ID.
 
 
 
@@ -27,6 +28,7 @@ The below requirements are needed on the host that executes this module.
 
 - python >= 2.6
 - PyVmomi
+- System.View privilege
 
 
 Parameters
@@ -43,6 +45,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cluster_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the cluster.</div>
+                        <div>If <code>esxi_hostname</code> is not given, this parameter is required.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -53,48 +71,31 @@ Parameters
                         <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
                 </td>
                 <td>
-                        <div>Datacenter name of the virtual machine to export.</div>
+                        <div>The datacenter name used to get specified cluster or host.</div>
                         <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>download_timeout</b>
+                    <b>esxi_hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">30</div>
-                </td>
-                <td>
-                        <div>The user defined timeout in second of exporting file.</div>
-                        <div>If the vmdk file is too large, you can increase the value.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>export_dir</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">path</span>
-                         / <span style="color: red">required</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Absolute path to place the exported files on the server running this task, must have write permission.</div>
-                        <div>If folder not exist will create it, also create a folder under this path named with VM name.</div>
+                        <div>ESXi hostname.</div>
+                        <div>Obtain VM configure options on this ESXi host.</div>
+                        <div>If <code>cluster_name</code> is not given, this parameter is required.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>export_with_images</b>
+                    <b>get_config_options</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -107,13 +108,53 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Export an ISO image of the media mounted on the CD/DVD Drive within the virtual machine.</div>
+                        <div>Return the dict of VM recommended config options for guest ID specified by <code>guest_id</code> with hardware version specified by <code>hardware_version</code> or the default hardware version.</div>
+                        <div>When set to True, <code>guest_id</code> must be set.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>folder</b>
+                    <b>get_guest_os_ids</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Return the list of guest OS IDs supported on the specified entity.</div>
+                        <div>If <code>hardware_version</code> is set, will return the corresponding guest OS ID list supported, or will return the guest OS ID list for the default hardware version.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>get_hardware_versions</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Return the list of VM hardware versions supported for creation and the default hardware version on the specified entity.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>guest_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -122,20 +163,23 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Destination folder, absolute path to find the specified guest.</div>
-                        <div>The folder should include the datacenter. ESX datacenter is ha-datacenter.</div>
-                        <div>This parameter is case sensitive.</div>
-                        <div>If multiple machines are found with same name, this parameter is used to identify</div>
-                        <div>Examples:</div>
-                        <div>folder: /ha-datacenter/vm</div>
-                        <div>folder: ha-datacenter/vm</div>
-                        <div>folder: /datacenter1/vm</div>
-                        <div>folder: datacenter1/vm</div>
-                        <div>folder: /datacenter1/vm/folder1</div>
-                        <div>folder: datacenter1/vm/folder1</div>
-                        <div>folder: /folder1/datacenter1/vm</div>
-                        <div>folder: folder1/datacenter1/vm</div>
-                        <div>folder: /folder1/datacenter1/vm/folder2</div>
+                        <div>The guest OS ID from the returned list when <code>get_guest_os_ids</code> is set to <code>True</code>, e.g., &#x27;rhel8_64Guest&#x27;.</div>
+                        <div>This parameter must be set when <code>get_config_options</code> is set to <code>True</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hardware_version</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The hardware version from the returned list when <code>get_hardware_versions</code> is set to <code>True</code>, e.g., &#x27;vmx-19&#x27;.</div>
                 </td>
             </tr>
             <tr>
@@ -153,38 +197,6 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>moid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
-                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the virtual machine to export.</div>
-                        <div>This is a required parameter, if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -278,22 +290,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uuid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Uuid of the virtual machine to export.</div>
-                        <div>This is a required parameter, if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -321,6 +317,9 @@ Notes
 -----
 
 .. note::
+   - Tested on vSphere 6.5
+   - Tested on vSphere 6.7
+   - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -330,13 +329,23 @@ Examples
 
 .. code-block:: yaml
 
-    - community.vmware.vmware_export_ovf:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        name: '{{ vm_name }}'
-        export_with_images: true
-        export_dir: /path/to/ovf_template/
+    - name: Get supported guest ID list on given ESXi host for with default hardware version
+      community.vmware.vmware_vm_config_option:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        esxi_hostname: "{{ esxi_hostname }}"
+        get_guest_os_ids: True
+      delegate_to: localhost
+
+    - name: Get VM recommended config option for Windows 10 guest OS on given ESXi host
+      community.vmware.vmware_vm_config_option:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        esxi_hostname: "{{ esxi_hostname }}"
+        get_config_options: True
+        guest_id: "windows9_64Guest"
       delegate_to: localhost
 
 
@@ -364,7 +373,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>always</td>
                 <td>
-                            <div>list of the exported files, if exported from vCenter server, device file is not named with vm name</div>
+                            <div>metadata about the VM recommended configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">None</div>

@@ -307,6 +307,7 @@ Notes
 
 .. note::
    - In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module :ref:`community.vmware.vmware_guest_powerstate <community.vmware.vmware_guest_powerstate_module>`.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

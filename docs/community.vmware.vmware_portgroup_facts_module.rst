@@ -236,6 +236,7 @@ Notes
 .. note::
    - Tested on vSphere 6.5
    - The ``vswitch_name`` property is deprecated starting from Ansible v2.12
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -299,7 +300,7 @@ Status
 ------
 
 
-- This module will be removed in version . *[deprecated]*
+- This module will be removed in a release after 2021-12-01. *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

@@ -636,6 +636,12 @@ Parameters
     <br/>
 
 
+Notes
+-----
+
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
+
 
 See Also
 --------

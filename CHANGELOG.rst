@@ -5,6 +5,36 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.15.0
+=======
+
+Minor Changes
+-------------
+
+- vm_device_helper - move NIC device types from vmware_guest module to vm_device_helper (https://github.com/ansible-collections/community.vmware/pull/998).
+
+Deprecated Features
+-------------------
+
+- vmware_guest_vnc -  Sphere 7.0 removed the built-in VNC server (https://docs.vmware.com/en/VMware-vSphere/7.0/rn/vsphere-esxi-vcenter-server-70-release-notes.html#productsupport).
+
+Bugfixes
+--------
+
+- Fix a bug that prevented enabling VSAN on more than one vmk, risking splitting the whole cluster during interface migration scenarios (https://github.com/ansible-collections/community.vmware/issues/891)
+- vmware_deploy_ovf - Fix deploy ovf issue when there are more than one datacenter in VC (https://github.com/ansible-collections/community.vmware/issues/164).
+- vmware_deploy_ovf - fixed to display suitable the error when not exist an ovf file path (https://github.com/ansible-collections/community.vmware/pull/1065).
+- vmware_guest_powerstate - handle 'present' state as 'poweredon' (https://github.com/ansible-collections/community.vmware/pull/1033).
+- vmware_guest_tools_wait - add documentation about datacenter parameter (https://github.com/ansible-collections/community.vmware/pull/870).
+- vmware_object_rename - fixed an issue that an error has occurred when getting than 1,000 objects (https://github.com/ansible-collections/community.vmware/pull/1010).
+- vmware_vcenter_settings_info - fix to return all VCSA settings when setting vsphere to the schema and not specifying the properties (https://github.com/ansible-collections/community.vmware/pull/1050).
+- vmware_vm_inventory - remove erroneous ``ansible_host`` condition (https://github.com/ansible-collections/community.vmware/issues/975).
+
+New Modules
+-----------
+
+- vmware_vm_config_option - Return supported guest ID list and VM recommended config option for specific guest OS
+
 v1.14.0
 =======
 

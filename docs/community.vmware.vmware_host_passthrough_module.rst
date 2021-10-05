@@ -265,6 +265,7 @@ Notes
 
 .. note::
    - Supports ``check_mode``.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

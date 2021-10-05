@@ -264,6 +264,7 @@ Notes
    - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
    - From 2.8 and onwards, information are returned as list of dict instead of dict.
    - Fact about ``moid`` added in VMware collection 1.4.0.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

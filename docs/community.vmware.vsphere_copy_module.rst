@@ -251,6 +251,7 @@ Notes
 .. note::
    - This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using ``transport: local`` or using ``delegate_to``.
    - Tested on vSphere 5.5 and ESXi 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
