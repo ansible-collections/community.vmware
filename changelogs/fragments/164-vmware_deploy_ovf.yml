@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - Fix deploy ovf issue when there are more than one datacenter in VC (https://github.com/ansible-collections/community.vmware/issues/164).

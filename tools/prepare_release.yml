@@ -22,7 +22,7 @@
 
     - name: Clean up the changelog fragments
       ansible.builtin.file:
-        path: changelogs/fragments
+        path: "{{ playbook_dir }}/../changelogs/fragments"
         state: absent
 
     - name: Add everything
