@@ -2,7 +2,7 @@
 set -eux
 
 # Envs
-export ANSIBLE_PYTHON_INTERPRETER=${ANSIBLE_TEST_PYTHON_INTERPRETER:-$(which python)}
+export ANSIBLE_PYTHON_INTERPRETER=${ANSIBLE_TEST_PYTHON_INTERPRETER:-$(command -v python)}
 export ANSIBLE_INVENTORY_ENABLED="community.vmware.vmware_host_inventory,host_list,ini"
 export ANSIBLE_CACHE_PLUGIN_CONNECTION="${PWD}/inventory_cache"
 export ANSIBLE_CACHE_PLUGIN="community.general.jsonfile"
