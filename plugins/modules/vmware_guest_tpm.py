@@ -14,7 +14,7 @@ short_description: Add or remove vTPM device for specified VM.
 description: >
    This module is used for adding or removing Virtual Trusted Platform Module(vTPM) device for an existing
    Virtual Machine. You must create a key provider on vCenter before you can add a vTPM. The ESXi hosts
-   running in your environment must be ESXi 6.7 or later (Windows guest OS), or 7.0 Update 2 (Linux guest OS). 
+   running in your environment must be ESXi 6.7 or later (Windows guest OS), or 7.0 Update 2 (Linux guest OS).
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 version_added: '1.16.0'
@@ -192,7 +192,7 @@ def main():
         moid=dict(type='str'),
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
-        state=dict(type='str', default='present'),
+        state=dict(type='str', default='present', choices=['present', 'absent']),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
