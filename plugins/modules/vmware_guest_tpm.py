@@ -156,19 +156,20 @@ class PyVmomiHelper(PyVmomi):
                 self.vtpm_device = device
 
         if self.module.params['state'] == 'present':
+            results['vtpm_operation'] = "add"
             if self.vtpm_device:
                 results['vtpm_info'] = self.get_vtpm_info(vtpm_device=self.vtpm_device)
-                results['vtpm_operation'] = "vTPM already exist"
+                results['msg'] = "vTPM device already exist on VM"
                 self.module.exit_json(**results)
             else:
                 vtpm_device_spec = self.device_helper.create_tpm()
-                results['vtpm_operation'] = "add vTPM"
         if self.module.params['state'] == 'absent':
+            results['vtpm_operation'] = "remove"
             if self.vtpm_device is None:
-                self.module.fail_json(msg="No vTPM device found on VM '%s'" % self.vm.name)
+                results['msg'] = "No vTPM device found on VM"
+                self.module.exit_json(**results)
             else:
                 vtpm_device_spec = self.device_helper.remove_tpm(self.vtpm_device)
-                results['vtpm_operation'] = "remove vTPM"
         self.config_spec.deviceChange.append(vtpm_device_spec)
 
         try:
