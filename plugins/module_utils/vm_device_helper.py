@@ -292,6 +292,18 @@ class PyVmomiDeviceHelper(object):
         nic.device.connectable.startConnected = bool(device_infos.get('start_connected', True))
         nic.device.connectable.allowGuestControl = bool(device_infos.get('allow_guest_control', True))
         nic.device.connectable.connected = bool(device_infos.get('connected', True))
+        if device_type == 'sriov':
+            pf_backing = device_infos.get('physical_function_backing', None)
+            vf_backing = device_infos.get('virtual_function_backing', None)
+
+            nic.device.allowGuestOSMtuChange = bool(device_infos.get('allow_gest_os_mtu_change', True))
+            nic.device.sriovBacking = vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo()
+            if pf_backing is not None:
+                nic.device.sriovBacking.physicalFunctionBacking = vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo()
+                nic.device.sriovBacking.physicalFunctionBacking.id = pf_backing
+            if vf_backing is not None:
+                nic.device.sriovBacking.virtualFunctionBacking = vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo()
+                nic.device.sriovBacking.virtualFunctionBacking.id = vf_backing
         if 'mac' in device_infos and is_mac(device_infos['mac']):
             nic.device.addressType = 'manual'
             nic.device.macAddress = device_infos['mac']
