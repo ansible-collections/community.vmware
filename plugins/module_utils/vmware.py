@@ -557,6 +557,12 @@ def gather_vm_facts(content, vm):
         facts['current_snapshot'] = snapshot_facts['current_snapshot']
 
     facts['vnc'] = get_vnc_extraconfig(vm)
+
+    # Gather vTPM information
+    facts['tpm_info'] = {
+        'tpm_present': vm.summary.config.tpmPresent if hasattr(vm.summary.config, 'tpmPresent') else None,
+        'provider_id': vm.config.keyId.providerId.id if vm.config.keyId else None
+    }
     return facts
 
 
