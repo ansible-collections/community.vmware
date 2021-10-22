@@ -121,7 +121,7 @@ results:
 '''
 
 try:
-    from pyvmomi import vim
+    from pyVmomi import vim
     HAS_PYVMOMI = True
 except ImportError:
     HAS_PYVMOMI = False
