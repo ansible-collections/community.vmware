@@ -196,6 +196,7 @@ def main():
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
+        supports_check_mode=True,
         required_one_of=[['name', 'uuid', 'moid']],
     )
     if module.params['folder']:
@@ -208,11 +209,23 @@ def main():
     if not vm:
         vm_id = (module.params.get('name') or module.params.get('uuid') or module.params.get('moid'))
         module.fail_json(msg="Unable to configure vTPM device for non-existing virtual machine '%s'." % vm_id)
-    try:
-        vm_config_vtpm.vtpm_operation(vm_obj=vm)
-    except Exception as e:
-        module.fail_json(msg="Failed to configure vTPM device of virtual machine '%s' with exception : %s"
-                             % (vm.name, to_native(e)))
+    else:
+        if module.check_mode:
+            if module.params['state'] == "present":
+                desired_operation = "add vTPM device"
+            else:
+                desired_operation = "remove vTPM device"
+            result = {
+                'changed': True,
+                'failed': False,
+                'desired_operation': desired_operation,
+            }
+            module.exit_json(**result)
+        try:
+            vm_config_vtpm.vtpm_operation(vm_obj=vm)
+        except Exception as e:
+            module.fail_json(msg="Failed to configure vTPM device of virtual machine '%s' with exception : %s"
+                                 % (vm.name, to_native(e)))
 
 
 if __name__ == "__main__":
