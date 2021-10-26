@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_datastore_info - add show_tag parameters to allow datastore tags to be read in a uniform way across _info modules.
