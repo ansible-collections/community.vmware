@@ -226,7 +226,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
   register: datastore_info_0010
 
 - debug:
