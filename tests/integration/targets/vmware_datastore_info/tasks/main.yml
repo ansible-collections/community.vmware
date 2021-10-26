@@ -206,7 +206,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster: "{{ ccr1 }}"
-    show_tag: yes
+    show_tag: true
   register: datastore_info_0009
 
 - debug:
@@ -226,7 +226,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
   register: datastore_info_0010
 
 - debug:
@@ -246,7 +246,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
     gather_nfs_mount_info: true
     gather_vmfs_mount_info: true
   register: datastore_info_0011
@@ -268,7 +268,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
   register: datastore_info_0012
 
 - debug:
@@ -288,7 +288,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster: "{{ ccr1 }}"
-    show_tag: yes
+    show_tag: true
     schema: vsphere
     properties:
       - name
@@ -310,7 +310,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
     schema: vsphere
     properties:
       - name
@@ -334,7 +334,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     name: "{{ ro_datastore }}"
-    show_tag: yes
+    show_tag: true
     schema: vsphere
     properties:
       - name
