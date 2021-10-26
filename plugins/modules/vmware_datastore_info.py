@@ -257,7 +257,7 @@ class VMwareHostDatastore(PyVmomi):
             else:
                 temp_ds = self.to_json(datastore, self.properties)
                 if self.module.params['show_tag']:
-                    temp_ds.update({ 'tags': self.vmware_client.get_tags_for_datastore(datastore._moId) })
+                    temp_ds.update({'tags': self.vmware_client.get_tags_for_datastore(datastore._moId)})
                 if self.module.params['name']:
                     if datastore.name == self.module.params['name']:
                         datastores.extend(([temp_ds]))
