@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_cluster_info - get info for all clusters (https://github.com/ansible-collections/community.vmware/issues/1086).
+  - vmware - get all datacenter_info required for vmware_cluster_info (https://github.com/ansible-collections/community.vmware/issues/1086).

@@ -6,13 +6,12 @@
     name: prepare_vmware_tests
 
 - &vc_all_data
-  name: gather info about all clusters in the given datacenter
+  name: gather info about all clusters
   vmware_cluster_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    datacenter: "{{ dc1 }}"
   register: all_cluster_result
 
 - &ensure_vc_all_data
@@ -50,12 +49,65 @@
   loop: "{{ all_cluster_result.clusters.keys() }}"
 
 - <<: *vc_all_data
-  name: Gather info about all clusters in the given datacenter in check mode
+  name: Gather info about all clusters in check mode
   check_mode: true
 
 - debug: msg=all_cluster_result
 
 - <<: *ensure_vc_all_data
+  name: Ensure info is gathered for all clusters in check mode
+
+- &vc_dc_data
+  name: gather info about all clusters in the given datacenter
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+  register: dc_cluster_result
+
+- &ensure_vc_dc_data
+  name: ensure info are gathered for all clusters
+  assert:
+    that:
+        - dc_cluster_result.clusters
+        - not dc_cluster_result.changed
+
+- name: ensure info are all defined
+  assert:
+    that:
+      - dc_cluster_result.clusters[item].datacenter is defined
+      - dc_cluster_result.clusters[item].hosts is defined
+      - dc_cluster_result.clusters[item].enable_ha is defined
+      - dc_cluster_result.clusters[item].ha_failover_level is defined
+      - dc_cluster_result.clusters[item].ha_vm_monitoring is defined
+      - dc_cluster_result.clusters[item].ha_host_monitoring is defined
+      - dc_cluster_result.clusters[item].ha_admission_control_enabled is defined
+      - dc_cluster_result.clusters[item].ha_restart_priority is defined
+      - dc_cluster_result.clusters[item].ha_vm_tools_monitoring is defined
+      - dc_cluster_result.clusters[item].ha_vm_min_up_time is defined
+      - dc_cluster_result.clusters[item].ha_vm_max_failures is defined
+      - dc_cluster_result.clusters[item].ha_vm_max_failure_window is defined
+      - dc_cluster_result.clusters[item].ha_vm_failure_interval is defined
+      - dc_cluster_result.clusters[item].enabled_drs is defined
+      - dc_cluster_result.clusters[item].drs_enable_vm_behavior_overrides is defined
+      - dc_cluster_result.clusters[item].drs_default_vm_behavior is defined
+      - dc_cluster_result.clusters[item].drs_vmotion_rate is defined
+      - dc_cluster_result.clusters[item].enabled_vsan is defined
+      - dc_cluster_result.clusters[item].vsan_auto_claim_storage is defined
+      - dc_cluster_result.clusters[item].tags is defined
+      - dc_cluster_result.clusters[item].resource_summary is defined
+      - dc_cluster_result.clusters[item].moid is defined
+  loop: "{{ dc_cluster_result.clusters.keys() }}"
+
+- <<: *vc_dc_data
+  name: Gather info about all clusters in the given datacenter in check mode
+  check_mode: true
+
+- debug: msg=dc_cluster_result
+
+- <<: *ensure_vc_dc_data
   name: Ensure info is gathered for all clusters in check mode
 
 - &vc_cluster_data
@@ -82,13 +134,12 @@
 - <<: *ensure_vc_cluster_data
   name: Ensure info is gathered for the given cluster in check mode
 
-- name: Gather info about all clusters in the given datacenter with properties
+- name: Gather info about all clusters with properties
   vmware_cluster_info:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    datacenter: "{{ dc1 }}"
     schema: vsphere
     properties:
       - name
@@ -105,6 +156,30 @@
       - all_cluster_result.clusters[item].summary.totalCpu is defined
       - not all_cluster_result.changed
   loop: "{{ all_cluster_result.clusters.keys() }}"
+
+- name: Gather info about all clusters in the given datacenter with properties
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    schema: vsphere
+    properties:
+      - name
+      - configuration.dasConfig.enabled
+      - summary.totalCpu
+  register: dc_cluster_result
+
+- name: Ensure info are gathered for all clusters with properteis
+  assert:
+    that:
+      - dc_cluster_result.clusters
+      - dc_cluster_result.clusters[item].name == item
+      - dc_cluster_result.clusters[item].configuration.dasConfig.enabled is defined
+      - dc_cluster_result.clusters[item].summary.totalCpu is defined
+      - not dc_cluster_result.changed
+  loop: "{{ dc_cluster_result.clusters.keys() }}"
 
 - name: Gather info about the given cluster with properties
   vmware_cluster_info:
@@ -181,6 +256,19 @@
     that:
       - prepare_cluster_url_encoded_result.changed is sameas true
 
+- name: "Gather information about all"
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+  register: all_cluster_result
+
+- name: "Ensure URL-encoded cluster name"
+  assert:
+    that:
+      - all_cluster_result.clusters['Cluster/\%']
+
 - name: "Gather information about all datacenter"
   vmware_cluster_info:
     hostname: "{{ vcenter_hostname }}"
@@ -188,9 +276,9 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     datacenter: "{{ dc1 }}"
-  register: all_cluster_result
+  register: dc_cluster_result
 
 - name: "Ensure URL-encoded cluster name"
   assert:
     that:
-      - all_cluster_result.clusters['Cluster/\%']
+      - dc_cluster_result.clusters['Cluster/\%']
