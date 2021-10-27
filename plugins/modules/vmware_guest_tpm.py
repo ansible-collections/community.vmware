@@ -142,7 +142,7 @@ class PyVmomiHelper(PyVmomi):
         return vtpm_info
 
     def vtpm_operation(self, vm_obj=None):
-        results = dict(changed=False, vtpm_info=dict(), vtpm_operation="")
+        results = {'failed': False, 'changed': False}
         if not self.is_vcenter():
             self.module.fail_json(msg="Please connect to vCenter Server to configure vTPM device of virtual machine.")
 
@@ -156,19 +156,31 @@ class PyVmomiHelper(PyVmomi):
                 self.vtpm_device = device
 
         if self.module.params['state'] == 'present':
-            results['vtpm_operation'] = "add"
+            if self.module.check_mode:
+                results['desired_operation'] = "add vTPM"
+            else:
+                results['vtpm_operation'] = "add vTPM"
             if self.vtpm_device:
                 results['vtpm_info'] = self.get_vtpm_info(vtpm_device=self.vtpm_device)
                 results['msg'] = "vTPM device already exist on VM"
                 self.module.exit_json(**results)
             else:
+                if self.module.check_mode:
+                    results['changed'] = True
+                    self.module.exit_json(**results)
                 vtpm_device_spec = self.device_helper.create_tpm()
         if self.module.params['state'] == 'absent':
-            results['vtpm_operation'] = "remove"
+            if self.module.check_mode:
+                results['desired_operation'] = "remove vTPM"
+            else:
+                results['vtpm_operation'] = "remove vTPM"
             if self.vtpm_device is None:
                 results['msg'] = "No vTPM device found on VM"
                 self.module.exit_json(**results)
             else:
+                if self.module.check_mode:
+                    results['changed'] = True
+                    self.module.exit_json(**results)
                 vtpm_device_spec = self.device_helper.remove_tpm(self.vtpm_device)
         self.config_spec.deviceChange.append(vtpm_device_spec)
 
@@ -209,23 +221,11 @@ def main():
     if not vm:
         vm_id = (module.params.get('name') or module.params.get('uuid') or module.params.get('moid'))
         module.fail_json(msg="Unable to configure vTPM device for non-existing virtual machine '%s'." % vm_id)
-    else:
-        if module.check_mode:
-            if module.params['state'] == "present":
-                desired_operation = "add vTPM device"
-            else:
-                desired_operation = "remove vTPM device"
-            result = {
-                'changed': True,
-                'failed': False,
-                'desired_operation': desired_operation,
-            }
-            module.exit_json(**result)
-        try:
-            vm_config_vtpm.vtpm_operation(vm_obj=vm)
-        except Exception as e:
-            module.fail_json(msg="Failed to configure vTPM device of virtual machine '%s' with exception : %s"
-                                 % (vm.name, to_native(e)))
+    try:
+        vm_config_vtpm.vtpm_operation(vm_obj=vm)
+    except Exception as e:
+        module.fail_json(msg="Failed to configure vTPM device of virtual machine '%s' with exception : %s"
+                             % (vm.name, to_native(e)))
 
 
 if __name__ == "__main__":
