@@ -76,7 +76,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
   delegate_to: localhost
   register: cluster_info
-  
+
 - name: Gather cluster info from given datacenter
   community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'

@@ -1956,14 +1956,14 @@ class PyVmomi(object):
             obj = None
 
         return obj
-    
+
     def get_datacenter_info(self):
         """
         Find datacenters
         Returns: list of datacenters including name and moref
 
         """
-        datacenter_info=[]
+        datacenter_info = []
 
         datacenter_objs = self.get_managed_objects_properties(vim_type=vim.Datacenter, properties=['name'])
         dcs = []
