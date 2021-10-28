@@ -50,7 +50,7 @@
           - "info_from_vcenter_with_dc_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
           - "info_from_vcenter_with_no_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
           - "info_from_vcenter_with_no_filter.datastores[0]['capacity'] is defined"
-          - "info_from_vcenter_with_no_filter.['datastores'][0]['tags'] is not defined"
+          - "info_from_vcenter_with_no_filter.datastores[0]['tags'] is not defined"
 
 # Testcase 0002: Get a full list of datastores in a cluster
 - name: get list of info about datastores - no dc
