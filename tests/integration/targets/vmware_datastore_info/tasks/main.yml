@@ -257,7 +257,7 @@
 - assert:
     that:
       - "datastore_info_0011['datastores'][0]['name'] == ro_datastore"
-      - "datastore_info_0011['datastores'][0]['capacity'] is not defined"
+      - "datastore_info_0011['datastores'][0]['capacity'] is defined"
       - "datastore_info_0011['datastores'][0]['tags'] is defined"
 
 - name: get list of info about one datastore in check mode
