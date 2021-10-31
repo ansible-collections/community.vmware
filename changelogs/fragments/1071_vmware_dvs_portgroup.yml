@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_dvs_portgroup - fix the default for port_allocation when port_binding is set to static (https://github.com/ansible-collections/community.vmware/issues/1071)
