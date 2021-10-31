@@ -37,8 +37,7 @@
     switch_name: "{{ dvswitch1 }}"
     portgroup_name: '{{ item }}'
     vlan_id: 0
-    num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: absent
   loop:
   - DC0_DVPG0
