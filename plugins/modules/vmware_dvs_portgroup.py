@@ -377,6 +377,9 @@ class VMwareDvsPortgroup(PyVmomi):
         self.dvs_portgroup = None
         self.dv_switch = None
 
+        if self.module.params['port_allocation'] is None and self.module.params['port_binding'] == 'static':
+            self.module.params['port_allocation'] = 'elastic'
+
         # Some sanity checks
         if self.module.params['port_allocation'] == 'elastic':
             if self.module.params['port_binding'] == 'ephemeral':
