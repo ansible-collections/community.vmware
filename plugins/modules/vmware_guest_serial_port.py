@@ -222,9 +222,8 @@ class PyVmomiHelper(PyVmomi):
         """
         if vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOff:
             return True
-        else:
-            self.module.fail_json(msg="A serial device cannot be added to a VM in the current state(" + vm_obj.runtime.powerState + ")."
-                                  + "Please use the vmware_guest_powerstate module to power off the VM")
+        self.module.fail_json(msg="A serial device cannot be added to a VM in the current state(" + vm_obj.runtime.powerState + "). "
+                                  "Please use the vmware_guest_powerstate module to power off the VM")
 
     def get_serial_port_config_spec(self, vm_obj):
         """
@@ -242,7 +241,8 @@ class PyVmomiHelper(PyVmomi):
                     if backing['state'] == 'present':
                         # modify existing serial port
                         serial_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-                        serial_spec.device.backing = self.get_backing_info(serial_port, backing, backing['type'])
+                        backing_type = backing.get('type', backing.get('backing_type'))
+                        serial_spec.device.backing = self.get_backing_info(serial_port, backing, backing_type)
                         serial_spec.device.yieldOnPoll = backing['yield_on_poll']
                         self.change_applied = True
                         self.config_spec.deviceChange.append(serial_spec)
@@ -358,7 +358,10 @@ class PyVmomiHelper(PyVmomi):
             "device": self.set_device_backing,
             "file": self.set_file_backing
         }
-        backing_func = switcher.get(backing_type, "Invalid Backing Info")
+        backing_func = switcher.get(backing_type, None)
+        if backing_func is None:
+            self.module.fail_json(msg="Failed to find a valid backing type. "
+                                      "Provided '%s', should be one of [%s]" % (backing_type, ', '.join(switcher.keys())))
         return backing_func(serial_port, backing)
 
     def create_serial_port(self, backing):
@@ -368,7 +371,8 @@ class PyVmomiHelper(PyVmomi):
         serial_spec = vim.vm.device.VirtualDeviceSpec()
         serial_port = vim.vm.device.VirtualSerialPort()
         serial_port.yieldOnPoll = backing['yield_on_poll']
-        serial_port.backing = self.get_backing_info(serial_port, backing, backing['type'])
+        backing_type = backing.get('type', backing.get('backing_type', None))
+        serial_port.backing = self.get_backing_info(serial_port, backing, backing_type)
         serial_spec.device = serial_port
         return serial_spec
 
@@ -387,7 +391,8 @@ def get_serial_port(vm_obj, backing):
     valid_params = backing.keys()
     for device in vm_obj.config.hardware.device:
         if isinstance(device, vim.vm.device.VirtualSerialPort):
-            if isinstance(device.backing, backing_type_mapping[backing['type']]):
+            backing_type = backing.get('type', backing.get('backing_type', None))
+            if isinstance(device.backing, backing_type_mapping[backing_type]):
                 if 'service_uri' in valid_params:
                     # network backing type
                     serial_port = device
