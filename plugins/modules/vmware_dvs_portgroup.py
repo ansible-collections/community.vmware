@@ -272,7 +272,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Create vlan portgroup
+- name: Create vlan portgroup with 120 ports
   community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -282,10 +282,11 @@ EXAMPLES = r'''
     vlan_id: 123
     num_ports: 120
     port_binding: static
+    port_allocation: fixed
     state: present
   delegate_to: localhost
 
-- name: Create vlan trunk portgroup
+- name: Create elastic vlan trunk portgroup
   community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -294,12 +295,11 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: True
-    num_ports: 120
     port_binding: static
     state: present
   delegate_to: localhost
 
-- name: Create private vlan portgroup
+- name: Create private vlan portgroup with 120 ports
   vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -310,10 +310,11 @@ EXAMPLES = r'''
     vlan_private: True
     num_ports: 120
     port_binding: static
+    port_allocation: fixed
     state: present
   delegate_to: localhost
 
-- name: Create no-vlan portgroup
+- name: Create (explicitly) elastic no-vlan portgroup
   community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -321,12 +322,12 @@ EXAMPLES = r'''
     portgroup_name: no-vlan-portrgoup
     switch_name: dvSwitch
     vlan_id: 0
-    num_ports: 120
     port_binding: static
+    port_allocation: elastic
     state: present
   delegate_to: localhost
 
-- name: Create vlan portgroup with all security and port policies
+- name: Create elastic vlan portgroup with all security and port policies
   community.vmware.vmware_dvs_portgroup:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -334,7 +335,6 @@ EXAMPLES = r'''
     portgroup_name: vlan-123-portrgoup
     switch_name: dvSwitch
     vlan_id: 123
-    num_ports: 120
     port_binding: static
     state: present
     network_policy:
