@@ -374,8 +374,12 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 class VMwareDvsPortgroup(PyVmomi):
     def __init__(self, module):
         super(VMwareDvsPortgroup, self).__init__(module)
-        self.dvs_portgroup = None
-        self.dv_switch = None
+
+        self.dv_switch = find_dvs_by_name(self.content, self.module.params['switch_name'])
+
+        if self.dv_switch is None:
+            self.module.fail_json(msg="A distributed virtual switch with name %s does not exist" % self.module.params['switch_name'])
+        self.dvs_portgroup = find_dvspg_by_name(self.dv_switch, self.module.params['portgroup_name'])
 
         # Some sanity checks
         if self.module.params['port_allocation'] == 'elastic':
@@ -592,12 +596,6 @@ class VMwareDvsPortgroup(PyVmomi):
         return False
 
     def check_dvspg_state(self):
-        self.dv_switch = find_dvs_by_name(self.content, self.module.params['switch_name'])
-
-        if self.dv_switch is None:
-            self.module.fail_json(msg="A distributed virtual switch with name %s does not exist" % self.module.params['switch_name'])
-        self.dvs_portgroup = find_dvspg_by_name(self.dv_switch, self.module.params['portgroup_name'])
-
         if self.dvs_portgroup is None:
             return 'absent'
 
