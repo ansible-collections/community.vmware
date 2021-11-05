@@ -1,3 +1,0 @@
----
-bugfixes:
-- vmware_guest_serial_port - handle correct serial backing type (https://github.com/ansible-collections/community.vmware/issues/1043).
