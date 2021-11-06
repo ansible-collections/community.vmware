@@ -599,10 +599,8 @@ class VMwareDvsPortgroup(PyVmomi):
         if self.dvs_portgroup is None:
             return 'absent'
 
-        # Check config
-        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
-            if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
-                return 'update'
+        if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
+            return 'update'
 
         # Default port config
         defaultPortConfig = self.dvs_portgroup.config.defaultPortConfig
