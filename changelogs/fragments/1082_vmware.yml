@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware - add vTPM information to default gather information (https://github.com/ansible-collections/community.vmware/pull/1082).
