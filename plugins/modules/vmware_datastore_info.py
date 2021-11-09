@@ -68,6 +68,12 @@ options:
      choices: ['summary', 'vsphere']
      default: 'summary'
      type: str
+   show_tag:
+     description:
+     - Tags related to Datastore are shown if set to C(True).
+     default: false
+     type: bool
+     version_added: '1.16.0'
    properties:
      description:
      - Specify the properties to retrieve.
@@ -177,6 +183,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     get_all_objs,
     find_cluster_by_name,
     get_parent_datacenter)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
 class VMwareHostDatastore(PyVmomi):
@@ -188,6 +195,8 @@ class VMwareHostDatastore(PyVmomi):
         self.gather_vmfs_mount_info = self.module.params['gather_vmfs_mount_info']
         self.schema = self.module.params['schema']
         self.properties = self.module.params['properties']
+        if self.module.params['show_tag']:
+            self.vmware_client = VmwareRestClient(self.module)
 
     def check_datastore_host(self, esxi_host, datastore):
         """ Get all datastores of specified ESXi host """
@@ -238,17 +247,23 @@ class VMwareHostDatastore(PyVmomi):
                 if isinstance(datastore.parent, vim.StoragePod):
                     datastore_summary['datastore_cluster'] = datastore.parent.name
 
+                if self.module.params['show_tag']:
+                    datastore_summary['tags'] = self.vmware_client.get_tags_for_datastore(datastore._moId)
+
                 if self.module.params['name']:
                     if datastore_summary['name'] == self.module.params['name']:
                         datastores.extend([datastore_summary])
                 else:
                     datastores.extend([datastore_summary])
             else:
+                temp_ds = self.to_json(datastore, self.properties)
+                if self.module.params['show_tag']:
+                    temp_ds.update({'tags': self.vmware_client.get_tags_for_datastore(datastore._moId)})
                 if self.module.params['name']:
                     if datastore.name == self.module.params['name']:
-                        datastores.extend(([self.to_json(datastore, self.properties)]))
+                        datastores.extend(([temp_ds]))
                 else:
-                    datastores.extend(([self.to_json(datastore, self.properties)]))
+                    datastores.extend(([temp_ds]))
 
         return datastores
 
@@ -310,7 +325,8 @@ def main():
         gather_nfs_mount_info=dict(type='bool', default=False),
         gather_vmfs_mount_info=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
-        properties=dict(type='list', elements='str')
+        properties=dict(type='list', elements='str'),
+        show_tag=dict(type='bool', default=False),
     )
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True
