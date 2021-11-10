@@ -10,7 +10,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'
@@ -33,7 +33,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm2
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'
@@ -56,7 +56,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'

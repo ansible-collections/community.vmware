@@ -16,7 +16,7 @@
     disk:
       - size: 10mb
         datastore: "{{ rw_datastore }}"
-    guest_id: rhel7_64guest
+    guest_id: debian8_64Guest
     hardware:
       memory_mb: 128
       num_cpus: 1
@@ -44,7 +44,7 @@
     disk:
       - size: 10mb
         datastore: "{{ rw_datastore }}"
-    guest_id: rhel7_64guest
+    guest_id: debian8_64Guest
     hardware:
       memory_mb: 128
       num_cpus: 1
