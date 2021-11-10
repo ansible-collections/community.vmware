@@ -15,7 +15,6 @@ vmware_guest_test_playbooks:
   - disk_mode_d1_c1_f0.yml
   - disk_size_d1_c1_f0.yml
   - disk_type_d1_c1_f0.yml
-  - linked_clone_d1_c1_f0.yml
   - mac_address_d1_c1_f0.yml
   - max_connections.yml
   - mem_reservation.yml
