@@ -39,7 +39,7 @@
     that:
       - dvspgvlid_0001.dvs_portgroups is defined
       - dvspgvlid_0001.dvs_portgroups[1] is defined
-      - dvspgvlid_0001.dvs_portgroups[1].vlan_id == "0"
+      - dvspgvlid_0001.dvs_portgroups | selectattr("vlan_id", "equalto", "0")|map(attribute="vlan_id")|first == "0"
 
 # https://github.com/ansible-collections/community.vmware/pull/648
 - name: The test for the dvportgroup with special characters
