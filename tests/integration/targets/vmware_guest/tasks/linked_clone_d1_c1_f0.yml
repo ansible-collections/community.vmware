@@ -8,22 +8,21 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    name: "{{ 'new_vm_' + item.name }}"
-    template: "{{ item.name }}"
+    name: test_vm1
+    template: "{{ virtual_machines[0].name }}"
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     linked_clone: true
-  with_items: "{{ virtual_machines }}"
-  register: linked_clone_d1_c1_f0
+  register: result
   ignore_errors: true
 
-- debug: var=linked_clone_d1_c1_f0
+- debug: var=result
 
 - name: assert that changes were not made
   assert:
     that:
-        - "linked_clone_d1_c1_f0.results|map(attribute='changed')|unique|list == [false]"
+      - result is changed
 
 - name: create new linked clone without specifying linked_clone
   vmware_guest:
@@ -31,13 +30,12 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    name: "{{ 'new_vm_' + item.name }}"
-    guest_id: centos64Guest
+    name: test_vm1
+    guest_id: centos64guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     snapshot_src: "snap_shot1"
-  with_items: "{{ virtual_machines }}"
-  register: linked_clone_d1_c1_f0
+  register: result
   ignore_errors: true
 
 - debug: var=linked_clone_d1_c1_f0
@@ -45,7 +43,7 @@
 - name: assert that changes were not made
   assert:
     that:
-        - "linked_clone_d1_c1_f0.results|map(attribute='changed')|unique|list == [false]"
+      - not (result is changed)
 
 # TODO: VCSIM: snapshot is not supported in current vcsim
 #
