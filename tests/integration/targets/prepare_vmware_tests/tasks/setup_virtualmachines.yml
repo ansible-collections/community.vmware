@@ -14,6 +14,7 @@
       memory_mb: 128
       num_cpus: 1
       scsi: paravirtual
+      version: 11
     cdrom:
       type: iso
       iso_path: "[{{ ro_datastore }}] fedora.iso"
