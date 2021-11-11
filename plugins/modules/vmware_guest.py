@@ -1055,6 +1055,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_dvspg_by_name,
     wait_for_vm_ip,
     quote_obj_name,
+    get_folder_abs_path,
 )
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
@@ -2797,21 +2798,7 @@ class PyVmomiHelper(PyVmomi):
 
         dcpath = compile_folder_path_for_object(datacenter)
 
-        # Nested folder does not have trailing /
-        if not dcpath.endswith('/'):
-            dcpath += '/'
-
-        # Check for full path first in case it was already supplied
-        if self.folder.startswith(
-            dcpath + self.params["datacenter"] + "/vm"
-        ) or self.folder.startswith(dcpath + "/" + self.params["datacenter"] + "/vm"):
-            fullpath = self.folder
-        elif self.folder.startswith("/vm/") or self.folder == "/vm":
-            fullpath = "%s%s%s" % (dcpath, self.params["datacenter"], self.folder)
-        elif self.folder.startswith("/"):
-            fullpath = "%s%s/vm%s" % (dcpath, self.params["datacenter"], self.folder)
-        else:
-            fullpath = "%s%s/vm/%s" % (dcpath, self.params["datacenter"], self.folder)
+        fullpath = get_folder_abs_path(dcpath, self.params['datacenter'], self.folder)
 
         f_obj = self.content.searchIndex.FindByInventoryPath(fullpath)
 
