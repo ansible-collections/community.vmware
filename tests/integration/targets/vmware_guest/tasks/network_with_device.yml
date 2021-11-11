@@ -10,7 +10,7 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     datacenter: "{{ dc1 }}"
-    state: poweredon
+    state: poweredoff
     folder: "{{ f0 }}"
     name: test_vm1
     disk:
@@ -38,7 +38,7 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     datacenter: "{{ dc1 }}"
-    state: poweredon
+    state: poweredoff
     folder: "{{ f0 }}"
     name: test_vm1
     disk:
