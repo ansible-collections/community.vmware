@@ -214,3 +214,6 @@
     assert:
       that:
           - not all_folder_results.changed
+
+  - block:
+    - include_tasks: regression_folder_collision.yml
