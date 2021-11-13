@@ -41,6 +41,22 @@
           - snmp_enabled is defined
           - snmp_enabled.changed
 
+    - name: Enable and configure SNMP system contact and location
+      vmware_host_snmp:
+        hostname: '{{ esxi1 }}'
+        username: '{{ esxi_user }}'
+        password: '{{ esxi_password }}'
+        sys_contact: "admin@testemail.com"
+        sys_location: "Austin, USA"
+        state: enabled
+        validate_certs: false
+      register: snmp_enabled_sys_options
+    - debug: var=snmp_enabled_sys_options
+    - assert:
+        that:
+          - snmp_enabled_sys_options is defined
+          - snmp_enabled_sys_options.changed
+
     - name: Disable SNMP
       vmware_host_snmp:
         hostname: '{{ esxi1 }}'
@@ -49,8 +65,8 @@
         state: disabled
         validate_certs: false
       register: snmp_disabled
-    - debug: var=snmp_enabled
+    - debug: var=snmp_disabled
     - assert:
         that:
-          - snmp_enabled is defined
-          - snmp_enabled.changed
+          - snmp_disabled is defined
+          - snmp_disabled.changed

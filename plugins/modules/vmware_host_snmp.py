@@ -77,10 +77,12 @@ options:
     description:
         - System contact who manages the system.
     type: str
+    version_added: '1.17.0'
   sys_location:
     description:
         - System location.
     type: str
+    version_added: '1.17.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -521,8 +523,8 @@ def main():
         hw_source=dict(type='str', default='indications', choices=['indications', 'sensors']),
         log_level=dict(type='str', default='info', choices=['debug', 'info', 'warning', 'error']),
         send_trap=dict(type='bool', default=False),
-        sys_contact=dict(type='str', required=False),
-        sys_location=dict(type='str', required=False),
+        sys_contact=dict(type='str'),
+        sys_location=dict(type='str')
     )
 
     module = AnsibleModule(
