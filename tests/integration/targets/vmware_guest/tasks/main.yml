@@ -10,7 +10,6 @@
     setup_datastore: true
     setup_dvswitch: true
     setup_resource_pool: true
-    setup_virtualmachines: true
     setup_dvs_portgroup: true
 
 - include_tasks: run_test_playbook.yml
