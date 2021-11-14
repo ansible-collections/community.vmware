@@ -78,6 +78,7 @@ options:
         - System contact who manages the system.
     type: str
     version_added: '1.17.0'
+    version_added: '1.17.0'
   sys_location:
     description:
         - System location.
