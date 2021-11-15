@@ -22,7 +22,7 @@
       folder: '/DC0/vm/F0'
       name: test_vm1
       state: poweredon
-      guest_id: centos7_64Guest
+      guest_id: debian8_64Guest
       disk:
       - size_gb: 1
         type: thin

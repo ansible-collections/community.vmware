@@ -17,7 +17,7 @@
         hardware:
           num_cpus: 1
           memory_mb: 128
-        guest_id: centos7_64Guest
+        guest_id: debian8_64Guest
         disk:
           - size_gb: 1
             type: thin
