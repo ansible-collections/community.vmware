@@ -5,7 +5,35 @@
   vars:
     setup_attach_host: true
     setup_datastore: true
-    setup_virtualmachines: true
+
+
+- name: Create VM
+  vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: test_vm1
+    folder: vm
+    esxi_hostname: "{{ esxi1 }}"
+    state: poweredoff
+    guest_id: debian8_64Guest
+    disk:
+    - size_gb: 1
+      type: thin
+      datastore: local
+    cdrom:
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    hardware:
+      # vmware_guest_disk need vmx-13 to reconfigure the disks
+      version: 13
+      memory_mb: 1024
+      num_cpus: 1
+      scsi: paravirtual
+  register: vm_create
+
 
 - name: create new disk with invalid disk mode
   vmware_guest_disk:
@@ -14,7 +42,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "invalid_disk_mode"
@@ -42,7 +70,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -85,7 +113,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - size_gb: 1
         type: eagerzeroedthick
@@ -114,7 +142,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - size_gb: 1
         type: eagerzeroedthick
@@ -148,7 +176,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - size_gb: 2
             scsi_controller: 2
@@ -176,7 +204,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - size_gb: 3
             scsi_controller: 2
@@ -203,7 +231,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - size_gb: 4
             scsi_controller: 2
@@ -230,7 +258,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - state: "absent"
             scsi_controller: 0
@@ -253,7 +281,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "persistent"
@@ -280,7 +308,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -308,7 +336,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -339,7 +367,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - state: "absent"
             scsi_controller: 0
@@ -365,7 +393,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -392,7 +420,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -419,7 +447,7 @@
     password: "{{ vcenter_password }}"
     datacenter: "{{ dc1 }}"
     validate_certs: false
-    name: "{{ virtual_machines[0].name }}"
+    name: test_vm1
     disk:
       - datastore: "{{ rw_datastore }}"
         disk_mode: "independent_persistent"
@@ -455,7 +483,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - disk_mode: "independent_nonpersistent"
             controller_type: 'sata'
@@ -483,7 +511,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - controller_type: 'nvme'
             controller_number: 0
@@ -512,7 +540,7 @@
         password: "{{ vcenter_password }}"
         datacenter: "{{ dc1 }}"
         validate_certs: false
-        name: "{{ virtual_machines[0].name }}"
+        name: test_vm1
         disk:
           - state: "absent"
             controller_type: 'sata'
