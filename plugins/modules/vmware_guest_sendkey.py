@@ -81,6 +81,7 @@ options:
      - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(HOME), C(DELETE), C(END), C(CTRL_ALT_DEL),
         C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
+     - C(HOME) and C(END) are added in version 1.17.0.
      type: list
      elements: str
    sleep_time:
