@@ -23,11 +23,10 @@
       set_fact:
         vswitch_pg_name_for_test: vSwitchForVMwareVMkernelIpConfig
         device_name: >-
-          {{ ( gather_host_facts_from_esxi_result.ansible_facts.ansible_interfaces
+          vmk{{( gather_host_facts_from_esxi_result.ansible_facts.ansible_interfaces
             | last
-            | regex_replace('vmk(.*)', '\1')
+            | regex_replace('vmk(\d+)', '\1')
             | int + 1 )
-            | regex_replace('(.*)', 'vmk\1')
           }}
 
     - name: "Gather vSwitch info"
@@ -66,7 +65,7 @@
         device: "{{ device_name }}"
         network:
           type: 'static'
-          ip_address: 192.168.0.254
+          ip_address: 172.16.118.254
           subnet_mask: 255.255.255.0
       register: prepare_integration_tests_result
 
@@ -81,10 +80,9 @@
     password: "{{ esxi_password }}"
     validate_certs: false
     vmk_name: "{{ device_name }}"
-    ip_address: 192.168.1.254
+    ip_address: 172.16.11.253
     subnet_mask: 255.255.255.0
   register: change_ip_address_vmk_result
-
 - assert:
     that:
       - change_ip_address_vmk_result.changed is sameas true
@@ -96,7 +94,7 @@
     password: "{{ esxi_password }}"
     validate_certs: false
     vmk_name: "{{ device_name }}"
-    ip_address: 192.168.1.254
+    ip_address: 172.16.11.253
     subnet_mask: 255.255.255.0
   register: change_ip_address_vmk_idempotency_check_result
 
