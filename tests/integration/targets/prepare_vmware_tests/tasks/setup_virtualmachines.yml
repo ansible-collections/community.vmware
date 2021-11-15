@@ -7,7 +7,7 @@
     state: poweredoff
     guest_id: debian8_64Guest
     disk:
-    - size_gb: 1
+    - size_mb: 10
       type: thin
       datastore: '{{ rw_datastore }}'
     hardware:

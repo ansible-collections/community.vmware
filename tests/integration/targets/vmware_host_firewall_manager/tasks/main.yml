@@ -220,3 +220,18 @@
       assert:
         that:
           - nfc_state.allowed_hosts.current_allowed_ip == ["1.2.3.4"]
+    - name: Clean up the firewall rules
+      vmware_host_firewall_manager:
+        cluster_name: '{{ ccr1 }}'
+        rules:
+            - name: vvold
+              enabled: false
+            - name: CIMHttpServer
+              enabled: true
+              allowed_hosts:
+                all_ip: true
+            - name: NFC
+              enabled: true
+              allowed_hosts:
+                all_ip: true
+      ignore_errors: true
