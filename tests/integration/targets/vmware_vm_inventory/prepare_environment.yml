@@ -17,10 +17,9 @@
 
     - name: set state to poweron the first VM
       vmware_guest_powerstate:
-        name: "{{ item.name }}"
+        name: "{{ virtual_machines[0].name }}"
         folder: '{{ f0 }}'
         state: powered-on
-      with_items: '{{ virtual_machines }}'
 
     - copy:
         dest: vmware.yaml
