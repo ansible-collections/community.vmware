@@ -26,8 +26,6 @@ vmware_guest_test_playbooks:
 #  - network_with_dvpg.yml
 #  - network_with_portgroup.yml
   - non_existent_vm_ops.yml
-  - poweroff_d1_c1_f0.yml
-  - poweroff_d1_c1_f1.yml
 #  - template_d1_c1_f0.yml
   - vapp_d1_c1_f0.yml
   - reconfig_vm_to_latest_version.yml
