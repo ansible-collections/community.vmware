@@ -18,6 +18,7 @@
         datastore: "{{ rw_datastore }}"
     guest_id: debian8_64Guest
     hardware:
+      version: 11
       memory_mb: 128
       num_cpus: 1
     networks:
@@ -46,6 +47,7 @@
         datastore: "{{ rw_datastore }}"
     guest_id: debian8_64Guest
     hardware:
+      version: 11
       memory_mb: 128
       num_cpus: 1
     networks:
