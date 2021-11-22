@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_vswitch_module:
+.. _community.vmware.vmware_guest_tpm_module:
 
 
-*******************************
-community.vmware.vmware_vswitch
-*******************************
+*********************************
+community.vmware.vmware_guest_tpm
+*********************************
 
-**Manage a VMware Standard Switch to an ESXi host.**
+**Add or remove vTPM device for specified VM.**
 
 
+Version added: 1.16.0
 
 .. contents::
    :local:
@@ -16,7 +17,8 @@ community.vmware.vmware_vswitch
 
 Synopsis
 --------
-- This module can be used to add, remove and update a VMware Standard Switch to an ESXi host.
+- This module is used for adding or removing Virtual Trusted Platform Module(vTPM) device for an existing Virtual Machine. You must create a key provider on vCenter before you can add a vTPM. The ESXi hosts running in your environment must be ESXi 6.7 or later (Windows guest OS), or 7.0 Update 2 (Linux guest OS).
+
 
 
 
@@ -42,7 +44,24 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The vCenter datacenter name used to get specified cluster or host.</div>
+                        <div>This parameter is case sensitive.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -51,8 +70,17 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Manage the vSwitch using this ESXi host system.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: host</div>
+                        <div>VM folder, absolute or relative path to find an existing VM.</div>
+                        <div>This parameter is not required, only when multiple VMs are found with the same name.</div>
+                        <div>The folder should include the datacenter name.</div>
+                        <div>Examples:</div>
+                        <div>folder: /datacenter1/vm</div>
+                        <div>folder: datacenter1/vm</div>
+                        <div>folder: /datacenter1/vm/folder1</div>
+                        <div>folder: datacenter1/vm/folder1</div>
+                        <div>folder: /folder1/datacenter1/vm</div>
+                        <div>folder: folder1/datacenter1/vm</div>
+                        <div>folder: /folder1/datacenter1/vm/folder2</div>
                 </td>
             </tr>
             <tr>
@@ -75,52 +103,33 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mtu</b>
+                    <b>moid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">1500</div>
                 </td>
                 <td>
-                        <div>MTU to configure on vSwitch.</div>
+                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
+                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>nics</b>
+                    <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
-                        <div>A list of vmnic names or vmnic name to attach to vSwitch.</div>
-                        <div>Alias <code>nics</code> is added in version 2.4.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: nic_name</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>number_of_ports</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">128</div>
-                </td>
-                <td>
-                        <div>Number of port to configure on vSwitch.</div>
+                        <div>Name of the virtual machine.</div>
+                        <div>This is required if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -204,30 +213,16 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>absent</li>
                                     <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Add or remove the switch.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>vSwitch name to add.</div>
-                        <div>Alias <code>switch</code> is added in version 2.4.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: switch_name</div>
+                        <div>State of vTPM device.</div>
+                        <div>If set to &#x27;absent&#x27;, vTPM device will be removed from VM.</div>
+                        <div>If set to &#x27;present&#x27;, vTPM device will be added if not present.</div>
+                        <div>Virtual machine should be turned off before add or remove vTPM device.</div>
+                        <div>Virtual machine should not contain snapshots before add vTPM device.</div>
                 </td>
             </tr>
             <tr>
@@ -246,6 +241,22 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>UUID of the instance to manage if known, this is VMware&#x27;s unique identifier.</div>
+                        <div>This is required if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -278,7 +289,8 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 5.5 and 6.5
+   - Tested on vSphere 6.7
+   - Tested on vSphere 7.0
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -288,55 +300,23 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Add a VMware vSwitch
-      community.vmware.vmware_vswitch:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        switch: vswitch_name
-        nics: vmnic_name
-        mtu: 9000
+    - name: Add vTPM to specified VM
+      community.vmware.vmware_guest_tpm:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter }}"
+        name: "Test_VM"
+        state: present
       delegate_to: localhost
 
-    - name: Add a VMware vSwitch without any physical NIC attached
-      community.vmware.vmware_vswitch:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        switch: vswitch_0001
-        mtu: 9000
-      delegate_to: localhost
-
-    - name: Add a VMware vSwitch with multiple NICs
-      community.vmware.vmware_vswitch:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        switch: vmware_vswitch_0004
-        nics:
-        - vmnic1
-        - vmnic2
-        mtu: 9000
-      delegate_to: localhost
-
-    - name: Add a VMware vSwitch to a specific host system
-      community.vmware.vmware_vswitch:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        esxi_hostname: DC0_H0
-        switch_name: vswitch_001
-        nic_name: vmnic0
-        mtu: 9000
-      delegate_to: localhost
-
-    - name: Delete a VMware vSwitch in a specific host system
-      community.vmware.vmware_vswitch:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        esxi_hostname: DC0_H0
-        switch_name: vswitch_001
+    - name: Remove vTPM from specified VM
+      community.vmware.vmware_guest_tpm:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter }}"
+        name: "Test_VM"
         state: absent
       delegate_to: localhost
 
@@ -357,18 +337,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
+                    <b>instance</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">string</span>
+                      <span style="color: purple">dictionary</span>
                     </div>
                 </td>
                 <td>always</td>
                 <td>
-                            <div>information about performed operation</div>
+                            <div>metadata about the VM vTPM device</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">vSwitch &#x27;vSwitch_1002&#x27; is created successfully</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">None</div>
                 </td>
             </tr>
     </table>
@@ -382,6 +362,4 @@ Status
 Authors
 ~~~~~~~
 
-- Joseph Callen (@jcpowermac)
-- Russell Teague (@mtnbikenc)
-- Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
+- Diane Wang (@Tomorrow9) <dianew@vmware.com>

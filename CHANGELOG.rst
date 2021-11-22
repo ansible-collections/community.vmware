@@ -5,6 +5,27 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.16.0
+=======
+
+Minor Changes
+-------------
+
+- vmware - add vTPM information to default gather information (https://github.com/ansible-collections/community.vmware/pull/1082).
+- vmware_guest_cross_vc_clone - Added the is_template option to mark a cloned vm/template as a template (https://github.com/ansible-collections/community.vmware/pull/996).
+
+Bugfixes
+--------
+
+- update_vswitch - add the possibility to remove nics from vswitch (https://github.com/ansible-collections/community.vmware/issues/536)
+- vmware_guest_serial_port - handle correct serial backing type (https://github.com/ansible-collections/community.vmware/issues/1043).
+- vmware_host_lockdown - Fix an issue when enabling or disabling lockdown mode failes (https://github.com/ansible-collections/community.vmware/issues/1083)
+
+New Modules
+-----------
+
+- vmware_guest_tpm - Add or remove vTPM device for specified VM.
+
 v1.15.0
 =======
 

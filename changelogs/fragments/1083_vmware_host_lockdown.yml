@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_host_lockdown - Fix an issue when enabling or disabling lockdown mode failes (https://github.com/ansible-collections/community.vmware/issues/1083)

@@ -1,111 +1,94 @@
 ---
-- name: Clean up the firewall rules
-  vmware_host_firewall_manager:
-    cluster_name: '{{ ccr1 }}'
-    rules:
-        - name: vvold
-          enabled: false
-        - name: CIMHttpServer
-          enabled: true
-          allowed_hosts:
-            all_ip: true
-        - name: NFC
-          enabled: true
-          allowed_hosts:
-            all_ip: true
+- name: Collect the list of the existing VM
+  vmware.vmware_rest.vcenter_vm_info:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+  register: existing_vms
+  until: existing_vms is not failed
+
+- name: Turn off the VM
+  vmware.vmware_rest.vcenter_vm_power:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+    state: stop
+    vm: '{{ item.vm }}'
+  with_items: "{{ existing_vms.value }}"
   ignore_errors: true
 
-- name: Remove the VM prepared by prepare_vmware_tests
-  vmware_guest:
-    name: "{{ item.name }}"
+- name: Delete the VMs
+  vmware.vmware_rest.vcenter_vm:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+    state: absent
+    vm: '{{ item.vm }}'
+  with_items: "{{ existing_vms.value }}"
+  when:
+    - not item.name.startswith("vCLS")
+
+
+- name: Build a list of local libraries
+  vmware.vmware_rest.content_locallibrary_info:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+  register: result
+  retries: 100
+  delay: 3
+  until: result is not failed
+
+- name: Delete all the local libraries
+  vmware.vmware_rest.content_locallibrary:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+    library_id: "{{ item.id }}"
+    state: absent
+  with_items: "{{ result.value }}"
+
+- name: Build a list of subscribed libraries
+  vmware.vmware_rest.content_subscribedlibrary_info:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+  register: result
+
+- name: Delete all the subscribed libraries
+  vmware.vmware_rest.content_subscribedlibrary:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+    library_id: "{{ item.id }}"
+    state: absent
+  with_items: "{{ result.value }}"
+
+- name: Get a list of all the datacenters
+  vmware.vmware_rest.vcenter_datacenter_info:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+  register: existing_datacenters
+- name: Force delete the existing DC
+  vmware.vmware_rest.vcenter_datacenter:
+    vcenter_hostname: '{{ vcenter_hostname }}'
+    vcenter_username: '{{ vcenter_username }}'
+    vcenter_password: '{{ vcenter_password }}'
+    vcenter_validate_certs: false
+    state: absent
+    datacenter: '{{ item.datacenter }}'
     force: true
-    state: absent
-  with_items: '{{ virtual_machines + virtual_machines_in_cluster }}'
-
-- name: Remove the test_vm* VMs
-  vmware_guest:
-    name: "{{ item }}"
-    force: true
-    state: absent
-  with_items:
-    - test_vm1
-    - test_vm2
-    - test_vm3
-
-- name: Remove the DVS portgroups
-  vmware_dvs_portgroup:
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: '{{ item }}'
-    vlan_id: 0
-    num_ports: 32
-    portgroup_type: earlyBinding
-    state: absent
-  loop:
-  - DC0_DVPG0
-  - DVPG/1
-  ignore_errors: true
-
-- name: Remove the DVSwitch
-  vmware_dvswitch:
-    datacenter_name: '{{ dc1 }}'
-    state: absent
-    switch_name: '{{ item }}'
-  loop:
-    - '{{ dvswitch1 }}'
-    - dvswitch_0001
-    - dvswitch_0002
-  ignore_errors: true
-
-- name: Clean up the VM Network portgroup
-  vmware_portgroup:
-    esxi_hostname: '{{ esxi_hosts }}'
-    switch: isolated_vSwitch
-    portgroup: VM Network
-    state: absent
-  ignore_errors: true
-  with_items:
-  - isolated_vSwitch
-  - vSwitch0
-
-- name: Remove the vSwitches
-  vmware_vswitch:
-    hostname: '{{ item }}'
-    username: '{{ esxi_user }}'
-    password: '{{ esxi_password }}'
-    switch_name: "{{ switch1 }}"
-    state: absent
-  with_items: "{{ esxi_hosts }}"
-  ignore_errors: true
-
-- include_tasks: move_host_out_of_cluster.yml
-
-- name: Umount NFS datastores from ESXi (1/2)
-  vmware_host_datastore:
-      hostname: '{{ item }}'
-      username: '{{ esxi_user }}'
-      password: '{{ esxi_password }}'
-      datastore_name: '{{ ro_datastore }}'
-      state: absent
-  with_items: "{{ esxi_hosts }}"
-  ignore_errors: true
-
-- name: Umount NFS datastores from ESXi (2/2)
-  vmware_host_datastore:
-      hostname: '{{ item }}'
-      username: '{{ esxi_user }}'
-      password: '{{ esxi_password }}'
-      datastore_name: '{{ rw_datastore }}'
-      state: absent
-  with_items: "{{ esxi_hosts }}"
-  ignore_errors: true
-
-- name: Remove ESXi Hosts from vCenter
-  vmware_host:
-    datacenter_name: '{{ dc1 }}'
-    cluster_name: '{{ ccr1 }}'
-    esxi_hostname: '{{ item }}'
-    esxi_username: '{{ esxi_user }}'
-    esxi_password: '{{ esxi_password }}'
-    state: absent
-  with_items: "{{ esxi_hosts }}"
-  ignore_errors: true
+  with_items: "{{ existing_datacenters.value }}"
+  until: _result is succeeded
+  retries: 10
+  delay: 1
+  register: _result

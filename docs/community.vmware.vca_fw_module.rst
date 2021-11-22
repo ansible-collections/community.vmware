@@ -259,7 +259,6 @@ Examples
        - community.vmware.vca_fw:
            instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
            vdc_name: 'benz_ansible'
-           state: 'absent'
            fw_rules:
              - description: "ben testing"
                source_ip: "Any"

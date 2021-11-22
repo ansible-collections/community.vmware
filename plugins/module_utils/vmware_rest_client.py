@@ -230,6 +230,18 @@ class VmwareRestClient(object):
         dobj = DynamicID(type='Datacenter', id=datacenter_mid)
         return self.get_tags_for_dynamic_obj(dobj=dobj)
 
+    def get_tags_for_datastore(self, datastore_mid=None):
+        """
+        Return list of tag object associated with datastore
+        Args:
+            datastore_mid: Dynamic object for datacenter
+
+        Returns: List of tag object associated with the given datastore
+
+        """
+        dobj = DynamicID(type="Datastore", id=datastore_mid)
+        return self.get_tags_for_dynamic_obj(dobj=dobj)
+
     def get_tags_for_cluster(self, cluster_mid=None):
         """
         Return list of tag object associated with cluster

@@ -6,3 +6,4 @@ pytest-xdist
 # We should avoid these two modules with py3
 pytest-mock
 mock
+aiohttp ; python_version >= '3.6'

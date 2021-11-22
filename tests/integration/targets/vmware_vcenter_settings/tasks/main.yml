@@ -213,3 +213,12 @@
     assert:
       that:
         - not configure_advanced_settings_again.changed
+
+  - name: Restore the original advanced_settings configuration
+    community.vmware.vmware_vcenter_settings:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      advanced_settings:
+        'config.vcls.clusters.domain-c8.enabled': 'true'

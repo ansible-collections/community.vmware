@@ -50,6 +50,7 @@
           - "info_from_vcenter_with_dc_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
           - "info_from_vcenter_with_no_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
           - "info_from_vcenter_with_no_filter.datastores[0]['capacity'] is defined"
+          - "info_from_vcenter_with_no_filter.datastores[0]['tags'] is not defined"
 
 # Testcase 0002: Get a full list of datastores in a cluster
 - name: get list of info about datastores - no dc
@@ -67,6 +68,7 @@
 - assert:
     that:
       - "datastore_info_0002['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0002['datastores'][0]['tags'] is not defined"
 
 # Testcase 0003: Find a specific datastore
 - name: get list of info about one datastore
@@ -86,6 +88,7 @@
     that:
       - "datastore_info_0003['datastores'][0]['name'] == ro_datastore"
       - "datastore_info_0003['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0003['datastores'][0]['tags'] is not defined"
 
 - name: get list of extended info about one datastore
   vmware_datastore_info:
@@ -106,6 +109,7 @@
     that:
       - "datastore_info_0004['datastores'][0]['name'] == ro_datastore"
       - "datastore_info_0004['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0004['datastores'][0]['tags'] is not defined"
 
 - name: get list of info about one datastore in check mode
   vmware_datastore_info:
@@ -124,6 +128,7 @@
     that:
       - "datastore_info_0005['datastores'][0]['name'] == ro_datastore"
       - "datastore_info_0005['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0005['datastores'][0]['tags'] is not defined"
 
 # Testcase with property specify
 - name: get list of info about datastores with properties specify - no dc
@@ -144,6 +149,7 @@
 - assert:
     that:
       - "datastore_info_0006['datastores'][0]['name'] is defined"
+      - "datastore_info_0006['datastores'][0]['tags'] is not defined"
 
 - name: get list of info about one datastore with properties specify
   vmware_datastore_info:
@@ -190,3 +196,158 @@
       - "datastore_info_0008['datastores'][0]['name'] is defined"
       - "datastore_info_0008['datastores'][0]['capability']['vsanSparseSupported'] is defined"
       - "datastore_info_0008['datastores'][0]['overallStatus'] is defined"
+
+
+# Testcase 0009: Get a full list of datastores in a cluster
+- name: get list of info about datastores with tags - no dc
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster: "{{ ccr1 }}"
+    show_tag: true
+  register: datastore_info_0009
+
+- debug:
+    msg: "{{ datastore_info_0009 }}"
+
+- assert:
+    that:
+      - "datastore_info_0009['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0009['datastores'][0]['tags'] is defined"
+
+# Testcase 0010: Find a specific datastore
+- name: get list of info about one datastore
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "{{ ro_datastore }}"
+    show_tag: true
+  register: datastore_info_0010
+
+- debug:
+    msg: "{{ datastore_info_0010 }}"
+
+- assert:
+    that:
+      - "datastore_info_0010['datastores'][0]['name'] == ro_datastore"
+      - "datastore_info_0010['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0010['datastores'][0]['tags'] is defined"
+
+- name: get list of extended info about one datastore
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "{{ ro_datastore }}"
+    show_tag: true
+    gather_nfs_mount_info: true
+    gather_vmfs_mount_info: true
+  register: datastore_info_0011
+
+- debug:
+    msg: "{{ datastore_info_0011 }}"
+
+- assert:
+    that:
+      - "datastore_info_0011['datastores'][0]['name'] == ro_datastore"
+      - "datastore_info_0011['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0011['datastores'][0]['tags'] is defined"
+
+- name: get list of info about one datastore in check mode
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "{{ ro_datastore }}"
+    show_tag: true
+  register: datastore_info_0012
+
+- debug:
+    msg: "{{ datastore_info_0012 }}"
+
+- assert:
+    that:
+      - "datastore_info_0012['datastores'][0]['name'] == ro_datastore"
+      - "datastore_info_0012['datastores'][0]['capacity'] is defined"
+      - "datastore_info_0012['datastores'][0]['tags'] is defined"
+
+# Testcase with property specify
+- name: get list of info about datastores with properties specify - no dc
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster: "{{ ccr1 }}"
+    show_tag: true
+    schema: vsphere
+    properties:
+      - name
+  register: datastore_info_0013
+
+- debug:
+    msg: "{{ datastore_info_0013 }}"
+
+- assert:
+    that:
+      - "datastore_info_0013['datastores'][0]['name'] is defined"
+      - "datastore_info_0013['datastores'][0]['tags'] is defined"
+
+- name: get list of info about one datastore with properties specify
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "{{ ro_datastore }}"
+    show_tag: true
+    schema: vsphere
+    properties:
+      - name
+  register: datastore_info_0014
+
+- debug:
+    msg: "{{ datastore_info_0014 }}"
+
+- assert:
+    that:
+      - "datastore_info_0014['datastores'][0]['name'] is defined"
+      - "datastore_info_0014['datastores'][0]['name'] == ro_datastore"
+      - "datastore_info_0014['datastores'] | length == 1"
+      - "datastore_info_0014['datastores'][0]['tags'] is defined"
+
+- name: get list of info about datastores with multiple properties specify
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "{{ ro_datastore }}"
+    show_tag: true
+    schema: vsphere
+    properties:
+      - name
+      - capability.vsanSparseSupported
+      - overallStatus
+  register: datastore_info_0015
+
+- debug:
+    msg: "{{ datastore_info_0015 }}"
+
+- assert:
+    that:
+      - "datastore_info_0015['datastores'][0]['name'] is defined"
+      - "datastore_info_0015['datastores'][0]['capability']['vsanSparseSupported'] is defined"
+      - "datastore_info_0015['datastores'][0]['overallStatus'] is defined"
+      - "datastore_info_0015['datastores'][0]['tags'] is defined"

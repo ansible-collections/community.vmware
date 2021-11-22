@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_cross_vc_clone - Added the is_template option to mark a cloned vm/template as a template (https://github.com/ansible-collections/community.vmware/pull/996).

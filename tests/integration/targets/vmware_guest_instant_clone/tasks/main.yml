@@ -25,6 +25,7 @@
     hardware:
       num_cpus: 1
       memory_mb: 512
+      version: 11
     disk:
       - size: 1gb
         type: thin

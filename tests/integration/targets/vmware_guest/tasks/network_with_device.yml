@@ -10,14 +10,15 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     datacenter: "{{ dc1 }}"
-    state: poweredon
+    state: poweredoff
     folder: "{{ f0 }}"
     name: test_vm1
     disk:
       - size: 10mb
         datastore: "{{ rw_datastore }}"
-    guest_id: rhel7_64guest
+    guest_id: debian8_64Guest
     hardware:
+      version: 11
       memory_mb: 128
       num_cpus: 1
     networks:
@@ -38,14 +39,15 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     datacenter: "{{ dc1 }}"
-    state: poweredon
+    state: poweredoff
     folder: "{{ f0 }}"
     name: test_vm1
     disk:
       - size: 10mb
         datastore: "{{ rw_datastore }}"
-    guest_id: rhel7_64guest
+    guest_id: debian8_64Guest
     hardware:
+      version: 11
       memory_mb: 128
       num_cpus: 1
     networks:

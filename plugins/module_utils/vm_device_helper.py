@@ -372,3 +372,21 @@ class PyVmomiDeviceHelper(object):
         nvdimm_device.capacityInMB = nvdimm_size
 
         return nvdimm_spec
+
+    def is_tpm_device(self, device):
+        return isinstance(device, vim.vm.device.VirtualTPM)
+
+    def create_tpm(self):
+        vtpm_device_spec = vim.vm.device.VirtualDeviceSpec()
+        vtpm_device_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+        vtpm_device_spec.device = vim.vm.device.VirtualTPM()
+        vtpm_device_spec.device.deviceInfo = vim.Description()
+
+        return vtpm_device_spec
+
+    def remove_tpm(self, vtpm_device):
+        vtpm_device_spec = vim.vm.device.VirtualDeviceSpec()
+        vtpm_device_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
+        vtpm_device_spec.device = vtpm_device
+
+        return vtpm_device_spec
