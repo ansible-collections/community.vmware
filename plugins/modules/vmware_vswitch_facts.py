@@ -59,7 +59,7 @@ EXAMPLES = r'''
     delegate_to: localhost
   register: all_hosts_vswitch_facts
 
-- name: Gather firewall facts about ESXi Host
+- name: Gather vswitch facts about ESXi Host
   community.vmware.vmware_vswitch_facts:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
