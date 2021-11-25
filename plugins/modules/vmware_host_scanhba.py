@@ -51,7 +51,7 @@ options:
     type: bool
   rescan_vmfs:
     description:
-    - Rescan all known storage devices for new VMFS volumes
+    - Rescan all known storage devices for new VMFS volumes.
     required: false
     default: false
     type: bool
