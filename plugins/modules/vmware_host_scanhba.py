@@ -55,6 +55,7 @@ options:
     required: false
     default: false
     type: bool
+    version_added: '1.17.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
