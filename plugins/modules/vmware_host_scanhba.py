@@ -43,6 +43,7 @@ options:
     required: false
     default: true
     type: bool
+    version_added: '1.17.0'
   refresh_storage:
     description:
     - Refresh the storage system in vCenter/ESXi Web Client for each host found
