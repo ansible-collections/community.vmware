@@ -148,6 +148,7 @@ options:
          type: str
          choices: ['noSharing', 'physicalSharing', 'virtualSharing']
          default: 'noSharing'
+         version_added: '1.17.0'
        unit_number:
          description:
            - Disk Unit Number.
