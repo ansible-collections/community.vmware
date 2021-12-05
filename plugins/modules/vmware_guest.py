@@ -2219,9 +2219,8 @@ class PyVmomiHelper(PyVmomi):
 
             ident.identification = vim.vm.customization.Identification()
 
-            if self.params['customization']['password'] is None:
-                self.module.fail_json(msg="'password' entry is required in 'customization' section")
-
+            if self.params['customization']['password'] is None or self.params['customization']['password'] == '':
+                ident.guiUnattended.password = None
             else:
                 ident.guiUnattended.password = vim.vm.customization.Password()
                 ident.guiUnattended.password.value = str(self.params['customization']['password'])
