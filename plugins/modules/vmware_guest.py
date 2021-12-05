@@ -680,7 +680,7 @@ options:
             type: str
             description:
             - Local administrator password.
-            - Required.
+            - If not defined, the password will be set to blank (that is, no password).
             - Specific to Windows customization.
         productid:
             type: str
