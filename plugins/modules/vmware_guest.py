@@ -681,6 +681,7 @@ options:
             type: str
             description:
             - Local administrator password.
+            - If not defined, the password will be set to blank (that is, no password).
             - Specific to Windows customization.
         productid:
             type: str
@@ -2215,7 +2216,9 @@ class PyVmomiHelper(PyVmomi):
 
             ident.identification = vim.vm.customization.Identification()
 
-            if self.params['customization'].get('password', '') != '':
+            if self.params['customization']['password'] is None or self.params['customization']['password'] == '':
+                ident.guiUnattended.password = None
+            else:
                 ident.guiUnattended.password = vim.vm.customization.Password()
                 ident.guiUnattended.password.value = str(self.params['customization']['password'])
                 ident.guiUnattended.password.plainText = True
