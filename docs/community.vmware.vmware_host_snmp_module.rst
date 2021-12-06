@@ -241,6 +241,38 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>sys_contact</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>System contact who manages the system.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>sys_location</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>System location.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>trap_filter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -358,6 +390,16 @@ Examples
         trap_filter:
           - 1.3.6.1.4.1.6876.4.1.1.0
           - 1.3.6.1.4.1.6876.4.1.1.1
+        state: enabled
+      delegate_to: localhost
+
+    - name: Enable and configure SNMP system contact and location
+      community.vmware.vmware_host_snmp:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        sys_contact: "admin@testemail.com"
+        sys_location: "Austin, USA"
         state: enabled
       delegate_to: localhost
 

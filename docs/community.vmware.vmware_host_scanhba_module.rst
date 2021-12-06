@@ -182,6 +182,46 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>rescan_hba</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Rescan all host bus adapters for new storage devices. Rescanning all adapters can be slow.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>rescan_vmfs</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Rescan all known storage devices for new VMFS volumes.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -255,6 +295,16 @@ Examples
           refresh_storage: true
       delegate_to: localhost
 
+    - name: Rescan for new VMFS Volumes in a given cluster, but do not scan for new Devices - all found hosts will be scanned
+      community.vmware.vmware_host_scanhba:
+          hostname: '{{ vcenter_hostname }}'
+          username: '{{ vcenter_username }}'
+          password: '{{ vcenter_password }}'
+          esxi_hostname: '{{ inventory_hostname }}'
+          rescan_vmfs: true
+          rescan_hba: false
+      delegate_to: localhost
+
     - name: Recan HBA's for a given ESXi host and don't refresh storage system objects
       community.vmware.vmware_host_scanhba:
           hostname: '{{ vcenter_hostname }}'
@@ -291,7 +341,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>return confirmation of requested host and updated / refreshed storage system</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01.example.com&#x27;: {&#x27;rescaned_hba&#x27;: &#x27;true&#x27;, &#x27;refreshed_storage&#x27;: &#x27;true&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01.example.com&#x27;: {&#x27;rescaned_hba&#x27;: &#x27;true&#x27;, &#x27;refreshed_storage&#x27;: &#x27;true&#x27;, &#x27;rescaned_vmfs&#x27;: &#x27;true&#x27;}}</div>
                 </td>
             </tr>
     </table>
