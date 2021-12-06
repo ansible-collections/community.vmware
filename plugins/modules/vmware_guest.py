@@ -190,7 +190,7 @@ options:
             type: str
             description:
             - The Virtual machine hardware versions.
-            - Default is C(latest)
+            - Default is C(latest). Defaulting to C(latest) is added in 1.15.0.
             - If set to C(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - C(latest) is added in Ansible 2.10.
             - Please check VMware documentation for correct virtual machine hardware version.
