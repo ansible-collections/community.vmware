@@ -1,3 +1,3 @@
 ---
 minor_changes:
-- "vmware_guest - clarify that the default hardware version is latest."
+- vmware_guest - clarify that the default hardware version is ``latest`` (https://github.com/ansible-collections/community.vmware/pull/973).
