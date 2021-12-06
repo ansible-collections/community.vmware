@@ -210,7 +210,6 @@ class VmwareStoragePolicyManager(SPBM):
                             tag_constraints['id'] = propertyInstance.id
                             tag_constraints['values'] = propertyInstance.value.values
                             tag_constraints['operator'] = propertyInstance.operator
-
         return tag_constraints
 
     def get_profile_manager(self):
@@ -249,7 +248,7 @@ class VmwareStoragePolicyManager(SPBM):
 
     def update_storage_policy(self, policy, pbm_client, results):
         expected_description = self.params.get('description')
-        expected_tags = [self.params.get('tag_name')]
+        expected_tags = self.params.get('tag_name')
         expected_tag_category = self.params.get('tag_category')
         expected_tag_id = self.format_tag_mob_id(expected_tag_category)
         expected_operator = "NOT"
@@ -293,7 +292,7 @@ class VmwareStoragePolicyManager(SPBM):
             createSpec=self.create_mob_pbm_create_spec(
                 self.format_tag_mob_id(self.params.get('tag_category')),
                 None,
-                [self.params.get('tag_name')],
+                self.params.get('tag_name'),
                 self.params.get('tag_category'),
                 self.params.get('description'),
                 self.params.get('name')
@@ -301,7 +300,6 @@ class VmwareStoragePolicyManager(SPBM):
         )
 
         policy = pbm_client.PbmRetrieveContent(profileIds=[profile_ids])
-
         self.format_results_and_exit(results, policy[0], True)
 
     def ensure_state(self):
@@ -323,9 +321,10 @@ class VmwareStoragePolicyManager(SPBM):
                 self.module.fail_json(msg="%s is not found in vCenter Server tag categories" % self.params.get('tag_category'))
 
             # ensure if the tag exists
-            tag_result = self.rest_client.get_tag_by_category(self.params.get('tag_name'), self.params.get('tag_category'))
-            if tag_result is None:
-                self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
+            for tags in self.params.get('tag_name'):
+              tag_result = self.rest_client.get_tag_by_category(tags, self.params.get('tag_category'))
+              if tag_result is None:
+                  self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
 
             # loop through and update the first match
             for policy in policies:
@@ -350,7 +349,7 @@ def main():
     argument_spec.update(
         name=dict(type='str', required=True),
         description=dict(type='str', required=False),
-        tag_name=dict(type='str', required=False),
+        tag_name=dict(type='list', required=False),
         tag_category=dict(type='str', required=False),
         tag_affinity=dict(type='bool', default=True),
         state=dict(type='str', choices=['absent', 'present'], default='present')
