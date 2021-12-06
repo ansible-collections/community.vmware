@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_host_snmp - implement setting syscontact and syslocation (https://github.com/ansible-collections/community.vmware/issues/1044).

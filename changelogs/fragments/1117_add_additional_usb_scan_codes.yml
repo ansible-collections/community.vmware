@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_sendkey - added additional USB scan codes for HOME and END.

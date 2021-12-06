@@ -535,6 +535,7 @@ Parameters
                 </td>
                 <td>
                         <div>Local administrator password.</div>
+                        <div>If not defined, the password will be set to blank (that is, no password).</div>
                         <div>Specific to Windows customization.</div>
                 </td>
             </tr>
