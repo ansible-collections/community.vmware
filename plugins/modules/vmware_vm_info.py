@@ -26,7 +26,7 @@ notes:
 - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
-- Fact about C(datastore_url) is added to output in version 1.18.0.
+- Fact about C(datastore_url) is added in VMware collection 1.18.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -119,7 +119,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.uuid }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -137,7 +137,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.tags }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -163,7 +163,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.datastore_url }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 '''
@@ -198,6 +198,12 @@ virtual_machines:
         "attributes": {
             "job": "backup-prepare"
         },
+        "datastore_url": [
+            {
+                "name": "t880-o2g",
+                "url": "/vmfs/volumes/e074264a-e5c82a58"
+            }
+        ],
         "tags": [
             {
                 "category_id": "urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL",
