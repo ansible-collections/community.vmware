@@ -26,6 +26,7 @@ notes:
 - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
+- datastore_url is added to output in version 1.18.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -148,6 +149,23 @@ EXAMPLES = r'''
     folder: "/Asia-Datacenter1/vm/prod"
   delegate_to: localhost
   register: vm_info
+
+- name: Get datastore_url from given VM name
+  block:
+    - name: Get virtual machine info
+      community.vmware.vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+      delegate_to: localhost
+      register: vm_info
+
+    - debug:
+        msg: "{{ item.datastore_url }}"
+      with_items:
+        - "{{ vm_info.virtual_machines | json_query(query) }}"
+      vars:
+        query: "[?guest_name=='DC0_H0_VM0']"
 '''
 
 RETURN = r'''
