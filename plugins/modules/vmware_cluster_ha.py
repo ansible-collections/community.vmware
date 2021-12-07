@@ -40,8 +40,7 @@ options:
       description:
       - Whether to enable HA.
       type: bool
-      default: false
-      aliases: [ enable_ha ]
+      default: true
     ha_host_monitoring:
       description:
       - Whether HA restarts virtual machines after a host fails.
@@ -284,9 +283,6 @@ class VMwareCluster(PyVmomi):
         else:
             self.changed_advanced_settings = None
 
-        self.module.warn("The default for enable will change from false to true in a future version to make the behavior more consistent with other modules."
-                         "Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
-
     def get_failover_hosts(self):
         """
         Get failover hosts for failover_host_admission_control policy
@@ -459,7 +455,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         # HA
-        enable=dict(type='bool', default=False, aliases=['enable_ha']),
+        enable=dict(type='bool', default=True),
         ha_host_monitoring=dict(type='str',
                                 default='enabled',
                                 choices=['enabled', 'disabled']),

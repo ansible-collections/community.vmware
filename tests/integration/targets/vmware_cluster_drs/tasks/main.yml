@@ -42,7 +42,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_drs
-    enable_drs: false
+    enable: false
   register: cluster_drs_result_0002
 
 - name: Ensure DRS is disabled
