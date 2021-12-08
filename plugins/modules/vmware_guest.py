@@ -3371,19 +3371,13 @@ def main():
     # Check requirements for virtualization based security
     if pyv.params['hardware']['virt_based_security']:
         if not pyv.params['hardware']['nested_virt']:
-            pyv.module.warn("Virtualization based security requires nested virtualization. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['nested_virt'] = True
+            pyv.module.fail("Virtualization based security requires nested virtualization. Please enable nested_virt.")
 
         if not pyv.params['hardware']['secure_boot']:
-            pyv.module.warn("Virtualization based security requires (U)EFI secure boot. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['secure_boot'] = True
+            pyv.module.fail("Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
 
         if not pyv.params['hardware']['iommu']:
-            pyv.module.warn("Virtualization based security requires I/O MMU. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling iommu explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['iommu'] = True
+            pyv.module.fail("Virtualization based security requires I/O MMU. Please enable iommu.")
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()
