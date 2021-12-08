@@ -91,3 +91,45 @@
   assert:
     that:
         - not deletion_result.changed
+
+- name: Delete third lvl folder first time
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: absent
+  register: deletion_result
+
+- debug:
+    msg: "{{ deletion_result }}"
+
+- name: Assert third lvl folder has been successfully deleted
+  assert:
+    that:
+        - deletion_result.changed
+
+- name: Delete third lvl folder again
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: absent
+  register: deletion_result
+
+- debug:
+    msg: "{{ deletion_result }}"
+
+- name: Assert third lvl folder has already been deleted earlier
+  assert:
+    that:
+        - not deletion_result.changed
