@@ -320,7 +320,7 @@
     that:
         - dvs_pg_result_0009.changed
 
-- name: Change portgroup_type to ephemeral
+- name: Change portgroup to ephemeral
   vmware_dvs_portgroup:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
