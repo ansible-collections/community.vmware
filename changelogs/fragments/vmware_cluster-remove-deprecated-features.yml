@@ -1,0 +1,4 @@
+removed_features:
+- vmware_cluster - Remove DRS configuration in favour of module ``vmware_cluster_drs``.
+- vmware_cluster - Remove HA configuration in favour of module ``vmware_cluster_ha``.
+- vmware_cluster - Remove VSAN configuration in favour of module ``vmware_cluster_vsan``.
