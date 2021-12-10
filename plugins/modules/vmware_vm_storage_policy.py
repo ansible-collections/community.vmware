@@ -49,7 +49,7 @@ options:
     - This parameter is ignored when C(state=absent).
     - This parameter is required when C(state=present).
     required: False
-    type: str
+    type: list
   tag_affinity:
     description:
     - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement.
