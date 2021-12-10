@@ -316,8 +316,6 @@ plugins/modules/vmware_vmkernel.py compile-2.6!skip
 plugins/modules/vmware_vmkernel.py import-2.6!skip
 plugins/modules/vmware_vmkernel_info.py compile-2.6!skip
 plugins/modules/vmware_vmkernel_info.py import-2.6!skip
-plugins/modules/vmware_vmkernel_ip_config.py compile-2.6!skip
-plugins/modules/vmware_vmkernel_ip_config.py import-2.6!skip
 plugins/modules/vmware_vmotion.py compile-2.6!skip
 plugins/modules/vmware_vmotion.py import-2.6!skip
 plugins/modules/vmware_vsan_cluster.py compile-2.6!skip
