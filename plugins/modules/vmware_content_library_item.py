@@ -539,9 +539,11 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             return None, e
 
     def _changed(self):
+        """Set changed status in Ansible module result."""
         self.result.changed = True
 
     def _fail(self):
+        """Fail Ansible module and return formatted error message."""
         if isinstance(self._error, Error):
             message = ""
             for default_message in self._error.messages:
@@ -553,9 +555,11 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             self.module.fail_json(msg="An unknown error occurred", **self.result)
 
     def _exit(self):
+        """End Ansible module execution."""
         self.module.exit_json(**self.result)
 
     def process_state(self):
+        """Ansible module entrypoint"""
         # Get content library, if it exists
         self.get_content_library()
 
