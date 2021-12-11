@@ -596,6 +596,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
 
 def main():
+    # Wrangle Ansible arguments
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     argument_spec.update(
         content_library_name=dict(type='str', aliases=['library_name']),
@@ -623,7 +624,7 @@ def main():
         ]
     )
 
-    # Initialize client
+    # Initialize client and execute module
     vmware_content_library_item_client = VmwareContentLibraryItemClient(module)
     vmware_content_library_item_client.process_state()
 
