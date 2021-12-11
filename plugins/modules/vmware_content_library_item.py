@@ -668,7 +668,7 @@ def main():
             ('content_library_item_name', 'content_library_item_id')
         ],
         required_if=[
-            ('state', 'present', ('src'))
+            ('state', 'present', ['src'], True)
         ]
     )
 
