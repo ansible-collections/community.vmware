@@ -198,8 +198,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             self._content_library, self._error = self.get_content_library_by_name(self.content_library_name)
 
         else:
-            self._error = "You must supply a value for either content_library_id or content_library_name"
-            self._fail()
+            self._fail("You must supply a value for either content_library_id or content_library_name")
 
         if self._error:
             self._fail()
@@ -254,10 +253,12 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         except Error as e:
             return None, e
 
-    def get_content_library_item(self):
+    def get_content_library_item(self, ignore_not_found=False):
         """Get a vCenter content library item and store it as a member variable. On error, state is stored in self._error.
         Parameters
         ---------
+        ignore_not_found: bool
+            Should NotFound errors be ignored. Used when it is expected that the content library item might not exist
         Returns
         ---------
         """
@@ -268,11 +269,14 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             self._content_library_item, self._error = self.get_content_library_item_by_name(self.content_library_id, self.content_library_item_name)
 
         else:
-            self._error = "You must supply a value for either content_library_item_id or both content_library_item_name and content_library_id"
-            self._fail()
+            self._fail("You must supply a value for either content_library_item_id or both content_library_item_name and content_library_id")
 
         if self._error:
-            self._fail()
+            if isinstance(self._error, NotFound) and ignore_not_found:
+                self._content_library_item = None
+                self._error = None
+            else:
+                self._fail()
 
     @staticmethod
     def get_content_library_item_by_id(api_client, content_library_item_id):
@@ -351,8 +355,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
             self._changed()
         else:
-            self._error = "You must supply a value for all of content_library_id, content_library_item_name, and src."
-            self._fail()
+            self._fail("You must supply a value for all of content_library_id, content_library_item_name, and src.")
 
         if self._error:
             self._fail()
@@ -542,8 +545,18 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         """Set changed status in Ansible module result."""
         self.result.changed = True
 
-    def _fail(self):
-        """Fail Ansible module and return formatted error message."""
+    def _fail(self, error=None):
+        """Fail Ansible module and return formatted error message.
+        Parameters
+        ---------
+        error: Union[com.vmware.vapi.std.errors_client.Error, str]
+            Error object or message
+        Returns
+        ---------
+        """
+        if error:
+            self._error = error
+
         if isinstance(self._error, Error):
             message = ""
             for default_message in self._error.messages:
@@ -560,39 +573,29 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
     def process_state(self):
         """Ansible module entrypoint"""
-        # Get content library, if it exists
+        # Get content library.
         self.get_content_library()
 
-        # If Ansible used the content library name for the lookup, store the id too
+        # If Ansible supplied only the content library name, store the id now that we have it.
         if self.content_library_id is None:
             self.content_library_id = self._content_library.id
 
-        # Get content library item, if it exists
-        self.get_content_library_item()
+        # Get content library item
+        self.get_content_library_item(ignore_not_found=True)
 
         if self.state == 'absent':
-            # Item shouldn't exist and it doesn't, great!
-            if isinstance(content_library_item, NotFound):
-                print('Object already doesnt exist')  # TODO
+            if not self._content_library_item:  # Item shouldn't exist and it doesn't, great!
+                self._exit()
 
-            # Error getting item
-            elif isinstance(content_library_item, Error):
-                print(content_library_item)  # TODO
-
-            # Item exists and it shouldn't, delete it
-            else:
-                vmware_content_library_item_client.delete_content_library_item()
+            else:  # Item exists and it shouldn't, delete it.
+                self.delete_content_library_item()
 
         elif self.state == 'present':
-            # Upsert item
-            if isinstance(content_library_item, NotFound) or not isinstance(content_library_item, Error):
-                print(vmware_content_library_item_client.create_content_library_item())
-            # Error getting item
-            else:
-                print(content_library_item)  # TODO
+            # We don't care if it already exists or not, upsert it.
+            self.create_content_library_item()
 
         else:
-            print("state can only be present or absent")  # TODO
+            self._fail("Valid values for state are either present or absent")
 
 
 def main():
@@ -607,7 +610,6 @@ def main():
         src=dict(type='str', aliases=['file_path']),
         state=dict(type='str', choices=['present', 'absent'], default='present')
     )
-
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
