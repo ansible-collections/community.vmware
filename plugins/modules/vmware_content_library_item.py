@@ -183,6 +183,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.content_library_item_description = self.params.get('content_library_item_description')
         self.src = self.params.get('src')
         self.state = self.params.get('state')
+        self.validate_certs = self.params.get('validate_certs')
 
     def get_content_library(self):
         """Get a vCenter content library and store it as a member variable. On error, state is stored in self._error."""
@@ -389,7 +390,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 content_library_item_session_token=content_library_item_session_token,
                 src=self.src,
                 content_library_item_id=self.content_library_item_id,
-                content_library_item_name=self.content_library_item_name
+                content_library_item_name=self.content_library_item_name,
+                validate_certs=self.validate_certs
             )
 
             if self._error:
@@ -454,7 +456,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             src,
             content_library_item_session_token,
             content_library_item_id,
-            content_library_item_name
+            content_library_item_name,
+            validate_certs
     ):
         """Update the contents of a content library item file
         Parameters
@@ -469,6 +472,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The id of the vCenter content library item.
         content_library_item_name: str
             The name of the vCenter content library item.
+        validate_certs: bool
+            Validate vCenter certificate when updating library item
         Returns
         ---------
         result: (File.Info, Union[Error, str])
@@ -503,7 +508,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             )
 
             session = requests.Session()
-            session.verify = False  # TODO: Implement vCenter certificate verification
+            session.verify = validate_certs
             with open(src, 'rb') as file_data:
                 response = session.put(content_library_item_file.upload_endpoint.uri, data=file_data)
 
@@ -538,16 +543,16 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
     def delete_content_library_item(self):
         """Delete a vCenter content library item."""
         if self.content_library_item_id is not None:
-            _, self._error = self.delete_content_library_item_by_id(self.content_library_item_id)
+            _, self._error = self.delete_content_library_item_by_id(self.api_client, self.content_library_item_id)
             self._changed()
 
         elif self.content_library_item_name is not None:
-            self._content_library_item, self._error = self.get_content_library_item_by_name(self.content_library_id, self.content_library_item_name)
+            self._content_library_item, self._error = self.get_content_library_item_by_name(self.api_client, self.content_library_id, self.content_library_item_name)
 
             if self._error:
                 self._fail()
             else:
-                _, self._error = self.delete_content_library_item_by_id(self._content_library_item.id)
+                _, self._error = self.delete_content_library_item_by_id(self.api_client, self._content_library_item.id)
                 self._changed()
 
         else:
