@@ -402,7 +402,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 content_library_item_name=self.content_library_item_name
             )
 
-            if self._error():
+            if self._error:
                 # If we failed to fully create the file and its new, cleanup after ourselves
                 if new_content_library_item:
                     _, _ = self.delete_content_library_item_by_id(self.api_client, self.content_library_item_id)  # TODO: Find a way to report errors here too
