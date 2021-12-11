@@ -185,12 +185,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.state = self.params.get('state')
 
     def get_content_library(self):
-        """Get a vCenter content library and store it as a member variable. On error, state is stored in self._error.
-        Parameters
-        ---------
-        Returns
-        ---------
-        """
+        """Get a vCenter content library and store it as a member variable. On error, state is stored in self._error."""
         if self.content_library_id is not None:
             self._content_library, self._error = self.get_content_library_by_id(self.api_client, self.content_library_id)
 
@@ -365,12 +360,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             return None, e
 
     def create_content_library_item(self):
-        """Create a vCenter content library item
-        Parameters
-        ---------
-        Returns
-        ---------
-        """
+        """Create a vCenter content library item"""
         # A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation
         content_library_item_session_token = str(uuid.uuid4())
 
@@ -533,7 +523,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.UpdateSession.complete
             api_client.content.library.item.UpdateSession.complete(content_library_item_update_session_id)
 
-            return content_library_item_file, None
+            # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.get
+            return api_client.content.library.item.updatesession.File.get(content_library_item_update_session_id, content_library_item_name), None
 
         except Exception as e:
             if content_library_item_update_session_id is not None:
@@ -545,12 +536,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 return None, repr(e)
 
     def delete_content_library_item(self):
-        """Delete a vCenter content library item.
-        Parameters
-        ---------
-        Returns
-        ---------
-        """
+        """Delete a vCenter content library item."""
         if self.content_library_item_id is not None:
             _, self._error = self.delete_content_library_item_by_id(self.content_library_item_id)
             self._changed()
