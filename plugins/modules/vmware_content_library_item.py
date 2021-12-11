@@ -295,7 +295,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     self._fail()
             else:
                 # Now that we have the id too, set it
-                self.content_library_id = self._content_library_item.id
+                self.content_library_item_id = self._content_library_item.id
 
         else:
             self._fail("You must supply a value for either content_library_item_id or both content_library_item_name and content_library_id")
@@ -594,7 +594,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
     def _changed(self):
         """Set changed status in Ansible module result."""
-        self.result.changed = True
+        self.result['changed'] = True
 
     def _fail(self, error=None):
         """Fail Ansible module and return formatted error message.
@@ -610,7 +610,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
         if isinstance(self._error, Error):
             message = ""
-            for default_message in self._error.messages:
+            for default_message in self._error.to_dict().messages:
                 message += " " + default_message
             self.module.fail_json(msg=message, **self.result)
         elif self._error:
