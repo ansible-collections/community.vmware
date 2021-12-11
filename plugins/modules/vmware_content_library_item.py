@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright: (c) 2022, Ansible Project
-# Copyright: (c) 2022, Nick Curry <code@nickcurry.com
+# Copyright: (c) 2022, Nick Curry <code@nickcurry.com>
 # # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)>
 
 DOCUMENTATION = r'''
@@ -9,7 +9,7 @@ DOCUMENTATION = r'''
 module: vmware_content_library_item
 short_description: Create, update and delete VMware content library items
 description:
-- Module to manage VMware content Library items
+- Module to manage VMware content library items
 - Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
 author:
@@ -174,7 +174,6 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self._content_library = None
         self._content_library_item = None
         self._error = None
-        self._vcenter_error = None
 
         # Get parameters
         self.content_library_name = self.params.get('content_library_name')
@@ -543,9 +542,9 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.result.changed = True
 
     def _fail(self):
-        if self._vcenter_error:
+        if isinstance(self._error, Error):
             message = ""
-            for default_message in self._vcenter_error.messages:
+            for default_message in self._error.messages:
                 message += " " + default_message
             self.module.fail_json(msg=message, **self.result)
         elif self._error:
