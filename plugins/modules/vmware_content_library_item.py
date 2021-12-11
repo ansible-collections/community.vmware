@@ -192,16 +192,25 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         ---------
         """
         if self.content_library_id is not None:
-            self._content_library, self._error = self.get_content_library_by_id(self.content_library_id)
+            self._content_library, self._error = self.get_content_library_by_id(self.api_client, self.content_library_id)
+
+            if self._error:
+                self._fail()
+
+            # Now that we have the name too, set it
+            self.content_library_name = self._content_library.name
 
         elif self.content_library_name is not None:
-            self._content_library, self._error = self.get_content_library_by_name(self.content_library_name)
+            self._content_library, self._error = self.get_content_library_by_name(self.api_client, self.content_library_name)
+
+            if self._error:
+                self._fail()
+
+            # Now that we have the id too, set it
+            self.content_library_id = self._content_library.id
 
         else:
             self._fail("You must supply a value for either content_library_id or content_library_name")
-
-        if self._error:
-            self._fail()
 
     @staticmethod
     def get_content_library_by_id(api_client, content_library_id):
@@ -263,20 +272,33 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         ---------
         """
         if self.content_library_item_id is not None:
-            self._content_library_item, self._error = self.get_content_library_item_by_id(self.content_library_item_id)
+            self._content_library_item, self._error = self.get_content_library_item_by_id(self.api_client, self.content_library_item_id)
+
+            if self._error:
+                if isinstance(self._error, NotFound) and ignore_not_found:
+                    self._content_library_item = None
+                    self._error = None
+                else:
+                    self._fail()
+            else:
+                # Now that we have the name too, set it
+                self.content_library_item_name = self._content_library_item.name
 
         elif self.content_library_item_name is not None and self.content_library_id is not None:
-            self._content_library_item, self._error = self.get_content_library_item_by_name(self.content_library_id, self.content_library_item_name)
+            self._content_library_item, self._error = self.get_content_library_item_by_name(self.api_client, self.content_library_id, self.content_library_item_name)
+
+            if self._error:
+                if isinstance(self._error, NotFound) and ignore_not_found:
+                    self._content_library_item = None
+                    self._error = None
+                else:
+                    self._fail()
+            else:
+                # Now that we have the id too, set it
+                self.content_library_id = self._content_library_item.id
 
         else:
             self._fail("You must supply a value for either content_library_item_id or both content_library_item_name and content_library_id")
-
-        if self._error:
-            if isinstance(self._error, NotFound) and ignore_not_found:
-                self._content_library_item = None
-                self._error = None
-            else:
-                self._fail()
 
     @staticmethod
     def get_content_library_item_by_id(api_client, content_library_item_id):
@@ -289,8 +311,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The ID of the vCenter content library item.
         Returns
         ---------
-        result: (File.Info, Union[Error, str])
-            A tuple of the com.vmware.content.library.item.updatesession_client.File.Info object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
+        result: (ItemModel, Union[Error, str])
+            A tuple of the com.vmware.content.library_client.ItemModel object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
         """
         try:
             return api_client.content.library.Item.get(content_library_item_id), None
@@ -311,8 +333,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The name of the vCenter content library item.
         Returns
         ---------
-        result: (File.Info, Union[Error, str])
-            A tuple of the com.vmware.content.library.item.updatesession_client.File.Info object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
+        result: (ItemModel, Union[Error, str])
+            A tuple of the com.vmware.content.library_client.ItemModel object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
         """
         try:
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.Item.find
@@ -343,78 +365,128 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             return None, e
 
     def create_content_library_item(self):
+        """Create a vCenter content library item
+        Parameters
+        ---------
+        Returns
+        ---------
+        """
+        # A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation
+        content_library_item_session_token = str(uuid.uuid4())
+
         if self.content_library_id is not None \
                 and self.content_library_item_name is not None \
                 and self.src is not None:
-            file_info, self._error = self.create_content_library_item_by_details(
-                content_library_id=self.content_library_id,
-                content_library_item_name=self.content_library_item_name,
-                content_library_item_description=self.content_library_item_description,
-                src=self.src
+
+            # If content library item doesn't already exist, create it first
+            new_content_library_item = False
+            if not self._content_library_item:
+                new_content_library_item = True
+                self.content_library_item_id, self._error = self.create_content_library_item_by_details(
+                    api_client=self.api_client,
+                    content_library_item_session_token=content_library_item_session_token,
+                    content_library_id=self.content_library_id,
+                    content_library_item_name=self.content_library_item_name,
+                    content_library_item_description=self.content_library_item_description
+                )
+
+                if self._error:
+                    self._fail()
+
+            # Update content library item file contents
+            file_info, self._error = self.update_content_library_item_file_by_details(
+                api_client=self.api_client,
+                content_library_item_session_token=content_library_item_session_token,
+                src=self.src,
+                content_library_item_id=self.content_library_item_id,
+                content_library_item_name=self.content_library_item_name
             )
 
+            if self._error():
+                # If we failed to fully create the file and its new, cleanup after ourselves
+                if new_content_library_item:
+                    _, _ = self.delete_content_library_item_by_id(self.api_client, self.content_library_item_id)  # TODO: Find a way to report errors here too
+
+                self._fail()
+
             self._changed()
+
         else:
             self._fail("You must supply a value for all of content_library_id, content_library_item_name, and src.")
-
-        if self._error:
-            self._fail()
 
     @staticmethod
     def create_content_library_item_by_details(
             api_client,
+            content_library_item_session_token,
             content_library_id,
             content_library_item_name,
-            content_library_item_description,
-            src
+            content_library_item_description
     ):
         """Create a vCenter content library item.
         Parameters
         ---------
         api_client: vmware.vapi.vsphere.client.VsphereClient
             vSphere API Client
+        content_library_item_session_token: str
+            A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation.
         content_library_id: str
             The ID of the vCenter content library.
         content_library_item_name: str
             The name of the vCenter content library item.
         content_library_item_description: str
             The description of the vCenter content library item.
+        Returns
+        ---------
+        result: (Item, Union[Error, str])
+            A tuple of the com.vmware.content.library.Item object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
+        """
+        try:
+            # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.ItemModel
+            content_library_item_create_spec = {
+                'library_id': content_library_id,
+                'description': content_library_item_description,
+                'name': content_library_item_name,
+                # 'type': 'ovf' # TODO: Supply type information
+            }
+
+            # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.Item.create
+            return api_client.content.library.Item.create(
+                client_token=content_library_item_session_token,
+                create_spec=content_library_item_create_spec
+            ), None
+
+        except Error as e:
+            return None, e
+
+    @staticmethod
+    def update_content_library_item_file_by_details(
+            api_client,
+            src,
+            content_library_item_session_token,
+            content_library_item_id,
+            content_library_item_name
+    ):
+        """Update the contents of a content library item file
+        Parameters
+        ---------
+        api_client: vmware.vapi.vsphere.client.VsphereClient
+            vSphere API Client
+        content_library_item_session_token: str
+            A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation.
         src: str
             File path of the file to update. The supported URI schemes are: file
+        content_library_item_id: str
+            The id of the vCenter content library item.
+        content_library_item_name: str
+            The name of the vCenter content library item.
         Returns
         ---------
         result: (File.Info, Union[Error, str])
             A tuple of the com.vmware.content.library.item.updatesession_client.File.Info object of the vCenter content library item and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
         """
-        # A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation
-        content_library_item_session_token = str(uuid.uuid4())
         content_library_item_update_session_id = None
 
         try:
-            # If file doesn't already exist, create it, otherwise use the existing id
-            content_library_item = api_client.get_content_library_item_by_name(content_library_id, content_library_item_name)
-            if isinstance(content_library_item, NotFound):
-                new_content_library_item = True
-                # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.ItemModel
-                content_library_item_create_spec = {
-                    'library_id': content_library_id,
-                    'description': content_library_item_description,
-                    'name': content_library_item_name,
-                    # 'type': 'ovf' # TODO: Supply type information
-                }
-
-                # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.Item.create
-                content_library_item_id = api_client.content.library.Item.create(
-                    client_token=content_library_item_session_token,
-                    create_spec=content_library_item_create_spec
-                )
-
-            elif isinstance(content_library_item, Error):
-                raise content_library_item
-
-            else:
-                content_library_item_id = content_library_item.id
-
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.UpdateSessionModel
             content_library_item_update_session_create_spec = {
                 'library_item_id': content_library_item_id,
@@ -441,58 +513,36 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             )
 
             session = requests.Session()
-            session.verify = False
-
+            session.verify = False  # TODO: Implement vCenter certificate verification
             with open(src, 'rb') as file_data:
                 response = session.put(content_library_item_file.upload_endpoint.uri, data=file_data)
+
+            if response.status_code.__str__()[0] != "2":
+                return None, "There was an error uploading the file. %s: %s" % (response.status_code, response.reason)
 
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.validate
             content_library_item_validation_result = api_client.content.library.item.updatesession.File.validate(content_library_item_update_session_id)
 
             if content_library_item_validation_result.has_errors:
                 if content_library_item_validation_result.missing_files is not None:
-                    raise InternalServerError(
-                        messages=[
-                            LocalizableMessage(
-                                id='unexpected-error',
-                                default_message="The file failed to upload: %s" %  " ".join(content_library_item_validation_result.missing_files),
-                                args=[]
-                            )
-                        ]
-                    )
+                    return None, "These files are missing and failed to upload: %s" % " ".join(content_library_item_validation_result.missing_files)
 
                 elif content_library_item_validation_result.invalid_files is not None:
-                    raise InternalServerError(
-                        messages=[
-                            LocalizableMessage(
-                                id='unexpected-error',
-                                default_message="The file failed to upload: %s" %  " ".join(content_library_item_validation_result.invalid_files),
-                                args=[]
-                            )
-                        ]
-                    )
+                    return None, "These files are invalid and failed to upload: %s" % " ".join(content_library_item_validation_result.invalid_files)
 
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.UpdateSession.complete
             api_client.content.library.item.UpdateSession.complete(content_library_item_update_session_id)
 
+            return content_library_item_file, None
+
         except Exception as e:
             if content_library_item_update_session_id is not None:
-                api_client.content.library.item.UpdateSession.fail(content_library_item_update_session_id, format(e))
+                api_client.content.library.item.UpdateSession.fail(content_library_item_update_session_id, repr(e))
 
-            # If we failed to create the item and its new, delete it
-            if new_content_library_item:
-                self.delete_content_library_item()
-
-            return e
-
-        except Error as e:
-            if content_library_item_update_session_id is not None:
-                api_client.content.library.item.UpdateSession.fail(content_library_item_update_session_id, format(e))
-
-            if new_content_library_item:
-                self.delete_content_library_item()
-
-            return e
+            if isinstance(e, Error):
+                return None, e
+            else:
+                return None, repr(e)
 
     def delete_content_library_item(self):
         """Delete a vCenter content library item.
@@ -538,6 +588,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.html#com.vmware.content.library_client.Item.delete
             api_client.content.library.Item.delete(library_item_id=content_library_item_id)
             return content_library_item_id, None
+
         except Error as e:
             return None, e
 
@@ -576,10 +627,6 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         # Get content library.
         self.get_content_library()
 
-        # If Ansible supplied only the content library name, store the id now that we have it.
-        if self.content_library_id is None:
-            self.content_library_id = self._content_library.id
-
         # Get content library item
         self.get_content_library_item(ignore_not_found=True)
 
@@ -590,8 +637,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             else:  # Item exists and it shouldn't, delete it.
                 self.delete_content_library_item()
 
-        elif self.state == 'present':
-            # We don't care if it already exists or not, upsert it.
+        elif self.state == 'present':  # We don't care if it already exists or not, upsert it.
             self.create_content_library_item()
 
         else:
