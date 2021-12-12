@@ -194,7 +194,9 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         # Initialize member variables
         self.module = module
         self.result = dict(
-            changed=False
+            changed=False,
+            vmware_content_library=None,
+            vmware_content_library_item=None
         )
         self._content_library = None
         self._content_library_item = None
@@ -700,7 +702,12 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             self.module.fail_json(msg="An unknown error occurred", **self.result)
 
     def _exit(self):
-        """End Ansible module execution."""
+        """End Ansible module execution and set result values"""
+        if self._content_library:
+            self.result.vmware_content_library = dict(id=self._content_library.id, name=self._content_library.name)
+        if self._content_library_item:
+            self.result.vmware_content_library_item = self._content_library_item.to_dict()
+
         self.module.exit_json(**self.result)
 
     def process_state(self):
