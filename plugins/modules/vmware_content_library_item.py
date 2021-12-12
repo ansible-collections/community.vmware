@@ -748,7 +748,7 @@ def main():
         content_library_item_description=dict(type='str', aliases=['item_description', 'description'], default=''),
         content_library_item_type=dict(type='str', aliases=['item_type', 'type']),
         content_library_item_uri_ssl_thumbprint=dict(type='str', aliases=['ssl_thumbprint'], default=None),
-        create_only=dict(type='str', default=False),
+        create_only=dict(type='bool', default=False),
         uri=dict(type='str', aliases=['file_path']),
         state=dict(type='str', choices=['present', 'absent'], default='present')
     )
