@@ -153,7 +153,9 @@ vmware_content_library_item:
   type: dict
   sample: {
     "cached": "true",
-    "certificate_verification_info": "None"
+    "certificate_verification_info": {
+        "status": "NOT_AVAILABLE"
+    },
     "content_version": "2",
     "creation_time": "2021-12-10 20:21:45.868000",
     "description": "Fedora CoreOS 35",
@@ -166,7 +168,7 @@ vmware_content_library_item:
     "security_compliance": "true",
     "size": 817418240,
     "source_id": "None",
-    "type": "",
+    "type": "ovf",
     "version": "1"
   }
 '''
@@ -704,9 +706,9 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
     def _exit(self):
         """End Ansible module execution and set result values"""
         if self._content_library:
-            self.result.vmware_content_library = dict(id=self._content_library.id, name=self._content_library.name)
+            self.result['vmware_content_library'] = dict(id=self._content_library.id, name=self._content_library.name)
         if self._content_library_item:
-            self.result.vmware_content_library_item = self._content_library_item.to_dict()
+            self.result['vmware_content_library_item'] = self._content_library_item.to_dict()
 
         self.module.exit_json(**self.result)
 
