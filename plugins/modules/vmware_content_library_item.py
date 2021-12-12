@@ -64,7 +64,7 @@ options:
       required: false
     uri:
       description:
-      - https, http, or ds URI to the content library item
+      - https, http, file, or ds URI to the content library item
       - This is required only if I(state) is set to C(present).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
@@ -119,6 +119,17 @@ EXAMPLES = r'''
     content_library_id: f19e22d1-290c-4fda-800b-8550ff36380b
     content_library_item_name: cli_tools.tar.gz
     uri: "ds:///vmfs/volumes/71a9a63f-4ec2bd96-556e-a8a1599a907d/cli_tools.tar.gz"
+    
+- name: Create a local content library item using a file URI scheme
+  community.vmware.vmware_content_library_item:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    content_library_id: f19e22d1-290c-4fda-800b-8550ff36380b
+    content_library_item_name: cli_tools.tar.gz
+    uri: "file://home/user/cli_tools.tar.gz"
+    create_only: true
 
 - name: Delete a local content library item by name
   community.vmware.vmware_content_library_item:
@@ -178,10 +189,12 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_clien
 import uuid
 import urllib3
 import time
+import os
 
 try:
     from com.vmware.vapi.std_client import LocalizableMessage
     from com.vmware.vapi.std.errors_client import NotFound, Error
+    import requests
 
 except ImportError:
     pass
@@ -215,6 +228,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.create_only = self.params.get('create_only')
         self.uri = self.params.get('uri')
         self.state = self.params.get('state')
+        self.validate_certs = self.params.get('validate_certs')
 
     def get_content_library(self):
         """Get a vCenter content library and store it as a member variable. On error, state is stored in self._error."""
@@ -427,7 +441,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 uri=self.uri,
                 content_library_item_id=self.content_library_item_id,
                 content_library_item_name=self.content_library_item_name,
-                content_library_item_uri_ssl_thumbprint=self.content_library_item_uri_ssl_thumbprint
+                content_library_item_uri_ssl_thumbprint=self.content_library_item_uri_ssl_thumbprint,
+                validate_certs=self.validate_certs
             )
 
             if self._error:
@@ -500,7 +515,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             content_library_item_session_token,
             content_library_item_id,
             content_library_item_name,
-            content_library_item_uri_ssl_thumbprint=None
+            content_library_item_uri_ssl_thumbprint=None,
+            validate_certs=False
     ):
         """Update the contents of a content library item file
         Parameters
@@ -517,6 +533,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The name of the vCenter content library item.
         content_library_item_uri_ssl_thumbprint: bool
             Thumbprint for the SSL certificate. Required when uri is https.
+        validate_certs: bool
+            Validate vCenter certificate when importing content library item from local file system
         Returns
         ---------
         result: (File.Info, Union[Error, str])
@@ -536,7 +554,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 create_spec=content_library_item_update_session_create_spec
             )
 
-            # TODO: Figure out why this fails with large files using the ds scheme
+            # TODO: Figure out why this doesn't work reliably with large files that already exist in the content library
             if uri[:8] == "https://" or uri[:7] == "http://" or uri[:5] == "ds://":  # PULL content item from external source
                 # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.AddSpec
                 content_library_item_add_spec = {
@@ -555,49 +573,48 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     file_spec=content_library_item_add_spec
                 )
 
-                # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.TransferStatus
-                while content_library_item_file.status in ["TRANSFERRING", "VALIDATING", "WAITING_FOR_TRANSFER"]:
-                    time.sleep(0.5)
-                    content_library_item_file = api_client.content.library.item.updatesession.File.get(
-                        content_library_item_update_session_id, content_library_item_name)
-
-                if content_library_item_file.status == "ERROR":
-                    return None, content_library_item_file.error_message.default_message
-
+            # TODO: Figure out why this doesn't work reliably for large files that already exist in the content library
             elif uri[:7] == "file://":  # Push from local file system
-                return None, "File URI file:// not supported for uri. You must use either https://, http:// or ds:// URI schemes."
-
-                # TODO: Implement this so it works reliably for large files.
                 # com.vmware.vapi.std.errors_client.NotAllowedInCurrentState: {messages : [LocalizableMessage(id='com.vmware.vdcs.cls-main.update_session_file_not_received', default_message='File fedora-coreos-35.20211119.3.0-vmware.x86_64.ova has transfer errors or has not been fully received yet (status: WAITING).', args=['fedora-coreos-35.20211119.3.0-vmware.x86_64.ova', 'WAITING'], params=None, localized=None)], data : None, error_type : NOT_ALLOWED_IN_CURRENT_STATE}
                 # 2021-12-11T19:29:12.560Z | ERROR    | 8393e620-b835-4a2f-a186-18d28d454c9f-63 | transferService-pool-6-thread-9 | TransferEndpointImpl           | Session 9cdddfd6-cbc5-5a77-8c1c-96045d492d54, Item fedora-coreos-35.20211119.3.0-vmware.x86_64.ova, Endpoint ds:/vmfs/volumes/61a1a63f-4ec2bd96-556e-a8a1599a907d/contentlib-f19e22d2-290c-4fda-800b-8550ff36380a/4dd2d055-cd65-4415-9b3e-c57245ba1c30/disk_2d36c6a9-9767-48e9-805a-dda56207fd52.vmdk: IO error during transfer of ds:/vmfs/volumes/61a9a63a-4ec2bd96-556e-a8a1599a907d/contentlib-f19e22d1-290c-4fda-800b-8550ff36380d/3dd2d055-cd65-4415-9b3e-c57245ba1c31/disk_2d36c6a9-9767-48e9-805a-dda56207fd52.vmdk: Pipe closed
                 # java.io.IOException: Pipe closed
-                # # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.AddSpec
-                # file_size = os.path.getsize(uri)
-                # content_library_item_add_spec = {
-                #     'name': content_library_item_name,
-                #     'source_type': 'PUSH',
-                #     'size': file_size
-                # }
-                #
-                # # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.add
-                # content_library_item_file = api_client.content.library.item.updatesession.File.add(
-                #     update_session_id=content_library_item_update_session_id,
-                #     file_spec=content_library_item_add_spec
-                # )
-                #
-                # session = requests.Session()
-                # session.verify = validate_certs
-                # # TODO: Look into doing this asyncrounously and updating status along the way
-                # with open(uri, 'rb') as file_data:
-                #     response = session.put(content_library_item_file.upload_endpoint.uri, data=file_data,
-                #                            timeout=None)
-                #
-                # if response.status_code.__str__()[0] != "2":
-                #     return None, "There was an error uploading the file. %s: %s" % (
-                #     response.status_code, response.reason)
+
+                # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.AddSpec
+                file_size = os.path.getsize(uri[6:])
+                content_library_item_add_spec = {
+                    'name': content_library_item_name,
+                    'source_type': 'PUSH',
+                    'size': file_size
+                }
+
+                # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.add
+                content_library_item_file = api_client.content.library.item.updatesession.File.add(
+                    update_session_id=content_library_item_update_session_id,
+                    file_spec=content_library_item_add_spec
+                )
+
+                session = requests.Session()
+                session.verify = validate_certs
+                # TODO: Look into doing this asyncrounously and updating status along the way
+                with open(uri[6:], 'rb') as file_data:
+                    response = session.put(content_library_item_file.upload_endpoint.uri, data=file_data,
+                                           timeout=None)
+
+                if response.status_code.__str__()[0] != "2":
+                    return None, "There was an error uploading the file. %s: %s" % (
+                    response.status_code, response.reason)
 
             else:
                 return None, "Unsupported URI scheme for uri, you must use either https://, http:// or ds:// URI schemes."
+
+            # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.TransferStatus
+            while content_library_item_file.status in ["TRANSFERRING", "VALIDATING", "WAITING_FOR_TRANSFER"]:
+                time.sleep(0.5)
+                content_library_item_file = api_client.content.library.item.updatesession.File.get(
+                    content_library_item_update_session_id, content_library_item_name)
+
+            if content_library_item_file.status == "ERROR":
+                return None, content_library_item_file.error_message.default_message
 
             # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.validate
             content_library_item_validation_result = api_client.content.library.item.updatesession.File.validate(content_library_item_update_session_id)
