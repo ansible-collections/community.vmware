@@ -554,7 +554,6 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 create_spec=content_library_item_update_session_create_spec
             )
 
-            # TODO: Figure out why this doesn't work reliably with large files that already exist in the content library
             if uri[:8] == "https://" or uri[:7] == "http://" or uri[:5] == "ds://":  # PULL content item from external source
                 # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.AddSpec
                 content_library_item_add_spec = {
@@ -573,12 +572,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     file_spec=content_library_item_add_spec
                 )
 
-            # TODO: Figure out why this doesn't work reliably for large files that already exist in the content library
-            elif uri[:7] == "file://":  # Push from local file system
-                # com.vmware.vapi.std.errors_client.NotAllowedInCurrentState: {messages : [LocalizableMessage(id='com.vmware.vdcs.cls-main.update_session_file_not_received', default_message='File fedora-coreos-35.20211119.3.0-vmware.x86_64.ova has transfer errors or has not been fully received yet (status: WAITING).', args=['fedora-coreos-35.20211119.3.0-vmware.x86_64.ova', 'WAITING'], params=None, localized=None)], data : None, error_type : NOT_ALLOWED_IN_CURRENT_STATE}
-                # 2021-12-11T19:29:12.560Z | ERROR    | 8393e620-b835-4a2f-a186-18d28d454c9f-63 | transferService-pool-6-thread-9 | TransferEndpointImpl           | Session 9cdddfd6-cbc5-5a77-8c1c-96045d492d54, Item fedora-coreos-35.20211119.3.0-vmware.x86_64.ova, Endpoint ds:/vmfs/volumes/61a1a63f-4ec2bd96-556e-a8a1599a907d/contentlib-f19e22d2-290c-4fda-800b-8550ff36380a/4dd2d055-cd65-4415-9b3e-c57245ba1c30/disk_2d36c6a9-9767-48e9-805a-dda56207fd52.vmdk: IO error during transfer of ds:/vmfs/volumes/61a9a63a-4ec2bd96-556e-a8a1599a907d/contentlib-f19e22d1-290c-4fda-800b-8550ff36380d/3dd2d055-cd65-4415-9b3e-c57245ba1c31/disk_2d36c6a9-9767-48e9-805a-dda56207fd52.vmdk: Pipe closed
-                # java.io.IOException: Pipe closed
-
+            elif uri[:7] == "file://":  # PUSH from local file system
                 # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.AddSpec
                 file_size = os.path.getsize(uri[6:])
                 content_library_item_add_spec = {
