@@ -26,49 +26,55 @@ options:
       - The name of VMware content library where the item is stored
       - One of content_library_name or content_library_id is required
       type: str
-      required: False
+      required: false
     content_library_id:
       description:
       - The id of VMware content library where the item is stored
       - One of content_library_name or content_library_id is required
       type: str
-      required: False
+      required: false
     content_library_item_name:
       description:
       - The name of the content library item
       - One of content_library_item_name or content_library_id is required
       type: str
-      required: False
+      required: false
     content_library_item_id:
       description:
       - The id of the content library item
       - One of content_library_item_id or content_library_id is required
       type: str
-      required: False
+      required: false
     content_library_item_description:
       description:
       - The description of the content library item
       type: str
-      required: False
+      required: false
     content_library_item_type:
       description:
       - The content library service type of the content library item
       type: str
-      required: False
-    uri:
-      description:
-      - https, http, or ds URI to the content library item
-      - This is required only if I(state) is set to C(present).
-      - This parameter is ignored, when I(state) is set to C(absent).
-      type: str
-      required: False
+      required: false
     content_library_item_uri_ssl_thumbprint:
       description:
       - SSL thumbprint of the uri web server certificate
       - This is required only if I(uri) uses an https URI scheme and I(state) is set to C(present)
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
-      required: False
+      required: false
+    uri:
+      description:
+      - https, http, or ds URI to the content library item
+      - This is required only if I(state) is set to C(present).
+      - This parameter is ignored, when I(state) is set to C(absent).
+      type: str
+      required: false
+    create_only:
+      description:
+      - Create the content library item only if an item with the same name or id doesn't already exist
+      - If a content library item with the same name or id already exists, do nothing
+      type: bool
+      required: false
     state:
       description:
       - The state of content library item.
@@ -77,7 +83,7 @@ options:
       - If set to C(absent) and item exists, then content library is deleted.
       - If set to C(absent) and item does not exists, no action is taken.
       type: str
-      required: False
+      required: false
       default: 'present'
       choices: [ 'present', 'absent' ]
 extends_documentation_fragment:
@@ -200,8 +206,10 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.content_library_item_name = self.params.get('content_library_item_name')
         self.content_library_item_id = self.params.get('content_library_item_id')
         self.content_library_item_description = self.params.get('content_library_item_description')
-        self.uri = self.params.get('uri')
+        self.content_library_item_type = self.params.get('content_library_item_type')
         self.content_library_item_uri_ssl_thumbprint = self.params.get('content_library_item_uri_ssl_thumbprint')
+        self.create_only = self.params.get('create_only')
+        self.uri = self.params.get('uri')
         self.state = self.params.get('state')
 
     def get_content_library(self):
@@ -381,6 +389,10 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
     def create_content_library_item(self):
         """Create a vCenter content library item"""
+        # If the item already exists and we're only supposed to create it, exit
+        if self._content_library_item and self.create_only:
+            self._exit()
+
         # A unique token generated on the client for each creation request, this token is used to guarantee idempotent creation
         content_library_item_session_token = str(uuid.uuid4())
 
@@ -397,7 +409,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     content_library_item_session_token=content_library_item_session_token,
                     content_library_id=self.content_library_id,
                     content_library_item_name=self.content_library_item_name,
-                    content_library_item_description=self.content_library_item_description
+                    content_library_item_description=self.content_library_item_description,
+                    content_library_item_type=self.content_library_item_type
                 )
 
                 if self._error:
@@ -448,6 +461,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The name of the vCenter content library item.
         content_library_item_description: str
             The description of the vCenter content library item.
+        content_library_item_type: str
+            The content library service type of the content library item
         Returns
         ---------
         result: (Item, Union[Error, str])
@@ -724,6 +739,7 @@ def main():
         content_library_item_description=dict(type='str', aliases=['item_description', 'description'], default=''),
         content_library_item_type=dict(type='str', aliases=['item_type', 'type']),
         content_library_item_uri_ssl_thumbprint=dict(type='str', aliases=['ssl_thumbprint'], default=None),
+        create_only=dict(type='str', default=False),
         uri=dict(type='str', aliases=['file_path']),
         state=dict(type='str', choices=['present', 'absent'], default='present')
     )
