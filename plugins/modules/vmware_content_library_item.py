@@ -150,14 +150,6 @@ EXAMPLES = r'''
     state: absent
 '''
 RETURN = r'''
-vmware_content_library:
-  description: VMware content library information
-  returned: on success
-  type: dict
-  sample: {
-    "id": "e19e22d1-290c-4fda-800b-8550ff36380a",
-    "name": "fedora-content-library"
-  }
 vmware_content_library_item:
   description: VMware content library item information
   returned: on success
@@ -453,6 +445,12 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
                 self._fail()
 
+            # Gather information on updated file
+            self._content_library_item, self._error = self.get_content_library_item_by_id(self.api_client, self.content_library_item_id)
+
+            if self._error:
+                self._fail()
+
             self._changed()
 
         else:
@@ -717,10 +715,10 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
     def _exit(self):
         """End Ansible module execution and set result values"""
-        if self._content_library:
-            self.result['vmware_content_library'] = dict(id=self._content_library.id, name=self._content_library.name)
         if self._content_library_item:
             self.result['vmware_content_library_item'] = self._content_library_item.to_dict()
+        else:
+            self.result['vmware_content_library_item'] = {}
 
         self.module.exit_json(**self.result)
 
