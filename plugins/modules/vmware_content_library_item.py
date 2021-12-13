@@ -62,6 +62,20 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: false
+    content_library_item_checksum:
+      description:
+      - Checksum of content library item 
+      - vCenter will validate the file against this value once it is uploaded
+      - This parameter is ignored, when I(state) is set to C(absent).
+      type: str
+      required: false
+    content_library_item_checksum_algorithm:
+      description:
+      - Checksum algorithm of content library item 
+      - vCenter will validate the file against this value once it is uploaded
+      - This parameter is ignored, when I(state) is set to C(absent).
+      type: str
+      required: false
     uri:
       description:
       - https, http, file, or ds URI to the content library item
@@ -98,8 +112,8 @@ EXAMPLES = r'''
     content_library_name: content_library
     content_library_item_name: fedora-coreos-35.20211029.3.0-vmware.x86_64.ova
     content_library_item_description: "Fedora CoreOS 35"
-    uri: "https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/35.20211119.3.0/x86_64/fedora-coreos-35.20211119.3.0-vmware.x86_64.ova"
     content_library_item_uri_ssl_thumbprint: "EC:AA:D8:83:2C:05:ED:4F:B7:B1:0D:C4:27:79:FF:BE:B9:F9:F5:5C"
+    uri: "https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/35.20211119.3.0/x86_64/fedora-coreos-35.20211119.3.0-vmware.x86_64.ova"
 
 - name: Create a local content library item using an http URI scheme
   community.vmware.vmware_content_library_item:
@@ -118,6 +132,8 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     content_library_id: f19e22d1-290c-4fda-800b-8550ff36380b
     content_library_item_name: cli_tools.tar.gz
+    content_library_item_checksum: f628312853054d35e1dd69ad93132a58f558a7f891ca645ec7172c8bc9945190
+    content_library_item_checksum_algorithm: SHA256
     uri: "ds:///vmfs/volumes/71a9a63f-4ec2bd96-556e-a8a1599a907d/cli_tools.tar.gz"
     
 - name: Create a local content library item using a file URI scheme
@@ -216,6 +232,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.content_library_item_description = self.params.get('content_library_item_description')
         self.content_library_item_type = self.params.get('content_library_item_type')
         self.content_library_item_uri_ssl_thumbprint = self.params.get('content_library_item_uri_ssl_thumbprint')
+        self.content_library_item_checksum = self.params.get('content_library_item_checksum')
+        self.content_library_item_checksum_algorithm = self.params.get('content_library_item_checksum_algorithm')
         self.create_only = self.params.get('create_only')
         self.uri = self.params.get('uri')
         self.state = self.params.get('state')
@@ -433,6 +451,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                 content_library_item_id=self.content_library_item_id,
                 content_library_item_name=self.content_library_item_name,
                 content_library_item_uri_ssl_thumbprint=self.content_library_item_uri_ssl_thumbprint,
+                content_library_item_checksum=self.content_library_item_checksum,
+                content_library_item_checksum_algorithm=self.content_library_item_checksum_algorithm,
                 validate_certs=self.validate_certs
             )
 
@@ -513,6 +533,8 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             content_library_item_id,
             content_library_item_name,
             content_library_item_uri_ssl_thumbprint=None,
+            content_library_item_checksum=None,
+            content_library_item_checksum_algorithm=None,
             validate_certs=False
     ):
         """Update the contents of a content library item file
@@ -530,6 +552,10 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The name of the vCenter content library item.
         content_library_item_uri_ssl_thumbprint: bool
             Thumbprint for the SSL certificate. Required when uri is https.
+        content_library_item_checksum: str
+            Checksum of content library item
+        content_library_item_checksum_algorithm: str
+            Checksum algorithm of content library item
         validate_certs: bool
             Validate vCenter certificate when importing content library item from local file system
         Returns
@@ -559,9 +585,17 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.html#com.vmware.content.library.item_client.TransferEndpoint
                     'source_endpoint': {
                         'uri': uri,
-                        'ssl_certificate_thumbprint': content_library_item_uri_ssl_thumbprint
                     }
                 }
+
+                if content_library_item_uri_ssl_thumbprint:
+                    content_library_item_add_spec['source_endpoint']['ssl_certificate_thumbprint'] = content_library_item_uri_ssl_thumbprint
+
+                if content_library_item_checksum and content_library_item_checksum_algorithm:
+                    content_library_item_add_spec['checksum_info'] = {
+                        'algorithm': content_library_item_checksum_algorithm,
+                        'checksum': content_library_item_checksum
+                    }
 
                 # https://vmware.github.io/vsphere-automation-sdk-python/vsphere/cloud/com.vmware.content.library.item.html#com.vmware.content.library.item.updatesession_client.File.add
                 content_library_item_file = api_client.content.library.item.updatesession.File.add(
@@ -759,8 +793,10 @@ def main():
         content_library_item_description=dict(type='str', aliases=['item_description', 'description'], default=''),
         content_library_item_type=dict(type='str', aliases=['item_type', 'type']),
         content_library_item_uri_ssl_thumbprint=dict(type='str', aliases=['ssl_thumbprint'], default=None),
+        content_library_item_checksum=dict(type='str', aliases=['item_checksum', 'checksum']),
+        content_library_item_checksum_algorithm=dict(type='str', choices=['SHA1', 'MD5', 'SHA256', 'SHA512'], aliases=['item_checksum_algorithm', 'checksum_algorithm']),
         create_only=dict(type='bool', default=False),
-        uri=dict(type='str', aliases=['file_path']),
+        uri=dict(type='str', aliases=['file_path', 'url']),
         state=dict(type='str', choices=['present', 'absent'], default='present')
     )
     module = AnsibleModule(
@@ -776,6 +812,9 @@ def main():
         ],
         required_if=[
             ('state', 'present', ['uri'], True)
+        ],
+        required_together=[
+            ('content_library_item_checksum', 'content_library_item_checksum_algorithm')
         ]
     )
 
