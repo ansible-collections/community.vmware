@@ -44,7 +44,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: true
+        enable: true
       register: cluster_vsan_result_0002
 
     - name: Ensure vSAN is not enabled again

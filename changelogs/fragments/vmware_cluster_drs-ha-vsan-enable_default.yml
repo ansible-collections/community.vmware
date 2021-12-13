@@ -1,0 +1,7 @@
+breaking_changes:
+- vmware_cluster_drs - The parameter alias ``enable_drs`` has been removed, use ``enable`` instead.
+- vmware_cluster_ha - The parameter alias ``enable_ha`` has been removed, use ``enable`` instead.
+- vmware_cluster_vsan - The parameter alias ``enable_vsan`` has been removed, use ``enable`` instead.
+- vmware_cluster_drs - The default for ``enable`` has been changed from ``false`` to ``true``.
+- vmware_cluster_ha - The default for ``enable`` has been changed from ``false`` to ``true``.
+- vmware_cluster_vsan - The default for ``enable`` has been changed from ``false`` to ``true``.
