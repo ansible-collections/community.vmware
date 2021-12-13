@@ -202,7 +202,6 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         self.module = module
         self.result = dict(
             changed=False,
-            vmware_content_library=None,
             vmware_content_library_item=None
         )
         self._content_library = None
