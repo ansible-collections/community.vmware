@@ -661,6 +661,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
         if self._error:
             self._fail()
 
+
     @staticmethod
     def delete_content_library_item_by_id(api_client, content_library_item_id):
         """Delete a vCenter content library item.
@@ -738,11 +739,13 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             else:  # Item exists and it shouldn't, delete it.
                 self.delete_content_library_item()
 
-        elif self.state == 'present':  # We don't care if it already exists or not, upsert it.
+        elif self.state == 'present':  # Upsert it
             self.create_content_library_item()
 
         else:
             self._fail("Valid values for state are either present or absent")
+
+        self._exit()
 
 
 def main():
