@@ -174,10 +174,6 @@ plugin_routing:
       deprecation:
         removal_date: 2022-06-01
         warning_text: see plugin documentation for details
-    vmware_vmkernel_ip_config:
-      deprecation:
-        removal_date: 2021-12-01
-        warning_text: see plugin documentation for details
     vmware_guest_vnc:
       deprecation:
         removal_date: 2022-10-15
