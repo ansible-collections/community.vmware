@@ -478,7 +478,7 @@ options:
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
-    version_added: '1.7.0'
+    version_added: '1.8.0'
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
