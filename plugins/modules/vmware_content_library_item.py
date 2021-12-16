@@ -293,7 +293,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
             The ID of the vCenter content library.
         Returns
         ---------
-        result: (LibraryModel, Union[Error, str'v)
+        result: (LibraryModel, Union[Error, str])
             A tuple of the com.vmware.content_client.LibraryModel object of the vCenter content library and an Union[com.vmware.vapi.std.errors_client.Error, str] object if there is an error.
         """
         try:
