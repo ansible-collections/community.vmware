@@ -17,7 +17,6 @@ short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
 - Cluster name as fact is added in version 2.7.
-- This module was called C(vmware_vm_facts) before Ansible 2.9. The usage did not change.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -320,9 +319,6 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    if module._name in ('vmware_vm_facts', 'community.vmware.vmware_vm_facts'):
-        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'",
-                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vm_info = VmwareVmInfo(module)
     _virtual_machines = vmware_vm_info.get_all_virtual_machines()

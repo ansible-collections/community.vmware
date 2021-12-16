@@ -15,7 +15,6 @@ module: vmware_guest_snapshot_info
 short_description: Gather info about virtual machine's snapshots in vCenter
 description:
     - This module can be used to gather information about virtual machine's snapshots.
-    - This module was called C(vmware_guest_snapshot_facts) before Ansible 2.9. The usage did not change.
 author:
     - Abhijeet Kasurde (@Akasurde)
 notes:
@@ -164,10 +163,6 @@ def main():
         ],
         supports_check_mode=True,
     )
-
-    if module._name in ('vmware_guest_snapshot_facts', 'community.vmware.vmware_guest_snapshot_facts'):
-        module.deprecate(msg="The 'vmware_guest_snapshot_facts' module has been renamed to 'vmware_guest_snapshot_info'",
-                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     if module.params['folder']:
         # FindByInventoryPath() does not require an absolute path

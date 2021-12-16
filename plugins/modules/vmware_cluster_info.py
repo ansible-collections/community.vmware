@@ -15,7 +15,6 @@ short_description: Gather info about clusters available in given vCenter
 description:
     - This module can be used to gather information about clusters in VMWare infrastructure.
     - All values and VMware object names are case sensitive.
-    - This module was called C(vmware_cluster_facts) before Ansible 2.9. The usage did not change.
 author:
     - Abhijeet Kasurde (@Akasurde)
     - Christian Neugum (@digifuchsi)
@@ -341,11 +340,6 @@ def main():
         ],
         supports_check_mode=True,
     )
-    if module._name == 'vmware_cluster_facts':
-        module.deprecate(
-            msg="The 'vmware_cluster_facts' module has been renamed to 'vmware_cluster_info'",
-            version='3.0.0',  # was Ansible 2.13
-            collection_name='community.vmware')
 
     pyv = VmwreClusterInfoManager(module)
     pyv.gather_cluster_info()
