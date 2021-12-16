@@ -16,7 +16,6 @@ short_description: Gather info about datastores available in given vCenter
 description:
     - This module can be used to gather information about datastores in VMWare infrastructure.
     - All values and VMware object names are case sensitive.
-    - This module was called C(vmware_datastore_facts) before Ansible 2.9. The usage did not change.
 author:
     - Tim Rightnour (@garbled1)
 notes:
@@ -331,12 +330,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True
                            )
-    if module._name == 'vmware_datastore_facts':
-        module.deprecate(
-            msg="The 'vmware_datastore_facts' module has been renamed to 'vmware_datastore_info'",
-            version='3.0.0',  # was Ansible 2.13
-            collection_name='community.vmware'
-        )
 
     result = dict(changed=False)
 
