@@ -70,7 +70,8 @@ options:
     description:
     - Export an ISO image of the media mounted on the CD/DVD Drive within the virtual machine.
     type: bool
-  export_with_extraconfig
+  export_with_extraconfig:
+    type: bool
     default: false
     description:
     - All extra configuration options are exported for a virtual machine.
