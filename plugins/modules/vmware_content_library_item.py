@@ -64,14 +64,14 @@ options:
       required: false
     content_library_item_checksum:
       description:
-      - Checksum of content library item 
+      - Checksum of content library item
       - vCenter will validate the file against this value once it is uploaded
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: false
     content_library_item_checksum_algorithm:
       description:
-      - Checksum algorithm of content library item 
+      - Checksum algorithm of content library item
       - vCenter will validate the file against this value once it is uploaded
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
@@ -135,7 +135,7 @@ EXAMPLES = r'''
     content_library_item_checksum: f628312853054d35e1dd69ad93132a58f558a7f891ca645ec7172c8bc9945190
     content_library_item_checksum_algorithm: SHA256
     uri: "ds:///vmfs/volumes/71a9a63f-4ec2bd96-556e-a8a1599a907d/cli_tools.tar.gz"
-    
+
 - name: Create a local content library item using a file URI scheme
   community.vmware.vmware_content_library_item:
     hostname: '{{ vcenter_hostname }}'
@@ -155,7 +155,7 @@ EXAMPLES = r'''
     content_library_name: content_library
     content_library_item_name: fedora-coreos-35.20211029.3.0-vmware.x86_64.ova
     state: absent
-    
+
 - name: Delete a local content library item by id
   community.vmware.vmware_content_library_item:
     hostname: '{{ vcenter_hostname }}'
@@ -626,8 +626,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                                            timeout=None)
 
                 if response.status_code.__str__()[0] != "2":
-                    return None, "There was an error uploading the file. %s: %s" % (
-                    response.status_code, response.reason)
+                    return None, "There was an error uploading the file. %s: %s" % (response.status_code, response.reason)
 
             else:
                 return None, "Unsupported URI scheme for uri, you must use either https://, http:// or ds:// URI schemes."
@@ -691,7 +690,6 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
 
         if self._error:
             self._fail()
-
 
     @staticmethod
     def delete_content_library_item_by_id(api_client, content_library_item_id):
