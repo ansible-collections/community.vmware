@@ -192,12 +192,13 @@ vmware_content_library_item:
   }
 '''
 
+import uuid
+import os
+import time
+import urllib3
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-import uuid
-import urllib3
-import time
-import os
+
 
 try:
     from com.vmware.vapi.std_client import LocalizableMessage
