@@ -444,7 +444,7 @@ class VmwareContentLibraryItemClient(VmwareRestClient):
                     self._fail()
 
             # Update content library item file contents
-            file_info, self._error = self.update_content_library_item_file_by_details(
+            _, self._error = self.update_content_library_item_file_by_details(
                 api_client=self.api_client,
                 content_library_item_session_token=content_library_item_session_token,
                 uri=self.uri,
