@@ -1,0 +1,135 @@
+# Test code for the vcenter_folder module.
+# Copyright: (c) 2021, Victor Dvornikov <spacefuryphonk@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Create first lvl vm folder
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "foo"
+    folder_type: "vm"
+    state: present
+  register: creation_result
+
+- debug:
+    msg: "{{ creation_result }}"
+
+- name: Create second lvl vm folder
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "bar"
+    parent_folder: "foo"
+    folder_type: "vm"
+    state: present
+  register: creation_result
+
+- debug:
+    msg: "{{ creation_result }}"
+
+- name: Create collision third lvl vm folder
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: present
+  register: creation_result
+
+- debug:
+    msg: "{{ creation_result }}"
+
+- name: Delete missed second lvl vm folder using name collision
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo"
+    folder_type: "vm"
+    state: absent
+  register: deletion_result
+
+- debug:
+    msg: "{{ deletion_result }}"
+
+- name: Assert collision folder wasn't deleted
+  assert:
+    that:
+        - not deletion_result.changed
+
+- name: Check present collision folder
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: present
+  register: check_present_result
+  check_mode: true
+
+- debug:
+    msg: "{{ check_present_result }}"
+
+- name: Assert collision folder is still present
+  assert:
+    that:
+        - not deletion_result.changed
+
+- name: Delete third lvl folder first time
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: absent
+  register: deletion_result
+
+- debug:
+    msg: "{{ deletion_result }}"
+
+- name: Assert third lvl folder has been successfully deleted
+  assert:
+    that:
+        - deletion_result.changed
+
+- name: Delete third lvl folder again
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "collision_folder"
+    parent_folder: "foo/bar"
+    folder_type: "vm"
+    state: absent
+  register: deletion_result
+
+- debug:
+    msg: "{{ deletion_result }}"
+
+- name: Assert third lvl folder has already been deleted earlier
+  assert:
+    that:
+        - not deletion_result.changed
