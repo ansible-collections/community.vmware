@@ -147,7 +147,8 @@
             switch_name: "{{ dvswitch1 }}"
             portgroup_name: "192.168.0.0/24"
             vlan_id: 0
-            portgroup_type: earlyBinding
+            port_binding: 'static'
+            port_allocation: 'fixed'
             num_ports: 8
             state: present
           register: create_dvportgroup_result
@@ -192,7 +193,8 @@
             switch_name: "{{ dvswitch1 }}"
             portgroup_name: "192.168.0.0/24"
             vlan_id: 0
-            portgroup_type: earlyBinding
+            port_binding: 'static'
+            port_allocation: 'fixed'
             num_ports: 8
             state: absent
           register: delete_dvportgroup_result

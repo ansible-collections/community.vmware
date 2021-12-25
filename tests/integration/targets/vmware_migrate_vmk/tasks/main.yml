@@ -129,7 +129,8 @@
         validate_certs: false
         switch_name: "{{ dvswitch1 }}"
         portgroup_name: "{{ dvswitch_pg_name_for_test }}"
-        portgroup_type: earlyBinding
+        port_binding: 'static'
+        port_allocation: 'fixed'
         num_ports: 8
         vlan_id: 0
         state: present

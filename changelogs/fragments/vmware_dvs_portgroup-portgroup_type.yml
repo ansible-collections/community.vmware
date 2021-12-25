@@ -1,0 +1,2 @@
+removed_features:
+- vmware_dvs_portgroup - The deprecated parameter ``portgroup_type`` has been removed, use ``port_binding`` instead.
