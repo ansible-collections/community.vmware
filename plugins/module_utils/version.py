@@ -11,7 +11,7 @@ __metaclass__ = type
 from ansible.module_utils.six import raise_from
 
 try:
-    from ansible.module_utils.compat.version import LooseVersion
+    from ansible.module_utils.compat.version import LooseVersion  # noqa: F401
 except ImportError:
     try:
         from distutils.version import LooseVersion
