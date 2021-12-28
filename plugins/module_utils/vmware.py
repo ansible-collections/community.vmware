@@ -1150,8 +1150,7 @@ class PyVmomi(object):
         if version:
             vc_version = self.content.about.version
             return StrictVersion(vc_version) >= StrictVersion('.'.join(map(str, version)))
-        else:
-            self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
+        self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
 
     def get_managed_objects_properties(self, vim_type, properties=None):
         """

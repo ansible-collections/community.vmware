@@ -19,7 +19,7 @@ description: >
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 requirements:
-  - python >= 2.6
+  - python >= 3.6
   - PyVmomi
 options:
   name:
