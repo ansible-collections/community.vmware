@@ -184,6 +184,7 @@ options:
         - Manual specified MAC address of the network adapter when creating, or reconfiguring.
         - If not specified when creating new network adapter, mac address will be generated automatically.
         - When reconfigure MAC address, VM should be in powered off state.
+        - There are restrictions on the MAC addresses you can set. Consult the documentation of your vSphere version as to allowed MAC addresses.
       connected:
         type: bool
         description:
