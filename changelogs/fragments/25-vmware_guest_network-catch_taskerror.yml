@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_network - fix a bug that can crash the module due to an uncaught exception (https://github.com/ansible-collections/community.vmware/issues/25).

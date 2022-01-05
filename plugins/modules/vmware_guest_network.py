@@ -184,6 +184,7 @@ options:
         - Manual specified MAC address of the network adapter when creating, or reconfiguring.
         - If not specified when creating new network adapter, mac address will be generated automatically.
         - When reconfigure MAC address, VM should be in powered off state.
+        - There are restrictions on the MAC addresses you can set. Consult the documentation of your vSphere version as to allowed MAC addresses.
       connected:
         type: bool
         description:
@@ -330,8 +331,9 @@ except ImportError:
     pass
 
 import copy
+from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
 
 
 class PyVmomiHelper(PyVmomi):
@@ -792,6 +794,8 @@ class PyVmomiHelper(PyVmomi):
                 wait_for_task(task)
             except (vim.fault.InvalidDeviceSpec, vim.fault.RestrictedVersion) as e:
                 self.module.fail_json(msg='failed to reconfigure guest', detail=e.msg)
+            except TaskError as task_e:
+                self.module.fail_json(msg=to_native(task_e))
 
             if task.info.state == 'error':
                 self.module.fail_json(msg='failed to reconfigure guest', detail=task.info.error.msg)
