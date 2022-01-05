@@ -1,0 +1,2 @@
+bugfixes:
+  - create_nic - support advanced SR-IOV options from the VMware API (PCI device physical/virtual backing and guest OS MTU change)
