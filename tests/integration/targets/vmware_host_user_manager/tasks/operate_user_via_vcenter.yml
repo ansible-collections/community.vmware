@@ -1,0 +1,196 @@
+# Test code for the vmware_host_user_manager module.
+# Copyright: (c) 2022, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Add new local user with check_mode
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_password: Vmware!1@pass
+    user_description: example user
+    state: present
+  check_mode: true
+  register: add_new_user_result_check_mode
+
+- name: Guaranteed new local user additional
+  assert:
+    that:
+      - add_new_user_result_check_mode.changed is sameas true
+
+- name: Add new local user
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_password: Vmware!1@pass
+    user_description: example user
+    state: present
+  register: add_new_user_result
+
+- name: Guaranteed that added the new local user
+  assert:
+    that:
+      - add_new_user_result.changed is sameas true
+
+- name: Add new local user for idempotency test
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_password: Vmware!1@pass
+    user_description: example user
+    state: present
+  register: add_new_user_result_idempotency
+
+- name: Guaranteed that doesn't occur the changed
+  assert:
+    that:
+      - add_new_user_result_idempotency.changed is sameas false
+
+- name: Update the local user description with check_mode
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_description: example user111
+    state: present
+  check_mode: true
+  register: update_user_description_result_check_mode
+
+- name: Guaranteed the local user description updation
+  assert:
+    that:
+      - update_user_description_result_check_mode.changed is sameas true
+
+- name: Update the local user description
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_description: example user111
+    state: present
+  register: update_user_description_result
+
+- name: Guaranteed that updated the local user description
+  assert:
+    that:
+      - update_user_description_result.changed is sameas true
+
+- name: Update the local user description for idempotency test
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_description: example user111
+    state: present
+  register: update_user_description_result_idempotency
+
+- name: Guaranteed that doesn't occur the changed
+  assert:
+    that:
+      - update_user_description_result_idempotency.changed is sameas false
+
+- name: Update the local user password with check_mode
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_password: Vmware!1@pass222
+    override_user_password: true
+    state: present
+  check_mode: true
+  register: update_user_password_result_check_mode
+
+- name: Guaranteed the local user password updation
+  assert:
+    that:
+      - update_user_password_result_check_mode.changed is sameas true
+
+- name: Update the local user password
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    user_password: Vmware!1@pass222
+    override_user_password: true
+    state: present
+  register: update_user_password_result
+
+- name: Guaranteed that updated the local user password
+  assert:
+    that:
+      - update_user_password_result.changed is sameas true
+
+- name: Delete the local user with check_mode
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    state: absent
+  check_mode: true
+  register: delete_user_result_check_mode
+
+- name: Guaranteed new local user deletion
+  assert:
+    that:
+      - delete_user_result_check_mode.changed is sameas true
+
+- name: Delete new local user
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    state: absent
+  register: delete_new_user_result
+
+- name: Guaranteed that deleted the local user
+  assert:
+    that:
+      - delete_new_user_result.changed is sameas true
+
+- name: Delete the local user for idempotency test
+  community.vmware.vmware_host_user_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    user_name: example
+    state: absent
+  register: delete_user_result_idempotency
+
+- name: Guaranteed that doesn't occur the changed
+  assert:
+    that:
+      - delete_user_result_idempotency.changed is sameas false

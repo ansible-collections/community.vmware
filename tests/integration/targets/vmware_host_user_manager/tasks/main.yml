@@ -1,0 +1,14 @@
+# Test code for the vmware_host_user_manager module.
+# Copyright: (c) 2022, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Import operate_user_via_vcenter tasks
+  import_tasks: operate_user_via_vcenter.yml
+
+- name: Import operate_user_via_ESXi tasks
+  import_tasks: operate_user_via_ESXi.yml
