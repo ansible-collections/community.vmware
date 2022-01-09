@@ -151,10 +151,9 @@ category_results:
     }
 '''
 
-from distutils.version import LooseVersion
-
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.community.vmware.plugins.module_utils.version import LooseVersion
 from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
