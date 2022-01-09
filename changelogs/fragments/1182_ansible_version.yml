@@ -1,0 +1,2 @@
+breaking_changes:
+- The collections now requires at least ansible 2.10.8.
