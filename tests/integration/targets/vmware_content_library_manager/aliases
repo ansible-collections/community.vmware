@@ -2,5 +2,3 @@ cloud/vcenter
 needs/target/prepare_vmware_tests
 zuul/vmware/vcenter_1esxi
 zuul/vmware/govcsim
-# we're hitting some SERVICE_UNAVAILABLE errors time to time with our current set-up
-disabled
