@@ -304,8 +304,10 @@ class VmwareVmInfo(PyVmomi):
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
-            for entry in vm.config.datastoreUrl:
-                datastore_url.append({key: getattr(entry, key) for key in dir(entry) if not key.startswith('_')})
+            datastore_attributes = ('name', 'url')
+            if vm.config.datastoreUrl:
+                for entry in vm.config.datastoreUrl:
+                    datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
