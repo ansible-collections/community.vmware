@@ -1,2 +1,2 @@
 breaking_changes:
-- The collections now requires at least ansible-base 2.10.8, or ansible-core 2.11.0. Ansible 2.9 and before, and ansible-base versions before 2.10.8, are no longer supported.
+- The collection now requires at least ansible-core 2.11.0. Ansible 2.9 and before, and ansible-base versions are no longer supported.
