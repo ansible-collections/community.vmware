@@ -1,2 +1,0 @@
-bugfixes:
-  - vcenter_folder - fixed folders search collision issue (https://github.com/ansible-collections/community.vmware/issues/1112).

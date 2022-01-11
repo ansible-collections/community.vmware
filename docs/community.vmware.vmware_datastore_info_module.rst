@@ -18,7 +18,6 @@ Synopsis
 --------
 - This module can be used to gather information about datastores in VMWare infrastructure.
 - All values and VMware object names are case sensitive.
-- This module was called ``vmware_datastore_facts`` before Ansible 2.9. The usage did not change.
 
 
 

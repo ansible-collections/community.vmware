@@ -17,7 +17,6 @@ community.vmware.vmware_guest_snapshot_info
 Synopsis
 --------
 - This module can be used to gather information about virtual machine's snapshots.
-- This module was called ``vmware_guest_snapshot_facts`` before Ansible 2.9. The usage did not change.
 
 
 
