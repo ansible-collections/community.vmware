@@ -5,6 +5,76 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.0.0
+======
+
+Minor Changes
+-------------
+
+- vmware_export_ovf - Add a new parameter 'export_with_extraconfig' to support export extra config options in ovf (https://github.com/ansible-collections/community.vmware/pull/1161).
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- The collection now requires at least ansible-core 2.11.0. Ansible 3 and before, and ansible-base versions are no longer supported.
+- vmware_cluster_drs - The default for ``enable`` has been changed from ``false`` to ``true``.
+- vmware_cluster_drs - The parameter alias ``enable_drs`` has been removed, use ``enable`` instead.
+- vmware_cluster_ha - The default for ``enable`` has been changed from ``false`` to ``true``.
+- vmware_cluster_ha - The parameter alias ``enable_ha`` has been removed, use ``enable`` instead.
+- vmware_cluster_vsan - The default for ``enable`` has been changed from ``false`` to ``true``.
+- vmware_cluster_vsan - The parameter alias ``enable_vsan`` has been removed, use ``enable`` instead.
+- vmware_guest - Virtualization Based Security has some requirements (``nested_virt``, ``secure_boot`` and ``iommu``) that the module silently enabled. They have to be enabled explicitly now.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- vcenter_extension_facts - The deprecated module ``vcenter_extension_facts`` has been removed, use ``vcenter_extension_info`` instead.
+- vmware_about_facts - The deprecated module ``vmware_about_facts`` has been removed, use ``vmware_about_info`` instead.
+- vmware_category_facts - The deprecated module ``vmware_category_facts`` has been removed, use ``vmware_category_info`` instead.
+- vmware_cluster - Remove DRS configuration in favour of module ``vmware_cluster_drs``.
+- vmware_cluster - Remove HA configuration in favour of module ``vmware_cluster_ha``.
+- vmware_cluster - Remove VSAN configuration in favour of module ``vmware_cluster_vsan``.
+- vmware_cluster_facts - The deprecated module ``vmware_cluster_facts`` has been removed, use ``vmware_cluster_info`` instead.
+- vmware_datastore_facts - The deprecated module ``vmware_datastore_facts`` has been removed, use ``vmware_datastore_info`` instead.
+- vmware_drs_group_facts - The deprecated module ``vmware_drs_group_facts`` has been removed, use ``vmware_drs_group_info`` instead.
+- vmware_drs_rule_facts - The deprecated module ``vmware_drs_rule_facts`` has been removed, use ``vmware_drs_rule_info`` instead.
+- vmware_dvs_portgroup - The deprecated parameter ``portgroup_type`` has been removed, use ``port_binding`` instead.
+- vmware_dvs_portgroup_facts - The deprecated module ``vmware_dvs_portgroup_facts`` has been removed, use ``vmware_dvs_portgroup_info`` instead.
+- vmware_guest_boot_facts - The deprecated module ``vmware_guest_boot_facts`` has been removed, use ``vmware_guest_boot_info`` instead.
+- vmware_guest_customization_facts - The deprecated module ``vmware_guest_customization_facts`` has been removed, use ``vmware_guest_customization_info`` instead.
+- vmware_guest_disk_facts - The deprecated module ``vmware_guest_disk_facts`` has been removed, use ``vmware_guest_disk_info`` instead.
+- vmware_guest_facts - The deprecated module ``vmware_guest_facts`` has been removed, use ``vmware_guest_info`` instead.
+- vmware_guest_snapshot_facts - The deprecated module ``vmware_guest_snapshot_facts`` has been removed, use ``vmware_guest_snapshot_info`` instead.
+- vmware_host_capability_facts - The deprecated module ``vmware_host_capability_facts`` has been removed, use ``vmware_host_capability_info`` instead.
+- vmware_host_config_facts - The deprecated module ``vmware_host_config_facts`` has been removed, use ``vmware_host_config_info`` instead.
+- vmware_host_dns_facts - The deprecated module ``vmware_host_dns_facts`` has been removed, use ``vmware_host_dns_info`` instead.
+- vmware_host_feature_facts - The deprecated module ``vmware_host_feature_facts`` has been removed, use ``vmware_host_feature_info`` instead.
+- vmware_host_firewall_facts - The deprecated module ``vmware_host_firewall_facts`` has been removed, use ``vmware_host_firewall_info`` instead.
+- vmware_host_ntp_facts - The deprecated module ``vmware_host_ntp_facts`` has been removed, use ``vmware_host_ntp_info`` instead.
+- vmware_host_package_facts - The deprecated module ``vmware_host_package_facts`` has been removed, use ``vmware_host_package_info`` instead.
+- vmware_host_service_facts - The deprecated module ``vmware_host_service_facts`` has been removed, use ``vmware_host_service_info`` instead.
+- vmware_host_ssl_facts - The deprecated module ``vmware_host_ssl_facts`` has been removed, use ``vmware_host_ssl_info`` instead.
+- vmware_host_vmhba_facts - The deprecated module ``vmware_host_vmhba_facts`` has been removed, use ``vmware_host_vmhba_info`` instead.
+- vmware_host_vmnic_facts - The deprecated module ``vmware_host_vmnic_facts`` has been removed, use ``vmware_host_vmnic_info`` instead.
+- vmware_local_role_facts - The deprecated module ``vmware_local_role_facts`` has been removed, use ``vmware_local_role_info`` instead.
+- vmware_local_user_facts - The deprecated module ``vmware_local_user_facts`` has been removed, use ``vmware_local_user_info`` instead.
+- vmware_portgroup_facts - The deprecated module ``vmware_portgroup_facts`` has been removed, use ``vmware_portgroup_info`` instead.
+- vmware_resource_pool_facts - The deprecated module ``vmware_resource_pool_facts`` has been removed, use ``vmware_resource_pool_info`` instead.
+- vmware_tag_facts - The deprecated module ``vmware_tag_facts`` has been removed, use ``vmware_tag_info`` instead.
+- vmware_target_canonical_facts - The deprecated module ``vmware_target_canonical_facts`` has been removed, use ``vmware_target_canonical_info`` instead.
+- vmware_vm_facts - The deprecated module ``vmware_vm_facts`` has been removed, use ``vmware_vm_info`` instead.
+- vmware_vmkernel_facts - The deprecated module ``vmware_vmkernel_facts`` has been removed, use ``vmware_vmkernel_info`` instead.
+- vmware_vmkernel_ip_config - The deprecated module ``vmware_vmkernel_ip_config`` has been removed, use ``vmware_vmkernel`` instead.
+- vmware_vswitch_facts - The deprecated module ``vmware_vswitch_facts`` has been removed, use ``vmware_vswitch_info`` instead.
+
+Bugfixes
+--------
+
+- Various modules and plugins - use vendored version of ``distutils.version`` included in ansible-core 2.12 if available. This avoids breakage when ``distutils`` is removed from the standard library of Python 3.12. Note that ansible-core 2.11, ansible-base 2.10 and Ansible 2.9 are right now not compatible with Python 3.12, hence this fix does not target these ansible-core/-base/2.9 versions.
+- create_nic - add advanced SR-IOV options from the VMware API (PCI dev PF/VF backing and guest OS MTU change)
+- vcenter_folder - fixed folders search collision issue (https://github.com/ansible-collections/community.vmware/issues/1112).
+- vmware_guest_network - fix a bug that can crash the module due to an uncaught exception (https://github.com/ansible-collections/community.vmware/issues/25).
+
 v1.17.0
 =======
 

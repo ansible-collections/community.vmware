@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_export_ovf - Add a new parameter 'export_with_extraconfig' to support export extra config options in ovf (https://github.com/ansible-collections/community.vmware/pull/1161).
