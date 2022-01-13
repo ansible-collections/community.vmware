@@ -439,8 +439,7 @@
           switch_name: "{{ dvswitch1 }}"
           portgroup_name: 204dvpg
           num_ports: 8
-          port_binding: 'static'
-          port_allocation: 'fixed'
+          portgroup_type: earlyBinding
           vlan_id: 1
           state: present
         register: prepare_integration_test_204_result
@@ -509,8 +508,7 @@
           switch_name: "{{ dvswitch1 }}"
           portgroup_name: 204dvpg
           num_ports: 8
-          port_binding: 'static'
-          port_allocation: 'fixed'
+          portgroup_type: earlyBinding
           vlan_id: 1
           state: absent
         register: delete_integration_test_204_result

@@ -46,11 +46,19 @@ options:
         description:
             - The number of ports the portgroup should contain.
         type: int
+    portgroup_type:
+        description:
+            - See VMware KB 1022312 regarding portgroup types.
+            - Deprecated. Will be removed 2021-12-01.
+        choices:
+            - 'earlyBinding'
+            - 'lateBinding'
+            - 'ephemeral'
+        type: str
     port_binding:
         description:
             - The type of port binding determines when ports in a port group are assigned to virtual machines.
             - See VMware KB 1022312 U(https://kb.vmware.com/s/article/1022312) for more details.
-        required: True
         type: str
         choices:
             - 'static'
@@ -61,7 +69,6 @@ options:
             - Elastic port groups automatically increase or decrease the number of ports as needed.
             - Only valid if I(port_binding) is set to C(static).
             - Will be C(elastic) if not specified and I(port_binding) is set to C(static).
-            - Will be C(fixed) if not specified and I(port_binding) is set to C(ephemeral).
         type: str
         choices:
             - 'elastic'
@@ -370,18 +377,17 @@ class VMwareDvsPortgroup(PyVmomi):
         self.dvs_portgroup = None
         self.dv_switch = None
 
-        self.port_allocation = self.module.params['port_allocation']
-        if self.port_allocation is None:
-            if self.module.params['port_binding'] == 'ephemeral':
-                self.port_allocation = 'fixed'
-            else:
-                self.port_allocation = 'elastic'
-
         # Some sanity checks
-        if self.port_allocation == 'elastic' and self.module.params['port_binding'] == 'ephemeral':
-            self.module.fail_json(
-                msg="'elastic' port allocation is not supported on an 'ephemeral' portgroup."
-            )
+        if self.module.params['port_allocation'] == 'elastic':
+            if self.module.params['port_binding'] == 'ephemeral':
+                self.module.fail_json(
+                    msg="'elastic' port allocation is not supported on an 'ephemeral' portgroup."
+                )
+
+            if self.module.params['num_ports']:
+                self.module.fail_json(
+                    msg="The number of ports cannot be configured when port allocation is set to 'elastic'."
+                )
 
     def create_vlan_list(self):
         vlan_id_list = []
@@ -418,7 +424,8 @@ class VMwareDvsPortgroup(PyVmomi):
         # Basic config
         config.name = self.module.params['portgroup_name']
 
-        config.numPorts = self.module.params['num_ports']
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
+            config.numPorts = self.module.params['num_ports']
 
         # Default port config
         config.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
@@ -498,15 +505,19 @@ class VMwareDvsPortgroup(PyVmomi):
         config.policy.vlanOverrideAllowed = self.module.params['port_policy']['vlan_override']
 
         # PG Type
-        if self.module.params['port_binding'] == 'ephemeral':
+        # NOTE: 'portgroup_type' is deprecated.
+        if self.module.params['portgroup_type']:
+            config.type = self.module.params['portgroup_type']
+        elif self.module.params['port_binding'] == 'ephemeral':
             config.type = 'ephemeral'
         else:
             config.type = 'earlyBinding'
 
-        if self.port_allocation == 'elastic':
-            config.autoExpand = True
-        else:
-            config.autoExpand = False
+        if self.module.params['port_allocation']:
+            if self.module.params['port_allocation'] == 'elastic':
+                config.autoExpand = True
+            else:
+                config.autoExpand = False
 
         return config
 
@@ -591,8 +602,9 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'absent'
 
         # Check config
-        if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
-            return 'update'
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
+            if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
+                return 'update'
 
         # Default port config
         defaultPortConfig = self.dvs_portgroup.config.defaultPortConfig
@@ -672,17 +684,22 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'update'
 
         # PG Type
-        if self.module.params['port_binding'] == 'ephemeral':
+        # NOTE: 'portgroup_type' is deprecated.
+        if self.module.params['portgroup_type']:
+            if self.dvs_portgroup.config.type != self.module.params['portgroup_type']:
+                return 'update'
+        elif self.module.params['port_binding'] == 'ephemeral':
             if self.dvs_portgroup.config.type != 'ephemeral':
                 return 'update'
-        elif self.port_allocation == 'fixed' and self.dvs_portgroup.config.type != 'earlyBinding':
+        elif self.dvs_portgroup.config.type != 'earlyBinding':
             return 'update'
 
         # Check port allocation
-        if self.port_allocation == 'elastic' and self.dvs_portgroup.config.autoExpand is False:
-            return 'update'
-        elif self.port_allocation == 'fixed' and self.dvs_portgroup.config.autoExpand is True:
-            return 'update'
+        if self.module.params['port_allocation']:
+            if self.module.params['port_allocation'] == 'elastic' and self.dvs_portgroup.config.autoExpand is False:
+                return 'update'
+            elif self.module.params['port_allocation'] == 'fixed' and self.dvs_portgroup.config.autoExpand is True:
+                return 'update'
 
         return 'present'
 
@@ -695,7 +712,13 @@ def main():
             switch_name=dict(required=True, type='str'),
             vlan_id=dict(required=True, type='str'),
             num_ports=dict(type='int'),
-            port_binding=dict(required=True, type='str', choices=['static', 'ephemeral']),
+            portgroup_type=dict(
+                type='str',
+                choices=['earlyBinding', 'lateBinding', 'ephemeral'],
+                removed_at_date='2021-12-01',
+                removed_from_collection='community.vmware',
+            ),
+            port_binding=dict(type='str', choices=['static', 'ephemeral']),
             port_allocation=dict(type='str', choices=['fixed', 'elastic']),
             state=dict(required=True, choices=['present', 'absent'], type='str'),
             vlan_trunk=dict(type='bool', default=False),
@@ -780,7 +803,12 @@ def main():
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
+                           required_one_of=[
+                               ['portgroup_type', 'port_binding'],
+                           ],
                            mutually_exclusive=[
+                               ['portgroup_type', 'port_binding'],
+                               ['portgroup_type', 'port_allocation'],
                                ['vlan_trunk', 'vlan_private'],
                            ],
                            supports_check_mode=True)

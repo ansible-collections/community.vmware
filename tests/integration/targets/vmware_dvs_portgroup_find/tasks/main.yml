@@ -55,8 +55,7 @@
         portgroup_name: 'dvportgroup\/%'
         vlan_id: 1
         num_ports: 8
-        port_binding: 'static'
-        port_allocation: 'fixed'
+        portgroup_type: earlyBinding
         state: present
       register: create_dvportgroup_with_special_characters_result
 
@@ -93,8 +92,7 @@
         portgroup_name: 'dvportgroup\/%'
         vlan_id: 1
         num_ports: 8
-        port_binding: 'static'
-        port_allocation: 'fixed'
+        portgroup_type: earlyBinding
         state: absent
       register: delete_dvportgroup_with_special_characters_result
 

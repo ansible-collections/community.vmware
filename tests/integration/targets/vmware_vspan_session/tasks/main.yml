@@ -38,8 +38,7 @@
     switch_name: dvswitch_0001
     vlan_id: 123
     num_ports: 120
-    port_binding: 'static'
-    port_allocation: 'fixed'
+    portgroup_type: earlyBinding
     state: present
     network_policy:
       promiscuous: true

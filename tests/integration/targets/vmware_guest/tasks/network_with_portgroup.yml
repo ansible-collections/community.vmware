@@ -12,8 +12,7 @@
     switch_name: "{{ dvswitch1 }}"
     vlan_id: "1"
     num_ports: 2
-    port_binding: 'static'
-    port_allocation: 'fixed'
+    portgroup_type: earlyBinding
     state: present
   register: dvsportgroup
 - debug: var=dvsportgroup
