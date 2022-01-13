@@ -17,7 +17,7 @@ description:
 requirements:
   - python >= 3.6
   - PyVmomi
-version_added: '1.18.0'
+version_added: '2.1.0'
 options:
   esxi_hostname:
     description:
