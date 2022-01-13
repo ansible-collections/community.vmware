@@ -17,4 +17,8 @@
       - vmnic1
     state: present
   with_items: "{{ esxi_hosts }}"
+  register: _result
+  until: _result is succeeded
+  retries: 10
+  delay: 1
   when: setup_attach_host is defined
