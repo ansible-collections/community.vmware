@@ -245,7 +245,7 @@ def main():
         user_name=dict(type="str", required=True, aliases=["local_user_name"]),
         user_password=dict(type="str", aliases=["local_user_password"], no_log=True),
         user_description=dict(type="str", aliases=["local_user_description"]),
-        override_user_password=dict(type="bool", default=False),
+        override_user_password=dict(type="bool", default=False, no_log=False),
         state=dict(type="str", default="present", choices=["present", "absent"])
     )
 
