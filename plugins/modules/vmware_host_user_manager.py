@@ -13,7 +13,7 @@ short_description: Manage users of ESXi
 author:
   - sky-joker (@sky-joker)
 description:
-  - This module can be added or updated or deleted the local user of ESXi host.
+  - This module can add, update or delete local users on ESXi host.
 requirements:
   - python >= 3.6
   - PyVmomi
