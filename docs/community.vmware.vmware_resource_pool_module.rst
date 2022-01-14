@@ -53,7 +53,6 @@ Parameters
                 <td>
                         <div>Name of the cluster to configure the resource pool.</div>
                         <div>This parameter is required if <code>esxi_hostname</code> or <code>parent_resource_pool</code> is not specified.</div>
-                        <div>The <code>cluster</code>, <code>esxi_hostname</code> and <code>parent_resource_pool</code> parameters are mutually exclusive.</div>
                 </td>
             </tr>
             <tr>
@@ -179,7 +178,6 @@ Parameters
                         <div>Name of the host to configure the resource pool.</div>
                         <div>The host must not be member of a cluster.</div>
                         <div>This parameter is required if <code>cluster</code> or <code>parent_resource_pool</code> is not specified.</div>
-                        <div>The <code>cluster</code>, <code>esxi_hostname</code> and <code>parent_resource_pool</code> parameters are mutually exclusive.</div>
                 </td>
             </tr>
             <tr>
@@ -305,7 +303,6 @@ Parameters
                 <td>
                         <div>Name of the parent resource pool.</div>
                         <div>This parameter is required if <code>cluster</code> or <code>esxi_hostname</code> is not specified.</div>
-                        <div>The <code>cluster</code>, <code>esxi_hostname</code> and <code>parent_resource_pool</code> parameters are mutually exclusive.</div>
                 </td>
             </tr>
             <tr>
