@@ -9,6 +9,20 @@
     discovery_proto: lldp
     discovery_operation: both
     state: present
+
+- name: Gather facts about the vmnics
+  community.vmware.vmware_host_vmnic_info:
+    hostname: '{{ esxi1 }}'
+    username: '{{ esxi_user }}'
+    password: '{{ esxi_password }}'
+    validate_certs: false
+    esxi_hostname: '{{ esxi1 }}'
+  register: my_vmnic
+  when: setup_attach_host is defined
+
+- debug: var=my_vmnic
+  when: setup_attach_host is defined
+
 - name: Attach the hosts to the DVSwitch
   vmware_dvs_host:
     esxi_hostname: "{{ item }}"
