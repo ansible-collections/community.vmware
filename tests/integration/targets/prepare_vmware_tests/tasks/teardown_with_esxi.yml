@@ -71,6 +71,13 @@
     state: absent
   with_items: "{{ result.value }}"
 
+- name: Delete the dvswitch
+  community.vmware.vcenter_dvswitch:
+    datacenter_name: '{{ dc1 }}'
+    switch_name: '{{ dvswitch1 }}'
+    state: absent
+  ignore_errors: true
+
 - name: Get a list of all the datacenters
   vmware.vmware_rest.vcenter_datacenter_info:
     vcenter_hostname: '{{ vcenter_hostname }}'
