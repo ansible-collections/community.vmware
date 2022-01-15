@@ -125,6 +125,8 @@ DOCUMENTATION = '''
       vm_user:
         description:
           - VM username.
+          - C(ansible_vmware_tools_user) is used for connecting to the VM.
+          - C(ansible_user) is used by ansible on the VM.
         vars:
           - name: ansible_user
           - name: ansible_vmware_tools_user
@@ -169,6 +171,7 @@ example = r'''
 # example vars.yml
 ---
 ansible_connection: vmware_tools
+ansible_user: "{{ ansible_vmware_tools_user }}"
 
 ansible_vmware_host: vcenter.example.com
 ansible_vmware_user: administrator@vsphere.local
