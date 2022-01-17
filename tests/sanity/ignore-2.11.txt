@@ -196,6 +196,8 @@ plugins/modules/vmware_guest_tools_upgrade.py compile-2.6!skip
 plugins/modules/vmware_guest_tools_upgrade.py import-2.6!skip
 plugins/modules/vmware_guest_tools_wait.py compile-2.6!skip
 plugins/modules/vmware_guest_tools_wait.py import-2.6!skip
+plugins/modules/vmware_guest_tpm.py compile-2.6!skip
+plugins/modules/vmware_guest_tpm.py import-2.6!skip
 plugins/modules/vmware_guest_video.py compile-2.6!skip
 plugins/modules/vmware_guest_video.py import-2.6!skip
 plugins/modules/vmware_guest_vnc.py compile-2.6!skip
@@ -327,6 +329,8 @@ plugins/modules/vmware_vcenter_settings_info.py compile-2.6!skip
 plugins/modules/vmware_vcenter_settings_info.py import-2.6!skip
 plugins/modules/vmware_vcenter_statistics.py compile-2.6!skip
 plugins/modules/vmware_vcenter_statistics.py import-2.6!skip
+plugins/modules/vmware_vm_config_option.py compile-2.6!skip
+plugins/modules/vmware_vm_config_option.py import-2.6!skip
 plugins/modules/vmware_vm_host_drs_rule.py compile-2.6!skip
 plugins/modules/vmware_vm_host_drs_rule.py import-2.6!skip
 plugins/modules/vmware_vm_info.py compile-2.6!skip
