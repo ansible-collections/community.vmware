@@ -126,7 +126,7 @@ DOCUMENTATION = '''
         description:
           - VM username.
           - C(ansible_vmware_tools_user) is used for connecting to the VM.
-          - C(ansible_user) is used by ansible on the VM.
+          - C(ansible_user) is used by Ansible on the VM.
         vars:
           - name: ansible_user
           - name: ansible_vmware_tools_user
