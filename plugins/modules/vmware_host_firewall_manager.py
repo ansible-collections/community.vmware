@@ -405,7 +405,7 @@ def main():
             module.deprecate(
                 msg=('Please adjust your playbook to ensure the `allowed_hosts` '
                      'entries come with an `all_ip` key (boolean).'),
-                version='2.0.0',
+                version='3.0.0',
                 collection_name='community.vmware'
             )
 

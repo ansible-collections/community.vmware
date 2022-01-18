@@ -866,7 +866,7 @@ def main():
         network_data = {}
         module.deprecate(
             msg='The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple interfaces',
-            version='2.0.0',
+            version='3.0.0',
             collection_name='community.vmware'
         )
         diff, changed, network_info = pyv._deprectated_list_config()
