@@ -31,18 +31,21 @@ options:
         description:
             - Name of the cluster to configure the resource pool.
             - This parameter is required if C(esxi_hostname) or C(parent_resource_pool) is not specified.
+            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
         type: str
     esxi_hostname:
         description:
             - Name of the host to configure the resource pool.
             - The host must not be member of a cluster.
             - This parameter is required if C(cluster) or C(parent_resource_pool) is not specified.
+            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
         type: str
         version_added: '1.5.0'
     parent_resource_pool:
         description:
             - Name of the parent resource pool.
             - This parameter is required if C(cluster) or C(esxi_hostname) is not specified.
+            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
         type: str
         version_added: '1.9.0'
     resource_pool:
