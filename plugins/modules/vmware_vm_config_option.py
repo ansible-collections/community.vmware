@@ -165,34 +165,52 @@ class VmConfigOption(PyVmomi):
 
         return vm_config_option
 
-    def get_config_option_recommended(self, guest_os_desc, hwv_version=''):
+    def get_config_option_recommended(self, guest_os_desc):
         guest_os_option_dict = {}
+        support_usb_controller = []
+        support_disk_controller = []
+        support_ethernet_card = []
         if guest_os_desc and len(guest_os_desc) != 0:
             default_disk_ctl = default_ethernet = default_cdrom_ctl = default_usb_ctl = ''
-            for name, type in self.ctl_device_type.items():
-                if type == guest_os_desc[0].recommendedDiskController:
-                    default_disk_ctl = name
-                if type == guest_os_desc[0].recommendedEthernetCard:
-                    default_ethernet = name
-                if type == guest_os_desc[0].recommendedCdromController:
-                    default_cdrom_ctl = name
-                if type == guest_os_desc[0].recommendedUSBController:
-                    default_usb_ctl = name
+            for name, dev_type in self.ctl_device_type.items():
+                for supported_type in guest_os_desc[0].supportedUSBControllerList:
+                    if supported_type == dev_type:
+                        support_usb_controller = support_usb_controller + [name]
+                    if dev_type == guest_os_desc[0].recommendedUSBController:
+                        default_usb_ctl = name
+                for supported_type in guest_os_desc[0].supportedEthernetCard:
+                    if supported_type == dev_type:
+                        support_ethernet_card = support_ethernet_card + [name]
+                    if dev_type == guest_os_desc[0].recommendedEthernetCard:
+                        default_ethernet = name
+                for supported_type in guest_os_desc[0].supportedDiskControllerList:
+                    if supported_type == dev_type:
+                        support_disk_controller = support_disk_controller + [name]
+                    if dev_type == guest_os_desc[0].recommendedDiskController:
+                        default_disk_ctl = name
+                    if dev_type == guest_os_desc[0].recommendedCdromController:
+                        default_cdrom_ctl = name
             guest_os_option_dict = {
-                'Hardware version': hwv_version,
-                'Guest ID': guest_os_desc[0].id,
-                'Guest fullname': guest_os_desc[0].fullName,
-                'Default CPU cores per socket': guest_os_desc[0].numRecommendedCoresPerSocket,
-                'Default CPU socket': guest_os_desc[0].numRecommendedPhysicalSockets,
-                'Default memory in MB': guest_os_desc[0].recommendedMemMB,
-                'Default firmware': guest_os_desc[0].recommendedFirmware,
-                'Default secure boot': guest_os_desc[0].defaultSecureBoot,
-                'Support secure boot': guest_os_desc[0].supportsSecureBoot,
-                'Default disk controller': default_disk_ctl,
-                'Default disk size in MB': guest_os_desc[0].recommendedDiskSizeMB,
-                'Default network adapter': default_ethernet,
-                'Default CDROM controller': default_cdrom_ctl,
-                'Default USB controller': default_usb_ctl
+                'guest_fullname': guest_os_desc[0].fullName,
+                'rec_cpu_cores_per_socket': guest_os_desc[0].numRecommendedCoresPerSocket,
+                'rec_cpu_socket': guest_os_desc[0].numRecommendedPhysicalSockets,
+                'rec_memory_mb': guest_os_desc[0].recommendedMemMB,
+                'default_firmware': guest_os_desc[0].recommendedFirmware,
+                'default_secure_boot': guest_os_desc[0].defaultSecureBoot,
+                'support_secure_boot': guest_os_desc[0].supportsSecureBoot,
+                'default_disk_controller': default_disk_ctl,
+                'rec_disk_mb': guest_os_desc[0].recommendedDiskSizeMB,
+                'default_ethernet': default_ethernet,
+                'default_cdrom_controller': default_cdrom_ctl,
+                'default_usb_controller': default_usb_ctl,
+                'support_tpm_20': guest_os_desc[0].supportsTPM20,
+                'support_persistent_memory': guest_os_desc[0].persistentMemorySupported,
+                'rec_persistent_memory': guest_os_desc[0].recommendedPersistentMemoryMB,
+                'support_min_persistent_mem_mb': guest_os_desc[0].supportedMinPersistentMemoryMB,
+                'rec_vram_kb': guest_os_desc[0].vRAMSizeInKB.defaultValue,
+                'support_usb_controller': support_usb_controller,
+                'support_disk_controller': support_disk_controller,
+                'support_ethernet_card': support_ethernet_card
             }
 
         return guest_os_option_dict
@@ -208,7 +226,6 @@ class VmConfigOption(PyVmomi):
     def get_config_option_for_guest(self):
         results = {}
         guest_id = []
-        host = None
         datacenter_name = self.params.get('datacenter')
         cluster_name = self.params.get('cluster_name')
         esxi_host_name = self.params.get('esxi_hostname')
@@ -247,8 +264,8 @@ class VmConfigOption(PyVmomi):
         # Get supported hardware versions list
         support_create_list, default_config = self.get_hardware_versions(env_browser=env_browser)
         if self.params.get('get_hardware_versions'):
-            results.update({'Supported hardware versions': support_create_list,
-                            'Default hardware version': default_config})
+            results.update({'supported_hardware_versions': support_create_list,
+                            'default_hardware_version': default_config})
 
         if self.params.get('get_guest_os_ids') or self.params.get('get_config_options'):
             # Get supported guest ID list
@@ -259,8 +276,8 @@ class VmConfigOption(PyVmomi):
             vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, key=hardware_version)
             supported_gos_list = self.get_guest_id_list(guest_os_desc=vm_config_option_all)
             if self.params.get('get_guest_os_ids'):
-                info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
-                results.update({info_key: supported_gos_list})
+                # info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
+                results.update({vm_config_option_all.version: supported_gos_list})
 
             if self.params.get('get_config_options') and len(guest_id) != 0:
                 if supported_gos_list and guest_id[0] not in supported_gos_list:
@@ -269,9 +286,10 @@ class VmConfigOption(PyVmomi):
                 vm_config_option_guest = self.get_config_option_by_spec(env_browser=env_browser, guest_id=guest_id,
                                                                         key=hardware_version)
                 guest_os_options = vm_config_option_guest.guestOSDescriptor
-                guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options,
-                                                                          hwv_version=vm_config_option_guest.version)
-                results.update({'Recommended config options': guest_os_option_dict})
+                guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options)
+                results.update({'guest_id': guest_id[0]})
+                results.update({'hardware_version': vm_config_option_guest.version})
+                results.update({'recommended_config_options': guest_os_option_dict})
 
         self.module.exit_json(changed=False, failed=False, instance=results)
 
