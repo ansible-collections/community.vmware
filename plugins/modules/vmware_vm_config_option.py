@@ -276,7 +276,6 @@ class VmConfigOption(PyVmomi):
             vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, key=hardware_version)
             supported_gos_list = self.get_guest_id_list(guest_os_desc=vm_config_option_all)
             if self.params.get('get_guest_os_ids'):
-                # info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
                 results.update({vm_config_option_all.version: supported_gos_list})
 
             if self.params.get('get_config_options') and len(guest_id) != 0:
