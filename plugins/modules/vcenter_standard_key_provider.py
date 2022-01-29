@@ -45,11 +45,10 @@ options:
     description:
       - The information of an external key server (KMS).
       - C(kms_name), C(kms_ip) are required when adding a Standard Key Provider.
-      - C(kms_port), C(kms_proxy), C(kms_proxy_port), C(kms_user), C(kms_password) are optional when adding a Standard
-        Key Provider.
       - If C(kms_port) is not specified, the default port 5696 will be used.
       - C(kms_ip), C(kms_port) can be reconfigured for an existing KMS with name C(kms_name).
-    type: dict
+    type: list
+    elements: dict
     suboptions:
       kms_name:
         description: Name of the KMS to be configured.
@@ -60,21 +59,21 @@ options:
       kms_port:
         description: Port of the external KMS.
         type: int
-      kms_proxy:
-        description: Address of the proxy server to connect to KMS.
-        type: str
-      kms_proxy_port:
-        description: Port of the proxy server.
-        type: int
-      kms_user:
-        description: Username to authenticate to the KMS.
-        type: str
-      kms_password:
-        description: Password to authenticate to the KMS.
-        type: str
       remove_kms:
         description: Remove the configured KMS with name C(kms_name) from the KMIP cluster.
         type: bool
+  proxy_server:
+    description: Address of the proxy server to connect to KMS.
+    type: str
+  proxy_port:
+    description: Port of the proxy server.
+    type: int
+  kms_username:
+    description: Username to authenticate to the KMS.
+    type: str
+  kms_password:
+    description: Password to authenticate to the KMS.
+    type: str
   make_kms_trust_vc:
     description:
       - After adding the Standard Key Provider to the vCenter Server, you can establish a trusted connection, the
@@ -121,8 +120,8 @@ EXAMPLES = r'''
     state: 'present'
     mark_default: True
     kms_info:
-      kms_name: test_kms_1
-      kms_ip: 192.168.1.10
+      - kms_name: test_kms_1
+        kms_ip: 192.168.1.10
     make_kms_trust_vc:
       upload_client_cert: "/tmp/test_cert.pem"
       upload_client_key: "/tmp/test_cert_key.pem"
@@ -136,8 +135,8 @@ EXAMPLES = r'''
     name: 'test_standard_kp'
     state: 'present'
     kms_info:
-      kms_name: test_kms_1
-      remove_kms: True
+      - kms_name: test_kms_1
+        remove_kms: True
   register: remove_kms_result
 
 - name: Remove the Standard Key Provider
@@ -257,7 +256,7 @@ class PyVmomiHelper(PyVmomi):
     def set_default_key_provider(self):
         # Since vSphere API 6.5
         try:
-            self.crypto_mgr.MarkDefault(clusterId=self.key_provider_id)
+            self.crypto_mgr.MarkDefault(self.key_provider_id)
         except Exception as e:
             self.module.fail_json(msg="Failed to mark default key provider to '%s' with exception: %s"
                                       % (self.key_provider_id.id, to_native(e)))
@@ -272,23 +271,23 @@ class PyVmomiHelper(PyVmomi):
         return key_provider_id
 
     @staticmethod
-    def create_kmip_server_info(kms_info):
+    def create_kmip_server_info(kms_info, proxy_user_info):
         kmip_server_info = None
-        if not kms_info:
-            return kmip_server_info
-        kmip_server_info = vim.encryption.KmipServerInfo()
-        kmip_server_info.name = kms_info['kms_name']
-        kmip_server_info.address = kms_info['kms_ip']
-        if kms_info.get('kms_port') is None:
-            kmip_server_info.port = 5696
-        else:
-            kmip_server_info.port = kms_info.get('kms_port')
-        if kms_info.get('kms_proxy'):
-            kmip_server_info.proxyAddress = kms_info['kms_proxy']
-        if kms_info.get('kms_proxy_port'):
-            kmip_server_info.proxyPort = kms_info['kms_proxy_port']
-        if kms_info.get('kms_user'):
-            kmip_server_info.userName = kms_info['kms_user']
+        if kms_info:
+            kmip_server_info = vim.encryption.KmipServerInfo()
+            kmip_server_info.name = kms_info.get('kms_name')
+            kmip_server_info.address = kms_info.get('kms_ip')
+            if kms_info.get('kms_port') is None:
+                kmip_server_info.port = 5696
+            else:
+                kmip_server_info.port = kms_info.get('kms_port')
+            if proxy_user_info:
+                if proxy_user_info.get('proxy_server'):
+                    kmip_server_info.proxyAddress = proxy_user_info['proxy_server']
+                if proxy_user_info.get('proxy_port'):
+                    kmip_server_info.proxyPort = proxy_user_info['proxy_port']
+                if proxy_user_info.get('kms_username'):
+                    kmip_server_info.userName = proxy_user_info['kms_username']
 
         return kmip_server_info
 
@@ -304,61 +303,66 @@ class PyVmomiHelper(PyVmomi):
 
         return kmip_server_spec
 
-    def setup_standard_kp(self, kp_name, kms_info):
-        server_cert = None
-        kp_id = None
-        if not kp_name or not kms_info:
-            return kp_id
+    def setup_standard_kp(self, kp_name, kms_info_list, proxy_user_config_dict):
         kp_id = self.create_key_provider_id(kp_name)
-        kms_server = self.create_kmip_server_info(kms_info)
-        kms_spec = self.create_kmip_server_spec(kp_id, kms_server, kms_info.get('kms_password'))
-        try:
-            self.crypto_mgr.RegisterKmipServer(server=kms_spec)
-        except Exception as e:
-            self.module.fail_json(msg="Failed to add Standard Key Provider '%s' with exception: %s"
-                                      % (kp_name, to_native(e)))
-        try:
-            server_cert = self.crypto_mgr.RetrieveKmipServerCert(keyProvider=kp_id, server=kms_server).certificate
-        except Exception as e:
-            self.module.fail_json(msg="Failed to retrieve KMS server certificate with exception: %s" % to_native(e))
-        if not server_cert:
-            self.module.fail_json(msg="Got empty KMS server certificate: '%s'" % server_cert)
-        try:
-            self.crypto_mgr.UploadKmipServerCert(cluster=kp_id, certificate=server_cert)
-        except Exception as e:
-            self.module.fail_json(msg="Failed to upload KMS server certificate for key provider '%s' with exception: %s"
-                                      % (kp_name, to_native(e)))
+        for kms_info in kms_info_list:
+            server_cert = None
+            kms_server = self.create_kmip_server_info(kms_info, proxy_user_config_dict)
+            kms_spec = self.create_kmip_server_spec(kp_id, kms_server, proxy_user_config_dict.get('kms_password'))
+            try:
+                self.crypto_mgr.RegisterKmipServer(server=kms_spec)
+            except Exception as e:
+                self.module.fail_json(msg="Failed to add Standard Key Provider '%s' with exception: %s"
+                                          % (kp_name, to_native(e)))
+            try:
+                server_cert = self.crypto_mgr.RetrieveKmipServerCert(keyProvider=kp_id, server=kms_server).certificate
+            except Exception as e:
+                self.module.fail_json(msg="Failed to retrieve KMS server certificate with exception: %s" % to_native(e))
+            if not server_cert:
+                self.module.fail_json(msg="Got empty KMS server certificate: '%s'" % server_cert)
+            try:
+                self.crypto_mgr.UploadKmipServerCert(cluster=kp_id, certificate=server_cert)
+            except Exception as e:
+                self.module.fail_json(msg="Failed to upload KMS server certificate for key provider '%s' with"
+                                          " exception: %s" % (kp_name, to_native(e)))
 
         return kp_id
 
-    def add_kmip_to_standard_kp(self, key_provider_id, kms_info):
-        kmip_server_info = self.create_kmip_server_info(kms_info)
-        kmip_server_spec = self.create_kmip_server_spec(key_provider_id, kmip_server_info, kms_info.get('kms_password'))
+    def add_kmip_to_standard_kp(self, kms_info, proxy_user_config_dict):
+        kmip_server_info = self.create_kmip_server_info(kms_info, proxy_user_config_dict)
+        kmip_server_spec = self.create_kmip_server_spec(self.key_provider_id, kmip_server_info,
+                                                        proxy_user_config_dict.get('kms_password'))
         try:
             self.crypto_mgr.RegisterKmipServer(server=kmip_server_spec)
         except Exception as e:
-            self.module.fail_json(msg="Failed to add the KMIP server to KMIP cluster with exception: %s" % to_native(e))
+            self.module.fail_json(msg="Failed to add the KMIP server to Key Provider cluster with exception: %s"
+                                      % to_native(e))
 
-    def change_kmip_in_standard_kp(self, key_provider_id, existing_kmip_info, kms_info):
+    def change_kmip_in_standard_kp(self, existing_kmip_info, kms_info, proxy_user_config_dict):
         changed = False
-        if kms_info.get('kms_ip') and existing_kmip_info.address != kms_info['kms_ip']:
-            existing_kmip_info.address = kms_info['kms_ip']
-            changed = True
-        if kms_info.get('kms_port') and existing_kmip_info.port != kms_info['kms_port']:
-            existing_kmip_info.port = kms_info['kms_port']
-            changed = True
-        if kms_info.get('kms_proxy') and existing_kmip_info.proxyAddress != kms_info['kms_proxy']:
-            existing_kmip_info.proxyAddress = kms_info['kms_proxy']
-            changed = True
-        if kms_info.get('kms_proxy_port') and existing_kmip_info.proxyPort != kms_info['kms_proxy_port']:
-            existing_kmip_info.proxyPort = kms_info['kms_proxy_port']
-            changed = True
-        if kms_info.get('kms_user') and existing_kmip_info.userName != kms_info.get('kms_user'):
-            existing_kmip_info.userName = kms_info['kms_user']
-            changed = True
+        if kms_info:
+            if kms_info.get('kms_ip') and existing_kmip_info.address != kms_info['kms_ip']:
+                existing_kmip_info.address = kms_info['kms_ip']
+                changed = True
+            if kms_info.get('kms_port') and existing_kmip_info.port != kms_info['kms_port']:
+                existing_kmip_info.port = kms_info['kms_port']
+                changed = True
+        if proxy_user_config_dict:
+            if proxy_user_config_dict.get('proxy_server') and \
+                    existing_kmip_info.proxyAddress != proxy_user_config_dict['proxy_server']:
+                existing_kmip_info.proxyAddress = proxy_user_config_dict['proxy_server']
+                changed = True
+            if proxy_user_config_dict.get('proxy_port') and \
+                    existing_kmip_info.proxyPort != proxy_user_config_dict['proxy_port']:
+                existing_kmip_info.proxyPort = proxy_user_config_dict['proxy_port']
+                changed = True
+            if proxy_user_config_dict.get('kms_username') and \
+                    existing_kmip_info.userName != proxy_user_config_dict['kms_username']:
+                existing_kmip_info.userName = proxy_user_config_dict['kms_username']
+                changed = True
         if changed:
-            kmip_server_spec = self.create_kmip_server_spec(key_provider_id, existing_kmip_info,
-                                                            kms_info.get('kms_password'))
+            kmip_server_spec = self.create_kmip_server_spec(self.key_provider_id, existing_kmip_info,
+                                                            proxy_user_config_dict.get('kms_password'))
             try:
                 # Since vSphere API 6.5
                 self.crypto_mgr.UpdateKmipServer(server=kmip_server_spec)
@@ -367,27 +371,36 @@ class PyVmomiHelper(PyVmomi):
 
         return changed
 
-    def reconfig_kmip_standard_kp(self, kmip_cluster_servers, kms_info):
+    def reconfig_kmip_standard_kp(self, kmip_cluster_servers, kms_info_list, proxy_user_config_dict):
         changed = False
-        existing_kmip = None
-        if len(kmip_cluster_servers) != 0 and kms_info:
-            for kmip_server in kmip_cluster_servers:
-                if kmip_server.name == kms_info.get('kms_name'):
-                    existing_kmip = kmip_server
-
-        if existing_kmip is not None:
-            if kms_info.get('remove_kms'):
-                self.remove_kms_server(self.key_provider_id, kms_info.get('kms_name'))
-                changed = True
-            else:
-                changed = self.change_kmip_in_standard_kp(self.key_provider_id, existing_kmip, kms_info)
-
-        if len(kmip_cluster_servers) == 0 or existing_kmip is None:
-            if kms_info.get('remove_kms'):
-                self.module.fail_json(msg="Not find named KMS server to remove in the key provider cluster '%s'"
-                                          % self.key_provider_id.id)
-            if kms_info:
-                self.add_kmip_to_standard_kp(self.key_provider_id, kms_info)
+        # kms server reconfigure
+        if len(kms_info_list) != 0:
+            for kms_info in kms_info_list:
+                existing_kmip = None
+                for kmip_server in kmip_cluster_servers:
+                    if kmip_server.name == kms_info.get('kms_name'):
+                        existing_kmip = kmip_server
+                # reconfigure existing kms server
+                if existing_kmip is not None:
+                    if kms_info.get('remove_kms'):
+                        self.remove_kms_server(self.key_provider_id, kms_info.get('kms_name'))
+                        kms_changed = True
+                    else:
+                        kms_changed = self.change_kmip_in_standard_kp(existing_kmip, kms_info, proxy_user_config_dict)
+                # no kms server with specified name
+                else:
+                    if kms_info.get('remove_kms'):
+                        self.module.fail_json(msg="Not find named KMS server to remove in the key provider cluster '%s'"
+                                                  % self.key_provider_id.id)
+                    self.add_kmip_to_standard_kp(kms_info, proxy_user_config_dict)
+                    kms_changed = True
+                if kms_changed:
+                    changed = True
+        # no kms specified in kms_info, then only update proxy or user info
+        for kmip_server in kmip_cluster_servers:
+            kms_changed = self.change_kmip_in_standard_kp(kmip_server, kms_info=None,
+                                                          proxy_user_config_dict=proxy_user_config_dict)
+            if kms_changed:
                 changed = True
 
         return changed
@@ -550,6 +563,13 @@ class PyVmomiHelper(PyVmomi):
         # Add a new Key Provider or reconfigure the existing Key Provider
         if self.params['state'] == 'present':
             is_default_kp = False
+            proxy_user_config = dict()
+            proxy_user_config.update(
+                proxy_server=self.params.get('proxy_server'),
+                proxy_port=self.params.get('proxy_port'),
+                kms_username=self.params.get('kms_username'),
+                kms_password=self.params.get('kms_password')
+            )
             if existing_kp_cluster is not None:
                 is_default_kp = existing_kp_cluster.useAsDefault
                 # For existing Standard Key Provider, KMS servers can be reconfigured
@@ -559,25 +579,23 @@ class PyVmomiHelper(PyVmomi):
                     self.module.exit_json(**results)
                 else:
                     results['operation'] = "reconfig standard key provider"
-                    if self.params.get('kms_info'):
-                        results['changed'] = self.reconfig_kmip_standard_kp(existing_kp_cluster.servers,
-                                                                            self.params.get('kms_info'))
+                    results['changed'] = self.reconfig_kmip_standard_kp(existing_kp_cluster.servers,
+                                                                        self.params['kms_info'], proxy_user_config)
             # Named Key Provider not exist
             else:
                 # Add a Standard Key Provider, KMS name, IP are required
-                if not self.params['kms_info'] or not self.params['kms_info'].get('kms_name') or \
-                        not self.params['kms_info'].get('kms_ip'):
-                    self.module.fail_json(msg="Please set 'kms_name', 'kms_ip' or 'kms_port' parameters when add new"
-                                              " standard key provider")
-                if self.params['kms_info'].get('remove_kms'):
-                    self.module.fail_json(msg="Specified key provider '%s' not exist, so no KMS server to be"
+                if len(self.params['kms_info']) == 0:
+                    self.module.fail_json(msg="Please set 'kms_info' when add new standard key provider")
+                for configured_kms_info in self.params['kms_info']:
+                    if configured_kms_info.get('remove_kms'):
+                        self.module.fail_json(msg="Specified key provider '%s' not exist, so no KMS server to be"
                                               " removed." % kp_name)
                 if self.module.check_mode:
                     results['desired_operation'] = "add standard key provider"
                     self.module.exit_json(**results)
                 else:
                     results['operation'] = "add standard key provider"
-                    new_key_provider_id = self.setup_standard_kp(kp_name, self.params['kms_info'])
+                    new_key_provider_id = self.setup_standard_kp(kp_name, self.params['kms_info'], proxy_user_config)
                     if new_key_provider_id:
                         self.key_provider_id = new_key_provider_id
                         # If this new added key provider is the only key provider, then mark it default
@@ -624,18 +642,20 @@ def main():
     argument_spec.update(
         name=dict(type='str', required=True),
         kms_info=dict(
-            type='dict',
+            type='list',
+            default=[],
+            elements='dict',
             options=dict(
                 kms_name=dict(type='str'),
                 kms_ip=dict(type='str'),
                 kms_port=dict(type='int'),
-                kms_proxy=dict(type='str'),
-                kms_proxy_port=dict(type='int'),
-                kms_user=dict(type='str'),
-                kms_password=dict(type='str', no_log=True),
                 remove_kms=dict(type='bool')
             )
         ),
+        proxy_server=dict(type='str'),
+        proxy_port=dict(type='int'),
+        kms_username=dict(type='str'),
+        kms_password=dict(type='str', no_log=True),
         make_kms_trust_vc=dict(
             type='dict',
             options=dict(
