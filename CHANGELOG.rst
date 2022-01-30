@@ -5,6 +5,14 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.17.1
+=======
+
+Bugfixes
+--------
+
+- vmware_guest_network - fix a bug that can crash the module due to an uncaught exception (https://github.com/ansible-collections/community.vmware/issues/25).
+
 v1.17.0
 =======
 

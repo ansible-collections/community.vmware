@@ -646,6 +646,14 @@ releases:
     - 1117_add_additional_usb_scan_codes.yml
     - rescan_VMFS_feature.yml
     release_date: '2021-12-06'
+  1.17.1:
+    changes:
+      bugfixes:
+      - vmware_guest_network - fix a bug that can crash the module due to an uncaught
+        exception (https://github.com/ansible-collections/community.vmware/issues/25).
+    fragments:
+    - 25-vmware_guest_network-catch_taskerror.yml
+    release_date: '2022-01-30'
   1.2.0:
     changes:
       bugfixes:
