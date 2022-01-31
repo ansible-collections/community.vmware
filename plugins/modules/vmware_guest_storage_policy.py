@@ -259,14 +259,14 @@ class SPBM_helper(SPBM):
             if isinstance(device, vim.vm.device.VirtualSCSIController):
                 if device.busNumber == controller_number:
                    controllerKey = device.key
-                   break;
+                   break
 
-        if controllerKey is not None: ## if controller was found check disk
+        if controllerKey is not None:  ## if controller was found check disk
             for device in vm.config.hardware.device:
                 if not isinstance(device, vim.vm.device.VirtualDisk):
                     continue
                 if int(device.unitNumber) == int(unit_number) and \
-                           int(device.controllerKey) == controllerKey:
+                   int(device.controllerKey) == controllerKey:
                     return device
 
         return None
