@@ -454,6 +454,7 @@ Parameters
                         <div>Manual specified MAC address of the network adapter when creating, or reconfiguring.</div>
                         <div>If not specified when creating new network adapter, mac address will be generated automatically.</div>
                         <div>When reconfigure MAC address, VM should be in powered off state.</div>
+                        <div>There are restrictions on the MAC addresses you can set. Consult the documentation of your vSphere version as to allowed MAC addresses.</div>
                 </td>
             </tr>
             <tr>
