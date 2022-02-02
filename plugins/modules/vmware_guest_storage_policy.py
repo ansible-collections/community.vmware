@@ -364,7 +364,7 @@ class SPBM_helper(SPBM):
                 result['msg'] = "Unable to find storage policy `%s' for disk %s." % (policy, disk)
                 self.module.fail_json(**result)
             if not disk_obj:
-                errmsg = "Unable to find disk for controller_number '%s' unit_number '%s'. 7 is reserved for SCSI adapters." 
+                errmsg = "Unable to find disk for controller_number '%s' unit_number '%s'. 7 is reserved for SCSI adapters."
                 result['msg'] = errmsg % (controller_number, unit_number)
                 self.module.fail_json(**result)
             disks_objs[unit_number] = dict(disk=disk_obj, policy=pol_obj)
