@@ -1,0 +1,2 @@
+minor_changes:
+  - Remove `version_added` documentation that pre-dates the collection, that is refers to Ansible < 2.10 (https://github.com/ansible-collections/community.vmware/pull/1215).
