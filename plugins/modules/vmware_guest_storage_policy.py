@@ -414,7 +414,7 @@ def run_module():
                   elements='dict',
                   options=dict(
                        unit_number=dict(type='int', required=True),
-                       controller_number=dict(type='int', required=True),
+                       controller_number=dict(type='int', default=0),
                        policy=dict(type='str', required=True)
                   )),
         vm_home=dict(type='str'),
