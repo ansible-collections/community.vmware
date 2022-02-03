@@ -128,7 +128,7 @@ EXAMPLES = r'''
   register: add_skp_result
 
 - name: Remove the KMS from the key provider cluster
-  community.vmware.vcenter_key_provider:
+  community.vmware.vcenter_standard_key_provider:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
