@@ -112,7 +112,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add a new Standard Key Provider with client certificate and private key
-  community.vmware.vcenter_key_provider:
+  community.vmware.vcenter_standard_key_provider:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
