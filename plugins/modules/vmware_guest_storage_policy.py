@@ -97,7 +97,7 @@ options:
          - SCSI controller number.
          - Valid values range from 0 to 3.
          type: int
-         required: true
+         default: 0
        policy:
          description:
          - Name of the storage profile policy to enforce for the disk.
