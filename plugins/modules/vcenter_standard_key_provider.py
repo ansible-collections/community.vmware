@@ -140,7 +140,7 @@ EXAMPLES = r'''
   register: remove_kms_result
 
 - name: Remove the Standard Key Provider
-  community.vmware.vcenter_key_provider:
+  community.vmware.vcenter_standard_key_provider:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
