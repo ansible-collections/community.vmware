@@ -13,14 +13,33 @@
       vars:
         setup_attach_host: true
         setup_datastore: true
-        setup_virtualmachines: true
 
-    - name: set state to poweron the first VM
-      vmware_guest_powerstate:
-        name: "{{ item.name }}"
-        folder: '{{ f0 }}'
+    - name: Create VM
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: test_vm1
+        folder: vm
+        esxi_hostname: "{{ esxi1 }}"
         state: powered-on
-      with_items: '{{ virtual_machines }}'
+        guest_id: debian8_64Guest
+        disk:
+        - size_gb: 1
+          type: thin
+          datastore: local
+        cdrom:
+          type: iso
+          iso_path: "[{{ ro_datastore }}] fedora.iso"
+        hardware:
+          # vmware_guest_disk need vmx-13 to reconfigure the disks
+          version: 13
+          memory_mb: 1024
+          num_cpus: 1
+          scsi: paravirtual
+      register: vm_create
 
     - copy:
         dest: vmware.yaml

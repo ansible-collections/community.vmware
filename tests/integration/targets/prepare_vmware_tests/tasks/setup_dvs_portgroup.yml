@@ -5,7 +5,8 @@
     portgroup_name: '{{ dvpg1 }}'
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: 'static'
+    port_allocation: 'fixed'
     state: present
 
 - name: Create the DVS PG with slash in name
@@ -14,5 +15,6 @@
     switch_name: '{{ dvswitch1 }}'
     vlan_id: 0
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: 'static'
+    port_allocation: 'fixed'
     state: present

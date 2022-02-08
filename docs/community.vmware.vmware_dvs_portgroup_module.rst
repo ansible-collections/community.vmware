@@ -297,6 +297,7 @@ Parameters
                         <div>Elastic port groups automatically increase or decrease the number of ports as needed.</div>
                         <div>Only valid if <em>port_binding</em> is set to <code>static</code>.</div>
                         <div>Will be <code>elastic</code> if not specified and <em>port_binding</em> is set to <code>static</code>.</div>
+                        <div>Will be <code>fixed</code> if not specified and <em>port_binding</em> is set to <code>ephemeral</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -306,6 +307,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
@@ -571,27 +573,6 @@ Parameters
                 </td>
                 <td>
                         <div>The name of the portgroup that is to be created or deleted.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>portgroup_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>earlyBinding</li>
-                                    <li>lateBinding</li>
-                                    <li>ephemeral</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>See VMware KB 1022312 regarding portgroup types.</div>
-                        <div>Deprecated. Will be removed 2021-12-01.</div>
                 </td>
             </tr>
             <tr>

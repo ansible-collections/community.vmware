@@ -165,13 +165,12 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                 <td>
                         <div>Whether to enable DRS.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: enable_drs</div>
                 </td>
             </tr>
             <tr>

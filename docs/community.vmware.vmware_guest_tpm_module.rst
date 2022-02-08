@@ -1,31 +1,24 @@
-.. _community.vmware.vmware_host_vmhba_facts_module:
+.. _community.vmware.vmware_guest_tpm_module:
 
 
-****************************************
-community.vmware.vmware_host_vmhba_facts
-****************************************
+*********************************
+community.vmware.vmware_guest_tpm
+*********************************
 
-**Gathers facts about vmhbas available on the given ESXi host**
+**Add or remove vTPM device for specified VM.**
 
 
+Version added: 1.16.0
 
 .. contents::
    :local:
    :depth: 1
 
-DEPRECATED
-----------
-:Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`community.vmware.vmware_host_vmhba_info <community.vmware.vmware_host_vmhba_info_module>` module.
-:Alternative: Use :ref:`community.vmware.vmware_host_vmhba_info <community.vmware.vmware_host_vmhba_info_module>` instead.
-
-
 
 Synopsis
 --------
-- This module can be used to gather facts about vmhbas available on the given ESXi host.
-- If ``cluster_name`` is provided, then vmhba facts about all hosts from given cluster will be returned.
-- If ``esxi_hostname`` is provided, then vmhba facts about given host system will be returned.
+- This module is used for adding or removing Virtual Trusted Platform Module(vTPM) device for an existing Virtual Machine. You must create a key provider on vCenter before you can add a vTPM. The ESXi hosts running in your environment must be ESXi 6.7 or later (Windows guest OS), or 7.0 Update 2 (Linux guest OS).
+
 
 
 
@@ -51,24 +44,24 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
+                    <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the cluster from which all host systems will be used.</div>
-                        <div>Vmhba facts about each ESXi server will be returned for the given cluster.</div>
-                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
+                        <div>The vCenter datacenter name used to get specified cluster or host.</div>
+                        <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -77,9 +70,17 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the host system to work with.</div>
-                        <div>Vmhba facts about this ESXi server will be returned.</div>
-                        <div>This parameter is required if <code>cluster_name</code> is not specified.</div>
+                        <div>VM folder, absolute or relative path to find an existing VM.</div>
+                        <div>This parameter is not required, only when multiple VMs are found with the same name.</div>
+                        <div>The folder should include the datacenter name.</div>
+                        <div>Examples:</div>
+                        <div>folder: /datacenter1/vm</div>
+                        <div>folder: datacenter1/vm</div>
+                        <div>folder: /datacenter1/vm/folder1</div>
+                        <div>folder: datacenter1/vm/folder1</div>
+                        <div>folder: /folder1/datacenter1/vm</div>
+                        <div>folder: folder1/datacenter1/vm</div>
+                        <div>folder: /folder1/datacenter1/vm/folder2</div>
                 </td>
             </tr>
             <tr>
@@ -97,6 +98,38 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
+                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the virtual machine.</div>
+                        <div>This is required if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -172,6 +205,29 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>State of vTPM device.</div>
+                        <div>If set to &#x27;absent&#x27;, vTPM device will be removed from VM.</div>
+                        <div>If set to &#x27;present&#x27;, vTPM device will be added if not present.</div>
+                        <div>Virtual machine should be turned off before add or remove vTPM device.</div>
+                        <div>Virtual machine should not contain snapshots before add vTPM device.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -185,6 +241,22 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>UUID of the instance to manage if known, this is VMware&#x27;s unique identifier.</div>
+                        <div>This is required if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -217,7 +289,8 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.5
+   - Tested on vSphere 6.7
+   - Tested on vSphere 7.0
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -227,23 +300,25 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather facts about vmhbas of all ESXi Host in the given Cluster
-      community.vmware.vmware_host_vmhba_facts:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
+    - name: Add vTPM to specified VM
+      community.vmware.vmware_guest_tpm:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter }}"
+        name: "Test_VM"
+        state: present
       delegate_to: localhost
-      register: cluster_host_vmhbas
 
-    - name: Gather facts about vmhbas of an ESXi Host
-      community.vmware.vmware_host_vmhba_facts:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
+    - name: Remove vTPM from specified VM
+      community.vmware.vmware_guest_tpm:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter }}"
+        name: "Test_VM"
+        state: absent
       delegate_to: localhost
-      register: host_vmhbas
 
 
 
@@ -262,18 +337,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>hosts_vmhbas_facts</b>
+                    <b>instance</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>
                     </div>
                 </td>
-                <td>hosts_vmhbas_facts</td>
+                <td>always</td>
                 <td>
-                            <div>dict with hostname as key and dict with vmhbas facts as value.</div>
+                            <div>metadata about the VM vTPM device</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.204&#x27;: {&#x27;vmhba_details&#x27;: [{&#x27;adapter&#x27;: &#x27;HPE Smart Array P440ar&#x27;, &#x27;bus&#x27;: 3, &#x27;device&#x27;: &#x27;vmhba0&#x27;, &#x27;driver&#x27;: &#x27;nhpsa&#x27;, &#x27;location&#x27;: &#x27;0000:03:00.0&#x27;, &#x27;model&#x27;: &#x27;Smart Array P440ar&#x27;, &#x27;node_wwn&#x27;: &#x27;50:01:43:80:37:18:9e:a0&#x27;, &#x27;status&#x27;: &#x27;unknown&#x27;, &#x27;type&#x27;: &#x27;SAS&#x27;}, {&#x27;adapter&#x27;: &#x27;QLogic Corp ISP2532-based 8Gb Fibre Channel to PCI Express HBA&#x27;, &#x27;bus&#x27;: 5, &#x27;device&#x27;: &#x27;vmhba1&#x27;, &#x27;driver&#x27;: &#x27;qlnativefc&#x27;, &#x27;location&#x27;: &#x27;0000:05:00.0&#x27;, &#x27;model&#x27;: &#x27;ISP2532-based 8Gb Fibre Channel to PCI Express HBA&#x27;, &#x27;node_wwn&#x27;: &#x27;57:64:96:32:15:90:23:95:82&#x27;, &#x27;port_type&#x27;: &#x27;unknown&#x27;, &#x27;port_wwn&#x27;: &#x27;57:64:96:32:15:90:23:95:82&#x27;, &#x27;speed&#x27;: 8, &#x27;status&#x27;: &#x27;online&#x27;, &#x27;type&#x27;: &#x27;Fibre Channel&#x27;}, {&#x27;adapter&#x27;: &#x27;QLogic Corp ISP2532-based 8Gb Fibre Channel to PCI Express HBA&#x27;, &#x27;bus&#x27;: 8, &#x27;device&#x27;: &#x27;vmhba2&#x27;, &#x27;driver&#x27;: &#x27;qlnativefc&#x27;, &#x27;location&#x27;: &#x27;0000:08:00.0&#x27;, &#x27;model&#x27;: &#x27;ISP2532-based 8Gb Fibre Channel to PCI Express HBA&#x27;, &#x27;node_wwn&#x27;: &#x27;57:64:96:32:15:90:23:95:21&#x27;, &#x27;port_type&#x27;: &#x27;unknown&#x27;, &#x27;port_wwn&#x27;: &#x27;57:64:96:32:15:90:23:95:21&#x27;, &#x27;speed&#x27;: 8, &#x27;status&#x27;: &#x27;online&#x27;, &#x27;type&#x27;: &#x27;Fibre Channel&#x27;}]}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">None</div>
                 </td>
             </tr>
     </table>
@@ -284,11 +359,7 @@ Status
 ------
 
 
-- This module will be removed in a release after 2021-12-01. *[deprecated]*
-- For more information see `DEPRECATED`_.
-
-
 Authors
 ~~~~~~~
 
-- Christian Kotte (@ckotte)
+- Diane Wang (@Tomorrow9) <dianew@vmware.com>

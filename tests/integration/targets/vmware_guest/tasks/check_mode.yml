@@ -2,6 +2,28 @@
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+- name: Create VMs
+  vmware_guest:
+    datacenter: "{{ dc1 }}"
+    folder: '{{ f0 }}'
+    name: DC0_H0_VM0
+    state: poweredoff
+    guest_id: debian8_64Guest
+    disk:
+    - size_mb: 10
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+      version: 11
+    cdrom:
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    networks:
+    - name: VM Network
+
 - name: Perform all operation in check mode
   vmware_guest:
     validate_certs: false
@@ -26,9 +48,6 @@
     - reboot-guest
   register: check_mode_state
   check_mode: true
-
-- debug:
-    var: check_mode_state
 
 - name: assert that changes were made
   assert:

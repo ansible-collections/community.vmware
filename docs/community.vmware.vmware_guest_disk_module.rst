@@ -101,6 +101,52 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>bus_sharing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>noSharing</b>&nbsp;&larr;</div></li>
+                                    <li>physicalSharing</li>
+                                    <li>virtualSharing</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Only functions with Paravirtual SCSI Controller.</div>
+                        <div>Allows for the sharing of the scsi bus between two virtual machines.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cluster_disk</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.17.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>This value allows for the sharing of an RDM between two machines.</div>
+                        <div>The primary machine holding the RDM uses the default <code>False</code>.</div>
+                        <div>The secondary machine holding the RDM uses <code>True</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>compatibility_mode</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -344,13 +390,12 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
                 </td>
                 <td>
                         <div>Path of LUN for Raw Device Mapping required for disk type <code>rdm</code>.</div>
-                        <div>Only valid is <code>type</code> is set to <code>rdm</code>.</div>
+                        <div>Only valid if <code>type</code> is set to <code>rdm</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -473,10 +518,9 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>This parameter is not available for Raw Device Mapping(RDM).</div>
                         <div>The sharing mode of the virtual disk.</div>
                         <div>Setting sharing means that multiple virtual machines can write to the virtual disk.</div>
-                        <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code>.</div>
+                        <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code>or <code>rdm</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -623,6 +667,7 @@ Parameters
                 <td>
                         <div>Disk Unit Number.</div>
                         <div>Valid value range from 0 to 15, except 7 for SCSI Controller.</div>
+                        <div>Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher</div>
                         <div>Valid value range from 0 to 29 for SATA controller.</div>
                         <div>Valid value range from 0 to 14 for NVME controller.</div>
                 </td>
@@ -955,6 +1000,42 @@ Examples
             rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
             compatibility_mode: 'virtualMode'
             disk_mode: 'persistent'
+
+    - name: Add raw device mapping to virtual machine with Physical bus sharing
+      community.vmware.vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: "Test_VM"
+        disk:
+          - type: rdm
+            state: present
+            scsi_controller: 1
+            unit_number: 5
+            rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+            compatibility_mode: 'virtualMode'
+            disk_mode: 'persistent'
+            bus_sharing: physicalSharing
+
+    - name: Add raw device mapping to virtual machine with Physical bus sharing and clustered disk
+      community.vmware.vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: "Test_VM"
+        disk:
+          - type: rdm
+            state: present
+            scsi_controller: 1
+            unit_number: 5
+            compatibility_mode: 'virtualMode'
+            disk_mode: 'persistent'
+            bus_sharing: physicalSharing
+            filename: "[datastore1] path/to/rdm/disk-marker.vmdk"
 
     - name: create new disk with custom IO limits and shares in IO Limits
       community.vmware.vmware_guest_disk:

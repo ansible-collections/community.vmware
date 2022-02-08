@@ -147,8 +147,9 @@ Parameters
                 </td>
                 <td>
                         <div>The list of the keys will be sent to the virtual machine.</div>
-                        <div>Valid values are <code>ENTER</code>, <code>ESC</code>, <code>BACKSPACE</code>, <code>TAB</code>, <code>SPACE</code>, <code>CAPSLOCK</code>, <code>DELETE</code>, <code>CTRL_ALT_DEL</code>, <code>CTRL_C</code> and <code>F1</code> to <code>F12</code>, <code>RIGHTARROW</code>, <code>LEFTARROW</code>, <code>DOWNARROW</code>, <code>UPARROW</code>.</div>
+                        <div>Valid values are <code>ENTER</code>, <code>ESC</code>, <code>BACKSPACE</code>, <code>TAB</code>, <code>SPACE</code>, <code>CAPSLOCK</code>, <code>HOME</code>, <code>DELETE</code>, <code>END</code>, <code>CTRL_ALT_DEL</code>, <code>CTRL_C</code> and <code>F1</code> to <code>F12</code>, <code>RIGHTARROW</code>, <code>LEFTARROW</code>, <code>DOWNARROW</code>, <code>UPARROW</code>.</div>
                         <div>If both <code>keys_send</code> and <code>string_send</code> are specified, keys in <code>keys_send</code> list will be sent in front of the <code>string_send</code>.</div>
+                        <div>Values <code>HOME</code> and <code>END</code> are added in version 1.17.0.</div>
                 </td>
             </tr>
             <tr>

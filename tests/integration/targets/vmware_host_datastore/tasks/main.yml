@@ -46,6 +46,7 @@
           - mount_vmware_host_datastore is failed
           - mount_vmware_host_datastore.msg == "Failed to find ESXi hostname nohost"
 
+    # note: datastore is already mounted
     - name: Mount NFS (ro_datastore) datastores on esxi1 using esxi_hostname
       vmware_host_datastore:
         hostname: "{{ vcenter_hostname }}"
@@ -61,9 +62,6 @@
         validate_certs: false
       register: mount_vmware_host_datastore
     - debug: var=mount_vmware_host_datastore
-    - assert:
-        that:
-          - mount_vmware_host_datastore is changed
 
     - name: Mount NFS (ro_datastore) datastores to ESXi directly
       vmware_host_datastore:

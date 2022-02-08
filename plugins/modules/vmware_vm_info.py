@@ -17,7 +17,6 @@ short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
 - Cluster name as fact is added in version 2.7.
-- This module was called C(vmware_vm_facts) before Ansible 2.9. The usage did not change.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -26,6 +25,7 @@ notes:
 - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
+- Fact about C(datastore_url) is added in VMware collection 1.18.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -118,7 +118,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.uuid }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -136,7 +136,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.tags }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -148,6 +148,23 @@ EXAMPLES = r'''
     folder: "/Asia-Datacenter1/vm/prod"
   delegate_to: localhost
   register: vm_info
+
+- name: Get datastore_url from given VM name
+  block:
+    - name: Get virtual machine info
+      community.vmware.vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+      delegate_to: localhost
+      register: vm_info
+
+    - debug:
+        msg: "{{ item.datastore_url }}"
+      with_items:
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
+      vars:
+        query: "[?guest_name=='DC0_H0_VM0']"
 '''
 
 RETURN = r'''
@@ -180,6 +197,12 @@ virtual_machines:
         "attributes": {
             "job": "backup-prepare"
         },
+        "datastore_url": [
+            {
+                "name": "t880-o2g",
+                "url": "/vmfs/volumes/e074264a-e5c82a58"
+            }
+        ],
         "tags": [
             {
                 "category_id": "urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL",
@@ -279,6 +302,11 @@ class VmwareVmInfo(PyVmomi):
 
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
+            datastore_url = list()
+            datastore_attributes = ('name', 'url')
+            if vm.config.datastoreUrl:
+                for entry in vm.config.datastoreUrl:
+                    datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
@@ -294,6 +322,7 @@ class VmwareVmInfo(PyVmomi):
                 "tags": vm_tags,
                 "folder": vm_folder,
                 "moid": vm._moId,
+                "datastore_url": datastore_url,
             }
 
             vm_type = self.module.params.get('vm_type')
@@ -320,9 +349,6 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    if module._name in ('vmware_vm_facts', 'community.vmware.vmware_vm_facts'):
-        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'",
-                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vm_info = VmwareVmInfo(module)
     _virtual_machines = vmware_vm_info.get_all_virtual_machines()

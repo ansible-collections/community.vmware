@@ -42,6 +42,34 @@
       that:
       - add_nic_again_run.changed == false
 
+  - name: Remove a nic from a switch
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      state: present
+    register: remove_nic_run
+  - debug: var=remove_nic_run
+  - assert:
+      that:
+      - remove_nic_run.changed == true
+
+  - name: Remove a nic from a switch again
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      state: present
+    register: remove_nic_again_run
+  - debug: var=remove_nic_run
+  - assert:
+      that:
+      - remove_nic_again_run.changed == false
+
   - name: Remove a switch
     vmware_vswitch:
       hostname: '{{ esxi1 }}'

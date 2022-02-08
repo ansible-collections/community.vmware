@@ -18,6 +18,8 @@
         rules:
           - name: vvold
             enabled: true
+            allowed_hosts:
+              all_ip: true
       register: all_hosts_result
     - debug: msg="{{ all_hosts_result }}"
     - name: ensure everything is changed for all hosts of {{ ccr1 }}
@@ -73,6 +75,8 @@
         rules:
           - name: vvold
             enabled: true
+            allowed_hosts:
+              all_ip: true
       register: all_hosts_result_check_mode
       check_mode: true
     - debug: var=all_hosts_result_check_mode
@@ -220,3 +224,18 @@
       assert:
         that:
           - nfc_state.allowed_hosts.current_allowed_ip == ["1.2.3.4"]
+    - name: Clean up the firewall rules
+      vmware_host_firewall_manager:
+        cluster_name: '{{ ccr1 }}'
+        rules:
+            - name: vvold
+              enabled: false
+            - name: CIMHttpServer
+              enabled: true
+              allowed_hosts:
+                all_ip: true
+            - name: NFC
+              enabled: true
+              allowed_hosts:
+                all_ip: true
+      ignore_errors: true

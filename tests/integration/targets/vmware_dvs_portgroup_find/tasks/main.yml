@@ -39,7 +39,7 @@
     that:
       - dvspgvlid_0001.dvs_portgroups is defined
       - dvspgvlid_0001.dvs_portgroups[1] is defined
-      - dvspgvlid_0001.dvs_portgroups[1].vlan_id == "0"
+      - dvspgvlid_0001.dvs_portgroups | selectattr("vlan_id", "equalto", "0")|map(attribute="vlan_id")|first == "0"
 
 # https://github.com/ansible-collections/community.vmware/pull/648
 - name: The test for the dvportgroup with special characters
@@ -55,7 +55,8 @@
         portgroup_name: 'dvportgroup\/%'
         vlan_id: 1
         num_ports: 8
-        portgroup_type: earlyBinding
+        port_binding: 'static'
+        port_allocation: 'fixed'
         state: present
       register: create_dvportgroup_with_special_characters_result
 
@@ -92,7 +93,8 @@
         portgroup_name: 'dvportgroup\/%'
         vlan_id: 1
         num_ports: 8
-        portgroup_type: earlyBinding
+        port_binding: 'static'
+        port_allocation: 'fixed'
         state: absent
       register: delete_dvportgroup_with_special_characters_result
 

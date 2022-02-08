@@ -10,6 +10,13 @@ $ git clone https://github.com/ansible-collections/community.vmware ~/.ansible/c
 $ cd ~/.ansible/collections/ansible_collections/community/vmware
 ```
 
+If you want to test a PR, you can get it after cloning like this:
+
+```
+$ git fetch origin pull/ID/head:BRANCHNAME
+$ git checkout BRANCHNAME
+```
+
 Prepare VMware configuration file:
 
 ```

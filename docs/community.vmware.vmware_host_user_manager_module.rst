@@ -1,29 +1,23 @@
-.. _community.vmware.vmware_local_role_facts_module:
+.. _community.vmware.vmware_host_user_manager_module:
 
 
-****************************************
-community.vmware.vmware_local_role_facts
-****************************************
+*****************************************
+community.vmware.vmware_host_user_manager
+*****************************************
 
-**Gather facts about local roles on an ESXi host**
+**Manage users of ESXi**
 
 
+Version added: 1.18.0
 
 .. contents::
    :local:
    :depth: 1
 
-DEPRECATED
-----------
-:Removed in collection release after 2021-12-01
-:Why: Deprecated in favour of :ref:`community.vmware.vmware_local_role_info <community.vmware.vmware_local_role_info_module>` module.
-:Alternative: Use :ref:`community.vmware.vmware_local_role_info <community.vmware.vmware_local_role_info_module>` instead.
-
-
 
 Synopsis
 --------
-- This module can be used to gather facts about local role facts on an ESXi host
+- This module can be added or updated or deleted the local user of ESXi host.
 
 
 
@@ -31,7 +25,7 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.6
+- python >= 3.6
 - PyVmomi
 
 
@@ -49,6 +43,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>esxi_hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the ESXi host that is managing the local user.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -61,6 +71,25 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>override_user_password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If the local user exists and updates the password, change this parameter value is true.</div>
                 </td>
             </tr>
             <tr>
@@ -136,6 +165,76 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If set to <code>present</code>, add a new local user or update information.</div>
+                        <div>If set to <code>absent</code>, delete the local user.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>user_description</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The local user description.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: local_user_description</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>user_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the local user.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: local_user_name</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>user_password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The local user password.</div>
+                        <div>If you&#x27;d like to update the password, require the <em>override_user_password</em> is true.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: local_user_password</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -177,15 +276,6 @@ Parameters
     <br/>
 
 
-Notes
------
-
-.. note::
-   - Tested on ESXi 6.5
-   - Be sure that the ESXi user used for login, has the appropriate rights to view roles
-   - The module returns a list of dict in version 2.8 and above.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
-
 
 
 Examples
@@ -193,18 +283,40 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather facts about local role from an ESXi
-      community.vmware.vmware_local_role_facts:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-      register: fact_details
-      delegate_to: localhost
-    - name: Get Admin privileges
-      set_fact:
-        admin_priv: "{{ fact_details.local_role_facts['Admin']['privileges'] }}"
-    - debug:
-        msg: "{{ admin_priv }}"
+    - name: Add new local user to ESXi host
+      community.vmware.vmware_host_user_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        user_name: example
+        user_description: "example user"
+        user_password: "{{ local_user_password }}"
+        state: present
+
+    - name: Update the local user password in ESXi host
+      community.vmware.vmware_host_user_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        user_name: example
+        user_description: "example user"
+        user_password: "{{ local_user_password }}"
+        override_user_password: true
+        state: present
+
+    - name: Delete the local user in ESXi host
+      community.vmware.vmware_host_user_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        user_name: example
+        state: absent
 
 
 
@@ -223,18 +335,20 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>local_role_facts</b>
+                    <b>msg</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
+                      <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>always</td>
                 <td>
-                            <div>Facts about role present on ESXi host</div>
+                            <div>The executed result for the module.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;privileges&#x27;: [&#x27;Alarm.Acknowledge&#x27;, &#x27;Alarm.Create&#x27;, &#x27;Alarm.Delete&#x27;, &#x27;Alarm.DisableActions&#x27;], &#x27;role_id&#x27;: -12, &#x27;role_info_label&#x27;: &#x27;Ansible User&#x27;, &#x27;role_info_summary&#x27;: &#x27;Ansible Automation user&#x27;, &#x27;role_name&#x27;: &#x27;AnsiUser1&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [], &#x27;role_id&#x27;: -5, &#x27;role_info_label&#x27;: &#x27;No access&#x27;, &#x27;role_info_summary&#x27;: &#x27;Used for restricting granted access&#x27;, &#x27;role_name&#x27;: &#x27;NoAccess&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [&#x27;System.Anonymous&#x27;, &#x27;System.View&#x27;], &#x27;role_id&#x27;: -3, &#x27;role_info_label&#x27;: &#x27;View&#x27;, &#x27;role_info_summary&#x27;: &#x27;Visibility access (cannot be granted)&#x27;, &#x27;role_name&#x27;: &#x27;View&#x27;, &#x27;role_system&#x27;: True}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{
+        &quot;msg&quot;: &quot;Added the new user.
+    }</div>
                 </td>
             </tr>
     </table>
@@ -245,11 +359,7 @@ Status
 ------
 
 
-- This module will be removed in a release after 2021-12-01. *[deprecated]*
-- For more information see `DEPRECATED`_.
-
-
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- sky-joker (@sky-joker)

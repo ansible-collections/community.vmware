@@ -111,7 +111,7 @@
         that:
           - vm_home_sp_idp.changed_policies.vm_home == ""
 
-    - name: "004: Assign storage policy to disk unit {{ unit_number }} check_mode test"
+    - name: "004: Assign storage policy to controller number {{ controller_number}} disk unit {{ unit_number }} check_mode test"
       vmware_guest_storage_policy: &disk_args
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -120,6 +120,7 @@
         name: "{{ virtual_machines[0].name }}"
         disk:
           - unit_number: "{{ unit_number }}"
+            controller_number: "{{ controller_number }}"
             policy: "{{ storage_policy }}"
       register: disk_sp_cm
       check_mode: true
@@ -133,6 +134,7 @@
       assert:
         that:
           - disk_sp_cm.changed_policies.disk[0].unit_number == unit_number
+          - disk_sp_cm.changed_policies.disk[0].controller_number == controller_number
           - disk_sp_cm.changed_policies.disk[0].policy == storage_policy
 
     - name: "005: Assign storage policy to disk unit {{ unit_number }}"
@@ -149,6 +151,7 @@
       assert:
         that:
           - disk_sp.changed_policies.disk[0].unit_number == unit_number
+          - disk_sp.changed_policies.disk[0].controller_number == controller_number
           - disk_sp.changed_policies.disk[0].policy == storage_policy
 
     - name: "006: Assign storage policy to disk unit {{ unit_number }} idempotence test"
@@ -203,3 +206,4 @@
     category: "vm_guest_storage_profile_cat001"
     tag: "vm_guest_storage_profile_tag001"
     unit_number: 0
+    controller_number: 0

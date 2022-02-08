@@ -350,7 +350,7 @@ Examples
         destination_resourcepool: 'destination_resourcepool_as_per_vcenter'
       delegate_to: localhost
 
-    - name: Perform storage vMotion of of virtual machine
+    - name: Perform storage vMotion of virtual machine
       community.vmware.vmware_vmotion:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'

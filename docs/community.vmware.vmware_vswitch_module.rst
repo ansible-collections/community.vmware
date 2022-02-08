@@ -330,6 +330,16 @@ Examples
         mtu: 9000
       delegate_to: localhost
 
+    - name: Delete a VMware vSwitch in a specific host system
+      community.vmware.vmware_vswitch:
+        hostname: '{{ esxi_hostname }}'
+        username: '{{ esxi_username }}'
+        password: '{{ esxi_password }}'
+        esxi_hostname: DC0_H0
+        switch_name: vswitch_001
+        state: absent
+      delegate_to: localhost
+
 
 
 Return Values

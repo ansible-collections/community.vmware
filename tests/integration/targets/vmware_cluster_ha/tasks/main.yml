@@ -40,7 +40,7 @@
     password: "{{ vcenter_password }}"
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_ha
-    enable_ha: false
+    enable: false
   register: disable_ha_result
 
 - name: Ensure HA is disabled

@@ -78,9 +78,10 @@ options:
    keys_send:
      description:
      - The list of the keys will be sent to the virtual machine.
-     - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(DELETE), C(CTRL_ALT_DEL),
+     - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(HOME), C(DELETE), C(END), C(CTRL_ALT_DEL),
         C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
+     - Values C(HOME) and C(END) are added in version 1.17.0.
      type: list
      elements: str
    sleep_time:
@@ -241,7 +242,9 @@ class PyVmomiHelper(PyVmomi):
             ('F10', '0x43', [('', [])]),
             ('F11', '0x44', [('', [])]),
             ('F12', '0x45', [('', [])]),
+            ('HOME', '0x4a', [('', [])]),
             ('DELETE', '0x4c', [('', [])]),
+            ('END', '0x4d', [('', [])]),
             ('CTRL_ALT_DEL', '0x4c', [('', ['CTRL', 'ALT'])]),
             ('CTRL_C', '0x06', [('', ['CTRL'])]),
             ('RIGHTARROW', '0x4f', [('', [])]),

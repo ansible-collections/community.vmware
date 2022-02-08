@@ -18,9 +18,6 @@ description:
 - This module can be used to collect information about VMware tags.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
-- This module was called C(vmware_tag_facts) before Ansible 2.9. The usage did not change.
-- C(tag_facts) will be deprecated in Ansible 2.14, since it does not return multiple tags with same name and different category id.
-- Please use C(tag_info) instead of C(tag_facts).
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
@@ -163,9 +160,6 @@ def main():
     argument_spec = VmwareRestClient.vmware_client_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
-    if module._name in ('vmware_tag_facts', 'community.vmware.vmware_tag_facts'):
-        module.deprecate("The 'vmware_tag_facts' module has been renamed to 'vmware_tag_info'",
-                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_tag_info = VmTagInfoManager(module)
     vmware_tag_info.get_all_tags()

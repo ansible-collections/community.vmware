@@ -478,7 +478,7 @@ options:
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
-    version_added: '1.7.0'
+    version_added: '1.8.0'
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
@@ -681,6 +681,7 @@ options:
             type: str
             description:
             - Local administrator password.
+            - If not defined, the password will be set to blank (that is, no password).
             - Specific to Windows customization.
         productid:
             type: str
@@ -2215,7 +2216,9 @@ class PyVmomiHelper(PyVmomi):
 
             ident.identification = vim.vm.customization.Identification()
 
-            if self.params['customization'].get('password', '') != '':
+            if self.params['customization']['password'] is None or self.params['customization']['password'] == '':
+                ident.guiUnattended.password = None
+            else:
                 ident.guiUnattended.password = vim.vm.customization.Password()
                 ident.guiUnattended.password.value = str(self.params['customization']['password'])
                 ident.guiUnattended.password.plainText = True
@@ -3368,19 +3371,13 @@ def main():
     # Check requirements for virtualization based security
     if pyv.params['hardware']['virt_based_security']:
         if not pyv.params['hardware']['nested_virt']:
-            pyv.module.warn("Virtualization based security requires nested virtualization. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['nested_virt'] = True
+            pyv.module.fail("Virtualization based security requires nested virtualization. Please enable nested_virt.")
 
         if not pyv.params['hardware']['secure_boot']:
-            pyv.module.warn("Virtualization based security requires (U)EFI secure boot. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['secure_boot'] = True
+            pyv.module.fail("Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
 
         if not pyv.params['hardware']['iommu']:
-            pyv.module.warn("Virtualization based security requires I/O MMU. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling iommu explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['iommu'] = True
+            pyv.module.fail("Virtualization based security requires I/O MMU. Please enable iommu.")
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()

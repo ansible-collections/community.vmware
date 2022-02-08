@@ -92,6 +92,12 @@ options:
          - Valid values range from 0 to 15.
          type: int
          required: true
+       controller_number:
+         description:
+         - SCSI controller number.
+         - Valid values range from 0 to 3.
+         type: int
+         default: 0
        policy:
          description:
          - Name of the storage profile policy to enforce for the disk.
@@ -102,7 +108,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Enforce storepol1 policy for disk 0 and 1 using UUID
+- name: Enforce storepol1 policy for disk 0 and 1 on SCSI controller 0 using UUID
   community.vmware.vmware_guest_storage_policy:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -111,8 +117,10 @@ EXAMPLES = r'''
     uuid: cefd316c-fc19-45f3-a539-2cd03427a78d
     disk:
       - unit_number: 0
+        controller_number: 0
         policy: storepol1
       - unit_number: 1
+        controller_number: 0
         policy: storepol1
   delegate_to: localhost
   register: policy_status
@@ -233,7 +241,7 @@ class SPBM_helper(SPBM):
         spec.vmProfile = [profileSpec]
         return vm.ReconfigVM_Task(spec)
 
-    def GetVirtualDiskObj(self, vm, unit_number):
+    def GetVirtualDiskObj(self, vm, unit_number, controller_number):
         """
         Get a virtual disk object.
 
@@ -241,18 +249,29 @@ class SPBM_helper(SPBM):
         :type vm: VirtualMachine
         :param unit_number: virtual machine's disk unit number.
         :type unit_number: int
+        :param controller_number: virtual machine's controller number.
+        :type controller_number: int
         :returns: VirtualDisk object if exists, else None.
         :rtype: VirtualDisk, None
         """
+        controllerKey = None
         for device in vm.config.hardware.device:
-            if not isinstance(device, vim.vm.device.VirtualDisk):
-                continue
-            if int(device.unitNumber) == int(unit_number):
-                return device
+            if isinstance(device, vim.vm.device.VirtualSCSIController):
+                if device.busNumber == controller_number:
+                    controllerKey = device.key
+                    break
+
+        if controllerKey is not None:  # if controller was found check disk
+            for device in vm.config.hardware.device:
+                if not isinstance(device, vim.vm.device.VirtualDisk):
+                    continue
+                if int(device.unitNumber) == int(unit_number) and \
+                   int(device.controllerKey) == controllerKey:
+                    return device
 
         return None
 
-    def SetVMDiskStorageProfile(self, vm, unit_number, profile):
+    def SetVMDiskStorageProfile(self, vm, unit_number, controller_number, profile):
         """
         Set VM's disk storage policy profile.
 
@@ -260,6 +279,8 @@ class SPBM_helper(SPBM):
         :type vm: VirtualMachine
         :param unit_number: virtual machine's disk unit number.
         :type unit_number: int
+        :param controller_number: virtual machine's controller number.
+        :type controller_number: int
         :param profile: A VMware Storage Policy profile
         :type profile: pbm.profile.Profile
         :returns: VMware task object.
@@ -272,7 +293,7 @@ class SPBM_helper(SPBM):
 
         deviceSpec = vim.vm.device.VirtualDeviceSpec()
         deviceSpec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-        disk_obj = self.GetVirtualDiskObj(vm, unit_number)
+        disk_obj = self.GetVirtualDiskObj(vm, unit_number, controller_number)
         deviceSpec.device = disk_obj
         deviceSpec.profile = [profileSpec]
         spec.deviceChange = [deviceSpec]
@@ -336,13 +357,15 @@ class SPBM_helper(SPBM):
         for disk in disks:
             policy = str(disk['policy'])
             unit_number = int(disk['unit_number'])
-            disk_obj = self.GetVirtualDiskObj(vm_obj, unit_number)
+            controller_number = int(disk['controller_number'])
+            disk_obj = self.GetVirtualDiskObj(vm_obj, unit_number, controller_number)
             pol_obj = self.SearchStorageProfileByName(pm, policy)
             if not pol_obj:
                 result['msg'] = "Unable to find storage policy `%s' for disk %s." % (policy, disk)
                 self.module.fail_json(**result)
             if not disk_obj:
-                result['msg'] = "Unable to find disk for unit_number `%s'. 7 will be reserved for SCSI adapters." % unit_number
+                errmsg = "Unable to find disk for controller_number '%s' unit_number '%s'. 7 is reserved for SCSI adapters."
+                result['msg'] = errmsg % (controller_number, unit_number)
                 self.module.fail_json(**result)
             disks_objs[unit_number] = dict(disk=disk_obj, policy=pol_obj)
 
@@ -351,6 +374,7 @@ class SPBM_helper(SPBM):
         for disk in disks:
             policy = str(disk['policy'])
             unit_number = int(disk['unit_number'])
+            controller_number = int(disk['controller_number'])
             disk_obj = disks_objs[unit_number]['disk']
             pol_obj = disks_objs[unit_number]['policy']
             pmObjectType = pbm.ServerObjectRef.ObjectType("virtualDiskId")
@@ -363,6 +387,7 @@ class SPBM_helper(SPBM):
                 # task success, and exit.
                 if not self.module.check_mode:
                     task = self.SetVMDiskStorageProfile(vm_obj, unit_number,
+                                                        controller_number,
                                                         pol_obj)
                     wait_for_task(task)
                 result['changed'] = True
@@ -389,6 +414,7 @@ def run_module():
                   elements='dict',
                   options=dict(
                        unit_number=dict(type='int', required=True),
+                       controller_number=dict(type='int', default=0),
                        policy=dict(type='str', required=True)
                   )),
         vm_home=dict(type='str'),

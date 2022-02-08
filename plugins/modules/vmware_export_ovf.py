@@ -70,6 +70,12 @@ options:
     description:
     - Export an ISO image of the media mounted on the CD/DVD Drive within the virtual machine.
     type: bool
+  export_with_extraconfig:
+    type: bool
+    default: false
+    description:
+    - All extra configuration options are exported for a virtual machine.
+    version_added: '2.0.0'
   download_timeout:
     description:
     - The user defined timeout in second of exporting file.
@@ -209,7 +215,7 @@ class VMwareExportVmOvf(PyVmomi):
     def export_to_ovf_files(self, vm_obj):
         self.create_export_dir(vm_obj=vm_obj)
         export_with_iso = False
-        if 'export_with_images' in self.params and self.params['export_with_images']:
+        if self.params['export_with_images']:
             export_with_iso = True
         self.download_timeout = self.params['download_timeout']
 
@@ -284,6 +290,10 @@ class VMwareExportVmOvf(PyVmomi):
             ovf_parameters = vim.OvfManager.CreateDescriptorParams()
             ovf_parameters.name = ovf_descriptor_name
             ovf_parameters.ovfFiles = ovf_files
+            if self.params['export_with_extraconfig']:
+                ovf_parameters.exportOption = ['extraconfig']
+            if self.params['export_with_images']:
+                ovf_parameters.includeImageFiles = True
             vm_descriptor_result = ovf_manager.CreateDescriptor(obj=vm_obj, cdp=ovf_parameters)
             if vm_descriptor_result.error:
                 http_nfc_lease.HttpNfcLeaseAbort()
@@ -325,6 +335,7 @@ def main():
         datacenter=dict(type='str', default='ha-datacenter'),
         export_dir=dict(type='path', required=True),
         export_with_images=dict(type='bool', default=False),
+        export_with_extraconfig=dict(type='bool', default=False),
         download_timeout=dict(type='int', default=30),
     )
 

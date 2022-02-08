@@ -19,9 +19,6 @@ Synopsis
 - This module can be used to collect information about VMware tags.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
-- This module was called ``vmware_tag_facts`` before Ansible 2.9. The usage did not change.
-- ``tag_facts`` will be deprecated in Ansible 2.14, since it does not return multiple tags with same name and different category id.
-- Please use ``tag_info`` instead of ``tag_facts``.
 
 
 

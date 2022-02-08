@@ -10,7 +10,7 @@
         datacenter: "{{ dc1 }}"
         folder: "{{ f0 }}"
         name: 'test_vm\/%'
-        guest_id: rhel7_64Guest
+        guest_id: debian8_64Guest
         hardware:
           memory_mb: 512
           num_cpus: 1
@@ -35,7 +35,7 @@
         datacenter: "{{ dc1 }}"
         folder: "{{ f0 }}"
         name: 'test_vm\/%'
-        guest_id: rhel7_64Guest
+        guest_id: debian8_64Guest
         hardware:
           memory_mb: 512
           num_cpus: 1

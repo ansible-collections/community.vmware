@@ -18,7 +18,6 @@ Synopsis
 --------
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
 - Cluster name as fact is added in version 2.7.
-- This module was called ``vmware_vm_facts`` before Ansible 2.9. The usage did not change.
 
 
 

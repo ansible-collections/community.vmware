@@ -123,3 +123,27 @@
   - assert:
       that:
         - delete_dsc_check.changed
+
+  - name: Remove SDRS cluster
+    vmware_datastore_cluster:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      datacenter_name: "{{ dc1 }}"
+      datastore_cluster_name: '{{ item }}'
+      state: absent
+    with_items:
+      - DSC1
+      - DSC2
+
+  - name: Delete the datastore folder
+    vcenter_folder:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datacenter: '{{ dc1 }}'
+      folder_name: 'my_datastore_folder'
+      folder_type: datastore
+      state: absent
+      validate_certs: false
