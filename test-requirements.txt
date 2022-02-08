@@ -1,2 +1,9 @@
+coverage==4.5.4
 flake8
 selinux
+mock ; python_version < '3.5'
+pytest-xdist
+# We should avoid these two modules with py3
+pytest-mock
+mock
+pyvmomi

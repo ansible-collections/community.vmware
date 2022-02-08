@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware - fix that the return value should be returned None if moId doesn't exist of a virtual machine (https://github.com/ansible-collections/community.vmware/pull/867).

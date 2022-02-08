@@ -71,6 +71,9 @@ Parameters
                 </td>
                 <td>
                         <div>Cluster to deploy to.</div>
+                        <div>This is a required parameter, if <code>esxi_hostname</code> is not set and <code>hostname</code> is set to the vCenter server.</div>
+                        <div><code>esxi_hostname</code> and <code>cluster</code> are mutually exclusive parameters.</div>
+                        <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
@@ -145,6 +148,25 @@ Parameters
                 </td>
                 <td>
                         <div>Disk provisioning type.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>esxi_hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ESXi hostname where the virtual machine will run.</div>
+                        <div>This is a required parameter, if <code>cluster</code> is not set and <code>hostname</code> is set to the vCenter server.</div>
+                        <div><code>esxi_hostname</code> and <code>cluster</code> are mutually exclusive parameters.</div>
+                        <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
@@ -506,6 +528,16 @@ Examples
         networks: "{u'VM Network':u'{{ ProvisioningNetworkLabel }}'}"
         power_on: no
         ovf: /absolute/path/to/template/mytemplate.ova
+      delegate_to: localhost
+
+    - community.vmware.vmware_deploy_ovf:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter: Datacenter1
+        esxi_hostname: test-server
+        datastore: test-datastore
+        ovf: /path/to/ubuntu-16.04-amd64.ovf
       delegate_to: localhost
 
 

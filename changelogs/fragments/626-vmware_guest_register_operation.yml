@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_register_operation - supported the check_mode

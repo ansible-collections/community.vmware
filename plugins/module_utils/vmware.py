@@ -51,7 +51,66 @@ class TaskError(Exception):
         super(TaskError, self).__init__(*args, **kwargs)
 
 
-def wait_for_task(task, max_backoff=64, timeout=3600):
+def check_answer_question_status(vm):
+    """Check whether locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+
+    Returns: bool
+    """
+    if hasattr(vm, "runtime") and vm.runtime.question:
+        return True
+
+    return False
+
+
+def make_answer_response(vm, answers):
+    """Make the response contents to answer against locked a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        answers: Answer contents
+
+    Returns: Dict with answer id and number
+    Raises: TaskError on failure
+    """
+    response_list = {}
+    for message in vm.runtime.question.message:
+        response_list[message.id] = {}
+        for choice in vm.runtime.question.choice.choiceInfo:
+            response_list[message.id].update({
+                choice.label: choice.key
+            })
+
+    responses = []
+    try:
+        for answer in answers:
+            responses.append({
+                "id": vm.runtime.question.id,
+                "response_num": response_list[answer["question"]][answer["response"]]
+            })
+    except Exception:
+        raise TaskError("not found %s or %s or both in the response list" % (answer["question"], answer["response"]))
+
+    return responses
+
+
+def answer_question(vm, responses):
+    """Answer against the question for unlocking a virtual machine.
+
+    Args:
+        vm: Virtual machine management object
+        responses: Answer contents to unlock a virtual machine
+    """
+    for response in responses:
+        try:
+            vm.AnswerVM(response["id"], response["response_num"])
+        except Exception as e:
+            raise TaskError("answer failed: %s" % to_text(e))
+
+
+def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
     """Wait for given task using exponential back-off algorithm.
 
     Args:
@@ -66,6 +125,12 @@ def wait_for_task(task, max_backoff=64, timeout=3600):
     start_time = time.time()
 
     while True:
+        if check_answer_question_status(vm):
+            if answers:
+                responses = make_answer_response(vm, answers)
+                answer_question(vm, responses)
+            else:
+                raise TaskError("%s" % to_text(vm.runtime.question.text))
         if time.time() - start_time >= timeout:
             raise TaskError("Timeout")
         if task.info.state == vim.TaskInfo.State.success:
@@ -136,8 +201,11 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
 
     objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
     for obj in objects:
-        if unquote(obj.name) == name:
-            return obj
+        try:
+            if unquote(obj.name) == name:
+                return obj
+        except vmodl.fault.ManagedObjectNotFound:
+            pass
 
     return None
 
@@ -164,7 +232,7 @@ def get_parent_datacenter(obj):
     while True:
         if not hasattr(obj, 'parent'):
             break
-        obj = obj.parent
+        obj = obj.parent or obj.parentVApp
         if isinstance(obj, vim.Datacenter):
             datacenter = obj
             break
@@ -177,6 +245,53 @@ def find_datastore_by_name(content, datastore_name, datacenter_name=None):
 
 def find_folder_by_name(content, folder_name):
     return find_object_by_name(content, folder_name, [vim.Folder])
+
+
+def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=None):
+    """
+    Find the folder by its given fully qualified path name.
+    The Fully Qualified Path Name is I(datacenter)/I(folder type)/folder name/
+    for example - Lab/vm/someparent/myfolder is a vm folder in the Lab datacenter.
+    """
+    # Remove leading/trailing slashes and create list of subfolders
+    folder = folder_name.strip('/')
+    folder_parts = folder.strip('/').split('/')
+
+    # Process datacenter
+    if len(folder_parts) > 0:
+        if not datacenter_name:
+            datacenter_name = folder_parts[0]
+        if datacenter_name == folder_parts[0]:
+            folder_parts.pop(0)
+    datacenter = find_datacenter_by_name(content, datacenter_name)
+    if not datacenter:
+        return None
+
+    # Process folder type
+    if len(folder_parts) > 0:
+        if not folder_type:
+            folder_type = folder_parts[0]
+        if folder_type == folder_parts[0]:
+            folder_parts.pop(0)
+    if folder_type in ['vm', 'host', 'datastore', 'network']:
+        parent_obj = getattr(datacenter, "%sFolder" % folder_type.lower())
+    else:
+        return None
+
+    # Process remaining subfolders
+    if len(folder_parts) > 0:
+        for part in folder_parts:
+            folder_obj = None
+            for part_obj in parent_obj.childEntity:
+                if part_obj.name == part and 'Folder' in part_obj.childType:
+                    folder_obj = part_obj
+                    parent_obj = part_obj
+                    break
+            if not folder_obj:
+                return None
+    else:
+        folder_obj = parent_obj
+    return folder_obj
 
 
 def find_dvs_by_name(content, switch_name, folder=None):
@@ -196,7 +311,7 @@ def find_resource_pool_by_cluster(content, resource_pool_name='Resources', clust
 
 
 def find_network_by_name(content, network_name, datacenter_name=None):
-    return find_object_by_name(content, quote_obj_name(network_name), [vim.Network], datacenter_name)
+    return find_object_by_name(content, network_name, [vim.Network], datacenter_name)
 
 
 def find_vm_by_id(content, vm_id, vm_id_type="vm_name", datacenter=None,
@@ -306,7 +421,8 @@ def gather_vm_facts(content, vm):
         'instance_uuid': vm.config.instanceUuid,
         'guest_tools_status': _get_vm_prop(vm, ('guest', 'toolsRunningStatus')),
         'guest_tools_version': _get_vm_prop(vm, ('guest', 'toolsVersion')),
-        'guest_question': vm.summary.runtime.question,
+        'guest_question': json.loads(json.dumps(vm.summary.runtime.question, cls=VmomiSupport.VmomiJSONEncoder,
+                                                sort_keys=True, strip_dynamic=True)),
         'guest_consolidation_needed': vm.summary.runtime.consolidationNeeded,
         'ipv4': None,
         'ipv6': None,
@@ -648,7 +764,10 @@ def get_all_objs(content, vimtype, folder=None, recurse=True):
     obj = {}
     container = content.viewManager.CreateContainerView(folder, vimtype, recurse)
     for managed_object_ref in container.view:
-        obj.update({managed_object_ref: managed_object_ref.name})
+        try:
+            obj.update({managed_object_ref: managed_object_ref.name})
+        except vmodl.fault.ManagedObjectNotFound:
+            pass
     return obj
 
 
@@ -773,7 +892,7 @@ def find_host_by_cluster_datacenter(module, content, datacenter_name, cluster_na
     return None, cluster
 
 
-def set_vm_power_state(content, vm, state, force, timeout=0):
+def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
     """
     Set the power status for a VM determined by the current and
     requested states. force is forceful
@@ -845,12 +964,17 @@ def set_vm_power_state(content, vm, state, force, timeout=0):
             result['msg'] = to_text(e)
 
         if task:
-            wait_for_task(task)
-            if task.info.state == 'error':
+            try:
+                wait_for_task(task, vm=vm, answers=answers)
+            except TaskError as e:
                 result['failed'] = True
-                result['msg'] = task.info.error.msg
-            else:
-                result['changed'] = True
+                result['msg'] = to_text(e)
+            finally:
+                if task.info.state == 'error':
+                    result['failed'] = True
+                    result['msg'] = task.info.error.msg
+                else:
+                    result['changed'] = True
 
     # need to get new metadata if changed
     result['instance'] = gather_vm_facts(content, vm)
@@ -937,6 +1061,13 @@ def quote_obj_name(object_name=None):
             object_name = object_name.replace(key, SPECIAL_CHARS[key])
 
     return object_name
+
+
+def dvs_supports_mac_learning(dvs):
+    """
+    Test if the switch supports MAC learning
+    """
+    return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and dvs.capability.featuresSupported.macLearningSupported
 
 
 class PyVmomi(object):
@@ -1113,6 +1244,10 @@ class PyVmomi(object):
                     vm_obj = vms[0]
         elif 'moid' in self.params and self.params['moid']:
             vm_obj = VmomiSupport.templateOf('VirtualMachine')(self.params['moid'], self.si._stub)
+            try:
+                getattr(vm_obj, 'name')
+            except vmodl.fault.ManagedObjectNotFound:
+                vm_obj = None
 
         if vm_obj:
             self.current_vm_obj = vm_obj
@@ -1417,6 +1552,21 @@ class PyVmomi(object):
         """
         return find_folder_by_name(self.content, folder_name=folder_name)
 
+    def find_folder_by_fqpn(self, folder_name, datacenter_name=None, folder_type=None):
+        """
+        Get a unique folder managed object by specifying its Fully Qualified Path Name
+        as datacenter/folder_type/sub1/sub2
+        Args:
+            folder_name: Fully Qualified Path Name folder name
+            datacenter_name: Name of the datacenter, taken from Fully Qualified Path Name if not defined
+            folder_type: Type of folder, vm, host, datastore or network,
+                         taken from Fully Qualified Path Name if not defined
+
+        Returns: folder managed object if found, else None
+
+        """
+        return find_folder_by_fqpn(self.content, folder_name=folder_name, datacenter_name=datacenter_name, folder_type=folder_type)
+
     # Datastore cluster
     def find_datastore_cluster_by_name(self, datastore_cluster_name, datacenter=None, folder=None):
         """
@@ -1483,7 +1633,7 @@ class PyVmomi(object):
         return None
 
     # Resource pool
-    def find_resource_pool_by_name(self, resource_pool_name, folder=None):
+    def find_resource_pool_by_name(self, resource_pool_name='Resources', folder=None):
         """
         Get resource pool managed object by name
         Args:
@@ -1752,3 +1902,25 @@ class PyVmomi(object):
             cur = cur.parent
             full_path = '/' + cur.name + full_path
         return full_path
+
+    def find_obj_by_moid(self, object_type, moid):
+        """
+        Get Managed Object based on an object type and moid.
+        If you'd like to search for a virtual machine, recommended you use get_vm method.
+
+        Args:
+          - object_type: Managed Object type
+                It is possible to specify types the following.
+                ["Datacenter", "ClusterComputeResource", "ResourcePool", "Folder", "HostSystem",
+                 "VirtualMachine", "DistributedVirtualSwitch", "DistributedVirtualPortgroup", "Datastore"]
+          - moid: moid of Managed Object
+        :return: Managed Object if it exists else None
+        """
+
+        obj = VmomiSupport.templateOf(object_type)(moid, self.si._stub)
+        try:
+            getattr(obj, 'name')
+        except vmodl.fault.ManagedObjectNotFound:
+            obj = None
+
+        return obj

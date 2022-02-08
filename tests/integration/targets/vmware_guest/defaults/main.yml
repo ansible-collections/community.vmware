@@ -19,6 +19,7 @@ vmware_guest_test_playbooks:
   - mac_address_d1_c1_f0.yml
   - max_connections.yml
   - mem_reservation.yml
+  - multiple_disk_controllers_d1_c1_f0.yml
   - network_negative_test.yml
   - network_with_device.yml
 # Currently, VCSIM doesn't support DVPG (as portkeys are not available) so commenting this test
@@ -32,3 +33,4 @@ vmware_guest_test_playbooks:
   - reconfig_vm_to_latest_version.yml
   - remove_vm_from_inventory.yml
   - create_vm_using_special_characters.yml
+  - advanced_settings.yml

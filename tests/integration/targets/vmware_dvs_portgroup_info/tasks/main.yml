@@ -37,6 +37,59 @@
         that:
           - dvs_results.dvs_portgroup_info is defined
 
+    # https://github.com/ansible-collections/community.vmware/pull/648
+    - name: The test for the dvportgroup with special characters
+      block:
+        - name: Create dvPortGroup with special characters
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: "{{ dvswitch1 }}"
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: present
+          register: create_dvportgroup_with_special_characters_result
+
+        - name: Make sure if the dvportgroup name with special characters is created
+          assert:
+            that:
+              - create_dvportgroup_with_special_characters_result.changed is sameas true
+
+        - <<: *dvs_info
+
+        - name: Make sure if the dvportgroup name with special characters exists
+          assert:
+            that:
+              - >-
+               dvs_results.dvs_portgroup_info.{{ dvswitch1 }}
+               | map(attribute='portgroup_name')
+               | select('==', 'dvportgroup\/%')
+               | list
+               | length == 1
+
+        - name: Delete dvPortGroup with special characters
+          vmware_dvs_portgroup:
+            hostname: "{{ vcenter_hostname }}"
+            username: "{{ vcenter_username }}"
+            password: "{{ vcenter_password }}"
+            validate_certs: false
+            switch_name: "{{ dvswitch1 }}"
+            portgroup_name: 'dvportgroup\/%'
+            vlan_id: 1
+            num_ports: 8
+            portgroup_type: earlyBinding
+            state: absent
+          register: delete_dvportgroup_with_special_characters_result
+
+        - name: Make sure if the dvportgroup is deleted
+          assert:
+            that:
+              - delete_dvportgroup_with_special_characters_result.changed is sameas true
+
 # Testcase 0002: Get portgroup info for a given dvswitch
 - name: get info for a given dvswitch
   vmware_dvs_portgroup_info:

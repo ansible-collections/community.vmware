@@ -19,7 +19,7 @@ author:
     - Joseph Callen (@jcpowermac)
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 notes:
-    - Tested on vSphere 5.5, 6.5
+    - Tested on vSphere 7.0
 requirements:
     - "python >= 2.6"
     - PyVmomi
@@ -45,17 +45,35 @@ options:
     num_ports:
         description:
             - The number of ports the portgroup should contain.
-        required: True
         type: int
     portgroup_type:
         description:
             - See VMware KB 1022312 regarding portgroup types.
-        required: True
+            - Deprecated. Will be removed 2021-12-01.
         choices:
             - 'earlyBinding'
             - 'lateBinding'
             - 'ephemeral'
         type: str
+    port_binding:
+        description:
+            - The type of port binding determines when ports in a port group are assigned to virtual machines.
+            - See VMware KB 1022312 U(https://kb.vmware.com/s/article/1022312) for more details.
+        type: str
+        choices:
+            - 'static'
+            - 'ephemeral'
+        version_added: '1.10.0'
+    port_allocation:
+        description:
+            - Elastic port groups automatically increase or decrease the number of ports as needed.
+            - Only valid if I(port_binding) is set to C(static).
+            - Will be C(elastic) if not specified and I(port_binding) is set to C(static).
+        type: str
+        choices:
+            - 'elastic'
+            - 'fixed'
+        version_added: '1.10.0'
     state:
         description:
             - Determines if the portgroup should be present or not.
@@ -78,6 +96,31 @@ options:
         required: False
         default: False
         type: bool
+    mac_learning:
+        description:
+            - Dictionary which configures MAC learning for portgroup.
+        suboptions:
+            allow_unicast_flooding:
+                type: bool
+                description: The flag to allow flooding of unlearned MAC for ingress traffic.
+                required: False
+            enabled:
+                type: bool
+                description: The flag to indicate if source MAC address learning is allowed.
+                required: False
+            limit:
+                type: int
+                description: The maximum number of MAC addresses that can be learned.
+                required: False
+            limit_policy:
+                type: str
+                description: The default switching policy after MAC limit is exceeded.
+                required: False
+                choices:
+                    - 'allow'
+                    - 'drop'
+        type: dict
+        version_added: '1.10.0'
     network_policy:
         description:
             - Dictionary which configures the different security values for portgroup.
@@ -126,16 +169,26 @@ options:
                 description:
                 - Indicate whether or not the teaming policy is applied to inbound frames as well.
                 type: bool
-                default: False
             rolling_order:
                 description:
                 - Indicate whether or not to use a rolling policy when restoring links.
                 default: False
                 type: bool
+            active_uplinks:
+                description:
+                - List of active uplinks used for load balancing.
+                type: list
+                elements: str
+                version_added: '1.10.0'
+            standby_uplinks:
+                description:
+                - List of standby uplinks used for failover.
+                type: list
+                elements: str
+                version_added: '1.10.0'
         default: {
             'notify_switches': True,
             'load_balance_policy': 'loadbalance_srcid',
-            'inbound_policy': False,
             'rolling_order': False
         }
         type: dict
@@ -228,7 +281,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 123
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -242,7 +295,7 @@ EXAMPLES = r'''
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: True
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -256,7 +309,7 @@ EXAMPLES = r'''
     vlan_id: 1001
     vlan_private: True
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -269,7 +322,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 0
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   delegate_to: localhost
 
@@ -282,7 +335,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     vlan_id: 123
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -311,6 +364,7 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
+    dvs_supports_mac_learning,
     find_dvs_by_name,
     find_dvspg_by_name,
     vmware_argument_spec,
@@ -322,6 +376,18 @@ class VMwareDvsPortgroup(PyVmomi):
         super(VMwareDvsPortgroup, self).__init__(module)
         self.dvs_portgroup = None
         self.dv_switch = None
+
+        # Some sanity checks
+        if self.module.params['port_allocation'] == 'elastic':
+            if self.module.params['port_binding'] == 'ephemeral':
+                self.module.fail_json(
+                    msg="'elastic' port allocation is not supported on an 'ephemeral' portgroup."
+                )
+
+            if self.module.params['num_ports']:
+                self.module.fail_json(
+                    msg="The number of ports cannot be configured when port allocation is set to 'elastic'."
+                )
 
     def create_vlan_list(self):
         vlan_id_list = []
@@ -357,7 +423,9 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # Basic config
         config.name = self.module.params['portgroup_name']
-        config.numPorts = self.module.params['num_ports']
+
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
+            config.numPorts = self.module.params['num_ports']
 
         # Default port config
         config.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
@@ -377,18 +445,49 @@ class VMwareDvsPortgroup(PyVmomi):
         else:
             config.defaultPortConfig.vlan = vim.dvs.VmwareDistributedVirtualSwitch.VlanIdSpec()
             config.defaultPortConfig.vlan.vlanId = int(self.module.params['vlan_id'])
+
         config.defaultPortConfig.vlan.inherited = False
-        config.defaultPortConfig.securityPolicy = vim.dvs.VmwareDistributedVirtualSwitch.SecurityPolicy()
-        config.defaultPortConfig.securityPolicy.allowPromiscuous = vim.BoolPolicy(value=self.module.params['network_policy']['promiscuous'])
-        config.defaultPortConfig.securityPolicy.forgedTransmits = vim.BoolPolicy(value=self.module.params['network_policy']['forged_transmits'])
-        config.defaultPortConfig.securityPolicy.macChanges = vim.BoolPolicy(value=self.module.params['network_policy']['mac_changes'])
+
+        # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
+        if dvs_supports_mac_learning(self.dv_switch):
+            config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
+            config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
+            config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
+            config.defaultPortConfig.macManagementPolicy.macChanges = self.module.params['network_policy']['mac_changes']
+
+            macLearning = self.module.params['mac_learning']
+            if macLearning:
+                macLearningPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacLearningPolicy()
+                if macLearning['allow_unicast_flooding'] is not None:
+                    macLearningPolicy.allowUnicastFlooding = macLearning['allow_unicast_flooding']
+                if macLearning['enabled'] is not None:
+                    macLearningPolicy.enabled = macLearning['enabled']
+                if macLearning['limit'] is not None:
+                    macLearningPolicy.limit = macLearning['limit']
+                if macLearning['limit_policy']:
+                    macLearningPolicy.limitPolicy = macLearning['limit_policy']
+                config.defaultPortConfig.macManagementPolicy.macLearningPolicy = macLearningPolicy
+        else:
+            config.defaultPortConfig.securityPolicy = vim.dvs.VmwareDistributedVirtualSwitch.SecurityPolicy()
+            config.defaultPortConfig.securityPolicy.allowPromiscuous = vim.BoolPolicy(value=self.module.params['network_policy']['promiscuous'])
+            config.defaultPortConfig.securityPolicy.forgedTransmits = vim.BoolPolicy(value=self.module.params['network_policy']['forged_transmits'])
+            config.defaultPortConfig.securityPolicy.macChanges = vim.BoolPolicy(value=self.module.params['network_policy']['mac_changes'])
 
         # Teaming Policy
         teamingPolicy = vim.dvs.VmwareDistributedVirtualSwitch.UplinkPortTeamingPolicy()
         teamingPolicy.policy = vim.StringPolicy(value=self.module.params['teaming_policy']['load_balance_policy'])
-        teamingPolicy.reversePolicy = vim.BoolPolicy(value=self.module.params['teaming_policy']['inbound_policy'])
+        if self.module.params['teaming_policy']['inbound_policy'] is not None:
+            teamingPolicy.reversePolicy = vim.BoolPolicy(value=self.module.params['teaming_policy']['inbound_policy'])
         teamingPolicy.notifySwitches = vim.BoolPolicy(value=self.module.params['teaming_policy']['notify_switches'])
         teamingPolicy.rollingOrder = vim.BoolPolicy(value=self.module.params['teaming_policy']['rolling_order'])
+
+        if self.module.params['teaming_policy']['active_uplinks'] or self.module.params['teaming_policy']['standby_uplinks']:
+            teamingPolicy.uplinkPortOrder = vim.dvs.VmwareDistributedVirtualSwitch.UplinkPortOrderPolicy()
+            if self.module.params['teaming_policy']['active_uplinks']:
+                teamingPolicy.uplinkPortOrder.activeUplinkPort = self.module.params['teaming_policy']['active_uplinks']
+            if self.module.params['teaming_policy']['standby_uplinks']:
+                teamingPolicy.uplinkPortOrder.standbyUplinkPort = self.module.params['teaming_policy']['standby_uplinks']
+
         config.defaultPortConfig.uplinkTeamingPolicy = teamingPolicy
 
         # PG policy (advanced_policy)
@@ -406,7 +505,19 @@ class VMwareDvsPortgroup(PyVmomi):
         config.policy.vlanOverrideAllowed = self.module.params['port_policy']['vlan_override']
 
         # PG Type
-        config.type = self.module.params['portgroup_type']
+        # NOTE: 'portgroup_type' is deprecated.
+        if self.module.params['portgroup_type']:
+            config.type = self.module.params['portgroup_type']
+        elif self.module.params['port_binding'] == 'ephemeral':
+            config.type = 'ephemeral'
+        else:
+            config.type = 'earlyBinding'
+
+        if self.module.params['port_allocation']:
+            if self.module.params['port_allocation'] == 'elastic':
+                config.autoExpand = True
+            else:
+                config.autoExpand = False
 
         return config
 
@@ -491,9 +602,9 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'absent'
 
         # Check config
-        # Basic config
-        if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
-            return 'update'
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
+            if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
+                return 'update'
 
         # Default port config
         defaultPortConfig = self.dvs_portgroup.config.defaultPortConfig
@@ -513,17 +624,48 @@ class VMwareDvsPortgroup(PyVmomi):
             if defaultPortConfig.vlan.vlanId != int(self.module.params['vlan_id']):
                 return 'update'
 
-        if defaultPortConfig.securityPolicy.allowPromiscuous.value != self.module.params['network_policy']['promiscuous'] or \
-                defaultPortConfig.securityPolicy.forgedTransmits.value != self.module.params['network_policy']['forged_transmits'] or \
-                defaultPortConfig.securityPolicy.macChanges.value != self.module.params['network_policy']['mac_changes']:
-            return 'update'
+        # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
+        if dvs_supports_mac_learning(self.dv_switch):
+            if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
+                    defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
+                    defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:
+                return 'update'
+
+            macLearning = self.module.params['mac_learning']
+            if macLearning:
+                macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
+                if macLearning['allow_unicast_flooding'] is not None and macLearningPolicy.allowUnicastFlooding != macLearning['allow_unicast_flooding']:
+                    return 'update'
+                if macLearning['enabled'] is not None and macLearningPolicy.enabled != macLearning['enabled']:
+                    return 'update'
+                if macLearning['limit'] is not None and macLearningPolicy.limit != macLearning['limit']:
+                    return 'update'
+                if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
+                    return 'update'
+        else:
+            if defaultPortConfig.securityPolicy.allowPromiscuous.value != self.module.params['network_policy']['promiscuous'] or \
+                    defaultPortConfig.securityPolicy.forgedTransmits.value != self.module.params['network_policy']['forged_transmits'] or \
+                    defaultPortConfig.securityPolicy.macChanges.value != self.module.params['network_policy']['mac_changes']:
+                return 'update'
 
         # Teaming Policy
         teamingPolicy = self.dvs_portgroup.config.defaultPortConfig.uplinkTeamingPolicy
+
+        if self.module.params['teaming_policy']['inbound_policy'] is not None and \
+                teamingPolicy.reversePolicy.value != self.module.params['teaming_policy']['inbound_policy']:
+            return 'update'
+
         if teamingPolicy.policy.value != self.module.params['teaming_policy']['load_balance_policy'] or \
-                teamingPolicy.reversePolicy.value != self.module.params['teaming_policy']['inbound_policy'] or \
                 teamingPolicy.notifySwitches.value != self.module.params['teaming_policy']['notify_switches'] or \
                 teamingPolicy.rollingOrder.value != self.module.params['teaming_policy']['rolling_order']:
+            return 'update'
+
+        if self.module.params['teaming_policy']['active_uplinks'] and \
+                teamingPolicy.uplinkPortOrder.activeUplinkPort != self.module.params['teaming_policy']['active_uplinks']:
+            return 'update'
+
+        if self.module.params['teaming_policy']['standby_uplinks'] and \
+                teamingPolicy.uplinkPortOrder.standbyUplinkPort != self.module.params['teaming_policy']['standby_uplinks']:
             return 'update'
 
         # PG policy (advanced_policy)
@@ -542,8 +684,22 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'update'
 
         # PG Type
-        if self.dvs_portgroup.config.type != self.module.params['portgroup_type']:
+        # NOTE: 'portgroup_type' is deprecated.
+        if self.module.params['portgroup_type']:
+            if self.dvs_portgroup.config.type != self.module.params['portgroup_type']:
+                return 'update'
+        elif self.module.params['port_binding'] == 'ephemeral':
+            if self.dvs_portgroup.config.type != 'ephemeral':
+                return 'update'
+        elif self.dvs_portgroup.config.type != 'earlyBinding':
             return 'update'
+
+        # Check port allocation
+        if self.module.params['port_allocation']:
+            if self.module.params['port_allocation'] == 'elastic' and self.dvs_portgroup.config.autoExpand is False:
+                return 'update'
+            elif self.module.params['port_allocation'] == 'fixed' and self.dvs_portgroup.config.autoExpand is True:
+                return 'update'
 
         return 'present'
 
@@ -555,8 +711,15 @@ def main():
             portgroup_name=dict(required=True, type='str'),
             switch_name=dict(required=True, type='str'),
             vlan_id=dict(required=True, type='str'),
-            num_ports=dict(required=True, type='int'),
-            portgroup_type=dict(required=True, choices=['earlyBinding', 'lateBinding', 'ephemeral'], type='str'),
+            num_ports=dict(type='int'),
+            portgroup_type=dict(
+                type='str',
+                choices=['earlyBinding', 'lateBinding', 'ephemeral'],
+                removed_at_date='2021-12-01',
+                removed_from_collection='community.vmware',
+            ),
+            port_binding=dict(type='str', choices=['static', 'ephemeral']),
+            port_allocation=dict(type='str', choices=['fixed', 'elastic']),
             state=dict(required=True, choices=['present', 'absent'], type='str'),
             vlan_trunk=dict(type='bool', default=False),
             vlan_private=dict(type='bool', default=False),
@@ -576,7 +739,7 @@ def main():
             teaming_policy=dict(
                 type='dict',
                 options=dict(
-                    inbound_policy=dict(type='bool', default=False),
+                    inbound_policy=dict(type='bool'),
                     notify_switches=dict(type='bool', default=True),
                     rolling_order=dict(type='bool', default=False),
                     load_balance_policy=dict(type='str',
@@ -588,10 +751,11 @@ def main():
                                                  'loadbalance_loadbased',
                                                  'failover_explicit',
                                              ],
-                                             )
+                                             ),
+                    active_uplinks=dict(type='list', elements='str'),
+                    standby_uplinks=dict(type='list', elements='str'),
                 ),
                 default=dict(
-                    inbound_policy=False,
                     notify_switches=True,
                     rolling_order=False,
                     load_balance_policy='loadbalance_srcid',
@@ -624,14 +788,28 @@ def main():
                     uplink_teaming_override=False,
                     vendor_config_override=False,
                     vlan_override=False
-                )
+                ),
+            ),
+            mac_learning=dict(
+                type='dict',
+                options=dict(
+                    allow_unicast_flooding=dict(type='bool'),
+                    enabled=dict(type='bool'),
+                    limit=dict(type='int'),
+                    limit_policy=dict(type='str', choices=['allow', 'drop']),
+                ),
             )
         )
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
+                           required_one_of=[
+                               ['portgroup_type', 'port_binding'],
+                           ],
                            mutually_exclusive=[
-                               ['vlan_trunk', 'vlan_private']
+                               ['portgroup_type', 'port_binding'],
+                               ['portgroup_type', 'port_allocation'],
+                               ['vlan_trunk', 'vlan_private'],
                            ],
                            supports_check_mode=True)
 

@@ -71,6 +71,7 @@
       - iscsi_info_result.iscsi_properties.iscsi_static_targets[0].iscsi_name == 'iqn.2011-08.com.xxxxxxx:as6104t-8c3e9d.target001'
       - iscsi_info_result.iscsi_properties.port_bind[0] == 'vmk0'
       - iscsi_info_result.iscsi_properties.vmhba_name is defined
+      - iscsi_info_result.detected_iscsi_drives is defined
 
 - name: Remove dynamic and static targets iSCSI config from ESXi
   vmware_host_iscsi:
@@ -109,3 +110,17 @@
 - assert:
     that:
       - disable_iscsi_result.changed is sameas true
+
+- name: Gather iSCSI configuration when ESXi host with iSCSI disabled
+  vmware_host_iscsi_info:
+    hostname: "{{ hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+  register: dsabled_iscsi_info_result
+
+- assert:
+    that:
+      - dsabled_iscsi_info_result.iscsi_properties.iscsi_enabled is sameas false
+      - dsabled_iscsi_info_result.detected_iscsi_drives is defined

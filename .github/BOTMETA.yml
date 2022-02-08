@@ -5,7 +5,7 @@ files:
   $connection/:
     labels: connection
   $modules/:
-    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte
+    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte lparkes
     keywords:
     - esx
     - vcenter
@@ -16,7 +16,7 @@ files:
     - cloud
     - vmware
     maintainers: $team_vmware
-    notified: lparkes
+    notified:
   $modules/vmware_deploy_ovf.py:
     ignored: sivel
   $httpapi:
@@ -66,7 +66,7 @@ files:
     keywords:
     - vmware inventory
     - vmware dynamic inventory plugin
-    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte
+    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte lparkes
   tests/:
     labels: tests
   tests/integration/:

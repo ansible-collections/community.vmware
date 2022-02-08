@@ -52,7 +52,7 @@ Parameters
                 </td>
                 <td>
                         <div>Name of the cluster to configure the resource pool.</div>
-                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
+                        <div>This parameter is required if <code>esxi_hostname</code> or <code>parent_resource_pool</code> is not specified.</div>
                 </td>
             </tr>
             <tr>
@@ -177,7 +177,7 @@ Parameters
                 <td>
                         <div>Name of the host to configure the resource pool.</div>
                         <div>The host must not be member of a cluster.</div>
-                        <div>This parameter is required if <code>cluster</code> is not specified.</div>
+                        <div>This parameter is required if <code>cluster</code> or <code>parent_resource_pool</code> is not specified.</div>
                 </td>
             </tr>
             <tr>
@@ -286,6 +286,23 @@ Parameters
                 </td>
                 <td>
                         <div>Memory shares are used in case of resource contention.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>parent_resource_pool</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the parent resource pool.</div>
+                        <div>This parameter is required if <code>cluster</code> or <code>esxi_hostname</code> is not specified.</div>
                 </td>
             </tr>
             <tr>

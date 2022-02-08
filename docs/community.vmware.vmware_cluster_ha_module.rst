@@ -114,7 +114,7 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable_ha</b>
+                    <b>enable</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -128,6 +128,7 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to enable HA.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: enable_ha</div>
                 </td>
             </tr>
             <tr>
@@ -184,7 +185,7 @@ Parameters
                         <div>Whether HA restarts virtual machines after a host fails.</div>
                         <div>If set to <code>enabled</code>, HA restarts virtual machines after a host fails.</div>
                         <div>If set to <code>disabled</code>, HA does not restart virtual machines after a host fails.</div>
-                        <div>If <code>enable_ha</code> is set to <code>False</code>, then this value is ignored.</div>
+                        <div>If <code>enable</code> is set to <code>False</code>, then this value is ignored.</div>
                 </td>
             </tr>
             <tr>
@@ -306,7 +307,7 @@ Parameters
                         <div>If set to <code>vmAndAppMonitoring</code>, HA response to both virtual machine and application heartbeat failure.</div>
                         <div>If set to <code>vmMonitoringDisabled</code>, virtual machine health monitoring is disabled.</div>
                         <div>If set to <code>vmMonitoringOnly</code>, HA response to virtual machine heartbeat failure.</div>
-                        <div>If <code>enable_ha</code> is set to <code>False</code>, then this value is ignored.</div>
+                        <div>If <code>enable</code> is set to <code>False</code>, then this value is ignored.</div>
                 </td>
             </tr>
             <tr>
@@ -620,7 +621,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: true
+        enable: true
       delegate_to: localhost
 
     - name: Enable HA and VM monitoring without admission control
@@ -630,7 +631,7 @@ Examples
         password: "{{ vcenter_password }}"
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
-        enable_ha: True
+        enable: True
         ha_vm_monitoring: vmMonitoringOnly
       delegate_to: localhost
 
@@ -641,7 +642,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: datacenter
         cluster_name: cluster
-        enable_ha: true
+        enable: true
         reservation_based_admission_control:
           auto_compute_percentages: False
           failover_level: 1

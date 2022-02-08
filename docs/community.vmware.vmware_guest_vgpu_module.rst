@@ -8,6 +8,7 @@ community.vmware.vmware_guest_vgpu
 **Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure**
 
 
+Version added: 1.9.0
 
 .. contents::
    :local:
@@ -16,8 +17,9 @@ community.vmware.vmware_guest_vgpu
 
 Synopsis
 --------
-- This module is used to reconfigure vGPU card profile of given virtual machine.
+- This module is used to reconfigure vGPU card profile of the given virtual machine.
 - All parameters and VMware object names are case sensitive.
+- VM must be power off :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module can perform that task.
 
 
 
@@ -27,7 +29,6 @@ The below requirements are needed on the host that executes this module.
 
 - python >= 3.6
 - PyVmomi
-- VM must be power off :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module can perform that task.
 
 
 Parameters
@@ -44,6 +45,21 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cluster</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The cluster name where the virtual machine is running.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -56,6 +72,21 @@ Parameters
                 <td>
                         <div>The datacenter name to which virtual machine belongs to.</div>
                         <div>This parameter is case sensitive.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>esxi_hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ESXi hostname where the virtual machine is running.</div>
                 </td>
             </tr>
             <tr>
@@ -83,6 +114,25 @@ Parameters
                         <div>folder: /folder1/datacenter1/vm</div>
                         <div>folder: folder1/datacenter1/vm</div>
                         <div>folder: /folder1/datacenter1/vm/folder2</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>force</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Force operation.</div>
                 </td>
             </tr>
             <tr>
@@ -228,6 +278,25 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>use_instance_uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -316,7 +385,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Add vGPU profile to VM
       community.vmware.vmware_guest_vgpu:
@@ -329,7 +398,7 @@ Examples
         vgpu: 'grid_m10-8q'
         state: present
       delegate_to: localhost
-      register: vgpu_facts
+      register: vgpu_info
 
     - name: Remove vGPU profile to VM
       community.vmware.vmware_guest_vgpu:
@@ -342,7 +411,7 @@ Examples
         vgpu: 'grid_m10-8q'
         state: absent
       delegate_to: localhost
-      register: vgpu_facts
+      register: vgpu_info
 
 
 
@@ -361,7 +430,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>vgpu_facts</b>
+                    <b>vgpu_info</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">dictionary</span>

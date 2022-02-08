@@ -27,7 +27,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: true
+        enable: true
       register: cluster_vsan_result_0001
 
     - name: Ensure vSAN is enabled
@@ -61,7 +61,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: true
+        enable: true
         advanced_options:
           object_repair_timer: 67
       register: cluster_vsan_result_0003
@@ -80,7 +80,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: true
+        enable: true
         advanced_options:
           object_repair_timer: 67
       register: cluster_vsan_result_0004
@@ -99,7 +99,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: false
+        enable: false
       register: cluster_vsan_result_0005
 
     - name: Ensure vSAN is disabled
@@ -116,7 +116,7 @@
         password: "{{ vcenter_password }}"
         datacenter_name: "{{ dc1 }}"
         cluster_name: test_cluster_vsan
-        enable_vsan: false
+        enable: false
       register: cluster_vsan_result_0006
 
     - name: Ensure vSAN is not disabled again

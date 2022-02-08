@@ -17,7 +17,7 @@
     portgroup_name: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0001
 
@@ -29,6 +29,104 @@
     that:
         - dvs_pg_result_0001.changed
 
+- when: vcsim is not defined
+  block:
+    - name: enable MAC learning
+      vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: true
+        state: present
+      register: enable_mac_learning_result
+
+    - debug:
+        var: enable_mac_learning_result
+
+    - name: ensure MAC learning is enabled
+      assert:
+        that:
+            - enable_mac_learning_result.changed
+
+    - name: enable MAC learning again (idempotency)
+      vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: true
+        state: present
+      register: enable_mac_learning_again_result
+
+    - debug:
+        var: enable_mac_learning_again_result
+
+    - name: ensure MAC learning is not enabled again
+      assert:
+        that:
+            - not enable_mac_learning_again_result.changed
+
+    - name: disable MAC learning
+      vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: false
+        state: present
+      register: disable_mac_learning_result
+
+    - debug:
+        var: disable_mac_learning_result
+
+    - name: ensure MAC learning is disabled
+      assert:
+        that:
+            - disable_mac_learning_result.changed
+
+    - name: disable MAC learning again (idempotency)
+      vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: false
+        state: present
+      register: disable_mac_learning_again_result
+
+    - debug:
+        var: disable_mac_learning_again_result
+
+    - name: ensure MAC learning is not disabled again
+      assert:
+        that:
+            - not disable_mac_learning_again_result.changed
+
 - name: create basic VLAN portgroup
   vmware_dvs_portgroup:
     validate_certs: false
@@ -39,7 +137,7 @@
     portgroup_name: "basic-vlan10"
     vlan_id: 10
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0002
 
@@ -59,7 +157,7 @@
     vlan_id: 1-4094
     vlan_trunk: true
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0003
 
@@ -78,7 +176,7 @@
     portgroup_name: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0004
 
@@ -97,7 +195,7 @@
     portgroup_name: "basic-all-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -132,7 +230,7 @@
     portgroup_name: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -157,7 +255,7 @@
     portgroup_name: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -182,7 +280,7 @@
     portgroup_name: "basic-some-enabled"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -207,7 +305,7 @@
     portgroup_name: "basic-some-enabled"
     vlan_id: 0
     num_ports: 16
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     network_policy:
       promiscuous: true
@@ -232,7 +330,7 @@
     portgroup_name: "basic-some-enabled"
     vlan_id: 0
     num_ports: 16
-    portgroup_type: ephemeral
+    port_binding: ephemeral
     state: present
     network_policy:
       promiscuous: true
@@ -257,7 +355,7 @@
     portgroup_name: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: absent
   register: dvs_pg_result_0011
 
@@ -276,7 +374,7 @@
     portgroup_name: "basic"
     vlan_id: 0
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: absent
   register: dvs_pg_result_0012
 
@@ -296,7 +394,7 @@
     vlan_id: 1-4096
     vlan_trunk: true
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0013
   ignore_errors: true
@@ -317,7 +415,7 @@
     portgroup_name: "basic-vlan10"
     vlan_id: 20
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0014
 
@@ -337,7 +435,7 @@
     vlan_id: 1000-2000
     vlan_trunk: true
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0015
 
@@ -357,7 +455,7 @@
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: true
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0016
 
@@ -377,7 +475,7 @@
     vlan_id: 1-1000, 1006, 1100-1200
     vlan_trunk: true
     num_ports: 32
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
   register: dvs_pg_result_0017
 
@@ -396,7 +494,7 @@
     vlan_id: 10
     vlan_private: true
     num_ports: 12
-    portgroup_type: earlyBinding
+    port_binding: static
     state: present
     validate_certs: false
   register: dvs_pg_result_0018
@@ -460,7 +558,7 @@
         vlan_id: 1
         vlan_private: true
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0019
@@ -480,7 +578,7 @@
         vlan_id: 2
         vlan_private: true
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0020
@@ -499,7 +597,7 @@
         switch_name: dvswitch_0001
         vlan_id: 5
         num_ports: 12
-        portgroup_type: earlyBinding
+        port_binding: static
         state: present
         validate_certs: false
       register: dvs_pg_result_0021
@@ -550,7 +648,7 @@
             portgroup_name: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: present
           register: create_dvportgroup_with_special_characters_result
 
@@ -568,7 +666,7 @@
             portgroup_name: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: present
           register: create_dvportgroup_with_special_characters_idempotency_check_result
 
@@ -586,7 +684,7 @@
             portgroup_name: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: absent
           register: delete_dvportgroup_with_special_characters_result
 
@@ -604,7 +702,7 @@
             portgroup_name: 'dvportgroup\/%'
             vlan_id: 1
             num_ports: 8
-            portgroup_type: earlyBinding
+            port_binding: static
             state: absent
           register: delete_dvportgroup_with_special_characters_idempotency_check_result
 
@@ -643,7 +741,7 @@
         vlan_id: "1500,1501"
         vlan_trunk: true
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         network_policy:
           promiscuous: false
           forged_transmits: true
@@ -666,7 +764,7 @@
         vlan_id: "1500,1501"
         vlan_trunk: true
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         network_policy:
           promiscuous: false
           forged_transmits: true
@@ -689,7 +787,7 @@
         vlan_id: "1500,1501"
         vlan_trunk: true
         num_ports: 120
-        portgroup_type: earlyBinding
+        port_binding: static
         network_policy:
           promiscuous: false
           forged_transmits: true

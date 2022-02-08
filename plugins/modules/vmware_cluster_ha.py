@@ -36,17 +36,18 @@ options:
       type: str
       required: true
       aliases: [ datacenter_name ]
-    enable_ha:
+    enable:
       description:
       - Whether to enable HA.
       type: bool
       default: false
+      aliases: [ enable_ha ]
     ha_host_monitoring:
       description:
       - Whether HA restarts virtual machines after a host fails.
       - If set to C(enabled), HA restarts virtual machines after a host fails.
       - If set to C(disabled), HA does not restart virtual machines after a host fails.
-      - If C(enable_ha) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(False), then this value is ignored.
       type: str
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
@@ -56,7 +57,7 @@ options:
       - If set to C(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
       - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
       - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
-      - If C(enable_ha) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(False), then this value is ignored.
       type: str
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'
@@ -200,7 +201,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: true
+    enable: true
   delegate_to: localhost
 
 - name: Enable HA and VM monitoring without admission control
@@ -210,7 +211,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
-    enable_ha: True
+    enable: True
     ha_vm_monitoring: vmMonitoringOnly
   delegate_to: localhost
 
@@ -221,7 +222,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     datacenter_name: datacenter
     cluster_name: cluster
-    enable_ha: true
+    enable: true
     reservation_based_admission_control:
       auto_compute_percentages: False
       failover_level: 1
@@ -255,7 +256,7 @@ class VMwareCluster(PyVmomi):
         super(VMwareCluster, self).__init__(module)
         self.cluster_name = module.params['cluster_name']
         self.datacenter_name = module.params['datacenter']
-        self.enable_ha = module.params['enable_ha']
+        self.enable_ha = module.params['enable']
         self.datacenter = None
         self.cluster = None
         self.host_isolation_response = getattr(vim.cluster.DasVmSettings.IsolationResponse, self.params.get('host_isolation_response'))
@@ -282,6 +283,9 @@ class VMwareCluster(PyVmomi):
             self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option, False)
         else:
             self.changed_advanced_settings = None
+
+        self.module.warn("The default for enable will change from false to true in a future version to make the behavior more consistent with other modules."
+                         "Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
 
     def get_failover_hosts(self):
         """
@@ -395,6 +399,10 @@ class VMwareCluster(PyVmomi):
                     das_vm_config.vmComponentProtectionSettings = vim.cluster.VmComponentProtectionSettings()
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForAPD = self.params.get('apd_response')
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForPDL = self.params.get('pdl_response')
+                    if (self.params['apd_response'] != "disabled" or self.params['pdl_response'] != "disabled"):
+                        cluster_config_spec.dasConfig.vmComponentProtecting = 'enabled'
+                    else:
+                        cluster_config_spec.dasConfig.vmComponentProtecting = 'disabled'
 
                     cluster_config_spec.dasConfig.defaultVmSettings = das_vm_config
 
@@ -451,7 +459,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         # HA
-        enable_ha=dict(type='bool', default=False),
+        enable=dict(type='bool', default=False, aliases=['enable_ha']),
         ha_host_monitoring=dict(type='str',
                                 default='enabled',
                                 choices=['enabled', 'disabled']),

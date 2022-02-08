@@ -2,17 +2,18 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import json
-from units.compat import mock
-from units.compat import unittest
 
-# just for quick local test
-# import unittest
-# from unittest import mock
+
+try:
+    import unittest.mock as mock
+except ImportError:
+    import mock
+import unittest
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
 
-from ansible_collections.community.vmware.plugins.modules.cloud.vmware import vmware_host_sriov
+from ansible_collections.community.vmware.plugins.modules import vmware_host_sriov
 
 
 def gen_mock_attrs(user_input):

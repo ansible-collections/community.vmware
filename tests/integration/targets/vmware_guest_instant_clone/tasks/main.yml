@@ -1,0 +1,388 @@
+# Test code for the vmware_guest_instant_clone Operations.
+# Copyright: (c) 2021, Anant Chopra <chopraan@vmware.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datacenter: true
+    setup_datastore: true
+    setup_resource_pool: true
+
+- name: Create VM
+  community.vmware.vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    guest_id: centos64Guest
+    datastore: "{{ rw_datastore }}"
+    esxi_hostname: "{{ esxi1 }}"
+    datacenter: "{{ dc1 }}"
+    folder: "{{ f0 }}"
+    hardware:
+      num_cpus: 1
+      memory_mb: 512
+    disk:
+      - size: 1gb
+        type: thin
+        autoselect_datastore: true
+    state: poweredon
+  register: create_vm_for_test
+
+- when: vcsim is not defined
+  block:
+  - name: Instant Clone a VM with parent VM
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      datacenter: "{{ dc1 }}"
+      host: "{{ esxi1 }}"
+      name: "cloned_vm_from_vm"
+      parent_vm: "test_vm1"
+      resource_pool: DC0_C0_RP1
+    register: instant_clone_from_vm_parent
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_parent is changed
+
+  - name: Instant Clone a VM when datastore cluster is specified
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      datacenter: "{{ dc1 }}"
+      host: "{{ esxi1 }}"
+      name: "cloned_vm_from_vm_cluster"
+      parent_vm: "test_vm1"
+      resource_pool: DC0_C0_RP1
+    register: instant_clone_from_vm_when_cluster_is_specified
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_when_cluster_is_specified is changed
+
+  - name: set state to poweroff the Cloned VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm_cluster"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_when_cluster
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_when_cluster
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm_cluster"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_when_cluster
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_when_cluster
+
+
+  - name: Instant Clone a VM when skipping optional params
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      name: "cloned_vm_from_vm_optional"
+      parent_vm: "test_vm1"
+      datacenter: "{{ dc1 }}"
+      datastore: "{{ rw_datastore }}"
+      host: "{{ esxi1 }}"
+    register: instant_clone_from_vm_optional_arguments
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_optional_arguments is changed
+
+  - name: set state to poweroff the Cloned VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm_optional"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_optional_arguments
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_optional_arguments
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm_optional"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_optional_arguments
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_optional_arguments
+
+  - name: Instant Clone a VM with moid
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      host:  "{{ esxi1 }}"
+      name: "Instant_cloned_test"
+      moid: "{{ create_vm_for_test.instance.moid }}"
+      resource_pool: DC0_C0_RP1
+    register: instant_clone_from_vm_moid
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_moid is changed
+
+  - name: set state to poweroff the Cloned VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_cloned_test"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_moid
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_moid
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_cloned_test"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_moid
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_moid
+
+  - name: Instant Clone a VM with instance_uuid
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      host:  "{{ esxi1 }}"
+      name: "Instant_cloned_instance_uuid"
+      use_instance_uuid: true
+      uuid: "{{ create_vm_for_test.instance.instance_uuid }}"
+      resource_pool: DC0_C0_RP1
+    register: instant_clone_from_vm_instance_uuid
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_instance_uuid is changed
+
+  - name: set state to poweroff the Cloned VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_cloned_instance_uuid"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_instance_uuid
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_instance_uuid
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "Instant_cloned_instance_uuid"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_instance_uuid
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_instance_uuid
+
+  - name: Instant Clone a VM with uuid
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      datacenter: "{{ dc1 }}"
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      host:  "{{ esxi1 }}"
+      name: "Instant_cloned_uuid"
+      uuid: "{{ create_vm_for_test.instance.hw_product_uuid }}"
+      resource_pool: DC0_C0_RP1
+    register: instant_clone_from_vm_uuid
+
+  - name: assert that changes were made
+    assert:
+      that:
+          - instant_clone_from_vm_uuid is changed
+
+  - name: set state to poweroff the VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: Instant_cloned_uuid
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_uuid
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_uuid
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: Instant_cloned_uuid
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_uuid
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_uuid
+
+  - name: Instant clone in check mode
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      folder: "{{ f0 }}"
+      datastore: "{{ rw_datastore }}"
+      datacenter: "{{ dc1 }}"
+      host: "{{ esxi1 }}"
+      name: "cloned_vm_from_vm_check"
+      parent_vm: "test_vm1"
+      resource_pool: DC0_C0_RP1
+    check_mode: true
+    register: check_mode_instant_clone
+
+  - debug:
+      var: check_mode_instant_clone
+
+  - name:  idempotency check - VM name already exists
+    community.vmware.vmware_guest_instant_clone:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: false
+      name: "cloned_vm_from_vm"
+      parent_vm: "test_vm1"
+      datacenter: "{{ dc1 }}"
+      datastore: "{{ rw_datastore }}"
+      host: "{{ esxi1 }}"
+      resource_pool: DC0_C0_RP1
+      folder: "{{ f0 }}"
+    register: idempotency_check
+
+  - debug:
+      var: idempotency_check
+
+  - name: set state to poweroff the Cloned VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_parent
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_parent
+
+  - name: Clean VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "cloned_vm_from_vm"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: delete_instant_clone_from_vm_parent
+    ignore_errors: true
+
+  - debug: var=delete_instant_clone_from_vm_parent
+
+  - name: set state to poweroff the parent VM
+    community.vmware.vmware_guest_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "test_vm1"
+      folder: "{{ f0 }}"
+      state: powered-off
+    register: poweroff_instant_clone_from_vm_parent
+
+  - debug:
+      var: poweroff_instant_clone_from_vm_parent
+
+  - name: Clean parent VM
+    community.vmware.vmware_guest:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      name: "test_vm1"
+      datacenter: "{{ dc1 }}"
+      state: absent
+    register: clean_parent_vm
+    ignore_errors: true
+
+  - debug: var=clean_parent_vm
+  

@@ -13,6 +13,13 @@ community.vmware.vmware_vmkernel_ip_config
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2021-12-01
+:Why: Deprecated in favour of :ref:`community.vmware.vmware_vmkernel <community.vmware.vmware_vmkernel_module>` module
+:Alternative: Use :ref:`community.vmware.vmware_vmkernel <community.vmware.vmware_vmkernel_module>` instead.
+
+
 
 Synopsis
 --------
@@ -248,6 +255,10 @@ Examples
 
 Status
 ------
+
+
+- This module will be removed in version . *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

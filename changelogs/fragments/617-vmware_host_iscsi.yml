@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_host_iscsi - added a name(iqn) changing option for iSCSI (https://github.com/ansible-collections/community.vmware/pull/617).

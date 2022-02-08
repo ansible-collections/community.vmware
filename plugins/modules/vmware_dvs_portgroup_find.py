@@ -91,6 +91,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec,
     PyVmomi)
+from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
 class DVSPortgroupFindManager(PyVmomi):
@@ -167,14 +168,14 @@ class DVSPortgroupFindManager(PyVmomi):
             if self.cmp_vlans:
                 if self.vlan_match(pg.config.uplink, self.module.params['show_uplink'], vlan_id_list):
                     pglist.append(dict(
-                        name=pg.name,
+                        name=unquote(pg.name),
                         trunk=trunk,
                         pvlan=pvlan,
                         vlan_id=','.join(vlan_id_list),
                         dvswitch=pg.config.distributedVirtualSwitch.name))
             else:
                 pglist.append(dict(
-                    name=pg.name,
+                    name=unquote(pg.name),
                     trunk=trunk,
                     pvlan=pvlan,
                     vlan_id=','.join(vlan_id_list),

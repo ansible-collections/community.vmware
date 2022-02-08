@@ -53,6 +53,7 @@ Parameters
                 </td>
                 <td>
                         <div>The name of the cluster to enable or disable EVC mode on.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: cluster</div>
                 </td>
             </tr>
             <tr>
@@ -69,6 +70,7 @@ Parameters
                 </td>
                 <td>
                         <div>The name of the datacenter the cluster belongs to that you want to enable or disable EVC mode on.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter</div>
                 </td>
             </tr>
             <tr>
@@ -78,7 +80,6 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>

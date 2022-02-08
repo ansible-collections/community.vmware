@@ -62,6 +62,12 @@ options:
       - Name of the destination datastore the virtual machine's vmdk should be moved on.
       aliases: ['datastore']
       type: str
+    destination_datacenter:
+      description:
+      - Name of the destination datacenter the datastore is located on.
+      - Optional, required only when datastores are shared across datacenters.
+      type: str
+      version_added: '1.11.0'
     destination_resourcepool:
       description:
       - Name of the destination resource pool where the virtual machine should be running.
@@ -142,6 +148,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi, find_hostsystem_by_name,
     find_vm_by_id, find_datastore_by_name,
     find_resource_pool_by_name,
+    find_datacenter_by_name,
     vmware_argument_spec, wait_for_task, TaskError)
 
 
@@ -153,6 +160,7 @@ class VmotionManager(PyVmomi):
         self.use_instance_uuid = self.params.get('use_instance_uuid', False)
         self.vm_name = self.params.get('vm_name', None)
         self.moid = self.params.get('moid') or None
+        self.destination_datacenter = self.params.get('destination_datacenter', None)
         result = dict()
 
         self.get_vm()
@@ -166,13 +174,22 @@ class VmotionManager(PyVmomi):
         if dest_host_name is not None:
             self.host_object = find_hostsystem_by_name(content=self.content,
                                                        hostname=dest_host_name)
+            if self.host_object is None:
+                self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
+
+        # Get Datacenter if specified by user
+        dest_datacenter = self.destination_datacenter
+        if dest_datacenter is not None:
+            datacenter_object = find_datacenter_by_name(content=self.content, datacenter_name=dest_datacenter)
+            if datacenter_object:
+                dest_datacenter = datacenter_object
 
         # Get Destination Datastore if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
         self.datastore_object = None
         if dest_datastore is not None:
             self.datastore_object = find_datastore_by_name(content=self.content,
-                                                           datastore_name=dest_datastore)
+                                                           datastore_name=dest_datastore, datacenter_name=dest_datacenter)
 
         # At-least one of datastore, host system is required to migrate
         if self.datastore_object is None and self.host_object is None:
@@ -189,7 +206,7 @@ class VmotionManager(PyVmomi):
             self.resourcepool_object = self.host_object.parent.resourcePool
         # Fail if resourcePool object is not found
         if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to destination resource pool object which is required")
+            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
@@ -338,7 +355,8 @@ def main():
             use_instance_uuid=dict(type='bool', default=False),
             destination_host=dict(aliases=['destination']),
             destination_resourcepool=dict(aliases=['resource_pool']),
-            destination_datastore=dict(aliases=['datastore'])
+            destination_datastore=dict(aliases=['datastore']),
+            destination_datacenter=dict(type='str')
         )
     )
 

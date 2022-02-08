@@ -30,6 +30,17 @@ options:
     cluster:
         description:
         - Cluster to deploy to.
+        - This is a required parameter, if C(esxi_hostname) is not set and C(hostname) is set to the vCenter server.
+        - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+        - This parameter is case sensitive.
+        type: str
+    esxi_hostname:
+        description:
+        - The ESXi hostname where the virtual machine will run.
+        - This is a required parameter, if C(cluster) is not set and C(hostname) is set to the vCenter server.
+        - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+        - This parameter is case sensitive.
+        version_added: '1.9.0'
         type: str
     datastore:
         default: datastore1
@@ -151,6 +162,16 @@ EXAMPLES = r'''
     networks: "{u'VM Network':u'{{ ProvisioningNetworkLabel }}'}"
     power_on: no
     ovf: /absolute/path/to/template/mytemplate.ova
+  delegate_to: localhost
+
+- community.vmware.vmware_deploy_ovf:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: Datacenter1
+    esxi_hostname: test-server
+    datastore: test-datastore
+    ovf: /path/to/ubuntu-16.04-amd64.ovf
   delegate_to: localhost
 '''
 
@@ -321,12 +342,31 @@ class VMwareDeployOvf(PyVmomi):
         self.entity = None
 
     def get_objects(self):
+        # Get datacenter firstly
         self.datacenter = self.find_datacenter_by_name(self.params['datacenter'])
-        if not self.datacenter:
-            self.module.fail_json(msg='%(datacenter)s could not be located' % self.params)
+        if self.datacenter is None:
+            self.module.fail_json(msg="Datacenter '%(datacenter)s' could not be located" % self.params)
+
+        # Get cluster in datacenter if cluster configured
+        if self.params['cluster']:
+            cluster = self.find_cluster_by_name(self.params['cluster'], datacenter_name=self.datacenter)
+            if cluster is None:
+                self.module.fail_json(msg="Unable to find cluster '%(cluster)s'" % self.params)
+            self.resource_pool = self.find_resource_pool_by_cluster(self.params['resource_pool'], cluster=cluster)
+        # Or get ESXi host in datacenter if ESXi host configured
+        elif self.params['esxi_hostname']:
+            host = self.find_hostsystem_by_name(self.params['esxi_hostname'])
+            if host is None:
+                self.module.fail_json(msg="Unable to find host '%(esxi_hostname)s'" % self.params)
+            self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'], folder=host.parent)
+        else:
+            self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'])
+
+        if not self.resource_pool:
+            self.module.fail_json(msg="Resource pool '%(resource_pool)s' could not be located" % self.params)
 
         self.datastore = None
-        datastore_cluster_obj = self.find_datastore_cluster_by_name(self.params['datastore'])
+        datastore_cluster_obj = self.find_datastore_cluster_by_name(self.params['datastore'], datacenter=self.datacenter)
         if datastore_cluster_obj:
             datastore = None
             datastore_freespace = 0
@@ -340,26 +380,15 @@ class VMwareDeployOvf(PyVmomi):
             if datastore:
                 self.datastore = datastore
         else:
-            self.datastore = self.find_datastore_by_name(self.params['datastore'], self.datacenter)
+            self.datastore = self.find_datastore_by_name(self.params['datastore'], datacenter_name=self.datacenter)
 
-        if not self.datastore:
-            self.module.fail_json(msg='%(datastore)s could not be located' % self.params)
-
-        if self.params['cluster']:
-            cluster = self.find_cluster_by_name(self.params['cluster'], datacenter_name=self.datacenter)
-            if cluster is None:
-                self.module.fail_json(msg="Unable to find cluster '%(cluster)s'" % self.params)
-            self.resource_pool = self.find_resource_pool_by_cluster(self.params['resource_pool'], cluster=cluster)
-        else:
-            self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'])
-
-        if not self.resource_pool:
-            self.module.fail_json(msg='%(resource_pool)s could not be located' % self.params)
+        if self.datastore is None:
+            self.module.fail_json(msg="Datastore '%(datastore)s' could not be located on specified ESXi host or datacenter" % self.params)
 
         for key, value in self.params['networks'].items():
             network = find_network_by_name(self.content, value, datacenter_name=self.datacenter)
             if not network:
-                self.module.fail_json(msg='%(network)s could not be located' % self.params)
+                self.module.fail_json(msg='%(networks)s could not be located' % self.params)
             network_mapping = vim.OvfManager.NetworkMapping()
             network_mapping.name = key
             network_mapping.network = network
@@ -610,7 +639,7 @@ class VMwareDeployOvf(PyVmomi):
                     self.module.fail_json(msg='Waiting for IP address timed out')
 
         if not facts:
-            facts.update(gather_vm_facts(self.content, self.entity))
+            facts.update(dict(instance=gather_vm_facts(self.content, self.entity)))
 
         return facts
 
@@ -626,6 +655,9 @@ def main():
             'default': 'ha-datacenter',
         },
         'cluster': {
+            'default': None,
+        },
+        'esxi_hostname': {
             'default': None,
         },
         'deployment_option': {
@@ -693,6 +725,9 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
+        mutually_exclusive=[
+            ['cluster', 'esxi_hostname'],
+        ],
     )
 
     deploy_ovf = VMwareDeployOvf(module)

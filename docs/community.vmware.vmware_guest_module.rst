@@ -1181,6 +1181,27 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>iommu</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Flag to specify if I/O MMU is enabled for this virtual machine.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>max_connections</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -1344,6 +1365,27 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>secure_boot</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to enable or disable (U)EFI secure boot.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -1380,7 +1422,8 @@ Parameters
                 <td>
                         <div>Enable Virtualization Based Security feature for Windows on ESXi 6.7 and later, from hardware version 14.</div>
                         <div>Supported Guest OS are Windows 10 64 bit, Windows Server 2016, Windows Server 2019 and later.</div>
-                        <div>The firmware of virtual machine must be EFI.</div>
+                        <div>The firmware of virtual machine must be EFI and secure boot must be enabled.</div>
+                        <div>Virtualization Based Security depends on nested virtualization and Intel Virtualization Technology for Directed I/O.</div>
                         <div>Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.</div>
                 </td>
             </tr>
@@ -1420,6 +1463,8 @@ Parameters
                 <td>
                         <div>Flag the instance as a template.</div>
                         <div>This will mark the given virtual machine as template.</div>
+                        <div>Note, this may need to be done in a dedicated task invocation that is not making any other changes. For example, user cannot change the state from powered-on to powered-off AND save as template in the same task.</div>
+                        <div>See <span class='module'>community.vmware.vmware_guest</span> source for more details.</div>
                 </td>
             </tr>
             <tr>

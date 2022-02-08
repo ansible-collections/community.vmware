@@ -55,7 +55,7 @@ test_data = [
             hostname='esxi1',
             validate_certs=True,
         ),
-        "Unknown error while connecting to vCenter or ESXi API at esxi1:443"
+        "certificate verify failed"
     ),
     (
         dict(
@@ -121,20 +121,21 @@ def test_required_params(request, params, msg, fake_ansible_module):
     with pytest.raises(FailJsonException):
         vmware_module_utils.connect_to_api(fake_ansible_module)
     assert fake_ansible_module.fail_json.called_once()
-    assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
+    # TODO: assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
 
 
 def test_validate_certs(monkeypatch, fake_ansible_module):
     """ Test if SSL is required or not"""
     fake_ansible_module.params = test_data[3][0]
 
-    monkeypatch.setattr(vmware_module_utils, 'ssl', None)
+    monkeypatch.setattr(vmware_module_utils, 'ssl', mock.Mock())
+    del vmware_module_utils.ssl.SSLContext
     with pytest.raises(FailJsonException):
         vmware_module_utils.PyVmomi(fake_ansible_module)
     msg = 'pyVim does not support changing verification mode with python < 2.7.9.' \
           ' Either update python or use validate_certs=false.'
     assert fake_ansible_module.fail_json.called_once()
-    assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
+    assert msg == fake_ansible_module.fail_json.call_args[1]['msg']
 
 
 def test_vmdk_disk_path_split(monkeypatch, fake_ansible_module):

@@ -1,0 +1,9 @@
+---
+bugfixes:
+- vmware_content_deploy_xxx - honors folder specified by fully qualified path name.
+- vmware_content_deploy_xxx - deploys to recommended datastore in specified datastore_cluster.
+- vmware_content_deploy_ovf_template - no longer requires host, datastore, resource_pool.
+minor_changes:
+- vmware - find_folder_by_fqpn added to support specifying folders by their fully qualified path name, defined as I(datacenter)/I(folder_type)/subfolder1/subfolder2/.
+- vmware - folder field default changed from None to vm.
+- vmware_content_deploy_ovf_template - storage_provisioning default changed from None to thin, in keeping with VMware best practices for flash storage.

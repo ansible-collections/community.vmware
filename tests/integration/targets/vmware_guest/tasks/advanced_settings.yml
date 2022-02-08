@@ -1,0 +1,76 @@
+# Test code for the vmware_guest module.
+# Copyright: (c) 2021, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- when: vcsim is not defined
+  block:
+    - name: Create new VM for advance settings
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: test_vm1
+        guest_id: centos64Guest
+        datacenter: "{{ dc1 }}"
+        hardware:
+          num_cpus: 1
+          memory_mb: 128
+        disk:
+          - size: 1gb
+            type: thin
+            datastore: "{{ rw_datastore }}"
+        state: present
+        folder: "{{ f0 }}"
+      register: r
+
+    - debug: var=r
+
+    - name: Assert that changes were made
+      assert:
+        that:
+          - r is changed
+
+    - name: Change advance settings for VM
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: test_vm1
+        datacenter: "{{ dc1 }}"
+        state: present
+        folder: "{{ f0 }}"
+        advanced_settings:
+          - key: "svga.present"
+            value: "FALSE"
+      register: r
+
+    - debug: var=r
+
+    - name: Assert that changes were made
+      assert:
+        that:
+          - r is changed
+
+    - name: Again change advance settings for VM (idempotency)
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        name: test_vm1
+        datacenter: "{{ dc1 }}"
+        state: present
+        folder: "{{ f0 }}"
+        advanced_settings:
+          - key: "svga.present"
+            value: "FALSE"
+      register: r
+
+    - debug: var=r
+
+    - name: Assert that changes were not made
+      assert:
+        that:
+          - r is not changed

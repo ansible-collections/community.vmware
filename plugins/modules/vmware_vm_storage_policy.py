@@ -116,11 +116,13 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
 class VmwareStoragePolicyManager(SPBM):
     def __init__(self, module):
         super(VmwareStoragePolicyManager, self).__init__(module)
+        self.rest_client = VmwareRestClient(module)
 
     #
     # MOB METHODS
@@ -314,6 +316,16 @@ class VmwareStoragePolicyManager(SPBM):
 
             if self.params.get('tag_name') is None:
                 self.module.fail_json(msg="tag_name is required when 'state' is 'present'")
+
+            # ensure if the category exists
+            category_result = self.rest_client.get_category_by_name(self.params.get('tag_category'))
+            if category_result is None:
+                self.module.fail_json(msg="%s is not found in vCenter Server tag categories" % self.params.get('tag_category'))
+
+            # ensure if the tag exists
+            tag_result = self.rest_client.get_tag_by_category(self.params.get('tag_name'), self.params.get('tag_category'))
+            if tag_result is None:
+                self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
 
             # loop through and update the first match
             for policy in policies:

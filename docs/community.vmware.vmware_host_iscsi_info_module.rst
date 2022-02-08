@@ -218,6 +218,32 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>detected_iscsi_drives</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>list of detected iSCSI drive</div>
+                            <div>added from version 1.9.0</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[
+        {
+            &quot;address&quot;: [
+                &quot;192.168.0.57:3260&quot;
+            ],
+            &quot;canonical_name&quot;: &quot;naa.60014055f198fb3d0cb4bd7ae1f802e1&quot;,
+            &quot;iscsi_name&quot;: &quot;iqn.2021-03.local.iscsi-target:iscsi-storage.target0&quot;
+        }
+    ]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>iscsi_properties</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">

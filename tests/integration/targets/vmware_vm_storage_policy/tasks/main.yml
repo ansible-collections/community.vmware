@@ -88,6 +88,50 @@
       that:
         - not policy_delete.changed
 
+  # The tests are the failure test for issue 677.
+  # https://github.com/ansible-collections/community.vmware/issues/677
+  - name: The failure test when tag_category not exists
+    community.vmware.vmware_vm_storage_policy:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      name: "storage policy for issue 667"
+      description: "issue667"
+      tag_category: "issue667"
+      tag_name: "{{ tag_one }}"
+      tag_affinity: true
+      state: "present"
+    ignore_errors: true
+    register: policy_failure_test1
+
+  - name: Make sure if the task failed and an error message displayed including tag_category name
+    assert:
+      that:
+        - policy_failure_test1.failed is sameas true
+        - "'issue667 is not found in vCenter Server tag categories' in policy_failure_test1.msg"
+
+  - name: The failure test when tag_name not exists
+    community.vmware.vmware_vm_storage_policy:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+      name: "storage policy for issue 667"
+      description: "issue667"
+      tag_category: "{{ cat_one }}"
+      tag_name: "issue667"
+      tag_affinity: true
+      state: "present"
+    ignore_errors: true
+    register: policy_failure_test2
+
+  - name: Make sure if the task failed and an error message displayed including tag_name name
+    assert:
+      that:
+        - policy_failure_test2.failed is sameas true
+        - "'issue667 is not found in vCenter Server tags' in policy_failure_test2.msg"
+
   always:
 
   - name: Delete Tags
@@ -97,6 +141,7 @@
       password: '{{ vcenter_password }}'
       validate_certs: false
       tag_name: "{{ item }}"
+      category_id: "{{ cat_one_id }}"
       state: absent
     register: delete_tag
     with_items:

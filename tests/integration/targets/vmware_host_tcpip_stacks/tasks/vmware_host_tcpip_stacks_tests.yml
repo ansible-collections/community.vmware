@@ -1,0 +1,327 @@
+# Test code for the vmware_host_tcpip_stacks module.
+# Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Update the default tcpip stack config with check_mode and diff
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 8.8.8.8
+      alternate_dns: 9.9.9.9
+      search_domains:
+        - example.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  check_mode: true
+  diff: true
+  register: update_default_config_check_mode_diff_result
+
+- name: Make sure if changes will occur
+  assert:
+    that:
+      - update_default_config_check_mode_diff_result.changed is sameas true
+      - update_default_config_check_mode_diff_result.diff is defined
+
+- name: Update the default tcpip stack config
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 8.8.8.8
+      alternate_dns: 9.9.9.9
+      search_domains:
+        - example.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_default_config_result
+
+- name: Make sure if the default tcpip stack config is updated
+  assert:
+    that:
+      - update_default_config_result.changed is sameas true
+      - update_default_config_result.default is defined
+      - update_default_config_result.default.hostname == "examplehost"
+      - update_default_config_result.default.domain == "example.com"
+      - update_default_config_result.default.preferred_dns == "8.8.8.8"
+      - update_default_config_result.default.alternate_dns == "9.9.9.9"
+      - update_default_config_result.default.search_domains.0 == "example.com"
+      - update_default_config_result.default.gateway == vmk0_ipaddr
+      - update_default_config_result.default.congestion_algorithm == "cubic"
+      - update_default_config_result.default.max_num_connections == 12000
+
+- name: Update the default tcpip stack config (idempotency)
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 8.8.8.8
+      alternate_dns: 9.9.9.9
+      search_domains:
+        - example.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_default_config_idempotency_result
+
+- name: Make sure if the default tcpip stack config isn't updated
+  assert:
+    that:
+      - update_default_config_idempotency_result.changed is sameas false
+
+- name: Update the provisioning tcpip stack config with check_mode and diff
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    provisioning:
+      gateway: 100.64.0.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  check_mode: true
+  diff: true
+  register: update_provisioning_config_check_mode_diff_result
+
+- name: Make sure if changes will occur
+  assert:
+    that:
+      - update_provisioning_config_check_mode_diff_result.changed is sameas true
+      - update_provisioning_config_check_mode_diff_result.diff is defined
+
+- name: Update the provisioning tcpip stack config
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    provisioning:
+      gateway: 100.64.0.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_provisioning_config
+
+- debug: var=update_provisioning_config
+
+- name: Make sure if the provisioning tcpip stack config is updated
+  assert:
+    that:
+      - update_provisioning_config.changed is sameas true
+      - update_provisioning_config.provisioning.gateway == "100.64.0.1"
+      - update_provisioning_config.provisioning.congestion_algorithm == "cubic"
+      - update_provisioning_config.provisioning.max_num_connections == 12000
+
+- name: Update the provisioning tcpip stack config (idempotency)
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    provisioning:
+      gateway: 100.64.0.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_provisioning_idempotency_config
+
+- name: Make sure if the provisioning tcpip stack config isn't updated
+  assert:
+    that:
+      - update_provisioning_idempotency_config.changed is sameas false
+
+- name: Update the vmotion tcpip stack config with check_mode and diff
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    vmotion:
+      gateway: 100.64.1.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  check_mode: true
+  diff: true
+  register: update_vmotion_config_check_mode_diff_result
+
+- name: Make sure if changes will occur
+  assert:
+    that:
+      - update_vmotion_config_check_mode_diff_result.changed is sameas true
+      - update_vmotion_config_check_mode_diff_result.diff is defined
+
+- name: Update the vmotion tcpip stack config
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    vmotion:
+      gateway: 100.64.1.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_vmotion_config
+
+- name: Make sure if the vmotion tcpip stack config is updated
+  assert:
+    that:
+      - update_vmotion_config.changed is sameas true
+      - update_vmotion_config.vmotion.gateway == "100.64.1.1"
+      - update_vmotion_config.vmotion.congestion_algorithm == "cubic"
+      - update_vmotion_config.vmotion.max_num_connections == 12000
+
+- name: Update the vmotion tcpip stack config (idempotency)
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    vmotion:
+      gateway: 100.64.1.1
+      congestion_algorithm: cubic
+      max_num_connections: 12000
+  register: update_vmotion_idempotency_config
+
+- name: Make sure if the vmotion tcpip stack config isn't updated
+  assert:
+    that:
+      - update_vmotion_idempotency_config.changed is sameas false
+
+- name: Update all tcpip stack config with check_mode and diff
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 9.9.9.9
+      alternate_dns: 8.8.8.8
+      search_domains:
+        - example.com
+        - hoge.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    provisioning:
+      gateway: 100.64.0.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    vmotion:
+      gateway: 100.64.1.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+  check_mode: true
+  diff: true
+  register: update_all_config_check_mode_diff_result
+
+- name: Make sure if changes will occur
+  assert:
+    that:
+      - update_all_config_check_mode_diff_result.changed is sameas true
+      - update_all_config_check_mode_diff_result.diff is defined
+
+- name: Update all tcpip stack config
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 9.9.9.9
+      alternate_dns: 8.8.8.8
+      search_domains:
+        - example.com
+        - hoge.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    provisioning:
+      gateway: 100.64.0.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    vmotion:
+      gateway: 100.64.1.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+  register: update_all_config_result
+
+- name: Make sure if all tcpip stack config is updated
+  assert:
+    that:
+      - update_all_config_result.changed is sameas true
+      - update_all_config_result.default is defined
+      - update_all_config_result.default.hostname == "examplehost"
+      - update_all_config_result.default.domain == "example.com"
+      - update_all_config_result.default.preferred_dns == "9.9.9.9"
+      - update_all_config_result.default.alternate_dns == "8.8.8.8"
+      - update_all_config_result.default.search_domains.0 == "example.com"
+      - update_all_config_result.default.search_domains.1 == "hoge.com"
+      - update_all_config_result.default.gateway == vmk0_ipaddr
+      - update_all_config_result.default.congestion_algorithm == "newreno"
+      - update_all_config_result.default.max_num_connections == 11000
+      - update_all_config_result.provisioning.gateway == "100.64.0.2"
+      - update_all_config_result.provisioning.congestion_algorithm == "newreno"
+      - update_all_config_result.provisioning.max_num_connections == 11000
+      - update_all_config_result.vmotion.gateway == "100.64.1.2"
+      - update_all_config_result.vmotion.congestion_algorithm == "newreno"
+      - update_all_config_result.vmotion.max_num_connections == 11000
+
+- name: Update all tcpip stack config (idempotency)
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: examplehost
+      domain: example.com
+      preferred_dns: 9.9.9.9
+      alternate_dns: 8.8.8.8
+      search_domains:
+        - example.com
+        - hoge.com
+      gateway: "{{ vmk0_ipaddr }}"
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    provisioning:
+      gateway: 100.64.0.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+    vmotion:
+      gateway: 100.64.1.2
+      congestion_algorithm: newreno
+      max_num_connections: 11000
+  register: update_all_config_idempotency_result
+
+- name: Make sure if all tcpip stack config isn't updated
+  assert:
+    that:
+      - update_all_config_idempotency_result.changed is sameas false

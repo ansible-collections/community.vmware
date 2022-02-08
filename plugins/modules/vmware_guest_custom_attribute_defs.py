@@ -120,7 +120,7 @@ class VmAttributeDefManager(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        attribute_key=dict(type='str'),
+        attribute_key=dict(type='str', no_log=False),
         state=dict(type='str', default='present', choices=['absent', 'present']),
     )
     module = AnsibleModule(

@@ -1,215 +1,218 @@
 # Test code for the vmware_guest module.
 # Copyright: (c) 2020, Diane Wang <dianew@vmware.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-- name: create a new VM with multiple scsi controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    folder: vm
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm1
-    guest_id: centos64Guest
-    datastore: "{{ rw_datastore }}"
-    hardware:
-      memory_mb: 512
-      num_cpus: 1
-    disk:
-    - controller_type: lsilogicsas
-      controller_number: 0
-      unit_number: 0
-      size_mb: 512
-      type: thin
-    - controller_type: paravirtual
-      controller_number: 1
-      unit_number: 0
-      size_mb: 256
-      type: eagerzeroedthick
-  register: multi_scsi_disk_vm
+- when: vcsim is not defined
+  block:
+    - name: create a new VM with multiple scsi controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        folder: vm
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm1
+        guest_id: centos64Guest
+        datastore: "{{ rw_datastore }}"
+        hardware:
+          memory_mb: 512
+          num_cpus: 1
+        disk:
+        - controller_type: lsilogicsas
+          controller_number: 0
+          unit_number: 0
+          size_mb: 512
+          type: thin
+        - controller_type: paravirtual
+          controller_number: 1
+          unit_number: 0
+          size_mb: 256
+          type: eagerzeroedthick
+      register: multi_scsi_disk_vm
 
-- debug: var=multi_scsi_disk_vm
+    - debug: var=multi_scsi_disk_vm
 
-- name: assert that VM was deployed
-  assert:
-    that:
-      - "multi_scsi_disk_vm.changed == true"
+    - name: assert that VM was deployed
+      assert:
+        that:
+          - "multi_scsi_disk_vm.changed == true"
 
-- name: reconfigure created VM with multiple scsi controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    folder: vm
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm1
-    datastore: "{{ rw_datastore }}"
-    state: present
-    disk:
-    - controller_type: lsilogicsas
-      controller_number: 0
-      unit_number: 0
-      disk_mode: independent_persistent
-    - controller_type: paravirtual
-      controller_number: 1
-      unit_number: 0
-      size_mb: 512
-  register: multi_scsi_disk_vm
+    - name: reconfigure created VM with multiple scsi controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        folder: vm
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm1
+        datastore: "{{ rw_datastore }}"
+        state: present
+        disk:
+        - controller_type: lsilogicsas
+          controller_number: 0
+          unit_number: 0
+          size_mb: 512
+          disk_mode: independent_persistent
+        - controller_type: paravirtual
+          controller_number: 1
+          unit_number: 0
+          size_mb: 512
+      register: multi_scsi_disk_vm
 
-- debug: var=multi_scsi_disk_vm
+    - debug: var=multi_scsi_disk_vm
 
-- name: assert that VM was configured
-  assert:
-    that:
-      - "multi_scsi_disk_vm.changed == true"
+    - name: assert that VM was configured
+      assert:
+        that:
+          - "multi_scsi_disk_vm.changed == true"
 
-- name: create a new VM with multiple sata controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    folder: vm
-    datacenter: "{{ dc1 }}"
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm2
-    guest_id: centos64Guest
-    datastore: "{{ rw_datastore }}"
-    hardware:
-      memory_mb: 512
-      num_cpus: 1
-    disk:
-    - controller_type: sata
-      controller_number: 0
-      unit_number: 0
-      size_mb: 512
-      disk_mode: independent_persistent
-    - controller_type: sata
-      controller_number: 1
-      unit_number: 0
-      size_mb: 256
-    - controller_type: sata
-      controller_number: 2
-      unit_number: 0
-      size_mb: 256
-  register: multi_sata_disk_vm
+    - name: create a new VM with multiple sata controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        folder: vm
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm2
+        guest_id: centos64Guest
+        datastore: "{{ rw_datastore }}"
+        hardware:
+          memory_mb: 512
+          num_cpus: 1
+        disk:
+        - controller_type: sata
+          controller_number: 0
+          unit_number: 0
+          size_mb: 512
+          disk_mode: independent_persistent
+        - controller_type: sata
+          controller_number: 1
+          unit_number: 0
+          size_mb: 256
+        - controller_type: sata
+          controller_number: 2
+          unit_number: 0
+          size_mb: 256
+      register: multi_sata_disk_vm
 
-- debug: var=multi_sata_disk_vm
+    - debug: var=multi_sata_disk_vm
 
-- name: assert that VM was deployed
-  assert:
-    that:
-      - "multi_sata_disk_vm.changed == true"
+    - name: assert that VM was deployed
+      assert:
+        that:
+          - "multi_sata_disk_vm.changed == true"
 
-- name: reconfigure created new VM with multiple sata controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    folder: vm
-    datacenter: "{{ dc1 }}"
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm2
-    state: present
-    datastore: "{{ rw_datastore }}"
-    disk:
-    - controller_type: sata
-      controller_number: 0
-      unit_number: 0
-      size_mb: 512
-      disk_mode: persistent
-    - controller_type: sata
-      controller_number: 1
-      unit_number: 0
-      size_mb: 512
-  register: multi_sata_disk_vm
+    - name: reconfigure created new VM with multiple sata controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        folder: vm
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm2
+        state: present
+        datastore: "{{ rw_datastore }}"
+        disk:
+        - controller_type: sata
+          controller_number: 0
+          unit_number: 0
+          size_mb: 512
+          disk_mode: persistent
+        - controller_type: sata
+          controller_number: 1
+          unit_number: 0
+          size_mb: 512
+      register: multi_sata_disk_vm
 
-- debug: var=multi_sata_disk_vm
+    - debug: var=multi_sata_disk_vm
 
-- name: assert that VM was deployed
-  assert:
-    that:
-      - "multi_sata_disk_vm.changed == true"
+    - name: assert that VM was deployed
+      assert:
+        that:
+          - "multi_sata_disk_vm.changed == true"
 
-- name: create a new VM with multiple nvme controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    folder: vm
-    datacenter: "{{ dc1 }}"
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm3
-    guest_id: centos64Guest
-    datastore: "{{ rw_datastore }}"
-    hardware:
-      memory_mb: 512
-      num_cpus: 1
-      version: 14
-    disk:
-    - controller_type: nvme
-      controller_number: 0
-      unit_number: 0
-      size_mb: 512
-    - controller_type: nvme
-      controller_number: 1
-      unit_number: 0
-      size_mb: 256
-      type: thin
-    - controller_type: nvme
-      controller_number: 2
-      unit_number: 0
-      size_mb: 256
-  register: multi_nvme_disk_vm
+    - name: create a new VM with multiple nvme controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        folder: vm
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm3
+        guest_id: centos64Guest
+        datastore: "{{ rw_datastore }}"
+        hardware:
+          memory_mb: 512
+          num_cpus: 1
+          version: 14
+        disk:
+        - controller_type: nvme
+          controller_number: 0
+          unit_number: 0
+          size_mb: 512
+        - controller_type: nvme
+          controller_number: 1
+          unit_number: 0
+          size_mb: 256
+          type: thin
+        - controller_type: nvme
+          controller_number: 2
+          unit_number: 0
+          size_mb: 256
+      register: multi_nvme_disk_vm
 
-- debug: var=multi_nvme_disk_vm
+    - debug: var=multi_nvme_disk_vm
 
-- name: assert that VM was deployed
-  assert:
-    that:
-      - "multi_nvme_disk_vm.changed == true"
+    - name: assert that VM was deployed
+      assert:
+        that:
+          - "multi_nvme_disk_vm.changed == true"
 
-- name: reconfigure created new VM with multiple types of controllers
-  vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    folder: vm
-    datacenter: "{{ dc1 }}"
-    cluster: "{{ ccr1 }}"
-    resource_pool: Resources
-    name: test_vm3
-    state: present
-    datastore: "{{ rw_datastore }}"
-    disk:
-    - controller_type: nvme
-      controller_number: 0
-      unit_number: 1
-      size_mb: 512
-    - controller_type: sata
-      controller_number: 1
-      unit_number: 0
-      size_mb: 256
-    - controller_type: paravirtual
-      controller_number: 0
-      unit_number: 0
-      size_mb: 256
-  register: multi_nvme_disk_vm
+    - name: reconfigure created new VM with multiple types of controllers
+      vmware_guest:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        folder: vm
+        datacenter: "{{ dc1 }}"
+        cluster: "{{ ccr1 }}"
+        resource_pool: Resources
+        name: test_vm3
+        state: present
+        datastore: "{{ rw_datastore }}"
+        disk:
+        - controller_type: nvme
+          controller_number: 0
+          unit_number: 1
+          size_mb: 512
+        - controller_type: sata
+          controller_number: 1
+          unit_number: 0
+          size_mb: 256
+        - controller_type: paravirtual
+          controller_number: 0
+          unit_number: 0
+          size_mb: 256
+      register: multi_nvme_disk_vm
 
-- debug: var=multi_nvme_disk_vm
+    - debug: var=multi_nvme_disk_vm
 
-- name: assert that VM was deployed
-  assert:
-    that:
-      - "multi_nvme_disk_vm.changed == true"
+    - name: assert that VM was deployed
+      assert:
+        that:
+          - "multi_nvme_disk_vm.changed == true"

@@ -11,6 +11,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vmkernel_ip_config
+deprecated:
+  removed_at_date: '2021-12-01'
+  why: Deprecated in favour of M(community.vmware.vmware_vmkernel) module
+  alternative: Use M(community.vmware.vmware_vmkernel) instead.
 short_description: Configure the VMkernel IP Address
 description:
     - Configure the VMkernel IP Address
@@ -92,6 +96,12 @@ def main():
                               subnet_mask=dict(required=True, type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
+
+    module.deprecate(
+        msg="The 'vmware_vmkernel_ip_config' is deprecated, please use the 'vmware_vmkernel' module instead.",
+        date="2021-12-01",
+        collection_name="community.vmware"
+    )
 
     if not HAS_PYVMOMI:
         module.fail_json(msg='pyvmomi is required for this module')
