@@ -121,12 +121,12 @@ options:
       - Only compatible with the C(vmxnet3) device type.
     type: bool
   physical_function_backing:
-    type: string
+    type: str
     description:
       - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
       - This option is only compatible for SR-IOV network adapters.
   virtual_function_backing:
-    type: string
+    type: str
     description:
       - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
       - This option is only compatible for SR-IOV network adapters.
@@ -214,12 +214,12 @@ options:
         - If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
         - UPT is only compatible for Vmxnet3 adapter.
       physical_function_backing:
-        type: string
+        type: str
         description:
         - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
         - This option is only compatible for SR-IOV network adapters.
       virtual_function_backing:
-        type: string
+        type: str
         description:
         - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
         - This option is only compatible for SR-IOV network adapters.
