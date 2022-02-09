@@ -1,0 +1,4 @@
+bugfixes:
+  - _get_nics_from_vm - acquire physical/virtual backing info and guest OS MTU status for diff generation
+  - _new_nic_spec - add advanced SR-IOV options from the VMware API (PCI dev PF/VF backing and guest OS MTU change)
+  - main - add support for the extra arguments
