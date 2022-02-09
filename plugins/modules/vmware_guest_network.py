@@ -602,7 +602,7 @@ class PyVmomiHelper(PyVmomi):
         if (pf_backing is not None or vf_backing is not None) and not isinstance(nic_spec.device, vim.vm.device.VirtualSriovEthernetCard):
             self.module_fail_json(msg='physical_function_backing, virtual_function_backing can only be used with the sriov device type')
 
-        if (isinstance(nic_spec.device, vim.vm.device.VirtualSriovEthernetCard):
+        if isinstance(nic_spec.device, vim.vm.device.VirtualSriovEthernetCard):
             nic_spec.device.allowGuestOSMtuChange = allow_guest_os_mtu_change
             nic_spec.device.sriovBacking = vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo()
             if pf_backing is not None:
