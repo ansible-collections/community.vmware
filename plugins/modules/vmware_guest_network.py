@@ -131,6 +131,7 @@ options:
       - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
       - This option is only compatible for SR-IOV network adapters.
   allow_guest_os_mtu_change:
+    default: True
     type: bool
     description:
       - Allows the guest OS to change the MTU on a SR-IOV network adapter.
