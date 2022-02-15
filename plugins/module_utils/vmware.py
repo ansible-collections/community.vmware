@@ -1140,6 +1140,18 @@ class PyVmomi(object):
         elif api_type == 'HostAgent':
             return False
 
+    def vcenter_version_at_least(self, version=None):
+        """
+        Check that the vCenter server is at least a specific version number
+        Args:
+            version (tuple): a version tuple, for example (6, 7, 0)
+        Returns: bool
+        """
+        if version:
+            vc_version = self.content.about.version
+            return StrictVersion(vc_version) >= StrictVersion('.'.join(map(str, version)))
+        self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
+
     def get_managed_objects_properties(self, vim_type, properties=None):
         """
         Look up a Managed Object Reference in vCenter / ESXi Environment
