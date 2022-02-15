@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_powerstate - `shutdownguest` power state is not idempotent

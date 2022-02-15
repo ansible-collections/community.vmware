@@ -982,9 +982,11 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
                     else:
                         result['failed'] = True
                         result['msg'] = "VMware tools should be installed for guest shutdown/reboot"
+                elif current_state == 'poweredoff':
+                    result['changed'] = False
                 else:
                     result['failed'] = True
-                    result['msg'] = "Virtual machine %s must be in poweredon state for guest shutdown/reboot" % vm.name
+                    result['msg'] = "Virtual machine %s must be in poweredon state for guest reboot" % vm.name
 
             else:
                 result['failed'] = True
