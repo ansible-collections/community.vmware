@@ -109,6 +109,7 @@ Parameters
                                     <li>ComputeResource</li>
                                     <li>ClusterComputeResource</li>
                                     <li>DistributedVirtualSwitch</li>
+                                    <li>DistributedVirtualPortgroup</li>
                         </ul>
                 </td>
                 <td>

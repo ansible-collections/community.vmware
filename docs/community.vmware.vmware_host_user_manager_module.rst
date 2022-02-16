@@ -8,7 +8,7 @@ community.vmware.vmware_host_user_manager
 **Manage users of ESXi**
 
 
-Version added: 1.18.0
+Version added: 2.1.0
 
 .. contents::
    :local:
@@ -17,7 +17,7 @@ Version added: 1.18.0
 
 Synopsis
 --------
-- This module can be added or updated or deleted the local user of ESXi host.
+- This module can add, update or delete local users on ESXi host.
 
 
 
@@ -275,6 +275,12 @@ Parameters
     </table>
     <br/>
 
+
+Notes
+-----
+
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
