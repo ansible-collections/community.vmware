@@ -42,6 +42,7 @@ ansible-playbook playbook/prepare_vmware.yml "$@"
 # ansible-playbook -i "${INVENTORY_DIR}" playbook/test_inventory_cache.yml "$@"
 
 # Test YAML and TOML
+ansible-playbook playbook/install_dependencies.yml "$@"
 ansible-playbook playbook/build_inventory_without_cache.yml "$@"
 ansible-inventory -i "${INVENTORY_DIR}" --list --yaml 1>/dev/null
 if ${ANSIBLE_PYTHON_INTERPRETER} -m pip list 2>/dev/null | grep toml >/dev/null 2>&1; then
