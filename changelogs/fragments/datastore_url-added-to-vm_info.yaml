@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_vm_info - adding fact about ``datastore_url`` to output (https://github.com/ansible-collections/community.vmware/pull/1143).

@@ -61,6 +61,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">0</div>
+                </td>
+                <td>
+                        <div>SCSI controller number.</div>
+                        <div>Valid values range from 0 to 3.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>policy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -90,25 +108,6 @@ Parameters
                 <td>
                         <div>Disk Unit Number.</div>
                         <div>Valid values range from 0 to 15.</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>controller_number</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>SCSI Controller Number.</div>
-                        <div>Valid values range from 0 to 3.</div>
                 </td>
             </tr>
 
@@ -349,7 +348,7 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enforce storepol1 policy for disk 0 and 1 on controller 0 using UUID
+    - name: Enforce storepol1 policy for disk 0 and 1 on SCSI controller 0 using UUID
       community.vmware.vmware_guest_storage_policy:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -404,7 +403,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Dictionary containing the changed policies of disk (list of dictionaries) and vm_home.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;disk&#x27;: [{&#x27;controller_number&#x27;: &#x27;0&#x27;,&#x27;policy&#x27;: &#x27;storepol1&#x27;, &#x27;unit_number&#x27;: 0}], &#x27;vm_home&#x27;: &#x27;storepol1&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;disk&#x27;: [{&#x27;policy&#x27;: &#x27;storepol1&#x27;, &#x27;unit_number&#x27;: 0}], &#x27;vm_home&#x27;: &#x27;storepol1&#x27;}</div>
                 </td>
             </tr>
             <tr>

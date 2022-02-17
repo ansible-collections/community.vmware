@@ -80,6 +80,7 @@ Name | Description
 [community.vmware.vcenter_extension_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_info_module.rst)|Gather info vCenter extensions
 [community.vmware.vcenter_folder](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_folder_module.rst)|Manage folders on given datacenter
 [community.vmware.vcenter_license](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_license_module.rst)|Manage VMware vCenter license keys
+[community.vmware.vcenter_standard_key_provider](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_standard_key_provider_module.rst)|Add, reconfigure or remove Standard Key Provider on vCenter server
 [community.vmware.vmware_about_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_about_info_module.rst)|Provides information about VMware server to which user is connecting to
 [community.vmware.vmware_category](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_module.rst)|Manage VMware categories
 [community.vmware.vmware_category_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_info_module.rst)|Gather info about VMware tag categories
@@ -187,6 +188,7 @@ Name | Description
 [community.vmware.vmware_host_sriov](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_sriov_module.rst)|Manage SR-IOV settings on host
 [community.vmware.vmware_host_ssl_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_info_module.rst)|Gather info of ESXi host system about SSL
 [community.vmware.vmware_host_tcpip_stacks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_tcpip_stacks_module.rst)|Manage the TCP/IP Stacks configuration of ESXi host
+[community.vmware.vmware_host_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_user_manager_module.rst)|Manage users of ESXi
 [community.vmware.vmware_host_vmhba_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_info_module.rst)|Gathers info about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmnic_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmnic_info_module.rst)|Gathers info about vmnics available on the given ESXi host
 [community.vmware.vmware_local_role_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_info_module.rst)|Gather info about local roles on an ESXi host
