@@ -774,47 +774,54 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # NetFlow
         if self.module.params['net_flow'] is not None and \
-            self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']:
+                self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']:
             return 'update'
 
         # Ingress traffic shaping
         if self.module.params['in_traffic_shaping'] is not None and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.value != self.module.params['in_traffic_shaping']['enabled'] and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.value != (self.module.params['in_traffic_shaping']['average_bandwidth'] * 1000) and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.value != (self.module.params['in_traffic_shaping']['burst_size'] * 1024) and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.value != (self.module.params['in_traffic_shaping']['peak_bandwidth'] * 1000):
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.value != self.module.params['in_traffic_shaping']['enabled'] and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.value != \
+                (self.module.params['in_traffic_shaping']['average_bandwidth'] * 1000) and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.value != \
+                (self.module.params['in_traffic_shaping']['burst_size'] * 1024) and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.value != \
+                (self.module.params['in_traffic_shaping']['peak_bandwidth'] * 1000):
             return 'update'
         elif self.module.params['in_traffic_shaping'] is None and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited is not True:
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited is not True:
             return 'update'
 
         # Egress traffic shaping
         if self.module.params['out_traffic_shaping'] is not None and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.value != self.module.params['out_traffic_shaping']['enabled'] and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.value != (self.module.params['out_traffic_shaping']['average_bandwidth'] * 1000) and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.value != (self.module.params['out_traffic_shaping']['burst_size'] * 1024) and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not False and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.value != (self.module.params['out_traffic_shaping']['peak_bandwidth'] * 1000):
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.value != \
+                self.module.params['out_traffic_shaping']['enabled'] and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.value != \
+                (self.module.params['out_traffic_shaping']['average_bandwidth'] * 1000) and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.value != \
+                (self.module.params['out_traffic_shaping']['burst_size'] * 1024) and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not False and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.value != \
+                (self.module.params['out_traffic_shaping']['peak_bandwidth'] * 1000):
             return 'update'
         elif self.module.params['out_traffic_shaping'] is None and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not True:
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not True and \
+                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not True:
             return 'update'
 
         # PG policy (advanced_policy)
