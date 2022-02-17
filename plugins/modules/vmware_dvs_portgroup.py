@@ -265,7 +265,7 @@ options:
         required: False
         default: False
         type: bool
-        version_added: ''
+        version_added: '1.11.0'
     in_traffic_shaping:
         description:
             - Dictionary which configures the ingress traffic shaping settings for the portgroup.
@@ -285,7 +285,7 @@ options:
                 description: The maximum number of bytes to allow in a burst.
         required: False
         type: dict
-        version_added: ''
+        version_added: '1.11.0'
     out_traffic_shaping:
         description:
             - Dictionary which configures the egress traffic shaping settings for the portgroup.
@@ -305,7 +305,7 @@ options:
                 description: The maximum number of bytes to allow in a burst.
         required: False
         type: dict
-        version_added: ''
+        version_added: '1.11.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
