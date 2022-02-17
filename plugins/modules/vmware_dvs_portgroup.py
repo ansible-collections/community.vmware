@@ -50,6 +50,7 @@ options:
         description:
             - The type of port binding determines when ports in a port group are assigned to virtual machines.
             - See VMware KB 1022312 U(https://kb.vmware.com/s/article/1022312) for more details.
+        required: True
         type: str
         choices:
             - 'static'
@@ -60,6 +61,7 @@ options:
             - Elastic port groups automatically increase or decrease the number of ports as needed.
             - Only valid if I(port_binding) is set to C(static).
             - Will be C(elastic) if not specified and I(port_binding) is set to C(static).
+            - Will be C(fixed) if not specified and I(port_binding) is set to C(ephemeral).
         type: str
         choices:
             - 'elastic'
@@ -242,7 +244,7 @@ options:
                 description:
                 - Indicates if the vlan can be changed per port.
                 type: bool
-                default: False   
+                default: False
         default: {
             'traffic_filter_override': False,
             'network_rp_override': False,
@@ -275,7 +277,7 @@ options:
             average_bandwidth:
                 type: int
                 description: Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
-            peak_bandwidth:
+            burst_size:
                 type: int
                 description: The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic. 
             peak_bandwidth:
@@ -295,7 +297,7 @@ options:
             average_bandwidth:
                 type: int
                 description: Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
-            peak_bandwidth:
+            burst_size:
                 type: int
                 description: The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic. 
             peak_bandwidth:
@@ -788,11 +790,11 @@ class VMwareDvsPortgroup(PyVmomi):
             self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.value != (self.module.params['in_traffic_shaping']['peak_bandwidth'] * 1000):
             return 'update'
         elif self.module.params['in_traffic_shaping'] is None and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited != True :
+            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.enabled.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.averageBandwidth.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.burstSize.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.inShapingPolicy.peakBandwidth.inherited is not True :
             return 'update'
 
         # Egress traffic shaping
@@ -808,11 +810,11 @@ class VMwareDvsPortgroup(PyVmomi):
             self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.value != (self.module.params['out_traffic_shaping']['peak_bandwidth'] * 1000):
             return 'update'
         elif self.module.params['out_traffic_shaping'] is None and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited != True  and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited != True and \
-            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited != True :
+            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not True  and \
+            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not True and \
+            self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not True :
             return 'update'
 
         # PG policy (advanced_policy)
