@@ -30,6 +30,12 @@ options:
   state:
     description:
     - Set the state of the virtual machine.
+    - Powered-off - Same as unplugging the VM  from the electricity (Not safe - may cause potential data / OS  corruption)
+    - Powered-on - Same is click Power-on on regular PC
+    - Reboot-guest - will reboot the VM safely - Need VM-Tools installed on the VM
+    - ShutDown the VM safely (Same as windows start button -> shutdown) - Need VM-Tools installed on the VM
+    - Suspended - save the current state of your virtual machine, then pick up work later with the virtual machine in the same state it was when you stopped
+    - Present - makes sure VM exists 
     choices: [ powered-off, powered-on, reboot-guest, restarted, shutdown-guest, suspended, present]
     default: present
     type: str
