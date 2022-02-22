@@ -1,5 +1,6 @@
 ---
 namespace: community
+version: 2.1.0
 name: vmware
 # the version key is generated during the release by Zuul
 # https://github.com/ansible-network/releases/tree/master/ansible_releases/cmd
