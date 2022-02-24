@@ -124,7 +124,6 @@ DOCUMENTATION = r'''
             - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
             - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
-            version_added: "2.10"
             required: False
             type: list
             default: []
