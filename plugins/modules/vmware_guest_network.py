@@ -723,6 +723,9 @@ class PyVmomiHelper(PyVmomi):
             network_params['vlan_id'] = i.get('vlan')
             network_params['switch'] = i.get('dvswitch_name')
             network_params['guest_control'] = i.get('allow_guest_control', self.params['guest_control'])
+            network_params['physical_function_backing'] = i.get('physical_function_backing')
+            network_params['virtual_function_backing'] = i.get('virtual_function_backing')
+            network_params['allow_guest_os_mtu_change'] = i.get('allow_guest_os_mtu_change')
 
             for k in ['connected', 'device_type', 'directpath_io', 'force', 'label', 'start_connected', 'state', 'wake_onlan']:
                 network_params[k] = i.get(k, self.params[k])
