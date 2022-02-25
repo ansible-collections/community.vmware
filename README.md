@@ -4,6 +4,13 @@ This repo hosts the `community.vmware` Ansible Collection.
 
 The collection includes the VMware modules and plugins supported by Ansible VMware community to help the management of VMware infrastructure.
 
+## Releases and maintenance
+
+| Release | Status     | Expected end of life |
+| ------: | ---------: | -------------------: |
+|       2 | Maintained |             May 2023 |
+|       1 | Maintained |             Nov 2022 |
+
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
