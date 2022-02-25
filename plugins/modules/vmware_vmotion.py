@@ -204,9 +204,6 @@ class VmotionManager(PyVmomi):
                                                                   resource_pool_name=dest_resourcepool)
         elif not dest_resourcepool and dest_host_name:
             self.resourcepool_object = self.host_object.parent.resourcePool
-        # Fail if resourcePool object is not found
-        if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
