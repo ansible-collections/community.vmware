@@ -202,6 +202,10 @@ class VmotionManager(PyVmomi):
         if dest_resourcepool:
             self.resourcepool_object = find_resource_pool_by_name(content=self.content,
                                                                   resource_pool_name=dest_resourcepool)
+            # Fail if resourcePool object is not found
+            if self.resourcepool_object is None:
+                self.module.fail_json(msg="Unable to find destination resource pool object for %s." % dest_resourcepool)
+            
         elif not dest_resourcepool and dest_host_name:
             self.resourcepool_object = self.host_object.parent.resourcePool
 
