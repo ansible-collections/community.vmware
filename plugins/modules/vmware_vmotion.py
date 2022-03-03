@@ -57,6 +57,16 @@ options:
       - Version 2.6 onwards, this parameter is not a required parameter, unlike the previous versions.
       aliases: ['destination']
       type: str
+    destination_cluster:
+      description:
+      - Name of the destination cluster the virtual machine should be running on.
+      - Only works if drs is enabled for this cluster.
+      type: str
+    destination_datastore_cluster:
+      description:
+      - Name of the destination datastore cluster (storage pod) the virtual machine's vmdk should be moved on.
+      - Only works if drs is enabled for the cluster the vm is running / should run.
+      type: str
     destination_datastore:
       description:
       - Name of the destination datastore the virtual machine's vmdk should be moved on.
@@ -127,14 +137,31 @@ EXAMPLES = r'''
     destination_host: 'destination_host_as_per_vcenter'
     destination_datastore: 'destination_datastore_as_per_vcenter'
   delegate_to: localhost
+
+- name: Perform storage vMotion to a Storage Cluster and vMotion to a Cluster of virtual machine
+  community.vmware.vmware_vmotion:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    vm_name: 'vm_name_as_per_vcenter'
+    destination_cluster: 'destination_cluster_as_per_vcenter'
+    destination_datastore_cluster: 'destination_datastore_cluster_as_per_vcenter'
+  delegate_to: localhost
 '''
 
 RETURN = r'''
 running_host:
-    description: List the host the virtual machine is registered to
+    description: List the host the virtual machine is registered to. 
+    Only returned if there is asked for a vMotion (Cluster or Host).
     returned: changed or success
     type: str
     sample: 'host1.example.com'
+datastore:
+    description: List the datastore the virtual machine is on. 
+    Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
+    returned: changed or success
+    type: str
+    sample: 'datastore1'
 '''
 
 try:
@@ -149,6 +176,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_vm_by_id, find_datastore_by_name,
     find_resource_pool_by_name,
     find_datacenter_by_name,
+    find_cluster_by_name, get_all_objs,
     vmware_argument_spec, wait_for_task, TaskError)
 
 
@@ -168,45 +196,65 @@ class VmotionManager(PyVmomi):
             vm_id = self.vm_uuid or self.vm_name or self.moid
             self.module.fail_json(msg="Failed to find the virtual machine with %s" % vm_id)
 
-        # Get Destination Host System if specified by user
-        dest_host_name = self.params.get('destination_host', None)
-        self.host_object = None
-        if dest_host_name is not None:
-            self.host_object = find_hostsystem_by_name(content=self.content,
-                                                       hostname=dest_host_name)
-            if self.host_object is None:
-                self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
-
         # Get Datacenter if specified by user
         dest_datacenter = self.destination_datacenter
+        datacenter_object = None
         if dest_datacenter is not None:
             datacenter_object = find_datacenter_by_name(content=self.content, datacenter_name=dest_datacenter)
             if datacenter_object:
                 dest_datacenter = datacenter_object
 
-        # Get Destination Datastore if specified by user
+        # Get Destination Host System or Cluster if specified by user
+        dest_host_name = self.params.get('destination_host', None)
+        dest_cluster_name = self.params.get('destination_cluster', None)
+
+        if dest_host_name and dest_cluster_name:
+            self.module.fail_json(msg="Please only define one: destination_host or destination_cluster")
+
+        self.host_object = None
+        self.cluster_object = None
+        self.cluster_hosts = None
+
+        if dest_host_name is not None:
+            self.host_object = find_hostsystem_by_name(content=self.content,
+                                                       hostname=dest_host_name)
+            if self.host_object is None:
+                self.module.fail_json(msg="Unable to find destination host %s" % dest_host_name)
+        if dest_cluster_name is not None:
+            self.cluster_object = find_cluster_by_name(content=self.content,
+                                                       cluster_name=dest_cluster_name, datacenter=datacenter_object)
+            if self.cluster_object:
+                self.cluster_hosts = []
+                for host in self.cluster_object.host:
+                    self.cluster_hosts.append(host)
+            else:
+                self.module.fail_json(msg="Unable to find destination cluster %s" % dest_cluster_name)
+
+        # Get Destination Datastore or Datastore Cluster if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
+        dest_datastore_cluster = self.params.get('destination_datastore_cluster', None)
+
+        if dest_datastore and dest_datastore_cluster:
+            self.module.fail_json(msg="Please only define one: destination_datastore or destination_datastore_cluster")
+
         self.datastore_object = None
+        self.datastore_cluster_object = None
+
         if dest_datastore is not None:
             self.datastore_object = find_datastore_by_name(content=self.content,
-                                                           datastore_name=dest_datastore, datacenter_name=dest_datacenter)
+                                                           datastore_name=dest_datastore,
+                                                           datacenter_name=dest_datacenter)
+        if dest_datastore_cluster is not None:
+            # unable to use find_datastore_cluster_by_name module
+            data_store_clusters = get_all_objs(self.content, [vim.StoragePod], folder=self.content.rootFolder)
+            for dsc in data_store_clusters:
+                if dsc.name == dest_datastore_cluster:
+                    self.datastore_cluster_object = dsc
 
-        # At-least one of datastore, host system is required to migrate
-        if self.datastore_object is None and self.host_object is None:
-            self.module.fail_json(msg="Unable to find destination datastore"
-                                      " and destination host system.")
-
-        # Get Destination resourcepool
-        dest_resourcepool = self.params.get('destination_resourcepool', None)
-        self.resourcepool_object = None
-        if dest_resourcepool:
-            self.resourcepool_object = find_resource_pool_by_name(content=self.content,
-                                                                  resource_pool_name=dest_resourcepool)
-        elif not dest_resourcepool and dest_host_name:
-            self.resourcepool_object = self.host_object.parent.resourcePool
-        # Fail if resourcePool object is not found
-        if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
+        # At-least one of datastore, datastore cluster, host system or cluster is required to migrate
+        if self.datastore_object is None and self.datastore_cluster_object is None and self.host_object is None and self.cluster_object is None:
+            self.module.fail_json(msg="Unable to find destination datastore, destination datastore cluster,"
+                                      " destination host system or destination cluster.")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
@@ -214,21 +262,25 @@ class VmotionManager(PyVmomi):
         for vm_datastore in self.vm.datastore:
             if self.host_object and vm_datastore not in self.host_object.datastore:
                 host_datastore_required.append(True)
+            if self.cluster_object and vm_datastore not in self.cluster_object.datastore:
+                host_datastore_required.append(True)
             else:
                 host_datastore_required.append(False)
 
-        if any(host_datastore_required) and dest_datastore is None:
-            msg = "Destination host system does not share" \
+        if any(host_datastore_required) and (dest_datastore is None or dest_datastore_cluster is None):
+            msg = "Destination host system or cluster does not share" \
                   " datastore ['%s'] with source host system ['%s'] on which" \
-                  " virtual machine is located.  Please specify destination_datastore" \
-                  " to rectify this problem." % ("', '".join([ds.name for ds in self.host_object.datastore]),
+                  " virtual machine is located.  Please specify destination_datastore or destination_datastore_cluster" \
+                  " to rectify this problem." % ("', '".join([ds.name for ds in (self.host_object.datastore
+                                                                                 or self.cluster_object.datastore)]),
                                                  "', '".join([ds.name for ds in self.vm.datastore]))
 
             self.module.fail_json(msg=msg)
 
+        # Check for changes
         storage_vmotion_needed = True
         change_required = True
-
+        vm_ds_name = self.vm.config.files.vmPathName.split(' ', 1)[0].replace('[', '').replace(']', '')
         if self.host_object and self.datastore_object:
             # We have both host system and datastore object
             if not self.datastore_object.summary.accessible:
@@ -249,14 +301,73 @@ class VmotionManager(PyVmomi):
             if self.vm.runtime.host.name == dest_host_name and dest_datastore in [ds.name for ds in self.vm.datastore]:
                 change_required = False
 
-        if self.host_object and self.datastore_object is None:
+        elif self.host_object and self.datastore_cluster_object:
+            if not set(self.datastore_cluster_object.datastore) <= set(self.host_object.datastore):
+                self.module.fail_json(msg="Destination datastore cluster %s provided"
+                                          " is not associated with destination"
+                                          " host system %s. Please specify"
+                                          " datastore value ['%s'] associated with"
+                                          " the given host system." % (dest_datastore_cluster,
+                                                                       dest_host_name,
+                                                                       "', '".join([ds.name for ds in
+                                                                                    self.host_object.datastore])))
+            if self.vm.runtime.host.name == dest_host_name and vm_ds_name in [ds.name for ds in
+                                                                              self.datastore_cluster_object.datastore]:
+                change_required = False
+
+        elif self.cluster_object and self.datastore_object:
+            if not self.datastore_object.summary.accessible:
+                # Datastore is not accessible
+                self.module.fail_json(msg='Destination datastore %s is'
+                                          ' not accessible.' % dest_datastore)
+
+            if self.datastore_object not in self.cluster_object.datastore:
+                # Datastore is not associated with host system
+                self.module.fail_json(msg="Destination datastore %s provided"
+                                          " is not associated with destination"
+                                          " cluster %s. Please specify"
+                                          " datastore value ['%s'] associated with"
+                                          " the given host system." % (dest_datastore,
+                                                                       dest_cluster_name,
+                                                                       "', '".join([ds.name for ds in
+                                                                                    self.cluster_object.datastore])))
+
+            if self.vm.runtime.host.name in [host.name for host in self.cluster_hosts] and \
+                    dest_datastore in [ds.name for ds in self.vm.datastore]:
+                change_required = False
+
+        elif self.cluster_object and self.datastore_cluster_object:
+            if not set(self.datastore_cluster_object.datastore) <= set(self.cluster_object.datastore):
+                self.module.fail_json(msg="Destination datastore cluster %s provided"
+                                          " is not associated with destination"
+                                          " cluster %s. Please specify"
+                                          " datastore value ['%s'] associated with"
+                                          " the given host system." % (dest_datastore_cluster,
+                                                                       dest_cluster_name,
+                                                                       "', '".join([ds.name for ds in
+                                                                                    self.cluster_object.datastore])))
+            if self.vm.runtime.host.name in [host.name for host in self.cluster_hosts] and \
+                    vm_ds_name in [ds.name for ds in self.datastore_cluster_object.datastore]:
+                change_required = False
+
+        elif (self.host_object and self.datastore_object is None) or (
+                self.host_object and self.datastore_cluster_object is None):
             if self.vm.runtime.host.name == dest_host_name:
                 # VM is already located on same host
                 change_required = False
 
             storage_vmotion_needed = False
 
-        elif self.datastore_object and self.host_object is None:
+        elif (self.cluster_object and self.datastore_object is None) or (
+                self.cluster_object and self.datastore_cluster_object is None):
+            if self.vm.runtime.host.name in [host.name for host in self.cluster_hosts]:
+                # VM is already located on this cluster
+                change_required = False
+
+            storage_vmotion_needed = False
+
+        elif (self.datastore_object and self.host_object is None) or (
+                self.datastore_object and self.cluster_object is None):
             if self.datastore_object in self.vm.datastore:
                 # VM is already located on same datastore
                 change_required = False
@@ -266,9 +377,32 @@ class VmotionManager(PyVmomi):
                 self.module.fail_json(msg='Destination datastore %s is'
                                           ' not accessible.' % dest_datastore)
 
+        elif (self.datastore_cluster_object and self.host_object is None) or (
+                self.datastore_cluster_object and self.cluster_object is None):
+            if vm_ds_name in [ds.name for ds in self.datastore_cluster_object.childEntity]:
+                # VM is already located on a datastore in the datastore cluster
+                change_required = False
+
+        if self.cluster_object or self.datastore_cluster_object:
+            self.set_placement()
+
+        # Get Destination resourcepool
+        dest_resourcepool = self.params.get('destination_resourcepool', None)
+        self.resourcepool_object = None
+        if dest_resourcepool:
+            self.resourcepool_object = find_resource_pool_by_name(content=self.content,
+                                                                  resource_pool_name=dest_resourcepool)
+            if self.resourcepool_object is None:
+                self.module.fail_json(msg="Unable to find destination resource pool object for %s" % dest_resourcepool)
+        elif not dest_resourcepool and self.host_object:
+            self.resourcepool_object = self.host_object.parent.resourcePool
+
         if module.check_mode:
-            result['running_host'] = module.params['destination_host']
-            result['changed'] = True
+            if self.host_object:
+                result['running_host'] = self.host_object.name
+            if self.datastore_object:
+                result['datastore'] = self.datastore_object.name
+            result['changed'] = change_required
             module.exit_json(**result)
 
         if change_required:
@@ -284,7 +418,10 @@ class VmotionManager(PyVmomi):
                 # The storage layout is not automatically refreshed, so we trigger it to get coherent module return values
                 if storage_vmotion_needed:
                     self.vm.RefreshStorageInfo()
-                result['running_host'] = module.params['destination_host']
+                if self.host_object:
+                    result['running_host'] = self.host_object.name
+                if self.datastore_object:
+                    result['datastore'] = self.datastore_object.name
                 result['changed'] = True
                 module.exit_json(**result)
             else:
@@ -294,10 +431,13 @@ class VmotionManager(PyVmomi):
                 module.fail_json(msg=msg)
         else:
             try:
-                host = self.vm.summary.runtime.host
-                result['running_host'] = host.summary.config.name
+                if self.host_object:
+                    result['running_host'] = self.host_object.name
+                if self.datastore_object:
+                    result['datastore'] = self.datastore_object.name
             except vim.fault.NoPermission:
                 result['running_host'] = 'NA'
+                result['datastore'] = 'NA'
             result['changed'] = False
             module.exit_json(**result)
 
@@ -310,6 +450,37 @@ class VmotionManager(PyVmomi):
                                             pool=self.resourcepool_object)
         task_object = self.vm.Relocate(relocate_spec)
         return task_object
+
+    def set_placement(self):
+        """
+        Get the host from the cluster and/or the datastore from datastore cluster.
+        """
+        if self.cluster_object is None:
+            if self.host_object:
+                self.cluster_object = self.host_object.parent
+            else:
+                self.cluster_object = self.vm.runtime.host.parent
+
+        if not self.cluster_object.configuration.drsConfig.enabled:
+            self.module.fail_json(
+                msg='destination_cluster or destination_storage_cluster is only allowed for clusters with active drs.')
+
+        relocate_spec = vim.vm.RelocateSpec(host=self.host_object,
+                                            datastore=self.datastore_object)
+        if self.datastore_cluster_object:
+            storagePods = [self.datastore_cluster_object]
+        else:
+            storagePods = None
+        placement_spec = vim.cluster.PlacementSpec(storagePods=storagePods,
+                                                   hosts=self.cluster_hosts,
+                                                   vm=self.vm,
+                                                   relocateSpec=relocate_spec)
+        placement = self.cluster_object.PlaceVm(placement_spec)
+
+        if self.host_object is None:
+            self.host_object = placement.recommendations[0].action[0].targetHost
+        if self.datastore_object is None:
+            self.datastore_object = placement.recommendations[0].action[0].relocateSpec.datastore
 
     def get_vm(self):
         """
@@ -356,7 +527,9 @@ def main():
             destination_host=dict(aliases=['destination']),
             destination_resourcepool=dict(aliases=['resource_pool']),
             destination_datastore=dict(aliases=['datastore']),
-            destination_datacenter=dict(type='str')
+            destination_datacenter=dict(type='str'),
+            destination_cluster=dict(type='str'),
+            destination_datastore_cluster=dict(type='str')
         )
     )
 
@@ -364,7 +537,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_one_of=[
-            ['destination_host', 'destination_datastore'],
+            ['destination_host', 'destination_datastore', 'destination_cluster', 'destination_datastore_cluster'],
             ['vm_uuid', 'vm_name', 'moid'],
         ],
         mutually_exclusive=[
