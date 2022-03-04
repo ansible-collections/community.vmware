@@ -151,12 +151,16 @@ EXAMPLES = r'''
 
 RETURN = r'''
 running_host:
-    description: List the host the virtual machine is registered to. Only returned if there is asked for a vMotion (Cluster or Host).
+    description: 
+    - List the host the virtual machine is registered to. 
+    - Only returned if there is asked for a vMotion (Cluster or Host).
     returned: changed or success
     type: str
     sample: 'host1.example.com'
 datastore:
-    description: List the datastore the virtual machine is on. Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
+    description: 
+    - List the datastore the virtual machine is on. 
+    - Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
     returned: changed or success
     type: str
     sample: 'datastore1'
@@ -265,15 +269,12 @@ class VmotionManager(PyVmomi):
             else:
                 host_datastore_required.append(False)
 
-        if any(host_datastore_required) and (dest_datastore is None or dest_datastore_cluster is None):
-            if self.host_object:
-                datastores = self.host_object.datastore
-            elif self.cluster_object:
-                datastores = self.cluster_object.datastore
+        if any(host_datastore_required) and (dest_datastore is None and dest_datastore_cluster is None):
             msg = "Destination host system or cluster does not share" \
                   " datastore ['%s'] with source host system ['%s'] on which" \
                   " virtual machine is located.  Please specify destination_datastore or destination_datastore_cluster" \
-                  " to rectify this problem." % ("', '".join([ds.name for ds in datastores]),
+                  " to rectify this problem." % ("', '".join([ds.name for ds in (self.host_object.datastore
+                                                                                 or self.cluster_object.datastore)]),
                                                  "', '".join([ds.name for ds in self.vm.datastore]))
 
             self.module.fail_json(msg=msg)
@@ -303,7 +304,7 @@ class VmotionManager(PyVmomi):
                 change_required = False
 
         elif self.host_object and self.datastore_cluster_object:
-            if not set(self.datastore_cluster_object.datastore) <= set(self.host_object.datastore):
+            if not set(self.datastore_cluster_object.childEntity) <= set(self.host_object.datastore):
                 self.module.fail_json(msg="Destination datastore cluster %s provided"
                                           " is not associated with destination"
                                           " host system %s. Please specify"
@@ -313,7 +314,7 @@ class VmotionManager(PyVmomi):
                                                                        "', '".join([ds.name for ds in
                                                                                     self.host_object.datastore])))
             if self.vm.runtime.host.name == dest_host_name and vm_ds_name in [ds.name for ds in
-                                                                              self.datastore_cluster_object.datastore]:
+                                                                              self.datastore_cluster_object.childEntity]:
                 change_required = False
 
         elif self.cluster_object and self.datastore_object:
@@ -338,7 +339,7 @@ class VmotionManager(PyVmomi):
                 change_required = False
 
         elif self.cluster_object and self.datastore_cluster_object:
-            if not set(self.datastore_cluster_object.datastore) <= set(self.cluster_object.datastore):
+            if not set(self.datastore_cluster_object.childEntity) <= set(self.cluster_object.datastore):
                 self.module.fail_json(msg="Destination datastore cluster %s provided"
                                           " is not associated with destination"
                                           " cluster %s. Please specify"
@@ -348,7 +349,7 @@ class VmotionManager(PyVmomi):
                                                                        "', '".join([ds.name for ds in
                                                                                     self.cluster_object.datastore])))
             if self.vm.runtime.host.name in [host.name for host in self.cluster_hosts] and \
-                    vm_ds_name in [ds.name for ds in self.datastore_cluster_object.datastore]:
+                    vm_ds_name in [ds.name for ds in self.datastore_cluster_object.childEntity]:
                 change_required = False
 
         elif (self.host_object and self.datastore_object is None) or (
