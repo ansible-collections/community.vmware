@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2015, Bede Carroll <bc+github () bedecarroll.com>
+
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2018, Ansible Project
 #
@@ -150,14 +151,12 @@ EXAMPLES = r'''
 
 RETURN = r'''
 running_host:
-    description: List the host the virtual machine is registered to. 
-    Only returned if there is asked for a vMotion (Cluster or Host).
+    description: List the host the virtual machine is registered to. Only returned if there is asked for a vMotion (Cluster or Host).
     returned: changed or success
     type: str
     sample: 'host1.example.com'
 datastore:
-    description: List the datastore the virtual machine is on.
-    Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
+    description: List the datastore the virtual machine is on. Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
     returned: changed or success
     type: str
     sample: 'datastore1'
