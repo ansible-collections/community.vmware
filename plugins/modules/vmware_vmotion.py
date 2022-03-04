@@ -152,7 +152,7 @@ EXAMPLES = r'''
 RETURN = r'''
 running_host:
     description: 
-    - List the host the virtual machine is registered to. 
+    - List the host the virtual machine is registered to.
     - Only returned if there is asked for a vMotion (Cluster or Host).
     returned: changed or success
     type: str
