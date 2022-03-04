@@ -239,8 +239,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi, get_all_objs, 
-    vmware_argument_spec, _get_vm_prop, 
+    PyVmomi, get_all_objs,
+    vmware_argument_spec, _get_vm_prop,
     get_parent_datacenter, find_vm_by_name)
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
