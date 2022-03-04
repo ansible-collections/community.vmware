@@ -79,10 +79,10 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
   delegate_to: localhost
   register: vminfo
-  
+
 - debug:
     var: vminfo.virtual_machines
-    
+
 - name: Gather one specific VM
   community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
@@ -91,7 +91,7 @@ EXAMPLES = r'''
     vm_name: 'vm_name_as_per_vcenter'
   delegate_to: localhost
   register: vm_info
-  
+
 - debug:
     var: vminfo.virtual_machines
 
@@ -238,7 +238,10 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, get_all_objs, 
+    vmware_argument_spec, _get_vm_prop, 
+    get_parent_datacenter, find_vm_by_name)
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
