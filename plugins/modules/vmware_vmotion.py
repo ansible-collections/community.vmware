@@ -157,7 +157,7 @@ running_host:
     type: str
     sample: 'host1.example.com'
 datastore:
-    description: List the datastore the virtual machine is on. 
+    description: List the datastore the virtual machine is on.
     Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).
     returned: changed or success
     type: str
