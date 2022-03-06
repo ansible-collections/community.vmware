@@ -300,7 +300,7 @@ class VMwareDvsHost(PyVmomi):
                         switch_uplink_ports[name].append(port.key)
                         lag_uplinks.append(port.key)
 
-        for port in ports:
+        for port in sorted(ports, key=lambda port: port.config.name):
             if port.key in self.uplink_portgroup.portKeys and port.key not in lag_uplinks:
                 switch_uplink_ports['non_lag'].append(port.key)
 
