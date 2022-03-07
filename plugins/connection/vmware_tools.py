@@ -126,7 +126,7 @@ DOCUMENTATION = r'''
             - name: ansible_vmware_tools_executable
 '''
 
-EXAMPLES = r'''
+example = r'''
 # example vars.yml
 ---
 ansible_connection: vmware_tools
