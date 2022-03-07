@@ -5,7 +5,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-DOCUMENTATION = '''
+DOCUMENTATION = r'''
     author:
     - Deric Crago (@dericcrago) <deric.crago@gmail.com>
     name: vmware_tools
