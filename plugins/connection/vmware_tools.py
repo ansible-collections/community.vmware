@@ -7,7 +7,7 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
     author:
-    - Deric Crago <deric.crago@gmail.com>
+    - Deric Crago (@dericcrago) <deric.crago@gmail.com>
     name: vmware_tools
     short_description: Execute tasks inside a VM via VMware Tools
     description:
