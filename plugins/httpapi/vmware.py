@@ -9,7 +9,7 @@ __metaclass__ = type
 DOCUMENTATION = '''
 ---
 author:
-- Abhijeet Kasurde (Akasurde)
+- Abhijeet Kasurde (@Akasurde)
 name : vmware
 short_description: HttpApi Plugin for VMware REST API
 description:
