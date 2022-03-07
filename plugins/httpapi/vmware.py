@@ -8,8 +8,9 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-author: Abhijeet Kasurde (Akasurde)
-httpapi : vmware
+author:
+- Abhijeet Kasurde (Akasurde)
+name : vmware
 short_description: HttpApi Plugin for VMware REST API
 description:
   - This HttpApi plugin provides methods to connect to VMware vCenter over a HTTP(S)-based APIs.
