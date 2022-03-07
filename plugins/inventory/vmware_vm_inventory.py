@@ -10,7 +10,6 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
     name: vmware_vm_inventory
-    plugin_type: inventory
     short_description: VMware Guest inventory source
     author:
       - Abhijeet Kasurde (@Akasurde)
