@@ -11,7 +11,6 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
     name: vmware_host_inventory
-    plugin_type: inventory
     short_description: VMware ESXi hostsystem inventory source
     author:
       - Abhijeet Kasurde (@Akasurde)
