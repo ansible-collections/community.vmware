@@ -2104,6 +2104,10 @@ class PyVmomiHelper(PyVmomi):
                 self.content.customFieldsManager.SetField(entity=vm_obj, key=key_id, value=kv['value'])
                 self.change_detected = True
 
+    def valid_hostname(hostname):
+        # Remove all characters except alphanumeric and minus which is allowed by RFC 952
+			  return re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
+
     def customize_vm(self, vm_obj):
 
         # User specified customization specification
@@ -2112,6 +2116,20 @@ class PyVmomiHelper(PyVmomi):
             cc_mgr = self.content.customizationSpecManager
             if cc_mgr.DoesCustomizationSpecExist(name=custom_spec_name):
                 temp_spec = cc_mgr.GetCustomizationSpec(name=custom_spec_name)
+                spec_adapter_counter = 0
+                if len(temp_spec.spec.nicSettingMap) != len(self.params['networks']):
+                    self.module.fail_json(msg="Number of custom spec network adapter mappings does not equal the num. of defined network adapter mappings")
+                for guest_map in temp_spec.spec.nicSettingMap:
+                    if 'ip' in self.params['networks'][spec_adapter_counter] and 'netmask' in self.params['networks'][spec_adapter_counter]:
+                        guest_map.adapter.ip = vim.vm.customization.FixedIp()
+                        guest_map.adapter.ip.ipAddress = str(self.params['networks'][spec_adapter_counter]['ip'])
+                        guest_map.adapter.subnetMask = str(self.params['networks'][spec_adapter_counter]['netmask'])
+                    spec_adapter_counter += 1
+                if 'name' in self.params and self.params['name']:
+                    temp_spec.spec.identity.hostName = vim.vm.customization.FixedName()
+                    temp_spec.spec.identity.hostName.name = valid_hostname(self.params['name'])
+                else:
+                    self.module.fail_json(msg="Name of the virtual machine not defined, please set 'name' parameter")
                 self.customspec = temp_spec.spec
                 return
             self.module.fail_json(msg="Unable to find customization specification"
@@ -2264,9 +2282,7 @@ class PyVmomiHelper(PyVmomi):
             else:
                 hostname = default_name.split('.')[0]
 
-            # Remove all characters except alphanumeric and minus which is allowed by RFC 952
-            valid_hostname = re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
-            ident.hostName.name = valid_hostname
+            ident.hostName.name = valid_hostname(hostname)
 
             # List of supported time zones for different vSphere versions in Linux/Unix systems
             # https://kb.vmware.com/s/article/2145518
