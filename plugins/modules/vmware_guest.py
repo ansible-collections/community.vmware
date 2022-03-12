@@ -2124,6 +2124,8 @@ class PyVmomiHelper(PyVmomi):
                         guest_map.adapter.ip = vim.vm.customization.FixedIp()
                         guest_map.adapter.ip.ipAddress = str(self.params['networks'][spec_adapter_counter]['ip'])
                         guest_map.adapter.subnetMask = str(self.params['networks'][spec_adapter_counter]['netmask'])
+                    if 'gateway' in self.params['networks'][spec_adapter_counter]:
+                        guest_map.adapter.gateway = str(self.params['networks'][spec_adapter_counter]['gateway'])
                     spec_adapter_counter += 1
                 if 'name' in self.params and self.params['name']:
                     temp_spec.spec.identity.hostName = vim.vm.customization.FixedName()
