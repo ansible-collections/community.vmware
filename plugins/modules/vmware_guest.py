@@ -2104,9 +2104,9 @@ class PyVmomiHelper(PyVmomi):
                 self.content.customFieldsManager.SetField(entity=vm_obj, key=key_id, value=kv['value'])
                 self.change_detected = True
 
-    def valid_hostname(hostname):
+    def valid_hostname(self, hostname):
         # Remove all characters except alphanumeric and minus which is allowed by RFC 952
-			  return re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
+        return re.sub(r"[^a-zA-Z0-9\-]", "", hostname)
 
     def customize_vm(self, vm_obj):
 
@@ -2127,7 +2127,7 @@ class PyVmomiHelper(PyVmomi):
                     spec_adapter_counter += 1
                 if 'name' in self.params and self.params['name']:
                     temp_spec.spec.identity.hostName = vim.vm.customization.FixedName()
-                    temp_spec.spec.identity.hostName.name = valid_hostname(self.params['name'])
+                    temp_spec.spec.identity.hostName.name = self.valid_hostname(self.params['name'])
                 else:
                     self.module.fail_json(msg="Name of the virtual machine not defined, please set 'name' parameter")
                 self.customspec = temp_spec.spec
@@ -2282,7 +2282,7 @@ class PyVmomiHelper(PyVmomi):
             else:
                 hostname = default_name.split('.')[0]
 
-            ident.hostName.name = valid_hostname(hostname)
+            ident.hostName.name = self.valid_hostname(hostname)
 
             # List of supported time zones for different vSphere versions in Linux/Unix systems
             # https://kb.vmware.com/s/article/2145518
