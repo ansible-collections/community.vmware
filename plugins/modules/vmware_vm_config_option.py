@@ -165,7 +165,7 @@ class VmConfigOption(PyVmomi):
 
         return vm_config_option
 
-    def get_config_option_recommended(self, guest_os_desc):
+    def get_config_option_recommended(self, guest_os_desc, hwv_version=''):
         guest_os_option_dict = {}
         support_usb_controller = []
         support_disk_controller = []
@@ -191,6 +191,8 @@ class VmConfigOption(PyVmomi):
                     if dev_type == guest_os_desc[0].recommendedCdromController:
                         default_cdrom_ctl = name
             guest_os_option_dict = {
+                'Hardware version': hwv_version,
+                'Guest ID': guest_os_desc[0].id,
                 'Guest fullname': guest_os_desc[0].fullName,
                 'Default CPU cores per socket': guest_os_desc[0].numRecommendedCoresPerSocket,
                 'Default CPU socket': guest_os_desc[0].numRecommendedPhysicalSockets,
@@ -285,9 +287,8 @@ class VmConfigOption(PyVmomi):
                 vm_config_option_guest = self.get_config_option_by_spec(env_browser=env_browser, guest_id=guest_id,
                                                                         key=hardware_version)
                 guest_os_options = vm_config_option_guest.guestOSDescriptor
-                guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options)
-                results.update({'Guest ID': guest_id[0]})
-                results.update({'Hardware version': vm_config_option_guest.version})
+                guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options,
+                                                                          hwv_version=vm_config_option_guest.version)
                 results.update({'Recommended config options': guest_os_option_dict})
 
         self.module.exit_json(changed=False, failed=False, instance=results)
@@ -312,8 +313,8 @@ def main():
             ['cluster_name', 'esxi_hostname'],
         ]
     )
-    module.deprecate(msg="Names of items in results dict will be changed from strings with spaces to strings"
-                         " joined with underlines, e.g., 'Guest fullname' will be changed to 'guest_fullname'.",
+    module.deprecate(msg="Dict item names in 'instance' result will be changed from strings joined with spaces to"
+                         " strings joined with underlines, e.g., 'Guest fullname' will be changed to 'guest_fullname'.",
                      version='3.0.0', collection_name="community.vmware")
     vm_config_option_guest = VmConfigOption(module)
     vm_config_option_guest.get_config_option_for_guest()
