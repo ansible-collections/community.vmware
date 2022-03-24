@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_object_role_permission - added VMware DV portgroup object_type for setting permissions (https://github.com/ansible-collections/community.vmware/pull/1176)

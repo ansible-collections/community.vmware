@@ -110,7 +110,7 @@ instance:
 
 HAS_PYVMOMI = False
 try:
-    from pyVmomi import vim, vmodl
+    from pyVmomi import vim
     HAS_PYVMOMI = True
 except ImportError:
     pass
@@ -131,16 +131,15 @@ class VmConfigOption(PyVmomi):
                                     )
         self.ctl_device_type.update(self.device_helper.usb_device_type)
         self.ctl_device_type.update(self.device_helper.nic_device_type)
+        self.target_host = None
 
     def get_hardware_versions(self, env_browser):
         support_create = []
         default_config = ''
         try:
             desc = env_browser.QueryConfigOptionDescriptor()
-        except vmodl.RuntimeFault as runtime_fault:
-            self.module.fail_json(msg=to_native(runtime_fault.msg))
-        except Exception as generic_fault:
-            self.module.fail_json(msg="Failed to obtain VM config option descriptor due to fault: %s" % generic_fault)
+        except Exception as e:
+            self.module.fail_json(msg="Failed to obtain VM config option descriptor due to fault: %s" % to_native(e))
         if desc:
             for option_desc in desc:
                 if option_desc.createSupported:
@@ -150,17 +149,19 @@ class VmConfigOption(PyVmomi):
 
         return support_create, default_config
 
-    def get_config_option_by_spec(self, env_browser, guest_id=None, host=None, key=''):
+    def get_config_option_by_spec(self, env_browser, guest_id=None, key=''):
         vm_config_option = None
         if guest_id is None:
             guest_id = []
+        if self.is_vcenter():
+            host = self.target_host
+        else:
+            host = None
         config_query_spec = vim.EnvironmentBrowser.ConfigOptionQuerySpec(guestId=guest_id, host=host, key=key)
         try:
             vm_config_option = env_browser.QueryConfigOptionEx(spec=config_query_spec)
-        except vmodl.RuntimeFault as runtime_fault:
-            self.module.fail_json(msg=to_native(runtime_fault.msg))
-        except Exception as generic_fault:
-            self.module.fail_json(msg="Failed to obtain VM config options due to fault: %s" % generic_fault)
+        except Exception as e:
+            self.module.fail_json(msg="Failed to obtain VM config options due to fault: %s" % to_native(e))
 
         return vm_config_option
 
@@ -236,6 +237,7 @@ class VmConfigOption(PyVmomi):
             host = find_obj(self.content, [vim.HostSystem], esxi_host_name, folder=datacenter)
             if not host:
                 self.module.fail_json(msg='Unable to find host "%s"' % esxi_host_name)
+            self.target_host = host
             cluster = host.parent
         # Define the environment browser object the ComputeResource presents
         env_browser = cluster.environmentBrowser
@@ -254,8 +256,7 @@ class VmConfigOption(PyVmomi):
             if hardware_version and len(support_create_list) != 0 and hardware_version not in support_create_list:
                 self.module.fail_json(msg="Specified hardware version '%s' is not in the supported create list: %s"
                                           % (hardware_version, support_create_list))
-            vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, host=host,
-                                                                  key=hardware_version)
+            vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, key=hardware_version)
             supported_gos_list = self.get_guest_id_list(guest_os_desc=vm_config_option_all)
             if self.params.get('get_guest_os_ids'):
                 info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
@@ -265,8 +266,8 @@ class VmConfigOption(PyVmomi):
                 if supported_gos_list and guest_id[0] not in supported_gos_list:
                     self.module.fail_json(msg="Specified guest ID '%s' is not in the supported guest ID list: '%s'"
                                               % (guest_id[0], supported_gos_list))
-                vm_config_option_guest = self.get_config_option_by_spec(env_browser=env_browser, host=host,
-                                                                        guest_id=guest_id, key=hardware_version)
+                vm_config_option_guest = self.get_config_option_by_spec(env_browser=env_browser, guest_id=guest_id,
+                                                                        key=hardware_version)
                 guest_os_options = vm_config_option_guest.guestOSDescriptor
                 guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options,
                                                                           hwv_version=vm_config_option_guest.version)
