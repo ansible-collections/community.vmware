@@ -167,17 +167,29 @@ class VmConfigOption(PyVmomi):
 
     def get_config_option_recommended(self, guest_os_desc, hwv_version=''):
         guest_os_option_dict = {}
+        support_usb_controller = []
+        support_disk_controller = []
+        support_ethernet_card = []
         if guest_os_desc and len(guest_os_desc) != 0:
             default_disk_ctl = default_ethernet = default_cdrom_ctl = default_usb_ctl = ''
-            for name, type in self.ctl_device_type.items():
-                if type == guest_os_desc[0].recommendedDiskController:
-                    default_disk_ctl = name
-                if type == guest_os_desc[0].recommendedEthernetCard:
-                    default_ethernet = name
-                if type == guest_os_desc[0].recommendedCdromController:
-                    default_cdrom_ctl = name
-                if type == guest_os_desc[0].recommendedUSBController:
-                    default_usb_ctl = name
+            for name, dev_type in self.ctl_device_type.items():
+                for supported_type in guest_os_desc[0].supportedUSBControllerList:
+                    if supported_type == dev_type:
+                        support_usb_controller = support_usb_controller + [name]
+                    if dev_type == guest_os_desc[0].recommendedUSBController:
+                        default_usb_ctl = name
+                for supported_type in guest_os_desc[0].supportedEthernetCard:
+                    if supported_type == dev_type:
+                        support_ethernet_card = support_ethernet_card + [name]
+                    if dev_type == guest_os_desc[0].recommendedEthernetCard:
+                        default_ethernet = name
+                for supported_type in guest_os_desc[0].supportedDiskControllerList:
+                    if supported_type == dev_type:
+                        support_disk_controller = support_disk_controller + [name]
+                    if dev_type == guest_os_desc[0].recommendedDiskController:
+                        default_disk_ctl = name
+                    if dev_type == guest_os_desc[0].recommendedCdromController:
+                        default_cdrom_ctl = name
             guest_os_option_dict = {
                 'Hardware version': hwv_version,
                 'Guest ID': guest_os_desc[0].id,
@@ -192,7 +204,15 @@ class VmConfigOption(PyVmomi):
                 'Default disk size in MB': guest_os_desc[0].recommendedDiskSizeMB,
                 'Default network adapter': default_ethernet,
                 'Default CDROM controller': default_cdrom_ctl,
-                'Default USB controller': default_usb_ctl
+                'Default USB controller': default_usb_ctl,
+                'support_tpm_20': guest_os_desc[0].supportsTPM20,
+                'support_persistent_memory': guest_os_desc[0].persistentMemorySupported,
+                'rec_persistent_memory': guest_os_desc[0].recommendedPersistentMemoryMB,
+                'support_min_persistent_mem_mb': guest_os_desc[0].supportedMinPersistentMemoryMB,
+                'rec_vram_kb': guest_os_desc[0].vRAMSizeInKB.defaultValue,
+                'support_usb_controller': support_usb_controller,
+                'support_disk_controller': support_disk_controller,
+                'support_ethernet_card': support_ethernet_card
             }
 
         return guest_os_option_dict
@@ -208,7 +228,6 @@ class VmConfigOption(PyVmomi):
     def get_config_option_for_guest(self):
         results = {}
         guest_id = []
-        host = None
         datacenter_name = self.params.get('datacenter')
         cluster_name = self.params.get('cluster_name')
         esxi_host_name = self.params.get('esxi_hostname')
@@ -259,8 +278,7 @@ class VmConfigOption(PyVmomi):
             vm_config_option_all = self.get_config_option_by_spec(env_browser=env_browser, key=hardware_version)
             supported_gos_list = self.get_guest_id_list(guest_os_desc=vm_config_option_all)
             if self.params.get('get_guest_os_ids'):
-                info_key = 'Supported guest IDs for %s' % vm_config_option_all.version
-                results.update({info_key: supported_gos_list})
+                results.update({vm_config_option_all.version: supported_gos_list})
 
             if self.params.get('get_config_options') and len(guest_id) != 0:
                 if supported_gos_list and guest_id[0] not in supported_gos_list:
@@ -295,6 +313,9 @@ def main():
             ['cluster_name', 'esxi_hostname'],
         ]
     )
+    module.deprecate(msg="Dict item names in 'instance' result will be changed from strings joined with spaces to"
+                         " strings joined with underlines, e.g., 'Guest fullname' will be changed to 'guest_fullname'.",
+                     version='3.0.0', collection_name="community.vmware")
     vm_config_option_guest = VmConfigOption(module)
     vm_config_option_guest.get_config_option_for_guest()
 
