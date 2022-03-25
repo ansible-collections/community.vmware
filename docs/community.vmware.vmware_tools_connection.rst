@@ -298,7 +298,7 @@ Status
 Authors
 ~~~~~~~
 
-- Deric Crago <deric.crago@gmail.com>
+- Deric Crago (@dericcrago) <deric.crago@gmail.com>
 
 
 .. hint::

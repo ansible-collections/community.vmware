@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_vm_config_option - Fix the parameter not correct issue when hostname is set to ESXi host(https://github.com/ansible-collections/community.vmware/pull/1171).
