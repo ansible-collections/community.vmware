@@ -90,6 +90,7 @@ DOCUMENTATION = r'''
             - Please refer more VMware guest attributes which can be used as properties
               U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
             type: list
+            elements: string
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
                        'config.name', 'config.uuid', 'guest.hostName', 'guest.ipAddress',
