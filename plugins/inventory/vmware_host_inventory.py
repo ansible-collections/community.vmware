@@ -118,6 +118,7 @@ DOCUMENTATION = r"""
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
             required: False
             type: list
+            elements: dict
             default: []
         with_path:
             description:
