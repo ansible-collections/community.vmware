@@ -192,6 +192,8 @@ Parameters
                     </td>
                 <td>
                         <div>VM username.</div>
+                        <div><code>ansible_vmware_tools_user</code> is used for connecting to the VM.</div>
+                        <div><code>ansible_user</code> is used by Ansible on the VM.</div>
                 </td>
             </tr>
             <tr>
@@ -298,7 +300,7 @@ Status
 Authors
 ~~~~~~~
 
-- Deric Crago <deric.crago@gmail.com>
+- Deric Crago (@dericcrago) <deric.crago@gmail.com>
 
 
 .. hint::

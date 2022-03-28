@@ -1,4 +1,0 @@
-minor_changes:
-  - vmware_vm_config_option - Add support_usb_controller, support_ethernet_card, support_disk_controller properties in output of getting VM default configs (https://github.com/ansible-collections/community.vmware/pull/1202).
-deprecated_features:
-  - vmware_vm_config_option - Dict item names in result will be changed from strings joined with spaces to strings joined with underlines, e.g. `Guest fullname` will be changed to `guest_fullname` in version 3.

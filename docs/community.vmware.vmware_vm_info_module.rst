@@ -233,6 +233,21 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vm_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the virtual machine to get related configurations information from.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vm_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -280,6 +295,18 @@ Examples
         password: '{{ vcenter_password }}'
       delegate_to: localhost
       register: vminfo
+
+    - debug:
+        var: vminfo.virtual_machines
+
+    - name: Gather one specific VM
+      community.vmware.vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        vm_name: 'vm_name_as_per_vcenter'
+      delegate_to: localhost
+      register: vm_info
 
     - debug:
         var: vminfo.virtual_machines

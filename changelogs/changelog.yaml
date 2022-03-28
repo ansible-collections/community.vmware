@@ -1137,3 +1137,17 @@ releases:
       name: vmware_host_user_manager
       namespace: ''
     release_date: '2022-02-16'
+  2.2.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_host - match the list of the host nics in the correct order based
+        on the uplink port name in vCenter (https://github.com/ansible-collections/community.vmware/issues/1242).
+      - vmware_guest_powerstate - `shutdownguest` power state is not idempotent (https://github.com/ansible-collections/community.vmware/pull/1227).
+      minor_changes:
+      - vmware_vm_info - Add the posibility to get the configuration informations
+        of only one vm by name. (https://github.com/ansible-collections/community.vmware/pull/1241)
+    fragments:
+    - 1241-vmware_vm_info-add_the_posibility_to_get_only_one_vm_by_name.yaml
+    - 1243-vmware-dvs-host-uplink-ordering.yml
+    - fix_shutdownguest_state_idempotency.yml
+    release_date: '2022-03-28'
