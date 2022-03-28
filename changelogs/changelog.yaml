@@ -654,6 +654,26 @@ releases:
     fragments:
     - 25-vmware_guest_network-catch_taskerror.yml
     release_date: '2022-01-30'
+  1.18.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_host - match the list of the host nics in the correct order based
+        on the uplink port name in vCenter (https://github.com/ansible-collections/community.vmware/issues/1242).
+      minor_changes:
+      - Remove `version_added` documentation that pre-dates the collection, that is
+        refers to Ansible < 2.10 (https://github.com/ansible-collections/community.vmware/pull/1215).
+      - vmware_object_role_permission - added VMware DV portgroup object_type for
+        setting permissions (https://github.com/ansible-collections/community.vmware/pull/1176)
+      - vmware_vm_config_option - Fix the parameter not correct issue when hostname
+        is set to ESXi host(https://github.com/ansible-collections/community.vmware/pull/1171).
+      - vmware_vm_info - adding fact about ``datastore_url`` to output (https://github.com/ansible-collections/community.vmware/pull/1143).
+    fragments:
+    - 1176-vmware_dv_portgroup.yml
+    - 1243-vmware-dvs-host-uplink-ordering.yml
+    - datastore_url-added-to-vm_info.yaml
+    - remove_pre-collection_version_added.yml
+    - vmware_vm_config_option.yml
+    release_date: '2022-03-25'
   1.2.0:
     changes:
       bugfixes:
