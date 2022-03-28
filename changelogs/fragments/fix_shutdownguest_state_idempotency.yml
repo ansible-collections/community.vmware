@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_guest_powerstate - `shutdownguest` power state is not idempotent (https://github.com/ansible-collections/community.vmware/pull/1227).

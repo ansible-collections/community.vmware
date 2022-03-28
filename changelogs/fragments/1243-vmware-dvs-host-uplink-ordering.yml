@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_dvs_host - match the list of the host nics in the correct order based on the uplink port name in vCenter 
-    (https://github.com/ansible-collections/community.vmware/issues/1242).
