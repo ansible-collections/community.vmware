@@ -8,7 +8,6 @@ plugins/modules/vca_fw.py validate-modules:undocumented-parameter # deprecated
 plugins/modules/vca_nat.py validate-modules:doc-default-does-not-match-spec # deprecated
 plugins/modules/vca_nat.py validate-modules:doc-missing-type # deprecated
 plugins/modules/vca_nat.py validate-modules:doc-required-mismatch # deprecated
-plugins/modules/vca_nat.py validate-modules:no-default-for-required-parameter # deprecated
 plugins/modules/vca_nat.py validate-modules:parameter-list-no-elements # deprecated
 plugins/modules/vca_nat.py validate-modules:parameter-type-not-in-doc # deprecated
 plugins/modules/vca_nat.py validate-modules:undocumented-parameter # deprecated
