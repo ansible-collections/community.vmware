@@ -74,6 +74,7 @@ DOCUMENTATION = r'''
             - Ignores template if resulted in an empty string or None value.
             - You can use property specified in I(properties) as variables in the template.
             type: list
+            elements: string
             default: ['config.name + "_" + config.uuid']
         properties:
             description:
@@ -90,6 +91,7 @@ DOCUMENTATION = r'''
             - Please refer more VMware guest attributes which can be used as properties
               U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
             type: list
+            elements: string
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
                        'config.name', 'config.uuid', 'guest.hostName', 'guest.ipAddress',
@@ -125,6 +127,7 @@ DOCUMENTATION = r'''
             - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
             required: False
             type: list
+            elements: dict
             default: []
         with_path:
             description:
