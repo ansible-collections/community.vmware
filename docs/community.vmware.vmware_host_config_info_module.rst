@@ -260,7 +260,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict with hostname as key and dict with host config information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.226&#x27;: {&#x27;Annotations.WelcomeMessage&#x27;: &#x27;&#x27;, &#x27;BufferCache.FlushInterval&#x27;: 30000, &#x27;BufferCache.HardMaxDirty&#x27;: 95, &#x27;BufferCache.PerFileHardMaxDirty&#x27;: 50, &#x27;BufferCache.SoftMaxDirty&#x27;: 15}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;10.76.33.226&#x27;, AnsibleMapping([(&#x27;Annotations.WelcomeMessage&#x27;, &#x27;&#x27;), (&#x27;BufferCache.FlushInterval&#x27;, 30000), (&#x27;BufferCache.HardMaxDirty&#x27;, 95), (&#x27;BufferCache.PerFileHardMaxDirty&#x27;, 50), (&#x27;BufferCache.SoftMaxDirty&#x27;, 15)]))])</div>
                 </td>
             </tr>
     </table>

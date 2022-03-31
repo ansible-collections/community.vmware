@@ -355,7 +355,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Metadata about DRS group created</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;drs_group_facts&#x27;: {&#x27;changed&#x27;: True, &#x27;failed&#x27;: False, &#x27;msg&#x27;: &#x27;Created host group TEST_HOST_01 successfully&#x27;, &#x27;result&#x27;: {&#x27;DC0_C0&#x27;: [{&#x27;group_name&#x27;: &#x27;TEST_HOST_01&#x27;, &#x27;hosts&#x27;: [&#x27;DC0_C0_H0&#x27;, &#x27;DC0_C0_H1&#x27;, &#x27;DC0_C0_H2&#x27;], &#x27;type&#x27;: &#x27;host&#x27;}]}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;drs_group_facts&#x27;, AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;failed&#x27;, False), (&#x27;msg&#x27;, &#x27;Created host group TEST_HOST_01 successfully&#x27;), (&#x27;result&#x27;, AnsibleMapping([(&#x27;DC0_C0&#x27;, [AnsibleMapping([(&#x27;group_name&#x27;, &#x27;TEST_HOST_01&#x27;), (&#x27;hosts&#x27;, [&#x27;DC0_C0_H0&#x27;, &#x27;DC0_C0_H1&#x27;, &#x27;DC0_C0_H2&#x27;]), (&#x27;type&#x27;, &#x27;host&#x27;)])])]))]))])</div>
                 </td>
             </tr>
     </table>

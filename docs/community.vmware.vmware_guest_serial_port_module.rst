@@ -533,7 +533,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the virtual machine&#x27;s serial ports after managing them</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;backing_type&#x27;: &#x27;network&#x27;, &#x27;direction&#x27;: &#x27;client&#x27;, &#x27;service_uri&#x27;: &#x27;tcp://6000&#x27;}, {&#x27;backing_type&#x27;: &#x27;pipe&#x27;, &#x27;direction&#x27;: &#x27;server&#x27;, &#x27;pipe_name&#x27;: &#x27;serial pipe&#x27;}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[AnsibleMapping([(&#x27;backing_type&#x27;, &#x27;network&#x27;), (&#x27;direction&#x27;, &#x27;client&#x27;), (&#x27;service_uri&#x27;, &#x27;tcp://6000&#x27;)]), AnsibleMapping([(&#x27;backing_type&#x27;, &#x27;pipe&#x27;), (&#x27;direction&#x27;, &#x27;server&#x27;), (&#x27;pipe_name&#x27;, &#x27;serial pipe&#x27;)])]</div>
                 </td>
             </tr>
     </table>

@@ -477,7 +477,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the virtual machine&#x27;s video card after managing them</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;auto_detect&#x27;: False, &#x27;display_number&#x27;: 2, &#x27;enable_3D_support&#x27;: True, &#x27;memory_3D&#x27;: 524288, &#x27;renderer_3D&#x27;: &#x27;automatic&#x27;, &#x27;video_memory&#x27;: 8192}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;auto_detect&#x27;, False), (&#x27;display_number&#x27;, 2), (&#x27;enable_3D_support&#x27;, True), (&#x27;memory_3D&#x27;, 524288), (&#x27;renderer_3D&#x27;, &#x27;automatic&#x27;), (&#x27;video_memory&#x27;, 8192)])</div>
                 </td>
             </tr>
     </table>

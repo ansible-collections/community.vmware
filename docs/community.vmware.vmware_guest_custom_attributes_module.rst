@@ -436,7 +436,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the virtual machine attributes</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;mycustom&#x27;: &#x27;my_custom_value&#x27;, &#x27;mycustom_2&#x27;: &#x27;my_custom_value_2&#x27;, &#x27;sample_1&#x27;: &#x27;sample_1_value&#x27;, &#x27;sample_2&#x27;: &#x27;sample_2_value&#x27;, &#x27;sample_3&#x27;: &#x27;sample_3_value&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;mycustom&#x27;, &#x27;my_custom_value&#x27;), (&#x27;mycustom_2&#x27;, &#x27;my_custom_value_2&#x27;), (&#x27;sample_1&#x27;, &#x27;sample_1_value&#x27;), (&#x27;sample_2&#x27;, &#x27;sample_2_value&#x27;), (&#x27;sample_3&#x27;, &#x27;sample_3_value&#x27;)])</div>
                 </td>
             </tr>
     </table>

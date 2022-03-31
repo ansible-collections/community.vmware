@@ -356,7 +356,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about VMware object rename operation</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;current_name&#x27;: &#x27;Fedora_31&#x27;, &#x27;desired_name&#x27;: &#x27;Fedora_31&#x27;, &#x27;previous_name&#x27;: &#x27;Fedora_VM&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;current_name&#x27;, &#x27;Fedora_31&#x27;), (&#x27;desired_name&#x27;, &#x27;Fedora_31&#x27;), (&#x27;previous_name&#x27;, &#x27;Fedora_VM&#x27;)])</div>
                 </td>
             </tr>
     </table>

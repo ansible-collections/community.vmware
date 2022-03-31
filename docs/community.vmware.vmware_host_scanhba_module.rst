@@ -341,7 +341,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>return confirmation of requested host and updated / refreshed storage system</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01.example.com&#x27;: {&#x27;rescaned_hba&#x27;: &#x27;true&#x27;, &#x27;refreshed_storage&#x27;: &#x27;true&#x27;, &#x27;rescaned_vmfs&#x27;: &#x27;true&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi01.example.com&#x27;, AnsibleMapping([(&#x27;rescaned_hba&#x27;, &#x27;true&#x27;), (&#x27;refreshed_storage&#x27;, &#x27;true&#x27;), (&#x27;rescaned_vmfs&#x27;, &#x27;true&#x27;)]))])</div>
                 </td>
             </tr>
     </table>

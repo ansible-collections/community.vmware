@@ -1,4 +1,7 @@
 - hosts: localhost
+  environment:
+    http_proxy: http://psrvcm02pro0001.sccloudinfra.net:8080
+    https_proxy: http://psrvcm02pro0001.sccloudinfra.net:8080
   tasks:
     - name: Generate version
       block:

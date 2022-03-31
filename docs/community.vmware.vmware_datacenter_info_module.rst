@@ -327,7 +327,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Information about datacenter</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;configStatus&#x27;: &#x27;gray&#x27;, &#x27;moid&#x27;: &#x27;datacenter-2&#x27;, &#x27;name&#x27;: &#x27;Asia-Datacenter1&#x27;}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[AnsibleMapping([(&#x27;configStatus&#x27;, &#x27;gray&#x27;), (&#x27;moid&#x27;, &#x27;datacenter-2&#x27;), (&#x27;name&#x27;, &#x27;Asia-Datacenter1&#x27;)])]</div>
                 </td>
             </tr>
     </table>

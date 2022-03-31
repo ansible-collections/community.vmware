@@ -538,7 +538,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>the Key Provider cluster info</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;has_backup&#x27;: None, &#x27;key_id&#x27;: None, &#x27;key_provide_id&#x27;: &#x27;test_standard&#x27;, &#x27;management_type&#x27;: None, &#x27;servers&#x27;: [{&#x27;address&#x27;: &#x27;192.168.1.10&#x27;, &#x27;name&#x27;: &#x27;test_kms&#x27;, &#x27;port&#x27;: 5696, &#x27;protocol&#x27;: &#x27;&#x27;, &#x27;proxy&#x27;: &#x27;&#x27;, &#x27;proxy_port&#x27;: None, &#x27;user_name&#x27;: &#x27;&#x27;}], &#x27;tpm_required&#x27;: None, &#x27;use_as_default&#x27;: True}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[AnsibleMapping([(&#x27;has_backup&#x27;, None), (&#x27;key_id&#x27;, None), (&#x27;key_provide_id&#x27;, &#x27;test_standard&#x27;), (&#x27;management_type&#x27;, None), (&#x27;servers&#x27;, [AnsibleMapping([(&#x27;address&#x27;, &#x27;192.168.1.10&#x27;), (&#x27;name&#x27;, &#x27;test_kms&#x27;), (&#x27;port&#x27;, 5696), (&#x27;protocol&#x27;, &#x27;&#x27;), (&#x27;proxy&#x27;, &#x27;&#x27;), (&#x27;proxy_port&#x27;, None), (&#x27;user_name&#x27;, &#x27;&#x27;)])]), (&#x27;tpm_required&#x27;, None), (&#x27;use_as_default&#x27;, True)])]</div>
                 </td>
             </tr>
     </table>

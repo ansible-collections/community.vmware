@@ -35,7 +35,7 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (Akasurde)
+- Abhijeet Kasurde (@Akasurde)
 
 
 .. hint::

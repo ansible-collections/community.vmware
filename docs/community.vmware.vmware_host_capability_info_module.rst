@@ -262,7 +262,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host&#x27;s capability info</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi_hostname_0001&#x27;: {&#x27;accel3dSupported&#x27;: False, &#x27;backgroundSnapshotsSupported&#x27;: False, &#x27;checkpointFtCompatibilityIssues&#x27;: [], &#x27;checkpointFtSupported&#x27;: False, &#x27;cloneFromSnapshotSupported&#x27;: True, &#x27;cpuHwMmuSupported&#x27;: True}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi_hostname_0001&#x27;, AnsibleMapping([(&#x27;accel3dSupported&#x27;, False), (&#x27;backgroundSnapshotsSupported&#x27;, False), (&#x27;checkpointFtCompatibilityIssues&#x27;, []), (&#x27;checkpointFtSupported&#x27;, False), (&#x27;cloneFromSnapshotSupported&#x27;, True), (&#x27;cpuHwMmuSupported&#x27;, True)]))])</div>
                 </td>
             </tr>
     </table>

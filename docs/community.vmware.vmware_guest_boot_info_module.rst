@@ -314,7 +314,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about boot order of virtual machine</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;current_boot_order&#x27;: [&#x27;floppy&#x27;, &#x27;disk&#x27;, &#x27;ethernet&#x27;, &#x27;cdrom&#x27;], &#x27;current_boot_delay&#x27;: 2000, &#x27;current_boot_retry_delay&#x27;: 22300, &#x27;current_boot_retry_enabled&#x27;: True, &#x27;current_enter_bios_setup&#x27;: True, &#x27;current_boot_firmware&#x27;: &#x27;bios&#x27;, &#x27;current_secure_boot_enabled&#x27;: False}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;current_boot_order&#x27;, [&#x27;floppy&#x27;, &#x27;disk&#x27;, &#x27;ethernet&#x27;, &#x27;cdrom&#x27;]), (&#x27;current_boot_delay&#x27;, 2000), (&#x27;current_boot_retry_delay&#x27;, 22300), (&#x27;current_boot_retry_enabled&#x27;, True), (&#x27;current_enter_bios_setup&#x27;, True), (&#x27;current_boot_firmware&#x27;, &#x27;bios&#x27;), (&#x27;current_secure_boot_enabled&#x27;, False)])</div>
                 </td>
             </tr>
     </table>

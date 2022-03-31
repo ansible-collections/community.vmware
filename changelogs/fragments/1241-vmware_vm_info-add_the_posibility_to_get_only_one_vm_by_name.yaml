@@ -1,3 +1,0 @@
-breaking_changes:
-  - vmware_vm_info - Add the posibility to get the configuration informations of only one vm by name.
-    (https://github.com/ansible-collections/community.vmware/pull/1241)

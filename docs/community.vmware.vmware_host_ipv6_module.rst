@@ -292,7 +292,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host system&#x27;s IPv6 configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01&#x27;: {&#x27;changed&#x27;: False, &#x27;msg&#x27;: &quot;IPv6 is already enabled and active for host &#x27;esxi01&#x27;&quot;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi01&#x27;, AnsibleMapping([(&#x27;changed&#x27;, False), (&#x27;msg&#x27;, &quot;IPv6 is already enabled and active for host &#x27;esxi01&#x27;&quot;)]))])</div>
                 </td>
             </tr>
     </table>

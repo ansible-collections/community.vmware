@@ -264,7 +264,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict with hostname as key and dict with NTP infos as value</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.226&#x27;: [{&#x27;ntp_servers&#x27;: [], &#x27;time_zone_description&#x27;: &#x27;UTC&#x27;, &#x27;time_zone_gmt_offset&#x27;: 0, &#x27;time_zone_identifier&#x27;: &#x27;UTC&#x27;, &#x27;time_zone_name&#x27;: &#x27;UTC&#x27;}]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;10.76.33.226&#x27;, [AnsibleMapping([(&#x27;ntp_servers&#x27;, []), (&#x27;time_zone_description&#x27;, &#x27;UTC&#x27;), (&#x27;time_zone_gmt_offset&#x27;, 0), (&#x27;time_zone_identifier&#x27;, &#x27;UTC&#x27;), (&#x27;time_zone_name&#x27;, &#x27;UTC&#x27;)])])])</div>
                 </td>
             </tr>
     </table>

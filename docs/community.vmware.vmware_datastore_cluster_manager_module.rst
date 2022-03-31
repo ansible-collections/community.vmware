@@ -309,7 +309,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>information about datastore cluster</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed_datastores&#x27;: [&#x27;ds_171_1&#x27;], &#x27;current_datastores&#x27;: [], &#x27;msg&#x27;: None, &#x27;previous_datastores&#x27;: [&#x27;ds_171_1&#x27;]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;changed_datastores&#x27;, [&#x27;ds_171_1&#x27;]), (&#x27;current_datastores&#x27;, []), (&#x27;msg&#x27;, None), (&#x27;previous_datastores&#x27;, [&#x27;ds_171_1&#x27;])])</div>
                 </td>
             </tr>
     </table>

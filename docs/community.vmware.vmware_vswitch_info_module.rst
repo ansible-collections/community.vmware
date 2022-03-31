@@ -266,7 +266,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host&#x27;s vswitch configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.218&#x27;: {&#x27;vSwitch0&#x27;: {&#x27;mtu&#x27;: 1500, &#x27;num_ports&#x27;: 128, &#x27;pnics&#x27;: [&#x27;vmnic0&#x27;]}, &#x27;vSwitch_0011&#x27;: {&#x27;mtu&#x27;: 1500, &#x27;num_ports&#x27;: 128, &#x27;pnics&#x27;: [&#x27;vmnic2&#x27;, &#x27;vmnic1&#x27;]}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;10.76.33.218&#x27;, AnsibleMapping([(&#x27;vSwitch0&#x27;, AnsibleMapping([(&#x27;mtu&#x27;, 1500), (&#x27;num_ports&#x27;, 128), (&#x27;pnics&#x27;, [&#x27;vmnic0&#x27;])])), (&#x27;vSwitch_0011&#x27;, AnsibleMapping([(&#x27;mtu&#x27;, 1500), (&#x27;num_ports&#x27;, 128), (&#x27;pnics&#x27;, [&#x27;vmnic2&#x27;, &#x27;vmnic1&#x27;])]))]))])</div>
                 </td>
             </tr>
     </table>

@@ -93,6 +93,7 @@ Name | Description
 [community.vmware.vmware_category_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_info_module.rst)|Gather info about VMware tag categories
 [community.vmware.vmware_cfg_backup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cfg_backup_module.rst)|Backup / Restore / Reset ESXi host configuration
 [community.vmware.vmware_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_module.rst)|Manage VMware vSphere clusters
+[community.vmware.vmware_cluster_dpm](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_dpm_module.rst)|Manage Distributed Power Management (DPM) on VMware vSphere clusters
 [community.vmware.vmware_cluster_drs](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_drs_module.rst)|Manage Distributed Resource Scheduler (DRS) on VMware vSphere clusters
 [community.vmware.vmware_cluster_ha](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_ha_module.rst)|Manage High Availability (HA) on VMware vSphere clusters
 [community.vmware.vmware_cluster_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_info_module.rst)|Gather info about clusters available in given vCenter

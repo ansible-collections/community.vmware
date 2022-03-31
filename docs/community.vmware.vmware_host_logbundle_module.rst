@@ -330,7 +330,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>saved path of a logbundle file for ESXi</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;dest&#x27;: &#x27;./esxi-log.tgz&#x27;, &#x27;failed&#x27;: False, &#x27;gid&#x27;: 0, &#x27;group&#x27;: &#x27;root&#x27;, &#x27;mode&#x27;: &#x27;0644&#x27;, &#x27;owner&#x27;: &#x27;root&#x27;, &#x27;size&#x27;: 25783140, &#x27;state&#x27;: &#x27;file&#x27;, &#x27;uid&#x27;: 0}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;dest&#x27;, &#x27;./esxi-log.tgz&#x27;), (&#x27;failed&#x27;, False), (&#x27;gid&#x27;, 0), (&#x27;group&#x27;, &#x27;root&#x27;), (&#x27;mode&#x27;, &#x27;0644&#x27;), (&#x27;owner&#x27;, &#x27;root&#x27;), (&#x27;size&#x27;, 25783140), (&#x27;state&#x27;, &#x27;file&#x27;), (&#x27;uid&#x27;, 0)])</div>
                 </td>
             </tr>
     </table>

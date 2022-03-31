@@ -279,7 +279,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict with hostname as key and dict with SSL thumbprint related info</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.215&#x27;: {&#x27;owner_tag&#x27;: &#x27;&#x27;, &#x27;principal&#x27;: &#x27;vpxuser&#x27;, &#x27;ssl_thumbprints&#x27;: [&#x27;E3:E8:A9:20:8D:32:AE:59:C6:8D:A5:91:B0:20:EF:00:A2:7C:27:EE&#x27;, &#x27;F1:AC:DA:6E:D8:1E:37:36:4A:5C:07:E5:04:0B:87:C8:75:FB:42:01&#x27;]}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;10.76.33.215&#x27;, AnsibleMapping([(&#x27;owner_tag&#x27;, &#x27;&#x27;), (&#x27;principal&#x27;, &#x27;vpxuser&#x27;), (&#x27;ssl_thumbprints&#x27;, [&#x27;E3:E8:A9:20:8D:32:AE:59:C6:8D:A5:91:B0:20:EF:00:A2:7C:27:EE&#x27;, &#x27;F1:AC:DA:6E:D8:1E:37:36:4A:5C:07:E5:04:0B:87:C8:75:FB:42:01&#x27;])]))])</div>
                 </td>
             </tr>
     </table>

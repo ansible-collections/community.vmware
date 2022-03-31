@@ -439,7 +439,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host system&#x27;s SNMP configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01&#x27;: {&#x27;changed&#x27;: False, &#x27;community&#x27;: [&#x27;test&#x27;], &#x27;hw_source&#x27;: &#x27;indications&#x27;, &#x27;msg&#x27;: &#x27;SNMP already configured properly&#x27;, &#x27;port&#x27;: 161, &#x27;state&#x27;: &#x27;enabled&#x27;, &#x27;trap_targets&#x27;: []}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi01&#x27;, AnsibleMapping([(&#x27;changed&#x27;, False), (&#x27;community&#x27;, [&#x27;test&#x27;]), (&#x27;hw_source&#x27;, &#x27;indications&#x27;), (&#x27;msg&#x27;, &#x27;SNMP already configured properly&#x27;), (&#x27;port&#x27;, 161), (&#x27;state&#x27;, &#x27;enabled&#x27;), (&#x27;trap_targets&#x27;, [])]))])</div>
                 </td>
             </tr>
     </table>

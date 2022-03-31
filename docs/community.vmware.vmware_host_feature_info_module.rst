@@ -270,7 +270,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host&#x27;s feature capability information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;10.76.33.226&#x27;: [{&#x27;feature_name&#x27;: &#x27;cpuid.3DNOW&#x27;, &#x27;key&#x27;: &#x27;cpuid.3DNOW&#x27;, &#x27;value&#x27;: &#x27;0&#x27;}, {&#x27;feature_name&#x27;: &#x27;cpuid.3DNOWPLUS&#x27;, &#x27;key&#x27;: &#x27;cpuid.3DNOWPLUS&#x27;, &#x27;value&#x27;: &#x27;0&#x27;}]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;10.76.33.226&#x27;, [AnsibleMapping([(&#x27;feature_name&#x27;, &#x27;cpuid.3DNOW&#x27;), (&#x27;key&#x27;, &#x27;cpuid.3DNOW&#x27;), (&#x27;value&#x27;, &#x27;0&#x27;)]), AnsibleMapping([(&#x27;feature_name&#x27;, &#x27;cpuid.3DNOWPLUS&#x27;), (&#x27;key&#x27;, &#x27;cpuid.3DNOWPLUS&#x27;), (&#x27;value&#x27;, &#x27;0&#x27;)])])])</div>
                 </td>
             </tr>
     </table>
