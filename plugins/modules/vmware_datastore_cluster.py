@@ -378,24 +378,24 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                     if foundVm:
                         if vm['automation_level'] == "disabled":
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
                             if foundVm.enabled != False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
                         elif vm['automation_level'] == "none":
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled != None:
+                            if foundVm.enabled is not None:
                                 vmConfigSpec.info.enabled = None
                                 changed = True
                         else:
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = vm['automation_level']
                                 changed = True
-                            if foundVm.enabled != False:
+                            if foundVm.enabled is not False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
 
@@ -535,11 +535,10 @@ def main():
             rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
-            vm_overrides=dict(type='list', elements='dict', required=False,
-                options=dict(
+            vm_overrides=dict(type='list', elements='dict', required=False, options=dict(
                     vm_name=dict(type='str', required=True),
                     keep_vmdks_together=dict(type='bool', default=None),
-                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'],default='none')
+                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none')
                 )
             )
         )
