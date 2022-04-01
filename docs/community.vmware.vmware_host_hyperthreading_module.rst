@@ -294,7 +294,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host system&#x27;s Hyperthreading configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01&#x27;: {&#x27;msg&#x27;: &quot;Hyperthreading is already enabled and active for host &#x27;esxi01&#x27;&quot;, &#x27;state_current&#x27;: &#x27;active&#x27;, &#x27;state&#x27;: &#x27;enabled&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi01&#x27;, AnsibleMapping([(&#x27;msg&#x27;, &quot;Hyperthreading is already enabled and active for host &#x27;esxi01&#x27;&quot;), (&#x27;state_current&#x27;, &#x27;active&#x27;), (&#x27;state&#x27;, &#x27;enabled&#x27;)]))])</div>
                 </td>
             </tr>
     </table>

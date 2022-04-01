@@ -1,11 +1,11 @@
-.. _community.vmware.vmware_host_powermgmt_policy_module:
+.. _community.vmware.vmware_cluster_dpm_module:
 
 
-*********************************************
-community.vmware.vmware_host_powermgmt_policy
-*********************************************
+***********************************
+community.vmware.vmware_cluster_dpm
+***********************************
 
-**Manages the Power Management Policy of an ESXI host system**
+**Manage Distributed Power Management (DPM) on VMware vSphere clusters**
 
 
 
@@ -16,7 +16,8 @@ community.vmware.vmware_host_powermgmt_policy
 
 Synopsis
 --------
-- This module can be used to manage the Power Management Policy of ESXi host systems in given vCenter infrastructure.
+- Manages DRS on VMware vSphere clusters.
+- All values and VMware object names are case sensitive.
 
 
 
@@ -24,8 +25,8 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.6
-- PyVmomi
+- Tested on ESXi 6.7 and 7.0.
+- PyVmomi installed.
 
 
 Parameters
@@ -46,29 +47,105 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the cluster from which all host systems will be used.</div>
-                        <div>This is required parameter if <code>esxi_hostname</code> is not specified.</div>
+                        <div>The name of the cluster to be managed.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the datacenter.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>default_dpm_behaviour</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>a</li>
+                                    <li>u</li>
+                                    <li>t</li>
+                                    <li>o</li>
+                                    <li>m</li>
+                                    <li>a</li>
+                                    <li>t</li>
+                                    <li>e</li>
+                                    <li>d</li>
+                                    <li>,</li>
+                                    <li> </li>
+                                    <li>m</li>
+                                    <li>a</li>
+                                    <li>n</li>
+                                    <li>u</li>
+                                    <li>a</li>
+                                    <li>l</li>
+                        </ul>
                 </td>
                 <td>
-                        <div>Name of the host system to work with.</div>
-                        <div>This is required parameter if <code>cluster_name</code> is not specified.</div>
+                        <div>Whether dpm should be automated or manual</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>enable_dpm</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to enable DPM.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>host_power_action_rate</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>1</li>
+                                    <li>2</li>
+                                    <li><div style="color: blue"><b>3</b>&nbsp;&larr;</div></li>
+                                    <li>4</li>
+                                    <li>5</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>specify host power action rate</div>
                 </td>
             </tr>
             <tr>
@@ -104,27 +181,6 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>policy</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>high-performance</li>
-                                    <li><div style="color: blue"><b>balanced</b>&nbsp;&larr;</div></li>
-                                    <li>low-power</li>
-                                    <li>custom</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the Power Management Policy of the host system.</div>
                 </td>
             </tr>
             <tr>
@@ -227,7 +283,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.5
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -237,57 +292,19 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Set the Power Management Policy of a host system to high-performance
-      community.vmware.vmware_host_powermgmt_policy:
+    - name: Enable DPM
+      community.vmware.vmware_cluster_dpm:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_host }}'
-        policy: high-performance
-      delegate_to: localhost
-
-    - name: Set the Power Management Policy of all host systems from cluster to high-performance
-      community.vmware.vmware_host_powermgmt_policy:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
-        policy: high-performance
+        datacenter_name: datacenter
+        cluster_name: cluster
+        enable_dpm: true
+        default_dpm_behaviour: automated
+        host_power_action_rate: 2
       delegate_to: localhost
 
 
-
-Return Values
--------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>metadata about host system&#x27;s Power Management Policy</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;result&#x27;, AnsibleMapping([(&#x27;esxi01&#x27;, AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;current_state&#x27;, &#x27;high-performance&#x27;), (&#x27;desired_state&#x27;, &#x27;high-performance&#x27;), (&#x27;msg&#x27;, &#x27;Power policy changed&#x27;), (&#x27;previous_state&#x27;, &#x27;balanced&#x27;)]))]))])</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
 
 
 Status
@@ -297,4 +314,4 @@ Status
 Authors
 ~~~~~~~
 
-- Christian Kotte (@ckotte) <christian.kotte@gmx.de>
+- Swisscom (Schweiz) AG

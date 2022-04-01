@@ -383,7 +383,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about DRS VM and VM rule</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;rule_enabled&#x27;: False, &#x27;rule_key&#x27;: 20, &#x27;rule_mandatory&#x27;: True, &#x27;rule_name&#x27;: &#x27;drs_rule_0014&#x27;, &#x27;rule_uuid&#x27;: &#x27;525f3bc0-253f-825a-418e-2ec93bffc9ae&#x27;, &#x27;rule_vms&#x27;: [&#x27;VM_65&#x27;, &#x27;VM_146&#x27;]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;rule_enabled&#x27;, False), (&#x27;rule_key&#x27;, 20), (&#x27;rule_mandatory&#x27;, True), (&#x27;rule_name&#x27;, &#x27;drs_rule_0014&#x27;), (&#x27;rule_uuid&#x27;, &#x27;525f3bc0-253f-825a-418e-2ec93bffc9ae&#x27;), (&#x27;rule_vms&#x27;, [&#x27;VM_65&#x27;, &#x27;VM_146&#x27;])])</div>
                 </td>
             </tr>
     </table>

@@ -434,7 +434,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>library creation success and library_id</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;library_id&#x27;: &#x27;d0b92fa9-7039-4f29-8e9c-0debfcb22b72&#x27;, &#x27;library_description&#x27;: &#x27;Test description&#x27;, &#x27;library_type&#x27;: &#x27;LOCAL&#x27;, &#x27;msg&#x27;: &quot;Content Library &#x27;demo-local-lib-4&#x27; created.&quot;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;library_id&#x27;, &#x27;d0b92fa9-7039-4f29-8e9c-0debfcb22b72&#x27;), (&#x27;library_description&#x27;, &#x27;Test description&#x27;), (&#x27;library_type&#x27;, &#x27;LOCAL&#x27;), (&#x27;msg&#x27;, &quot;Content Library &#x27;demo-local-lib-4&#x27; created.&quot;)])</div>
                 </td>
             </tr>
     </table>

@@ -472,7 +472,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Virtual machine deployment message and vm_id</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;msg&#x27;: &quot;Deployed Virtual Machine &#x27;Sample_VM&#x27;.&quot;, &#x27;vm_id&#x27;: &#x27;vm-1009&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;msg&#x27;, &quot;Deployed Virtual Machine &#x27;Sample_VM&#x27;.&quot;), (&#x27;vm_id&#x27;, &#x27;vm-1009&#x27;)])</div>
                 </td>
             </tr>
     </table>

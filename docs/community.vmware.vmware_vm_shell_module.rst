@@ -506,7 +506,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about the new process after completion with wait_for_process</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;cmd_line&#x27;: &#x27;&quot;/bin/sleep&quot; 1&#x27;, &#x27;end_time&#x27;: &#x27;2018-04-26T05:03:21+00:00&#x27;, &#x27;exit_code&#x27;: 0, &#x27;name&#x27;: &#x27;sleep&#x27;, &#x27;owner&#x27;: &#x27;dev1&#x27;, &#x27;start_time&#x27;: &#x27;2018-04-26T05:03:19+00:00&#x27;, &#x27;uuid&#x27;: &#x27;564db1e2-a3ff-3b0e-8b77-49c25570bb66&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;cmd_line&#x27;, &#x27;&quot;/bin/sleep&quot; 1&#x27;), (&#x27;end_time&#x27;, &#x27;2018-04-26T05:03:21+00:00&#x27;), (&#x27;exit_code&#x27;, 0), (&#x27;name&#x27;, &#x27;sleep&#x27;), (&#x27;owner&#x27;, &#x27;dev1&#x27;), (&#x27;start_time&#x27;, &#x27;2018-04-26T05:03:19+00:00&#x27;), (&#x27;uuid&#x27;, &#x27;564db1e2-a3ff-3b0e-8b77-49c25570bb66&#x27;)])</div>
                 </td>
             </tr>
     </table>

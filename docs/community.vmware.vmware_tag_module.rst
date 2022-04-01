@@ -334,7 +334,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dictionary of tag metadata</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;msg&#x27;: &quot;Tag &#x27;Sample_Tag_0002&#x27; created.&quot;, &#x27;tag_id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:bff91819-f529-43c9-80ca-1c9dfda09441:GLOBAL&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;msg&#x27;, &quot;Tag &#x27;Sample_Tag_0002&#x27; created.&quot;), (&#x27;tag_id&#x27;, &#x27;urn:vmomi:InventoryServiceTag:bff91819-f529-43c9-80ca-1c9dfda09441:GLOBAL&#x27;)])</div>
                 </td>
             </tr>
     </table>

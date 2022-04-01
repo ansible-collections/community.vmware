@@ -300,7 +300,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict with information on what was changed, by ESXi host in scope.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;results&#x27;: {&#x27;myhost01.example.com&#x27;: {&#x27;changed&#x27;: True, &#x27;configured_options&#x27;: &#x27;ipv6=0&#x27;, &#x27;msg&#x27;: &#x27;Options have been changed on the kernel module&#x27;, &#x27;original_options&#x27;: &#x27;ipv6=1&#x27;}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;results&#x27;, AnsibleMapping([(&#x27;myhost01.example.com&#x27;, AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;configured_options&#x27;, &#x27;ipv6=0&#x27;), (&#x27;msg&#x27;, &#x27;Options have been changed on the kernel module&#x27;), (&#x27;original_options&#x27;, &#x27;ipv6=1&#x27;)]))]))])</div>
                 </td>
             </tr>
     </table>

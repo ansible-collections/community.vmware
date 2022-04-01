@@ -377,7 +377,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>display the facts of captured virtual machine screenshot file</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;virtual_machine&#x27;: &#x27;test_vm&#x27;, &#x27;screenshot_file&#x27;: &#x27;[datastore0] test_vm/test_vm-1.png&#x27;, &#x27;task_start_time&#x27;: &#x27;2019-05-25T10:35:04.215016Z&#x27;, &#x27;task_complete_time&#x27;: &#x27;2019-05-25T10:35:04.412622Z&#x27;, &#x27;result&#x27;: &#x27;success&#x27;, &#x27;screenshot_file_url&#x27;: &#x27;https://test_vcenter/folder/test_vm/test_vm-1.png?dcPath=test-dc&amp;dsName=datastore0&#x27;, &#x27;download_local_path&#x27;: &#x27;/tmp/&#x27;, &#x27;download_file_size&#x27;: 2367}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;virtual_machine&#x27;, &#x27;test_vm&#x27;), (&#x27;screenshot_file&#x27;, &#x27;[datastore0] test_vm/test_vm-1.png&#x27;), (&#x27;task_start_time&#x27;, &#x27;2019-05-25T10:35:04.215016Z&#x27;), (&#x27;task_complete_time&#x27;, &#x27;2019-05-25T10:35:04.412622Z&#x27;), (&#x27;result&#x27;, &#x27;success&#x27;), (&#x27;screenshot_file_url&#x27;, &#x27;https://test_vcenter/folder/test_vm/test_vm-1.png?dcPath=test-dc&amp;dsName=datastore0&#x27;), (&#x27;download_local_path&#x27;, &#x27;/tmp/&#x27;), (&#x27;download_file_size&#x27;, 2367)])</div>
                 </td>
             </tr>
     </table>

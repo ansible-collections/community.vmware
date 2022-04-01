@@ -325,7 +325,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dict with hostname as key and dict with acceptance level facts, error as value</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;facts&#x27;: {&#x27;localhost.localdomain&#x27;: {&#x27;error&#x27;: &#x27;NA&#x27;, &#x27;level&#x27;: &#x27;vmware_certified&#x27;}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;facts&#x27;, AnsibleMapping([(&#x27;localhost.localdomain&#x27;, AnsibleMapping([(&#x27;error&#x27;, &#x27;NA&#x27;), (&#x27;level&#x27;, &#x27;vmware_certified&#x27;)]))]))])</div>
                 </td>
             </tr>
     </table>

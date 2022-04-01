@@ -403,7 +403,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Dictionary containing the changed policies of disk (list of dictionaries) and vm_home.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;disk&#x27;: [{&#x27;policy&#x27;: &#x27;storepol1&#x27;, &#x27;unit_number&#x27;: 0}], &#x27;vm_home&#x27;: &#x27;storepol1&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;disk&#x27;, [AnsibleMapping([(&#x27;policy&#x27;, &#x27;storepol1&#x27;), (&#x27;unit_number&#x27;, 0)])]), (&#x27;vm_home&#x27;, &#x27;storepol1&#x27;)])</div>
                 </td>
             </tr>
             <tr>

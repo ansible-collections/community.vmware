@@ -260,7 +260,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host&#x27;s firewall configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi_hostname_0001&#x27;: [{&#x27;allowed_hosts&#x27;: {&#x27;all_ip&#x27;: True, &#x27;ip_address&#x27;: [&#x27;10.10.10.1&#x27;], &#x27;ip_network&#x27;: [&#x27;11.111.112.0/22&#x27;, &#x27;192.168.10.1/24&#x27;]}, &#x27;enabled&#x27;: True, &#x27;key&#x27;: &#x27;CIMHttpServer&#x27;, &#x27;rule&#x27;: [{&#x27;direction&#x27;: &#x27;inbound&#x27;, &#x27;end_port&#x27;: None, &#x27;port&#x27;: 5988, &#x27;port_type&#x27;: &#x27;dst&#x27;, &#x27;protocol&#x27;: &#x27;tcp&#x27;}], &#x27;service&#x27;: &#x27;sfcbd-watchdog&#x27;}]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi_hostname_0001&#x27;, [AnsibleMapping([(&#x27;allowed_hosts&#x27;, AnsibleMapping([(&#x27;all_ip&#x27;, True), (&#x27;ip_address&#x27;, [&#x27;10.10.10.1&#x27;]), (&#x27;ip_network&#x27;, [&#x27;11.111.112.0/22&#x27;, &#x27;192.168.10.1/24&#x27;])])), (&#x27;enabled&#x27;, True), (&#x27;key&#x27;, &#x27;CIMHttpServer&#x27;), (&#x27;rule&#x27;, [AnsibleMapping([(&#x27;direction&#x27;, &#x27;inbound&#x27;), (&#x27;end_port&#x27;, None), (&#x27;port&#x27;, 5988), (&#x27;port_type&#x27;, &#x27;dst&#x27;), (&#x27;protocol&#x27;, &#x27;tcp&#x27;)])]), (&#x27;service&#x27;, &#x27;sfcbd-watchdog&#x27;)])])])</div>
                 </td>
             </tr>
     </table>

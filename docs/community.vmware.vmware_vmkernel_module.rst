@@ -680,7 +680,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about VMKernel name</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: False, &#x27;msg&#x27;: &#x27;VMkernel Adapter already configured properly&#x27;, &#x27;device&#x27;: &#x27;vmk1&#x27;, &#x27;ipv4&#x27;: &#x27;static&#x27;, &#x27;ipv4_gw&#x27;: &#x27;No override&#x27;, &#x27;ipv4_ip&#x27;: &#x27;192.168.1.15&#x27;, &#x27;ipv4_sm&#x27;: &#x27;255.255.255.0&#x27;, &#x27;mtu&#x27;: 9000, &#x27;services&#x27;: &#x27;vMotion&#x27;, &#x27;switch&#x27;: &#x27;vDS&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;changed&#x27;, False), (&#x27;msg&#x27;, &#x27;VMkernel Adapter already configured properly&#x27;), (&#x27;device&#x27;, &#x27;vmk1&#x27;), (&#x27;ipv4&#x27;, &#x27;static&#x27;), (&#x27;ipv4_gw&#x27;, &#x27;No override&#x27;), (&#x27;ipv4_ip&#x27;, &#x27;192.168.1.15&#x27;), (&#x27;ipv4_sm&#x27;, &#x27;255.255.255.0&#x27;), (&#x27;mtu&#x27;, 9000), (&#x27;services&#x27;, &#x27;vMotion&#x27;), (&#x27;switch&#x27;, &#x27;vDS&#x27;)])</div>
                 </td>
             </tr>
     </table>

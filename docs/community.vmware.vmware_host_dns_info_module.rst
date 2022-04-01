@@ -261,7 +261,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about DNS config from given cluster / host system</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;DC0_C0_H0&#x27;: {&#x27;dhcp&#x27;: True, &#x27;domain_name&#x27;: &#x27;localdomain&#x27;, &#x27;host_name&#x27;: &#x27;localhost&#x27;, &#x27;ip_address&#x27;: [&#x27;8.8.8.8&#x27;], &#x27;search_domain&#x27;: [&#x27;localdomain&#x27;], &#x27;virtual_nic_device&#x27;: &#x27;vmk0&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;DC0_C0_H0&#x27;, AnsibleMapping([(&#x27;dhcp&#x27;, True), (&#x27;domain_name&#x27;, &#x27;localdomain&#x27;), (&#x27;host_name&#x27;, &#x27;localhost&#x27;), (&#x27;ip_address&#x27;, [&#x27;8.8.8.8&#x27;]), (&#x27;search_domain&#x27;, [&#x27;localdomain&#x27;]), (&#x27;virtual_nic_device&#x27;, &#x27;vmk0&#x27;)]))])</div>
                 </td>
             </tr>
     </table>

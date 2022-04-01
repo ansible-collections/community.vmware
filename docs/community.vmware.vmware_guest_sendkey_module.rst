@@ -430,7 +430,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>display the keys and the number of keys sent to the virtual machine</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;virtual_machine&#x27;: &#x27;test_vm&#x27;, &#x27;keys_send&#x27;: [&#x27;SPACE&#x27;, &#x27;DOWNARROW&#x27;, &#x27;DOWNARROW&#x27;, &#x27;ENTER&#x27;], &#x27;string_send&#x27;: None, &#x27;keys_send_number&#x27;: 4, &#x27;returned_keys_send_number&#x27;: 4}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;virtual_machine&#x27;, &#x27;test_vm&#x27;), (&#x27;keys_send&#x27;, [&#x27;SPACE&#x27;, &#x27;DOWNARROW&#x27;, &#x27;DOWNARROW&#x27;, &#x27;ENTER&#x27;]), (&#x27;string_send&#x27;, None), (&#x27;keys_send_number&#x27;, 4), (&#x27;returned_keys_send_number&#x27;, 4)])</div>
                 </td>
             </tr>
     </table>

@@ -331,7 +331,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host system&#x27;s AD domain join state</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01&#x27;: {&#x27;changed&#x27;: True, &#x27;domain&#x27;: &#x27;example.local&#x27;, &#x27;membership_state&#x27;: &#x27;ok&#x27;, &#x27;msg&#x27;: &#x27;Host joined to AD domain&#x27;, &#x27;ad_state&#x27;: &#x27;present&#x27;, &#x27;ad_state_current&#x27;: &#x27;present&#x27;, &#x27;ad_state_previous&#x27;: &#x27;absent&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;esxi01&#x27;, AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;domain&#x27;, &#x27;example.local&#x27;), (&#x27;membership_state&#x27;, &#x27;ok&#x27;), (&#x27;msg&#x27;, &#x27;Host joined to AD domain&#x27;), (&#x27;ad_state&#x27;, &#x27;present&#x27;), (&#x27;ad_state_current&#x27;, &#x27;present&#x27;), (&#x27;ad_state_previous&#x27;, &#x27;absent&#x27;)]))])</div>
                 </td>
             </tr>
     </table>

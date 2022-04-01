@@ -344,7 +344,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>dictionary of information for the storage policy</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vmware_vm_storage_policy&#x27;: {&#x27;description&#x27;: &#x27;Storage policy for gold-tier storage&#x27;, &#x27;id&#x27;: &#x27;aa6d5a82-1c88-45da-85d3-3d74b91a5bad&#x27;, &#x27;name&#x27;: &#x27;gold&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;vmware_vm_storage_policy&#x27;, AnsibleMapping([(&#x27;description&#x27;, &#x27;Storage policy for gold-tier storage&#x27;), (&#x27;id&#x27;, &#x27;aa6d5a82-1c88-45da-85d3-3d74b91a5bad&#x27;), (&#x27;name&#x27;, &#x27;gold&#x27;)]))])</div>
                 </td>
             </tr>
     </table>

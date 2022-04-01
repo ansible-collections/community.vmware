@@ -5,6 +5,9 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.3.0
+======
+
 v2.2.0
 ======
 

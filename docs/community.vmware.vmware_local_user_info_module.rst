@@ -222,7 +222,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about all local users</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;role&#x27;: &#x27;admin&#x27;, &#x27;description&#x27;: &#x27;Administrator&#x27;, &#x27;group&#x27;: False, &#x27;user_id&#x27;: 0, &#x27;user_name&#x27;: &#x27;root&#x27;, &#x27;shell_access&#x27;: True}, {&#x27;role&#x27;: &#x27;admin&#x27;, &#x27;description&#x27;: &#x27;DCUI User&#x27;, &#x27;group&#x27;: False, &#x27;user_id&#x27;: 100, &#x27;user_name&#x27;: &#x27;dcui&#x27;, &#x27;shell_access&#x27;: False}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[AnsibleMapping([(&#x27;role&#x27;, &#x27;admin&#x27;), (&#x27;description&#x27;, &#x27;Administrator&#x27;), (&#x27;group&#x27;, False), (&#x27;user_id&#x27;, 0), (&#x27;user_name&#x27;, &#x27;root&#x27;), (&#x27;shell_access&#x27;, True)]), AnsibleMapping([(&#x27;role&#x27;, &#x27;admin&#x27;), (&#x27;description&#x27;, &#x27;DCUI User&#x27;), (&#x27;group&#x27;, False), (&#x27;user_id&#x27;, 100), (&#x27;user_name&#x27;, &#x27;dcui&#x27;), (&#x27;shell_access&#x27;, False)])]</div>
                 </td>
             </tr>
     </table>

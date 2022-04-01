@@ -372,7 +372,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>Metadata about DRS group</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;Asia-Cluster1&#x27;: [{&#x27;group_name&#x27;: &#x27;vm_group_002&#x27;, &#x27;type&#x27;: &#x27;vm&#x27;, &#x27;vms&#x27;: [&#x27;dev-1&#x27;]}]}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;Asia-Cluster1&#x27;, [AnsibleMapping([(&#x27;group_name&#x27;, &#x27;vm_group_002&#x27;), (&#x27;type&#x27;, &#x27;vm&#x27;), (&#x27;vms&#x27;, [&#x27;dev-1&#x27;])])])])</div>
                 </td>
             </tr>
             <tr>

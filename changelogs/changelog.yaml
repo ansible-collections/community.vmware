@@ -1151,3 +1151,5 @@ releases:
     - 1243-vmware-dvs-host-uplink-ordering.yml
     - fix_shutdownguest_state_idempotency.yml
     release_date: '2022-03-28'
+  2.3.0:
+    release_date: '2022-04-01'

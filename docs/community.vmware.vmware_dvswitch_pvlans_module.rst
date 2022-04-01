@@ -314,7 +314,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>information about performed operation</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;dvswitch&#x27;: &#x27;dvSwitch&#x27;, &#x27;private_vlans&#x27;: [{&#x27;primary_pvlan_id&#x27;: 1, &#x27;pvlan_type&#x27;: &#x27;promiscuous&#x27;, &#x27;secondary_pvlan_id&#x27;: 1}, {&#x27;primary_pvlan_id&#x27;: 1, &#x27;pvlan_type&#x27;: &#x27;isolated&#x27;, &#x27;secondary_pvlan_id&#x27;: 2}, {&#x27;primary_pvlan_id&#x27;: 1, &#x27;pvlan_type&#x27;: &#x27;community&#x27;, &#x27;secondary_pvlan_id&#x27;: 3}], &#x27;private_vlans_previous&#x27;: [], &#x27;result&#x27;: &#x27;All private VLANs added&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">AnsibleMapping([(&#x27;changed&#x27;, True), (&#x27;dvswitch&#x27;, &#x27;dvSwitch&#x27;), (&#x27;private_vlans&#x27;, [AnsibleMapping([(&#x27;primary_pvlan_id&#x27;, 1), (&#x27;pvlan_type&#x27;, &#x27;promiscuous&#x27;), (&#x27;secondary_pvlan_id&#x27;, 1)]), AnsibleMapping([(&#x27;primary_pvlan_id&#x27;, 1), (&#x27;pvlan_type&#x27;, &#x27;isolated&#x27;), (&#x27;secondary_pvlan_id&#x27;, 2)]), AnsibleMapping([(&#x27;primary_pvlan_id&#x27;, 1), (&#x27;pvlan_type&#x27;, &#x27;community&#x27;), (&#x27;secondary_pvlan_id&#x27;, 3)])]), (&#x27;private_vlans_previous&#x27;, []), (&#x27;result&#x27;, &#x27;All private VLANs added&#x27;)])</div>
                 </td>
             </tr>
     </table>
