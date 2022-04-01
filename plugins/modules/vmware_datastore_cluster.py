@@ -7,7 +7,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-
 DOCUMENTATION = r'''
 ---
 module: vmware_datastore_cluster
@@ -89,13 +88,82 @@ options:
       default: False
       type: bool
       required: False
+    space_balance_automation_level:
+        description:
+        - Specifies whether the space balance automation level is automated, manual or use the cluster settings.
+        - Specifies the Storage DRS behavior when it generates recommendations for correcting space load imbalance in a datastore cluster.
+        choices: [automated, manual, cluster_settings]
+        default: automated
+        type: str
+        version_added: '2.3.0'
+    io_balance_automation_level:
+        description:
+        - Specifies whether the I/O balance automation level is automated, manual or use the cluster settings.
+        - Specifies the Storage DRS behavior when it generates recommendations for correcting I/O load imbalance in a datastore cluster.
+        choices: [automated, manual, cluster_settings]
+        default: automated
+        type: str
+        version_added: '2.3.0'
+    rule_enforcement_automation_level:
+        description:
+        - Specifies whether the rule enforcement automation level is automated, manual or use the cluster settings.
+        - Specifies the Storage DRS behavior when it generates recommendations for correcting affinity rule violations in a datastore cluster.
+        choices: [automated, manual, cluster_settings]
+        default: automated
+        type: str
+        version_added: '2.3.0'
+    policy_enforcement_automation_level:
+        description:
+        - Specifies whether the policy enforcement automation level is automated, manual or use the cluster settings.
+        - Specifies the Storage DRS behavior when it generates recommendations for correcting storage and VM policy violations in a datastore cluster
+        choices: [automated, manual, cluster_settings]
+        default: automated
+        type: str
+        version_added: '2.3.0'
+    vm_evacuation_automation_level:
+        description:
+        - Specifies whether the vm evacuation enforcement automation level is automated, manual or use the cluster settings.
+        - Specifies the Storage DRS behavior when it generates recommendations for VM evacuations from datastores in a datastore cluster.
+        choices: [automated, manual, cluster_settings]
+        default: automated
+        type: str
+        version_added: '2.3.0'
+    vm_overrides:
+        description:
+        - Override the datastore cluster-wide automation level for individual virtual machines.
+        - And override default virtual disk affinity rules
+        type: list
+        elements: dict
+        version_added: '2.3.0'
+        suboptions:
+            vm_name:
+                description:
+                - Name of the virtual machine that should have a an override.
+                type: str
+                required: True
+            keep_vmdks_together:
+                description:
+                - None: No override
+                - True: This VM should have its virtual disks on the same datastore.
+                - False: This VM should not have its virtual disks on the same datastore.
+                default: None
+                type: bool
+            automation_level:
+                description:
+                - none: No override
+                - automated: Placement and migration recommendations run automatically.
+                - manual: Placement and migration recommendations are displayed, but do not run until you manually apply the recommendation.
+                - disabled: vCenter Server does not migrate the virtual machine or provide migration recommendations for it.
+                choices: [none, automated, manual, disabled]
+                default: none
+                type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
 EXAMPLES = r'''
-- name: Create datastore cluster and enable SDRS
+- name: Create/Modify datastore cluster with enable SDRS
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -104,6 +172,37 @@ EXAMPLES = r'''
     datastore_cluster_name: '{{ datastore_cluster_name }}'
     enable_sdrs: True
     state: present
+  delegate_to: localhost
+
+- name: Create/Modify datastore cluster with enable SDRS
+  community.vmware.vmware_datastore_cluster:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    datastore_cluster_name: '{{ datastore_cluster_name }}'
+    enable_sdrs: True
+    state: present
+    vm_overrides:
+    - vm_name: testvm
+      keep_vmdks_together: True
+      automation_level: none
+  delegate_to: localhost
+
+- name: Create/Modify datastore cluster with enable SDRS and set the automation levels to manual
+  community.vmware.vmware_datastore_cluster:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter_name: '{{ datacenter_name }}'
+    datastore_cluster_name: '{{ datastore_cluster_name }}'
+    enable_sdrs: True
+    state: present
+    space_balance_automation_level=manual
+    io_balance_automation_level=manual
+    rule_enforcement_automation_level=manual
+    policy_enforcement_automation_level=manual
+    vm_evacuation_automation_level=manual
   delegate_to: localhost
 
 - name: Create datastore cluster using folder
@@ -141,7 +240,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, find_vm_by_name
 from ansible.module_utils._text import to_native
 
 
@@ -176,42 +275,158 @@ class VMwareDatastoreClusterManager(PyVmomi):
         keep_vmdks_together = self.params.get('keep_vmdks_together')
         enable_io_loadbalance = self.params.get('enable_io_loadbalance')
         loadbalance_interval = self.params.get('loadbalance_interval')
+        space_balance_automation_level = self.params.get('space_balance_automation_level')
+        io_balance_automation_level = self.params.get('io_balance_automation_level')
+        rule_enforcement_automation_level = self.params.get('rule_enforcement_automation_level')
+        policy_enforcement_automation_level = self.params.get('policy_enforcement_automation_level')
+        vm_evacuation_automation_level = self.params.get('vm_evacuation_automation_level')
+        vm_overrides = {} if self.params.get('vm_overrides') is None else self.params.get('vm_overrides')
 
         if self.datastore_cluster_obj:
             if state == 'present':
                 results['result'] = "Datastore cluster '%s' already available." % self.datastore_cluster_name
                 sdrs_spec = vim.storageDrs.ConfigSpec()
-                sdrs_spec.podConfigSpec = None
-                if enable_sdrs != self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.enabled:
-                    if not sdrs_spec.podConfigSpec:
-                        sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
-                    sdrs_spec.podConfigSpec.enabled = enable_sdrs
-                    results['result'] = results['result'] + " Changed SDRS to '%s'." % enable_sdrs
-                if automation_level != self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.defaultVmBehavior:
-                    if not sdrs_spec.podConfigSpec:
-                        sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
+                currentPodConfig = self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig
+
+                change = False
+                # Storage Pod Config
+                sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
+                sdrs_spec.podConfigSpec.automationOverrides = currentPodConfig.automationOverrides
+                sdrs_spec.podConfigSpec.enabled = enable_sdrs  # Must be set because automationOverrides not be written otherwise
+
+                if enable_sdrs != currentPodConfig.enabled:
+                    results['result'] += " Changed SDRS to '%s'." % enable_sdrs
+                    change = True
+
+                if automation_level != currentPodConfig.defaultVmBehavior:
                     sdrs_spec.podConfigSpec.defaultVmBehavior = automation_level
-                    results['result'] = results['result'] + " Changed automation level to '%s'." % automation_level
-                if keep_vmdks_together != self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.defaultIntraVmAffinity:
-                    if not sdrs_spec.podConfigSpec:
-                        sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
+                    results['result'] += " Changed automation level to '%s'." % automation_level
+                    change = True
+
+                if keep_vmdks_together != currentPodConfig.defaultIntraVmAffinity:
                     sdrs_spec.podConfigSpec.defaultIntraVmAffinity = keep_vmdks_together
-                    results['result'] = results['result'] + " Changed VMDK affinity to '%s'." % keep_vmdks_together
-                if enable_io_loadbalance != self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.ioLoadBalanceEnabled:
-                    if not sdrs_spec.podConfigSpec:
-                        sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
+                    results['result'] += " Changed VMDK affinity to '%s'." % keep_vmdks_together
+                    change = True
+
+                if enable_io_loadbalance != currentPodConfig.ioLoadBalanceEnabled:
                     sdrs_spec.podConfigSpec.ioLoadBalanceEnabled = enable_io_loadbalance
-                    results['result'] = results['result'] + " Changed I/O workload balancing to '%s'." % enable_io_loadbalance
-                if loadbalance_interval != self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.podConfig.loadBalanceInterval:
-                    if not sdrs_spec.podConfigSpec:
-                        sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
+                    results['result'] += " Changed I/O workload balancing to '%s'." % enable_io_loadbalance
+                    change = True
+
+                if loadbalance_interval != currentPodConfig.loadBalanceInterval:
                     sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
-                    results['result'] = results['result'] + " Changed load balance interval to '%s' minutes." % loadbalance_interval
-                if sdrs_spec.podConfigSpec:
+                    results['result'] += " Changed load balance interval to '%s' minutes." % loadbalance_interval
+                    change = True
+
+                if space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
+                    sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
+                        if space_balance_automation_level != "cluster_settings" else None
+                    results[
+                        'result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
+                    change = True
+
+                if io_balance_automation_level != currentPodConfig.automationOverrides.ioLoadBalanceAutomationMode:
+                    sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
+                        if io_balance_automation_level != "cluster_settings" else None
+                    results['result'] += " Changed I/O balance automation level to '%s'." % io_balance_automation_level
+                    change = True
+
+                if rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
+                    sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
+                        if rule_enforcement_automation_level != "cluster_settings" else None
+                    results[
+                        'result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
+                    change = True
+
+                if policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
+                    sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
+                        if policy_enforcement_automation_level != "cluster_settings" else None
+                    results[
+                        'result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
+                    change = True
+
+                if vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
+                    sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
+                        if vm_evacuation_automation_level != "cluster_settings" else None
+                    results[
+                        'result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
+                    change = True
+
+                # Storage DRS VM Config Override
+                sdrs_spec.vmConfigSpec = None
+                vmConfig = self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.vmConfig
+
+                vmConfigSpecs = []
+                for vm in vm_overrides:
+                    changed = False
+
+                    # get the virtual machine
+                    virtual_machine = find_vm_by_name(self.content, vm_name=vm['vm_name'])
+                    if not virtual_machine:
+                        self.module.fail_json(msg="Failed to find virtual machine %s" % vm['vm_name'])
+
+                    vmConfigSpec = vim.storageDrs.VmConfigSpec()
+                    vmConfigSpec.operation = "add"
+                    vmConfigSpec.info = vim.storageDrs.VmConfigInfo()
+                    vmConfigSpec.info.vm = virtual_machine
+
+                    foundVm = None
+                    for storageDrsVmConfigInfo in vmConfig:
+                        if storageDrsVmConfigInfo.vm.name == vm['vm_name']:
+                            foundVm = storageDrsVmConfigInfo
+                            break
+
+                    if foundVm:
+                        if vm['automation_level'] == "disabled":
+                            if foundVm.behavior != None:
+                                vmConfigSpec.info.behavior = None
+                                changed = True
+                            if foundVm.enabled != False:
+                                vmConfigSpec.info.enabled = False
+                                changed = True
+                        elif vm['automation_level'] == "none":
+                            if foundVm.behavior != None:
+                                vmConfigSpec.info.behavior = None
+                                changed = True
+                            if foundVm.enabled != None:
+                                vmConfigSpec.info.enabled = None
+                                changed = True
+                        else:
+                            if foundVm.behavior != None:
+                                vmConfigSpec.info.behavior = vm['automation_level']
+                                changed = True
+                            if foundVm.enabled != False:
+                                vmConfigSpec.info.enabled = False
+                                changed = True
+
+                        if foundVm.intraVmAffinity != vm['keep_vmdks_together']:
+                            vmConfigSpec.info.intraVmAffinity = vm['keep_vmdks_together']
+                            changed = True
+                    else:
+                        changed = True
+                        if vm['automation_level'] == "disabled":
+                            vmConfigSpec.info.behavior = None
+                            vmConfigSpec.info.enabled = False
+                        elif vm['automation_level'] == "none":
+                            vmConfigSpec.info.behavior = None
+                            vmConfigSpec.info.enabled = None
+                        else:
+                            vmConfigSpec.info.behavior = vm['automation_level']
+                            vmConfigSpec.info.enabled = False
+                        vmConfigSpec.info.intraVmAffinity = vm['keep_vmdks_together']
+
+                    if changed:
+                        vmConfigSpecs.append(vmConfigSpec)
+
+                sdrs_spec.vmConfigSpec = vmConfigSpecs
+
+                # Check for changes or run changes
+                if change or len(sdrs_spec.vmConfigSpec) != 0:
                     if not self.module.check_mode:
                         try:
-                            task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(pod=self.datastore_cluster_obj,
-                                                                                                      spec=sdrs_spec, modify=True)
+                            task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(
+                                pod=self.datastore_cluster_obj,
+                                spec=sdrs_spec, modify=True)
                             changed, result = wait_for_task(task)
                         except Exception as generic_exc:
                             self.module.fail_json(msg="Failed to configure datastore cluster"
@@ -250,7 +465,46 @@ class VMwareDatastoreClusterManager(PyVmomi):
                         sdrs_spec.podConfigSpec.defaultIntraVmAffinity = keep_vmdks_together
                         sdrs_spec.podConfigSpec.ioLoadBalanceEnabled = enable_io_loadbalance
                         sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
-                        task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(pod=self.datastore_cluster_obj, spec=sdrs_spec, modify=True)
+                        sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
+                            if io_balance_automation_level != "cluster_settings" else None
+                        sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
+                            if policy_enforcement_automation_level != "cluster_settings" else None
+                        sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
+                            if rule_enforcement_automation_level != "cluster_settings" else None
+                        sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
+                            if space_balance_automation_level != "cluster_settings" else None
+                        sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
+                            if vm_evacuation_automation_level != "cluster_settings" else None
+
+                        vmConfigSpecs = []
+                        for vm in vm_overrides:
+                            # get the virtual machine
+                            virtual_machine = find_vm_by_name(self.content, vm_name=vm['vm_name'])
+                            if not virtual_machine:
+                                self.module.fail_json(msg="Failed to find virtual machine %s" % vm['vm_name'])
+
+                            vmConfigSpec = vim.storageDrs.VmConfigSpec()
+                            vmConfigSpec.operation = "add"
+                            vmConfigSpec.info = vim.storageDrs.VmConfigInfo()
+                            vmConfigSpec.info.vm = virtual_machine
+
+                            if vm['automation_level'] == "disabled":
+                                vmConfigSpec.info.behavior = None
+                                vmConfigSpec.info.enabled = False
+                            elif vm['automation_level'] == "none":
+                                vmConfigSpec.info.behavior = None
+                                vmConfigSpec.info.enabled = None
+                            else:
+                                vmConfigSpec.info.behavior = vm['automation_level']
+                                vmConfigSpec.info.enabled = False
+
+                            vmConfigSpec.info.intraVmAffinity = vm['keep_vmdks_together']
+                            vmConfigSpecs.append(vmConfigSpec)
+
+                        sdrs_spec.vmConfigSpec = vmConfigSpecs
+
+                        task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(
+                            pod=self.datastore_cluster_obj, spec=sdrs_spec, modify=True)
                         changed, result = wait_for_task(task)
                     except Exception as generic_exc:
                         self.module.fail_json(msg="Failed to configure datastore cluster"
@@ -275,7 +529,19 @@ def main():
             keep_vmdks_together=dict(type='bool', default=True, required=False),
             automation_level=dict(type='str', choices=['automated', 'manual'], default='manual'),
             enable_io_loadbalance=dict(type='bool', default=False, required=False),
-            loadbalance_interval=dict(type='int', default=480, required=False)
+            loadbalance_interval=dict(type='int', default=480, required=False),
+            space_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            io_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            vm_overrides=dict(type='list', elements='dict', required=False,
+                options=dict(
+                    vm_name=dict(type='str', required=True),
+                    keep_vmdks_together=dict(type='bool', default=None),
+                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'],default='none')
+                )
+            )
         )
     )
     module = AnsibleModule(
