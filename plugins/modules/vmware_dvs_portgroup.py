@@ -263,7 +263,6 @@ options:
         description:
             - Indicate whether or not the virtual machine IP traffic that flows through a vds gets analyzed by sending reports to a NetFlow collector.
         required: False
-        default: False
         type: bool
         version_added: '2.3.0'
     in_traffic_shaping:
@@ -546,8 +545,11 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # NetFlow
         config.defaultPortConfig.ipfixEnabled = vim.BoolPolicy()
-        config.defaultPortConfig.ipfixEnabled.inherited = False
-        config.defaultPortConfig.ipfixEnabled.value = self.module.params['net_flow']
+        if self.module.params['net_flow']:
+            config.defaultPortConfig.ipfixEnabled.inherited = False
+            config.defaultPortConfig.ipfixEnabled.value = self.module.params['net_flow']
+        else:
+            config.defaultPortConfig.ipfixEnabled.inherited = True
 
         # Ingress traffic shaping
         config.defaultPortConfig.inShapingPolicy = vim.dvs.DistributedVirtualPort.TrafficShapingPolicy()
@@ -774,7 +776,11 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # NetFlow
         if self.module.params['net_flow'] is not None and \
+                self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not False and \
                 self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']:
+            return 'update'
+        elif self.module.params['net_flow'] is None and \
+                self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not True:
             return 'update'
 
         # Ingress traffic shaping
@@ -899,7 +905,7 @@ def main():
                     burst_size=dict(type='int'),
                 ),
             ),
-            net_flow=dict(type='bool', default=False),
+            net_flow=dict(type='bool'),
             teaming_policy=dict(
                 type='dict',
                 options=dict(
