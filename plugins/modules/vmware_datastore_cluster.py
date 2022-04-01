@@ -381,7 +381,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                             if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled != False:
+                            if foundVm.enabled is not False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
                         elif vm['automation_level'] == "none":
@@ -536,10 +536,9 @@ def main():
             policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             vm_overrides=dict(type='list', elements='dict', required=False, options=dict(
-                    vm_name=dict(type='str', required=True),
-                    keep_vmdks_together=dict(type='bool', default=None),
-                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none')
-                )
+                vm_name=dict(type='str', required=True),
+                keep_vmdks_together=dict(type='bool', default=None),
+                automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none'))
             )
         )
     )
