@@ -143,17 +143,16 @@ options:
                 required: True
             keep_vmdks_together:
                 description:
-                - None: No override
-                - True: This VM should have its virtual disks on the same datastore.
-                - False: This VM should not have its virtual disks on the same datastore.
-                default: None
+                - None (Not set) -> No override
+                - True -> This VM should have its virtual disks on the same datastore.
+                - False -> This VM should not have its virtual disks on the same datastore.
                 type: bool
             automation_level:
                 description:
-                - none: No override
-                - automated: Placement and migration recommendations run automatically.
-                - manual: Placement and migration recommendations are displayed, but do not run until you manually apply the recommendation.
-                - disabled: vCenter Server does not migrate the virtual machine or provide migration recommendations for it.
+                - none (or Not set) -> No override
+                - automated -> Placement and migration recommendations run automatically.
+                - manual -> Placement and migration recommendations are displayed, but do not run until you manually apply the recommendation.
+                - disabled -> vCenter Server does not migrate the virtual machine or provide migration recommendations for it.
                 choices: [none, automated, manual, disabled]
                 default: none
                 type: str
@@ -198,11 +197,11 @@ EXAMPLES = r'''
     datastore_cluster_name: '{{ datastore_cluster_name }}'
     enable_sdrs: True
     state: present
-    space_balance_automation_level=manual
-    io_balance_automation_level=manual
-    rule_enforcement_automation_level=manual
-    policy_enforcement_automation_level=manual
-    vm_evacuation_automation_level=manual
+    space_balance_automation_level: manual
+    io_balance_automation_level: manual
+    rule_enforcement_automation_level: manual
+    policy_enforcement_automation_level: manual
+    vm_evacuation_automation_level: manual
   delegate_to: localhost
 
 - name: Create datastore cluster using folder
