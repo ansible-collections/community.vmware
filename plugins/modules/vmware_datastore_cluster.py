@@ -381,7 +381,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                             if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled != False:
+                            if foundVm.enabled is not False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
                         elif vm['automation_level'] == "none":
