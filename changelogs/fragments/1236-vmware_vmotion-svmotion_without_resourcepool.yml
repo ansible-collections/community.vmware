@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_vmotion - Like already define in the examples, allow Storage vMotion without defining a resource pool. 
+    (https://github.com/ansible-collections/community.vmware/pull/1236).

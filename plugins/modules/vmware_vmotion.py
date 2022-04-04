@@ -246,6 +246,7 @@ class VmotionManager(PyVmomi):
             self.datastore_object = find_datastore_by_name(content=self.content,
                                                            datastore_name=dest_datastore,
                                                            datacenter_name=dest_datacenter)
+                                           
         if dest_datastore_cluster is not None:
             # unable to use find_datastore_cluster_by_name module
             data_store_clusters = get_all_objs(self.content, [vim.StoragePod], folder=self.content.rootFolder)
