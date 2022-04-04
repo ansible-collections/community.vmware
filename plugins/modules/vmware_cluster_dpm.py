@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 module: vmware_cluster_dpm
 short_description: Manage Distributed Power Management (DPM) on VMware vSphere clusters
 description:
-    - Manages DRS on VMware vSphere clusters.
+    - Manages DPM on VMware vSphere clusters.
     - All values and VMware object names are case sensitive.
 author:
 - Swisscom (Schweiz) AG
@@ -130,7 +130,7 @@ class VMwareCluster(PyVmomi):
                 changes = True
                 return changes, change_message
 
-        return changes,change_message
+        return changes, change_message
 
     def configure_dpm(self):
         """
