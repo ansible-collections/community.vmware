@@ -40,7 +40,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    folder: '{{ f0 }}'
+    folder: '{{ f0 }}/' # Test with a trailing / because of issue 1238
     state: powered-off
   register: poweroff_d1_c1_f0
 
