@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2022, Swisscom (Schweiz) AG
+# Author(s): Olivia Luetolf <olivia.luetolf@swisscom.com>
 # Copyright: (c) 2018, Ansible Project
 #
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
@@ -18,7 +19,7 @@ description:
     - Manages DPM on VMware vSphere clusters.
     - All values and VMware object names are case sensitive.
 author:
-- Swisscom (Schweiz) AG
+- Olivia Luetolf (@olilu)
 requirements:
     - Tested on ESXi 6.7 and 7.0.
     - PyVmomi installed.
