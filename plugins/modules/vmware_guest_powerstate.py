@@ -261,8 +261,8 @@ def main():
 
     result = dict(changed=False,)
 
-    # if module.params['folder']:
-    #     module.params['folder'] = module.params['folder'].rstrip('/')
+    if module.params['folder']:
+        module.params['folder'] = module.params['folder'].rstrip('/')
 
     pyv = PyVmomi(module)
 
