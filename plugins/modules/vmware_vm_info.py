@@ -184,7 +184,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 virtual_machines:
-  description: list of dictionary of virtual machines and their information
+  description: list of dictionary of virtual machines and their information. (allocated storage in byte and memory in MB)
   returned: success
   type: list
   sample: [
@@ -227,7 +227,13 @@ virtual_machines:
                 "name": "tag_0001"
             }
         ],
-        "moid": "vm-24"
+        "moid": "vm-24",
+        "allocated":
+            {
+                "storage": 500000000,
+                "cpu": 2,
+                "memory": 16
+            }
     }
   ]
 '''
@@ -238,10 +244,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi, get_all_objs,
-    vmware_argument_spec, _get_vm_prop,
-    get_parent_datacenter, find_vm_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -326,6 +329,17 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
+            storage_allocated = 0
+            for device in vm.config.hardware.device:
+                if isinstance(device, vim.vm.device.VirtualDisk):
+                    storage_allocated += device.capacityInBytes
+
+            allocated = {
+                "storage": storage_allocated,
+                "cpu": vm.config.hardware.numCPU,
+                "memory": vm.config.hardware.memoryMB
+                }
+
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
@@ -349,6 +363,7 @@ class VmwareVmInfo(PyVmomi):
                 "folder": vm_folder,
                 "moid": vm._moId,
                 "datastore_url": datastore_url,
+                "allocated": allocated
             }
 
             vm_type = self.module.params.get('vm_type')
