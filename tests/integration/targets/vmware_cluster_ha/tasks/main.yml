@@ -303,7 +303,7 @@
         - change_heartbeat_selection_policy_result_again.changed
 
   - name: Change Heartbeat Datastores
-    vmware_cluster_ha: &change_heartbeat_selection_policy
+    vmware_cluster_ha: &change_heartbeat_datastore
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -322,7 +322,7 @@
 
   - name: Change Heartbeat Datastores Again
     vmware_cluster_ha:
-      <<: *change_heartbeat_selection_policy
+      <<: *change_heartbeat_datastore
       heartbeat_datastore_selection_policy: allFeasibleDs
       heartbeat_datastores: []
     register: change_heartbeat_datastores_result_again
