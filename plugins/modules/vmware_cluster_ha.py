@@ -22,7 +22,7 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 requirements:
-    - Tested on ESXi 5.5 and 6.5.
+    - Tested on ESXi 5.5, 6.5, 7.0
     - PyVmomi installed.
 options:
     cluster_name:
@@ -187,6 +187,17 @@ options:
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartAggressive' ]
       version_added: '1.4.0'
+    heartbeat_datastores:
+      description:
+      - List of datastores used for VM heartbeats.
+      type: list
+      elements: str
+    heartbeat_datastore_selection_policy:
+      description:
+      - Policy for selecting datastores used for VM heartbeats.
+      type: str
+      choices: [  'allFeasibleDs', 'allFeasibleDsWithUserPreference', 'userSelectedDs' ]
+      default: 'allFeasibleDsWithUserPreference'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -243,6 +254,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     TaskError,
     find_datacenter_by_name,
+    find_datastore_by_name,
     vmware_argument_spec,
     wait_for_task,
     option_diff,
@@ -282,6 +294,19 @@ class VMwareCluster(PyVmomi):
             self.changed_advanced_settings = option_diff(self.advanced_settings, self.cluster.configurationEx.dasConfig.option, False)
         else:
             self.changed_advanced_settings = None
+
+        self.heartbeat_datastore_selection_policy_changed = False
+        self.heartbeat_datastore_selection_policy = self.params.get('heartbeat_datastore_selection_policy')
+
+        self.datastore_names = self.params.get('heartbeat_datastores')
+        self.heartbeat_datastores = []
+        self.heartbeat_datastores_changed = False
+        if self.datastore_names:
+          for ds_name in self.datastore_names:
+              ds_found = find_datastore_by_name(self.content, ds_name)
+              if ds_found is None:
+                  self.module.fail_json(msg="Failed to find datastore %s" % ds_name)
+              self.heartbeat_datastores.append(ds_found)
 
     def get_failover_hosts(self):
         """
@@ -363,6 +388,14 @@ class VMwareCluster(PyVmomi):
         if self.changed_advanced_settings:
             return True
 
+        if (das_config.hBDatastoreCandidatePolicy != self.params.get("heartbeat_datastore_selection_policy")):
+            self.heartbeat_datastore_selection_policy_changed = True
+            return True
+
+        if (das_config.heartbeatDatastore != self.heartbeat_datastores):
+            self.heartbeat_datastores_changed = True
+            return True
+
         return False
 
     def configure_ha(self):
@@ -427,6 +460,14 @@ class VMwareCluster(PyVmomi):
 
                 cluster_config_spec.dasConfig.hostMonitoring = self.params.get('ha_host_monitoring')
                 cluster_config_spec.dasConfig.vmMonitoring = self.params.get('ha_vm_monitoring')
+
+                if self.heartbeat_datastores_changed:
+                  cluster_config_spec.dasConfig.heartbeatDatastore = self.heartbeat_datastores
+
+                if self.heartbeat_datastore_selection_policy_changed:
+                  cluster_config_spec.dasConfig.hBDatastoreCandidatePolicy = self.heartbeat_datastore_selection_policy
+                  if self.heartbeat_datastore_selection_policy == "allFeasibleDs":
+                    cluster_config_spec.dasConfig.heartbeatDatastore = []
 
                 if self.changed_advanced_settings:
                     cluster_config_spec.dasConfig.option = self.changed_advanced_settings
@@ -494,6 +535,10 @@ def main():
         pdl_response=dict(type='str',
                           choices=['disabled', 'warning', 'restartAggressive'],
                           default='warning'),
+        heartbeat_datastores=dict(type='list', elements='str', default=[]),
+        heartbeat_datastore_selection_policy=dict(type='str',
+                                                 choices=['allFeasibleDs', 'allFeasibleDsWithUserPreference', 'userSelectedDs'],
+                                                 default='allFeasibleDsWithUserPreference'),
     ))
 
     module = AnsibleModule(

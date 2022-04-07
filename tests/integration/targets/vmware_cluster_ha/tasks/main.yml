@@ -277,6 +277,60 @@
       that:
         - not change_includeFTcomplianceChecks_again.changed
 
+  - name: Change Heartbeat Datastore Selection Policy
+    vmware_cluster_ha: &change_heartbeat_selection_policy
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      cluster_name: test_cluster_ha
+      heartbeat_datastore_selection_policy: allFeasibleDs
+    register: change_heartbeat_selection_policy_result
+
+  - assert:
+      that:
+        - change_heartbeat_selection_policy_result.changed
+
+  - name: Change Heartbeat Datastore Selection Policy
+    vmware_cluster_ha:
+      <<: *change_heartbeat_selection_policy
+      heartbeat_datastore_selection_policy: allFeasibleDsWithUserPreference
+    register: change_heartbeat_selection_policy_result_again
+
+  - assert:
+      that:
+        - change_heartbeat_selection_policy_result_again.changed
+
+  - name: Change Heartbeat Datastores
+    vmware_cluster_ha: &change_heartbeat_selection_policy
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: "{{ dc1 }}"
+      cluster_name: test_cluster_ha
+      heartbeat_datastore_selection_policy: allFeasibleDsWithUserPreference
+      heartbeat_datastores:
+        - "{{ ro_datastore }}"
+        - "{{ rw_datastore }}"
+    register: change_heartbeat_datastores_result
+
+  - assert:
+      that:
+        - change_heartbeat_datastores_result.changed
+
+  - name: Change Heartbeat Datastores Again
+    vmware_cluster_ha:
+      <<: *change_heartbeat_selection_policy
+      heartbeat_datastore_selection_policy: allFeasibleDs
+      heartbeat_datastores: []
+    register: change_heartbeat_datastores_result_again
+
+  - assert:
+      that:
+        - change_heartbeat_datastores_result_again.changed
+
   - name: Disable HA
     vmware_cluster_ha:
       validate_certs: false
