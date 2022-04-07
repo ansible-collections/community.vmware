@@ -302,11 +302,11 @@ class VMwareCluster(PyVmomi):
         self.heartbeat_datastores = []
         self.heartbeat_datastores_changed = False
         if self.datastore_names:
-          for ds_name in self.datastore_names:
-              ds_found = find_datastore_by_name(self.content, ds_name)
-              if ds_found is None:
-                  self.module.fail_json(msg="Failed to find datastore %s" % ds_name)
-              self.heartbeat_datastores.append(ds_found)
+            for ds_name in self.datastore_names:
+                ds_found = find_datastore_by_name(self.content, ds_name)
+                if ds_found is None:
+                    self.module.fail_json(msg="Failed to find datastore %s" % ds_name)
+                self.heartbeat_datastores.append(ds_found)
 
     def get_failover_hosts(self):
         """
@@ -462,12 +462,12 @@ class VMwareCluster(PyVmomi):
                 cluster_config_spec.dasConfig.vmMonitoring = self.params.get('ha_vm_monitoring')
 
                 if self.heartbeat_datastores_changed:
-                  cluster_config_spec.dasConfig.heartbeatDatastore = self.heartbeat_datastores
+                    cluster_config_spec.dasConfig.heartbeatDatastore = self.heartbeat_datastores
 
                 if self.heartbeat_datastore_selection_policy_changed:
-                  cluster_config_spec.dasConfig.hBDatastoreCandidatePolicy = self.heartbeat_datastore_selection_policy
-                  if self.heartbeat_datastore_selection_policy == "allFeasibleDs":
-                    cluster_config_spec.dasConfig.heartbeatDatastore = []
+                    cluster_config_spec.dasConfig.hBDatastoreCandidatePolicy = self.heartbeat_datastore_selection_policy
+                    if self.heartbeat_datastore_selection_policy == "allFeasibleDs":
+                        cluster_config_spec.dasConfig.heartbeatDatastore = []
 
                 if self.changed_advanced_settings:
                     cluster_config_spec.dasConfig.option = self.changed_advanced_settings
@@ -537,8 +537,8 @@ def main():
                           default='warning'),
         heartbeat_datastores=dict(type='list', elements='str', default=[]),
         heartbeat_datastore_selection_policy=dict(type='str',
-                                                 choices=['allFeasibleDs', 'allFeasibleDsWithUserPreference', 'userSelectedDs'],
-                                                 default='allFeasibleDsWithUserPreference'),
+                                                  choices=['allFeasibleDs', 'allFeasibleDsWithUserPreference', 'userSelectedDs'],
+                                                  default='allFeasibleDsWithUserPreference'),
     ))
 
     module = AnsibleModule(
