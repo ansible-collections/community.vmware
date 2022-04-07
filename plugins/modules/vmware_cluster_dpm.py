@@ -86,8 +86,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     TaskError,
     find_datacenter_by_name,
     vmware_argument_spec,
-    wait_for_task,
-    option_diff,
+    wait_for_task
 )
 from ansible.module_utils._text import to_native
 
