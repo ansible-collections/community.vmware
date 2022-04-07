@@ -228,12 +228,11 @@ virtual_machines:
             }
         ],
         "moid": "vm-24",
-        "allocated":
-            {
-                "storage": 500000000,
-                "cpu": 2,
-                "memory": 16
-            }
+        "allocated": {
+            "storage": 500000000,
+            "cpu": 2,
+            "memory": 16
+        }
     }
   ]
 '''
