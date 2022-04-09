@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_powerstate - Ignore trailing `/` in `folder` parameter like other guest modules do (https://github.com/ansible-collections/community.vmware/issues/1238).

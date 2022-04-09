@@ -261,6 +261,9 @@ def main():
 
     result = dict(changed=False,)
 
+    if module.params['folder']:
+        module.params['folder'] = module.params['folder'].rstrip('/')
+
     pyv = PyVmomi(module)
 
     # Check if the VM exists before continuing
