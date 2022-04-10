@@ -464,7 +464,8 @@ class VMwareDvsPortgroup(PyVmomi):
         # Basic config
         config.name = self.module.params['portgroup_name']
 
-        config.numPorts = self.module.params['num_ports']
+        if self.module.params['num_ports'] is not None:
+            config.numPorts = self.module.params['num_ports']
 
         # Default port config
         config.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
@@ -709,7 +710,8 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'absent'
 
         # Check config
-        if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
+        if self.module.params['num_ports'] is not None and \
+                self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
             return 'update'
 
         # Default port config
