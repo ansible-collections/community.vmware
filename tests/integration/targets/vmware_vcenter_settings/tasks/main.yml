@@ -164,61 +164,59 @@
     that:
       - configure_settings_idempotency_check_result.changed is sameas false
 
-- when: vcsim is not defined
-  block:
-  - name: Configure advanced settings
-    community.vmware.vmware_vcenter_settings:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      database:
-        max_connections: 50
-        task_cleanup: true
-        task_retention: 180
-        event_cleanup: true
-        event_retention: 180
-      mail:
-        server: mail.example.local
-        sender: vcenter@{{ inventory_hostname }}
-      advanced_settings:
-        'config.vcls.clusters.domain-c8.enabled': 'false'
-    register: configure_advanced_settings
+- name: Configure advanced settings
+  community.vmware.vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+    advanced_settings:
+      'config.vcls.clusters.domain-c8.enabled': 'false'
+  register: configure_advanced_settings
 
-  - name: Make sure that advanced settings are configured
-    assert:
-      that:
-        - configure_advanced_settings.changed
+- name: Make sure that advanced settings are configured
+  assert:
+    that:
+      - configure_advanced_settings.changed
 
-  - name: Configure advanced settings again (idempotency)
-    community.vmware.vmware_vcenter_settings:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      database:
-        max_connections: 50
-        task_cleanup: true
-        task_retention: 180
-        event_cleanup: true
-        event_retention: 180
-      mail:
-        server: mail.example.local
-        sender: vcenter@{{ inventory_hostname }}
-      advanced_settings:
-        'config.vcls.clusters.domain-c8.enabled': 'false'
-    register: configure_advanced_settings_again
+- name: Configure advanced settings again (idempotency)
+  community.vmware.vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    database:
+      max_connections: 50
+      task_cleanup: true
+      task_retention: 180
+      event_cleanup: true
+      event_retention: 180
+    mail:
+      server: mail.example.local
+      sender: vcenter@{{ inventory_hostname }}
+    advanced_settings:
+      'config.vcls.clusters.domain-c8.enabled': 'false'
+  register: configure_advanced_settings_again
 
-  - name: Make sure that advanced settings are not configured (idempotency)
-    assert:
-      that:
-        - not configure_advanced_settings_again.changed
+- name: Make sure that advanced settings are not configured (idempotency)
+  assert:
+    that:
+      - not configure_advanced_settings_again.changed
 
-  - name: Restore the original advanced_settings configuration
-    community.vmware.vmware_vcenter_settings:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      advanced_settings:
-        'config.vcls.clusters.domain-c8.enabled': 'true'
+- name: Restore the original advanced_settings configuration
+  community.vmware.vmware_vcenter_settings:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    advanced_settings:
+      'config.vcls.clusters.domain-c8.enabled': 'true'

@@ -2,148 +2,146 @@
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
-  block:
-  - import_role:
-      name: prepare_vmware_tests
+- import_role:
+    name: prepare_vmware_tests
 
-  - name: Add a datastore cluster to datacenter (check-mode)
-    vmware_datastore_cluster: &add_datastore_cluster
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      datastore_cluster_name: DSC1
-      enable_sdrs: false
-      state: present
-    check_mode: true
-    register: add_dsc_check
+- name: Add a datastore cluster to datacenter (check-mode)
+  vmware_datastore_cluster: &add_datastore_cluster
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: DSC1
+    enable_sdrs: false
+    state: present
+  check_mode: true
+  register: add_dsc_check
 
-  - assert:
-      that:
-       - add_dsc_check.changed
+- assert:
+    that:
+     - add_dsc_check.changed
 
-  - name: Add a datastore cluster to datacenter
-    vmware_datastore_cluster: *add_datastore_cluster
-    register: add_dsc
+- name: Add a datastore cluster to datacenter
+  vmware_datastore_cluster: *add_datastore_cluster
+  register: add_dsc
 
-  - assert:
-      that:
-       - add_dsc.changed
+- assert:
+    that:
+     - add_dsc.changed
 
-  - name: Add a datastore cluster to datacenter again
-    vmware_datastore_cluster: *add_datastore_cluster
-    register: add_dsc
+- name: Add a datastore cluster to datacenter again
+  vmware_datastore_cluster: *add_datastore_cluster
+  register: add_dsc
 
-  - assert:
-      that:
-       - not add_dsc.changed
+- assert:
+    that:
+     - not add_dsc.changed
 
-  - name: Enable SDRS on a datastore cluster (check-mode)
-    vmware_datastore_cluster: &enable_sdrs
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      datastore_cluster_name: DSC1
-      enable_sdrs: true
-      state: present
-    check_mode: true
-    register: enable_sdrs_check
+- name: Enable SDRS on a datastore cluster (check-mode)
+  vmware_datastore_cluster: &enable_sdrs
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: DSC1
+    enable_sdrs: true
+    state: present
+  check_mode: true
+  register: enable_sdrs_check
 
-  - assert:
-      that:
-       - enable_sdrs_check.changed
+- assert:
+    that:
+     - enable_sdrs_check.changed
 
-  - name: Enable SDRS on a datastore cluster
-    vmware_datastore_cluster: *enable_sdrs
-    register: enable_sdrs
+- name: Enable SDRS on a datastore cluster
+  vmware_datastore_cluster: *enable_sdrs
+  register: enable_sdrs
 
-  - assert:
-      that:
-       - enable_sdrs.changed
+- assert:
+    that:
+     - enable_sdrs.changed
 
-  - name: Enable SDRS on a datastore cluster again
-    vmware_datastore_cluster: *enable_sdrs
-    register: enable_sdrs_again
+- name: Enable SDRS on a datastore cluster again
+  vmware_datastore_cluster: *enable_sdrs
+  register: enable_sdrs_again
 
-  - assert:
-      that:
-       - not enable_sdrs_again.changed
+- assert:
+    that:
+     - not enable_sdrs_again.changed
 
-  - name: Create a datastore folder on given Datacenter
-    vcenter_folder:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: '{{ dc1 }}'
-      folder_name: 'my_datastore_folder'
-      folder_type: datastore
-      state: present
-      validate_certs: false
-    register: my_datastore_folder
+- name: Create a datastore folder on given Datacenter
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    folder_name: 'my_datastore_folder'
+    folder_type: datastore
+    state: present
+    validate_certs: false
+  register: my_datastore_folder
 
-  - name: Add a datastore cluster using folder
-    vmware_datastore_cluster:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      folder: "{{ my_datastore_folder.result.path }}"
-      datastore_cluster_name: DSC2
-      state: present
-    register: add_dsc_folder_check
+- name: Add a datastore cluster using folder
+  vmware_datastore_cluster:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    folder: "{{ my_datastore_folder.result.path }}"
+    datastore_cluster_name: DSC2
+    state: present
+  register: add_dsc_folder_check
 
-  - assert:
-      that:
-       - add_dsc_folder_check.changed
+- assert:
+    that:
+     - add_dsc_folder_check.changed
 
-  - name: Delete a datastore cluster to datacenter (check-mode)
-    vmware_datastore_cluster: &delete_datastore_cluster
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      datastore_cluster_name: DSC1
-      state: absent
-    check_mode: true
-    register: delete_dsc_check
+- name: Delete a datastore cluster to datacenter (check-mode)
+  vmware_datastore_cluster: &delete_datastore_cluster
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: DSC1
+    state: absent
+  check_mode: true
+  register: delete_dsc_check
 
-  - assert:
-      that:
-       - delete_dsc_check.changed
+- assert:
+    that:
+     - delete_dsc_check.changed
 
-  - name: Delete a datastore cluster to datacenter
-    vmware_datastore_cluster: *delete_datastore_cluster
-    register: delete_dsc_check
+- name: Delete a datastore cluster to datacenter
+  vmware_datastore_cluster: *delete_datastore_cluster
+  register: delete_dsc_check
 
-  - assert:
-      that:
-        - delete_dsc_check.changed
+- assert:
+    that:
+      - delete_dsc_check.changed
 
-  - name: Remove SDRS cluster
-    vmware_datastore_cluster:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      datastore_cluster_name: '{{ item }}'
-      state: absent
-    with_items:
-      - DSC1
-      - DSC2
+- name: Remove SDRS cluster
+  vmware_datastore_cluster:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: '{{ item }}'
+    state: absent
+  with_items:
+    - DSC1
+    - DSC2
 
-  - name: Delete the datastore folder
-    vcenter_folder:
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: '{{ dc1 }}'
-      folder_name: 'my_datastore_folder'
-      folder_type: datastore
-      state: absent
-      validate_certs: false
+- name: Delete the datastore folder
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    folder_name: 'my_datastore_folder'
+    folder_type: datastore
+    state: absent
+    validate_certs: false

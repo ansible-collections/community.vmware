@@ -48,7 +48,6 @@
       - vm_with_portgroup is changed
 
 - name: Integration test for issue 457(https://github.com/ansible-collections/community.vmware/issues/457)
-  when: vcsim is not defined
   block:
     - name: Create a new portgroup with / in the name
       vmware_portgroup:

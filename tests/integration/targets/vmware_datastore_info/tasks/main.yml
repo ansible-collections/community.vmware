@@ -10,19 +10,17 @@
     setup_attach_host: true
     setup_datastore: true
 
-- when: vcsim is not defined
-  block:
-    - name: get list of info about datastores from the ESXi
-      vmware_datastore_info:
-        validate_certs: false
-        hostname: '{{ item }}'
-        username: '{{ esxi_user }}'
-        password: '{{ esxi_password }}'
-      register: info_from_esxi
-      with_items: "{{ esxi_hosts }}"
-    - assert:
-        that:
-          - "info_from_esxi.results[0].datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
+- name: get list of info about datastores from the ESXi
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: '{{ item }}'
+    username: '{{ esxi_user }}'
+    password: '{{ esxi_password }}'
+  register: info_from_esxi
+  with_items: "{{ esxi_hosts }}"
+- assert:
+    that:
+      - "info_from_esxi.results[0].datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
 
 - name: get list of info about datastores
   vmware_datastore_info:
@@ -34,23 +32,21 @@
     gather_nfs_mount_info: true
   register: info_from_vcenter_with_dc_filter
 
-- when: vcsim is not defined
-  block:
-    - name: get list of info about datastores
-      vmware_datastore_info:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        gather_nfs_mount_info: true
-      register: info_from_vcenter_with_no_filter
+- name: get list of info about datastores
+  vmware_datastore_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    gather_nfs_mount_info: true
+  register: info_from_vcenter_with_no_filter
 
-    - assert:
-        that:
-          - "info_from_vcenter_with_dc_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
-          - "info_from_vcenter_with_no_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
-          - "info_from_vcenter_with_no_filter.datastores[0]['capacity'] is defined"
-          - "info_from_vcenter_with_no_filter.datastores[0]['tags'] is not defined"
+- assert:
+    that:
+      - "info_from_vcenter_with_dc_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
+      - "info_from_vcenter_with_no_filter.datastores|selectattr('type', 'equalto', 'NFS')|list|length == 2"
+      - "info_from_vcenter_with_no_filter.datastores[0]['capacity'] is defined"
+      - "info_from_vcenter_with_no_filter.datastores[0]['tags'] is not defined"
 
 # Testcase 0002: Get a full list of datastores in a cluster
 - name: get list of info about datastores - no dc

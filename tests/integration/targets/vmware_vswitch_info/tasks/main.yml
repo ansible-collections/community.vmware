@@ -7,8 +7,6 @@
   vars:
     setup_attach_host: true
 
-# TODO: vcsim does not support networkConfig related to operations
-
 - name: Gather vswitch info about all hosts in given cluster
   vmware_vswitch_info:
     hostname: "{{ vcenter_hostname }}"

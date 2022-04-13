@@ -9,23 +9,21 @@
     setup_datastore: true
     setup_resource_pool: true
 
-- when: vcsim is not defined
-  block:
-    - name: Add ESXi Hosts to vCenter
-      vmware_host:
-        datacenter_name: '{{ dc1 }}'
-        esxi_hostname: '{{ item }}'
-        esxi_username: '{{ esxi_user }}'
-        esxi_password: '{{ esxi_password }}'
-        folder: '/DC0/host'
-        state: present
-      with_items: "{{ esxi_hosts }}"
+- name: Add ESXi Hosts to vCenter
+  vmware_host:
+    datacenter_name: '{{ dc1 }}'
+    esxi_hostname: '{{ item }}'
+    esxi_username: '{{ esxi_user }}'
+    esxi_password: '{{ esxi_password }}'
+    folder: '/DC0/host'
+    state: present
+  with_items: "{{ esxi_hosts }}"
 
-    - name: Disable the Maintenance Mode
-      vmware_maintenancemode:
-        esxi_hostname: '{{ item }}'
-        state: absent
-      with_items: "{{ esxi_hosts }}"
+- name: Disable the Maintenance Mode
+  vmware_maintenancemode:
+    esxi_hostname: '{{ item }}'
+    state: absent
+  with_items: "{{ esxi_hosts }}"
 
 - name: Create VM
   vmware_guest:

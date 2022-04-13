@@ -9,8 +9,7 @@
   set_fact:
     role_list:
       - Admin
-      # NoCryptoAdmin has no privilege with govcsim
-      # - NoCryptoAdmin
+      - NoCryptoAdmin
       - Anonymous
       - ReadOnly
 
