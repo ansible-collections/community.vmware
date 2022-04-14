@@ -4,6 +4,9 @@
 
 - import_role:
     name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
 
 # Setup: Create test cluster
 - name: Create test cluster
@@ -284,7 +287,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
-      cluster_name: test_cluster_ha
+      cluster_name: "{{ ccr1 }}"
       heartbeat_datastore_selection_policy: allFeasibleDs
     register: change_heartbeat_selection_policy_result
 
@@ -295,7 +298,9 @@
   - name: Change Heartbeat Datastore Selection Policy
     vmware_cluster_ha:
       <<: *change_heartbeat_selection_policy
-      heartbeat_datastore_selection_policy: allFeasibleDsWithUserPreference
+      heartbeat_datastore_selection_policy: userSelectedDs
+      heartbeat_datastores:
+        - "{{ rw_datastore }}"
     register: change_heartbeat_selection_policy_result_again
 
   - assert:
@@ -309,11 +314,11 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       datacenter_name: "{{ dc1 }}"
-      cluster_name: test_cluster_ha
+      cluster_name: "{{ ccr1 }}"
       heartbeat_datastore_selection_policy: allFeasibleDsWithUserPreference
       heartbeat_datastores:
-        - "{{ ro_datastore }}"
         - "{{ rw_datastore }}"
+        - "{{ ro_datastore }}"
     register: change_heartbeat_datastores_result
 
   - assert:
