@@ -45,7 +45,7 @@ options:
       - Whether dpm should be automated or manual
       type: str
       default: automated
-      choices: automated, manual
+      choices: [ automated, manual ]
     host_power_action_rate:
       description:
       - specify host power action rate
@@ -172,7 +172,7 @@ def main():
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         enable_dpm=dict(type='bool', default=False),
         default_dpm_behaviour=dict(type='str', choices=['automated', 'manual'], default='automated'),
-        host_power_action_rate=dict(type='int', choices=range(1, 6), default=3)
+        host_power_action_rate=dict(type='int', choices=[1, 2, 3, 4, 5], default=3)
     ))
 
     module = AnsibleModule(
