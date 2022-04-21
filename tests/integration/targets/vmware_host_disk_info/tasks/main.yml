@@ -8,30 +8,28 @@
   vars:
     setup_attach_host: true
 
-- when: vcsim is not defined
-  block:
-    # Testcase 0001: Get disk info for a host
-    - name: get list of disks from a single host
-      vmware_host_disk_info:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        esxi_hostname: "{{ esxi_hosts[0] }}"
-      register: host_disk_info
+# Testcase 0001: Get disk info for a host
+- name: get list of disks from a single host
+  vmware_host_disk_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+  register: host_disk_info
 
-    - debug:
-        var: host_disk_info
+- debug:
+    var: host_disk_info
 
-    # Testcase 0002: Get disk info for all hosts in a cluster
-    - name: get list of disks from all hosts in a cluster
-      vmware_host_disk_info:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        cluster_name: "{{ ccr1 }}"
-      register: host_disk_info
+# Testcase 0002: Get disk info for all hosts in a cluster
+- name: get list of disks from all hosts in a cluster
+  vmware_host_disk_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: "{{ ccr1 }}"
+  register: host_disk_info
 
-    - debug:
-        var: host_disk_info    
+- debug:
+    var: host_disk_info    

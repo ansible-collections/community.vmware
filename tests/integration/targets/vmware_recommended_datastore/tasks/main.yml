@@ -6,7 +6,7 @@
   set_fact:
     dsc: "DSC1"
 
-- when: vcsim is not defined
+- name: Run tests and clean up
   block:
   - import_role:
       name: prepare_vmware_tests

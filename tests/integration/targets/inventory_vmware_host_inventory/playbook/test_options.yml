@@ -188,7 +188,6 @@
           - "'tags' in test_host.value"
           - "'categories' in test_host.value"
           - "'tag_category' in test_host.value"
-      when: not (vcsim is defined)
 
 
     - name: Inventory 'resources' option

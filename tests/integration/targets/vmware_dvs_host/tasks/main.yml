@@ -4,7 +4,7 @@
   vars:
     setup_attach_host: true
 
-- when: vcsim is not defined
+- name: Run tests and clean up
   block:
   - name: Create the DVSwitch
     vmware_dvswitch:

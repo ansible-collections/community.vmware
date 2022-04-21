@@ -3,7 +3,7 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # Clone from existing VM with DVPG
-- when: vcsim is not defined
+- name: Run tests and clean up
   block:
     - name: Deploy VM from template
       vmware_guest:
@@ -204,8 +204,7 @@
               - delete_dvportgroup_result.changed is sameas true
 
   always:
-    - when: vcsim is not defined
-      name: Remove VM to free the portgroup
+    - name: Remove VM to free the portgroup
       vmware_guest:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"

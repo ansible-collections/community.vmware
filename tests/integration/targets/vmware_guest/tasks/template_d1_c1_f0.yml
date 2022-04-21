@@ -83,23 +83,20 @@
     that:
         - not (still_templates is changed)
 
-# To avoid the follow error of vcsim: VirtualMachine:vm-67 does not implement: MarkAsVirtualMachine
-- when: vcsim is not defined
-  block:
-    - name: convert template back to VMs
-      vmware_guest:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ dc1 }}"
-        folder: "{{ virtual_machines[1].folder }}"
-        name: "{{ virtual_machines[1].name }}"
-        state: present
-        is_template: false
-      register: revert_to_vm
-    - debug: var=revert_to_vm
-    - name: ensure that changes were made
-      assert:
-        that:
-            - revert_to_vm is changed
+- name: convert template back to VMs
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    folder: "{{ virtual_machines[1].folder }}"
+    name: "{{ virtual_machines[1].name }}"
+    state: present
+    is_template: false
+  register: revert_to_vm
+- debug: var=revert_to_vm
+- name: ensure that changes were made
+  assert:
+    that:
+        - revert_to_vm is changed

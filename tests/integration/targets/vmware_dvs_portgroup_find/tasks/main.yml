@@ -42,63 +42,60 @@
       - dvspgvlid_0001.dvs_portgroups | selectattr("vlan_id", "equalto", "0")|map(attribute="vlan_id")|first == "0"
 
 # https://github.com/ansible-collections/community.vmware/pull/648
-- name: The test for the dvportgroup with special characters
-  when: vcsim is not defined
-  block:
-    - name: Create dvPortGroup with special characters
-      vmware_dvs_portgroup:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        switch_name: "{{ dvswitch1 }}"
-        portgroup_name: 'dvportgroup\/%'
-        vlan_id: 1
-        num_ports: 8
-        port_binding: 'static'
-        port_allocation: 'fixed'
-        state: present
-      register: create_dvportgroup_with_special_characters_result
+- name: Create dvPortGroup with special characters
+  vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    switch_name: "{{ dvswitch1 }}"
+    portgroup_name: 'dvportgroup\/%'
+    vlan_id: 1
+    num_ports: 8
+    port_binding: 'static'
+    port_allocation: 'fixed'
+    state: present
+  register: create_dvportgroup_with_special_characters_result
 
-    - name: Make sure if the dvportgroup name with special characters is created
-      assert:
-        that:
-          - create_dvportgroup_with_special_characters_result.changed is sameas true
+- name: Make sure if the dvportgroup name with special characters is created
+  assert:
+    that:
+      - create_dvportgroup_with_special_characters_result.changed is sameas true
 
-    - name: get list of portgroups
-      vmware_dvs_portgroup_find:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-      register: dvspg_0002
+- name: get list of portgroups
+  vmware_dvs_portgroup_find:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+  register: dvspg_0002
 
-    - name: Make sure if the dvportgroup name with special characters is created
-      assert:
-        that:
-          - >-
-           dvspg_0002.dvs_portgroups
-           | map(attribute='name')
-           | select('==', 'dvportgroup\/%')
-           | list
-           | length == 1
+- name: Make sure if the dvportgroup name with special characters is created
+  assert:
+    that:
+      - >-
+       dvspg_0002.dvs_portgroups
+       | map(attribute='name')
+       | select('==', 'dvportgroup\/%')
+       | list
+       | length == 1
 
-    - name: Delete dvPortGroup with special characters
-      vmware_dvs_portgroup:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        switch_name: "{{ dvswitch1 }}"
-        portgroup_name: 'dvportgroup\/%'
-        vlan_id: 1
-        num_ports: 8
-        port_binding: 'static'
-        port_allocation: 'fixed'
-        state: absent
-      register: delete_dvportgroup_with_special_characters_result
+- name: Delete dvPortGroup with special characters
+  vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    switch_name: "{{ dvswitch1 }}"
+    portgroup_name: 'dvportgroup\/%'
+    vlan_id: 1
+    num_ports: 8
+    port_binding: 'static'
+    port_allocation: 'fixed'
+    state: absent
+  register: delete_dvportgroup_with_special_characters_result
 
-    - name: Make sure if the dvportgroup is deleted
-      assert:
-        that:
-          - delete_dvportgroup_with_special_characters_result.changed is sameas true
+- name: Make sure if the dvportgroup is deleted
+  assert:
+    that:
+      - delete_dvportgroup_with_special_characters_result.changed is sameas true

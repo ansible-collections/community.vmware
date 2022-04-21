@@ -1,15 +1,13 @@
-- when: vcsim is not defined
-  block:
-    - name: Gather info about vCenter Extensions
-      vcenter_extension_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-      register: ext_info
+- name: Gather info about vCenter Extensions
+  vcenter_extension_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+  register: ext_info
 
-    - name: ensure the result is ok
-      assert:
-        that:
-          - ext_info.extension_info| length >= 10
-          - ext_info.extension_info[0]["extension_version"] != ""
+- name: ensure the result is ok
+  assert:
+    that:
+      - ext_info.extension_info| length >= 10
+      - ext_info.extension_info[0]["extension_version"] != ""

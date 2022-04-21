@@ -7,90 +7,88 @@
   vars:
     setup_dvswitch: true
 
-- when: vcsim is not defined
+- &dvs_info
+  name: Gather info about DVS portgroup
+  vmware_dvs_portgroup_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+  register: dvs_results
+
+- debug:
+    var: dvs_results
+
+- assert:
+    that:
+      - dvs_results.dvs_portgroup_info is defined
+
+- <<: *dvs_info
+  name: Gather info about DVS portgroup in check mode
+  check_mode: true
+
+- debug:
+    var: dvs_results
+
+- assert:
+    that:
+      - dvs_results.dvs_portgroup_info is defined
+
+# https://github.com/ansible-collections/community.vmware/pull/648
+- name: The test for the dvportgroup with special characters
   block:
-    - &dvs_info
-      name: Gather info about DVS portgroup
-      vmware_dvs_portgroup_info:
-        validate_certs: false
+    - name: Create dvPortGroup with special characters
+      vmware_dvs_portgroup:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        datacenter: "{{ dc1 }}"
-      register: dvs_results
+        validate_certs: false
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: 'dvportgroup\/%'
+        vlan_id: 1
+        num_ports: 8
+        port_binding: 'static'
+        port_allocation: 'fixed'
+        state: present
+      register: create_dvportgroup_with_special_characters_result
 
-    - debug:
-        var: dvs_results
-
-    - assert:
+    - name: Make sure if the dvportgroup name with special characters is created
+      assert:
         that:
-          - dvs_results.dvs_portgroup_info is defined
+          - create_dvportgroup_with_special_characters_result.changed is sameas true
 
     - <<: *dvs_info
-      name: Gather info about DVS portgroup in check mode
-      check_mode: true
 
-    - debug:
-        var: dvs_results
-
-    - assert:
+    - name: Make sure if the dvportgroup name with special characters exists
+      assert:
         that:
-          - dvs_results.dvs_portgroup_info is defined
+          - >-
+           dvs_results.dvs_portgroup_info.{{ dvswitch1 }}
+           | map(attribute='portgroup_name')
+           | select('==', 'dvportgroup\/%')
+           | list
+           | length == 1
 
-    # https://github.com/ansible-collections/community.vmware/pull/648
-    - name: The test for the dvportgroup with special characters
-      block:
-        - name: Create dvPortGroup with special characters
-          vmware_dvs_portgroup:
-            hostname: "{{ vcenter_hostname }}"
-            username: "{{ vcenter_username }}"
-            password: "{{ vcenter_password }}"
-            validate_certs: false
-            switch_name: "{{ dvswitch1 }}"
-            portgroup_name: 'dvportgroup\/%'
-            vlan_id: 1
-            num_ports: 8
-            port_binding: 'static'
-            port_allocation: 'fixed'
-            state: present
-          register: create_dvportgroup_with_special_characters_result
+    - name: Delete dvPortGroup with special characters
+      vmware_dvs_portgroup:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: 'dvportgroup\/%'
+        vlan_id: 1
+        num_ports: 8
+        port_binding: 'static'
+        port_allocation: 'fixed'
+        state: absent
+      register: delete_dvportgroup_with_special_characters_result
 
-        - name: Make sure if the dvportgroup name with special characters is created
-          assert:
-            that:
-              - create_dvportgroup_with_special_characters_result.changed is sameas true
-
-        - <<: *dvs_info
-
-        - name: Make sure if the dvportgroup name with special characters exists
-          assert:
-            that:
-              - >-
-               dvs_results.dvs_portgroup_info.{{ dvswitch1 }}
-               | map(attribute='portgroup_name')
-               | select('==', 'dvportgroup\/%')
-               | list
-               | length == 1
-
-        - name: Delete dvPortGroup with special characters
-          vmware_dvs_portgroup:
-            hostname: "{{ vcenter_hostname }}"
-            username: "{{ vcenter_username }}"
-            password: "{{ vcenter_password }}"
-            validate_certs: false
-            switch_name: "{{ dvswitch1 }}"
-            portgroup_name: 'dvportgroup\/%'
-            vlan_id: 1
-            num_ports: 8
-            port_binding: 'static'
-            port_allocation: 'fixed'
-            state: absent
-          register: delete_dvportgroup_with_special_characters_result
-
-        - name: Make sure if the dvportgroup is deleted
-          assert:
-            that:
-              - delete_dvportgroup_with_special_characters_result.changed is sameas true
+    - name: Make sure if the dvportgroup is deleted
+      assert:
+        that:
+          - delete_dvportgroup_with_special_characters_result.changed is sameas true
 
 # Testcase 0002: Get portgroup info for a given dvswitch
 - name: get info for a given dvswitch
