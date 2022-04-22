@@ -68,3 +68,14 @@
   assert:
     that:
     - vm_move_0003.changed
+
+- name: Delete the f1 VM folder
+  vcenter_folder:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
+    folder_name: 'f1'
+    folder_type: vm
+    state: absent
+    validate_certs: false
