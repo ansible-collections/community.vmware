@@ -69,7 +69,7 @@
     that:
     - vm_move_0003.changed
 
-- name: Delete the f1 VM
+- name: Delete the f1 VM folder
   vcenter_folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
