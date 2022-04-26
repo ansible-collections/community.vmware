@@ -157,12 +157,15 @@ class VMwareHostVirtualSwitch(PyVmomi):
             self.module.fail_json(msg="Failed to get details of ESXi server."
                                       " Please specify esxi_hostname.")
 
+        self.network_mgr = self.host_system.configManager.networkSystem
+        if not self.network_mgr:
+            self.module.fail_json(msg="Failed to find network manager for ESXi system.")
+
         if self.params.get('state') == 'present':
             # Gather information about all vSwitches and Physical NICs
-            network_manager = self.host_system.configManager.networkSystem
-            available_pnic = [pnic.device for pnic in network_manager.networkInfo.pnic]
+            available_pnic = [pnic.device for pnic in self.network_mgr.networkInfo.pnic]
             self.available_vswitches = dict()
-            for available_vswitch in network_manager.networkInfo.vswitch:
+            for available_vswitch in self.network_mgr.networkInfo.vswitch:
                 used_pnic = []
                 for pnic in available_vswitch.pnic:
                     # vSwitch contains all PNICs as string in format of 'key-vim.host.PhysicalNic-vmnic0'
@@ -224,14 +227,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
         if self.nics:
             vss_spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=self.nics)
         try:
-            network_mgr = self.host_system.configManager.networkSystem
-            if network_mgr:
-                network_mgr.AddVirtualSwitch(vswitchName=self.switch,
-                                             spec=vss_spec)
-                results['changed'] = True
-                results['result'] = "vSwitch '%s' is created successfully" % self.switch
-            else:
-                self.module.fail_json(msg="Failed to find network manager for ESXi system")
+            self.network_mgr.AddVirtualSwitch(vswitchName=self.switch,
+                                              spec=vss_spec)
+            results['changed'] = True
+            results['result'] = "vSwitch '%s' is created successfully" % self.switch
         except vim.fault.AlreadyExists as already_exists:
             results['result'] = "vSwitch with name %s already exists: %s" % (self.switch,
                                                                              to_native(already_exists.msg))
@@ -333,14 +332,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 vss_spec.numPorts = self.number_of_ports
                 vss_spec.mtu = self.mtu
 
-                network_mgr = self.host_system.configManager.networkSystem
-                if network_mgr:
-                    network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
-                                                    spec=vss_spec)
-                    results['changed'] = True
-                    results['result'] = "vSwitch '%s' is updated successfully" % self.switch
-                else:
-                    self.module.fail_json(msg="Failed to find network manager for ESXi system.")
+                self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
+                                                     spec=vss_spec)
+                results['changed'] = True
+                results['result'] = "vSwitch '%s' is updated successfully" % self.switch
         except vim.fault.ResourceInUse as resource_used:
             self.module.fail_json(msg="Failed to update vSwitch '%s' as physical network adapter"
                                       " being bridged is already in use: %s" % (self.switch,
