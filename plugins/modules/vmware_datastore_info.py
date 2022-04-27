@@ -235,7 +235,7 @@ class VMwareHostDatastore(PyVmomi):
                         datastore_summary['vmfs_blockSize'] = host_mount_info.volume.blockSize
                         datastore_summary['vmfs_version'] = host_mount_info.volume.version
                         datastore_summary['vmfs_uuid'] = host_mount_info.volume.uuid
-                # vcsim does not return uncommitted
+                # uncommitted is optional / not always set
                 if not summary.uncommitted:
                     summary.uncommitted = 0
                 datastore_summary['uncommitted'] = summary.uncommitted
