@@ -312,24 +312,6 @@ class VMwareHostVirtualSwitch(PyVmomi):
         changed = False
         results = dict(changed=False, result="No change in vSwitch '%s'" % self.switch)
         spec = self.vss.spec
-        vswitch_pnic_info = self.available_vswitches[self.switch]
-        pnic_add = []
-        for desired_pnic in self.nics:
-            if desired_pnic not in vswitch_pnic_info['pnic']:
-                pnic_add.append(desired_pnic)
-        pnic_remove = []
-        for configured_pnic in vswitch_pnic_info['pnic']:
-            if configured_pnic not in self.nics:
-                pnic_remove.append(configured_pnic)
-        # Update all nics
-        all_nics = vswitch_pnic_info['pnic']
-        if pnic_add or pnic_remove:
-            changed = True
-            if pnic_add:
-                all_nics += pnic_add
-            if pnic_remove:
-                for pnic in pnic_remove:
-                    all_nics.remove(pnic)
 
         # Check MTU
         if self.vss.mtu != self.mtu:
@@ -341,14 +323,16 @@ class VMwareHostVirtualSwitch(PyVmomi):
             spec.numPorts = self.number_of_ports
             changed = True
 
+        # Check nics
+        if set(map(lambda n: n.rsplit('-',1)[1] ,self.vss.pnic)) != set(self.nics):
+            spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=self.nics)
+            changed = True
+
         if changed:
             if self.module.check_mode:
                 results['msg'] = "vSwitch '%s' would be updated" %  self.switch
             else:
                 try:
-                    if all_nics:
-                        spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=all_nics)
-
                     self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
                                                         spec=spec)
                     results['result'] = "vSwitch '%s' is updated successfully" % self.switch
