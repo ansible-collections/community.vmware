@@ -80,6 +80,41 @@ options:
     required: False
     aliases: [ 'security_policy', 'network_policy' ]
     type: dict
+  teaming:
+    description:
+      - Dictionary which configures the different teaming values for portgroup.
+    suboptions:
+      load_balancing:
+        type: str
+        description:
+        - Network adapter teaming policy.
+        choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, failover_explicit, None ]
+        aliases: [ 'load_balance_policy' ]
+      network_failure_detection:
+        type: str
+        description: Network failure detection.
+        choices: [ link_status_only, beacon_probing ]
+      notify_switches:
+        type: bool
+        description: Indicate whether or not to notify the physical switch if a link fails.
+      failback:
+        type: bool
+        description: Indicate whether or not to use a failback when restoring links.
+      active_adapters:
+        type: list
+        description:
+        - List of active adapters used for load balancing.
+        - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+        elements: str
+      standby_adapters:
+        type: list
+        description:
+        - List of standby adapters used for failover.
+        - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+        elements: str
+    required: False
+    aliases: [ 'teaming_policy' ]
+    type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -139,6 +174,23 @@ EXAMPLES = r'''
     mtu: 9000
     security:
         promiscuous_mode: True
+  delegate_to: localhost
+
+- name: Add a VMware vSwitch to a specific host system with active/standby teaming
+  community.vmware.vmware_vswitch:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    esxi_hostname: DC0_H0
+    switch_name: vswitch_001
+    nic_name:
+      - vmnic0
+      - vmnic1
+    teaming:
+      active_adapters:
+        - vmnic0
+      standby_adapters:
+        - vmnic1
   delegate_to: localhost
 
 - name: Delete a VMware vSwitch in a specific host system
@@ -273,6 +325,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 if self.update_security_policy(spec, results):
                     changed = True
 
+                # Check Teaming Policy
+                if self.update_teaming_policy(spec, results):
+                    changed = True
+
                 if changed:
                     self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
                                                          spec=spec)
@@ -374,6 +430,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
 
         # Check Security Policy
         if self.update_security_policy(spec, results):
+            changed = True
+
+        # Check Teaming Policy
+        if self.update_teaming_policy(spec, results):
             changed = True
 
         if changed:
@@ -489,6 +549,81 @@ class VMwareHostVirtualSwitch(PyVmomi):
 
         return changed
 
+    def update_teaming_policy(self, spec, results):
+        """
+        Update the teaming policy according to the parameters
+        Args:
+            spec: The vSwitch spec
+            results: The results dict
+
+        Returns: True if changes have been made, else false
+        """
+        if not self.params['teaming'] or not spec.policy.nicTeaming:
+            return False
+
+        teaming_policy = spec.policy.nicTeaming
+        changed = False
+        teaming_load_balancing = self.params['teaming'].get('load_balancing')
+        teaming_failure_detection = self.params['teaming'].get('network_failure_detection')
+        teaming_notify_switches = self.params['teaming'].get('notify_switches')
+        teaming_failback = self.params['teaming'].get('failback')
+        teaming_failover_order_active = self.params['teaming'].get('active_adapters')
+        teaming_failover_order_standby = self.params['teaming'].get('standby_adapters')
+
+        # Check teaming policy
+        if teaming_load_balancing is not None:
+            results['load_balancing'] = teaming_load_balancing
+            if teaming_policy.policy != teaming_load_balancing:
+                results['load_balancing_previous'] = teaming_policy.policy
+                teaming_policy.policy = teaming_load_balancing
+                changed = True
+
+        # Check teaming notify switches
+        if teaming_notify_switches is not None:
+            results['notify_switches'] = teaming_notify_switches
+            if teaming_policy.notifySwitches is not teaming_notify_switches:
+                results['notify_switches_previous'] = teaming_policy.notifySwitches
+                teaming_policy.notifySwitches = teaming_notify_switches
+                changed = True
+
+        # Check failback
+        if teaming_failback is not None:
+            results['failback'] = teaming_failback
+            if teaming_policy.rollingOrder is not teaming_failback:
+                results['notify_switches_previous'] = teaming_policy.rollingOrder
+                teaming_policy.rollingOrder = teaming_failback
+                changed = True
+
+        # Check teaming failover order
+        if teaming_failover_order_active is not None :
+            results['failover_active'] = teaming_failover_order_active
+            if teaming_policy.nicOrder.activeNic != teaming_failover_order_active:
+                results['failover_active_previous'] = teaming_policy.nicOrder.activeNic
+                teaming_policy.nicOrder.activeNic = teaming_failover_order_active
+                changed = True
+        if teaming_failover_order_standby is not None:
+            results['failover_standby'] = teaming_failover_order_standby
+            if teaming_policy.nicOrder.standbyNic != teaming_failover_order_standby:
+                results['failover_standby_previous'] = teaming_policy.nicOrder.standbyNic
+                teaming_policy.nicOrder.standbyNic = teaming_failover_order_standby
+                changed = True
+
+        # Check teaming failure detection
+        if teaming_failure_detection is not None:
+            results['failure_detection'] = teaming_failure_detection
+            if teaming_failure_detection == "link_status_only":
+                if teaming_policy.failureCriteria.checkBeacon is True:
+                    results['failure_detection_previous'] = "beacon_probing"
+                    teaming_policy.failureCriteria.checkBeacon = False
+                    changed = True
+            elif teaming_failure_detection == "beacon_probing":
+                if teaming_policy.failureCriteria.checkBeacon is False:
+                    results['failure_detection_previous'] = "link_status_only"
+                    teaming_policy.failureCriteria.checkBeacon = True
+                    changed = True
+
+        return changed
+
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
@@ -506,6 +641,31 @@ def main():
                 mac_changes=dict(type='bool'),
             ),
             aliases=['security_policy', 'network_policy']
+        ),
+        teaming=dict(
+            type='dict',
+            options=dict(
+                load_balancing=dict(
+                    type='str',
+                    choices=[
+                        None,
+                        'loadbalance_ip',
+                        'loadbalance_srcmac',
+                        'loadbalance_srcid',
+                        'failover_explicit',
+                    ],
+                    aliases=['load_balance_policy'],
+                ),
+                network_failure_detection=dict(
+                    type='str',
+                    choices=['link_status_only', 'beacon_probing']
+                ),
+                notify_switches=dict(type='bool'),
+                failback=dict(type='bool'),
+                active_adapters=dict(type='list', elements='str'),
+                standby_adapters=dict(type='list', elements='str'),
+            ),
+            aliases=['teaming_policy']
         ),
     )
 
