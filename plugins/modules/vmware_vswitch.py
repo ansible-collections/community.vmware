@@ -331,8 +331,14 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 for pnic in pnic_remove:
                     all_nics.remove(pnic)
 
-        if vswitch_pnic_info['mtu'] != self.mtu or \
-                vswitch_pnic_info['num_ports'] != self.number_of_ports:
+        # Check MTU
+        if self.vss.mtu != self.mtu:
+            spec.mtu = self.mtu
+            changed = True
+
+        # Check Number of Ports
+        if  spec.numPorts != self.number_of_ports:
+            spec.numPorts = self.number_of_ports
             changed = True
 
         if changed:
@@ -342,8 +348,6 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 try:
                     if all_nics:
                         spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=all_nics)
-                    spec.numPorts = self.number_of_ports
-                    spec.mtu = self.mtu
 
                     self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
                                                         spec=spec)
