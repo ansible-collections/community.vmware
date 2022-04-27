@@ -265,6 +265,18 @@ class VMwareHostVirtualSwitch(PyVmomi):
             try:
                 self.network_mgr.AddVirtualSwitch(vswitchName=self.switch,
                                                 spec=vss_spec)
+
+                changed = False
+                spec = self.find_vswitch_by_name(self.host_system, self.switch).spec
+
+                # Check Security Policy
+                if self.update_security_policy(spec, results):
+                    changed = True
+
+                if changed:
+                    self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
+                                                         spec=spec)
+
                 results['result'] = "vSwitch '%s' is created successfully" % self.switch
             except vim.fault.AlreadyExists as already_exists:
                 results['result'] = "vSwitch with name %s already exists: %s" % (self.switch,
