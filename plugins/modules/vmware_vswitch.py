@@ -115,6 +115,24 @@ options:
     required: False
     aliases: [ 'teaming_policy' ]
     type: dict
+  traffic_shaping:
+    description:
+      - Dictionary which configures traffic shaping for the switch.
+    suboptions:
+      enabled:
+        type: bool
+        description: Status of Traffic Shaping Policy.
+      average_bandwidth:
+        type: int
+        description: Average bandwidth (kbit/s).
+      peak_bandwidth:
+        type: int
+        description: Peak bandwidth (kbit/s).
+      burst_size:
+        type: int
+        description: Burst size (KB).
+    required: False
+    type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -191,6 +209,23 @@ EXAMPLES = r'''
         - vmnic0
       standby_adapters:
         - vmnic1
+  delegate_to: localhost
+
+- name: Add a VMware vSwitch to a specific host system with traffic shaping
+  community.vmware.vmware_vswitch:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    esxi_hostname: DC0_H0
+    switch_name: vswitch_001
+    nic_name:
+      - vmnic0
+      - vmnic1
+    traffic_shaping:
+        enabled: True
+        average_bandwidth: 100000
+        peak_bandwidth: 100000
+        burst_size: 102400
   delegate_to: localhost
 
 - name: Delete a VMware vSwitch in a specific host system
@@ -329,6 +364,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 if self.update_teaming_policy(spec, results):
                     changed = True
 
+                # Check Traffic Shaping Policy
+                if self.update_traffic_shaping_policy(spec, results):
+                    changed = True
+
                 if changed:
                     self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
                                                          spec=spec)
@@ -434,6 +473,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
 
         # Check Teaming Policy
         if self.update_teaming_policy(spec, results):
+            changed = True
+
+        # Check Traffic Shaping Policy
+        if self.update_traffic_shaping_policy(spec, results):
             changed = True
 
         if changed:
@@ -624,6 +667,60 @@ class VMwareHostVirtualSwitch(PyVmomi):
 
         return changed
 
+    def update_traffic_shaping_policy(self, spec, results):
+        """
+        Update the traffic shaping policy according to the parameters
+        Args:
+            spec: The vSwitch spec
+            results: The results dict
+
+        Returns: True if changes have been made, else false
+        """
+        if not self.params['traffic_shaping'] or not spec.policy.nicTeaming:
+            return False
+
+        ts_policy = spec.policy.shapingPolicy
+        changed = False
+        ts_enabled = self.params['traffic_shaping'].get('enabled')
+
+        # Check if traffic shaping needs to be disabled
+        if not ts_enabled:
+            if ts_policy.enabled:
+                ts_policy.enabled = False
+                changed = True
+            return changed
+
+        for value in ['average_bandwidth', 'peak_bandwidth', 'burst_size']:
+            if not self.params['traffic_shaping'].get(value):
+                self.module.fail_json(msg="traffic_shaping.%s is a required parameter if traffic_shaping is enabled." % value)
+        ts_average_bandwidth = self.params['traffic_shaping'].get('average_bandwidth') * 1000
+        ts_peak_bandwidth = self.params['traffic_shaping'].get('peak_bandwidth') * 1000
+        ts_burst_size = self.params['traffic_shaping'].get('burst_size') * 1024
+
+        if not ts_policy.enabled:
+            ts_policy.enabled = True
+            changed = True
+
+        if ts_policy.averageBandwidth != ts_average_bandwidth:
+            results['traffic_shaping_avg_bandw'] = ts_average_bandwidth
+            results['traffic_shaping_avg_bandw_previous'] = ts_policy.averageBandwidth
+            ts_policy.averageBandwidth = ts_average_bandwidth
+            changed = True
+
+        if ts_policy.peakBandwidth != ts_peak_bandwidth:
+            results['traffic_shaping_peak_bandw'] = ts_peak_bandwidth
+            results['traffic_shaping_peak_bandw_previous'] = ts_policy.peakBandwidth
+            ts_policy.peakBandwidth = ts_peak_bandwidth
+            changed = True
+
+        if ts_policy.burstSize != ts_burst_size:
+            results['traffic_shaping_burst'] = ts_burst_size
+            results['traffic_shaping_burst_previous'] = ts_policy.burstSize
+            ts_policy.burstSize = ts_burst_size
+            changed = True
+
+        return changed
+
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
@@ -666,6 +763,15 @@ def main():
                 standby_adapters=dict(type='list', elements='str'),
             ),
             aliases=['teaming_policy']
+        ),
+        traffic_shaping=dict(
+            type='dict',
+            options=dict(
+                enabled=dict(type='bool'),
+                average_bandwidth=dict(type='int'),
+                peak_bandwidth=dict(type='int'),
+                burst_size=dict(type='int'),
+            ),
         ),
     )
 
