@@ -311,6 +311,7 @@ class VMwareHostVirtualSwitch(PyVmomi):
         """
         changed = False
         results = dict(changed=False, result="No change in vSwitch '%s'" % self.switch)
+        spec = self.vss.spec
         vswitch_pnic_info = self.available_vswitches[self.switch]
         pnic_add = []
         for desired_pnic in self.nics:
@@ -339,14 +340,13 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 results['msg'] = "vSwitch '%s' would be updated" %  self.switch
             else:
                 try:
-                    vss_spec = vim.host.VirtualSwitch.Specification()
                     if all_nics:
-                        vss_spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=all_nics)
-                    vss_spec.numPorts = self.number_of_ports
-                    vss_spec.mtu = self.mtu
+                        spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=all_nics)
+                    spec.numPorts = self.number_of_ports
+                    spec.mtu = self.mtu
 
                     self.network_mgr.UpdateVirtualSwitch(vswitchName=self.switch,
-                                                        spec=vss_spec)
+                                                        spec=spec)
                     results['result'] = "vSwitch '%s' is updated successfully" % self.switch
                 except vim.fault.ResourceInUse as resource_used:
                     self.module.fail_json(msg="Failed to update vSwitch '%s' as physical network adapter"
