@@ -61,6 +61,25 @@ options:
     - Manage the vSwitch using this ESXi host system.
     aliases: [ 'host' ]
     type: str
+  security:
+    description:
+    - Network policy specifies layer 2 security settings for a
+      portgroup such as promiscuous mode, where guest adapter listens
+      to all the packets, MAC address changes and forged transmits.
+    - Dict which configures the different security values for portgroup.
+    suboptions:
+      promiscuous_mode:
+        type: bool
+        description: Indicates whether promiscuous mode is allowed.
+      forged_transmits:
+        type: bool
+        description: Indicates whether forged transmits are allowed.
+      mac_changes:
+        type: bool
+        description: Indicates whether mac changes are allowed.
+    required: False
+    aliases: [ 'security_policy', 'network_policy' ]
+    type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -107,6 +126,19 @@ EXAMPLES = r'''
     switch_name: vswitch_001
     nic_name: vmnic0
     mtu: 9000
+  delegate_to: localhost
+
+- name: Add a VMware vSwitch to a specific host system with Promiscuous Mode Enabled
+  community.vmware.vmware_vswitch:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    esxi_hostname: DC0_H0
+    switch_name: vswitch_001
+    nic_name: vmnic0
+    mtu: 9000
+    security:
+        promiscuous_mode: True
   delegate_to: localhost
 
 - name: Delete a VMware vSwitch in a specific host system
@@ -328,6 +360,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
             spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=self.nics)
             changed = True
 
+        # Check Security Policy
+        if self.update_security_policy(spec, results):
+            changed = True
+
         if changed:
             if self.module.check_mode:
                 results['msg'] = "vSwitch '%s' would be updated" %  self.switch
@@ -400,6 +436,46 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 return vss
         return None
 
+    def update_security_policy(self, spec, results):
+        """
+        Update the security policy according to the parameters
+        Args:
+            spec: The vSwitch spec
+            results: The results dict
+
+        Returns: True if changes have been made, else false
+        """
+        if not self.params['security'] or not spec.policy.security:
+            return False
+
+        security_policy = spec.policy.security
+        changed = False
+        sec_promiscuous_mode = self.params['security'].get('promiscuous_mode')
+        sec_forged_transmits = self.params['security'].get('forged_transmits')
+        sec_mac_changes = self.params['security'].get('mac_changes')
+        
+        if sec_promiscuous_mode is not None:
+            results['sec_promiscuous_mode'] = sec_promiscuous_mode
+            if security_policy.allowPromiscuous is not sec_promiscuous_mode:
+                results['sec_promiscuous_mode_previous'] = security_policy.allowPromiscuous
+                security_policy.allowPromiscuous = sec_promiscuous_mode
+                changed = True
+
+        if sec_mac_changes is not None:
+            results['sec_mac_changes'] = sec_mac_changes
+            if security_policy.macChanges is not sec_mac_changes:
+                results['sec_mac_changes_previous'] = security_policy.macChanges
+                security_policy.macChanges = sec_mac_changes
+                changed = True
+
+        if sec_forged_transmits is not None:
+            results['sec_forged_transmits'] = sec_forged_transmits
+            if security_policy.forgedTransmits is not sec_forged_transmits:
+                results['sec_forged_transmits_previous'] = security_policy.forgedTransmits
+                security_policy.forgedTransmits = sec_forged_transmits
+                changed = True
+
+        return changed
 
 def main():
     argument_spec = vmware_argument_spec()
@@ -410,6 +486,15 @@ def main():
         mtu=dict(type='int', default=1500),
         state=dict(type='str', default='present', choices=['absent', 'present'])),
         esxi_hostname=dict(type='str', aliases=['host']),
+        security=dict(
+            type='dict',
+            options=dict(
+                promiscuous_mode=dict(type='bool'),
+                forged_transmits=dict(type='bool'),
+                mac_changes=dict(type='bool'),
+            ),
+            aliases=['security_policy', 'network_policy']
+        ),
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
