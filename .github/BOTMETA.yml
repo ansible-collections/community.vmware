@@ -10,7 +10,6 @@ files:
     - esx
     - vcenter
     - vcsa
-    - vcsim
     - vsphere
     labels:
     - cloud
@@ -24,7 +23,6 @@ files:
     - esx
     - vcenter
     - vcsa
-    - vcsim
     - vsphere
     labels:
     - cloud
