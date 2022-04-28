@@ -479,7 +479,6 @@ class VMwareHostVirtualSwitch(PyVmomi):
                 if nicOrder.standbyNic != [i for i in nicOrder.standbyNic if i in self.nics]:
                     nicOrder.standbyNic = [i for i in nicOrder.standbyNic if i in self.nics]
                     changed = True
-                return changed
 
         # Check Security Policy
         if self.update_security_policy(spec, results):
