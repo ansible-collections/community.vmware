@@ -40,6 +40,4 @@ $ VMWARE_TEST_PLATFORM=static ansible-test integration --diff --no-temp-workdir 
 
 ## More Information
 
-* [Container image with govcsim](https://github.com/ansible/vcenter-test-container)
-
-* [Developer guide for testing with govcsim](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html#testing-with-govcsim)
+* [Developer guide for testing](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html#testing-with-your-own-infrastructure)
