@@ -120,6 +120,25 @@ options:
       - Enable Universal Pass-through (UPT).
       - Only compatible with the C(vmxnet3) device type.
     type: bool
+  physical_function_backing:
+    version_added: '2.3.0'
+    type: str
+    description:
+      - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
+      - This option is only compatible for SR-IOV network adapters.
+  virtual_function_backing:
+    version_added: '2.3.0'
+    type: str
+    description:
+      - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
+      - This option is only compatible for SR-IOV network adapters.
+  allow_guest_os_mtu_change:
+    version_added: '2.3.0'
+    default: True
+    type: bool
+    description:
+      - Allows the guest OS to change the MTU on a SR-IOV network adapter.
+      - This option is only compatible for SR-IOV network adapters.
   force:
     default: false
     description:
@@ -198,6 +217,24 @@ options:
         description:
         - If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
         - UPT is only compatible for Vmxnet3 adapter.
+      physical_function_backing:
+        version_added: '2.3.0'
+        type: str
+        description:
+        - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
+        - This option is only compatible for SR-IOV network adapters.
+      virtual_function_backing:
+        version_added: '2.3.0'
+        type: str
+        description:
+        - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
+        - This option is only compatible for SR-IOV network adapters.
+      allow_guest_os_mtu_change:
+        version_added: '2.3.0'
+        type: bool
+        description:
+        - Allows the guest OS to change the MTU on a SR-IOV network adapter.
+        - This option is only compatible for SR-IOV network adapters.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -440,6 +477,14 @@ class PyVmomiHelper(PyVmomi):
                 connected=nic.connectable.connected,
                 start_connected=nic.connectable.startConnected,
             )
+            # If NIC is a SR-IOV adapter
+            if isinstance(nic, vim.vm.device.VirtualSriovEthernetCard):
+                d_item['allow_guest_os_mtu_change'] = nic.allowGuesOSMtuChange
+                if isinstance(nic.sriovBacking, vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo):
+                    if isinstance(nic.sriovBacking.physicalFunctionBacking, vim.vm.device.VirtualPCIPassthrough.DeviceBacking):
+                        d_item['physical_function_backing'] = nic.sriovBacking.physicalFunctionBacking.id
+                    if isinstance(nic.sriovBacking.virtualFunctionBacking, vim.vm.device.VirtualPCIPassthrough.DeviceBacking):
+                        d_item['virtual_function_backing'] = nic.sriovBacking.virtualFunctionBacking.id
             # If a distributed port group specified
             if isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo):
                 key = nic.backing.port.portgroupKey
@@ -511,6 +556,9 @@ class PyVmomiHelper(PyVmomi):
             mac_address = network_params['mac_address']
             start_connected = network_params['start_connected']
             wake_onlan = network_params['wake_onlan']
+            pf_backing = network_params['physical_function_backing']
+            vf_backing = network_params['virtual_function_backing']
+            allow_guest_os_mtu_change = network_params['allow_guest_os_mtu_change']
         else:
             connected = self.params['connected']
             device_type = self.params['device_type'].lower()
@@ -520,6 +568,9 @@ class PyVmomiHelper(PyVmomi):
             mac_address = self.params['mac_address']
             start_connected = self.params['start_connected']
             wake_onlan = self.params['wake_onlan']
+            pf_backing = self.params['physical_function_backing']
+            vf_backing = self.params['virtual_function_backing']
+            allow_guest_os_mtu_change = self.params['allow_guest_os_mtu_change']
 
         if not nic_obj:
             device_obj = self.nic_device_type[device_type]
@@ -554,6 +605,19 @@ class PyVmomiHelper(PyVmomi):
             connected=connected
         )
         nic_spec.device.wakeOnLanEnabled = wake_onlan
+
+        if (pf_backing is not None or vf_backing is not None) and not isinstance(nic_spec.device, vim.vm.device.VirtualSriovEthernetCard):
+            self.module_fail_json(msg='physical_function_backing, virtual_function_backing can only be used with the sriov device type')
+
+        if isinstance(nic_spec.device, vim.vm.device.VirtualSriovEthernetCard):
+            nic_spec.device.allowGuestOSMtuChange = allow_guest_os_mtu_change
+            nic_spec.device.sriovBacking = vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo()
+            if pf_backing is not None:
+                nic_spec.device.sriovBacking.physicalFunctionBacking = vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo()
+                nic_spec.device.sriovBacking.physicalFunctionBacking.id = pf_backing
+            if vf_backing is not None:
+                nic_spec.device.sriovBacking.virtualFunctionBacking = vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo()
+                nic_spec.device.sriovBacking.virtualFunctionBacking.id = vf_backing
 
         if directpath_io and not isinstance(nic_spec.device, vim.vm.device.VirtualVmxnet3):
             self.module.fail_json(msg='directpath_io can only be used with the vmxnet3 device type')
@@ -665,6 +729,9 @@ class PyVmomiHelper(PyVmomi):
             network_params['vlan_id'] = i.get('vlan')
             network_params['switch'] = i.get('dvswitch_name')
             network_params['guest_control'] = i.get('allow_guest_control', self.params['guest_control'])
+            network_params['physical_function_backing'] = i.get('physical_function_backing')
+            network_params['virtual_function_backing'] = i.get('virtual_function_backing')
+            network_params['allow_guest_os_mtu_change'] = i.get('allow_guest_os_mtu_change')
 
             for k in ['connected', 'device_type', 'directpath_io', 'force', 'label', 'start_connected', 'state', 'wake_onlan']:
                 network_params[k] = i.get(k, self.params[k])
@@ -831,6 +898,9 @@ def main():
         start_connected=dict(type='bool', default=True),
         wake_onlan=dict(type='bool', default=False),
         directpath_io=dict(type='bool', default=False),
+        physical_function_backing=dict(type='str'),
+        virtual_function_backing=dict(type='str'),
+        allow_guest_os_mtu_change=dict(type='bool', default=True),
         force=dict(type='bool', default=False),
         gather_network_info=dict(type='bool', default=False, aliases=['gather_network_facts']),
         networks=dict(type='list', default=[], elements='dict'),

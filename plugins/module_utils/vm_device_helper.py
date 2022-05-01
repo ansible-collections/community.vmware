@@ -296,7 +296,7 @@ class PyVmomiDeviceHelper(object):
             pf_backing = device_infos.get('physical_function_backing', None)
             vf_backing = device_infos.get('virtual_function_backing', None)
 
-            nic.device.allowGuestOSMtuChange = bool(device_infos.get('allow_gest_os_mtu_change', True))
+            nic.device.allowGuestOSMtuChange = bool(device_infos.get('allow_guest_os_mtu_change', True))
             nic.device.sriovBacking = vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo()
             if pf_backing is not None:
                 nic.device.sriovBacking.physicalFunctionBacking = vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo()

@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_network - Add parameters `physical_function_backing`, `virtual_function_backing` and `allow_guest_os_mtu_change` (https://github.com/ansible-collections/community.vmware/pull/1218)
