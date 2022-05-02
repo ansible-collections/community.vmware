@@ -247,15 +247,12 @@ class DVSPortgroupInfoManager(PyVmomi):
                     )
 
                 if self.module.params['show_teaming_policy']:
-                    # govcsim does not have uplinkTeamingPolicy, remove this check once
-                    # PR https://github.com/vmware/govmomi/pull/1524 merged.
-                    if dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy:
-                        teaming_policy = dict(
-                            policy=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.policy.value,
-                            inbound_policy=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.reversePolicy.value,
-                            notify_switches=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.notifySwitches.value,
-                            rolling_order=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.rollingOrder.value,
-                        )
+                    teaming_policy = dict(
+                        policy=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.policy.value,
+                        inbound_policy=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.reversePolicy.value,
+                        notify_switches=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.notifySwitches.value,
+                        rolling_order=dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.rollingOrder.value,
+                    )
 
                 if self.module.params['show_uplinks'] and \
                         dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy and \
@@ -264,21 +261,19 @@ class DVSPortgroupInfoManager(PyVmomi):
                     standby_uplinks = dvs_pg.config.defaultPortConfig.uplinkTeamingPolicy.uplinkPortOrder.standbyUplinkPort
 
                 if self.params['show_port_policy']:
-                    # govcsim does not have port policy
-                    if dvs_pg.config.policy:
-                        port_policy = dict(
-                            block_override=dvs_pg.config.policy.blockOverrideAllowed,
-                            ipfix_override=dvs_pg.config.policy.ipfixOverrideAllowed,
-                            live_port_move=dvs_pg.config.policy.livePortMovingAllowed,
-                            network_rp_override=dvs_pg.config.policy.networkResourcePoolOverrideAllowed,
-                            port_config_reset_at_disconnect=dvs_pg.config.policy.portConfigResetAtDisconnect,
-                            security_override=dvs_pg.config.policy.securityPolicyOverrideAllowed,
-                            shaping_override=dvs_pg.config.policy.shapingOverrideAllowed,
-                            traffic_filter_override=dvs_pg.config.policy.trafficFilterOverrideAllowed,
-                            uplink_teaming_override=dvs_pg.config.policy.uplinkTeamingOverrideAllowed,
-                            vendor_config_override=dvs_pg.config.policy.vendorConfigOverrideAllowed,
-                            vlan_override=dvs_pg.config.policy.vlanOverrideAllowed
-                        )
+                    port_policy = dict(
+                        block_override=dvs_pg.config.policy.blockOverrideAllowed,
+                        ipfix_override=dvs_pg.config.policy.ipfixOverrideAllowed,
+                        live_port_move=dvs_pg.config.policy.livePortMovingAllowed,
+                        network_rp_override=dvs_pg.config.policy.networkResourcePoolOverrideAllowed,
+                        port_config_reset_at_disconnect=dvs_pg.config.policy.portConfigResetAtDisconnect,
+                        security_override=dvs_pg.config.policy.securityPolicyOverrideAllowed,
+                        shaping_override=dvs_pg.config.policy.shapingOverrideAllowed,
+                        traffic_filter_override=dvs_pg.config.policy.trafficFilterOverrideAllowed,
+                        uplink_teaming_override=dvs_pg.config.policy.uplinkTeamingOverrideAllowed,
+                        vendor_config_override=dvs_pg.config.policy.vendorConfigOverrideAllowed,
+                        vlan_override=dvs_pg.config.policy.vlanOverrideAllowed
+                    )
 
                 if self.params['show_vlan_info']:
                     vlan_info = self.get_vlan_info(dvs_pg.config.defaultPortConfig.vlan)

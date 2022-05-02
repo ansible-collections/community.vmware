@@ -1959,8 +1959,7 @@ class PyVmomiHelper(PyVmomi):
 
         if vm_obj:
             # VM exists
-            # This is primarily for vcsim/integration tests, unset vAppConfig was not seen on my deployments
-            orig_spec = vm_obj.config.vAppConfig if vm_obj.config.vAppConfig else new_vmconfig_spec
+            orig_spec = vm_obj.config.vAppConfig
 
             vapp_properties_current = dict((x.id, x) for x in orig_spec.property)
             vapp_properties_to_change = dict((x['id'], x) for x in self.params['vapp_properties'])
