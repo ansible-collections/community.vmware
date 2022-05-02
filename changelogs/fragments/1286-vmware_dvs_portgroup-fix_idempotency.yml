@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_dvs_portgroup - Fix an idempotency issue when `num_ports` is unset (https://github.com/ansible-collections/community.vmware/pull/1286).

@@ -1,2 +1,0 @@
-major_changes:
-  - Drop VCSIM as a test target (https://github.com/ansible-collections/community.vmware/pull/1294).
