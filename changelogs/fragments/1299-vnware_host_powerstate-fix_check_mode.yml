@@ -1,2 +1,0 @@
-bugfixes:
-  -  vmware_host_powerstate - Do not execute the powerstate changes in check_mode. (https://github.com/ansible-collections/community.vmware/pull/1299).
