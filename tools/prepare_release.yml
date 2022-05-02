@@ -28,5 +28,8 @@
     - name: Add everything
       ansible.builtin.shell: git add --all
 
+    # git diff-index --quiet HEAD
+    #   0 -> repository is clean, nothing to commit
+    #   1 -> the opposite
     - name: Commit everything
-      ansible.builtin.shell: 'git commit -m "prepare {{ version }} release"'
+      ansible.builtin.shell: 'git diff-index --quiet HEAD || git commit -m "prepare {{ version }} release"'
