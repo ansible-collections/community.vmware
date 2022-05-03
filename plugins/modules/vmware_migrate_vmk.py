@@ -53,6 +53,11 @@ options:
             - Portgroup name to migrate VMK interface to
         required: True
         type: str
+    migrate_vlan_id:
+        description:
+            - VLAN to use for the VMK interface when migrating from VDS to VSS
+            - Will be ignored when migrating from VSS to VDS
+        type: int
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -91,6 +96,7 @@ class VMwareMigrateVmk(object):
         self.host_system = None
         self.migrate_switch_name = self.module.params['migrate_switch_name']
         self.migrate_portgroup_name = self.module.params['migrate_portgroup_name']
+        self.migrate_vlan_id = self.module.params['migrate_vlan_id']
         self.device = self.module.params['device']
         self.esxi_hostname = self.module.params['esxi_hostname']
         self.current_portgroup_name = self.module.params['current_portgroup_name']
@@ -130,7 +136,7 @@ class VMwareMigrateVmk(object):
         port_group_config.spec = vim.host.PortGroup.Specification()
         port_group_config.changeOperation = "add"
         port_group_config.spec.name = self.migrate_portgroup_name
-        port_group_config.spec.vlanId = 0
+        port_group_config.spec.vlanId = self.migrate_vlan_id if self.migrate_vlan_id is not None else 0
         port_group_config.spec.vswitchName = self.migrate_switch_name
         port_group_config.spec.policy = vim.host.NetworkPolicy()
         return port_group_config
@@ -209,7 +215,8 @@ def main():
                               current_switch_name=dict(required=True, type='str'),
                               current_portgroup_name=dict(required=True, type='str'),
                               migrate_switch_name=dict(required=True, type='str'),
-                              migrate_portgroup_name=dict(required=True, type='str')))
+                              migrate_portgroup_name=dict(required=True, type='str'),
+                              migrate_vlan_id=dict(required=False, type='int')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
 
