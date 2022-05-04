@@ -17,7 +17,7 @@ import time
 import traceback
 import datetime
 from collections import OrderedDict
-from distutils.version import StrictVersion
+from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
 from random import randint
 
 REQUESTS_IMP_ERR = None
