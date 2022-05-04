@@ -17,3 +17,11 @@ except ImportError:
         from distutils.version import LooseVersion  # noqa: F401
     except ImportError as exc:
         raise_from(ImportError('To use this plugin or module with ansible-core < 2.11, you need to use Python < 3.12 with distutils.version present'), exc)
+
+try:
+    from ansible.module_utils.compat.version import StrictVersion  # noqa: F401
+except ImportError:
+    try:
+        from distutils.version import StrictVersion  # noqa: F401
+    except ImportError as exc:
+        raise_from(ImportError('To use this plugin or module with ansible-core < 2.11, you need to use Python < 3.12 with distutils.version present'), exc)
