@@ -463,22 +463,25 @@ class VMwareHostVirtualSwitch(PyVmomi):
             changed = True
 
         # Check nics
-        if set(map(lambda n: n.rsplit('-', 1)[1], self.vss.pnic)) != set(self.nics):
+        nics_current = set(map(lambda n: n.rsplit('-', 1)[1], self.vss.pnic))
+        if nics_current != set(self.nics):
             if self.nics:
                 spec.bridge = vim.host.VirtualSwitch.BondBridge(nicDevice=self.nics)
             else:
                 spec.bridge = None
             changed = True
 
-            # Remove nics from policy if no teaming policy is set and nic is removed
+            # Update teaming if not configured specifigaly
             if not self.params['teaming']:
                 nicOrder = spec.policy.nicTeaming.nicOrder
+                # Remove missing nics from policy
                 if nicOrder.activeNic != [i for i in nicOrder.activeNic if i in self.nics]:
                     nicOrder.activeNic = [i for i in nicOrder.activeNic if i in self.nics]
-                    changed = True
                 if nicOrder.standbyNic != [i for i in nicOrder.standbyNic if i in self.nics]:
                     nicOrder.standbyNic = [i for i in nicOrder.standbyNic if i in self.nics]
-                    changed = True
+                # Set new nics as active
+                if set(self.nics) - nics_current:
+                    nicOrder.activeNic += set(self.nics) - nics_current
 
         # Check Security Policy
         if self.update_security_policy(spec, results):
