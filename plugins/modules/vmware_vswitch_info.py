@@ -25,10 +25,10 @@ requirements:
 - PyVmomi
 options:
   policies:
+    version_added: '2.4.0'
     description:
     - Gather information about Security, Traffic Shaping, as well as Teaming and failover.
     - The property C(ts) stands for Traffic Shaping and C(lb) for Load Balancing.
-    version_added: '2.4.0'
     type: bool
     default: false
   cluster_name:
@@ -98,7 +98,7 @@ hosts_vswitch_info:
                     ],
                 "failback": true,
                 "failover_active": ["vmnic1"],
-                "failover_standby": ["vmnic2],
+                "failover_standby": ["vmnic2"],
                 "failure_detection": "link_status_only",
                 "lb": "loadbalance_srcid",
                 "notify": true,
@@ -146,9 +146,6 @@ class VswitchInfoManager(PyVmomi):
         if policy_info:
             # Security info
             if spec.policy.security:
-                promiscuous_mode = spec.policy.security.allowPromiscuous
-                mac_changes = spec.policy.security.macChanges
-                forged_transmits = spec.policy.security.forgedTransmits
                 vswitch_info_dict['security'] = (
                     [
                         spec.policy.security.allowPromiscuous,
