@@ -53,6 +53,8 @@
 - assert:
     that:
       - switch_policies_info.hosts_vswitch_info is defined
-      - switch_policies_info.hosts_vswitch_info[esxi1].security is defined
-      - switch_policies_info.hosts_vswitch_info[esxi1].ts is defined
-      - switch_policies_info.hosts_vswitch_info[esxi1].lb is defined
+      - switch_policies_info.hosts_vswitch_info[esxi1] is defined
+      - switch_policies_info.hosts_vswitch_info[esxi1]['vSwitch0'] is defined
+      - switch_policies_info.hosts_vswitch_info[esxi1]['vSwitch0'].security is defined
+      - switch_policies_info.hosts_vswitch_info[esxi1]['vSwitch0'].ts is defined
+      - switch_policies_info.hosts_vswitch_info[esxi1]['vSwitch0'].lb is defined
