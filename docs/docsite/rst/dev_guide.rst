@@ -1,4 +1,4 @@
-.. _ansible_collections.community.vmware.docsite.vmware_ansible:
+.. _ansible_collections.community.vmware.docsite.vmware_ansible_devguide:
 
 ****************************************
 Guidelines for VMware module development
