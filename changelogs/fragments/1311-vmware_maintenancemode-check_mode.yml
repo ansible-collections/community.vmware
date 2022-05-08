@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_maintenancemode - Add support for check_mode
-    (https://github.com/ansible-collections/community.vmware/pull/1311).

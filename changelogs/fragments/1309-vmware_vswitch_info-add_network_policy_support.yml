@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_vswitch_info - Add support to return security, teaming and traffic shaping policies on vSwitches.
-    (https://github.com/ansible-collections/community.vmware/pull/1309).

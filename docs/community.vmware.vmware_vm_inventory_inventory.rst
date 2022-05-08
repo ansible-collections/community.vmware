@@ -924,6 +924,26 @@ Examples
           - 'guest.guestFamily'
           - 'guest.ipStack'
 
+    # Select a specific IP address for use by ansible when multiple NICs are present on the VM
+        plugin: community.vmware.vmware_vm_inventory
+        strict: False
+        hostname: 10.65.223.31
+        username: administrator@vsphere.local
+        password: Esxi@123$%
+        validate_certs: False
+        compose:
+          # Set the IP address used by ansible to one that starts by 10.42. or 10.43.
+          ansible_host: >-
+            guest.net
+            | selectattr('ipAddress')
+            | map(attribute='ipAddress')
+            | flatten
+            | select('match', '^10.42.*|^10.43.*')
+            | list
+            | first
+        properties:
+          - guest.net
+
 
 
 
