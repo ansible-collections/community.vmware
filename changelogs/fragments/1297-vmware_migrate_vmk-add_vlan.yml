@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_migrate_vmk - Add `migrate_vlan_id` to use for the VMK interface when migrating from VDS to VSS
-    (https://github.com/ansible-collections/community.vmware/issues/1297).

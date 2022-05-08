@@ -5,6 +5,17 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.4.0
+======
+
+Minor Changes
+-------------
+
+- vmware_maintenancemode - Add support for check_mode (https://github.com/ansible-collections/community.vmware/pull/1311).
+- vmware_migrate_vmk - Add `migrate_vlan_id` to use for the VMK interface when migrating from VDS to VSS (https://github.com/ansible-collections/community.vmware/issues/1297).
+- vmware_vswitch - Add support to manage security, teaming and traffic shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1298).
+- vmware_vswitch_info - Add support to return security, teaming and traffic shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1309).
+
 v2.3.0
 ======
 

@@ -1178,3 +1178,19 @@ releases:
     - 1299-vnware_host_powerstate-fix_check_mode.yml
     - add-sriov-advanced-options-to-vmware_guest_network.yml
     release_date: '2022-05-02'
+  2.4.0:
+    changes:
+      minor_changes:
+      - vmware_maintenancemode - Add support for check_mode (https://github.com/ansible-collections/community.vmware/pull/1311).
+      - vmware_migrate_vmk - Add `migrate_vlan_id` to use for the VMK interface when
+        migrating from VDS to VSS (https://github.com/ansible-collections/community.vmware/issues/1297).
+      - vmware_vswitch - Add support to manage security, teaming and traffic shaping
+        policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1298).
+      - vmware_vswitch_info - Add support to return security, teaming and traffic
+        shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1309).
+    fragments:
+    - 1297-vmware_migrate_vmk-add_vlan.yml
+    - 1298-vmware_vswitch-add_network_policy_support.yml
+    - 1309-vmware_vswitch_info-add_network_policy_support.yml
+    - 1311-vmware_maintenancemode-check_mode.yml
+    release_date: '2022-05-08'

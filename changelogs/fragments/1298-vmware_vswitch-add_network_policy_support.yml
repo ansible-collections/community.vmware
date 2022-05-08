@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_vswitch - Add support to manage security, teaming and traffic shaping policies on vSwitches.
-    (https://github.com/ansible-collections/community.vmware/pull/1298).
