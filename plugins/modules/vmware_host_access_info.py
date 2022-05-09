@@ -62,7 +62,7 @@ hosts_access_info:
     sample: {
             "esxi_hostname_0001": {
                 "lockdown_mode": "disabled",
-                "lockdown_exceptions": [], 
+                "lockdown_exceptions": [],
                 "access": {
                     "dcui": {"access": "admin", "group": false},
                     "root": {"access": "admin", "group": false},
