@@ -63,7 +63,7 @@ options:
         - Tags related to virtual machine are shown if set to C(True).
       default: False
       type: bool
-    show_allocateed:
+    show_allocated:
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: False
