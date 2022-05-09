@@ -147,7 +147,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 
@@ -167,7 +167,7 @@ class VmwareHostAccessManager(PyVmomi):
     def __init__(self, module):
         super(VmwareHostAccessManager, self).__init__(module)
         self.principal = module.params["user_name"] or module.params["group_name"]
-        self.group = module.params["user_name"] == None
+        self.group = module.params["user_name"] is None
         self.access_mode = module.params["access"]
         self.lockdown_mode = module.params["lockdown_mode"]
         self.lockdown_exceptions = module.params["lockdown_exceptions"]
@@ -187,7 +187,7 @@ class VmwareHostAccessManager(PyVmomi):
         """
         for ace in access_mgr.RetrieveHostAccessControlEntries():
             if ace.principal == self.principal and ace.group == self.group:
-                return {v:k for k, v in self.ACCESS_MODE_MAP.items()}.get(ace.accessMode)
+                return {v: k for k, v in self.ACCESS_MODE_MAP.items()}.get(ace.accessMode)
         return None
 
     def update_access_controll_entry(self, access_mgr, access_mode):
@@ -198,7 +198,7 @@ class VmwareHostAccessManager(PyVmomi):
             access_mgr.ChangeAccessMode(self.principal, self.group, self.ACCESS_MODE_MAP[access_mode])
         except vim.fault.UserNotFound as user_not_found:
             self.module.fail_json(msg="Failed to update permission for '%s' due to user"
-                                    " not found : %s" % (self.principal, to_native(user_not_found.msg)))
+                                      " not found : %s" % (self.principal, to_native(user_not_found.msg)))
         except Exception as generic_exc:
             self.module.fail_json(msg="Failed to add access: %s" % (to_native(generic_exc)))
 
@@ -209,20 +209,20 @@ class VmwareHostAccessManager(PyVmomi):
         Returns: Lockdown mode as string
         """
         lockdown_mode = access_mgr.lockdownMode
-        return {v:k for k, v in self.LOCKDOWN_MODE_MAP.items()}.get(lockdown_mode)
+        return {v: k for k, v in self.LOCKDOWN_MODE_MAP.items()}.get(lockdown_mode)
 
     def execute_access_controll_entry(self, host, access_mgr):
         access_mode_current = self.get_access_controll_entry(access_mgr)
-        
+
         if self.state == "present":
             if access_mode_current != self.access_mode:
                 self.result['changed'] = True
                 if self.module.check_mode:
                     self.result['msg'].append("The permission '%s' will be granted to '%s' on '%s'." %
-                                                (self.access_mode, self.principal, host.name))
+                                              (self.access_mode, self.principal, host.name))
                 else:
                     self.result['msg'].append("Granted permission '%s' to '%s' on '%s'" %
-                                                (self.access_mode, self.principal, host.name))
+                                              (self.access_mode, self.principal, host.name))
                     self.update_access_controll_entry(access_mgr, self.access_mode)
 
                 self.result['result'][host.name]['access'] = {self.principal: dict(group=self.group, access=self.access_mode)}
@@ -233,14 +233,14 @@ class VmwareHostAccessManager(PyVmomi):
             self.result['changed'] = True
             if self.module.check_mode:
                 self.result['msg'].append("The permission '%s' will be revoked from '%s' on '%s'." %
-                                            (access_mode_current, self.principal, host.name))
+                                          (access_mode_current, self.principal, host.name))
             else:
                 self.result['msg'].append("Revoked permission '%s' from '%s' on '%s'" %
-                                            (access_mode_current, self.principal, host.name))
+                                          (access_mode_current, self.principal, host.name))
                 self.update_access_controll_entry(access_mgr, None)
-                
+
             if self.module._diff:
-                self.result['diff']['before'][host.name]['access'] =  [dict(principal=self.principal, group=self.group, access=access_mode_current)]
+                self.result['diff']['before'][host.name]['access'] = [dict(principal=self.principal, group=self.group, access=access_mode_current)]
                 self.result['diff']['after'][host.name]['access'] = []
 
     def execute_lockdown_exceptions(self, host, access_mgr):
