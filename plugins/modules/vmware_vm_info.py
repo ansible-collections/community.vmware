@@ -340,12 +340,10 @@ class VmwareVmInfo(PyVmomi):
                 for device in vm.config.hardware.device:
                     if isinstance(device, vim.vm.device.VirtualDisk):
                         storage_allocated += device.capacityInBytes
-    
                 allocated = {
                     "storage": storage_allocated,
                     "cpu": vm.config.hardware.numCPU,
-                    "memory": vm.config.hardware.memoryMB
-                    }
+                    "memory": vm.config.hardware.memoryMB}
 
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
