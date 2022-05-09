@@ -242,7 +242,7 @@ class VmwareHostAccessManager(PyVmomi):
             if self.module._diff:
                 self.result['diff']['before'][host.name]['access'] =  [dict(principal=self.principal, group=self.group, access=access_mode_current)]
                 self.result['diff']['after'][host.name]['access'] = []
-    
+
     def execute_lockdown_exceptions(self, host, access_mgr):
         exceptions = [s for s in access_mgr.QueryLockdownExceptions()]
         exceptions_current = exceptions.copy()
@@ -266,10 +266,10 @@ class VmwareHostAccessManager(PyVmomi):
                     access_mgr.UpdateLockdownExceptions(exceptions)
                 except vim.fault.UserNotFound as user_not_found:
                     self.module.fail_json(msg="Failed to update lockdown exceptions due to user"
-                                            " not found : %s" % (to_native(user_not_found.msg)))
+                                              " not found : %s" % (to_native(user_not_found.msg)))
                 except Exception as generic_exc:
                     self.module.fail_json(msg="Failed to update lockdown exceptions due to"
-                                            " generic exception : %s" % (to_native(generic_exc)))
+                                              " generic exception : %s" % (to_native(generic_exc)))
                 self.result['msg'].append("Updated Lockdown exceptions for '%s'" % (host.name))
 
             self.result['result'][host.name]['lockdown_exceptions'] = exceptions
@@ -298,10 +298,10 @@ class VmwareHostAccessManager(PyVmomi):
     def execute(self):
         self.result = dict(changed=False, msg=[], result={})
         if self.module._diff:
-            self.result['diff']=dict(before=dict(),after=dict())
-        
+            self.result['diff'] = dict(before=dict(), after=dict())
+
         for host in self.hosts:
-            
+
             self.result['result'][host.name] = {}
             if self.module._diff:
                 self.result['diff']['before'][host.name] = {}
@@ -329,16 +329,14 @@ def main():
         cluster_name=dict(type='str', aliases=['cluster']),
         user_name=dict(type="str"),
         group_name=dict(type="str"),
-        access=dict(type="str", aliases=["access_mode"],  choices=["admin", "no-access", "read-only"]),
-        lockdown_mode=dict(type="str", aliases=["lockdown"],  choices=["disabled", "normal", "strict"]),
+        access=dict(type="str", aliases=["access_mode"], choices=["admin", "no-access", "read-only"]),
+        lockdown_mode=dict(type="str", aliases=["lockdown"], choices=["disabled", "normal", "strict"]),
         lockdown_exceptions=dict(type="list", elements="str"),
         state=dict(type="str", default="present", choices=["present", "absent"])
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        #required_if=[
-        #    ['state', 'present', ['access']]],
         required_one_of=[
             ['user_name', 'group_name', 'lockdown', 'lockdown_exceptions'],
             ['cluster_name', 'hosts'],
@@ -350,6 +348,7 @@ def main():
     )
     vmware_host_access_manager = VmwareHostAccessManager(module)
     vmware_host_access_manager.execute()
+
 
 if __name__ == "__main__":
     main()
