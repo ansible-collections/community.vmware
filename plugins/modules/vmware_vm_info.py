@@ -63,6 +63,11 @@ options:
         - Tags related to virtual machine are shown if set to C(True).
       default: False
       type: bool
+    show_allocateed:
+      description:
+        - Allocated storage in byte and memory in MB are shown if it set to True.
+      default: False
+      type: bool
     vm_name:
       description:
         - Name of the virtual machine to get related configurations information from.
@@ -184,7 +189,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 virtual_machines:
-  description: list of dictionary of virtual machines and their information. (allocated storage in byte and memory in MB)
+  description: list of dictionary of virtual machines and their information
   returned: success
   type: list
   sample: [
@@ -329,16 +334,18 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
-            storage_allocated = 0
-            for device in vm.config.hardware.device:
-                if isinstance(device, vim.vm.device.VirtualDisk):
-                    storage_allocated += device.capacityInBytes
-
-            allocated = {
-                "storage": storage_allocated,
-                "cpu": vm.config.hardware.numCPU,
-                "memory": vm.config.hardware.memoryMB
-                }
+            allocated = {}
+            if self.module.params.get('show_allocated'):
+                storage_allocated = 0
+                for device in vm.config.hardware.device:
+                    if isinstance(device, vim.vm.device.VirtualDisk):
+                        storage_allocated += device.capacityInBytes
+    
+                allocated = {
+                    "storage": storage_allocated,
+                    "cpu": vm.config.hardware.numCPU,
+                    "memory": vm.config.hardware.memoryMB
+                    }
 
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
@@ -383,6 +390,7 @@ def main():
         vm_type=dict(type='str', choices=['vm', 'all', 'template'], default='all'),
         show_attribute=dict(type='bool', default='no'),
         show_tag=dict(type='bool', default=False),
+        show_allocated=dict(type='bool', default=False),
         folder=dict(type='str'),
         vm_name=dict(type='str')
     )
