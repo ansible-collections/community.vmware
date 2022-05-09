@@ -19,7 +19,7 @@ author:
 notes:
 - Tested on vSphere 7.0
 requirements:
-  - python >= 3.6
+- python >= 3.6
 - PyVmomi
 options:
   cluster_name:
