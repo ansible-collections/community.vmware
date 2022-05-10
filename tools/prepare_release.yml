@@ -1,0 +1,35 @@
+- hosts: localhost
+  tasks:
+    - name: Generate version
+      block:
+        - name: Get the next release version
+          ansible.builtin.shell: git tag --sort=-creatordate --merged|head -n1|perl -pe 's/(\d+\.)(\d+)\.\d+/"$1" . ($2+1) . ".0"/e'
+          register: result
+
+        - name: Set the release version
+          ansible.builtin.set_fact:
+            version: "{{ result.stdout }}"
+      when: version is not defined
+
+    - name: Create release branch
+      ansible.builtin.shell: git checkout -b "prepare_{{ version }}_release"
+
+    - name: Update documentation
+      import_tasks: create_documentation_tasks.yml
+
+    - name: Refresh the changelog
+      ansible.builtin.shell: 'tox -e antsibull-changelog -- release --verbose --version {{ version }}'
+
+    - name: Clean up the changelog fragments
+      ansible.builtin.file:
+        path: "{{ playbook_dir }}/../changelogs/fragments"
+        state: absent
+
+    - name: Add everything
+      ansible.builtin.shell: git add --all
+
+    # git diff-index --quiet HEAD
+    #   0 -> repository is clean, nothing to commit
+    #   1 -> the opposite
+    - name: Commit everything
+      ansible.builtin.shell: 'git diff-index --quiet HEAD || git commit -m "prepare {{ version }} release"'

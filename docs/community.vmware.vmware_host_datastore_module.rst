@@ -45,6 +45,28 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>auto_expand</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.13.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Expand a datastore capacity to full if it has free capacity.</div>
+                        <div>This parameter can&#x27;t be extend using another datastore.</div>
+                        <div>A use case example in <em>auto_expand</em>, it can be used to expand a datastore capacity after increasing LUN volume.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datastore_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -337,6 +359,7 @@ Notes
    - Tested on vSphere 6.0, 6.5 and ESXi 6.7
    - NFS v4.1 tested on vSphere 6.5
    - Kerberos authentication with NFS v4.1 isn't implemented
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

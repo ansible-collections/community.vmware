@@ -9,15 +9,22 @@
 
 - name: prepare of integration test for iSCSI - connect to vCenter
   block:
-    - vmware_host_iscsi:
+    - name: Enable iSCSI
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
         esxi_hostname: "{{ esxi1 }}"
         state: enabled
+      register: create_iscsi_device_result
 
-    - vmware_host_iscsi:
+    - name: Set iSCSI hba name to vmhba_name variable
+      set_fact:
+        vmhba_name: "{{ create_iscsi_device_result.iscsi_properties.vmhba_name }}"
+
+    - name: Disable iSCSI
+      community.vmware.vmware_host_iscsi:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -29,26 +36,6 @@
     - assert:
         that:
           - prepare_iscsi_disabled_result.changed is sameas true
-
-- name: Gather facts for host bus adapters
-  vmware_host_facts:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    schema: vsphere
-    properties:
-      - config.storageDevice.hostBusAdapter
-  register: gather_facts_host_bus_adapters_result
-
-- name: set iSCSI hba name to vmhba_name variable
-  set_fact:
-    vmhba_name: "{{ item.device }}"
-  loop: "{{ gather_facts_host_bus_adapters_result.ansible_facts.config.storageDevice.hostBusAdapter }}"
-  when:
-    - "'device' in item"
-    - "'isSoftwareBased' in item and item.isSoftwareBased is sameas true"
 
 - name: vmware_host_iscsi module test - connect to vCenter
   include_tasks: iscsi_module_test_tasks.yml

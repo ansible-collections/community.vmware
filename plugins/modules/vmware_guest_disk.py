@@ -91,9 +91,11 @@ options:
          description: Disk storage size in tb.
          type: int
        type:
-         description: The type of disk, if not specified then use C(thick) type for new disk, no eagerzero.
+         description:
+         - The type of disk, if not specified then use C(thick) type for new disk, no eagerzero.
+         - The disk type C(rdm) is added in version 1.13.0.
          type: str
-         choices: ['thin', 'eagerzeroedthick', 'thick']
+         choices: ['thin', 'eagerzeroedthick', 'thick', 'rdm' ]
        disk_mode:
          description:
            - Type of disk mode. If not specified then use C(persistent) mode for new disk.
@@ -103,11 +105,28 @@ options:
              at power off, but not affected by snapshots.
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
+       rdm_path:
+         description:
+         - Path of LUN for Raw Device Mapping required for disk type C(rdm).
+         - Only valid if C(type) is set to C(rdm).
+         type: str
+       cluster_disk:
+         description:
+           - This value allows for the sharing of an RDM between two machines.
+           - The primary machine holding the RDM uses the default C(False).
+           - The secondary machine holding the RDM uses C(True).
+         type: bool
+         default: False
+         version_added: '1.17.0'
+       compatibility_mode:
+         description: Compatibility mode for raw devices. Required for disk type 'rdm'
+         type: str
+         choices: ['physicalMode','virtualMode']
        sharing:
          description:
            - The sharing mode of the virtual disk.
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
-           - Sharing can only be set if C(type) is set to C(eagerzeroedthick).
+           - Sharing can only be set if C(type) is set to C(eagerzeroedthick)or C(rdm).
          type: bool
          default: False
        datastore:
@@ -122,10 +141,19 @@ options:
            - Care should be taken while specifying 'scsi_controller' is 0 and 'unit_number' as 0 as this disk may contain OS.
          type: int
          choices: [0, 1, 2, 3]
+       bus_sharing:
+         description:
+           - Only functions with Paravirtual SCSI Controller.
+           - Allows for the sharing of the scsi bus between two virtual machines.
+         type: str
+         choices: ['noSharing', 'physicalSharing', 'virtualSharing']
+         default: 'noSharing'
+         version_added: '1.17.0'
        unit_number:
          description:
            - Disk Unit Number.
            - Valid value range from 0 to 15, except 7 for SCSI Controller.
+           - Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher
            - Valid value range from 0 to 29 for SATA controller.
            - Valid value range from 0 to 14 for NVME controller.
          type: int
@@ -257,6 +285,75 @@ EXAMPLES = r'''
   delegate_to: localhost
   register: test_custom_shares
 
+- name: Add physical raw device mapping to virtual machine using name
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+        compatibility_mode: 'physicalMode'
+
+- name: Add virtual raw device mapping to virtual machine using name and virtual mode
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+        compatibility_mode: 'virtualMode'
+        disk_mode: 'persistent'
+
+- name: Add raw device mapping to virtual machine with Physical bus sharing
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        rdm_path: /vmfs/devices/disks/naa.060000003b1234efb453
+        compatibility_mode: 'virtualMode'
+        disk_mode: 'persistent'
+        bus_sharing: physicalSharing
+
+- name: Add raw device mapping to virtual machine with Physical bus sharing and clustered disk
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: "Test_VM"
+    disk:
+      - type: rdm
+        state: present
+        scsi_controller: 1
+        unit_number: 5
+        compatibility_mode: 'virtualMode'
+        disk_mode: 'persistent'
+        bus_sharing: physicalSharing
+        filename: "[datastore1] path/to/rdm/disk-marker.vmdk"
+
 - name: create new disk with custom IO limits and shares in IO Limits
   community.vmware.vmware_guest_disk:
     hostname: "{{ vcenter_hostname }}"
@@ -386,63 +483,19 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec,\
     wait_for_task, find_obj, get_all_objs, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
+        self.device_helper = PyVmomiDeviceHelper(self.module)
         self.desired_disks = self.params['disk']  # Match with vmware_guest parameter
         self.vm = None
-        self.scsi_device_type = dict(lsilogic=vim.vm.device.VirtualLsiLogicController,
-                                     paravirtual=vim.vm.device.ParaVirtualSCSIController,
-                                     buslogic=vim.vm.device.VirtualBusLogicController,
-                                     lsilogicsas=vim.vm.device.VirtualLsiLogicSASController)
-        self.ctl_device_type = self.scsi_device_type.copy()
-        self.ctl_device_type.update({'sata': vim.vm.device.VirtualAHCIController, 'nvme': vim.vm.device.VirtualNVMEController})
+        self.ctl_device_type = self.device_helper.scsi_device_type.copy()
+        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type, 'nvme': self.device_helper.nvme_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
-
-    def create_scsi_controller(self, scsi_type, scsi_bus_number):
-        """
-        Create SCSI Controller with given SCSI Type and SCSI Bus Number
-        Args:
-            scsi_type: Type of SCSI
-            scsi_bus_number: SCSI Bus number to be assigned
-
-        Returns: Virtual device spec for SCSI Controller
-
-        """
-        scsi_ctl = vim.vm.device.VirtualDeviceSpec()
-        scsi_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        scsi_ctl.device = self.scsi_device_type[scsi_type]()
-        scsi_ctl.device.deviceInfo = vim.Description()
-        scsi_ctl.device.busNumber = scsi_bus_number
-        scsi_ctl.device.sharedBus = 'noSharing'
-        scsi_ctl.device.hotAddRemove = True
-        scsi_ctl.device.key = -randint(1000, 9999)
-        scsi_ctl.device.scsiCtlrUnitNumber = 7
-
-        return scsi_ctl
-
-    def create_sata_controller(self, sata_bus_number):
-        sata_ctl = vim.vm.device.VirtualDeviceSpec()
-        sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        sata_ctl.device = vim.vm.device.VirtualAHCIController()
-        sata_ctl.device.deviceInfo = vim.Description()
-        sata_ctl.device.busNumber = sata_bus_number
-        sata_ctl.device.key = -randint(15000, 19999)
-
-        return sata_ctl
-
-    def create_nvme_controller(self, nvme_bus_number):
-        nvme_ctl = vim.vm.device.VirtualDeviceSpec()
-        nvme_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        nvme_ctl.device = vim.vm.device.VirtualNVMEController()
-        nvme_ctl.device.deviceInfo = vim.Description()
-        nvme_ctl.device.busNumber = nvme_bus_number
-        nvme_ctl.device.key = -randint(31000, 39999)
-
-        return nvme_ctl
 
     def find_disk_by_key(self, disk_key, disk_unit_number):
         found_disk = None
@@ -469,11 +522,20 @@ class PyVmomiHelper(PyVmomi):
         disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
         disk_spec.device = vim.vm.device.VirtualDisk()
         disk_spec.device.key = -randint(20000, 24999)
-        disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
+
+        # Check if RDM first as changing backing later on will erase some settings like disk_mode
+        if disk['disk_type'] == 'rdm':
+            disk_spec.device.backing = vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo()
+            disk_spec.device.backing.deviceName = disk['rdm_path']
+            disk_spec.device.backing.compatibilityMode = disk['compatibility_mode']
+        else:
+            disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
+
         disk_spec.device.backing.diskMode = disk['disk_mode']
         disk_spec.device.backing.sharing = disk['sharing']
         disk_spec.device.controllerKey = ctl_key
         disk_spec.device.unitNumber = disk['disk_unit_number']
+
         if disk['disk_type'] == 'thin':
             disk_spec.device.backing.thinProvisioned = True
         elif disk['disk_type'] == 'eagerzeroedthick':
@@ -499,7 +561,7 @@ class PyVmomiHelper(PyVmomi):
         except vim.fault.InvalidDeviceSpec as invalid_device_spec:
             self.module.fail_json(msg="Failed to manage '%s' on given virtual machine due to invalid"
                                       " device spec : %s" % (device_type, to_native(invalid_device_spec.msg)),
-                                  details="Please check ESXi server logs for more details.")
+                                      details="Please check ESXi server logs for more details.")
         except vim.fault.RestrictedVersion as e:
             self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
                                       " product versioning restrictions: %s" % to_native(e.msg))
@@ -539,9 +601,9 @@ class PyVmomiHelper(PyVmomi):
 
         """
         sharing = disk.get('sharing')
-        if sharing and disk_type != 'eagerzeroedthick':
+        if sharing and disk_type != 'eagerzeroedthick' and disk_type != 'rdm':
             self.module.fail_json(msg="Invalid 'sharing' mode specified for disk index [%s]. 'disk_mode'"
-                                      " must be 'eagerzeroedthick' when 'sharing'." % disk_index)
+                                      " must be 'eagerzeroedthick' or 'rdm' when 'sharing'." % disk_index)
         if sharing:
             sharing_mode = 'sharingMultiWriter'
         else:
@@ -583,12 +645,12 @@ class PyVmomiHelper(PyVmomi):
             # create disk controller when not found and disk state is present
             if not ctl_found and disk['state'] == 'present':
                 # Create new controller
-                if disk['controller_type'] in self.scsi_device_type.keys():
-                    ctl_spec = self.create_scsi_controller(disk['controller_type'], disk['controller_number'])
+                if disk['controller_type'] in self.device_helper.scsi_device_type.keys():
+                    ctl_spec = self.device_helper.create_scsi_controller(disk['controller_type'], disk['controller_number'], disk['bus_sharing'])
                 elif disk['controller_type'] == 'sata':
-                    ctl_spec = self.create_sata_controller(disk['controller_number'])
+                    ctl_spec = self.device_helper.create_sata_controller(disk['controller_number'])
                 elif disk['controller_type'] == 'nvme':
-                    ctl_spec = self.create_nvme_controller(disk['controller_number'])
+                    ctl_spec = self.device_helper.create_nvme_controller(disk['controller_number'])
                 new_added_disk_ctl.append({'controller_type': disk['controller_type'], 'controller_number': disk['controller_number']})
                 ctl_changed = True
                 self.config_spec.deviceChange.append(ctl_spec)
@@ -616,20 +678,22 @@ class PyVmomiHelper(PyVmomi):
                                 disk_spec = vim.vm.device.VirtualDeviceSpec()
                                 # set the operation to edit so that it knows to keep other settings
                                 disk_spec.device = disk_device
-                                # Edit and no resizing allowed
-                                if disk['size'] < disk_spec.device.capacityInKB:
-                                    self.module.fail_json(msg="Given disk size at disk index [%s] is smaller than found"
-                                                              " (%d < %d). Reducing disks is not allowed."
-                                                              % (disk['disk_index'], disk['size'],
-                                                                 disk_spec.device.capacityInKB))
-                                if disk['size'] != disk_spec.device.capacityInKB:
-                                    disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-                                    disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
-                                    disk_spec.device.capacityInKB = disk['size']
-                                    self.config_spec.deviceChange.append(disk_spec)
-                                    disk_change = True
-                                    disk_change_list.append(disk_change)
-                                    results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
+                                # If this is an RDM ignore disk size
+                                if disk['disk_type'] != 'rdm':
+                                    if disk['size'] < disk_spec.device.capacityInKB:
+                                        self.module.fail_json(msg="Given disk size at disk index [%s] is smaller than found"
+                                                                  " (%d < %d). Reducing disks is not allowed."
+                                                                  % (disk['disk_index'], disk['size'],
+                                                                      disk_spec.device.capacityInKB))
+                                    if disk['size'] != disk_spec.device.capacityInKB:
+                                        disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                                        disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                                        disk_spec.device.capacityInKB = disk['size']
+                                        self.config_spec.deviceChange.append(disk_spec)
+                                        disk_change = True
+                                        disk_change_list.append(disk_change)
+                                        results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
+
                             elif disk['state'] == 'absent':
                                 # Disk already exists, deleting
                                 disk_spec = vim.vm.device.VirtualDeviceSpec()
@@ -642,31 +706,43 @@ class PyVmomiHelper(PyVmomi):
                                 disk_change_list.append(disk_change)
                                 results['disk_changes'][disk['disk_index']] = "Disk deleted."
                             break
+
                     if disk_found:
                         break
                     if not disk_found and disk['state'] == 'present':
                         # Add new disk
                         disk_spec = self.create_disk(device.key, disk)
                         # get Storage DRS recommended datastore from the datastore cluster
-                        if disk['filename'] is None:
-                            if disk['datastore_cluster'] is not None:
-                                datastore_name = self.get_recommended_datastore(datastore_cluster_obj=disk['datastore_cluster'], disk_spec_obj=disk_spec)
-                                disk['datastore'] = find_obj(self.content, [vim.Datastore], datastore_name)
-                            disk_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
-                            disk_spec.device.capacityInKB = disk['size']
-                            # Set backing filename when datastore is configured and not the same as VM datastore
-                            # If datastore is not configured or backing filename is not set, default is VM datastore
-                            if disk['datastore'] is not None and disk['datastore'].name != vm_files_datastore:
-                                disk_spec.device.backing.datastore = disk['datastore']
-                                disk_spec.device.backing.fileName = "[%s] %s/%s_%s_%s_%s.vmdk" % (disk['datastore'].name,
-                                                                                                  self.vm.name,
-                                                                                                  self.vm.name,
-                                                                                                  device.key,
-                                                                                                  str(disk['disk_unit_number']),
-                                                                                                  str(randint(1, 10000)))
-                        elif disk['filename'] is not None:
-                            disk_spec.device.backing.fileName = disk['filename']
-                        disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                        if disk['disk_type'] == 'rdm':
+                            # Since RDMs can be shared between two machines cluster_disk with rdm will
+                            # invoke a copy of the existing disk instead of trying to create a new one which causes
+                            # file lock issues in VSphere. This ensures we dont add a "create" operation.
+                            if disk['filename'] is not None and disk['cluster_disk'] is True:
+                                disk_spec.device.backing.fileName = disk['filename']
+                            else:
+                                disk_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+                        else:
+                            if disk['filename'] is None:
+                                if disk['datastore_cluster'] is not None:
+                                    datastore_name = self.get_recommended_datastore(datastore_cluster_obj=disk['datastore_cluster'], disk_spec_obj=disk_spec)
+                                    disk['datastore'] = find_obj(self.content, [vim.Datastore], datastore_name)
+
+                                disk_spec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+                                disk_spec.device.capacityInKB = disk['size']
+                                # Set backing filename when datastore is configured and not the same as VM datastore
+                                # If datastore is not configured or backing filename is not set, default is VM datastore
+                                if disk['datastore'] is not None and disk['datastore'].name != vm_files_datastore:
+                                    disk_spec.device.backing.datastore = disk['datastore']
+                                    disk_spec.device.backing.fileName = "[%s] %s/%s_%s_%s_%s.vmdk" % (disk['datastore'].name,
+                                                                                                      self.vm.name,
+                                                                                                      self.vm.name,
+                                                                                                      device.key,
+                                                                                                      str(disk['disk_unit_number']),
+                                                                                                      str(randint(1, 10000)))
+                            elif disk['filename'] is not None:
+                                disk_spec.device.backing.fileName = disk['filename']
+                            disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+
                         self.config_spec.deviceChange.append(disk_spec)
                         disk_change = True
                         disk_change_list.append(disk_change)
@@ -690,6 +766,7 @@ class PyVmomiHelper(PyVmomi):
     def sanitize_disk_inputs(self):
         """
         Check correctness of disk input provided by user
+
         Returns: A list of dictionary containing disk information
 
         """
@@ -711,7 +788,9 @@ class PyVmomiHelper(PyVmomi):
                                 controller_number=0,
                                 disk_mode='persistent',
                                 disk_type='thick',
-                                sharing=False)
+                                sharing=False,
+                                bus_sharing='noSharing',
+                                cluster_disk=False)
             # Check state
             if disk['state'] is not None:
                 current_disk['state'] = disk['state']
@@ -748,15 +827,29 @@ class PyVmomiHelper(PyVmomi):
             except ValueError:
                 self.module.fail_json(msg="Invalid Disk unit number ID '%s' specified at index [%s]."
                                           % (disk['unit_number'], disk_index))
-            if current_disk['controller_type'] in self.scsi_device_type.keys():
-                if temp_disk_unit_number not in range(0, 16):
-                    self.module.fail_json(msg="Invalid Disk unit number ID specified for disk [%s] at index [%s],"
-                                              " please specify value between 0 to 15 only (excluding 7)."
-                                              % (temp_disk_unit_number, disk_index))
-                if temp_disk_unit_number == 7:
-                    self.module.fail_json(msg="Invalid Disk unit number ID specified for disk at index [%s], please"
-                                              " specify value other than 7 as it is reserved for SCSI Controller."
-                                              % disk_index)
+            if current_disk['controller_type'] in self.device_helper.scsi_device_type.keys():
+                # the Paravirtual SCSI Controller Supports up to 64 disks in vSphere 6.7. Using hardware
+                # version 14 or higher from the vm config should catch this appropriately.
+                hw_version = int(self.vm.config.version.split('-')[1])
+                if current_disk['controller_type'] == 'paravirtual' and hw_version >= 14:
+                    if temp_disk_unit_number not in range(0, 64):
+                        self.module.fail_json(msg="Invalid Disk unit number ID specified for disk [%s] at index [%s],"
+                                                  " please specify value between 0 to 64 only (excluding 7)."
+                                                  % (temp_disk_unit_number, disk_index))
+                    if temp_disk_unit_number == 7:
+                        self.module.fail_json(msg="Invalid Disk unit number ID specified for disk at index [%s], please"
+                                                  " specify value other than 7 as it is reserved for SCSI Controller."
+                                                  % disk_index)
+
+                else:
+                    if temp_disk_unit_number not in range(0, 16):
+                        self.module.fail_json(msg="Invalid Disk unit number ID specified for disk [%s] at index [%s],"
+                                                  " please specify value between 0 to 15 only (excluding 7)."
+                                                  % (temp_disk_unit_number, disk_index))
+                    if temp_disk_unit_number == 7:
+                        self.module.fail_json(msg="Invalid Disk unit number ID specified for disk at index [%s], please"
+                                                  " specify value other than 7 as it is reserved for SCSI Controller."
+                                                  % disk_index)
             elif current_disk['controller_type'] == 'sata' and temp_disk_unit_number not in range(0, 30):
                 self.module.fail_json(msg="Invalid Disk unit number ID specified for SATA disk [%s] at index [%s],"
                                           " please specify value between 0 to 29" % (temp_disk_unit_number, disk_index))
@@ -862,8 +955,8 @@ class PyVmomiHelper(PyVmomi):
                     else:
                         self.module.fail_json(msg="%s is not a supported unit for disk size for disk index [%s]."
                                                   " Supported units are ['%s']." % (unit, disk_index, "', '".join(disk_units.keys())))
-                elif current_disk['filename'] is None:
-                    # No size found but disk, fail
+                elif current_disk['filename'] is None and disk['type'] != 'rdm':
+                    # No size found but disk, fail. Excepting RDMs because the cluster_disk will need a filename.
                     self.module.fail_json(msg="No size, size_kb, size_mb, size_gb or size_tb"
                                               " attribute found into disk index [%s] configuration." % disk_index)
 
@@ -880,6 +973,36 @@ class PyVmomiHelper(PyVmomi):
                     current_disk['shares'] = disk['shares']
                 if disk['iolimit'] is not None:
                     current_disk['iolimit'] = disk['iolimit']
+
+                # Deal with RDM disk needs. RDMS require some different values compared to Virtual Disks
+                if disk['type'] == 'rdm':
+                    compatibility_mode = disk.get('compatibility_mode', 'physicalMode')
+                    if compatibility_mode not in ['physicalMode', 'virtualMode']:
+                        self.module.fail_json(msg="Invalid 'compatibility_mode' specified for disk index [%s]. Please specify"
+                                              "'compatibility_mode' value from ['physicalMode', 'virtualMode']." % disk_index)
+                    current_disk['compatibility_mode'] = compatibility_mode
+
+                    # RDMs need a path
+                    if 'rdm_path'not in disk and 'filename' not in disk:
+                        self.module.fail_json(msg="rdm_path and/or 'filename' needs must be specified when using disk type 'rdm'"
+                                              "for disk index [%s]" % disk_index)
+                    else:
+                        current_disk['rdm_path'] = disk.get('rdm_path')
+
+                    if disk['filename'] and disk['rdm_path'] is None and disk['cluster_disk'] is False:
+                        self.module.fail_json(msg=" 'filename' requires setting 'cluster_disk' to True when using disk type 'rdm' without a"
+                                              "'rdm_path' for disk index [%s]" % disk_index)
+                    else:
+                        current_disk['cluster_disk'] = disk.get('cluster_disk')
+
+                # Enable Physical or virtuals SCSI Bus Sharing
+                if disk['bus_sharing']:
+                    bus_sharing = disk.get('bus_sharing', 'noSharing')
+                    if bus_sharing not in ['noSharing', 'physicalSharing', 'virtualSharing']:
+                        self.module.fail_json(msg="Invalid SCSI 'bus_sharing' specied for disk index [%s]. Please specify"
+                                              "'bus_sharing' value from['noSharing', 'physicalSharing', 'virtualSharing']." % disk_index)
+                    current_disk['bus_sharing'] = bus_sharing
+
             disks_data.append(current_disk)
         return disks_data
 
@@ -949,8 +1072,10 @@ class PyVmomiHelper(PyVmomi):
                 if disk.storageIOAllocation is None:
                     disk.storageIOAllocation = vim.StorageResourceManager.IOAllocationInfo()
                     disk.storageIOAllocation.shares = vim.SharesInfo()
+
                 if disk.shares is None:
                     disk.shares = vim.SharesInfo()
+
                 disks_facts[disk_index] = dict(
                     key=disk.key,
                     label=disk.deviceInfo.label,
@@ -959,9 +1084,6 @@ class PyVmomiHelper(PyVmomi):
                     backing_datastore=disk.backing.datastore.name,
                     backing_disk_mode=disk.backing.diskMode,
                     backing_sharing=disk.backing.sharing,
-                    backing_writethrough=disk.backing.writeThrough,
-                    backing_thinprovisioned=disk.backing.thinProvisioned,
-                    backing_eagerlyscrub=bool(disk.backing.eagerlyScrub),
                     backing_uuid=disk.backing.uuid,
                     controller_key=disk.controllerKey,
                     unit_number=disk.unitNumber,
@@ -973,6 +1095,14 @@ class PyVmomiHelper(PyVmomi):
                     capacity_in_kb=disk.capacityInKB,
                     capacity_in_bytes=disk.capacityInBytes,
                 )
+                if isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):
+                    disks_facts[disk_index].update(backing_devicename=disk.backing.deviceName,
+                                                   backing_compatibility_mode=disk.backing.compatibilityMode)
+
+                else:
+                    disks_facts[disk_index].update(backing_writethrough=disk.backing.writeThrough,
+                                                   backing_thinprovisioned=disk.backing.thinProvisioned,
+                                                   backing_eagerlyscrub=bool(disk.backing.eagerlyScrub))
                 disk_index += 1
         return disks_facts
 
@@ -996,8 +1126,10 @@ def main():
                 size_mb=dict(type='int'),
                 size_gb=dict(type='int'),
                 size_tb=dict(type='int'),
-                type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick']),
+                type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick', 'rdm']),
                 disk_mode=dict(type='str', choices=['persistent', 'independent_persistent', 'independent_nonpersistent']),
+                compatibility_mode=dict(type='str', choices=['physicalMode', 'virtualMode']),
+                rdm_path=dict(type='str'),
                 sharing=dict(type='bool', default=False),
                 datastore=dict(type='str'),
                 autoselect_datastore=dict(type='bool'),
@@ -1009,6 +1141,8 @@ def main():
                 state=dict(type='str', default='present', choices=['present', 'absent']),
                 controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme']),
                 controller_number=dict(type='int', choices=[0, 1, 2, 3]),
+                bus_sharing=dict(type='str', choices=['noSharing', 'physicalSharing', 'virtualSharing'], default='noSharing'),
+                cluster_disk=dict(type='bool', default=False),
                 iolimit=dict(
                     type='dict',
                     options=dict(

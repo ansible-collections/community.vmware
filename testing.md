@@ -10,6 +10,13 @@ $ git clone https://github.com/ansible-collections/community.vmware ~/.ansible/c
 $ cd ~/.ansible/collections/ansible_collections/community/vmware
 ```
 
+If you want to test a PR, you can get it after cloning like this:
+
+```
+$ git fetch origin pull/ID/head:BRANCHNAME
+$ git checkout BRANCHNAME
+```
+
 Prepare VMware configuration file:
 
 ```
@@ -33,6 +40,4 @@ $ VMWARE_TEST_PLATFORM=static ansible-test integration --diff --no-temp-workdir 
 
 ## More Information
 
-* [Container image with govcsim](https://github.com/ansible/vcenter-test-container)
-
-* [Developer guide for testing with govcsim](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html#testing-with-govcsim)
+* [Developer guide for testing](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html#testing-with-your-own-infrastructure)

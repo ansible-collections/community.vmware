@@ -355,12 +355,13 @@ class VMwareDeployOvf(PyVmomi):
             self.resource_pool = self.find_resource_pool_by_cluster(self.params['resource_pool'], cluster=cluster)
         # Or get ESXi host in datacenter if ESXi host configured
         elif self.params['esxi_hostname']:
-            host = self.find_hostsystem_by_name(self.params['esxi_hostname'])
+            host = self.find_hostsystem_by_name(self.params['esxi_hostname'], datacenter=self.datacenter)
             if host is None:
-                self.module.fail_json(msg="Unable to find host '%(esxi_hostname)s'" % self.params)
+                self.module.fail_json(msg="Unable to find host '%(esxi_hostname)s' in datacenter '%(datacenter)s'" % self.params)
             self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'], folder=host.parent)
         else:
-            self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'])
+            # For more than one datacenter env, specify 'folder' to datacenter hostFolder
+            self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'], folder=self.datacenter.hostFolder)
 
         if not self.resource_pool:
             self.module.fail_json(msg="Resource pool '%(resource_pool)s' could not be located" % self.params)
@@ -383,7 +384,8 @@ class VMwareDeployOvf(PyVmomi):
             self.datastore = self.find_datastore_by_name(self.params['datastore'], datacenter_name=self.datacenter)
 
         if self.datastore is None:
-            self.module.fail_json(msg="Datastore '%(datastore)s' could not be located on specified ESXi host or datacenter" % self.params)
+            self.module.fail_json(msg="Datastore '%(datastore)s' could not be located on specified ESXi host or"
+                                      " datacenter" % self.params)
 
         for key, value in self.params['networks'].items():
             network = find_network_by_name(self.content, value, datacenter_name=self.datacenter)
@@ -397,6 +399,12 @@ class VMwareDeployOvf(PyVmomi):
         return self.datastore, self.datacenter, self.resource_pool, self.network_mappings
 
     def get_ovf_descriptor(self):
+        # Check whether ovf/ova file exists
+        try:
+            path_exists(self.params['ovf'])
+        except ValueError as e:
+            self.module.fail_json(msg="%s" % e)
+
         if tarfile.is_tarfile(self.params['ovf']):
             self.tar = tarfile.open(self.params['ovf'])
             ovf = None

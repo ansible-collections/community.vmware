@@ -49,7 +49,7 @@ Parameters
                         <span style="color: purple">list</span>
                          / <span style="color: purple">elements=dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.8.0</div>
                 </td>
                 <td>
                 </td>
@@ -535,6 +535,7 @@ Parameters
                 </td>
                 <td>
                         <div>Local administrator password.</div>
+                        <div>If not defined, the password will be set to blank (that is, no password).</div>
                         <div>Specific to Windows customization.</div>
                 </td>
             </tr>
@@ -1789,6 +1790,83 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>nvdimm</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.13.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Add or remove a virtual NVDIMM device to the virtual machine.</div>
+                        <div>VM virtual hardware version must be 14 or higher on vSphere 6.7 or later.</div>
+                        <div>Verify that guest OS of the virtual machine supports PMem before adding virtual NVDIMM device.</div>
+                        <div>Verify that you have the <em>Datastore.Allocate</em> space privilege on the virtual machine.</div>
+                        <div>Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.</div>
+                        <div>To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>label</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The label of the virtual NVDIMM device to be removed or configured, e.g., &quot;NVDIMM 1&quot;.</div>
+                        <div>This parameter is required when <code>state</code> is set to <code>absent</code>, or <code>present</code> to reconfigure NVDIMM device size. When add a new device, please do not set <code>label</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>size_mb</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">1024</div>
+                </td>
+                <td>
+                        <div>Virtual NVDIMM device size in MB.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>present</li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Valid value is <code>present</code> or <code>absent</code>.</div>
+                        <div>If set to <code>absent</code>, then the NVDIMM device with specified <code>label</code> will be removed.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -1871,6 +1949,7 @@ Parameters
                         <div>Use the given resource pool for virtual machine operation.</div>
                         <div>This parameter is case sensitive.</div>
                         <div>Resource pool should be child of the selected host parent.</div>
+                        <div>When not specified <em>Resources</em> is taken as default value.</div>
                 </td>
             </tr>
             <tr>
@@ -2224,6 +2303,7 @@ Notes
    - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
    - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the ``state=present`` must be used to apply the changes.
    - For additional information please visit Ansible VMware community wiki - https://github.com/ansible/community/wiki/VMware.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -2482,6 +2562,29 @@ Examples
         networks:
         - name: VM Network
           device_type: vmxnet3
+      delegate_to: localhost
+      register: deploy_vm
+
+    - name: Create a VM with NVDIMM device
+      community.vmware.vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        folder: /DC1/vm/
+        name: test_vm_nvdimm
+        state: poweredoff
+        guest_id: centos7_64Guest
+        datastore: datastore1
+        hardware:
+          memory_mb: 512
+          num_cpus: 4
+          version: 14
+        networks:
+        - name: VM Network
+          device_type: vmxnet3
+        nvdimm:
+          state: present
+          size_mb: 2048
       delegate_to: localhost
       register: deploy_vm
 

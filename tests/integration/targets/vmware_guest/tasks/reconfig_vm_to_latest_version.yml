@@ -10,12 +10,12 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'
     hardware:
-        num_cpus: 4
+        num_cpus: 1
         memory_mb: 1028
         version: 12
     state: present
@@ -33,12 +33,12 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm2
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'
     hardware:
-        num_cpus: 4
+        num_cpus: 1
         memory_mb: 1028
         version: latest
     state: present
@@ -56,12 +56,12 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    guest_id: centos7_64Guest
+    guest_id: debian8_64Guest
     datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     datastore: '{{ rw_datastore }}'
     hardware:
-        num_cpus: 4
+        num_cpus: 1
         memory_mb: 1028
         version: latest
     state: present

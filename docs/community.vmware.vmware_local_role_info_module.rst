@@ -177,6 +177,7 @@ Notes
    - Tested on ESXi 6.5
    - Be sure that the ESXi user used for login, has the appropriate rights to view roles
    - The module returns a list of dict in version 2.8 and above.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

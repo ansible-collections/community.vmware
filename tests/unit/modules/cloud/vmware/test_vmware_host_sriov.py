@@ -5,7 +5,7 @@ import json
 
 
 try:
-    import unittest.mock as mock
+    from unittest import mock
 except ImportError:
     import mock
 import unittest

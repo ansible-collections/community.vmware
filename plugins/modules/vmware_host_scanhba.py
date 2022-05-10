@@ -37,12 +37,26 @@ options:
     - Cluster name to Rescan the storage subsystem on (this will run the rescan task on each host in the cluster).
     required: false
     type: str
+  rescan_hba:
+    description:
+    - Rescan all host bus adapters for new storage devices. Rescanning all adapters can be slow.
+    required: false
+    default: true
+    type: bool
+    version_added: '1.17.0'
   refresh_storage:
     description:
     - Refresh the storage system in vCenter/ESXi Web Client for each host found
     required: false
     default: false
     type: bool
+  rescan_vmfs:
+    description:
+    - Rescan all known storage devices for new VMFS volumes.
+    required: false
+    default: false
+    type: bool
+    version_added: '1.17.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -67,6 +81,16 @@ EXAMPLES = r'''
       refresh_storage: true
   delegate_to: localhost
 
+- name: Rescan for new VMFS Volumes in a given cluster, but do not scan for new Devices - all found hosts will be scanned
+  community.vmware.vmware_host_scanhba:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      esxi_hostname: '{{ inventory_hostname }}'
+      rescan_vmfs: true
+      rescan_hba: false
+  delegate_to: localhost
+
 - name: Recan HBA's for a given ESXi host and don't refresh storage system objects
   community.vmware.vmware_host_scanhba:
       hostname: '{{ vcenter_hostname }}'
@@ -84,7 +108,8 @@ result:
     sample: {
         "esxi01.example.com": {
             "rescaned_hba": "true",
-            "refreshed_storage": "true"
+            "refreshed_storage": "true",
+            "rescaned_vmfs": "true"
         }
     }
 '''
@@ -100,7 +125,9 @@ class VmwareHbaScan(PyVmomi):
     def scan(self):
         esxi_host_name = self.params.get('esxi_hostname', None)
         cluster_name = self.params.get('cluster_name', None)
+        rescan_hba = self.params.get('rescan_hba', bool)
         refresh_storage = self.params.get('refresh_storage', bool)
+        rescan_vmfs = self.params.get('rescan_vmfs', bool)
         hosts = self.get_all_host_objs(cluster_name=cluster_name, esxi_host_name=esxi_host_name)
         results = dict(changed=True, result=dict())
 
@@ -109,12 +136,18 @@ class VmwareHbaScan(PyVmomi):
 
         for host in hosts:
             results['result'][host.name] = dict()
-            host.configManager.storageSystem.RescanAllHba()
+            if rescan_hba is True:
+                host.configManager.storageSystem.RescanAllHba()
+
             if refresh_storage is True:
                 host.configManager.storageSystem.RefreshStorageSystem()
 
-            results['result'][host.name]['rescaned_hba'] = True
+            if rescan_vmfs is True:
+                host.configManager.storageSystem.RescanVmfs()
+
+            results['result'][host.name]['rescaned_hba'] = rescan_hba
             results['result'][host.name]['refreshed_storage'] = refresh_storage
+            results['result'][host.name]['rescaned_vmfs'] = rescan_vmfs
 
         self.module.exit_json(**results)
 
@@ -124,7 +157,9 @@ def main():
     argument_spec.update(
         esxi_hostname=dict(type='str', required=False),
         cluster_name=dict(type='str', required=False),
-        refresh_storage=dict(type='bool', default=False, required=False)
+        rescan_hba=dict(type='bool', default=True, required=False),
+        refresh_storage=dict(type='bool', default=False, required=False),
+        rescan_vmfs=dict(type='bool', default=False, required=False)
     )
     module = AnsibleModule(
         argument_spec=argument_spec,

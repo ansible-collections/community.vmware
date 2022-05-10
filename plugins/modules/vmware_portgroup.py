@@ -296,12 +296,13 @@ class VMwareHostPortGroup(PyVmomi):
             self.sec_mac_changes = None
         if self.params['traffic_shaping']:
             self.ts_enabled = self.params['traffic_shaping'].get('enabled')
-            for value in ['average_bandwidth', 'peak_bandwidth', 'burst_size']:
-                if not self.params['traffic_shaping'].get(value):
-                    self.module.fail_json(msg="traffic_shaping.%s is a required parameter if traffic_shaping is enabled." % value)
-            self.ts_average_bandwidth = self.params['traffic_shaping'].get('average_bandwidth')
-            self.ts_peak_bandwidth = self.params['traffic_shaping'].get('peak_bandwidth')
-            self.ts_burst_size = self.params['traffic_shaping'].get('burst_size')
+            if self.ts_enabled is True:
+                for value in ['average_bandwidth', 'peak_bandwidth', 'burst_size']:
+                    if not self.params['traffic_shaping'].get(value):
+                        self.module.fail_json(msg="traffic_shaping.%s is a required parameter if traffic_shaping is enabled." % value)
+                self.ts_average_bandwidth = self.params['traffic_shaping'].get('average_bandwidth')
+                self.ts_peak_bandwidth = self.params['traffic_shaping'].get('peak_bandwidth')
+                self.ts_burst_size = self.params['traffic_shaping'].get('burst_size')
         else:
             self.ts_enabled = None
             self.ts_average_bandwidth = None
@@ -641,11 +642,6 @@ class VMwareHostPortGroup(PyVmomi):
                     changed = True
                     changed_list.append("Traffic shaping")
                     host_results['traffic_shaping_previous'] = False
-                elif self.ts_enabled is False:
-                    changed = True
-                    changed_list.append("Traffic shaping")
-                    host_results['traffic_shaping_previous'] = True
-                    spec.policy.shapingPolicy.enabled = False
                 elif self.ts_enabled is None:
                     spec.policy.shapingPolicy = None
                     changed = True

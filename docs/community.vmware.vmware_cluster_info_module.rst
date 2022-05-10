@@ -18,7 +18,6 @@ Synopsis
 --------
 - This module can be used to gather information about clusters in VMWare infrastructure.
 - All values and VMware object names are case sensitive.
-- This module was called ``vmware_cluster_facts`` before Ansible 2.9. The usage did not change.
 
 
 
@@ -275,6 +274,7 @@ Notes
 
 .. note::
    - Tested on vSphere 6.5, 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

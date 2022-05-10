@@ -75,6 +75,58 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>lag_uplinks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ESXi hosts vmnics to use with specific LAGs.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>lag</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the LAG.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vmnics</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The ESXi hosts vmnics to use with the LAG.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -293,6 +345,7 @@ Notes
 
 .. note::
    - Tested on vSphere 5.5
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -311,6 +364,25 @@ Examples
         vmnics:
             - vmnic0
             - vmnic1
+        state: present
+      delegate_to: localhost
+
+    - name: Add vmnics to LAGs
+      community.vmware.vmware_dvs_host:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
+        switch_name: dvSwitch
+        lag_uplinks:
+            - lag: lag1
+              vmnics:
+                  - vmnic0
+                  - vmnic1
+            - lag: lag2
+              vmnics:
+                  - vmnic2
+                  - vmnic3
         state: present
       delegate_to: localhost
 

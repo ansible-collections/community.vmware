@@ -1,3 +1,5 @@
 cloud/vcenter
 needs/target/prepare_vmware_tests
 zuul/vmware/vcenter_1esxi
+# https://github.com/ansible-collections/community.vmware/issues/1114
+disabled

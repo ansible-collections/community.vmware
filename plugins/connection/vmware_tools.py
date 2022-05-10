@@ -5,49 +5,10 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-import re
-from os.path import exists, getsize
-from socket import gaierror
-from ssl import SSLError
-from time import sleep
-import traceback
-
-REQUESTS_IMP_ERR = None
-try:
-    import requests
-    HAS_REQUESTS = True
-except ImportError:
-    REQUESTS_IMP_ERR = traceback.format_exc()
-    HAS_REQUESTS = False
-
-try:
-    from requests.packages import urllib3
-    HAS_URLLIB3 = True
-except ImportError:
-    try:
-        import urllib3
-        HAS_URLLIB3 = True
-    except ImportError:
-        HAS_URLLIB3 = False
-
-from ansible.errors import AnsibleError, AnsibleFileNotFound, AnsibleConnectionFailure
-from ansible.module_utils._text import to_bytes, to_native
-from ansible.plugins.connection import ConnectionBase
-from ansible.module_utils.basic import missing_required_lib
-
-try:
-    from pyVim.connect import Disconnect, SmartConnect, SmartConnectNoSSL
-    from pyVmomi import vim, vmodl
-
-    HAS_PYVMOMI = True
-except ImportError:
-    HAS_PYVMOMI = False
-    PYVMOMI_IMP_ERR = traceback.format_exc()
-
-
-DOCUMENTATION = '''
-    author: Deric Crago <deric.crago@gmail.com>
-    connection: vmware_tools
+DOCUMENTATION = r'''
+    author:
+    - Deric Crago (@dericcrago) <deric.crago@gmail.com>
+    name: vmware_tools
     short_description: Execute tasks inside a VM via VMware Tools
     description:
       - Use VMware tools to run tasks in, or put/fetch files to guest operating systems running in VMware infrastructure.
@@ -125,6 +86,8 @@ DOCUMENTATION = '''
       vm_user:
         description:
           - VM username.
+          - C(ansible_vmware_tools_user) is used for connecting to the VM.
+          - C(ansible_user) is used by Ansible on the VM.
         vars:
           - name: ansible_user
           - name: ansible_vmware_tools_user
@@ -169,6 +132,7 @@ example = r'''
 # example vars.yml
 ---
 ansible_connection: vmware_tools
+ansible_user: "{{ ansible_vmware_tools_user }}"
 
 ansible_vmware_host: vcenter.example.com
 ansible_vmware_user: administrator@vsphere.local
@@ -232,6 +196,45 @@ ansible_shell_type: powershell
         path: C:\Users\user\foo
         state: absent
 '''
+
+import re
+from os.path import exists, getsize
+from socket import gaierror
+from ssl import SSLError
+from time import sleep
+import traceback
+
+REQUESTS_IMP_ERR = None
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    REQUESTS_IMP_ERR = traceback.format_exc()
+    HAS_REQUESTS = False
+
+try:
+    from requests.packages import urllib3
+    HAS_URLLIB3 = True
+except ImportError:
+    try:
+        import urllib3
+        HAS_URLLIB3 = True
+    except ImportError:
+        HAS_URLLIB3 = False
+
+from ansible.errors import AnsibleError, AnsibleFileNotFound, AnsibleConnectionFailure
+from ansible.module_utils._text import to_bytes, to_native
+from ansible.plugins.connection import ConnectionBase
+from ansible.module_utils.basic import missing_required_lib
+
+try:
+    from pyVim.connect import Disconnect, SmartConnect, SmartConnectNoSSL
+    from pyVmomi import vim, vmodl
+
+    HAS_PYVMOMI = True
+except ImportError:
+    HAS_PYVMOMI = False
+    PYVMOMI_IMP_ERR = traceback.format_exc()
 
 
 class Connection(ConnectionBase):

@@ -17,7 +17,7 @@ import time
 import traceback
 import datetime
 from collections import OrderedDict
-from distutils.version import StrictVersion
+from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
 from random import randint
 
 REQUESTS_IMP_ERR = None
@@ -49,6 +49,11 @@ from ansible.module_utils.six.moves.urllib.parse import unquote
 class TaskError(Exception):
     def __init__(self, *args, **kwargs):
         super(TaskError, self).__init__(*args, **kwargs)
+
+
+class ApiAccessError(Exception):
+    def __init__(self, *args, **kwargs):
+        super(ApiAccessError, self).__init__(*args, **kwargs)
 
 
 def check_answer_question_status(vm):
@@ -211,7 +216,6 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
 
 
 def find_cluster_by_name(content, cluster_name, datacenter=None):
-
     if datacenter and hasattr(datacenter, 'hostFolder'):
         folder = datacenter.hostFolder
     else:
@@ -298,8 +302,12 @@ def find_dvs_by_name(content, switch_name, folder=None):
     return find_object_by_name(content, switch_name, [vim.DistributedVirtualSwitch], folder=folder)
 
 
-def find_hostsystem_by_name(content, hostname):
-    return find_object_by_name(content, hostname, [vim.HostSystem])
+def find_hostsystem_by_name(content, hostname, datacenter=None):
+    if datacenter and hasattr(datacenter, 'hostFolder'):
+        folder = datacenter.hostFolder
+    else:
+        folder = content.rootFolder
+    return find_object_by_name(content, hostname, [vim.HostSystem], folder=folder)
 
 
 def find_resource_pool_by_name(content, resource_pool_name):
@@ -549,6 +557,12 @@ def gather_vm_facts(content, vm):
         facts['current_snapshot'] = snapshot_facts['current_snapshot']
 
     facts['vnc'] = get_vnc_extraconfig(vm)
+
+    # Gather vTPM information
+    facts['tpm_info'] = {
+        'tpm_present': vm.summary.config.tpmPresent if hasattr(vm.summary.config, 'tpmPresent') else None,
+        'provider_id': vm.config.keyId.providerId.id if vm.config.keyId else None
+    }
     return facts
 
 
@@ -587,7 +601,8 @@ def deserialize_snapshot_obj(obj):
             'name': obj.name,
             'description': obj.description,
             'creation_time': obj.createTime,
-            'state': obj.state}
+            'state': obj.state,
+            'quiesced': obj.quiesced}
 
 
 def list_snapshots_recursively(snapshots):
@@ -668,31 +683,47 @@ def vmware_argument_spec():
     )
 
 
-def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None):
-    hostname = hostname if hostname else module.params['hostname']
-    username = username if username else module.params['username']
-    password = password if password else module.params['password']
-    port = port if port else module.params.get('port', 443)
-    validate_certs = validate_certs if validate_certs else module.params['validate_certs']
+def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=None, username=None, password=None, port=None, validate_certs=None,
+                   httpProxyHost=None, httpProxyPort=None):
+    if module:
+        if not hostname:
+            hostname = module.params['hostname']
+        if not username:
+            username = module.params['username']
+        if not password:
+            password = module.params['password']
+        if not httpProxyHost:
+            httpProxyHost = module.params.get('proxy_host')
+        if not httpProxyPort:
+            httpProxyPort = module.params.get('proxy_port')
+        if not port:
+            port = module.params.get('port', 443)
+        if not validate_certs:
+            validate_certs = module.params['validate_certs']
+
+    def _raise_or_fail(msg):
+        if module is not None:
+            module.fail_json(msg=msg)
+        raise ApiAccessError(msg)
 
     if not hostname:
-        module.fail_json(msg="Hostname parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
+        _raise_or_fail(msg="Hostname parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_HOST=ESXI_HOSTNAME'")
 
     if not username:
-        module.fail_json(msg="Username parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
+        _raise_or_fail(msg="Username parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_USER=ESXI_USERNAME'")
 
     if not password:
-        module.fail_json(msg="Password parameter is missing."
-                             " Please specify this parameter in task or"
-                             " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
+        _raise_or_fail(msg="Password parameter is missing."
+                       " Please specify this parameter in task or"
+                       " export environment variable like 'export VMWARE_PASSWORD=ESXI_PASSWORD'")
 
     if validate_certs and not hasattr(ssl, 'SSLContext'):
-        module.fail_json(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
-                             'python or use validate_certs=false.')
+        _raise_or_fail(msg='pyVim does not support changing verification mode with python < 2.7.9. Either update '
+                           'python or use validate_certs=false.')
     elif validate_certs:
         ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
         ssl_context.verify_mode = ssl.CERT_REQUIRED
@@ -706,8 +737,6 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
         ssl_context = None
 
     service_instance = None
-    proxy_host = module.params.get('proxy_host')
-    proxy_port = module.params.get('proxy_port')
 
     connect_args = dict(
         host=hostname,
@@ -718,9 +747,9 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
 
     msg_suffix = ''
     try:
-        if proxy_host:
-            msg_suffix = " [proxy: %s:%d]" % (proxy_host, proxy_port)
-            connect_args.update(httpProxyHost=proxy_host, httpProxyPort=proxy_port)
+        if httpProxyHost:
+            msg_suffix = " [proxy: %s:%d]" % (httpProxyHost, httpProxyPort)
+            connect_args.update(httpProxyHost=httpProxyHost, httpProxyPort=httpProxyPort)
             smart_stub = connect.SmartStubAdapter(**connect_args)
             session_stub = connect.VimSessionOrientedStub(smart_stub, connect.VimSessionOrientedStub.makeUserLoginMethod(username, password))
             service_instance = vim.ServiceInstance('ServiceInstance', session_stub)
@@ -729,23 +758,23 @@ def connect_to_api(module, disconnect_atexit=True, return_si=False, hostname=Non
             service_instance = connect.SmartConnect(**connect_args)
     except vim.fault.InvalidLogin as invalid_login:
         msg = "Unable to log on to vCenter or ESXi API at %s:%s " % (hostname, port)
-        module.fail_json(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
+        _raise_or_fail(msg="%s as %s: %s" % (msg, username, invalid_login.msg) + msg_suffix)
     except vim.fault.NoPermission as no_permission:
-        module.fail_json(msg="User %s does not have required permission"
-                             " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
+        _raise_or_fail(msg="User %s does not have required permission"
+                           " to log on to vCenter or ESXi API at %s:%s : %s" % (username, hostname, port, no_permission.msg))
     except (requests.ConnectionError, ssl.SSLError) as generic_req_exc:
-        module.fail_json(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
+        _raise_or_fail(msg="Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (hostname, port, generic_req_exc))
     except vmodl.fault.InvalidRequest as invalid_request:
         # Request is malformed
         msg = "Failed to get a response from server %s:%s " % (hostname, port)
-        module.fail_json(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
+        _raise_or_fail(msg="%s as request is malformed: %s" % (msg, invalid_request.msg) + msg_suffix)
     except Exception as generic_exc:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port) + msg_suffix
-        module.fail_json(msg="%s : %s" % (msg, generic_exc))
+        _raise_or_fail(msg="%s : %s" % (msg, generic_exc))
 
     if service_instance is None:
         msg = "Unknown error while connecting to vCenter or ESXi API at %s:%s" % (hostname, port)
-        module.fail_json(msg=msg + msg_suffix)
+        _raise_or_fail(msg=msg + msg_suffix)
 
     # Disabling atexit should be used in special cases only.
     # Such as IP change of the ESXi host which removes the connection anyway.
@@ -898,6 +927,8 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
     requested states. force is forceful
     """
     facts = gather_vm_facts(content, vm)
+    if state == 'present':
+        state = 'poweredon'
     expected_state = state.replace('_', '').replace('-', '').lower()
     current_state = facts['hw_power_status'].lower()
     result = dict(
@@ -951,9 +982,11 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
                     else:
                         result['failed'] = True
                         result['msg'] = "VMware tools should be installed for guest shutdown/reboot"
+                elif current_state == 'poweredoff':
+                    result['changed'] = False
                 else:
                     result['failed'] = True
-                    result['msg'] = "Virtual machine %s must be in poweredon state for guest shutdown/reboot" % vm.name
+                    result['msg'] = "Virtual machine %s must be in poweredon state for guest reboot" % vm.name
 
             else:
                 result['failed'] = True
@@ -1029,11 +1062,11 @@ def option_diff(options, current_options, truthy_strings_as_bool=True):
     for option_key, option_value in options.items():
         if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
-        elif isinstance(option_value, int):
+        elif type(option_value) is int:
             option_value = VmomiSupport.vmodlTypes['int'](option_value)
-        elif isinstance(option_value, float):
+        elif type(option_value) is float:
             option_value = VmomiSupport.vmodlTypes['float'](option_value)
-        elif isinstance(option_value, str):
+        elif type(option_value) is str:
             option_value = VmomiSupport.vmodlTypes['string'](option_value)
 
         if option_key not in current_options_dict or current_options_dict[option_key] != option_value:
@@ -1108,6 +1141,18 @@ class PyVmomi(object):
             return True
         elif api_type == 'HostAgent':
             return False
+
+    def vcenter_version_at_least(self, version=None):
+        """
+        Check that the vCenter server is at least a specific version number
+        Args:
+            version (tuple): a version tuple, for example (6, 7, 0)
+        Returns: bool
+        """
+        if version:
+            vc_version = self.content.about.version
+            return StrictVersion(vc_version) >= StrictVersion('.'.join(map(str, version)))
+        self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
 
     def get_managed_objects_properties(self, vim_type, properties=None):
         """
@@ -1364,16 +1409,17 @@ class PyVmomi(object):
             return []
 
     # Hosts related functions
-    def find_hostsystem_by_name(self, host_name):
+    def find_hostsystem_by_name(self, host_name, datacenter=None):
         """
         Find Host by name
         Args:
             host_name: Name of ESXi host
+            datacenter: (optional) Datacenter of ESXi resides
 
         Returns: True if found
 
         """
-        return find_hostsystem_by_name(self.content, hostname=host_name)
+        return find_hostsystem_by_name(self.content, hostname=host_name, datacenter=datacenter)
 
     def get_all_host_objs(self, cluster_name=None, esxi_host_name=None):
         """

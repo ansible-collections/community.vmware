@@ -10,6 +10,7 @@
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
     hardware:
+        version: 11
         num_cpus: 1
         memory_mb: 128
     disk:
@@ -61,6 +62,7 @@
     datacenter: "{{ dc1 }}"
     cluster: "{{ ccr1 }}"
     hardware:
+        version: 11
         num_cpus: 1
         memory_mb: 128
     disk:
@@ -114,6 +116,7 @@
     cluster: "{{ ccr1 }}"
     resource_pool: DC0_C0_RP1
     hardware:
+        version: 11
         num_cpus: 1
         memory_mb: 128
     disk:

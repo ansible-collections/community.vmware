@@ -147,42 +147,38 @@
     that:
       - "cdrom_vm.changed == true"
 
-# VCSIM fails with invalidspec exception but real vCenter PASS testcase
-# Commenting this testcase till the time
-- when: vcsim is not defined
-  block:
-    - name: Again create VM with multiple disks and a CDROM - GitHub issue 38679
-      vmware_guest:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        folder: "{{ f0 }}"
-        name: test_vm3
-        datacenter: "{{ dc1 }}"
-        cluster: "{{ ccr1 }}"
-        resource_pool: Resources
-        guest_id: centos64Guest
-        hardware:
-          memory_mb: 128
-          num_cpus: 1
-          scsi: paravirtual
-        disk:
-        - size_mb: 128
-          type: thin
-          datastore: "{{ rw_datastore }}"
-        - size_mb: 128
-          type: thin
-          datastore: "{{ rw_datastore }}"
-        - size_mb: 128
-          type: thin
-          datastore: "{{ rw_datastore }}"
-        cdrom:
-          type: iso
-          iso_path: "[{{ ro_datastore }}] base.iso"
-      register: cdrom_vm
-    - debug: var=cdrom_vm
-    - name: assert the VM was created
-      assert:
-        that:
-          - cdrom_vm is changed
+- name: Again create VM with multiple disks and a CDROM - GitHub issue 38679
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: "{{ f0 }}"
+    name: test_vm3
+    datacenter: "{{ dc1 }}"
+    cluster: "{{ ccr1 }}"
+    resource_pool: Resources
+    guest_id: centos64Guest
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+    disk:
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    - size_mb: 128
+      type: thin
+      datastore: "{{ rw_datastore }}"
+    cdrom:
+      type: iso
+      iso_path: "[{{ ro_datastore }}] base.iso"
+  register: cdrom_vm
+- debug: var=cdrom_vm
+- name: assert the VM was created
+  assert:
+    that:
+      - cdrom_vm is changed

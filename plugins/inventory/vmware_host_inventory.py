@@ -11,7 +11,6 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
     name: vmware_host_inventory
-    plugin_type: inventory
     short_description: VMware ESXi hostsystem inventory source
     author:
       - Abhijeet Kasurde (@Akasurde)
@@ -77,6 +76,7 @@ DOCUMENTATION = r"""
             - Ignores template if resulted in an empty string or None value.
             - You can use property specified in I(properties) as variables in the template.
             type: list
+            elements: string
             default: ['name']
         properties:
             description:
@@ -90,6 +90,7 @@ DOCUMENTATION = r"""
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
             type: list
+            elements: string
             default: [ 'name', 'customValue', 'summary.runtime.powerState' ]
         with_nested_properties:
             description:
@@ -117,6 +118,7 @@ DOCUMENTATION = r"""
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
             required: False
             type: list
+            elements: dict
             default: []
         with_path:
             description:
@@ -130,6 +132,24 @@ DOCUMENTATION = r"""
                 - Also, transforms property name to snake case.
             type: bool
             default: False
+        proxy_host:
+          description:
+          - Address of a proxy that will receive all HTTPS requests and relay them.
+          - The format is a hostname or a IP.
+          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
+          type: str
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_HOST
+        proxy_port:
+          description:
+          - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+          type: int
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_PORT
 """
 
 EXAMPLES = r"""
@@ -173,11 +193,11 @@ from ansible.errors import AnsibleError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.six import text_type
-from ansible_collections.community.vmware.plugins.module_utils.inventory import (
-    BaseVMwareInventory,
+from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
     to_nested_dict,
     to_flatten_dict,
 )
+from ansible_collections.community.vmware.plugins.inventory.vmware_vm_inventory import BaseVMwareInventory
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
 
@@ -236,7 +256,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             port=self.get_option("port"),
             with_tags=self.get_option("with_tags"),
             validate_certs=self.get_option("validate_certs"),
-            display=self.display,
+            http_proxy_host=self.get_option("proxy_host"),
+            http_proxy_port=self.get_option("proxy_port")
         )
 
         self.pyv.do_login()
@@ -372,13 +393,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_properties = to_nested_dict(properties)
 
+            # Check if we can add host as per filters
+            host_filters = self.get_option("filters")
+            if not self._can_add_host(host_filters, host_properties, strict=strict):
+                continue
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
-            host_filters = self.get_option("filters")
-
-            if host not in hostvars and self._can_add_host(
-                host_filters, host_properties, strict=strict
-            ):
+            if host not in hostvars:
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
                 self.inventory.set_variable(

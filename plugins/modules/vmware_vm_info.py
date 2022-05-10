@@ -17,7 +17,6 @@ short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
 - Cluster name as fact is added in version 2.7.
-- This module was called C(vmware_vm_facts) before Ansible 2.9. The usage did not change.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -26,6 +25,7 @@ notes:
 - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
+- Fact about C(datastore_url) is added in VMware collection 1.18.0.
 requirements:
 - python >= 2.6
 - PyVmomi
@@ -63,9 +63,12 @@ options:
         - Tags related to virtual machine are shown if set to C(True).
       default: False
       type: bool
+    vm_name:
+      description:
+        - Name of the virtual machine to get related configurations information from.
+      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -76,6 +79,18 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
   delegate_to: localhost
   register: vminfo
+
+- debug:
+    var: vminfo.virtual_machines
+
+- name: Gather one specific VM
+  community.vmware.vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    vm_name: 'vm_name_as_per_vcenter'
+  delegate_to: localhost
+  register: vm_info
 
 - debug:
     var: vminfo.virtual_machines
@@ -118,7 +133,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.uuid }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -136,7 +151,7 @@ EXAMPLES = r'''
     - debug:
         msg: "{{ item.tags }}"
       with_items:
-        - "{{ vm_info.virtual_machines | json_query(query) }}"
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
       vars:
         query: "[?guest_name=='DC0_H0_VM0']"
 
@@ -148,6 +163,23 @@ EXAMPLES = r'''
     folder: "/Asia-Datacenter1/vm/prod"
   delegate_to: localhost
   register: vm_info
+
+- name: Get datastore_url from given VM name
+  block:
+    - name: Get virtual machine info
+      community.vmware.vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+      delegate_to: localhost
+      register: vm_info
+
+    - debug:
+        msg: "{{ item.datastore_url }}"
+      with_items:
+        - "{{ vm_info.virtual_machines | community.general.json_query(query) }}"
+      vars:
+        query: "[?guest_name=='DC0_H0_VM0']"
 '''
 
 RETURN = r'''
@@ -180,6 +212,12 @@ virtual_machines:
         "attributes": {
             "job": "backup-prepare"
         },
+        "datastore_url": [
+            {
+                "name": "t880-o2g",
+                "url": "/vmfs/volumes/e074264a-e5c82a58"
+            }
+        ],
         "tags": [
             {
                 "category_id": "urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL",
@@ -200,7 +238,10 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi, get_all_objs,
+    vmware_argument_spec, _get_vm_prop,
+    get_parent_datacenter, find_vm_by_name)
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -218,9 +259,9 @@ class VmwareVmInfo(PyVmomi):
                     for v in vm.customValue if x.key == v.key)
 
     # https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/getallvms.py
-    def get_all_virtual_machines(self):
+    def get_virtual_machines(self):
         """
-        Get all virtual machines and related configurations information
+        Get one/all virtual machines and related configurations information.
         """
         folder = self.params.get('folder')
         folder_obj = None
@@ -229,7 +270,15 @@ class VmwareVmInfo(PyVmomi):
             if not folder_obj:
                 self.module.fail_json(msg="Failed to find folder specified by %(folder)s" % self.params)
 
-        virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
+        vm_name = self.params.get('vm_name')
+        if vm_name:
+            virtual_machine = find_vm_by_name(self.content, vm_name=vm_name, folder=folder_obj)
+            if not virtual_machine:
+                self.module.fail_json(msg="Failed to find virtual machine %s" % vm_name)
+            else:
+                virtual_machines = [virtual_machine]
+        else:
+            virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
         _virtual_machines = []
 
         for vm in virtual_machines:
@@ -279,6 +328,11 @@ class VmwareVmInfo(PyVmomi):
 
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
+            datastore_url = list()
+            datastore_attributes = ('name', 'url')
+            if vm.config.datastoreUrl:
+                for entry in vm.config.datastoreUrl:
+                    datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
@@ -294,6 +348,7 @@ class VmwareVmInfo(PyVmomi):
                 "tags": vm_tags,
                 "folder": vm_folder,
                 "moid": vm._moId,
+                "datastore_url": datastore_url,
             }
 
             vm_type = self.module.params.get('vm_type')
@@ -314,18 +369,16 @@ def main():
         show_attribute=dict(type='bool', default='no'),
         show_tag=dict(type='bool', default=False),
         folder=dict(type='str'),
+        vm_name=dict(type='str')
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True
     )
-    if module._name in ('vmware_vm_facts', 'community.vmware.vmware_vm_facts'):
-        module.deprecate("The 'vmware_vm_facts' module has been renamed to 'vmware_vm_info'",
-                         version='3.0.0', collection_name='community.vmware')  # was Ansible 2.13
 
     vmware_vm_info = VmwareVmInfo(module)
-    _virtual_machines = vmware_vm_info.get_all_virtual_machines()
+    _virtual_machines = vmware_vm_info.get_virtual_machines()
 
     module.exit_json(changed=False, virtual_machines=_virtual_machines)
 

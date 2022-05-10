@@ -64,210 +64,203 @@
     that:
       - dvs_result_0002.changed
 
-# vcsim doesn't support ldp check (self.dvs.config.linkDiscoveryProtocolConfig.protocol)
-- when: vcsim is not defined
-  block:
-  - <<: *dvs_data
-    name: add distributed vSwitch again
-    register: dvs_result_0002
+- <<: *dvs_data
+  name: add distributed vSwitch again
+  register: dvs_result_0002
 
-  - name: ensure distributed vswitch is present
-    assert:
-      that:
-        - not dvs_result_0002.changed
+- name: ensure distributed vswitch is present
+  assert:
+    that:
+      - not dvs_result_0002.changed
 
-  - name: Add distributed vSwitch with network policy
-    vmware_dvswitch:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: present
-      switch_name: dvswitch_network_policy
-      mtu: 9000
-      uplink_quantity: 2
-      discovery_proto: lldp
-      discovery_operation: both
-      network_policy:
-        promiscuous: false
-        forged_transmits: false
-        mac_changes: false
-    register: dvs_with_network_policy_result
+- name: Add distributed vSwitch with network policy
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    state: present
+    switch_name: dvswitch_network_policy
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+    network_policy:
+      promiscuous: false
+      forged_transmits: false
+      mac_changes: false
+  register: dvs_with_network_policy_result
 
-  - name: Ensure distributed vswitch is present
-    assert:
-      that:
-        - dvs_with_network_policy_result.changed
+- name: Ensure distributed vswitch is present
+  assert:
+    that:
+      - dvs_with_network_policy_result.changed
 
-  - name: Add distributed vSwitch with network policy again (idempotency)
-    vmware_dvswitch:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: present
-      switch_name: dvswitch_network_policy
-      mtu: 9000
-      uplink_quantity: 2
-      discovery_proto: lldp
-      discovery_operation: both
-      network_policy:
-        promiscuous: false
-        forged_transmits: false
-        mac_changes: false
-    register: dvs_with_network_policy_again_result
+- name: Add distributed vSwitch with network policy again (idempotency)
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    state: present
+    switch_name: dvswitch_network_policy
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+    network_policy:
+      promiscuous: false
+      forged_transmits: false
+      mac_changes: false
+  register: dvs_with_network_policy_again_result
 
-  - name: Ensure distributed vswitch is present
-    assert:
-      that:
-        - not dvs_with_network_policy_again_result.changed
+- name: Ensure distributed vswitch is present
+  assert:
+    that:
+      - not dvs_with_network_policy_again_result.changed
 
-  - name: Change network policy
-    vmware_dvswitch:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: present
-      switch_name: dvswitch_network_policy
-      mtu: 9000
-      uplink_quantity: 2
-      discovery_proto: lldp
-      discovery_operation: both
-      network_policy:
-        promiscuous: true
-        forged_transmits: false
-        mac_changes: false
-    register: dvs_change_network_policy_result
+- name: Change network policy
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    state: present
+    switch_name: dvswitch_network_policy
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+    network_policy:
+      promiscuous: true
+      forged_transmits: false
+      mac_changes: false
+  register: dvs_change_network_policy_result
 
-  - name: Ensure network policy is changed
-    assert:
-      that:
-        - dvs_change_network_policy_result.changed
+- name: Ensure network policy is changed
+  assert:
+    that:
+      - dvs_change_network_policy_result.changed
 
-  - name: Change network policy again (idempotency)
-    vmware_dvswitch:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: present
-      switch_name: dvswitch_network_policy
-      mtu: 9000
-      uplink_quantity: 2
-      discovery_proto: lldp
-      discovery_operation: both
-      network_policy:
-        promiscuous: true
-        forged_transmits: false
-        mac_changes: false
-    register: dvs_change_network_policy_again_result
+- name: Change network policy again (idempotency)
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    state: present
+    switch_name: dvswitch_network_policy
+    mtu: 9000
+    uplink_quantity: 2
+    discovery_proto: lldp
+    discovery_operation: both
+    network_policy:
+      promiscuous: true
+      forged_transmits: false
+      mac_changes: false
+  register: dvs_change_network_policy_again_result
 
-  - name: Ensure network policy is not changed
-    assert:
-      that:
-        - not dvs_change_network_policy_again_result.changed
-
-# FIXME: Remove this testcase from block once vcsim supports distributed vswitch delete method
-# Currently, vcsim does not support distributed vswitch delete option,
-# Once this feature is available we can move this out of this block
+- name: Ensure network policy is not changed
+  assert:
+    that:
+      - not dvs_change_network_policy_again_result.changed
 
 # Testcase 0003: Add Distributed vSwitch
-  - name: delete the distributed vSwitch
-    vmware_dvswitch:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: absent
-      switch_name: '{{ item }}'
-    loop:
-      - dvswitch_0001
-      - dvswitch_0002
-      - dvswitch_network_policy
-    register: dvswitch_delete
-  - debug: var=dvswitch_delete
+- name: delete the distributed vSwitch
+  vmware_dvswitch:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    state: absent
+    switch_name: '{{ item }}'
+  loop:
+    - dvswitch_0001
+    - dvswitch_0002
+    - dvswitch_network_policy
+  register: dvswitch_delete
+- debug: var=dvswitch_delete
 
-  - name: Ensure the state has changed
-    assert:
-      that:
-        - dvswitch_delete.results[0] is changed
-        - dvswitch_delete.results[1] is changed
-        - dvswitch_delete.results[2] is changed
+- name: Ensure the state has changed
+  assert:
+    that:
+      - dvswitch_delete.results[0] is changed
+      - dvswitch_delete.results[1] is changed
+      - dvswitch_delete.results[2] is changed
 
-  - name: Create dvSwitch with special characters
-    vmware_dvswitch:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter: "{{ dc1 }}"
-      switch: 'dvSwitch\/%'
-      version: 6.5.0
-      mtu: 9000
-      uplink_quantity: 1
-      state: present
-    register: create_dvswitch_with_special_characters_result
+- name: Create dvSwitch with special characters
+  vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    switch: 'dvSwitch\/%'
+    version: 6.5.0
+    mtu: 9000
+    uplink_quantity: 1
+    state: present
+  register: create_dvswitch_with_special_characters_result
 
-  - assert:
-      that:
-        - create_dvswitch_with_special_characters_result.changed is sameas true
+- assert:
+    that:
+      - create_dvswitch_with_special_characters_result.changed is sameas true
 
-  - name: Create dvSwitch with special characters(idempotency check)
-    vmware_dvswitch:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter: "{{ dc1 }}"
-      switch: 'dvSwitch\/%'
-      version: 6.5.0
-      mtu: 9000
-      uplink_quantity: 1
-      state: present
-    register: create_dvswitch_with_special_characters_idempotency_check_result
+- name: Create dvSwitch with special characters(idempotency check)
+  vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    switch: 'dvSwitch\/%'
+    version: 6.5.0
+    mtu: 9000
+    uplink_quantity: 1
+    state: present
+  register: create_dvswitch_with_special_characters_idempotency_check_result
 
-  - assert:
-      that:
-        - create_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false
+- assert:
+    that:
+      - create_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false
 
-  - name: Delete dvSwitch with special characters
-    vmware_dvswitch:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter: "{{ dc1 }}"
-      switch: 'dvSwitch\/%'
-      version: 6.5.0
-      mtu: 9000
-      uplink_quantity: 1
-      state: absent
-    register: delete_dvswitch_with_special_characters_result
+- name: Delete dvSwitch with special characters
+  vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    switch: 'dvSwitch\/%'
+    version: 6.5.0
+    mtu: 9000
+    uplink_quantity: 1
+    state: absent
+  register: delete_dvswitch_with_special_characters_result
 
-  - assert:
-      that:
-        - delete_dvswitch_with_special_characters_result.changed is sameas true
+- assert:
+    that:
+      - delete_dvswitch_with_special_characters_result.changed is sameas true
 
-  - name: Delete dvSwitch with special characters(idempotency check)
-    vmware_dvswitch:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter: "{{ dc1 }}"
-      switch: 'dvSwitch\/%'
-      version: 6.5.0
-      mtu: 9000
-      uplink_quantity: 1
-      state: absent
-    register: delete_dvswitch_with_special_characters_idempotency_check_result
+- name: Delete dvSwitch with special characters(idempotency check)
+  vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    switch: 'dvSwitch\/%'
+    version: 6.5.0
+    mtu: 9000
+    uplink_quantity: 1
+    state: absent
+  register: delete_dvswitch_with_special_characters_idempotency_check_result
 
-  - assert:
-      that:
-        - delete_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false
+- assert:
+    that:
+      - delete_dvswitch_with_special_characters_idempotency_check_result.changed is sameas false

@@ -9,7 +9,7 @@
     setup_datastore: true
 
 - name: Create a VM with the state poweredoff
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -34,13 +34,13 @@
     - name: VM Network
 
 - name: set state to poweroff the first VM
-  vmware_guest_powerstate:
+  community.vmware.vmware_guest_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    folder: '{{ f0 }}'
+    folder: '{{ f0 }}/' # Test with a trailing / because of issue 1238
     state: powered-off
   register: poweroff_d1_c1_f0
 
@@ -52,21 +52,36 @@
     that:
         - not (poweroff_d1_c1_f0 is changed)
 
-- when: vcsim is not defined
-  block:
-  - name: Set a schedule task for first VM
-    vmware_guest_powerstate:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      name: test_vm1
-      folder: '{{ f0 }}'
-      scheduled_at: "10/10/2030 10:10"
-      state: powered-on
-    register: poweron_d1_c1_f0
+- name: set state to poweroff the first VM with datacenter
+  community.vmware.vmware_guest_powerstate:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: test_vm1
+    folder: '{{ f0 }}'
+    state: powered-off
+  register: poweroff_d1_c1_f0_datacenter
 
-  - name: Check that task is schedule
-    assert:
-      that:
-        - poweron_d1_c1_f0 is changed
+- name: make sure change was made
+  assert:
+    that:
+        - not (poweroff_d1_c1_f0_datacenter is changed)
+
+- name: Set a schedule task for first VM
+  community.vmware.vmware_guest_powerstate:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    folder: '{{ f0 }}'
+    scheduled_at: "10/10/2030 10:10"
+    state: powered-on
+  register: poweron_d1_c1_f0
+
+- name: Check that task is schedule
+  assert:
+    that:
+      - poweron_d1_c1_f0 is changed

@@ -10,7 +10,6 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
     name: vmware_vm_inventory
-    plugin_type: inventory
     short_description: VMware Guest inventory source
     author:
       - Abhijeet Kasurde (@Akasurde)
@@ -75,6 +74,7 @@ DOCUMENTATION = r'''
             - Ignores template if resulted in an empty string or None value.
             - You can use property specified in I(properties) as variables in the template.
             type: list
+            elements: string
             default: ['config.name + "_" + config.uuid']
         properties:
             description:
@@ -91,6 +91,7 @@ DOCUMENTATION = r'''
             - Please refer more VMware guest attributes which can be used as properties
               U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
             type: list
+            elements: string
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
                        'config.instanceUuid', 'config.hardware.numCPU', 'config.template',
                        'config.name', 'config.uuid', 'guest.hostName', 'guest.ipAddress',
@@ -124,9 +125,9 @@ DOCUMENTATION = r'''
             - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
             - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
-            version_added: "2.10"
             required: False
             type: list
+            elements: dict
             default: []
         with_path:
             description:
@@ -140,6 +141,24 @@ DOCUMENTATION = r'''
                 - Also, transforms property name to snake case.
             type: bool
             default: False
+        proxy_host:
+          description:
+          - Address of a proxy that will receive all HTTPS requests and relay them.
+          - The format is a hostname or a IP.
+          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
+          type: str
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_HOST
+        proxy_port:
+          description:
+          - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+          type: int
+          required: False
+          version_added: '1.12.0'
+          env:
+            - name: VMWARE_PROXY_PORT
 '''
 
 EXAMPLES = r'''
@@ -321,17 +340,38 @@ EXAMPLES = r'''
       - 'guest.ipAddress'
       - 'guest.guestFamily'
       - 'guest.ipStack'
+
+# Select a specific IP address for use by ansible when multiple NICs are present on the VM
+    plugin: community.vmware.vmware_vm_inventory
+    strict: False
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: False
+    compose:
+      # Set the IP address used by ansible to one that starts by 10.42. or 10.43.
+      ansible_host: >-
+        guest.net
+        | selectattr('ipAddress')
+        | map(attribute='ipAddress')
+        | flatten
+        | select('match', '^10.42.*|^10.43.*')
+        | list
+        | first
+    properties:
+      - guest.net
 '''
 
-import ssl
-import atexit
-import base64
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
 from ansible.module_utils.six import text_type
+from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
+    to_nested_dict,
+    to_flatten_dict,
+)
 
 display = Display()
 
@@ -343,10 +383,7 @@ except ImportError:
     HAS_REQUESTS = False
 
 try:
-    from pyVim import connect
     from pyVmomi import vim, vmodl
-    from pyVmomi.VmomiSupport import DataObject
-    from pyVmomi import Iso8601
     HAS_PYVMOMI = True
 except ImportError:
     HAS_PYVMOMI = False
@@ -361,10 +398,11 @@ except ImportError:
 
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
+from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 
 
 class BaseVMwareInventory:
-    def __init__(self, hostname, username, password, port, validate_certs, with_tags):
+    def __init__(self, hostname, username, password, port, validate_certs, with_tags, http_proxy_host, http_proxy_port):
         self.hostname = hostname
         self.username = username
         self.password = password
@@ -373,6 +411,8 @@ class BaseVMwareInventory:
         self.validate_certs = validate_certs
         self.content = None
         self.rest_content = None
+        self.proxy_host = http_proxy_host
+        self.proxy_port = http_proxy_port
 
     def do_login(self):
         """
@@ -421,40 +461,10 @@ class BaseVMwareInventory:
         Returns: connection object
 
         """
-        if self.validate_certs and not hasattr(ssl, 'SSLContext'):
-            raise AnsibleError('pyVim does not support changing verification mode with python < 2.7.9. Either update '
-                               'python or set validate_certs to false in configuration YAML file.')
-
-        ssl_context = None
-        if not self.validate_certs and hasattr(ssl, 'SSLContext'):
-            ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
-            ssl_context.verify_mode = ssl.CERT_NONE
-
-        service_instance = None
-        try:
-            service_instance = connect.SmartConnect(host=self.hostname, user=self.username,
-                                                    pwd=self.password, sslContext=ssl_context,
-                                                    port=self.port)
-
-        except vim.fault.InvalidLogin as e:
-            raise AnsibleParserError("Unable to log on to vCenter or ESXi API at %s:%s as %s: %s" % (self.hostname, self.port, self.username, e.msg))
-        except vim.fault.NoPermission as e:
-            raise AnsibleParserError("User %s does not have required permission"
-                                     " to log on to vCenter or ESXi API at %s:%s : %s" % (self.username, self.hostname, self.port, e.msg))
-        except (requests.ConnectionError, ssl.SSLError) as e:
-            raise AnsibleParserError("Unable to connect to vCenter or ESXi API at %s on TCP/%s: %s" % (self.hostname, self.port, e))
-        except vmodl.fault.InvalidRequest as e:
-            # Request is malformed
-            raise AnsibleParserError("Failed to get a response from server %s:%s as "
-                                     "request is malformed: %s" % (self.hostname, self.port, e.msg))
-        except Exception as e:
-            raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s : %s" % (self.hostname, self.port, e))
-
-        if service_instance is None:
-            raise AnsibleParserError("Unknown error while connecting to vCenter or ESXi API at %s:%s" % (self.hostname, self.port))
-
-        atexit.register(connect.Disconnect, service_instance)
-        return service_instance, service_instance.RetrieveContent()
+        return connect_to_api(module=None, disconnect_atexit=True, return_si=True,
+                              hostname=self.hostname, username=self.username, password=self.password,
+                              port=self.port, validate_certs=self.validate_certs, httpProxyHost=self.proxy_host,
+                              httpProxyPort=self.proxy_port)
 
     def check_requirements(self):
         """ Check all requirements for this inventory are satisfied"""
@@ -602,96 +612,6 @@ class BaseVMwareInventory:
         return []
 
 
-def in_place_merge(a, b):
-    """
-        Recursively merges second dict into the first.
-
-    """
-    if not isinstance(b, dict):
-        return b
-    for k, v in b.items():
-        if k in a and isinstance(a[k], dict):
-            a[k] = in_place_merge(a[k], v)
-        else:
-            a[k] = v
-    return a
-
-
-def to_nested_dict(vm_properties):
-    """
-    Parse properties from dot notation to dict
-
-    """
-
-    host_properties = {}
-
-    for vm_prop_name, vm_prop_val in vm_properties.items():
-        prop_parents = reversed(vm_prop_name.split("."))
-        prop_dict = parse_vim_property(vm_prop_val)
-
-        for k in prop_parents:
-            prop_dict = {k: prop_dict}
-        host_properties = in_place_merge(host_properties, prop_dict)
-
-    return host_properties
-
-
-def to_flatten_dict(d, parent_key='', sep='.'):
-    """
-    Parse properties dict to dot notation
-
-    """
-    items = []
-    for k, v in d.items():
-        new_key = parent_key + sep + k if parent_key else k
-        if v and isinstance(v, dict):
-            items.extend(to_flatten_dict(v, new_key, sep=sep).items())
-        else:
-            items.append((new_key, v))
-    return dict(items)
-
-
-def parse_vim_property(vim_prop):
-    """
-    Helper method to parse VIM properties of virtual machine
-    """
-    prop_type = type(vim_prop).__name__
-    if prop_type.startswith("vim") or prop_type.startswith("vmodl"):
-        if isinstance(vim_prop, DataObject):
-            r = {}
-            for prop in vim_prop._GetPropertyList():  # pylint: disable=protected-access
-                if prop.name not in ['dynamicProperty', 'dynamicType', 'managedObjectType']:
-                    sub_prop = getattr(vim_prop, prop.name)
-                    r[prop.name] = parse_vim_property(sub_prop)
-            return r
-
-        elif isinstance(vim_prop, list):
-            r = []
-            for prop in vim_prop:
-                r.append(parse_vim_property(prop))
-            return r
-        return vim_prop.__str__()
-
-    elif prop_type == "datetime":
-        return Iso8601.ISO8601Format(vim_prop)
-
-    elif prop_type == "long":
-        return int(vim_prop)
-    elif prop_type == "long[]":
-        return [int(x) for x in vim_prop]
-
-    elif isinstance(vim_prop, list):
-        return [parse_vim_property(x) for x in vim_prop]
-
-    elif prop_type in ['bool', 'int', 'NoneType', 'dict']:
-        return vim_prop
-
-    elif prop_type in ['binary']:
-        return to_text(base64.b64encode(vim_prop))
-
-    return to_text(vim_prop)
-
-
 class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
     NAME = 'community.vmware.vmware_vm_inventory'
@@ -738,9 +658,10 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             password=password,
             port=self.get_option('port'),
             with_tags=self.get_option('with_tags'),
-            validate_certs=self.get_option('validate_certs')
+            validate_certs=self.get_option('validate_certs'),
+            http_proxy_host=self.get_option('proxy_host'),
+            http_proxy_port=self.get_option('proxy_port')
         )
-
         self.pyv.do_login()
 
         if cache:
@@ -862,11 +783,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
 
             host_properties = to_nested_dict(properties)
 
+            # Check if we can add host as per filters
+            host_filters = self.get_option('filters')
+            if not self._can_add_host(host_filters, host_properties, strict=strict):
+                continue
+
             host = self._get_hostname(host_properties, hostnames, strict=strict)
 
-            host_filters = self.get_option('filters')
-
-            if host not in hostvars and self._can_add_host(host_filters, host_properties, host, strict=strict):
+            if host not in hostvars:
                 hostvars[host] = host_properties
                 self._populate_host_properties(host_properties, host)
 
@@ -895,7 +819,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             )
         )
 
-    def _can_add_host(self, host_filters, host_properties, host, strict=False):
+    def _can_add_host(self, host_filters, host_properties, strict=False):
         can_add_host = True
         for host_filter in host_filters:
             try:
@@ -920,9 +844,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if not compose:
             compose['ansible_host'] = 'guest.ipAddress'
 
-        if not compose.get('ansible_host', None):
-            raise AnsibleError('"ansible_host" not found in "compose". '
-                               'Without this inventory will be useless.')
         self._set_composite_vars(compose, host_properties, host, strict=strict)
         # Complex groups based on jinja2 conditionals, hosts that meet the conditional are added to group
         self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)

@@ -42,6 +42,23 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.15.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the datacenter.</div>
+                        <div>The datacenter to search for a virtual machine.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -304,6 +321,7 @@ Notes
 
 .. note::
    - Tested on vSphere 6.5
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -349,6 +367,7 @@ Examples
         password: "{{ vcenter_password }}"
         name: test-vm
         folder: "/{{datacenter}}/vm"
+        datacenter: "{{ datacenter }}"
       delegate_to: localhost
       register: facts
 

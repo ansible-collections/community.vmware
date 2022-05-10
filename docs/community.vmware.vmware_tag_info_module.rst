@@ -19,9 +19,6 @@ Synopsis
 - This module can be used to collect information about VMware tags.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
-- This module was called ``vmware_tag_facts`` before Ansible 2.9. The usage did not change.
-- ``tag_facts`` will be deprecated in Ansible 2.14, since it does not return multiple tags with same name and different category id.
-- Please use ``tag_info`` instead of ``tag_facts``.
 
 
 
@@ -112,6 +109,41 @@ Parameters
                 </td>
                 <td>
                         <div>The connection to protocol.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>The format is a hostname or a IP.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
                 </td>
             </tr>
             <tr>

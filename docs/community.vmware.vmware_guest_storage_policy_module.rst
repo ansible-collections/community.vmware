@@ -61,6 +61,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>controller_number</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">0</div>
+                </td>
+                <td>
+                        <div>SCSI controller number.</div>
+                        <div>Valid values range from 0 to 3.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>policy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -321,6 +339,7 @@ Notes
 
 .. note::
    - Tested on vSphere 6.0 and 6.5
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -329,7 +348,7 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enforce storepol1 policy for disk 0 and 1 using UUID
+    - name: Enforce storepol1 policy for disk 0 and 1 on SCSI controller 0 using UUID
       community.vmware.vmware_guest_storage_policy:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
@@ -338,8 +357,10 @@ Examples
         uuid: cefd316c-fc19-45f3-a539-2cd03427a78d
         disk:
           - unit_number: 0
+            controller_number: 0
             policy: storepol1
           - unit_number: 1
+            controller_number: 0
             policy: storepol1
       delegate_to: localhost
       register: policy_status

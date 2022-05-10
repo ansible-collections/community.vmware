@@ -41,8 +41,7 @@ options:
       description:
       - Whether to enable vSAN.
       type: bool
-      default: false
-      aliases: [ enable_vsan ]
+      default: true
     vsan_auto_claim_storage:
       description:
       - Whether the VSAN service is configured to automatically claim local storage
@@ -170,9 +169,6 @@ class VMwareCluster(PyVmomi):
         vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
         self.vsanClusterConfigSystem = vcMos['vsan-cluster-config-system']
 
-        self.module.warn("The default for enable will change from false to true in a future version to make the behavior more consistent with other modules."
-                         "Please make sure your playbooks don't rely on the default being false so you don't run into problems.")
-
     def check_vsan_config_diff(self):
         """
         Check VSAN configuration diff
@@ -261,7 +257,7 @@ def main():
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
         # VSAN
-        enable=dict(type='bool', default=False, aliases=['enable_vsan']),
+        enable=dict(type='bool', default=True),
         vsan_auto_claim_storage=dict(type='bool', default=False),
         advanced_options=dict(type='dict', options=dict(
             automatic_rebalance=dict(type='bool', required=False),

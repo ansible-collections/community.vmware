@@ -55,9 +55,7 @@
 - name: ensure statistics were configured
   assert:
     that:
-      # Doesn't really work with vcsim. No matter which settings are used; they are always shown as already configured!?
       - statistics_results_check_mode is changed
-  when: vcsim is not defined
 
 - name: Configure statistics
   vmware_vcenter_statistics:
@@ -70,7 +68,6 @@
   assert:
     that:
       - statistics_results is changed
-  when: vcsim is not defined
 
 - name: Configure statistics (again)
   vmware_vcenter_statistics:
@@ -83,7 +80,6 @@
   assert:
     that:
       - not (statistics_results is changed)
-  when: vcsim is not defined
 
 - name: Configure statistics intervall to level 2 for later check
   vmware_vcenter_statistics:
@@ -103,7 +99,6 @@
       enabled: true
       level: 2
     validate_certs: false
-  when: vcsim is not defined
 
 - name: Increase daily and weekly while decrease monthly and yearly
   vmware_vcenter_statistics:
@@ -124,10 +119,8 @@
       level: 1
     validate_certs: false
   register: statistics_results_mixed_increase_decrease
-  when: vcsim is not defined
 
 - name: Ensure statistics were configured
   assert:
     that:
       - statistics_results_mixed_increase_decrease is changed
-  when: vcsim is not defined

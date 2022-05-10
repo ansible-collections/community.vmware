@@ -131,40 +131,38 @@
   loop: "{{ cluster_result.clusters.keys() }}"
 
 # Disabled until we get a fix for https://github.com/ansible-collections/vmware/issues/301
-# - when: vcsim is not defined
-#   block:
-#   - import_role:
-#      name: prepare_vmware_tests
-#     vars:
-#      setup_category: true
-#      setup_tag: true
+# - import_role:
+#    name: prepare_vmware_tests
+#   vars:
+#    setup_category: true
+#    setup_tag: true
 
-#   - name: Apply tag to cluster
-#     vmware_tag_manager:
-#      hostname: "{{ vcenter_hostname }}"
-#      username: "{{ vcenter_username }}"
-#      password: "{{ vcenter_password }}"
-#      validate_certs: false
-#      tag_names:
-#        - '{{ cluster_category }}:{{ cluster_tag }}'
-#      state: present
-#      object_name: '{{ ccr1 }}'
-#      object_type: ClusterComputeResource
+# - name: Apply tag to cluster
+#   vmware_tag_manager:
+#    hostname: "{{ vcenter_hostname }}"
+#    username: "{{ vcenter_username }}"
+#    password: "{{ vcenter_password }}"
+#    validate_certs: false
+#    tag_names:
+#      - '{{ cluster_category }}:{{ cluster_tag }}'
+#    state: present
+#    object_name: '{{ ccr1 }}'
+#    object_type: ClusterComputeResource
 
-#   - name: Get info about cluster
-#     vmware_cluster_info:
-#      hostname: "{{ vcenter_hostname }}"
-#      username: "{{ vcenter_username }}"
-#      password: "{{ vcenter_password }}"
-#      validate_certs: false
-#      show_tag: true
-#      cluster_name: "{{ ccr1 }}"
-#     register: cluster_info
+# - name: Get info about cluster
+#   vmware_cluster_info:
+#    hostname: "{{ vcenter_hostname }}"
+#    username: "{{ vcenter_username }}"
+#    password: "{{ vcenter_password }}"
+#    validate_certs: false
+#    show_tag: true
+#    cluster_name: "{{ ccr1 }}"
+#   register: cluster_info
 
-#   - assert:
-#      that:
-#        - cluster_info is defined
-#        - cluster_info.clusters[ccr1].tags is defined
+# - assert:
+#    that:
+#      - cluster_info is defined
+#      - cluster_info.clusters[ccr1].tags is defined
 
 - name: "Prepare a cluster name with character to be URL-encoded"
   vmware_cluster:

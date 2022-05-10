@@ -38,31 +38,29 @@
     that:
         - all_hosts_result_check_mode.hosts_info
 
-- when: vcsim is not defined
-  block:
-  - name: gather info about a given host in check mode
-    vmware_host_config_info:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      esxi_hostname: "{{ esxi1 }}"
-    register: single_hosts_result_check_mode
-    check_mode: true
-  - name: ensure info are gathered for all hosts
-    assert:
-      that:
-          - single_hosts_result_check_mode.hosts_info
+- name: gather info about a given host in check mode
+  vmware_host_config_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+  register: single_hosts_result_check_mode
+  check_mode: true
+- name: ensure info are gathered for all hosts
+  assert:
+    that:
+        - single_hosts_result_check_mode.hosts_info
 
-  - name: gather info about a given host
-    vmware_host_config_info:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      esxi_hostname: "{{ esxi1 }}"
-    register: single_hosts_result
-  - name: ensure info are gathered for all hosts
-    assert:
-      that:
-          - single_hosts_result.hosts_info
+- name: gather info about a given host
+  vmware_host_config_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+  register: single_hosts_result
+- name: ensure info are gathered for all hosts
+  assert:
+    that:
+        - single_hosts_result.hosts_info

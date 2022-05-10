@@ -458,6 +458,194 @@ releases:
         name: vmware_host_inventory
         namespace: null
     release_date: '2021-06-11'
+  1.12.0:
+    changes:
+      bugfixes:
+      - vmware_content_deploy_ovf_template - no longer requires host, datastore, resource_pool.
+      - vmware_content_deploy_xxx - deploys to recommended datastore in specified
+        datastore_cluster.
+      - vmware_content_deploy_xxx - honors folder specified by fully qualified path
+        name.
+      - vmware_guest - Use hostname parameter in customization only if value is not
+        None (https://github.com/ansible-collections/community.vmware/issues/655)
+      minor_changes:
+      - vmware - add processing to answer if the answer question is occurred in starting
+        the vm (https://github.com/ansible-collections/community.vmware/pull/821).
+      - vmware - find_folder_by_fqpn added to support specifying folders by their
+        fully qualified path name, defined as I(datacenter)/I(folder_type)/subfolder1/subfolder2/.
+      - vmware - folder field default changed from None to vm.
+      - vmware_content_deploy_ovf_template - storage_provisioning default changed
+        from None to thin, in keeping with VMware best practices for flash storage.
+      - vmware_dvs_host - implement adding pNICs to LAGs (https://github.com/ansible-collections/community.vmware/issues/112).
+      - vmware_guest_instant_clone - added a new option to wait until the vmware tools
+        start (https://github.com/ansible-collections/community.vmware/pull/904).
+      - vmware_guest_instant_clone - added a reboot processing to reflect the customization
+        parameters to an instant clone vm (https://github.com/ansible-collections/community.vmware/pull/904).
+      - vmware_guest_powerstate - Add an option that answers whether it was copied
+        or moved the vm if the vm is blocked (https://github.com/ansible-collections/community.vmware/pull/821).
+      - vmware_host_inventory - support api access via proxy (https://github.com/ansible-collections/community.vmware/pull/817).
+      - vmware_object_role_permission_info - added principal to provide list of individual
+        permissions on specified entity (https://github.com/ansible-collections/community.vmware/issues/868).
+      - vmware_rest_client - support proxy feature for module using this API (https://github.com/ansible-collections/community.vmware/pull/848).
+      - vmware_vm_inventory - support api access via proxy (https://github.com/ansible-collections/community.vmware/pull/817).
+    fragments:
+    - 112-vmware_dvs_host.yml
+    - 738-vmware_content_deploy_xxx.yml
+    - 817-vmware_vm_inventory-support-proxy.yml
+    - 821-vmware_guest_powerstate.yml
+    - 831-vmware_guest-hostname.yml
+    - 848_vmware_rest_client_add_support_for_proxy.yml
+    - 874-vmware_object_role_permission_info-principal_permissions.yml
+    - 904-vmware_guest_instant_clone.yml
+    release_date: '2021-07-07'
+  1.13.0:
+    changes:
+      bugfixes:
+      - vmware - changed to use from isinstance to type in the if condition of option_diff
+        method (https://github.com/ansible-collections/community.vmware/pull/983).
+      - vmware_guest - add message for `deploy_vm` method when it fails with timeout
+        error while customizing the VM (https://github.com/ansible-collections/community.vmware/pull/933).
+      - vmware_guest_instant_clone - fixed an issue that the module should be required
+        the guestinfo_vars parameter when executing (https://github.com/ansible-collections/community.vmware/pull/962).
+      - vmware_guest_powerstate - added the datacenter parameter to fix an issue that
+        datacenter key error has been occurring (https://github.com/ansible-collections/community.vmware/pull/924).
+      - vmware_host_datastore - fixed an issue that the right error message isn't
+        displayed (https://github.com/ansible-collections/community.vmware/pull/976).
+      minor_changes:
+      - vm_device_helper - Add new functions for create, remove or reconfigure virutal
+        NVDIMM device (https://github.com/ansible-collections/community.vmware/issues/853).
+      - vmware - the scenario guides from Ansible repo migrated to collection repo.
+      - vmware_guest - Add new parameter 'nvdimm' for add, remove or reconfigure virutal
+        NVDIMM device of virtual machine (https://github.com/ansible-collections/community.vmware/issues/853).
+      - vmware_guest_disk - add the capability to create and remove RDM disks from
+        Virtual Machines.
+      - vmware_guest_snapshot_info - add quiesced status in VM snapshot info (https://github.com/ansible-collections/community.vmware/pull/978)
+      - vmware_host_datastore - added a new parameter to expand a datastore capacity
+        (https://github.com/ansible-collections/community.vmware/pull/915).
+      - vmware_host_inventory - filter hosts before templating hostnames (https://github.com/ansible-collections/community.vmware/issues/850).
+      - vmware_portgroup - Disable traffic shaping without defining ``traffic_shaping.average_bandwidth``,
+        ``traffic_shaping.burst_size`` and ``traffic_shaping.peak_bandwidth`` (https://github.com/ansible-collections/community.vmware/issues/955).
+      - vmware_spbm - Add a new function 'find_storage_profile_by_name' (https://github.com/ansible-collections/community.vmware/issues/853).
+      - vmware_vm_inventory - filter guests before templating hostnames (https://github.com/ansible-collections/community.vmware/issues/850).
+    fragments:
+    - 449-vmware_guest_disk_rdm.yml
+    - 850_vmware_inventory.yml
+    - 853-vmware_guest.yml
+    - 915-vmware_host_datastore.yml
+    - 924-vmware_guest_powerstate.yml
+    - 933-vmware_guest_add_msg_customization_failed.yml
+    - 955-vmware_portgroup.yml
+    - 962-vmware_guest_instant_clone.yml
+    - 976-vmware_host_datastore.yml
+    - 978-vmware_guest_snapshot_info.yml
+    - 983-vmware.yml
+    - migrate_vmware_scenario_guides.yml
+    release_date: '2021-08-16'
+  1.14.0:
+    changes:
+      bugfixes:
+      - vmware_category - fixed some issues that the errors have occurred in executing
+        the module (https://github.com/ansible-collections/community.vmware/pull/990).
+      - vmware_guest_network - Fix adding more than one NIC to a VM before powering
+        on (https://github.com/ansible-collections/community.vmware/issues/860).
+      minor_changes:
+      - vmware_host_service_manager - Introducing a new state "unchanged" to allow
+        defining startup policy without defining service state or automatically starting
+        it (https://github.com/ansible-collections/community.vmware/issues/916).
+    fragments:
+    - 860-vmware_guest_network.yml
+    - 916-vmware_host_service_manager.yml
+    - 990-vmware_category.yml
+    release_date: '2021-09-01'
+  1.15.0:
+    changes:
+      bugfixes:
+      - Fix a bug that prevented enabling VSAN on more than one vmk, risking splitting
+        the whole cluster during interface migration scenarios (https://github.com/ansible-collections/community.vmware/issues/891)
+      - vmware_deploy_ovf - Fix deploy ovf issue when there are more than one datacenter
+        in VC (https://github.com/ansible-collections/community.vmware/issues/164).
+      - vmware_deploy_ovf - fixed to display suitable the error when not exist an
+        ovf file path (https://github.com/ansible-collections/community.vmware/pull/1065).
+      - vmware_guest_powerstate - handle 'present' state as 'poweredon' (https://github.com/ansible-collections/community.vmware/pull/1033).
+      - vmware_guest_tools_wait - add documentation about datacenter parameter (https://github.com/ansible-collections/community.vmware/pull/870).
+      - vmware_object_rename - fixed an issue that an error has occurred when getting
+        than 1,000 objects (https://github.com/ansible-collections/community.vmware/pull/1010).
+      - vmware_vcenter_settings_info - fix to return all VCSA settings when setting
+        vsphere to the schema and not specifying the properties (https://github.com/ansible-collections/community.vmware/pull/1050).
+      - vmware_vm_inventory - remove erroneous ``ansible_host`` condition (https://github.com/ansible-collections/community.vmware/issues/975).
+      deprecated_features:
+      - vmware_guest_vnc -  Sphere 7.0 removed the built-in VNC server (https://docs.vmware.com/en/VMware-vSphere/7.0/rn/vsphere-esxi-vcenter-server-70-release-notes.html#productsupport).
+      minor_changes:
+      - vm_device_helper - move NIC device types from vmware_guest module to vm_device_helper
+        (https://github.com/ansible-collections/community.vmware/pull/998).
+    fragments:
+    - 0-copy_ignore_txt.yml
+    - 1010-vmware_object_rename.yml
+    - 1050-vmware_vcenter_settings_info.yml
+    - 1065-vmware_deploy_ovf.yml
+    - 164-vmware_deploy_ovf.yml
+    - 870_vmware_guest_tools_wait.yml
+    - 892-vmware_vmkernel.yml
+    - 975_vmware_vm_inventory.yml
+    - 993-vmware_vm_config_option.yml
+    - deprecate-vmware_guest_vnc.yml
+    - powerstate.yml
+    modules:
+    - description: Return supported guest ID list and VM recommended config option
+        for specific guest OS
+      name: vmware_vm_config_option
+      namespace: ''
+    release_date: '2021-10-05'
+  1.16.0:
+    changes:
+      bugfixes:
+      - update_vswitch - add the possibility to remove nics from vswitch (https://github.com/ansible-collections/community.vmware/issues/536)
+      - vmware_guest_serial_port - handle correct serial backing type (https://github.com/ansible-collections/community.vmware/issues/1043).
+      - vmware_host_lockdown - Fix an issue when enabling or disabling lockdown mode
+        failes (https://github.com/ansible-collections/community.vmware/issues/1083)
+      minor_changes:
+      - vmware - add vTPM information to default gather information (https://github.com/ansible-collections/community.vmware/pull/1082).
+      - vmware_guest_cross_vc_clone - Added the is_template option to mark a cloned
+        vm/template as a template (https://github.com/ansible-collections/community.vmware/pull/996).
+    fragments:
+    - 1043_vmware_guest_serial.yml
+    - 1082_vmware.yml
+    - 1083_vmware_host_lockdown.yml
+    - 840_vmware_vswitch.yml
+    - 996_vmware_guest_cross_vc_clone.yml
+    modules:
+    - description: Add or remove vTPM device for specified VM.
+      name: vmware_guest_tpm
+      namespace: ''
+    release_date: '2021-11-05'
+  1.17.0:
+    changes:
+      bugfixes:
+      - vmware_guest - when ``customization.password`` is not defined, the Administrator
+        password is made empty instead of setting it to string 'None' (https://github.com/ansible-collections/community.vmware/issues/1017).
+      minor_changes:
+      - vmware_datastore_info - added show_tag parameters to allow datastore tags
+        to be read in a uniform way across _info modules  (https://github.com/ansible-collections/community.vmware/pull/1085).
+      - vmware_guest_disk - Added a new key 'cluster_disk' which allows you to use
+        a filename originating from a VM with an RDM.
+      - vmware_guest_disk - Added bus_sharing as an option for SCSI devices.
+      - vmware_guest_disk - Enabled the use of up to 64 disks on a paravirtual SCSI
+        controller when the hardware is version 14 or higher.
+      - vmware_guest_sendkey - added additional USB scan codes for HOME and END.
+      - vmware_host_scanhba - add rescan_vmfs parameter to allow rescaning for new
+        VMFS volumes. Also add rescan_hba parameter with default true to allow for
+        not rescaning HBAs as this might be very slow. (https://github.com/ansible-collections/community.vmware/issues/479)
+      - vmware_host_snmp - implement setting syscontact and syslocation (https://github.com/ansible-collections/community.vmware/issues/1044).
+      - vmware_rest_client module_util - added function get_tags_for_datastore for
+        convenient tag collection (https://github.com/ansible-collections/community.vmware/pull/1085).
+    fragments:
+    - 1013-vmware_rdm_updates.yml
+    - 1017-vmware_guest-fix_administrator_password.yml
+    - 1044_add_syscontact_syslocation_vmware_host_snmp.yml
+    - 1085_add_show_tag_to_vmware_datastore_info.yml
+    - 1117_add_additional_usb_scan_codes.yml
+    - rescan_VMFS_feature.yml
+    release_date: '2021-12-06'
   1.2.0:
     changes:
       bugfixes:
@@ -804,3 +992,205 @@ releases:
       name: vmware_guest_storage_policy
       namespace: ''
     release_date: '2021-04-01'
+  2.0.0:
+    changes:
+      breaking_changes:
+      - The collection now requires at least ansible-core 2.11.0. Ansible 3 and before,
+        and ansible-base versions are no longer supported.
+      - vmware_cluster_drs - The default for ``enable`` has been changed from ``false``
+        to ``true``.
+      - vmware_cluster_drs - The parameter alias ``enable_drs`` has been removed,
+        use ``enable`` instead.
+      - vmware_cluster_ha - The default for ``enable`` has been changed from ``false``
+        to ``true``.
+      - vmware_cluster_ha - The parameter alias ``enable_ha`` has been removed, use
+        ``enable`` instead.
+      - vmware_cluster_vsan - The default for ``enable`` has been changed from ``false``
+        to ``true``.
+      - vmware_cluster_vsan - The parameter alias ``enable_vsan`` has been removed,
+        use ``enable`` instead.
+      - vmware_guest - Virtualization Based Security has some requirements (``nested_virt``,
+        ``secure_boot`` and ``iommu``) that the module silently enabled. They have
+        to be enabled explicitly now.
+      bugfixes:
+      - Various modules and plugins - use vendored version of ``distutils.version``
+        included in ansible-core 2.12 if available. This avoids breakage when ``distutils``
+        is removed from the standard library of Python 3.12. Note that ansible-core
+        2.11, ansible-base 2.10 and Ansible 2.9 are right now not compatible with
+        Python 3.12, hence this fix does not target these ansible-core/-base/2.9 versions.
+      - create_nic - add advanced SR-IOV options from the VMware API (PCI dev PF/VF
+        backing and guest OS MTU change)
+      - vcenter_folder - fixed folders search collision issue (https://github.com/ansible-collections/community.vmware/issues/1112).
+      - vmware_guest_network - fix a bug that can crash the module due to an uncaught
+        exception (https://github.com/ansible-collections/community.vmware/issues/25).
+      minor_changes:
+      - vmware_export_ovf - Add a new parameter 'export_with_extraconfig' to support
+        export extra config options in ovf (https://github.com/ansible-collections/community.vmware/pull/1161).
+      removed_features:
+      - vcenter_extension_facts - The deprecated module ``vcenter_extension_facts``
+        has been removed, use ``vcenter_extension_info`` instead.
+      - vmware_about_facts - The deprecated module ``vmware_about_facts`` has been
+        removed, use ``vmware_about_info`` instead.
+      - vmware_category_facts - The deprecated module ``vmware_category_facts`` has
+        been removed, use ``vmware_category_info`` instead.
+      - vmware_cluster - Remove DRS configuration in favour of module ``vmware_cluster_drs``.
+      - vmware_cluster - Remove HA configuration in favour of module ``vmware_cluster_ha``.
+      - vmware_cluster - Remove VSAN configuration in favour of module ``vmware_cluster_vsan``.
+      - vmware_cluster_facts - The deprecated module ``vmware_cluster_facts`` has
+        been removed, use ``vmware_cluster_info`` instead.
+      - vmware_datastore_facts - The deprecated module ``vmware_datastore_facts``
+        has been removed, use ``vmware_datastore_info`` instead.
+      - vmware_drs_group_facts - The deprecated module ``vmware_drs_group_facts``
+        has been removed, use ``vmware_drs_group_info`` instead.
+      - vmware_drs_rule_facts - The deprecated module ``vmware_drs_rule_facts`` has
+        been removed, use ``vmware_drs_rule_info`` instead.
+      - vmware_dvs_portgroup - The deprecated parameter ``portgroup_type`` has been
+        removed, use ``port_binding`` instead.
+      - vmware_dvs_portgroup_facts - The deprecated module ``vmware_dvs_portgroup_facts``
+        has been removed, use ``vmware_dvs_portgroup_info`` instead.
+      - vmware_guest_boot_facts - The deprecated module ``vmware_guest_boot_facts``
+        has been removed, use ``vmware_guest_boot_info`` instead.
+      - vmware_guest_customization_facts - The deprecated module ``vmware_guest_customization_facts``
+        has been removed, use ``vmware_guest_customization_info`` instead.
+      - vmware_guest_disk_facts - The deprecated module ``vmware_guest_disk_facts``
+        has been removed, use ``vmware_guest_disk_info`` instead.
+      - vmware_guest_facts - The deprecated module ``vmware_guest_facts`` has been
+        removed, use ``vmware_guest_info`` instead.
+      - vmware_guest_snapshot_facts - The deprecated module ``vmware_guest_snapshot_facts``
+        has been removed, use ``vmware_guest_snapshot_info`` instead.
+      - vmware_host_capability_facts - The deprecated module ``vmware_host_capability_facts``
+        has been removed, use ``vmware_host_capability_info`` instead.
+      - vmware_host_config_facts - The deprecated module ``vmware_host_config_facts``
+        has been removed, use ``vmware_host_config_info`` instead.
+      - vmware_host_dns_facts - The deprecated module ``vmware_host_dns_facts`` has
+        been removed, use ``vmware_host_dns_info`` instead.
+      - vmware_host_feature_facts - The deprecated module ``vmware_host_feature_facts``
+        has been removed, use ``vmware_host_feature_info`` instead.
+      - vmware_host_firewall_facts - The deprecated module ``vmware_host_firewall_facts``
+        has been removed, use ``vmware_host_firewall_info`` instead.
+      - vmware_host_ntp_facts - The deprecated module ``vmware_host_ntp_facts`` has
+        been removed, use ``vmware_host_ntp_info`` instead.
+      - vmware_host_package_facts - The deprecated module ``vmware_host_package_facts``
+        has been removed, use ``vmware_host_package_info`` instead.
+      - vmware_host_service_facts - The deprecated module ``vmware_host_service_facts``
+        has been removed, use ``vmware_host_service_info`` instead.
+      - vmware_host_ssl_facts - The deprecated module ``vmware_host_ssl_facts`` has
+        been removed, use ``vmware_host_ssl_info`` instead.
+      - vmware_host_vmhba_facts - The deprecated module ``vmware_host_vmhba_facts``
+        has been removed, use ``vmware_host_vmhba_info`` instead.
+      - vmware_host_vmnic_facts - The deprecated module ``vmware_host_vmnic_facts``
+        has been removed, use ``vmware_host_vmnic_info`` instead.
+      - vmware_local_role_facts - The deprecated module ``vmware_local_role_facts``
+        has been removed, use ``vmware_local_role_info`` instead.
+      - vmware_local_user_facts - The deprecated module ``vmware_local_user_facts``
+        has been removed, use ``vmware_local_user_info`` instead.
+      - vmware_portgroup_facts - The deprecated module ``vmware_portgroup_facts``
+        has been removed, use ``vmware_portgroup_info`` instead.
+      - vmware_resource_pool_facts - The deprecated module ``vmware_resource_pool_facts``
+        has been removed, use ``vmware_resource_pool_info`` instead.
+      - vmware_tag_facts - The deprecated module ``vmware_tag_facts`` has been removed,
+        use ``vmware_tag_info`` instead.
+      - vmware_target_canonical_facts - The deprecated module ``vmware_target_canonical_facts``
+        has been removed, use ``vmware_target_canonical_info`` instead.
+      - vmware_vm_facts - The deprecated module ``vmware_vm_facts`` has been removed,
+        use ``vmware_vm_info`` instead.
+      - vmware_vmkernel_facts - The deprecated module ``vmware_vmkernel_facts`` has
+        been removed, use ``vmware_vmkernel_info`` instead.
+      - vmware_vmkernel_ip_config - The deprecated module ``vmware_vmkernel_ip_config``
+        has been removed, use ``vmware_vmkernel`` instead.
+      - vmware_vswitch_facts - The deprecated module ``vmware_vswitch_facts`` has
+        been removed, use ``vmware_vswitch_info`` instead.
+    fragments:
+    - 1080-add-sr-iov-advanced-options.yml
+    - 1112-vcenter_folder.yml
+    - 1182_ansible_version.yml
+    - 25-vmware_guest_network-catch_taskerror.yml
+    - disutils.version.yml
+    - remove_deprecated_facts_modules.yml
+    - remove_vmware_vmkernel_ip_config.yml
+    - vmware_cluster-remove-deprecated-features.yml
+    - vmware_cluster_drs-ha-vsan-enable_default.yml
+    - vmware_dvs_portgroup-portgroup_type.yml
+    - vmware_export_ovf.yml
+    - vmware_guest-vbs.yml
+    release_date: '2022-01-11'
+  2.1.0:
+    changes:
+      minor_changes:
+      - Remove `version_added` documentation that pre-dates the collection, that is
+        refers to Ansible < 2.10 (https://github.com/ansible-collections/community.vmware/pull/1215).
+      - vmware_guest_storage_policy - New parameter `controller_number` to support
+        multiple SCSI controllers (https://github.com/ansible-collections/community.vmware/issues/1203).
+      - vmware_object_role_permission - added VMware DV portgroup object_type for
+        setting permissions (https://github.com/ansible-collections/community.vmware/pull/1176)
+      - vmware_vm_config_option - Fix the parameter not correct issue when hostname
+        is set to ESXi host(https://github.com/ansible-collections/community.vmware/pull/1171).
+      - vmware_vm_info - adding fact about ``datastore_url`` to output (https://github.com/ansible-collections/community.vmware/pull/1143).
+    fragments:
+    - 1176-vmware_dv_portgroup.yml
+    - 1203-vmware_guest_storage_policy-controller_number-param.yml
+    - datastore_url-added-to-vm_info.yaml
+    - remove_pre-collection_version_added.yml
+    - vmware_vm_config_option.yml
+    modules:
+    - description: Manage users of ESXi
+      name: vmware_host_user_manager
+      namespace: ''
+    release_date: '2022-02-16'
+  2.2.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_host - match the list of the host nics in the correct order based
+        on the uplink port name in vCenter (https://github.com/ansible-collections/community.vmware/issues/1242).
+      - vmware_guest_powerstate - `shutdownguest` power state is not idempotent (https://github.com/ansible-collections/community.vmware/pull/1227).
+      minor_changes:
+      - vmware_vm_info - Add the posibility to get the configuration informations
+        of only one vm by name. (https://github.com/ansible-collections/community.vmware/pull/1241)
+    fragments:
+    - 1241-vmware_vm_info-add_the_posibility_to_get_only_one_vm_by_name.yaml
+    - 1243-vmware-dvs-host-uplink-ordering.yml
+    - fix_shutdownguest_state_idempotency.yml
+    release_date: '2022-03-28'
+  2.3.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_portgroup - Fix an idempotency issue when `num_ports` is unset
+        (https://github.com/ansible-collections/community.vmware/pull/1286).
+      - vmware_guest_powerstate - Ignore trailing `/` in `folder` parameter like other
+        guest modules do (https://github.com/ansible-collections/community.vmware/issues/1238).
+      - vmware_host_powerstate - Do not execute the powerstate changes in check_mode.
+        (https://github.com/ansible-collections/community.vmware/pull/1299).
+      - vmware_vmotion - Like already define in the examples, allow Storage vMotion
+        without defining a resource pool. (https://github.com/ansible-collections/community.vmware/pull/1236).
+      major_changes:
+      - Drop VCSIM as a test target (https://github.com/ansible-collections/community.vmware/pull/1294).
+      minor_changes:
+      - vmware_dvs_portgroup - Add the feature to configure ingress and egress traffinc
+        shaping and netflow on the dvs portgroup. (https://github.com/ansible-collections/community.vmware/pull/1224)
+      - vmware_guest_network - Add parameters `physical_function_backing`, `virtual_function_backing`
+        and `allow_guest_os_mtu_change` (https://github.com/ansible-collections/community.vmware/pull/1218)
+    fragments:
+    - 1224-vmware_dvs_portgroup-ingress_egress_traffic_shaping_and_netflow.yaml
+    - 1236-vmware_vmotion-svmotion_without_resourcepool.yml
+    - 1238-vmware_guest_powerstate-ignore_trailing_slash_in_folder.yml
+    - 1286-vmware_dvs_portgroup-fix_idempotency.yml
+    - 1294-remove_vcsim.yml
+    - 1299-vnware_host_powerstate-fix_check_mode.yml
+    - add-sriov-advanced-options-to-vmware_guest_network.yml
+    release_date: '2022-05-02'
+  2.4.0:
+    changes:
+      minor_changes:
+      - vmware_maintenancemode - Add support for check_mode (https://github.com/ansible-collections/community.vmware/pull/1311).
+      - vmware_migrate_vmk - Add `migrate_vlan_id` to use for the VMK interface when
+        migrating from VDS to VSS (https://github.com/ansible-collections/community.vmware/issues/1297).
+      - vmware_vswitch - Add support to manage security, teaming and traffic shaping
+        policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1298).
+      - vmware_vswitch_info - Add support to return security, teaming and traffic
+        shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1309).
+    fragments:
+    - 1297-vmware_migrate_vmk-add_vlan.yml
+    - 1298-vmware_vswitch-add_network_policy_support.yml
+    - 1309-vmware_vswitch_info-add_network_policy_support.yml
+    - 1311-vmware_maintenancemode-check_mode.yml
+    release_date: '2022-05-08'

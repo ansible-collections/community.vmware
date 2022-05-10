@@ -38,7 +38,8 @@
     switch_name: dvswitch_0001
     vlan_id: 123
     num_ports: 120
-    portgroup_type: earlyBinding
+    port_binding: 'static'
+    port_allocation: 'fixed'
     state: present
     network_policy:
       promiscuous: true
@@ -63,40 +64,38 @@
     that:
         - portgroup_create_result.changed
 
-- when: vcsim is not defined
-  block:
-    - name: create a session.
-      vmware_vspan_session:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        switch: dvswitch_0001
-        name: "session_0001"
-        state: "present"
-        enabled: true
-        description: "basic_description"
-        source_port_transmitted: 13
-        source_port_received: 13
-        destination_port: 12
-      register: vspan_session_create_result
-    - debug: var=vspan_session_create_result
-    - name: ensure session was created
-      assert:
-        that:
-            - vspan_session_create_result.changed
+- name: create a session.
+  vmware_vspan_session:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    switch: dvswitch_0001
+    name: "session_0001"
+    state: "present"
+    enabled: true
+    description: "basic_description"
+    source_port_transmitted: 13
+    source_port_received: 13
+    destination_port: 12
+  register: vspan_session_create_result
+- debug: var=vspan_session_create_result
+- name: ensure session was created
+  assert:
+    that:
+        - vspan_session_create_result.changed
 
-    - name: delete a session.
-      vmware_vspan_session:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        switch: dvswitch_0001
-        name: "session_0001"
-        state: "absent"
-      register: vspan_session_delete_result
-    - name: ensure session was deleted
-      assert:
-        that:
-            - vspan_session_delete_result.changed
+- name: delete a session.
+  vmware_vspan_session:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    switch: dvswitch_0001
+    name: "session_0001"
+    state: "absent"
+  register: vspan_session_delete_result
+- name: ensure session was deleted
+  assert:
+    that:
+        - vspan_session_delete_result.changed

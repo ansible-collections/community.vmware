@@ -141,9 +141,9 @@ def main():
     )
 
     if module.params.get('host'):
-        module.deprecate("The 'host' option is being replaced by 'hostname'", version='2.0.0', collection_name='community.vmware')
+        module.deprecate("The 'host' option is being replaced by 'hostname'", version='3.0.0', collection_name='community.vmware')
     if module.params.get('login'):
-        module.deprecate("The 'login' option is being replaced by 'username'", version='2.0.0', collection_name='community.vmware')
+        module.deprecate("The 'login' option is being replaced by 'username'", version='3.0.0', collection_name='community.vmware')
 
     hostname = module.params['hostname']
     username = module.params['username']

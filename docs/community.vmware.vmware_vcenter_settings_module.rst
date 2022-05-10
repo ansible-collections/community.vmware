@@ -897,6 +897,7 @@ Notes
 
 .. note::
    - Tested with vCenter Server Appliance (vCSA) 6.5 and 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

@@ -2,7 +2,7 @@
 # Copyright: (c) 2018, Christian Kotte <christian.kotte@gmx.de>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
+- name: Run tests and clean up
   block:
     - import_role:
         name: prepare_vmware_tests
@@ -18,7 +18,6 @@
         policy: balanced
         validate_certs: false
 
-    # The following test cases aren't supported by vcsim
     - name: Set the Power Management Policy for esxi1
       vmware_host_powermgmt_policy:
         hostname: "{{ vcenter_hostname }}"

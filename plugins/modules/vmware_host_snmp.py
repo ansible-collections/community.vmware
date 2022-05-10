@@ -73,6 +73,16 @@ options:
     type: str
     choices: [ debug, info, warning, error ]
     default: info
+  sys_contact:
+    description:
+        - System contact who manages the system.
+    type: str
+    version_added: '1.17.0'
+  sys_location:
+    description:
+        - System location.
+    type: str
+    version_added: '1.17.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -104,6 +114,16 @@ EXAMPLES = r'''
     trap_filter:
       - 1.3.6.1.4.1.6876.4.1.1.0
       - 1.3.6.1.4.1.6876.4.1.1.1
+    state: enabled
+  delegate_to: localhost
+
+- name: Enable and configure SNMP system contact and location
+  community.vmware.vmware_host_snmp:
+    hostname: '{{ esxi_hostname }}'
+    username: '{{ esxi_username }}'
+    password: '{{ esxi_password }}'
+    sys_contact: "admin@testemail.com"
+    sys_location: "Austin, USA"
     state: enabled
   delegate_to: localhost
 
@@ -171,6 +191,8 @@ class VmwareHostSnmp(PyVmomi):
         log_level = self.params.get("log_level")
         send_trap = self.params.get("send_trap")
         trap_filter = self.params.get("trap_filter")
+        sys_contact = self.params.get("sys_contact")
+        sys_location = self.params.get("sys_location")
         event_filter = None
         if trap_filter:
             event_filter = ';'.join(trap_filter)
@@ -207,6 +229,10 @@ class VmwareHostSnmp(PyVmomi):
                     results['log_level_previous'] = option.value
                 if option.key == 'EventFilter' and option.value != hw_source:
                     results['trap_filter_previous'] = option.value.split(';')
+                if option.key == 'syscontact' and option.value != hw_source:
+                    results['syscontact_previous'] = option.value
+                if option.key == 'syslocation' and option.value != hw_source:
+                    results['syslocation_previous'] = option.value
             # Build factory default config
             destination = vim.host.SnmpSystem.SnmpConfigSpec.Destination()
             destination.hostName = ""
@@ -315,6 +341,8 @@ class VmwareHostSnmp(PyVmomi):
             results['log_level'] = log_level
             results['trap_filter'] = trap_filter
             event_filter_found = False
+            sys_contact_found = False
+            sys_location_found = False
             if snmp_config_spec.option:
                 for option in snmp_config_spec.option:
                     if option.key == 'EnvEventSource' and option.value != hw_source:
@@ -334,6 +362,20 @@ class VmwareHostSnmp(PyVmomi):
                             changed_list.append("trap filter")
                             results['trap_filter_previous'] = option.value.split(';')
                             option.value = event_filter
+                    if option.key == 'syscontact':
+                        sys_contact_found = True
+                        if sys_contact is not None and option.value != sys_contact:
+                            changed = True
+                            changed_list.append("sys contact")
+                            results['sys_contact_previous'] = option.value
+                            option.value = sys_contact
+                    if option.key == 'syslocation':
+                        sys_location_found = True
+                        if sys_location is not None and option.value != sys_location:
+                            changed = True
+                            changed_list.append("sys location")
+                            results['sys_location_previous'] = option.value
+                            option.value = sys_location
             if trap_filter and not event_filter_found:
                 changed = True
                 changed_list.append("trap filter")
@@ -351,7 +393,16 @@ class VmwareHostSnmp(PyVmomi):
                 # Doesn't work. Need to reset config instead
                 # snmp_config_spec.option = options
                 reset_hint = True
-
+            if sys_contact and not sys_contact_found:
+                changed = True
+                changed_list.append("sys contact")
+                results['sys_contact_previous'] = ''
+                snmp_config_spec.option.append(self.create_option('syscontact', sys_contact))
+            if sys_location and not sys_location_found:
+                changed = True
+                changed_list.append("sys location")
+                results['sys_location_previous'] = ''
+                snmp_config_spec.option.append(self.create_option('syslocation', sys_location))
         if changed:
             if snmp_state == 'reset':
                 if self.module.check_mode:
@@ -472,6 +523,8 @@ def main():
         hw_source=dict(type='str', default='indications', choices=['indications', 'sensors']),
         log_level=dict(type='str', default='info', choices=['debug', 'info', 'warning', 'error']),
         send_trap=dict(type='bool', default=False),
+        sys_contact=dict(type='str'),
+        sys_location=dict(type='str')
     )
 
     module = AnsibleModule(

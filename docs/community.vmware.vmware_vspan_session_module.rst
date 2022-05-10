@@ -568,6 +568,7 @@ Notes
 
 .. note::
    - Tested on vSphere 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
@@ -606,7 +607,7 @@ Examples
         session_type: "remoteMirrorDest"
       delegate_to: localhost
 
-    - name: Create remote destination mirroring session.
+    - name: Delete remote destination mirroring session.
       community.vmware.vmware_vspan_session:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'

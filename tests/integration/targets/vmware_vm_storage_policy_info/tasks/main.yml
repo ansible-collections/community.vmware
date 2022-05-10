@@ -2,24 +2,22 @@
 # Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
-  block:
-  - &spbm_data
-    name: Get information about vSphere SPBM info
-    vmware_vm_storage_policy_info:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-    register: spbm_data
+- &spbm_data
+  name: Get information about vSphere SPBM info
+  vmware_vm_storage_policy_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+  register: spbm_data
 
-  - &spbm_check
-    assert:
-      that:
-        - spbm_data.spbm_profiles is defined
+- &spbm_check
+  assert:
+    that:
+      - spbm_data.spbm_profiles is defined
 
-  - <<: *spbm_data
-    name: Get information about vSphere SPBM info in check mode
-    check_mode: true
+- <<: *spbm_data
+  name: Get information about vSphere SPBM info in check mode
+  check_mode: true
 
-  - <<: *spbm_check
+- <<: *spbm_check

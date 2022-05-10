@@ -314,6 +314,33 @@ options:
             - C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
               with multiple types of disk controllers and disks.
             - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
+  nvdimm:
+    description:
+    - Add or remove a virtual NVDIMM device to the virtual machine.
+    - VM virtual hardware version must be 14 or higher on vSphere 6.7 or later.
+    - Verify that guest OS of the virtual machine supports PMem before adding virtual NVDIMM device.
+    - Verify that you have the I(Datastore.Allocate) space privilege on the virtual machine.
+    - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
+    - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
+    type: dict
+    version_added: '1.13.0'
+    suboptions:
+        state:
+             type: str
+             description:
+             - Valid value is C(present) or C(absent).
+             - If set to C(absent), then the NVDIMM device with specified C(label) will be removed.
+             choices: ['present', 'absent']
+        size_mb:
+            type: int
+            description: Virtual NVDIMM device size in MB.
+            default: 1024
+        label:
+             type: str
+             description:
+             - The label of the virtual NVDIMM device to be removed or configured, e.g., "NVDIMM 1".
+             - 'This parameter is required when C(state) is set to C(absent), or C(present) to reconfigure NVDIMM device
+               size. When add a new device, please do not set C(label).'
   cdrom:
     description:
     - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
@@ -363,6 +390,7 @@ options:
     - Use the given resource pool for virtual machine operation.
     - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
+    - When not specified I(Resources) is taken as default value.
     type: str
   wait_for_ip_address:
     description:
@@ -450,7 +478,7 @@ options:
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
-    version_added: '1.7.0'
+    version_added: '1.8.0'
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
@@ -653,6 +681,7 @@ options:
             type: str
             description:
             - Local administrator password.
+            - If not defined, the password will be set to blank (that is, no password).
             - Specific to Windows customization.
         productid:
             type: str
@@ -967,6 +996,29 @@ EXAMPLES = r'''
       device_type: vmxnet3
   delegate_to: localhost
   register: deploy_vm
+
+- name: Create a VM with NVDIMM device
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: /DC1/vm/
+    name: test_vm_nvdimm
+    state: poweredoff
+    guest_id: centos7_64Guest
+    datastore: datastore1
+    hardware:
+      memory_mb: 512
+      num_cpus: 4
+      version: 14
+    networks:
+    - name: VM Network
+      device_type: vmxnet3
+    nvdimm:
+      state: present
+      size_mb: 2048
+  delegate_to: localhost
+  register: deploy_vm
 '''
 
 RETURN = r'''
@@ -988,7 +1040,6 @@ try:
 except ImportError:
     pass
 
-from random import randint
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.network import is_mac
 from ansible.module_utils._text import to_text, to_native
@@ -1006,287 +1057,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_vm_ip,
     quote_obj_name,
 )
-
-
-class PyVmomiDeviceHelper(object):
-    """ This class is a helper to create easily VMware Objects for PyVmomiHelper """
-
-    def __init__(self, module):
-        self.module = module
-        # This is not used for the multiple controller with multiple disks scenario,
-        # disk unit number can not be None
-        # self.next_disk_unit_number = 0
-        self.scsi_device_type = {
-            'lsilogic': vim.vm.device.VirtualLsiLogicController,
-            'paravirtual': vim.vm.device.ParaVirtualSCSIController,
-            'buslogic': vim.vm.device.VirtualBusLogicController,
-            'lsilogicsas': vim.vm.device.VirtualLsiLogicSASController,
-        }
-
-    def create_scsi_controller(self, scsi_type, bus_number):
-        scsi_ctl = vim.vm.device.VirtualDeviceSpec()
-        scsi_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        scsi_device = self.scsi_device_type.get(scsi_type, vim.vm.device.ParaVirtualSCSIController)
-        scsi_ctl.device = scsi_device()
-        scsi_ctl.device.busNumber = bus_number
-        # While creating a new SCSI controller, temporary key value
-        # should be unique negative integers
-        scsi_ctl.device.key = -randint(1000, 9999)
-        scsi_ctl.device.hotAddRemove = True
-        scsi_ctl.device.sharedBus = 'noSharing'
-        scsi_ctl.device.scsiCtlrUnitNumber = 7
-
-        return scsi_ctl
-
-    def is_scsi_controller(self, device):
-        return isinstance(device, tuple(self.scsi_device_type.values()))
-
-    @staticmethod
-    def create_sata_controller(bus_number):
-        sata_ctl = vim.vm.device.VirtualDeviceSpec()
-        sata_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        sata_ctl.device = vim.vm.device.VirtualAHCIController()
-        sata_ctl.device.busNumber = bus_number
-        sata_ctl.device.key = -randint(15000, 19999)
-
-        return sata_ctl
-
-    @staticmethod
-    def is_sata_controller(device):
-        return isinstance(device, vim.vm.device.VirtualAHCIController)
-
-    @staticmethod
-    def create_nvme_controller(bus_number):
-        nvme_ctl = vim.vm.device.VirtualDeviceSpec()
-        nvme_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        nvme_ctl.device = vim.vm.device.VirtualNVMEController()
-        nvme_ctl.device.deviceInfo = vim.Description()
-        nvme_ctl.device.key = -randint(31000, 39999)
-        nvme_ctl.device.busNumber = bus_number
-
-        return nvme_ctl
-
-    @staticmethod
-    def is_nvme_controller(device):
-        return isinstance(device, vim.vm.device.VirtualNVMEController)
-
-    def create_disk_controller(self, ctl_type, ctl_number):
-        disk_ctl = None
-        if ctl_type in ['buslogic', 'paravirtual', 'lsilogic', 'lsilogicsas']:
-            disk_ctl = self.create_scsi_controller(ctl_type, ctl_number)
-        if ctl_type == 'sata':
-            disk_ctl = self.create_sata_controller(ctl_number)
-        if ctl_type == 'nvme':
-            disk_ctl = self.create_nvme_controller(ctl_number)
-
-        return disk_ctl
-
-    def get_controller_disks(self, vm_obj, ctl_type, ctl_number):
-        disk_controller = None
-        disk_list = []
-        disk_key_list = []
-        if vm_obj is None:
-            return disk_controller, disk_list
-        disk_controller_type = self.scsi_device_type.copy()
-        disk_controller_type.update({'sata': vim.vm.device.VirtualAHCIController, 'nvme': vim.vm.device.VirtualNVMEController})
-        for device in vm_obj.config.hardware.device:
-            if isinstance(device, disk_controller_type[ctl_type]):
-                if device.busNumber == ctl_number:
-                    disk_controller = device
-                    disk_key_list = device.device
-                    break
-        if len(disk_key_list) != 0:
-            for device in vm_obj.config.hardware.device:
-                if isinstance(device, vim.vm.device.VirtualDisk):
-                    if device.key in disk_key_list:
-                        disk_list.append(device)
-
-        return disk_controller, disk_list
-
-    @staticmethod
-    def create_ide_controller(bus_number=0):
-        ide_ctl = vim.vm.device.VirtualDeviceSpec()
-        ide_ctl.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        ide_ctl.device = vim.vm.device.VirtualIDEController()
-        ide_ctl.device.deviceInfo = vim.Description()
-        # While creating a new IDE controller, temporary key value
-        # should be unique negative integers
-        ide_ctl.device.key = -randint(200, 299)
-        ide_ctl.device.busNumber = bus_number
-
-        return ide_ctl
-
-    @staticmethod
-    def create_cdrom(ctl_device, cdrom_type, iso_path=None, unit_number=0):
-        cdrom_spec = vim.vm.device.VirtualDeviceSpec()
-        cdrom_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        cdrom_spec.device = vim.vm.device.VirtualCdrom()
-        cdrom_spec.device.controllerKey = ctl_device.key
-        if isinstance(ctl_device, vim.vm.device.VirtualIDEController):
-            cdrom_spec.device.key = -randint(3000, 3999)
-        elif isinstance(ctl_device, vim.vm.device.VirtualAHCIController):
-            cdrom_spec.device.key = -randint(16000, 16999)
-        cdrom_spec.device.unitNumber = unit_number
-        cdrom_spec.device.connectable = vim.vm.device.VirtualDevice.ConnectInfo()
-        cdrom_spec.device.connectable.allowGuestControl = True
-        cdrom_spec.device.connectable.startConnected = (cdrom_type != "none")
-        if cdrom_type in ["none", "client"]:
-            cdrom_spec.device.backing = vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo()
-        elif cdrom_type == "iso":
-            cdrom_spec.device.backing = vim.vm.device.VirtualCdrom.IsoBackingInfo(fileName=iso_path)
-            cdrom_spec.device.connectable.connected = True
-
-        return cdrom_spec
-
-    @staticmethod
-    def is_equal_cdrom(vm_obj, cdrom_device, cdrom_type, iso_path):
-        if cdrom_type == "none":
-            return (
-                isinstance(
-                    cdrom_device.backing,
-                    vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo,
-                )
-                and cdrom_device.connectable.allowGuestControl
-                and not cdrom_device.connectable.startConnected
-                and (
-                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
-                    or not cdrom_device.connectable.connected
-                )
-            )
-        elif cdrom_type == "client":
-            return (
-                isinstance(
-                    cdrom_device.backing,
-                    vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo,
-                )
-                and cdrom_device.connectable.allowGuestControl
-                and cdrom_device.connectable.startConnected
-                and (
-                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
-                    or cdrom_device.connectable.connected
-                )
-            )
-        elif cdrom_type == "iso":
-            return (
-                isinstance(
-                    cdrom_device.backing, vim.vm.device.VirtualCdrom.IsoBackingInfo
-                )
-                and cdrom_device.backing.fileName == iso_path
-                and cdrom_device.connectable.allowGuestControl
-                and cdrom_device.connectable.startConnected
-                and (
-                    vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOn
-                    or cdrom_device.connectable.connected
-                )
-            )
-
-    @staticmethod
-    def update_cdrom_config(vm_obj, cdrom_spec, cdrom_device, iso_path=None):
-        # Updating an existing CD-ROM
-        if cdrom_spec["type"] in ["client", "none"]:
-            cdrom_device.backing = vim.vm.device.VirtualCdrom.RemotePassthroughBackingInfo()
-        elif cdrom_spec["type"] == "iso" and iso_path is not None:
-            cdrom_device.backing = vim.vm.device.VirtualCdrom.IsoBackingInfo(fileName=iso_path)
-        cdrom_device.connectable = vim.vm.device.VirtualDevice.ConnectInfo()
-        cdrom_device.connectable.allowGuestControl = True
-        cdrom_device.connectable.startConnected = (cdrom_spec["type"] != "none")
-        if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-            cdrom_device.connectable.connected = (cdrom_spec["type"] != "none")
-
-    def remove_cdrom(self, cdrom_device):
-        cdrom_spec = vim.vm.device.VirtualDeviceSpec()
-        cdrom_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.remove
-        cdrom_spec.device = cdrom_device
-
-        return cdrom_spec
-
-    def create_hard_disk(self, disk_ctl, disk_index=None):
-        diskspec = vim.vm.device.VirtualDeviceSpec()
-        diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-        diskspec.device = vim.vm.device.VirtualDisk()
-        diskspec.device.key = -randint(20000, 24999)
-        diskspec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
-        diskspec.device.controllerKey = disk_ctl.device.key
-
-        if self.is_scsi_controller(disk_ctl.device):
-            # one scsi controller attach 0-15 (except 7) disks
-            if disk_index is None:
-                self.module.fail_json(msg='unitNumber for sata disk is None.')
-            else:
-                if disk_index == 7 or disk_index > 15:
-                    self.module.fail_json(msg='Invalid scsi disk unitNumber, valid 0-15(except 7).')
-                else:
-                    diskspec.device.unitNumber = disk_index
-        elif self.is_sata_controller(disk_ctl.device):
-            # one sata controller attach 0-29 disks
-            if disk_index is None:
-                self.module.fail_json(msg='unitNumber for sata disk is None.')
-            else:
-                if disk_index > 29:
-                    self.module.fail_json(msg='Invalid sata disk unitNumber, valid 0-29.')
-                else:
-                    diskspec.device.unitNumber = disk_index
-        elif self.is_nvme_controller(disk_ctl.device):
-            # one nvme controller attach 0-14 disks
-            if disk_index is None:
-                self.module.fail_json(msg='unitNumber for nvme disk is None.')
-            else:
-                if disk_index > 14:
-                    self.module.fail_json(msg='Invalid nvme disk unitNumber, valid 0-14.')
-                else:
-                    diskspec.device.unitNumber = disk_index
-
-        return diskspec
-
-    def get_device(self, device_type, name):
-        nic_dict = dict(pcnet32=vim.vm.device.VirtualPCNet32(),
-                        vmxnet2=vim.vm.device.VirtualVmxnet2(),
-                        vmxnet3=vim.vm.device.VirtualVmxnet3(),
-                        e1000=vim.vm.device.VirtualE1000(),
-                        e1000e=vim.vm.device.VirtualE1000e(),
-                        sriov=vim.vm.device.VirtualSriovEthernetCard(),
-                        )
-        if device_type in nic_dict:
-            return nic_dict[device_type]
-        else:
-            self.module.fail_json(msg='Invalid device_type "%s"'
-                                      ' for network "%s"' % (device_type, name))
-
-    def create_nic(self, device_type, device_label, device_infos):
-        nic = vim.vm.device.VirtualDeviceSpec()
-        nic.device = self.get_device(device_type, device_infos['name'])
-        nic.device.key = -randint(25000, 29999)
-        nic.device.wakeOnLanEnabled = bool(device_infos.get('wake_on_lan', True))
-        nic.device.deviceInfo = vim.Description()
-        nic.device.deviceInfo.label = device_label
-        nic.device.deviceInfo.summary = device_infos['name']
-        nic.device.connectable = vim.vm.device.VirtualDevice.ConnectInfo()
-        nic.device.connectable.startConnected = bool(device_infos.get('start_connected', True))
-        nic.device.connectable.allowGuestControl = bool(device_infos.get('allow_guest_control', True))
-        nic.device.connectable.connected = bool(device_infos.get('connected', True))
-        if 'mac' in device_infos and is_mac(device_infos['mac']):
-            nic.device.addressType = 'manual'
-            nic.device.macAddress = device_infos['mac']
-        else:
-            nic.device.addressType = 'generated'
-
-        return nic
-
-    def integer_value(self, input_value, name):
-        """
-        Function to return int value for given input, else return error
-        Args:
-            input_value: Input value to retrieve int value from
-            name:  Name of the Input value (used to build error message)
-        Returns: (int) if integer value can be obtained, otherwise will send a error message.
-        """
-        if isinstance(input_value, int):
-            return input_value
-        elif isinstance(input_value, str) and input_value.isdigit():
-            return int(input_value)
-        else:
-            self.module.fail_json(msg='"%s" attribute should be an'
-                                  ' integer value.' % name)
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
+from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
 
 class PyVmomiCache(object):
@@ -1852,17 +1624,93 @@ class PyVmomiHelper(PyVmomi):
     def get_vm_sata_devices(self, vm=None):
         return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualAHCIController)
 
+    def get_vm_nvdimm_ctl_device(self, vm=None):
+        return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualNVDIMMController)
+
+    def get_vm_nvdimm_devices(self, vm=None):
+        return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualNVDIMM)
+
+    def configure_nvdimm(self, vm_obj):
+        """
+        Manage virtual NVDIMM device to the virtual machine
+        Args:
+            vm_obj: virtual machine object
+        """
+        if self.params['nvdimm']['state']:
+            # Label is required when remove device
+            if self.params['nvdimm']['state'] == 'absent' and not self.params['nvdimm']['label']:
+                self.module.fail_json(msg="Please specify the label of virtual NVDIMM device using 'label' parameter"
+                                          " when state is set to 'absent'.")
+            # Reconfigure device requires VM in power off state
+            if vm_obj and not vm_obj.config.template:
+                if vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+                    self.module.fail_json(msg="VM is not in power off state, can not do virtual NVDIMM configuration.")
+
+            nvdimm_ctl_exists = False
+            if vm_obj and not vm_obj.config.template:
+                # Get existing NVDIMM controller
+                nvdimm_ctl = self.get_vm_nvdimm_ctl_device(vm=vm_obj)
+                if len(nvdimm_ctl) != 0:
+                    nvdimm_ctl_exists = True
+                    nvdimm_ctl_key = nvdimm_ctl[0].key
+                    if self.params['nvdimm']['label'] is not None:
+                        nvdimm_devices = self.get_vm_nvdimm_devices(vm=vm_obj)
+                        if len(nvdimm_devices) != 0:
+                            existing_nvdimm_dev = self.device_helper.find_nvdimm_by_label(
+                                nvdimm_label=self.params['nvdimm']['label'],
+                                nvdimm_devices=nvdimm_devices
+                            )
+                            if existing_nvdimm_dev is not None:
+                                if self.params['nvdimm']['state'] == 'absent':
+                                    nvdimm_remove_spec = self.device_helper.remove_nvdimm(
+                                        nvdimm_device=existing_nvdimm_dev
+                                    )
+                                    self.change_detected = True
+                                    self.configspec.deviceChange.append(nvdimm_remove_spec)
+                                else:
+                                    if existing_nvdimm_dev.capacityInMB < self.params['nvdimm']['size_mb']:
+                                        nvdimm_config_spec = self.device_helper.update_nvdimm_config(
+                                            nvdimm_device=existing_nvdimm_dev,
+                                            nvdimm_size=self.params['nvdimm']['size_mb']
+                                        )
+                                        self.change_detected = True
+                                        self.configspec.deviceChange.append(nvdimm_config_spec)
+                                    elif existing_nvdimm_dev.capacityInMB > self.params['nvdimm']['size_mb']:
+                                        self.module.fail_json(msg="Can not change NVDIMM device size to %s MB, which is"
+                                                                  " smaller than the current size %s MB."
+                                                                  % (self.params['nvdimm']['size_mb'],
+                                                                     existing_nvdimm_dev.capacityInMB))
+            # New VM or existing VM without label specified, add new NVDIMM device
+            if vm_obj is None or (vm_obj and not vm_obj.config.template and self.params['nvdimm']['label'] is None):
+                if self.params['nvdimm']['state'] == 'present':
+                    # Get host default PMem storage policy
+                    storage_profile_name = "Host-local PMem Default Storage Policy"
+                    spbm = SPBM(self.module)
+                    pmem_profile = spbm.find_storage_profile_by_name(profile_name=storage_profile_name)
+                    if pmem_profile is None:
+                        self.module.fail_json(msg="Can not find PMem storage policy with name '%s'." % storage_profile_name)
+                    if not nvdimm_ctl_exists:
+                        nvdimm_ctl_spec = self.device_helper.create_nvdimm_controller()
+                        self.configspec.deviceChange.append(nvdimm_ctl_spec)
+                        nvdimm_ctl_key = nvdimm_ctl_spec.device.key
+
+                    nvdimm_dev_spec = self.device_helper.create_nvdimm_device(
+                        nvdimm_ctl_dev_key=nvdimm_ctl_key,
+                        pmem_profile_id=pmem_profile.profileId.uniqueId,
+                        nvdimm_dev_size_mb=self.params['nvdimm']['size_mb']
+                    )
+                    self.change_detected = True
+                    self.configspec.deviceChange.append(nvdimm_dev_spec)
+
     def get_vm_network_interfaces(self, vm=None):
         device_list = []
         if vm is None:
             return device_list
 
-        nw_device_types = (vim.vm.device.VirtualPCNet32, vim.vm.device.VirtualVmxnet2,
-                           vim.vm.device.VirtualVmxnet3, vim.vm.device.VirtualE1000,
-                           vim.vm.device.VirtualE1000e, vim.vm.device.VirtualSriovEthernetCard)
         for device in vm.config.hardware.device:
-            if isinstance(device, nw_device_types):
-                device_list.append(device)
+            for device_type in self.device_helper.nic_device_type.values():
+                if isinstance(device, device_type):
+                    device_list.append(device)
 
         return device_list
 
@@ -1926,12 +1774,10 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="'ip' is required if 'netmask' is"
                                               " specified under VM network list.")
 
-            validate_device_types = ['pcnet32', 'vmxnet2', 'vmxnet3', 'e1000', 'e1000e', 'sriov']
-            if 'device_type' in network and network['device_type'] not in validate_device_types:
-                self.module.fail_json(msg="Device type specified '%s' is not valid."
-                                          " Please specify correct device"
-                                          " type from ['%s']." % (network['device_type'],
-                                                                  "', '".join(validate_device_types)))
+            if 'device_type' in network and network['device_type'] not in self.device_helper.nic_device_type.keys():
+                self.module.fail_json(msg="Device type specified '%s' is not valid. Please specify correct device type"
+                                          " from ['%s']." % (network['device_type'],
+                                                             "', '".join(self.device_helper.nic_device_type.keys())))
 
             if 'mac' in network and not is_mac(network['mac']):
                 self.module.fail_json(msg="Device MAC address '%s' is invalid."
@@ -1986,11 +1832,11 @@ class PyVmomiHelper(PyVmomi):
                     nic.device.deviceInfo.summary = network_name
                     nic_change_detected = True
                 if 'device_type' in network_devices[key]:
-                    device = self.device_helper.get_device(network_devices[key]['device_type'], network_name)
-                    device_class = type(device)
-                    if not isinstance(nic.device, device_class):
-                        self.module.fail_json(msg="Changing the device type is not possible when interface is already present. "
-                                                  "The failing device type is %s" % network_devices[key]['device_type'])
+                    device = self.device_helper.nic_device_type.get(network_devices[key]['device_type'])
+                    if not isinstance(nic.device, device):
+                        self.module.fail_json(msg="Changing the device type is not possible when interface is already"
+                                                  " present. The failing device type is %s"
+                                                  % network_devices[key]['device_type'])
                 # Changing mac address has no effect when editing interface
                 if 'mac' in network_devices[key] and nic.device.macAddress != current_net_devices[key].macAddress:
                     self.module.fail_json(msg="Changing MAC address has not effect when interface is already present. "
@@ -2113,8 +1959,7 @@ class PyVmomiHelper(PyVmomi):
 
         if vm_obj:
             # VM exists
-            # This is primarily for vcsim/integration tests, unset vAppConfig was not seen on my deployments
-            orig_spec = vm_obj.config.vAppConfig if vm_obj.config.vAppConfig else new_vmconfig_spec
+            orig_spec = vm_obj.config.vAppConfig
 
             vapp_properties_current = dict((x.id, x) for x in orig_spec.property)
             vapp_properties_to_change = dict((x['id'], x) for x in self.params['vapp_properties'])
@@ -2370,7 +2215,9 @@ class PyVmomiHelper(PyVmomi):
 
             ident.identification = vim.vm.customization.Identification()
 
-            if self.params['customization'].get('password', '') != '':
+            if self.params['customization']['password'] is None or self.params['customization']['password'] == '':
+                ident.guiUnattended.password = None
+            else:
                 ident.guiUnattended.password = vim.vm.customization.Password()
                 ident.guiUnattended.password.value = str(self.params['customization']['password'])
                 ident.guiUnattended.password.plainText = True
@@ -3022,6 +2869,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_disks(vm_obj=vm_obj)
         self.configure_network(vm_obj=vm_obj)
         self.configure_cdrom(vm_obj=vm_obj)
+        self.configure_nvdimm(vm_obj=vm_obj)
 
         # Find if we need network customizations (find keys in dictionary that requires customizations)
         network_changes = False
@@ -3172,7 +3020,9 @@ class PyVmomiHelper(PyVmomi):
                     is_customization_ok = self.wait_for_customization(vm=vm, timeout=self.params['wait_for_customization_timeout'])
                     if not is_customization_ok:
                         vm_facts = self.gather_facts(vm)
-                        return {'changed': self.change_applied, 'failed': True, 'instance': vm_facts, 'op': 'customization'}
+                        return {'changed': self.change_applied, 'failed': True,
+                                'msg': 'Customization failed. For detailed information see warnings',
+                                'instance': vm_facts, 'op': 'customization'}
 
             vm_facts = self.gather_facts(vm)
             return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
@@ -3198,6 +3048,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
+        self.configure_nvdimm(vm_obj=self.current_vm_obj)
         self.customize_advanced_settings(vm_obj=self.current_vm_obj, config_spec=self.configspec)
         self.customize_customvalues(vm_obj=self.current_vm_obj)
         self.configure_resource_alloc_info(vm_obj=self.current_vm_obj)
@@ -3327,7 +3178,8 @@ class PyVmomiHelper(PyVmomi):
             is_customization_ok = self.wait_for_customization(vm=self.current_vm_obj, timeout=self.params['wait_for_customization_timeout'])
             if not is_customization_ok:
                 return {'changed': self.change_applied, 'failed': True,
-                        'msg': 'Wait for customization failed due to timeout', 'op': 'wait_for_customize_exist'}
+                        'msg': 'Customization failed. For detailed information see warnings',
+                        'op': 'wait_for_customize_exist'}
 
         return {'changed': self.change_applied, 'failed': False}
 
@@ -3426,6 +3278,15 @@ def main():
                 unit_number=dict(type='int'),
             )
         ),
+        nvdimm=dict(
+            type='dict',
+            default={},
+            options=dict(
+                state=dict(type='str', choices=['present', 'absent']),
+                label=dict(type='str'),
+                size_mb=dict(type='int', default=1024),
+            )
+        ),
         cdrom=dict(type='raw', default=[]),
         hardware=dict(
             type='dict',
@@ -3503,27 +3364,19 @@ def main():
                                ['name', 'uuid'],
                            ],
                            )
-
     result = {'failed': False, 'changed': False}
-
     pyv = PyVmomiHelper(module)
 
     # Check requirements for virtualization based security
     if pyv.params['hardware']['virt_based_security']:
         if not pyv.params['hardware']['nested_virt']:
-            pyv.module.warn("Virtualization based security requires nested virtualization. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['nested_virt'] = True
+            pyv.module.fail("Virtualization based security requires nested virtualization. Please enable nested_virt.")
 
         if not pyv.params['hardware']['secure_boot']:
-            pyv.module.warn("Virtualization based security requires (U)EFI secure boot. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling this explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['secure_boot'] = True
+            pyv.module.fail("Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
 
         if not pyv.params['hardware']['iommu']:
-            pyv.module.warn("Virtualization based security requires I/O MMU. At the moment, this modules enables this implicitly. "
-                            "Please consider enabling iommu explicitly because this behavior might change in the future.")
-            pyv.params['hardware']['iommu'] = True
+            pyv.module.fail("Virtualization based security requires I/O MMU. Please enable iommu.")
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()

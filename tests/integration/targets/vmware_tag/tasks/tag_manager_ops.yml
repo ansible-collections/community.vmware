@@ -3,90 +3,88 @@
 # Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
-  block:
-    - name: Get VM Facts
-      vmware_vm_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-      register: vm_info
+- name: Get VM Facts
+  vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  register: vm_info
 
-    - set_fact: vm_name="{{ vm_info['virtual_machines'][0]['guest_name'] }}"
+- set_fact: vm_name="{{ vm_info['virtual_machines'][0]['guest_name'] }}"
 
-    # Get Tagname
-    - &tag_info
-      name: Get info about tag
-      vmware_tag_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-      register: tag_info
+# Get Tagname
+- &tag_info
+  name: Get info about tag
+  vmware_tag_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+  register: tag_info
 
-    - <<: *tag_info
-      name: Get info about tag in check mode
-      check_mode: true
+- <<: *tag_info
+  name: Get info about tag in check mode
+  check_mode: true
 
-    - set_fact: Tag_Name={{ tag_info['tag_facts'].keys() | list }}
+- set_fact: Tag_Name={{ tag_info['tag_facts'].keys() | list }}
 
-    - debug: var=Tag_Name
+- debug: var=Tag_Name
 
-    # Testcase Assign tag to virtual Machine
-    - &tag_assign
-      name: Add tags to a virtual machine
-      vmware_tag_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        tag_names:
-          - "{{ Tag_Name[0] }}"
-        object_name: "{{ vm_name }}"
-        object_type: VirtualMachine
-        state: add
-      register: tag_manager_ops
+# Testcase Assign tag to virtual Machine
+- &tag_assign
+  name: Add tags to a virtual machine
+  vmware_tag_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    tag_names:
+      - "{{ Tag_Name[0] }}"
+    object_name: "{{ vm_name }}"
+    object_type: VirtualMachine
+    state: add
+  register: tag_manager_ops
 
-    - name: Check tag is assign to virtual machine
-      assert:
-        that:
-          - tag_manager_ops.changed
+- name: Check tag is assign to virtual machine
+  assert:
+    that:
+      - tag_manager_ops.changed
 
-    - name: Get tags from a virtual machine
-      vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        name: "{{ vm_name }}"
-      register: r
+- name: Get tags from a virtual machine
+  vmware_guest_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    name: "{{ vm_name }}"
+  register: r
 
-    - name: Get detailed tags' information from a virtual machine
-      vmware_guest_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        name: "{{ vm_name }}"
-        tags: true
-        tag_details: true
-      register: tag_details
+- name: Get detailed tags' information from a virtual machine
+  vmware_guest_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    name: "{{ vm_name }}"
+    tags: true
+    tag_details: true
+  register: tag_details
 
-    - name: Check if tag information is available
-      assert:
-        that:
-          - not r.changed
-          - r['instance']['tags'] is defined
-          - "{{ Tag_Name[0] in r['instance']['tags'] }}"
-          - not tag_details.changed
-          - tag_details['instance']['tags'] is defined
-          - "{{ Tag_Name[0] == tag_details['instance']['tags'][0]['name'] }}"
+- name: Check if tag information is available
+  assert:
+    that:
+      - not r.changed
+      - r['instance']['tags'] is defined
+      - "{{ Tag_Name[0] in r['instance']['tags'] }}"
+      - not tag_details.changed
+      - tag_details['instance']['tags'] is defined
+      - "{{ Tag_Name[0] == tag_details['instance']['tags'][0]['name'] }}"
 
-    - <<: *tag_assign
-      name: Add tags to a virtual machine again
+- <<: *tag_assign
+  name: Add tags to a virtual machine again
 
-    - name: Check tag is not assigned to virtual machine again
-      assert:
-        that:
-          - not tag_manager_ops.changed
+- name: Check tag is not assigned to virtual machine again
+  assert:
+    that:
+      - not tag_manager_ops.changed

@@ -6,5 +6,5 @@
   tasks:
     - assert:
         that:
-            - "{{ groups['debian8_64Guest'] | length }} == 4"
-            - hostvars['DC0_H0_VM0'] is defined
+            - "{{ groups['debian8_64Guest'] | length }} == 1"
+            - hostvars['test_vm1'] is defined

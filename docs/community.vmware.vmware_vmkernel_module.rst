@@ -555,6 +555,7 @@ Notes
    - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with ``device`` specified.
    - You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
    - Tested on vSphere 5.5 and 6.5
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

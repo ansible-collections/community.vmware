@@ -45,19 +45,17 @@
       - "vapp_vm.failed == false"
       - "vapp_vm.changed == true"
 
-- when: vcsim is not defined
-  block:
-    - <<: *vapp_new_vm
-      name: Try to create same VM with same vAPP settings
-      register: vapp_vm_no_change
+- <<: *vapp_new_vm
+  name: Try to create same VM with same vAPP settings
+  register: vapp_vm_no_change
 
-    - debug: var=vapp_vm_no_change
+- debug: var=vapp_vm_no_change
 
-    - name: Assert that vApp properties were not changed
-      assert:
-        that:
-          - "vapp_vm_no_change.failed == false"
-          - "not vapp_vm_no_change.changed"
+- name: Assert that vApp properties were not changed
+  assert:
+    that:
+      - "vapp_vm_no_change.failed == false"
+      - "not vapp_vm_no_change.changed"
 
 - &vapp_edit_vm
   name: Edit one vApp property and removing another
@@ -85,16 +83,14 @@
       - "vapp_vm.failed == false"
       - "vapp_vm.changed == true"
 
-- when: vcsim is not defined
-  block:
-    - <<: *vapp_edit_vm
-      name: Try to edit VM with vApp settings
-      register: vapp_vm_no_change_edit
+- <<: *vapp_edit_vm
+  name: Try to edit VM with vApp settings
+  register: vapp_vm_no_change_edit
 
-    - debug: var=vapp_vm_no_change_edit
+- debug: var=vapp_vm_no_change_edit
 
-    - name: assert the VM was changed
-      assert:
-        that:
-          - "vapp_vm_no_change_edit.failed == false"
-          - "vapp_vm_no_change_edit.changed == false"
+- name: assert the VM was changed
+  assert:
+    that:
+      - "vapp_vm_no_change_edit.failed == false"
+      - "vapp_vm_no_change_edit.changed == false"

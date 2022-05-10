@@ -109,7 +109,7 @@ EXAMPLES = r'''
     destination_resourcepool: 'destination_resourcepool_as_per_vcenter'
   delegate_to: localhost
 
-- name: Perform storage vMotion of of virtual machine
+- name: Perform storage vMotion of virtual machine
   community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -202,11 +202,11 @@ class VmotionManager(PyVmomi):
         if dest_resourcepool:
             self.resourcepool_object = find_resource_pool_by_name(content=self.content,
                                                                   resource_pool_name=dest_resourcepool)
+            # Fail if resourcePool object is not found
+            if self.resourcepool_object is None:
+                self.module.fail_json(msg="Unable to find destination resource pool object for %s." % dest_resourcepool)
         elif not dest_resourcepool and dest_host_name:
             self.resourcepool_object = self.host_object.parent.resourcePool
-        # Fail if resourcePool object is not found
-        if self.resourcepool_object is None:
-            self.module.fail_json(msg="Unable to find destination resource pool object which is required")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.

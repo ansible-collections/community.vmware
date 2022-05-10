@@ -1,0 +1,6 @@
+- name: Install tox
+  ansible.builtin.pip:
+    name: tox
+
+- name: Refresh the README.md
+  ansible.builtin.shell: tox -e add_docs

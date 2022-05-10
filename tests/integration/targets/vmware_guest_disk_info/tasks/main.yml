@@ -7,7 +7,28 @@
   vars:
     setup_attach_host: true
     setup_datastore: true
-    setup_virtualmachines: true
+
+- name: Create VMs
+  vmware_guest:
+    datacenter: "{{ dc1 }}"
+    folder: '{{ f0 }}'
+    name: DC0_H0_VM0
+    state: poweredoff
+    guest_id: debian8_64Guest
+    disk:
+    - size_mb: 10
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    hardware:
+      memory_mb: 128
+      num_cpus: 1
+      scsi: paravirtual
+      version: 11
+    cdrom:
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    networks:
+    - name: VM Network
 
 - name: set state to poweron the first VM
   vmware_guest_powerstate:
@@ -15,7 +36,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    name: "{{ virtual_machines[0].name }}"
+    name: DC0_H0_VM0
     folder: '{{ f0 }}'
     state: powered-on
 
@@ -25,7 +46,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    name: "{{ virtual_machines[0].name }}"
+    name: DC0_H0_VM0
     datacenter: '{{ dc1 }}'
   register: disk_info
 

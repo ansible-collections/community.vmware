@@ -10,6 +10,7 @@ clean_up () {
 trap clean_up EXIT
 
 
+export LC_ALL=C
 for i in $(find tests/sanity -name 'ignore-*.txt'); do
     sort -u ${i} > ${tmp_file}
     diff -s ${i} ${tmp_file}

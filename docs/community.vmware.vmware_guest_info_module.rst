@@ -17,7 +17,6 @@ community.vmware.vmware_guest_info
 Synopsis
 --------
 - Gather information about a single VM on a VMware ESX cluster.
-- This module was called ``vmware_guest_facts`` before Ansible 2.9. The usage did not change.
 
 
 
@@ -397,6 +396,7 @@ Notes
 
 .. note::
    - Tested on vSphere 5.5, 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

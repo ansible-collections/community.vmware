@@ -15,7 +15,6 @@ module: vmware_guest_info
 short_description: Gather info about a single VM
 description:
     - Gather information about a single VM on a VMware ESX cluster.
-    - This module was called C(vmware_guest_facts) before Ansible 2.9. The usage did not change.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 notes:
@@ -278,12 +277,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec,
                            required_one_of=[['name', 'uuid', 'moid']],
                            supports_check_mode=True)
-    if module._name in ('vmware_guest_facts', 'community.vmware.vmware_guest_facts'):
-        module.deprecate(
-            msg="The 'vmware_guest_facts' module has been renamed to 'vmware_guest_info'",
-            version='3.0.0',
-            collection_name='community.vmware'
-        )
 
     if module.params.get('folder'):
         # FindByInventoryPath() does not require an absolute path
@@ -308,7 +301,7 @@ def main():
                 if not HAS_VSPHERE:
                     module.fail_json(msg="Unable to find 'vCloud Suite SDK' Python library which is required."
                                          " Please refer this URL for installation steps"
-                                         " - https://code.vmware.com/web/sdk/60/vcloudsuite-python")
+                                         " - https://code.vmware.com/web/sdk/vsphere-automation-python")
 
                 vm_rest_client = VmwareTag(module)
                 tags = []

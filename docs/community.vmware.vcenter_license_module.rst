@@ -160,7 +160,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">443</div>
@@ -179,7 +178,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9</div>
                 </td>
                 <td>
                 </td>
@@ -197,7 +195,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9</div>
                 </td>
                 <td>
                 </td>
@@ -277,6 +274,7 @@ Notes
    - The evaluation license (00000-00000-00000-00000-00000) is not listed when unused.
    - If ``esxi_hostname`` is specified, then will assign the ``license`` key to the ESXi host.
    - If ``esxi_hostname`` is not specified, then will just register the ``license`` key to vCenter inventory without assigning it to an ESXi host.
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

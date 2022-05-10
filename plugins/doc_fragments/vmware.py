@@ -12,6 +12,8 @@ __metaclass__ = type
 class ModuleDocFragment(object):
     # Parameters for VMware modules
     DOCUMENTATION = r'''
+notes:
+  - All modules requires API write access and hence is not supported on a free ESXi license.
 options:
     hostname:
       description:
@@ -66,6 +68,8 @@ options:
 
     # This doc fragment is specific to vcenter modules like vcenter_license
     VCENTER_DOCUMENTATION = r'''
+notes:
+  - All modules requires API write access and hence is not supported on a free ESXi license.
 options:
     hostname:
       description:
@@ -102,23 +106,17 @@ options:
       - Environment variable supported added in Ansible 2.6.
       type: int
       default: 443
-      version_added: '2.5'
-      version_added_collection: 'ansible.builtin'
     proxy_host:
       description:
       - Address of a proxy that will receive all HTTPS requests and relay them.
       - The format is a hostname or a IP.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_HOST) will be used instead.
       type: str
-      version_added: '2.9'
-      version_added_collection: 'ansible.builtin'
       required: False
     proxy_port:
       description:
       - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
       type: int
-      version_added: '2.9'
-      version_added_collection: 'ansible.builtin'
       required: False
     '''

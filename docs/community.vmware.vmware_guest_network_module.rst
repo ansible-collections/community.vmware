@@ -43,6 +43,27 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>allow_guest_os_mtu_change</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows the guest OS to change the MTU on a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>cluster</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -334,6 +355,28 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>allow_guest_os_mtu_change</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows the guest OS to change the MTU on a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>connected</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -454,6 +497,7 @@ Parameters
                         <div>Manual specified MAC address of the network adapter when creating, or reconfiguring.</div>
                         <div>If not specified when creating new network adapter, mac address will be generated automatically.</div>
                         <div>When reconfigure MAC address, VM should be in powered off state.</div>
+                        <div>There are restrictions on the MAC addresses you can set. Consult the documentation of your vSphere version as to allowed MAC addresses.</div>
                 </td>
             </tr>
             <tr>
@@ -471,6 +515,24 @@ Parameters
                 <td>
                         <div>Name of the portgroup or distributed virtual portgroup for this interface.</div>
                         <div>When specifying distributed virtual portgroup make sure given <code>esxi_hostname</code> or <code>cluster</code> is associated with it.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>physical_function_backing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
                 </td>
             </tr>
             <tr>
@@ -516,6 +578,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>virtual_function_backing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vlan</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -545,6 +625,23 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>physical_function_backing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
                 </td>
             </tr>
             <tr>
@@ -732,6 +829,23 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>virtual_function_backing</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.</div>
+                        <div>This option is only compatible for SR-IOV network adapters.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vlan_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -773,6 +887,7 @@ Notes
 .. note::
    - Tested on vSphere 6.0, 6.5 and 6.7
    - For backwards compatibility network_data is returned when using the gather_network_info and networks parameters
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 

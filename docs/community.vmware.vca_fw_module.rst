@@ -259,7 +259,6 @@ Examples
        - community.vmware.vca_fw:
            instance_id: 'b15ff1e5-1024-4f55-889f-ea0209726282'
            vdc_name: 'benz_ansible'
-           state: 'absent'
            fw_rules:
              - description: "ben testing"
                source_ip: "Any"
@@ -281,7 +280,7 @@ Status
 ------
 
 
-- This module will be removed in version . *[deprecated]*
+- This module will be removed in a release after 2022-06-01. *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 
