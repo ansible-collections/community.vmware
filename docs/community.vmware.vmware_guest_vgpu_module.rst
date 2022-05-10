@@ -379,13 +379,14 @@ Notes
 
 .. note::
    - Tested on vSphere 6.7
+   - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Add vGPU profile to VM
       community.vmware.vmware_guest_vgpu:
