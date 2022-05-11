@@ -360,14 +360,9 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>grid_m10-8q</li>
-                                    <li>grid_m60-4q</li>
-                                    <li>grid_m10-2a</li>
-                        </ul>
                 </td>
                 <td>
-                        <div>Required for any operation.</div>
+                        <div>A supported vGPU profile depending on the GPU model. Required for any operation.</div>
                 </td>
             </tr>
     </table>

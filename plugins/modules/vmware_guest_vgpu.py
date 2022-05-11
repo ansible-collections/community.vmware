@@ -72,8 +72,7 @@ options:
      type: str
    vgpu:
      description:
-       - Required for any operation.
-     choices: [ 'grid_m10-8q', 'grid_m60-4q', 'grid_m10-2a' ]
+       - A supported vGPU profile depending on the GPU model. Required for any operation.
      type: str
    force:
      description:
@@ -352,7 +351,7 @@ def main():
         datacenter=dict(type="str", default="ha-datacenter"),
         esxi_hostname=dict(type="str"),
         cluster=dict(type="str"),
-        vgpu=dict(type="str", choices=["grid_m10-8q", "grid_m60-4q", "grid_m10-2a"]),
+        vgpu=dict(type="str"),
         force=dict(type="bool", default=False),
         state=dict(type="str", default="present", choices=["absent", "present"]),
     )
