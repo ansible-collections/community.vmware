@@ -64,6 +64,7 @@ options:
       default: False
       type: bool
     show_allocated:
+      version_added: '2.5.0'
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: False
