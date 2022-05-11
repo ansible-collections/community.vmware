@@ -63,6 +63,12 @@ options:
         - Tags related to virtual machine are shown if set to C(True).
       default: False
       type: bool
+    show_allocated:
+      version_added: '2.5.0'
+      description:
+        - Allocated storage in byte and memory in MB are shown if it set to True.
+      default: False
+      type: bool
     vm_name:
       description:
         - Name of the virtual machine to get related configurations information from.
@@ -227,7 +233,12 @@ virtual_machines:
                 "name": "tag_0001"
             }
         ],
-        "moid": "vm-24"
+        "moid": "vm-24",
+        "allocated": {
+            "storage": 500000000,
+            "cpu": 2,
+            "memory": 16
+        },
     }
   ]
 '''
@@ -238,10 +249,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi, get_all_objs,
-    vmware_argument_spec, _get_vm_prop,
-    get_parent_datacenter, find_vm_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, \
+    get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -326,6 +335,17 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
+            allocated = {}
+            if self.module.params.get('show_allocated'):
+                storage_allocated = 0
+                for device in vm.config.hardware.device:
+                    if isinstance(device, vim.vm.device.VirtualDisk):
+                        storage_allocated += device.capacityInBytes
+                allocated = {
+                    "storage": storage_allocated,
+                    "cpu": vm.config.hardware.numCPU,
+                    "memory": vm.config.hardware.memoryMB}
+
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
@@ -349,6 +369,7 @@ class VmwareVmInfo(PyVmomi):
                 "folder": vm_folder,
                 "moid": vm._moId,
                 "datastore_url": datastore_url,
+                "allocated": allocated
             }
 
             vm_type = self.module.params.get('vm_type')
@@ -368,6 +389,7 @@ def main():
         vm_type=dict(type='str', choices=['vm', 'all', 'template'], default='all'),
         show_attribute=dict(type='bool', default='no'),
         show_tag=dict(type='bool', default=False),
+        show_allocated=dict(type='bool', default=False),
         folder=dict(type='str'),
         vm_name=dict(type='str')
     )
