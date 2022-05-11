@@ -23,9 +23,16 @@ version_added: '2.3.0'
 options:
   esxi_hostname:
     description:
-      - Name of the ESXi host that is managing the local user.
+    - Name of the host system to work with.
+    - This parameter is required if C(cluster_name) is not specified and you connect to a vCenter.
+    - Cannot be used when you connect directly to an ESXi host.
     type: str
-    required: true
+  cluster_name:
+    description:
+    - Name of the cluster from which all host systems will be used.
+    - This parameter is required if C(esxi_hostname) is not specified and you connect to a vCenter.
+    - Cannot be used when you connect directly to an ESXi host.
+    type: str
   user_name:
     description:
       - Name of the local user to grant/revoke permissions of.
@@ -45,8 +52,9 @@ options:
       - admin
       - no-access
       - read-only
+    aliases: [ access_mode ]
     required: False
-  lockdown:
+  lockdown_mode:
     description:
       - Lockdown mode to set.
       - C(disabled), C(normal) oder C(strict) are valid options.
@@ -55,6 +63,7 @@ options:
       - disabled
       - normal
       - strict
+    aliases: [ lockdown ]
     required: False
   lockdown_exceptions:
     description:
@@ -62,7 +71,6 @@ options:
     type: list
     elements: str
     required: False
-    type: dict
   state:
     description:
       - If set to C(present), grant permissions or add users to lockdown exceptions list.
@@ -173,9 +181,9 @@ class VmwareHostAccessManager(PyVmomi):
         self.lockdown_exceptions = module.params["lockdown_exceptions"]
         self.state = module.params["state"]
 
-        hosts = self.params['hosts']
+        esxi_hostname = self.params['esxi_hostname']
         cluster = self.params['cluster_name']
-        self.hosts = self.get_all_host_objs(cluster_name=cluster, esxi_host_name=hosts)
+        self.hosts = self.get_all_host_objs(cluster_name=cluster, esxi_host_name=esxi_hostname)
         if not self.hosts:
             self.module.fail_json(msg="Failed to find host system with given configuration.")
 
@@ -325,8 +333,8 @@ class VmwareHostAccessManager(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        hosts=dict(type='list', aliases=['esxi_hostname'], elements='str'),
-        cluster_name=dict(type='str', aliases=['cluster']),
+        cluster_name=dict(type='str', required=False),
+        esxi_hostname=dict(type='str', required=False),
         user_name=dict(type="str"),
         group_name=dict(type="str"),
         access=dict(type="str", aliases=["access_mode"], choices=["admin", "no-access", "read-only"]),
@@ -338,11 +346,11 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         required_one_of=[
-            ['user_name', 'group_name', 'lockdown', 'lockdown_exceptions'],
-            ['cluster_name', 'hosts'],
+            ['user_name', 'group_name', 'lockdown_mode', 'lockdown_exceptions'],
+            ['cluster_name', 'esxi_hostname'],
         ],
         mutually_exclusive=[
-            ['user_name', 'group_name', 'lockdown', 'lockdown_exceptions']
+            ['user_name', 'group_name', 'lockdown_mode', 'lockdown_exceptions']
         ],
         supports_check_mode=True,
     )
