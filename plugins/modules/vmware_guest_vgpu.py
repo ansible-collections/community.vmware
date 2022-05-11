@@ -15,7 +15,7 @@ short_description: Modify vGPU video card profile of the specified virtual machi
 description:
     - This module is used to reconfigure vGPU card profile of the given virtual machine.
     - All parameters and VMware object names are case sensitive.
-    - VM must be power off M(community.vmware.vmware_guest) module can perform that task.
+    - VM must be power off M(community.vmware.vmware_guest_powerstate) module can perform that task.
 author:
     - Mohamed Alibi (@Medalibi)
     - Unknown (@matancarmeli7)
@@ -67,7 +67,7 @@ options:
      choices: [ 'present', 'absent' ]
      description:
        - vGPU profile state.
-       - When C(state=present), the selected vGPU profile will be added if the VM hosted ESXi host Nvidia GPU offer it.
+       - When C(state=present), the selected vGPU profile will be added if the VM hosted ESXi host NVIDIA GPU offer it.
        - When C(state=absent), the selected vGPU profile gets removed from the VM.
      type: str
    vgpu:
@@ -94,7 +94,7 @@ options:
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: '1.9.0'
+version_added: '2.5.0'
 """
 
 EXAMPLES = r"""

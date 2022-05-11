@@ -155,6 +155,26 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>show_allocated</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allocated storage in byte and memory in MB are shown if it set to True.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>show_attribute</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -425,7 +445,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>list of dictionary of virtual machines and their information</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;guest_name&#x27;: &#x27;ubuntu_t&#x27;, &#x27;datacenter&#x27;: &#x27;Datacenter-1&#x27;, &#x27;cluster&#x27;: None, &#x27;esxi_hostname&#x27;: &#x27;10.76.33.226&#x27;, &#x27;folder&#x27;: &#x27;/Datacenter-1/vm&#x27;, &#x27;guest_fullname&#x27;: &#x27;Ubuntu Linux (64-bit)&#x27;, &#x27;ip_address&#x27;: &#x27;&#x27;, &#x27;mac_address&#x27;: [&#x27;00:50:56:87:a5:9a&#x27;], &#x27;power_state&#x27;: &#x27;poweredOff&#x27;, &#x27;uuid&#x27;: &#x27;4207072c-edd8-3bd5-64dc-903fd3a0db04&#x27;, &#x27;vm_network&#x27;: {&#x27;00:50:56:87:a5:9a&#x27;: {&#x27;ipv4&#x27;: [&#x27;10.76.33.228&#x27;], &#x27;ipv6&#x27;: []}}, &#x27;attributes&#x27;: {&#x27;job&#x27;: &#x27;backup-prepare&#x27;}, &#x27;datastore_url&#x27;: [{&#x27;name&#x27;: &#x27;t880-o2g&#x27;, &#x27;url&#x27;: &#x27;/vmfs/volumes/e074264a-e5c82a58&#x27;}], &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:43737ec0-b832-4abf-abb1-fd2448ce3b26:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;tag_0001&#x27;}], &#x27;moid&#x27;: &#x27;vm-24&#x27;}]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;guest_name&#x27;: &#x27;ubuntu_t&#x27;, &#x27;datacenter&#x27;: &#x27;Datacenter-1&#x27;, &#x27;cluster&#x27;: None, &#x27;esxi_hostname&#x27;: &#x27;10.76.33.226&#x27;, &#x27;folder&#x27;: &#x27;/Datacenter-1/vm&#x27;, &#x27;guest_fullname&#x27;: &#x27;Ubuntu Linux (64-bit)&#x27;, &#x27;ip_address&#x27;: &#x27;&#x27;, &#x27;mac_address&#x27;: [&#x27;00:50:56:87:a5:9a&#x27;], &#x27;power_state&#x27;: &#x27;poweredOff&#x27;, &#x27;uuid&#x27;: &#x27;4207072c-edd8-3bd5-64dc-903fd3a0db04&#x27;, &#x27;vm_network&#x27;: {&#x27;00:50:56:87:a5:9a&#x27;: {&#x27;ipv4&#x27;: [&#x27;10.76.33.228&#x27;], &#x27;ipv6&#x27;: []}}, &#x27;attributes&#x27;: {&#x27;job&#x27;: &#x27;backup-prepare&#x27;}, &#x27;datastore_url&#x27;: [{&#x27;name&#x27;: &#x27;t880-o2g&#x27;, &#x27;url&#x27;: &#x27;/vmfs/volumes/e074264a-e5c82a58&#x27;}], &#x27;tags&#x27;: [{&#x27;category_id&#x27;: &#x27;urn:vmomi:InventoryServiceCategory:b316cc45-f1a9-4277-811d-56c7e7975203:GLOBAL&#x27;, &#x27;category_name&#x27;: &#x27;cat_0001&#x27;, &#x27;description&#x27;: &#x27;&#x27;, &#x27;id&#x27;: &#x27;urn:vmomi:InventoryServiceTag:43737ec0-b832-4abf-abb1-fd2448ce3b26:GLOBAL&#x27;, &#x27;name&#x27;: &#x27;tag_0001&#x27;}], &#x27;moid&#x27;: &#x27;vm-24&#x27;, &#x27;allocated&#x27;: {&#x27;storage&#x27;: 500000000, &#x27;cpu&#x27;: 2, &#x27;memory&#x27;: 16}}]</div>
                 </td>
             </tr>
     </table>

@@ -8,7 +8,7 @@ community.vmware.vmware_guest_vgpu
 **Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure**
 
 
-Version added: 1.9.0
+Version added: 2.5.0
 
 .. contents::
    :local:
@@ -19,7 +19,7 @@ Synopsis
 --------
 - This module is used to reconfigure vGPU card profile of the given virtual machine.
 - All parameters and VMware object names are case sensitive.
-- VM must be power off :ref:`community.vmware.vmware_guest <community.vmware.vmware_guest_module>` module can perform that task.
+- VM must be power off :ref:`community.vmware.vmware_guest_powerstate <community.vmware.vmware_guest_powerstate_module>` module can perform that task.
 
 
 
@@ -271,7 +271,7 @@ Parameters
                 </td>
                 <td>
                         <div>vGPU profile state.</div>
-                        <div>When <code>state=present</code>, the selected vGPU profile will be added if the VM hosted ESXi host Nvidia GPU offer it.</div>
+                        <div>When <code>state=present</code>, the selected vGPU profile will be added if the VM hosted ESXi host NVIDIA GPU offer it.</div>
                         <div>When <code>state=absent</code>, the selected vGPU profile gets removed from the VM.</div>
                 </td>
             </tr>
