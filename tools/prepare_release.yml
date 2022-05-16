@@ -14,6 +14,12 @@
     - name: Create release branch
       ansible.builtin.shell: git checkout -b "prepare_{{ version }}_release"
 
+    - name: Update galaxy.yml
+      ansible.builtin.lineinfile:
+        path: "{{ playbook_dir }}/../galaxy.yml"
+        regexp: "^version: "
+        line: "version: {{ version }}"
+
     - name: Update documentation
       import_tasks: create_documentation_tasks.yml
 

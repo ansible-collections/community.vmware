@@ -269,6 +269,8 @@ Push the release:
 - Tag the release: `git tag -s $VERSION`
 - Push the tag: `git push origin $VERSION`
 
+Create a PR to revert the version in `galaxy.yml` back to `null`.
+
 ## Communication
 
 We have a dedicated Working Group for VMware.
