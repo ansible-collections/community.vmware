@@ -4,8 +4,6 @@
 # Copyright: (c) 2018, James E. King III (@jeking3) <jking@apache.org>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-from __future__ import absolute_import, division, print_function
-__metaclass__ = type
 
 import atexit
 import ansible.module_utils.common._collections_compat as collections_compat
