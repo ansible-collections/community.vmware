@@ -1,0 +1,26 @@
+- hosts: localhost
+  tasks:
+    - name: Get version
+      block:
+        - name: Get the current release version
+          ansible.builtin.shell: git tag --sort=-creatordate --merged|head -n1
+          register: result
+
+        - name: Set the release version
+          ansible.builtin.set_fact:
+            version: "{{ result.stdout }}"
+
+    - name: Create branch
+      ansible.builtin.shell: git checkout -b "unset_version_{{ version }}"
+
+    - name: Update galaxy.yml
+      ansible.builtin.lineinfile:
+        path: "{{ playbook_dir }}/../galaxy.yml"
+        regexp: "^version: "
+        line: "version: null"
+
+    - name: Add everything
+      ansible.builtin.shell: git add --all
+
+    - name: Commit everything
+      ansible.builtin.shell: 'git commit -m "Remove version {{ version }} from galaxy.yml"'
