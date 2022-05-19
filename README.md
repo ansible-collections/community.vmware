@@ -260,16 +260,22 @@ Refer [testing](testing.md) for more information.
 
 ## Publishing New Version
 
+Assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`:
+
 Prepare the release:
-- Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
+- Make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
 - Run `ansible-playbook tools/prepare_release.yml`. The playbook tries to generate the next minor release automatically, but you can also set the version explicitly with `--extra-vars "version=$VERSION"`. You *will* have to set the version explicitly when publishing a new major release.
-- Push the created release branch `prepare_$VERSION_release` to your GitHub repo and open a PR for review.
+- Push the created release branch to your GitHub repo (`git push --set-upstream origin prepare_$VERSION_release`) and open a PR for review.
 
 Push the release:
+- After the PR has been merged, make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
 - Tag the release: `git tag -s $VERSION`
-- Push the tag: `git push origin $VERSION`
+- Push the tag: `git push upstream $VERSION`
 
-Create a PR to revert the version in `galaxy.yml` back to `null`.
+Revert the version in `galaxy.yml` back to `null`:
+- Make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
+- Run `ansible-playbook tools/unset_version.yml`.
+- Push the created branch to your GitHub repo (`git push --set-upstream origin unset_version_$VERSION`) and open a PR for review.
 
 ## Communication
 
