@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_vm_info - Add the feature to get the output of allocated storage, cpu und memory.
-    (https://github.com/ansible-collections/community.vmware/pull/1283)

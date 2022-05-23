@@ -5,6 +5,19 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.5.0
+======
+
+Minor Changes
+-------------
+
+- vmware_vm_info - Add the feature to get the output of allocated storage, cpu und memory. (https://github.com/ansible-collections/community.vmware/pull/1283)
+
+New Modules
+-----------
+
+- vmware_guest_vgpu - Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
+
 v2.4.0
 ======
 
