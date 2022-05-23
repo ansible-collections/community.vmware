@@ -1,7 +1,7 @@
 ---
 namespace: community
 name: vmware
-version: null
+version: 2.5.0
 # the version key is generated during the release by Zuul
 # https://github.com/ansible-network/releases/tree/master/ansible_releases/cmd
 # A script based on https://pypi.org/project/pbr/ will generate the version

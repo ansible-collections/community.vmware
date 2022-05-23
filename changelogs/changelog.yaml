@@ -1194,3 +1194,16 @@ releases:
     - 1309-vmware_vswitch_info-add_network_policy_support.yml
     - 1311-vmware_maintenancemode-check_mode.yml
     release_date: '2022-05-08'
+  2.5.0:
+    changes:
+      minor_changes:
+      - vmware_vm_info - Add the feature to get the output of allocated storage, cpu
+        und memory. (https://github.com/ansible-collections/community.vmware/pull/1283)
+    fragments:
+    - 1283-vmware_vm_info-allocaded_storag_cpu_memory_output.yaml
+    modules:
+    - description: Modify vGPU video card profile of the specified virtual machine
+        in the given vCenter infrastructure
+      name: vmware_guest_vgpu
+      namespace: ''
+    release_date: '2022-05-23'
