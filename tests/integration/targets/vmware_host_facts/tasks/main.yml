@@ -1,0 +1,55 @@
+# Test code for the vmware_guest_info module.
+# Copyright: (c) 2022, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Get info from an ESXi host
+  community.vmware.vmware_host_facts:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: "{{ esxi1 }}"
+  register: host_facts_0001
+
+- debug:
+    var: host_facts_0001
+
+- assert:
+    that:
+      - host_facts_0001 is defined
+
+# https://github.com/ansible-collections/community.vmware/issues/184#issuecomment-630950107
+- name: Get info from an ESXi host that is offline / disconnected / shut down
+  block:
+  - name: Shut down ESXi host
+    community.vmware.vmware_host_powerstate:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: "{{ esxi1 }}"
+
+  - name: Give the ESXi host time to shut down
+    ansible.builtin.pause:
+      minutes: 2
+
+  - name: Get info from an ESXi host that is shut down
+    community.vmware.vmware_host_facts:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: "{{ esxi1 }}"
+    register: host_facts_0002
+
+  - debug:
+      var: host_facts_0002
+
+  - assert:
+      that:
+        - host_facts_0002 is defined
