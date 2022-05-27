@@ -26,20 +26,22 @@
 # https://github.com/ansible-collections/community.vmware/issues/184#issuecomment-630950107
 - name: Get info from an ESXi host that is offline / disconnected / shut down
   block:
-  - name: Shut down ESXi host
-    community.vmware.vmware_host_powerstate:
+  - name: Disconnect ESXi host
+    community.vmware.vmware_host:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
       esxi_hostname: "{{ esxi1 }}"
-      force: true
+      state: disconnected
 
-  - name: Give the ESXi host time to shut down
+  - name: Give the ESXi host time to disconnect
     ansible.builtin.pause:
-      minutes: 2
+      minutes: 1
 
-  - name: Get info from an ESXi host that is shut down
+  - name: Get info from an ESXi host that is disconnected
     community.vmware.vmware_host_facts:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
@@ -54,3 +56,14 @@
   - assert:
       that:
         - host_facts_0002 is defined
+  always:
+  - name: Reconnect ESXi host
+    community.vmware.vmware_host:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
+      esxi_hostname: "{{ esxi1 }}"
+      state: reconnect
