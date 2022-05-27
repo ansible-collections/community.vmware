@@ -33,6 +33,7 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       esxi_hostname: "{{ esxi1 }}"
+      force: true
 
   - name: Give the ESXi host time to shut down
     ansible.builtin.pause:
