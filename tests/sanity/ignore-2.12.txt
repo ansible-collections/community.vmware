@@ -34,6 +34,8 @@ plugins/modules/vcenter_folder.py compile-2.6!skip
 plugins/modules/vcenter_folder.py import-2.6!skip
 plugins/modules/vcenter_license.py compile-2.6!skip
 plugins/modules/vcenter_license.py import-2.6!skip
+plugins/modules/vcenter_standard_key_provider.py compile-2.6!skip
+plugins/modules/vcenter_standard_key_provider.py import-2.6!skip
 plugins/modules/vmware_about_info.py compile-2.6!skip
 plugins/modules/vmware_about_info.py import-2.6!skip
 plugins/modules/vmware_category.py compile-2.6!skip
@@ -44,6 +46,8 @@ plugins/modules/vmware_cfg_backup.py compile-2.6!skip
 plugins/modules/vmware_cfg_backup.py import-2.6!skip
 plugins/modules/vmware_cluster.py compile-2.6!skip
 plugins/modules/vmware_cluster.py import-2.6!skip
+plugins/modules/vmware_cluster_dpm.py compile-2.6!skip
+plugins/modules/vmware_cluster_dpm.py import-2.6!skip
 plugins/modules/vmware_cluster_drs.py compile-2.6!skip
 plugins/modules/vmware_cluster_drs.py import-2.6!skip
 plugins/modules/vmware_cluster_ha.py compile-2.6!skip
@@ -169,6 +173,8 @@ plugins/modules/vmware_guest_tools_wait.py compile-2.6!skip
 plugins/modules/vmware_guest_tools_wait.py import-2.6!skip
 plugins/modules/vmware_guest_tpm.py compile-2.6!skip
 plugins/modules/vmware_guest_tpm.py import-2.6!skip
+plugins/modules/vmware_guest_vgpu.py compile-2.6!skip
+plugins/modules/vmware_guest_vgpu.py import-2.6!skip
 plugins/modules/vmware_guest_video.py compile-2.6!skip
 plugins/modules/vmware_guest_video.py import-2.6!skip
 plugins/modules/vmware_guest_vnc.py compile-2.6!skip
@@ -250,6 +256,8 @@ plugins/modules/vmware_host_ssl_info.py compile-2.6!skip
 plugins/modules/vmware_host_ssl_info.py import-2.6!skip
 plugins/modules/vmware_host_tcpip_stacks.py compile-2.6!skip
 plugins/modules/vmware_host_tcpip_stacks.py import-2.6!skip
+plugins/modules/vmware_host_user_manager.py compile-2.6!skip
+plugins/modules/vmware_host_user_manager.py import-2.6!skip
 plugins/modules/vmware_host_vmhba_info.py compile-2.6!skip
 plugins/modules/vmware_host_vmhba_info.py import-2.6!skip
 plugins/modules/vmware_host_vmnic_info.py compile-2.6!skip
