@@ -66,8 +66,8 @@ Configure your installation
 ---------------------------
 
 Prepare a configuration file that describes your set-up. The file
-should be called :file:`test/integration/cloud-config-vcenter.ini` and based on
-:file:`test/lib/ansible_test/config/cloud-config-vcenter.ini.template`. For instance, if you have deployed your lab with
+should be called `test/integration/cloud-config-vcenter.ini` and based on
+`test/lib/ansible_test/config/cloud-config-vcenter.ini.template`. For instance, if you have deployed your lab with
 `vmware-on-libvirt <https://github.com/goneri/vmware-on-libvirt>`_:
 
 .. code-block:: ini
