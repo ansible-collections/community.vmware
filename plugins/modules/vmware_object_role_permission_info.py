@@ -44,7 +44,8 @@ options:
     default: 'Folder'
     choices: ['Folder', 'VirtualMachine', 'Datacenter', 'ResourcePool',
               'Datastore', 'Network', 'HostSystem', 'ComputeResource',
-              'ClusterComputeResource', 'DistributedVirtualSwitch']
+              'ClusterComputeResource', 'DistributedVirtualSwitch',
+              'DistributedVirtualPortgroup', 'StoragePod']
     type: str
   moid:
     description:
@@ -252,6 +253,8 @@ def main():
                     "ComputeResource",
                     "ClusterComputeResource",
                     "DistributedVirtualSwitch",
+                    "DistributedVirtualPortgroup", 
+                    "StoragePod",
                 ],
             ),
             moid=dict(
