@@ -166,7 +166,7 @@ hosts_vmnics_info:
 '''
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
@@ -231,12 +231,15 @@ class HostVmnicMgr(PyVmomi):
                             pnic_info['status'] = 'Connected'
                             pnic_info['actual_speed'] = pnic.linkSpeed.speedMb
                             pnic_info['actual_duplex'] = 'Full Duplex' if pnic.linkSpeed.duplex else 'Half Duplex'
-                            network_hint = host_nw_system.QueryNetworkHint(pnic.device)
-                            for hint in self.to_json(network_hint):
-                                if hint.get('lldpInfo'):
-                                    pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
-                                else:
-                                    pnic_info['lldp_info'] = 'N/A'
+                            try:
+                                network_hint = host_nw_system.QueryNetworkHint(pnic.device)
+                                for hint in self.to_json(network_hint):
+                                    if hint.get('lldpInfo'):
+                                        pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
+                                    else:
+                                        pnic_info['lldp_info'] = 'N/A'
+                            except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
+                                pnic_info['lldp_info'] = 'N/A'
                         else:
                             pnic_info['status'] = 'Disconnected'
                             pnic_info['actual_speed'] = 'N/A'

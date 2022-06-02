@@ -35,3 +35,60 @@
 - assert:
     that:
       - host_vmnics_extended.hosts_vmnics_info is defined
+
+- name: Get info from an ESXi host that is offline / disconnected / shut down
+  block:
+  - name: Disconnect ESXi host
+    community.vmware.vmware_host:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
+      esxi_hostname: "{{ esxi1 }}"
+      state: disconnected
+
+  - name: Give the ESXi host time to disconnect
+    ansible.builtin.pause:
+      minutes: 1
+
+  - name: Gather vmnic info about a host that is offline / disconnected / shut down
+    vmware_host_vmnic_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_vmnics_disconnected
+  - debug: var=host_vmnics_disconnected
+  - assert:
+      that:
+        - host_vmnics_disconnected.hosts_vmnics_info is defined
+
+  - name: Gather extended vmnic info about a host that is offline / disconnected / shut down
+    vmware_host_vmnic_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+      capabilities: true
+      directpath_io: true
+      sriov: true
+    register: host_vmnics_extended_disconnected
+  - debug: var=host_vmnics_extended_disconnected
+  - assert:
+      that:
+        - host_vmnics_extended_disconnected.hosts_vmnics_info is defined
+  always:
+  - name: Reconnect ESXi host
+    community.vmware.vmware_host:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
+      esxi_hostname: "{{ esxi1 }}"
+      state: reconnect
