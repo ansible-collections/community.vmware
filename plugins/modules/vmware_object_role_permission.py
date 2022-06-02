@@ -56,7 +56,7 @@ options:
     choices: ['Folder', 'VirtualMachine', 'Datacenter', 'ResourcePool',
               'Datastore', 'Network', 'HostSystem', 'ComputeResource',
               'ClusterComputeResource', 'DistributedVirtualSwitch',
-              'DistributedVirtualPortgroup']
+              'DistributedVirtualPortgroup', 'StoragePod']
     type: str
   recursive:
     description:
@@ -324,6 +324,7 @@ def main():
                     'ClusterComputeResource',
                     'DistributedVirtualSwitch',
                     'DistributedVirtualPortgroup',
+                    'StoragePod',
                 ],
             ),
             principal=dict(type='str'),
