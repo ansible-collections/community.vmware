@@ -1,2 +1,2 @@
-minor_changes:
-- vmware_host_facts - add connection state fact about ESXi hostsystem with note about stale facts (https://github.com/ansible-collections/vmware/issues/184).
+bugfixes:
+- vmware_host_facts - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/vmware/issues/184).
