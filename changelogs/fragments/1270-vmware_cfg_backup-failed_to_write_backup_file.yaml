@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_cfg_backup - Fix a bug that failed the module when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1270).
