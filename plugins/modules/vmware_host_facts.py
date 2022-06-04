@@ -9,12 +9,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
-
 DOCUMENTATION = r'''
 ---
 module: vmware_host_facts
@@ -26,6 +20,7 @@ description:
       module will throw an error.
     - VSAN facts added in 2.7 version.
     - SYSTEM fact uuid added in 2.10 version.
+    - Please note that when ESXi host connection state is not C(connected), facts returned from vCenter might be stale.
 author:
     - Wei Gao (@woshihaoren)
 requirements:
@@ -240,7 +235,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 )
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
@@ -304,6 +299,12 @@ class VMwareHostFactManager(PyVmomi):
 
         try:
             status = config_mgr.QueryHostStatus()
+        except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
+            return {
+                'vsan_cluster_uuid': 'NA',
+                'vsan_node_uuid': 'NA',
+                'vsan_health': 'NA',
+            }
         except Exception as err:
             self.module.fail_json(msg="Unable to query VSAN status due to %s" % to_native(err))
 
