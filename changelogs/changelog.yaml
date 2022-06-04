@@ -1207,3 +1207,21 @@ releases:
       name: vmware_guest_vgpu
       namespace: ''
     release_date: '2022-05-23'
+  2.6.0:
+    changes:
+      bugfixes:
+      - vmware_cfg_backup - Fix a bug that failed the module when port 80 is blocked
+        (https://github.com/ansible-collections/community.vmware/issues/1270).
+      - vmware_host_facts - Fix a bug that crashes the module when a host is disconnected
+        (https://github.com/ansible-collections/vmware/issues/184).
+      - vmware_host_vmnic_info - Fix a bug that crashes the module when a host is
+        disconnected (https://github.com/ansible-collections/community.vmware/pull/1337).
+      minor_changes:
+      - vmware_vmotion - Add the feature to use cluster and datastore cluster (storage
+        pods) to define where the vmotion shold go. (https://github.com/ansible-collections/community.vmware/pull/1240)
+    fragments:
+    - 1240-vmware_vmotion-add_cluster_storage_cluster.yaml
+    - 1270-vmware_cfg_backup-failed_to_write_backup_file.yaml
+    - 1337_vmware_host_vmnic_info-fix_disconnected.yml
+    - 184_vmware_host_facts.yml
+    release_date: '2022-06-04'
