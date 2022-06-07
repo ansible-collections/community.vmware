@@ -253,7 +253,7 @@ def main():
                     "ComputeResource",
                     "ClusterComputeResource",
                     "DistributedVirtualSwitch",
-                    "DistributedVirtualPortgroup", 
+                    "DistributedVirtualPortgroup",
                     "StoragePod",
                 ],
             ),
