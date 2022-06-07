@@ -172,6 +172,8 @@ class VMwareConfigurationBackup(PyVmomi):
     def save_configuration(self):
         url = self.host.configManager.firmwareSystem.BackupFirmwareConfiguration()
         url = url.replace('*', self.host.name)
+        if self.module.params["port"] == 443:
+            url = url.replace("http:", "https:")
         if os.path.isdir(self.dest):
             filename = url.rsplit('/', 1)[1]
             self.dest = os.path.join(self.dest, filename)
