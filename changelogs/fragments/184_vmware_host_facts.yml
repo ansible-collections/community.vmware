@@ -1,0 +1,2 @@
+bugfixes:
+- vmware_host_facts - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/vmware/issues/184).
