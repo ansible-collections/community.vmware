@@ -76,6 +76,7 @@ DOCUMENTATION = r"""
             - Ignores template if resulted in an empty string or None value.
             - You can use property specified in I(properties) as variables in the template.
             type: list
+            elements: string
             default: ['name']
         properties:
             description:
@@ -89,6 +90,7 @@ DOCUMENTATION = r"""
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
             type: list
+            elements: string
             default: [ 'name', 'customValue', 'summary.runtime.powerState' ]
         with_nested_properties:
             description:
@@ -116,6 +118,7 @@ DOCUMENTATION = r"""
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
             required: False
             type: list
+            elements: dict
             default: []
         with_path:
             description:
