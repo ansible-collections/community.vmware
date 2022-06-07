@@ -21,6 +21,7 @@ Synopsis
 - If hostname or IP address of vCenter is provided as ``hostname`` and ``esxi_hostname`` is not specified, then the module will throw an error.
 - VSAN facts added in 2.7 version.
 - SYSTEM fact uuid added in 2.10 version.
+- Please note that when ESXi host connection state is not ``connected``, facts returned from vCenter might be stale.
 
 
 
