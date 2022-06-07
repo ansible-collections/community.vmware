@@ -5,6 +5,16 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.18.1
+=======
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a bug that failed the module when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1270).
+- vmware_host_facts - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/vmware/issues/184).
+- vmware_host_vmnic_info - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/community.vmware/pull/1337).
+
 v1.18.0
 =======
 
