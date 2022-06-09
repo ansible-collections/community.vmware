@@ -1,0 +1,5 @@
+minor_changes:
+  - vmware_object_role_permission.py - Add StoragePod to the list of object_types.
+    (https://github.com/ansible-collections/community.vmware/pull/1338)
+  - vmware_object_role_permission_info.py - Add StoragePod and DistributedVirtalPortgroup to the list of object_types.
+    (https://github.com/ansible-collections/community.vmware/pull/1338)
