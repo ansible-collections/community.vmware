@@ -215,7 +215,7 @@ options:
                 default: 15
             sampling_rate:
                 type: int
-                description: 
+                description:
                     - The portion of data that the switch collects.
                     - The sampling rate represents the number of packets that NetFlow drops after every collected packet.
                     - If the rate is 0, NetFlow samples every packet, that is, collect one packet and drop none.
@@ -224,7 +224,7 @@ options:
             internal_flows_only:
                 type: bool
                 description: If True, data on network activity between vms on the same host will be collected only.
-                default: False  
+                default: False
         type: dict
         default: {
             collector_ip='',
