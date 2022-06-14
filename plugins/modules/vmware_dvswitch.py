@@ -723,7 +723,7 @@ class VMwareDvSwitch(PyVmomi):
             activeFlowTimeout_previous = current_config.activeFlowTimeout
             new_config.activeFlowTimeout = self.netFlow_active_flow_timeout
         if current_config.idleFlowTimeout != self.netFlow_idle_flow_timeout:
-            changed = changed_idleFlowTimeout= True
+            changed = changed_idleFlowTimeout = True
             idleFlowTimeout_previous = current_config.idleFlowTimeout
             new_config.idleFlowTimeout = self.netFlow_idle_flow_timeout
         if current_config.samplingRate != self.netFlow_sampling_rate:
@@ -938,10 +938,10 @@ class VMwareDvSwitch(PyVmomi):
         results['netFlow_sampling_rate'] = self.netFlow_sampling_rate
         results['netFlow_internal_flows_only'] = self.netFlow_internal_flows_only
         (ipfixConfig, changed_netFlow, changed_collectorIpAddress, collectorIpAddress_previous,
-               changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
-               changed_activeFlowTimeout, activeFlowTimeout_previous, changed_idleFlowTimeout, idleFlowTimeout_previous,
-               changed_samplingRate, samplingRate_previous, changed_internalFlowsOnly, internalFlowsOnly_previous) = \
-            self.check_netFlow_config()
+         changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
+         changed_activeFlowTimeout, activeFlowTimeout_previous, changed_idleFlowTimeout, idleFlowTimeout_previous,
+         changed_samplingRate, samplingRate_previous, changed_internalFlowsOnly, internalFlowsOnly_previous) = \
+         self.check_netFlow_config()
         if changed_netFlow:
             changed = changed_settings = True
             changed_list.append("netFlow")
