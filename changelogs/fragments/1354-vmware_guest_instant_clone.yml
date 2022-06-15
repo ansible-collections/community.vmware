@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_instant_clone - Support FQPN in the folder parameter.
