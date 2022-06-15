@@ -12,7 +12,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: vmware_cluster_vCLS
+module: vmware_cluster_vcls
 short_description: Override the default vCLS (vSphere Cluster Services) VM disk placement for this cluster.
 description:
     - Override the default vCLS VM disk placement for this cluster.
@@ -49,7 +49,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Set Allowed vCLS Datastores
-  community.vmware.vmware_cluster_vCLS:
+  community.vmware.vmware_cluster_vcls:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
