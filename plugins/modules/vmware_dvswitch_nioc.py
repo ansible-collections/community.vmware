@@ -51,7 +51,7 @@ options:
             name:
                 description:
                 - Resource name.
-                choices: ["faultTolerance", "hbr", "iSCSI", "management", "nfs", "vdp", "virtualMachine", "vmotion", "vsan"]
+                choices: ["faultTolerance", "hbr", "iSCSI", "management", "nfs", "vdp", "virtualMachine", "vmotion", "vsan", "backupNfc", "nvmetcp"]
                 required: True
                 type: str
             limit:
@@ -384,7 +384,9 @@ def main():
                             'vdp',
                             'virtualMachine',
                             'vmotion',
-                            'vsan'
+                            'vsan',
+                            'backupNfc',
+                            'nvmetcp'
                         ]
                     ),
                     limit=dict(type='int', default=-1),
