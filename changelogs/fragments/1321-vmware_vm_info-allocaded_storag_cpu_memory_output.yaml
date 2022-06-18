@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_guest_disk - Ignore datastores in maintenance mode
+    (https://github.com/ansible-collections/community.vmware/pull/1321).

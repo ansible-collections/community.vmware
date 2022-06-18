@@ -1044,6 +1044,8 @@ class PyVmomiHelper(PyVmomi):
         datastore = None
         datastore_freespace = 0
         for ds in datastore_cluster_obj.childEntity:
+            if ds.summary.maintenanceMode == "inMaintenance":
+                continue
             if ds.summary.freeSpace > datastore_freespace:
                 # If datastore field is provided, filter destination datastores
                 datastore = ds
