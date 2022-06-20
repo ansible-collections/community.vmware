@@ -220,7 +220,7 @@ options:
                     - The sampling rate represents the number of packets that NetFlow drops after every collected packet.
                     - If the rate is 0, NetFlow samples every packet, that is, collect one packet and drop none.
                     - If the rate is 1, NetFlow samples a packet and drops the next one, and so on.
-                default: 409
+                default: 4096
             internal_flows_only:
                 type: bool
                 description: If True, data on network activity between vms on the same host will be collected only.
