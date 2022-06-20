@@ -189,7 +189,7 @@ options:
             - '   folder: /folder1/datacenter1/network/folder2'
         required: False
         type: str
-    health_check:
+    net_flow:
         description:
             - Dictionary which configures the Net Flow for the Distributed Switch.
         suboptions:
