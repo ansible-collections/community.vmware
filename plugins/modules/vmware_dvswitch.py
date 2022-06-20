@@ -227,13 +227,13 @@ options:
                 default: False
         type: dict
         default: {
-            collector_ip='',
-            collector_port=0,
-            observation_domain_id=0,
-            active_flow_timeout=60,
-            idle_flow_timeout=15,
-            sampling_rate=4096,
-            internal_flows_only=False,
+            'collector_ip'='',
+            'collector_port'=0,
+            'observation_domain_id'=0,
+            'active_flow_timeout'=60,
+            'idle_flow_timeou't=15,
+            'sampling_rate'=4096,
+            'internal_flows_only'=False,
         }
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
