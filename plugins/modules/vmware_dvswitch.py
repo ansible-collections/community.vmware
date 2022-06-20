@@ -231,7 +231,7 @@ options:
             'collector_port': 0,
             'observation_domain_id': 0,
             'active_flow_timeout': 60,
-            'idle_flow_timeou't: 15,
+            'idle_flow_timeout': 15,
             'sampling_rate': 4096,
             'internal_flows_only': False
         }
