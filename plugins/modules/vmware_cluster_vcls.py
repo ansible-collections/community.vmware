@@ -138,7 +138,7 @@ class VMwareCluster(PyVmomi):
 
         """
         result = None
-        changed, toAddAllowedDatastores, toRemoveAllowedDatastores  = self.check_vCLS_config_diff()
+        changed, toAddAllowedDatastores, toRemoveAllowedDatastores = self.check_vCLS_config_diff()
 
         if changed:
             if not self.module.check_mode:
@@ -147,7 +147,7 @@ class VMwareCluster(PyVmomi):
 
                 cluster_config_spec.systemVMsConfig.allowedDatastores = []
 
-                #Build the Spec
+                # Build the Spec
                 for ds_name in toAddAllowedDatastores:
                     specSystemVMsConfigAllowedDatastore = vim.cluster.DatastoreUpdateSpec()
                     specSystemVMsConfigAllowedDatastore.datastore = find_datastore_by_name(self.content, ds_name, self.datacenter)
@@ -174,7 +174,6 @@ class VMwareCluster(PyVmomi):
                                               " due to generic exception %s" % to_native(generic_exc))
             else:
                 changed = True
-
 
         results = dict(changed=changed)
         results['result'] = result
