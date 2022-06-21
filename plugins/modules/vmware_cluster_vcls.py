@@ -114,7 +114,10 @@ class VMwareCluster(PyVmomi):
         Returns: True and all to add and to remove allowed and not allowed Datastores if there is diff, else False
 
         """
-        vCLS_config = self.cluster.configurationEx.systemVMsConfig
+        if hasattr(self.cluster.configurationEx, 'systemVMsConfig'):
+            vCLS_config = self.cluster.configurationEx.systemVMsConfig
+        else:
+            return False, self.allowedDatastores_names, None
         changed = False
 
         # Get List currently of allowed Datastore Names
