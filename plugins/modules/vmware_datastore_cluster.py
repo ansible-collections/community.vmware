@@ -128,6 +128,28 @@ options:
         default: automated
         type: str
         version_added: '2.3.0'
+    min_space_utilization_difference:
+        description:
+        - This threshold ensures that there is some minimum difference between the space utilization of the source and the destination before make migration recommendations.
+        - Value between 1% and 50%
+        type: int
+        version_added: '2.3.0'
+    free_space_threshold_gb:
+        description:
+        - Runtime thresholds govern when Storage DRS performs or recommends migrations (based on the selected automation level).
+        - Dictates the minimum level of free space for each datastore that is the threshold for action.
+        - Value in GB
+        - Use free_space_threshold_gb or space_utilization_threshold to define the threshold.
+        type: int
+        version_added: '2.3.0'
+    space_utilization_threshold:
+        description:
+        - Runtime thresholds govern when Storage DRS performs or recommends migrations (based on the selected automation level).
+        - Dictates the minimum level of consumed space for each datastore that is the threshold for action.
+        - Value between 50% and 100%
+        - Use space_utilization_threshold or free_space_threshold_gb to define the threshold.
+        type: int
+        version_added: '2.3.0'
     vm_overrides:
         description:
         - Override the datastore cluster-wide automation level for individual virtual machines.
@@ -143,16 +165,17 @@ options:
                 required: True
             keep_vmdks_together:
                 description:
-                - None (Not set) -> No override
-                - True -> This VM should have its virtual disks on the same datastore.
-                - False -> This VM should not have its virtual disks on the same datastore.
+                - None: No override
+                - True: This VM should have its virtual disks on the same datastore.
+                - False: This VM should not have its virtual disks on the same datastore.
+                default: None
                 type: bool
             automation_level:
                 description:
-                - none (or Not set) -> No override
-                - automated -> Placement and migration recommendations run automatically.
-                - manual -> Placement and migration recommendations are displayed, but do not run until you manually apply the recommendation.
-                - disabled -> vCenter Server does not migrate the virtual machine or provide migration recommendations for it.
+                - none: No override
+                - automated: Placement and migration recommendations run automatically.
+                - manual: Placement and migration recommendations are displayed, but do not run until you manually apply the recommendation.
+                - disabled: vCenter Server does not migrate the virtual machine or provide migration recommendations for it.
                 choices: [none, automated, manual, disabled]
                 default: none
                 type: str
@@ -173,7 +196,7 @@ EXAMPLES = r'''
     state: present
   delegate_to: localhost
 
-- name: Create/Modify datastore cluster with enable SDRS
+ - name: Create/Modify datastore cluster with enable SDRS
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -182,10 +205,6 @@ EXAMPLES = r'''
     datastore_cluster_name: '{{ datastore_cluster_name }}'
     enable_sdrs: True
     state: present
-    vm_overrides:
-    - vm_name: testvm
-      keep_vmdks_together: True
-      automation_level: none
   delegate_to: localhost
 
 - name: Create/Modify datastore cluster with enable SDRS and set the automation levels to manual
@@ -197,11 +216,11 @@ EXAMPLES = r'''
     datastore_cluster_name: '{{ datastore_cluster_name }}'
     enable_sdrs: True
     state: present
-    space_balance_automation_level: manual
-    io_balance_automation_level: manual
-    rule_enforcement_automation_level: manual
-    policy_enforcement_automation_level: manual
-    vm_evacuation_automation_level: manual
+    space_balance_automation_level=manual
+    io_balance_automation_level=manual
+    rule_enforcement_automation_level=manual
+    policy_enforcement_automation_level=manual
+    vm_evacuation_automation_level=manual
   delegate_to: localhost
 
 - name: Create datastore cluster using folder
@@ -274,11 +293,23 @@ class VMwareDatastoreClusterManager(PyVmomi):
         keep_vmdks_together = self.params.get('keep_vmdks_together')
         enable_io_loadbalance = self.params.get('enable_io_loadbalance')
         loadbalance_interval = self.params.get('loadbalance_interval')
+
+        # Automation overrides
         space_balance_automation_level = self.params.get('space_balance_automation_level')
         io_balance_automation_level = self.params.get('io_balance_automation_level')
         rule_enforcement_automation_level = self.params.get('rule_enforcement_automation_level')
         policy_enforcement_automation_level = self.params.get('policy_enforcement_automation_level')
         vm_evacuation_automation_level = self.params.get('vm_evacuation_automation_level')
+
+        # Space Load Balance Config
+        min_space_utilization_difference = self.params.get('min_space_utilization_difference')
+        if min_space_utilization_difference is not None and min_space_utilization_difference not in range(1,51):  # between 1% and 50%
+            self.module.fail_json(msg="min_space_utilization_difference can only be set between 1% and 50%.")
+        free_space_threshold_gb = self.params.get('free_space_threshold_gb')
+        space_utilization_threshold = self.params.get('space_utilization_threshold')
+        if space_utilization_threshold is not None and space_utilization_threshold not in range(50, 101):  # between 50% and 100%
+            self.module.fail_json(msg="space_utilization_threshold can only be set between 50% and 100%.")
+
         vm_overrides = {} if self.params.get('vm_overrides') is None else self.params.get('vm_overrides')
 
         if self.datastore_cluster_obj:
@@ -291,6 +322,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 # Storage Pod Config
                 sdrs_spec.podConfigSpec = vim.storageDrs.PodConfigSpec()
                 sdrs_spec.podConfigSpec.automationOverrides = currentPodConfig.automationOverrides
+                sdrs_spec.podConfigSpec.spaceLoadBalanceConfig = currentPodConfig.spaceLoadBalanceConfig
                 sdrs_spec.podConfigSpec.enabled = enable_sdrs  # Must be set because automationOverrides not be written otherwise
 
                 if enable_sdrs != currentPodConfig.enabled:
@@ -317,11 +349,11 @@ class VMwareDatastoreClusterManager(PyVmomi):
                     results['result'] += " Changed load balance interval to '%s' minutes." % loadbalance_interval
                     change = True
 
+                # Automation overrides
                 if space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
-                        if space_balance_automation_level != "cluster_settings" else None
-                    results[
-                        'result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
+                            if space_balance_automation_level != "cluster_settings" else None
+                    results['result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
                     change = True
 
                 if io_balance_automation_level != currentPodConfig.automationOverrides.ioLoadBalanceAutomationMode:
@@ -333,25 +365,40 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 if rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
                         if rule_enforcement_automation_level != "cluster_settings" else None
-                    results[
-                        'result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
+                    results['result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
                     change = True
 
                 if policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
                         if policy_enforcement_automation_level != "cluster_settings" else None
-                    results[
-                        'result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
+                    results['result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
                     change = True
 
                 if vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
                         if vm_evacuation_automation_level != "cluster_settings" else None
-                    results[
-                        'result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
+                    results['result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
                     change = True
 
-                # Storage DRS VM Config Override
+                # Space Load Balance Config
+                if min_space_utilization_difference is not None and min_space_utilization_difference != currentPodConfig.spaceLoadBalanceConfig.minSpaceUtilizationDifference:
+                    sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.minSpaceUtilizationDifference = min_space_utilization_difference
+                    results['result'] += " Changed minimum space utilization difference to '%s' prozent." % min_space_utilization_difference
+                    change = True
+
+                if free_space_threshold_gb is not None and free_space_threshold_gb != currentPodConfig.spaceLoadBalanceConfig.freeSpaceThresholdGB:
+                    sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.freeSpaceThresholdGB = free_space_threshold_gb
+                    sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "freeSpace"
+                    results['result'] += " Changed Space threshold to '%s'GB." % free_space_threshold_gb
+                    change = True
+
+                if space_utilization_threshold is not None and space_utilization_threshold != currentPodConfig.spaceLoadBalanceConfig.spaceUtilizationThreshold:
+                    sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceUtilizationThreshold = space_utilization_threshold
+                    sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "utilization"
+                    results['result'] += " Changed Space threshold to '%s' prozent." % space_utilization_threshold
+                    change = True
+
+                # Storage DRS VM Config
                 sdrs_spec.vmConfigSpec = None
                 vmConfig = self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.vmConfig
 
@@ -377,24 +424,24 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                     if foundVm:
                         if vm['automation_level'] == "disabled":
-                            if foundVm.behavior is not None:
+                            if foundVm.behavior != None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled is not False:
+                            if foundVm.enabled != False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
                         elif vm['automation_level'] == "none":
-                            if foundVm.behavior is not None:
+                            if foundVm.behavior != None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled is not None:
+                            if foundVm.enabled != None:
                                 vmConfigSpec.info.enabled = None
                                 changed = True
                         else:
-                            if foundVm.behavior is not None:
+                            if foundVm.behavior != None:
                                 vmConfigSpec.info.behavior = vm['automation_level']
                                 changed = True
-                            if foundVm.enabled is not False:
+                            if foundVm.enabled != False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
 
@@ -423,9 +470,8 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 if change or len(sdrs_spec.vmConfigSpec) != 0:
                     if not self.module.check_mode:
                         try:
-                            task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(
-                                pod=self.datastore_cluster_obj,
-                                spec=sdrs_spec, modify=True)
+                            task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(pod=self.datastore_cluster_obj,
+                                                                                                      spec=sdrs_spec, modify=True)
                             changed, result = wait_for_task(task)
                         except Exception as generic_exc:
                             self.module.fail_json(msg="Failed to configure datastore cluster"
@@ -464,6 +510,8 @@ class VMwareDatastoreClusterManager(PyVmomi):
                         sdrs_spec.podConfigSpec.defaultIntraVmAffinity = keep_vmdks_together
                         sdrs_spec.podConfigSpec.ioLoadBalanceEnabled = enable_io_loadbalance
                         sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
+
+                        # Automation Overrides
                         sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
                             if io_balance_automation_level != "cluster_settings" else None
                         sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
@@ -474,6 +522,17 @@ class VMwareDatastoreClusterManager(PyVmomi):
                             if space_balance_automation_level != "cluster_settings" else None
                         sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
                             if vm_evacuation_automation_level != "cluster_settings" else None
+
+                        # Space Load Balance Config
+                        sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.minSpaceUtilizationDifference = min_space_utilization_difference
+
+                        if free_space_threshold_gb:
+                            sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.freeSpaceThresholdGB = free_space_threshold_gb
+                            sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "freeSpace"
+
+                        if space_utilization_threshold:
+                            sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceUtilizationThreshold = space_utilization_threshold
+                            sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "utilization"
 
                         vmConfigSpecs = []
                         for vm in vm_overrides:
@@ -502,8 +561,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                         sdrs_spec.vmConfigSpec = vmConfigSpecs
 
-                        task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(
-                            pod=self.datastore_cluster_obj, spec=sdrs_spec, modify=True)
+                        task = self.content.storageResourceManager.ConfigureStorageDrsForPod_Task(pod=self.datastore_cluster_obj, spec=sdrs_spec, modify=True)
                         changed, result = wait_for_task(task)
                     except Exception as generic_exc:
                         self.module.fail_json(msg="Failed to configure datastore cluster"
@@ -529,16 +587,24 @@ def main():
             automation_level=dict(type='str', choices=['automated', 'manual'], default='manual'),
             enable_io_loadbalance=dict(type='bool', default=False, required=False),
             loadbalance_interval=dict(type='int', default=480, required=False),
-            space_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            # Automation overrides
+            space_balance_automation_level=dict(type='str', choices=['automated', 'manual','cluster_settings'], default='automated'),
             io_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
-            vm_overrides=dict(type='list', elements='dict', required=False, options=dict(
-                vm_name=dict(type='str', required=True),
-                keep_vmdks_together=dict(type='bool', default=None),
-                automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none')
-            ))
+            # Space Load Balance Config
+            min_space_utilization_difference=dict(type='int', required=False),
+            free_space_threshold_gb=dict(type='int', required=False),
+            space_utilization_threshold=dict(type='int', required=False),
+            # VM overrides
+            vm_overrides=dict(type='list', elements='dict', required=False,
+                options=dict(
+                    vm_name=dict(type='str', required=True),
+                    keep_vmdks_together=dict(type='bool', default=None),
+                    automation_level=dict(type='str', choices=['none','automated', 'manual', 'disabled'], default='none')
+                )
+            )
         )
     )
     module = AnsibleModule(
@@ -546,6 +612,7 @@ def main():
         supports_check_mode=True,
         mutually_exclusive=[
             ['datacenter_name', 'folder'],
+            ['free_space_threshold_gb', 'space_utilization_threshold'],
         ],
         required_one_of=[
             ['datacenter_name', 'folder'],
