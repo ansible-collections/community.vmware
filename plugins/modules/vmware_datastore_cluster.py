@@ -598,10 +598,9 @@ def main():
             space_utilization_threshold=dict(type='int', required=False),
             # VM overrides
             vm_overrides=dict(type='list', elements='dict', required=False, options=dict(
-                    vm_name=dict(type='str', required=True),
-                    keep_vmdks_together=dict(type='bool', default=None),
-                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none')
-                )
+                vm_name=dict(type='str', required=True),
+                keep_vmdks_together=dict(type='bool', default=None),
+                automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none'))
             )
         )
     )
