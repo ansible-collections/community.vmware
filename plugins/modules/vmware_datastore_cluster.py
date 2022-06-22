@@ -302,7 +302,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
         # Space Load Balance Config
         min_space_utilization_difference = self.params.get('min_space_utilization_difference')
-        if min_space_utilization_difference is not None and min_space_utilization_difference not in range(1,51):  # between 1% and 50%
+        if min_space_utilization_difference is not None and min_space_utilization_difference not in range(1, 51):  # between 1% and 50%
             self.module.fail_json(msg="min_space_utilization_difference can only be set between 1% and 50%.")
         free_space_threshold_gb = self.params.get('free_space_threshold_gb')
         space_utilization_threshold = self.params.get('space_utilization_threshold')
@@ -351,7 +351,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 # Automation overrides
                 if space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
-                            if space_balance_automation_level != "cluster_settings" else None
+                        if space_balance_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
                     change = True
 
@@ -423,24 +423,24 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                     if foundVm:
                         if vm['automation_level'] == "disabled":
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
                             if foundVm.enabled is not False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
                         elif vm['automation_level'] == "none":
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = None
                                 changed = True
-                            if foundVm.enabled != None:
+                            if foundVm.enabled is not None:
                                 vmConfigSpec.info.enabled = None
                                 changed = True
                         else:
-                            if foundVm.behavior != None:
+                            if foundVm.behavior is not None:
                                 vmConfigSpec.info.behavior = vm['automation_level']
                                 changed = True
-                            if foundVm.enabled != False:
+                            if foundVm.enabled is not False:
                                 vmConfigSpec.info.enabled = False
                                 changed = True
 
@@ -587,7 +587,7 @@ def main():
             enable_io_loadbalance=dict(type='bool', default=False, required=False),
             loadbalance_interval=dict(type='int', default=480, required=False),
             # Automation overrides
-            space_balance_automation_level=dict(type='str', choices=['automated', 'manual','cluster_settings'], default='automated'),
+            space_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             io_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
             policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
@@ -597,11 +597,10 @@ def main():
             free_space_threshold_gb=dict(type='int', required=False),
             space_utilization_threshold=dict(type='int', required=False),
             # VM overrides
-            vm_overrides=dict(type='list', elements='dict', required=False,
-                options=dict(
+            vm_overrides=dict(type='list', elements='dict', required=False, options=dict(
                     vm_name=dict(type='str', required=True),
                     keep_vmdks_together=dict(type='bool', default=None),
-                    automation_level=dict(type='str', choices=['none','automated', 'manual', 'disabled'], default='none')
+                    automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none')
                 )
             )
         )
