@@ -279,7 +279,7 @@ class VmwareContentDeployTemplate(VmwareRestClient):
             self._resourcepool_id = cluster_obj.resource_pool
 
         # Find the resourcepool by the given resourcepool name
-        if self.resourcepool and self.cluster and self.host:
+        if self.resourcepool:
             self._resourcepool_id = self.get_resource_pool_by_name(self.datacenter, self.resourcepool, self.cluster, self.host)
             if not self._resourcepool_id:
                 self._fail(msg="Failed to find the resource_pool %s" % self.resourcepool)

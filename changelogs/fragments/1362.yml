@@ -1,0 +1,5 @@
+bugfixes:
+  - vmware_content_deploy_ovf_template - Fixed a bug that ignored `resource_pool` in some cases.
+    (https://github.com/ansible-collections/community.vmware/issues/1290).
+  - vmware_content_deploy_template - Fixed a bug that ignored `resource_pool` in some cases.
+    (https://github.com/ansible-collections/community.vmware/issues/1290).
