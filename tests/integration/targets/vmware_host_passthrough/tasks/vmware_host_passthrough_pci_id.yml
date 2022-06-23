@@ -4,7 +4,7 @@
 
 - name: Set the target_pci_device variable to execute the integration tests
   ansible.builtin.set_fact:
-    target_pci_device: "{{ list_of_pci_devices_that_can_be_enabled_passthrough.0.deviceName }}"
+    target_pci_device: "{{ list_of_pci_devices_that_can_be_enabled_passthrough.0.id }}"
 
 - name: Enable passthrough of PCI device with check_mode and diff without the cluster
   community.vmware.vmware_host_passthrough:
@@ -14,7 +14,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   check_mode: true
   diff: true
   register: enable_passthrough_check_mode_diff_result
@@ -32,7 +32,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   check_mode: true
   register: enable_passthrough_check_mode_result
 
@@ -49,7 +49,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   register: enable_passthrough_result
 
 - name: Make sure if the change has occurred
@@ -71,7 +71,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   register: enable_passthrough_indempotency_result
 
 - name: Make sure if the change hasn't occurred
@@ -87,7 +87,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
     state: absent
   register: disable_passthrough_result
 
@@ -108,7 +108,7 @@
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
     state: absent
   register: disable_passthrough_idempotency_result
 
@@ -125,7 +125,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   check_mode: true
   diff: true
   register: enable_passthrough_cluster_check_mode_diff_result
@@ -143,7 +143,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   check_mode: true
   register: enable_passthrough_cluster_check_mode_result
 
@@ -160,7 +160,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   register: enable_passthrough_cluster_result
 
 - name: Make sure if the change has occurred
@@ -182,7 +182,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
   register: enable_passthrough_cluster_indempotency_result
 
 - name: Make sure if the change hasn't occurred
@@ -198,7 +198,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
     state: absent
   register: disable_passthrough_cluster_result
 
@@ -219,7 +219,7 @@
     validate_certs: false
     cluster: "{{ ccr1 }}"
     devices:
-      - device_name: "{{ target_pci_device }}"
+      - device: "{{ target_pci_device }}"
     state: absent
   register: disable_passthrough_cluster_idempotency_result
 

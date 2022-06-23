@@ -2,16 +2,21 @@
 # Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- import_role:
+- ansible.builtin.import_role:
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
 
 - name: Include tasks pre.yml
-  include_tasks: pre.yml
+  ansible.builtin.include_tasks: pre.yml
 
-- name: Include tasks vmware_host_passthrough_tests.yml
-  include_tasks: vmware_host_passthrough.yml
+- name: Integration test for vmware_host_passthrough_tests module
   when:
     - list_of_pci_devices_that_can_be_enabled_passthrough is defined
     - list_of_pci_devices_that_can_be_enabled_passthrough | length >= 1
+  block:
+    - name: Include tasks vmware_host_passthrough_tests.yml
+      ansible.builtin.include_tasks: vmware_host_passthrough.yml
+
+    - name: Include tasks vmware_host_passthrough_pci_id.yml
+      ansible.builtin.include_tasks: vmware_host_passthrough_pci_id.yml
