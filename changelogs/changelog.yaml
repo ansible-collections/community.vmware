@@ -688,6 +688,18 @@ releases:
     - 1337_vmware_host_vmnic_info-fix_disconnected.yml
     - 184_vmware_host_facts.yml
     release_date: '2022-06-07'
+  1.18.2:
+    changes:
+      bugfixes:
+      - vmware_content_deploy_ovf_template - Fixed a bug that ignored `resource_pool`
+        in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+      - vmware_content_deploy_template - Fixed a bug that ignored `resource_pool`
+        in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+      - vmware_guest_disk - Ignore datastores in maintenance mode (https://github.com/ansible-collections/community.vmware/pull/1321).
+    fragments:
+    - 1321-vmware_vm_info-allocaded_storag_cpu_memory_output.yaml
+    - 1362.yml
+    release_date: '2022-06-24'
   1.2.0:
     changes:
       bugfixes:

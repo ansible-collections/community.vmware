@@ -5,6 +5,16 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v1.18.2
+=======
+
+Bugfixes
+--------
+
+- vmware_content_deploy_ovf_template - Fixed a bug that ignored `resource_pool` in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+- vmware_content_deploy_template - Fixed a bug that ignored `resource_pool` in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+- vmware_guest_disk - Ignore datastores in maintenance mode (https://github.com/ansible-collections/community.vmware/pull/1321).
+
 v1.18.1
 =======
 
