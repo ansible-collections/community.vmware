@@ -40,7 +40,8 @@ options:
       description:
         - List of the allowed Datastores.
         - If there is one more in the current List it will be removed.
-      type: str
+      type: list
+      elements: str
       required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
