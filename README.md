@@ -248,7 +248,7 @@ Name | Description
 
 If you want to develop new content for this collection or improve what is already here, the easiest way to work on the collection is to clone it into one of the configured [`COLLECTIONS_PATHS`](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths), and work on it there.
 
-- [Guidelines for VMware module development](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html)
+- [Guidelines for VMware module development](https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/dev_guide.html)
 
 ### Testing with `ansible-test`
 
