@@ -535,13 +535,13 @@ class VMwareDvSwitch(PyVmomi):
                         spec.defaultPortConfig.securityPolicy = result[0]
 
             # Set NetFlow config
-            results['netFlow_collector_ip'] = self.netFlow_collector_ip
-            results['netFlow_collector_port'] = self.netFlow_collector_port
-            results['netFlow_observation_domain_id'] = self.netFlow_observation_domain_id
-            results['netFlow_active_flow_timeout'] = self.netFlow_active_flow_timeout
-            results['netFlow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
-            results['netFlow_sampling_rate'] = self.netFlow_sampling_rate
-            results['netFlow_internal_flows_only'] = self.netFlow_internal_flows_only
+            results['net_flow_collector_ip'] = self.netFlow_collector_ip
+            results['net_flow_collector_port'] = self.netFlow_collector_port
+            results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
+            results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
+            results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
+            results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
+            results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
             result = self.check_netFlow_config()
 
             changed_netFlow = result[1]
@@ -930,13 +930,13 @@ class VMwareDvSwitch(PyVmomi):
             results['version_previous'] = self.dvs.config.productInfo.version
 
         # Check NetFlow Config
-        results['netFlow_collector_ip'] = self.netFlow_collector_ip
-        results['netFlow_collector_port'] = self.netFlow_collector_port
-        results['netFlow_observation_domain_id'] = self.netFlow_observation_domain_id
-        results['netFlow_active_flow_timeout'] = self.netFlow_active_flow_timeout
-        results['netFlow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
-        results['netFlow_sampling_rate'] = self.netFlow_sampling_rate
-        results['netFlow_internal_flows_only'] = self.netFlow_internal_flows_only
+        results['net_flow_collector_ip'] = self.netFlow_collector_ip
+        results['net_flow_collector_port'] = self.netFlow_collector_port
+        results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
+        results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
+        results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
+        results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
+        results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
         (ipfixConfig, changed_netFlow, changed_collectorIpAddress, collectorIpAddress_previous,
          changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
          changed_activeFlowTimeout, activeFlowTimeout_previous, changed_idleFlowTimeout, idleFlowTimeout_previous,
@@ -945,19 +945,19 @@ class VMwareDvSwitch(PyVmomi):
             changed = changed_settings = True
             changed_list.append("netFlow")
             if changed_collectorIpAddress:
-                results['netFlow_collector_ip_previous'] = collectorIpAddress_previous
+                results['net_flow_collector_ip_previous'] = collectorIpAddress_previous
             if changed_collectorPort:
-                results['netFlow_collector_port_previous'] = collectorPort_previous
+                results['net_flow_collector_port_previous'] = collectorPort_previous
             if changed_observationDomainId:
-                results['netFlow_observation_domain_id_previous'] = observationDomainId_previous
+                results['net_flow_observation_domain_id_previous'] = observationDomainId_previous
             if changed_activeFlowTimeout:
-                results['netFlow_active_flow_timeout_previous'] = activeFlowTimeout_previous
+                results['net_flow_active_flow_timeout_previous'] = activeFlowTimeout_previous
             if changed_idleFlowTimeout:
-                results['netFlow_idle_flow_timeout_previous'] = idleFlowTimeout_previous
+                results['net_flow_idle_flow_timeout_previous'] = idleFlowTimeout_previous
             if changed_samplingRate:
-                results['netFlow_sampling_rate_previous'] = samplingRate_previous
+                results['net_flow_sampling_rate_previous'] = samplingRate_previous
             if changed_internalFlowsOnly:
-                results['netFlow_internal_flows_only_previous'] = internalFlowsOnly_previous
+                results['net_flow_internal_flows_only_previous'] = internalFlowsOnly_previous
 
             config_spec.ipfixConfig = ipfixConfig
 
