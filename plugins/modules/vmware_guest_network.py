@@ -481,9 +481,9 @@ class PyVmomiHelper(PyVmomi):
             if isinstance(nic, vim.vm.device.VirtualSriovEthernetCard):
                 d_item['allow_guest_os_mtu_change'] = nic.allowGuestOSMtuChange
                 if isinstance(nic.sriovBacking, vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo):
-                    if isinstance(nic.sriovBacking.physicalFunctionBacking, vim.vm.device.VirtualPCIPassthrough.DeviceBacking):
+                    if isinstance(nic.sriovBacking.physicalFunctionBacking, vim.vm.device.VirtualPCIPassthrough):
                         d_item['physical_function_backing'] = nic.sriovBacking.physicalFunctionBacking.id
-                    if isinstance(nic.sriovBacking.virtualFunctionBacking, vim.vm.device.VirtualPCIPassthrough.DeviceBacking):
+                    if isinstance(nic.sriovBacking.virtualFunctionBacking, vim.vm.device.VirtualPCIPassthrough):
                         d_item['virtual_function_backing'] = nic.sriovBacking.virtualFunctionBacking.id
             # If a distributed port group specified
             if isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo):
