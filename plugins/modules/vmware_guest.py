@@ -496,6 +496,9 @@ options:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - All parameters and VMware object names are case sensitive.
+    - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
+      They are set by the customization via vmware-tools.
+      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
     type: list
     elements: dict
     suboptions:
