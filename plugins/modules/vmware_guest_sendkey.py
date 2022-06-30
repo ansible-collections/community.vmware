@@ -247,6 +247,7 @@ class PyVmomiHelper(PyVmomi):
             ('END', '0x4d', [('', [])]),
             ('CTRL_ALT_DEL', '0x4c', [('', ['CTRL', 'ALT'])]),
             ('CTRL_C', '0x06', [('', ['CTRL'])]),
+            ('CTRL_X', '0x1b', [('', ['CTRL'])]),
             ('RIGHTARROW', '0x4f', [('', [])]),
             ('LEFTARROW', '0x50', [('', [])]),
             ('DOWNARROW', '0x51', [('', [])]),
