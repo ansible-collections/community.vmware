@@ -99,10 +99,6 @@ from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     vmware_argument_spec,
-    get_all_objs,
-    find_cluster_by_name,
-    get_parent_datacenter,
-    find_datastore_by_name,
     wait_for_task,
     TaskError)
 
@@ -135,7 +131,6 @@ class VMwareDatastore(PyVmomi):
         Returns: True if there is diff, else False
         """
         iormConfiguration = self.datastore.iormConfiguration
-        #self.module.fail_json(msg="%s" % vars(iormConfiguration))
 
         conf_statsAggregationDisabled = not self.module.params.get('statistic_collection')
 
@@ -212,8 +207,6 @@ class VMwareDatastore(PyVmomi):
                 elif self.module.params.get('storage_io_control') == "disable":
                     config_spec.enabled = False
                     config_spec.statsCollectionEnabled = False
-
-                #self.module.fail_json(msg="%s" % vars(config_spec))
 
                 try:
                     task = self.storageResourceManager.ConfigureDatastoreIORM_Task(self.datastore, config_spec)
