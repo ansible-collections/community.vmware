@@ -418,12 +418,12 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                 if io_latency_threshold is not None and io_latency_threshold != currentPodConfig.ioLoadBalanceConfig.ioLatencyThreshold:
                     sdrs_spec.podConfigSpec.ioLoadBalanceConfig.ioLatencyThreshold = io_latency_threshold
-                    results['result'] += " Changed Space threshold to '%s'." % io_latency_threshold
+                    results['result'] += " Changed latency_ threshold to '%s'." % io_latency_threshold
                     change = True
 
                 if io_load_imbalanc_threshold is not None and io_load_imbalanc_threshold != currentPodConfig.ioLoadBalanceConfig.ioLoadImbalanceThreshold:
                     sdrs_spec.podConfigSpec.ioLoadBalanceConfig.ioLoadImbalanceThreshold = io_load_imbalanc_threshold
-                    results['result'] += " Changed Space threshold to '%s'." % io_load_imbalanc_threshold
+                    results['result'] += " Changed load imbalance threshold to '%s'." % io_load_imbalanc_threshold
                     change = True
 
                 # Storage DRS VM Config
