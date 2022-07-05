@@ -836,8 +836,6 @@ class PyVmomiHelper(PyVmomi):
                 disk['autoselect_datastore'] = None
                 disk['filename'] = None
                 disk['disk_mode'] = None
-                # current_disk['disk_mode'] = None
-                # current_disk['sharing'] = None
 
             # Check state
             if disk['state'] is not None:
@@ -1056,8 +1054,6 @@ class PyVmomiHelper(PyVmomi):
                     current_disk['bus_sharing'] = bus_sharing
 
             disks_data.append(current_disk)
-
-        # self.module.fail_json(msg="%s" % disks_data)
 
         return disks_data
 

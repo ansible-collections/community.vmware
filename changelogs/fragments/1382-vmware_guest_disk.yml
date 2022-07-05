@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_disk - Add a new disk type to support add/reconfigure/remove vPMem disk (https://github.com/ansible-collections/community.vmware/pull/1382). 
