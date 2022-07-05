@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_cluster_vcls.py - Add the possibility to override the default vCLS VM disk placement for this cluster.
-    (https://github.com/ansible-collections/community.vmware/pull/1355)
