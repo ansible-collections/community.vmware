@@ -479,7 +479,7 @@ class VmwareGuestInstantClone(PyVmomi):
             self.module.fail_json(msg="Datastore not found.")
 
         if self.params['folder']:
-            self.folder = self.find_folder_by_name(folder_name=self.params['folder'])
+            self.folder = self.find_folder_by_fqpn(folder_name=self.params['folder'], datacenter_name=self.params['datacenter'], folder_type='vm')
             if self.folder is None:
                 self.module.fail_json(msg="Folder not found.")
         else:
