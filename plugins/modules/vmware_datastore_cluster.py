@@ -392,7 +392,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                 # Space Load Balance Config
                 if min_space_utilization_difference is not None and \
-                    min_space_utilization_difference != currentPodConfig.spaceLoadBalanceConfig.minSpaceUtilizationDifference:
+                        min_space_utilization_difference != currentPodConfig.spaceLoadBalanceConfig.minSpaceUtilizationDifference:
                     sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.minSpaceUtilizationDifference = min_space_utilization_difference
                     results['result'] += " Changed minimum space utilization difference to '%s' prozent." % min_space_utilization_difference
                     change = True
