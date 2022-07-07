@@ -196,7 +196,6 @@ options:
             collector_ip:
                 type: str
                 description: The IP Address (IPv4 or IPv6) of the NetFlow collector.
-                default: ''
             collector_port:
                 type: int
                 description: The Port of the NetFlow collector.
@@ -227,7 +226,6 @@ options:
                 default: False
         type: dict
         default: {
-            'collector_ip': '',
             'collector_port': 0,
             'observation_domain_id': 0,
             'active_flow_timeout': 60,
@@ -401,7 +399,7 @@ class VMwareDvSwitch(PyVmomi):
         if self.network_policy is None:
             self.network_policy = {}
 
-        self.netFlow_collector_ip = self.module.params['net_flow'].get('collector_ip')
+        self.netFlow_collector_ip = self.module.params['net_flow'].get('collector_ip') or None
         self.netFlow_collector_port = self.module.params['net_flow'].get('collector_port')
         self.netFlow_observation_domain_id = self.module.params['net_flow'].get('observation_domain_id')
         self.netFlow_active_flow_timeout = self.module.params['net_flow'].get('active_flow_timeout')
@@ -535,13 +533,14 @@ class VMwareDvSwitch(PyVmomi):
                         spec.defaultPortConfig.securityPolicy = result[0]
 
             # Set NetFlow config
-            results['net_flow_collector_ip'] = self.netFlow_collector_ip
-            results['net_flow_collector_port'] = self.netFlow_collector_port
-            results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
-            results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
-            results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
-            results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
-            results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
+            if self.netFlow_collector_ip is not None:
+                results['net_flow_collector_ip'] = self.netFlow_collector_ip
+                results['net_flow_collector_port'] = self.netFlow_collector_port
+                results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
+                results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
+                results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
+                results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
+                results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
             result = self.check_netFlow_config()
 
             changed_netFlow = result[1]
@@ -706,34 +705,35 @@ class VMwareDvSwitch(PyVmomi):
         else:
             new_config = current_config
 
-        if current_config.collectorIpAddress != self.netFlow_collector_ip:
-            changed = changed_collectorIpAddress = True
-            collectorIpAddress_previous = current_config.collectorIpAddress
-            new_config.collectorIpAddress = self.netFlow_collector_ip
-        if current_config.collectorPort != self.netFlow_collector_port:
-            changed = changed_collectorPort = True
-            collectorPort_previous = current_config.collectorPort
-            new_config.collectorPort = self.netFlow_collector_port
-        if current_config.observationDomainId != self.netFlow_observation_domain_id:
-            changed = changed_observationDomainId = True
-            observationDomainId_previous = current_config.observationDomainId
-            new_config.observationDomainId = self.netFlow_observation_domain_id
-        if current_config.activeFlowTimeout != self.netFlow_active_flow_timeout:
-            changed = changed_activeFlowTimeout = True
-            activeFlowTimeout_previous = current_config.activeFlowTimeout
-            new_config.activeFlowTimeout = self.netFlow_active_flow_timeout
-        if current_config.idleFlowTimeout != self.netFlow_idle_flow_timeout:
-            changed = changed_idleFlowTimeout = True
-            idleFlowTimeout_previous = current_config.idleFlowTimeout
-            new_config.idleFlowTimeout = self.netFlow_idle_flow_timeout
-        if current_config.samplingRate != self.netFlow_sampling_rate:
-            changed = changed_samplingRate = True
-            samplingRate_previous = current_config.samplingRate
-            new_config.samplingRate = self.netFlow_sampling_rate
-        if current_config.internalFlowsOnly != self.netFlow_internal_flows_only:
-            changed = changed_internalFlowsOnly = True
-            internalFlowsOnly_previous = current_config.internalFlowsOnly
-            new_config.internalFlowsOnly = self.netFlow_internal_flows_only
+        if self.netFlow_collector_ip is not None:
+            if current_config.collectorIpAddress != self.netFlow_collector_ip:
+                changed = changed_collectorIpAddress = True
+                collectorIpAddress_previous = current_config.collectorIpAddress
+                new_config.collectorIpAddress = self.netFlow_collector_ip
+            if current_config.collectorPort != self.netFlow_collector_port:
+                changed = changed_collectorPort = True
+                collectorPort_previous = current_config.collectorPort
+                new_config.collectorPort = self.netFlow_collector_port
+            if current_config.observationDomainId != self.netFlow_observation_domain_id:
+                changed = changed_observationDomainId = True
+                observationDomainId_previous = current_config.observationDomainId
+                new_config.observationDomainId = self.netFlow_observation_domain_id
+            if current_config.activeFlowTimeout != self.netFlow_active_flow_timeout:
+                changed = changed_activeFlowTimeout = True
+                activeFlowTimeout_previous = current_config.activeFlowTimeout
+                new_config.activeFlowTimeout = self.netFlow_active_flow_timeout
+            if current_config.idleFlowTimeout != self.netFlow_idle_flow_timeout:
+                changed = changed_idleFlowTimeout = True
+                idleFlowTimeout_previous = current_config.idleFlowTimeout
+                new_config.idleFlowTimeout = self.netFlow_idle_flow_timeout
+            if current_config.samplingRate != self.netFlow_sampling_rate:
+                changed = changed_samplingRate = True
+                samplingRate_previous = current_config.samplingRate
+                new_config.samplingRate = self.netFlow_sampling_rate
+            if current_config.internalFlowsOnly != self.netFlow_internal_flows_only:
+                changed = changed_internalFlowsOnly = True
+                internalFlowsOnly_previous = current_config.internalFlowsOnly
+                new_config.internalFlowsOnly = self.netFlow_internal_flows_only
 
         return(new_config, changed, changed_collectorIpAddress, collectorIpAddress_previous,
                changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
@@ -930,13 +930,14 @@ class VMwareDvSwitch(PyVmomi):
             results['version_previous'] = self.dvs.config.productInfo.version
 
         # Check NetFlow Config
-        results['net_flow_collector_ip'] = self.netFlow_collector_ip
-        results['net_flow_collector_port'] = self.netFlow_collector_port
-        results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
-        results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
-        results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
-        results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
-        results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
+        if self.netFlow_collector_ip is not None:
+            results['net_flow_collector_ip'] = self.netFlow_collector_ip
+            results['net_flow_collector_port'] = self.netFlow_collector_port
+            results['net_flow_observation_domain_id'] = self.netFlow_observation_domain_id
+            results['net_flow_active_flow_timeout'] = self.netFlow_active_flow_timeout
+            results['net_flow_idle_flow_timeout'] = self.netFlow_idle_flow_timeout
+            results['net_flow_sampling_rate'] = self.netFlow_sampling_rate
+            results['net_flow_internal_flows_only'] = self.netFlow_internal_flows_only
         (ipfixConfig, changed_netFlow, changed_collectorIpAddress, collectorIpAddress_previous,
          changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
          changed_activeFlowTimeout, activeFlowTimeout_previous, changed_idleFlowTimeout, idleFlowTimeout_previous,
@@ -1058,7 +1059,6 @@ def main():
                     internal_flows_only=dict(type='bool', default=False),
                 ),
                 default=dict(
-                    collector_ip='',
                     collector_port=0,
                     observation_domain_id=0,
                     active_flow_timeout=60,
