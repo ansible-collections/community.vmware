@@ -30,7 +30,6 @@ options:
    datacenter:
      description:
      - Datacenter to search for the datastores.
-     required: True
      aliases: ['datacenter_name']
      type: str
    storage_io_control:
