@@ -94,8 +94,9 @@ options:
          description:
          - The type of disk, if not specified then use C(thick) type for new disk, no eagerzero.
          - The disk type C(rdm) is added in version 1.13.0.
+         - The disk type C(vpmemdisk) is added in version 2.7.0.
          type: str
-         choices: ['thin', 'eagerzeroedthick', 'thick', 'rdm' ]
+         choices: ['thin', 'eagerzeroedthick', 'thick', 'rdm', 'vpmemdisk']
        disk_mode:
          description:
            - Type of disk mode. If not specified then use C(persistent) mode for new disk.
@@ -103,6 +104,7 @@ options:
            - If set to 'independent_persistent' mode, same as persistent, but not affected by snapshots.
            - If set to 'independent_nonpersistent' mode, changes to virtual disk are made to a redo log and discarded
              at power off, but not affected by snapshots.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
        rdm_path:
@@ -119,21 +121,25 @@ options:
          default: False
          version_added: '1.17.0'
        compatibility_mode:
-         description: Compatibility mode for raw devices. Required for disk type 'rdm'
+         description: Compatibility mode for raw devices. Required when disk type C(type) is set to C(rdm).
          type: str
          choices: ['physicalMode','virtualMode']
        sharing:
          description:
            - The sharing mode of the virtual disk.
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
-           - Sharing can only be set if C(type) is set to C(eagerzeroedthick)or C(rdm).
+           - Sharing can only be set if C(type) is set to C(eagerzeroedthick) or C(rdm).
          type: bool
          default: False
        datastore:
-         description: Name of datastore or datastore cluster to be used for the disk.
+         description:
+           - Name of datastore or datastore cluster to be used for the disk.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          type: str
        autoselect_datastore:
-         description: Select the less used datastore. Specify only if C(datastore) is not specified.
+         description:
+           - Select the less used datastore. Specify only if C(datastore) is not specified.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          type: bool
        scsi_controller:
          description:
@@ -172,6 +178,7 @@ options:
          description:
            - Existing disk image to be used. Filename must already exist on the datastore.
            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in version 2.10.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          type: str
        state:
          description:
@@ -193,7 +200,9 @@ options:
          type: int
          choices: [0, 1, 2, 3]
        iolimit:
-         description: Section specifies the shares and limit for storage I/O resource.
+         description:
+           - Section specifies the shares and limit for storage I/O resource.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          suboptions:
            limit:
              description: Section specifies values for limit where the utilization of a virtual machine will not exceed, even if there are available resources.
@@ -211,7 +220,9 @@ options:
              type: dict
          type: dict
        shares:
-         description: Section for iolimit section tells about what are all different types of shares user can add for disk.
+         description:
+           - Section for iolimit section tells about what are all different types of shares user can add for disk.
+           - Not applicable when disk C(type) is set to C(vpmemdisk).
          suboptions:
            level:
              description: Tells about different level for the shares section.
@@ -445,6 +456,24 @@ EXAMPLES = r'''
         disk_mode: 'independent_persistent'
   delegate_to: localhost
   register: disk_facts
+
+- name: Add a new vPMem disk to virtual machine to SATA controller
+  community.vmware.vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter_name }}"
+    validate_certs: no
+    name: VM_226
+    disk:
+      - type: vpmemdisk
+        size_gb: 1
+        state: present
+        controller_type: sata
+        controller_number: 1
+        unit_number: 2
+  delegate_to: localhost
+  register: disk_facts
 '''
 
 RETURN = r'''
@@ -528,18 +557,22 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.backing = vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo()
             disk_spec.device.backing.deviceName = disk['rdm_path']
             disk_spec.device.backing.compatibilityMode = disk['compatibility_mode']
+        elif disk['disk_type'] == 'vpmemdisk':
+            disk_spec.device.backing = vim.vm.device.VirtualDisk.LocalPMemBackingInfo()
         else:
             disk_spec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
 
-        disk_spec.device.backing.diskMode = disk['disk_mode']
-        disk_spec.device.backing.sharing = disk['sharing']
+        if disk['disk_type'] != 'vpmemdisk':
+            disk_spec.device.backing.diskMode = disk['disk_mode']
+            disk_spec.device.backing.sharing = disk['sharing']
+
+            if disk['disk_type'] == 'thin':
+                disk_spec.device.backing.thinProvisioned = True
+            elif disk['disk_type'] == 'eagerzeroedthick':
+                disk_spec.device.backing.eagerlyScrub = True
+
         disk_spec.device.controllerKey = ctl_key
         disk_spec.device.unitNumber = disk['disk_unit_number']
-
-        if disk['disk_type'] == 'thin':
-            disk_spec.device.backing.thinProvisioned = True
-        elif disk['disk_type'] == 'eagerzeroedthick':
-            disk_spec.device.backing.eagerlyScrub = True
 
         return disk_spec
 
@@ -687,7 +720,8 @@ class PyVmomiHelper(PyVmomi):
                                                                       disk_spec.device.capacityInKB))
                                     if disk['size'] != disk_spec.device.capacityInKB:
                                         disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-                                        disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
+                                        if disk['disk_type'] != 'vpmemdisk':
+                                            disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
                                         disk_spec.device.capacityInKB = disk['size']
                                         self.config_spec.deviceChange.append(disk_spec)
                                         disk_change = True
@@ -791,6 +825,18 @@ class PyVmomiHelper(PyVmomi):
                                 sharing=False,
                                 bus_sharing='noSharing',
                                 cluster_disk=False)
+            # Type of Disk
+            if disk['type'] is not None:
+                current_disk['disk_type'] = disk['type']
+            if current_disk['disk_type'] == 'vpmemdisk':
+                if self.vm.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+                    self.module.fail_json(msg="Please make sure VM is in powered off state before doing vPMem disk"
+                                              " reconfiguration.")
+                disk['datastore'] = None
+                disk['autoselect_datastore'] = None
+                disk['filename'] = None
+                disk['disk_mode'] = None
+
             # Check state
             if disk['state'] is not None:
                 current_disk['state'] = disk['state']
@@ -899,6 +945,10 @@ class PyVmomiHelper(PyVmomi):
                             datastore = ds
                             datastore_freespace = ds.summary.freeSpace
                     current_disk['datastore'] = datastore
+                else:
+                    if current_disk['disk_type'] == 'vpmemdisk':
+                        current_disk['datastore'] = None
+                        current_disk['autoselect_datastore'] = False
 
                 if disk['filename'] is not None:
                     current_disk['filename'] = disk['filename']
@@ -960,19 +1010,18 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="No size, size_kb, size_mb, size_gb or size_tb"
                                               " attribute found into disk index [%s] configuration." % disk_index)
 
-                # Type of Disk
-                if disk['type'] is not None:
-                    current_disk['disk_type'] = disk['type']
                 # Mode of Disk
                 if disk['disk_mode'] is not None:
                     current_disk['disk_mode'] = disk['disk_mode']
-                # Sharing mode of disk
-                current_disk['sharing'] = self.get_sharing(disk, current_disk['disk_type'], disk_index)
 
-                if disk['shares'] is not None:
-                    current_disk['shares'] = disk['shares']
-                if disk['iolimit'] is not None:
-                    current_disk['iolimit'] = disk['iolimit']
+                if current_disk['disk_type'] != 'vpmemdisk':
+                    # Sharing mode of disk
+                    current_disk['sharing'] = self.get_sharing(disk, current_disk['disk_type'], disk_index)
+
+                    if disk['shares'] is not None:
+                        current_disk['shares'] = disk['shares']
+                    if disk['iolimit'] is not None:
+                        current_disk['iolimit'] = disk['iolimit']
 
                 # Deal with RDM disk needs. RDMS require some different values compared to Virtual Disks
                 if disk['type'] == 'rdm':
@@ -983,7 +1032,7 @@ class PyVmomiHelper(PyVmomi):
                     current_disk['compatibility_mode'] = compatibility_mode
 
                     # RDMs need a path
-                    if 'rdm_path'not in disk and 'filename' not in disk:
+                    if 'rdm_path' not in disk and 'filename' not in disk:
                         self.module.fail_json(msg="rdm_path and/or 'filename' needs must be specified when using disk type 'rdm'"
                                               "for disk index [%s]" % disk_index)
                     else:
@@ -995,15 +1044,17 @@ class PyVmomiHelper(PyVmomi):
                     else:
                         current_disk['cluster_disk'] = disk.get('cluster_disk')
 
-                # Enable Physical or virtuals SCSI Bus Sharing
+                # Enable Physical or virtual SCSI Bus Sharing
                 if disk['bus_sharing']:
                     bus_sharing = disk.get('bus_sharing', 'noSharing')
                     if bus_sharing not in ['noSharing', 'physicalSharing', 'virtualSharing']:
-                        self.module.fail_json(msg="Invalid SCSI 'bus_sharing' specied for disk index [%s]. Please specify"
-                                              "'bus_sharing' value from['noSharing', 'physicalSharing', 'virtualSharing']." % disk_index)
+                        self.module.fail_json(msg="Invalid SCSI 'bus_sharing' specied for disk index [%s]. Please "
+                                                  "specify 'bus_sharing' value from "
+                                                  "['noSharing', 'physicalSharing', 'virtualSharing']." % disk_index)
                     current_disk['bus_sharing'] = bus_sharing
 
             disks_data.append(current_disk)
+
         return disks_data
 
     def get_recommended_datastore(self, datastore_cluster_obj, disk_spec_obj):
@@ -1085,7 +1136,7 @@ class PyVmomiHelper(PyVmomi):
                     backing_filename=disk.backing.fileName,
                     backing_datastore=disk.backing.datastore.name,
                     backing_disk_mode=disk.backing.diskMode,
-                    backing_sharing=disk.backing.sharing,
+                    backing_sharing=disk.backing.sharing if hasattr(disk.backing, 'sharing') else None,
                     backing_uuid=disk.backing.uuid,
                     controller_key=disk.controllerKey,
                     unit_number=disk.unitNumber,
@@ -1101,7 +1152,7 @@ class PyVmomiHelper(PyVmomi):
                     disks_facts[disk_index].update(backing_devicename=disk.backing.deviceName,
                                                    backing_compatibility_mode=disk.backing.compatibilityMode)
 
-                else:
+                elif not isinstance(disk.backing, vim.vm.device.VirtualDisk.LocalPMemBackingInfo):
                     disks_facts[disk_index].update(backing_writethrough=disk.backing.writeThrough,
                                                    backing_thinprovisioned=disk.backing.thinProvisioned,
                                                    backing_eagerlyscrub=bool(disk.backing.eagerlyScrub))
@@ -1128,7 +1179,7 @@ def main():
                 size_mb=dict(type='int'),
                 size_gb=dict(type='int'),
                 size_tb=dict(type='int'),
-                type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick', 'rdm']),
+                type=dict(type='str', choices=['thin', 'eagerzeroedthick', 'thick', 'rdm', 'vpmemdisk']),
                 disk_mode=dict(type='str', choices=['persistent', 'independent_persistent', 'independent_nonpersistent']),
                 compatibility_mode=dict(type='str', choices=['physicalMode', 'virtualMode']),
                 rdm_path=dict(type='str'),
