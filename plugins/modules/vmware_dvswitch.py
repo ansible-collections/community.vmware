@@ -190,6 +190,7 @@ options:
         required: False
         type: str
     net_flow:
+        version_added: '2.7.0'
         description:
             - Dictionary which configures the Net Flow for the Distributed Switch.
         suboptions:
