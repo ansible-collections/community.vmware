@@ -1542,6 +1542,7 @@ Parameters
                         <div>A list of networks (in the order of the NICs).</div>
                         <div>Removing NICs is not allowed, while reconfiguring the virtual machine.</div>
                         <div>All parameters and VMware object names are case sensitive.</div>
+                        <div>The <em>type</em>, <em>ip</em>, <em>netmask</em>, <em>gateway</em>, <em>domain</em>, <em>dns_servers</em> options don&#x27;t set to a guest when creating a blank new virtual machine. They are set by the customization via vmware-tools. If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).</div>
                 </td>
             </tr>
                                 <tr>
