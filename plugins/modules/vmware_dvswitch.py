@@ -1051,7 +1051,7 @@ def main():
             net_flow=dict(
                 type='dict',
                 options=dict(
-                    collector_ip=dict(type='str', default=''),
+                    collector_ip=dict(type='str'),
                     collector_port=dict(type='int', default=0),
                     observation_domain_id=dict(type='int', default=0),
                     active_flow_timeout=dict(type='int', default=60),
