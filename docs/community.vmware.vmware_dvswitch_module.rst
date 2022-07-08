@@ -347,6 +347,148 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>net_flow</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.7.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"active_flow_timeout": 60, "collector_port": 0, "idle_flow_timeout": 15, "internal_flows_only": false, "observation_domain_id": 0, "sampling_rate": 4096}</div>
+                </td>
+                <td>
+                        <div>Dictionary which configures the Net Flow for the Distributed Switch.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>active_flow_timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">60</div>
+                </td>
+                <td>
+                        <div>The time, in seconds, to wait before sending information after the flow is initiated.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>collector_ip</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The IP Address (IPv4 or IPv6) of the NetFlow collector.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>collector_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">0</div>
+                </td>
+                <td>
+                        <div>The Port of the NetFlow collector.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>idle_flow_timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">15</div>
+                </td>
+                <td>
+                        <div>The time, in seconds, to wait before sending information after the flow is initiated.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>internal_flows_only</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If True, data on network activity between vms on the same host will be collected only.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>observation_domain_id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">0</div>
+                </td>
+                <td>
+                        <div>Identifies the information related to the switch.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>sampling_rate</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">4096</div>
+                </td>
+                <td>
+                        <div>The portion of data that the switch collects.</div>
+                        <div>The sampling rate represents the number of packets that NetFlow drops after every collected packet.</div>
+                        <div>If the rate is 0, NetFlow samples every packet, that is, collect one packet and drop none.</div>
+                        <div>If the rate is 1, NetFlow samples a packet and drops the next one, and so on.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>network_policy</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -676,6 +818,14 @@ Examples
           vlan_mtu_interval: 1
           teaming_failover: true
           teaming_failover_interval: 1
+        net_flow:
+            collector_ip: 192.168.10.50
+            collector_port: 50034
+            observation_domain_id: 0
+            active_flow_timeout: 60
+            idle_flow_timeout: 15
+            sampling_rate: 4096
+            internal_flows_only: False
         state: present
       delegate_to: localhost
 
@@ -717,7 +867,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>information about performed operation</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: False, &#x27;contact&#x27;: None, &#x27;contact_details&#x27;: None, &#x27;description&#x27;: None, &#x27;discovery_operation&#x27;: &#x27;both&#x27;, &#x27;discovery_protocol&#x27;: &#x27;cdp&#x27;, &#x27;dvswitch&#x27;: &#x27;test&#x27;, &#x27;health_check_teaming&#x27;: False, &#x27;health_check_teaming_interval&#x27;: 0, &#x27;health_check_vlan&#x27;: False, &#x27;health_check_vlan_interval&#x27;: 0, &#x27;mtu&#x27;: 9000, &#x27;multicast_filtering_mode&#x27;: &#x27;basic&#x27;, &#x27;result&#x27;: &#x27;DVS already configured properly&#x27;, &#x27;uplink_quantity&#x27;: 2, &#x27;uplinks&#x27;: [&#x27;Uplink_1&#x27;, &#x27;Uplink_2&#x27;], &#x27;version&#x27;: &#x27;6.6.0&#x27;}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: False, &#x27;contact&#x27;: None, &#x27;contact_details&#x27;: None, &#x27;description&#x27;: None, &#x27;discovery_operation&#x27;: &#x27;both&#x27;, &#x27;discovery_protocol&#x27;: &#x27;cdp&#x27;, &#x27;dvswitch&#x27;: &#x27;test&#x27;, &#x27;health_check_teaming&#x27;: False, &#x27;health_check_teaming_interval&#x27;: 0, &#x27;health_check_vlan&#x27;: False, &#x27;health_check_vlan_interval&#x27;: 0, &#x27;net_flow_collector_ip&#x27;: &#x27;192.168.10.50&#x27;, &#x27;net_flow_collector_port&#x27;: 50034, &#x27;net_flow_observation_domain_id&#x27;: 0, &#x27;net_flow_active_flow_timeout&#x27;: 60, &#x27;net_flow_idle_flow_timeout&#x27;: 15, &#x27;net_flow_sampling_rate&#x27;: 4096, &#x27;net_flow_internal_flows_only&#x27;: False, &#x27;mtu&#x27;: 9000, &#x27;multicast_filtering_mode&#x27;: &#x27;basic&#x27;, &#x27;result&#x27;: &#x27;DVS already configured properly&#x27;, &#x27;uplink_quantity&#x27;: 2, &#x27;uplinks&#x27;: [&#x27;Uplink_1&#x27;, &#x27;Uplink_2&#x27;], &#x27;version&#x27;: &#x27;6.6.0&#x27;}</div>
                 </td>
             </tr>
     </table>

@@ -181,6 +181,8 @@ Parameters
                                     <li>virtualMachine</li>
                                     <li>vmotion</li>
                                     <li>vsan</li>
+                                    <li>backupNfc</li>
+                                    <li>nvmetcp</li>
                         </ul>
                 </td>
                 <td>

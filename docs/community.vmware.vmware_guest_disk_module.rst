@@ -95,6 +95,7 @@ Parameters
                 </td>
                 <td>
                         <div>Select the less used datastore. Specify only if <code>datastore</code> is not specified.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -160,7 +161,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Compatibility mode for raw devices. Required for disk type &#x27;rdm&#x27;</div>
+                        <div>Compatibility mode for raw devices. Required when disk type <code>type</code> is set to <code>rdm</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -224,6 +225,7 @@ Parameters
                 </td>
                 <td>
                         <div>Name of datastore or datastore cluster to be used for the disk.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -268,6 +270,7 @@ Parameters
                         <div>If set to &#x27;persistent&#x27; mode, changes are immediately and permanently written to the virtual disk.</div>
                         <div>If set to &#x27;independent_persistent&#x27; mode, same as persistent, but not affected by snapshots.</div>
                         <div>If set to &#x27;independent_nonpersistent&#x27; mode, changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -285,6 +288,7 @@ Parameters
                 <td>
                         <div>Existing disk image to be used. Filename must already exist on the datastore.</div>
                         <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in version 2.10.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -301,6 +305,7 @@ Parameters
                 </td>
                 <td>
                         <div>Section specifies the shares and limit for storage I/O resource.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
                                 <tr>
@@ -458,6 +463,7 @@ Parameters
                 </td>
                 <td>
                         <div>Section for iolimit section tells about what are all different types of shares user can add for disk.</div>
+                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
                 </td>
             </tr>
                                 <tr>
@@ -520,7 +526,7 @@ Parameters
                 <td>
                         <div>The sharing mode of the virtual disk.</div>
                         <div>Setting sharing means that multiple virtual machines can write to the virtual disk.</div>
-                        <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code>or <code>rdm</code>.</div>
+                        <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code> or <code>rdm</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -644,11 +650,13 @@ Parameters
                                     <li>eagerzeroedthick</li>
                                     <li>thick</li>
                                     <li>rdm</li>
+                                    <li>vpmemdisk</li>
                         </ul>
                 </td>
                 <td>
                         <div>The type of disk, if not specified then use <code>thick</code> type for new disk, no eagerzero.</div>
                         <div>The disk type <code>rdm</code> is added in version 1.13.0.</div>
+                        <div>The disk type <code>vpmemdisk</code> is added in version 2.7.0.</div>
                 </td>
             </tr>
             <tr>
@@ -1126,6 +1134,24 @@ Examples
             controller_number: 2
             unit_number: 3
             disk_mode: 'independent_persistent'
+      delegate_to: localhost
+      register: disk_facts
+
+    - name: Add a new vPMem disk to virtual machine to SATA controller
+      community.vmware.vmware_guest_disk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: VM_226
+        disk:
+          - type: vpmemdisk
+            size_gb: 1
+            state: present
+            controller_type: sata
+            controller_number: 1
+            unit_number: 2
       delegate_to: localhost
       register: disk_facts
 

@@ -110,6 +110,7 @@ Parameters
                                     <li>ClusterComputeResource</li>
                                     <li>DistributedVirtualSwitch</li>
                                     <li>DistributedVirtualPortgroup</li>
+                                    <li>StoragePod</li>
                         </ul>
                 </td>
                 <td>

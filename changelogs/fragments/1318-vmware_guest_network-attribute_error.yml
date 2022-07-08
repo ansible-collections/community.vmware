@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_guest_network - Fix an `AttributeError` when using SR-IOV NICs (https://github.com/ansible-collections/community.vmware/issues/1318).

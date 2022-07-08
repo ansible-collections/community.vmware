@@ -1,14 +1,13 @@
-.. _community.vmware.vmware_host_passthrough_module:
+.. _community.vmware.vmware_cluster_vcls_module:
 
 
-****************************************
-community.vmware.vmware_host_passthrough
-****************************************
+************************************
+community.vmware.vmware_cluster_vcls
+************************************
 
-**Manage PCI device passthrough settings on host**
+**Override the default vCLS (vSphere Cluster Services) VM disk placement for this cluster.**
 
 
-Version added: 1.11.0
 
 .. contents::
    :local:
@@ -17,7 +16,9 @@ Version added: 1.11.0
 
 Synopsis
 --------
-- This module can be managed PCI device passthrough settings on host.
+- Override the default vCLS VM disk placement for this cluster.
+- Some datastores cannot be selected for vCLS 'Allowed' as they are blocked by solutions as SRM or vSAN maintenance mode where vCLS cannot be configured.
+- All values and VMware object names are case sensitive.
 
 
 
@@ -25,8 +26,8 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 3.6
-- PyVmomi
+- Tested on ESXi 7.0
+- PyVmomi installed.
 
 
 Parameters
@@ -36,81 +37,63 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="2">Parameter</th>
+            <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the cluster from which all host systems will be used.</div>
-                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: cluster_name</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>devices</b>
+                    <b>allowed_datastores</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
+                         / <span style="color: purple">elements=string</span>
                          / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>List of PCI device name or id.</div>
+                        <div>List of the allowed Datastores.</div>
+                        <div>If there is one more in the current List it will be removed.</div>
                 </td>
             </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
+            <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>device</b>
+                    <b>cluster_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of PCI device to enable passthrough.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: name, device_name</div>
+                        <div>The name of the cluster to be managed.</div>
                 </td>
             </tr>
-
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the host system to work with.</div>
-                        <div>This parameter is required if <code>cluster_name</code> is not specified.</div>
-                        <div>User can specify specific host from the cluster.</div>
+                        <div>The name of the datacenter.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -127,7 +110,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -145,7 +128,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -163,7 +146,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -181,7 +164,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -197,27 +180,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <em>state=present</em>, passthrough of PCI device will be enabled.</div>
-                        <div>If <em>state=absent</em>, passthrough of PCI device will be disabled.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -235,7 +198,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -264,7 +227,6 @@ Notes
 -----
 
 .. note::
-   - Supports ``check_mode``.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -274,50 +236,17 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enable PCI device passthrough against the whole ESXi in a cluster
-      community.vmware.vmware_host_passthrough:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        cluster: "{{ ccr1 }}"
-        devices:
-          - device_name: "Dual Band Wireless AC 3165"
-        state: present
-
-    - name: Enable PCI device passthrough against one ESXi
-      community.vmware.vmware_host_passthrough:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        esxi_hostname: "{{ esxi1 }}"
-        devices:
-          - device_name: "Dual Band Wireless AC 3165"
-        state: present
-
-    - name: Enable PCI device passthrough with PCI ids
-      community.vmware.vmware_host_passthrough:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        esxi_hostname: "{{ esxi1 }}"
-        devices:
-          - device: '0000:03:00.0'
-          - device: '0000:00:02.0'
-        state: present
-
-    - name: Disable PCI device passthrough against the whole ESXi in a cluster
-      community.vmware.vmware_host_passthrough:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        cluster: "{{ ccr1 }}"
-        devices:
-          - device_name: "Dual Band Wireless AC 3165"
-        state: absent
+    - name: Set Allowed vCLS Datastores
+      community.vmware.vmware_cluster_vcls:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter_name: datacenter
+        cluster_name: cluster
+        allowed_datastores:
+          - ds1
+          - ds2
+      delegate_to: localhost
 
 
 
@@ -336,38 +265,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>passthrough_configs</b>
+                    <b>result</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                       / <span style="color: purple">elements=dictionary</span>
+                      <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>changed</td>
+                <td>always</td>
                 <td>
-                            <div>list of that PCI devices have been enabled passthrough for each host system.</div>
+                            <div>information about performed operation</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[
-        {
-            &quot;esxi-01.example.com&quot;: [
-                {
-                    &quot;device_id&quot;: &quot;0000:03:00.0&quot;,
-                    &quot;device_name&quot;: &quot;Dual Band Wireless AC 3165&quot;,
-                    &quot;passthruEnabled&quot;: true
-                }
-            ]
-        },
-        {
-            &quot;esxi-02.example.com&quot;: [
-                {
-                    &quot;device_id&quot;: &quot;0000:03:00.0&quot;,
-                    &quot;device_name&quot;: &quot;Dual Band Wireless AC 3165&quot;,
-                    &quot;passthruEnabled&quot;: true
-                }
-            ]
-        }
-    ]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;result&#x27;: None, &#x27;Added_AllowedDatastores&#x27;: [&#x27;ds2&#x27;], &#x27;Removed_AllowedDatastores&#x27;: [&#x27;ds3&#x27;]}</div>
                 </td>
             </tr>
     </table>
@@ -381,4 +290,5 @@ Status
 Authors
 ~~~~~~~
 
-- sky-joker (@sky-joker)
+- Joseph Callen (@jcpowermac)
+- Nina Loser (@Nina2244)
