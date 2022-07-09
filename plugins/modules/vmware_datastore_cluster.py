@@ -206,7 +206,7 @@ EXAMPLES = r'''
     state: present
   delegate_to: localhost
 
- - name: Create/Modify datastore cluster with enable SDRS
+- name: Create/Modify datastore cluster with enable SDRS
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
