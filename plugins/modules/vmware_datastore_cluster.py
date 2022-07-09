@@ -160,6 +160,7 @@ options:
         - When you use an aggressive setting (Small value), Storage DRS corrects small imbalances if possible.
         - When you use a conservative setting (Big value), Storage DRS produces recommendations only when the imbalance across datastores is very high.
         - Value between 1 and 100.
+        type: int
     vm_overrides:
         description:
         - Override the datastore cluster-wide automation level for individual virtual machines.
