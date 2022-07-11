@@ -160,7 +160,8 @@ EXAMPLES = r'''
     strings_send:
       - "user_logon"
       - "<WAIT2s><ENTER>"
-      - "\<TAB>"
+      - "<TAB>"
+      - "<NONKEY>\\<TAB>SOMETHING<ENTER>"
   delegate_to: localhost
   register: keys_num_sent
 '''
@@ -338,13 +339,13 @@ class PyVmomiHelper(PyVmomi):
         """
         send_keys = 0
         for item in key_queue:
-            if (type(item) == str):
+            if isinstance(item, (str,)):
                 match = re.match(r"^WAIT($|([0-9]+)(h|m|s|$))", item)
-                if (match):
+                if match:
                     wtime = int(match.groups()[1]) if (match.groups()[1]) else 1
                     wtype = match.groups()[2]
-                    if (wtype):
-                        if (wtype == 's'):
+                    if wtype:
+                        if wtype == 's':
                             pass
                         elif (wtype == 'h'):
                             wtime *= 3600

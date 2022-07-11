@@ -435,7 +435,8 @@ Examples
         strings_send:
           - "user_logon"
           - "<WAIT2s><ENTER>"
-          - "\<TAB>"
+          - "<TAB>"
+          - "<NONKEY>\\<TAB>SOMETHING<ENTER>"
       delegate_to: localhost
       register: keys_num_sent
 
