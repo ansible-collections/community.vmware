@@ -79,7 +79,7 @@ options:
      description:
      - The list of the keys will be sent to the virtual machine.
      - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(HOME), C(DELETE), C(END), C(CTRL_ALT_DEL),
-        C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
+        C(CTRL_C), C(CTRL_X) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      - Values C(HOME) and C(END) are added in version 1.17.0.
      type: list
@@ -247,6 +247,7 @@ class PyVmomiHelper(PyVmomi):
             ('END', '0x4d', [('', [])]),
             ('CTRL_ALT_DEL', '0x4c', [('', ['CTRL', 'ALT'])]),
             ('CTRL_C', '0x06', [('', ['CTRL'])]),
+            ('CTRL_X', '0x1b', [('', ['CTRL'])]),
             ('RIGHTARROW', '0x4f', [('', [])]),
             ('LEFTARROW', '0x50', [('', [])]),
             ('DOWNARROW', '0x51', [('', [])]),
