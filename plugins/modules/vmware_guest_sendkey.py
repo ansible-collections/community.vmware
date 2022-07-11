@@ -397,7 +397,7 @@ class PyVmomiHelper(PyVmomi):
                             key_queue.append(str_replaced)
                             continue
                         else:
-                            #code reused from keys_send... is there a better approach?
+                            # code reused from keys_send... is there a better approach?
                             key_found = False
                             for keys in self.keys_hid_code:
                                 if (isinstance(keys[0], tuple) and str_replaced in keys[0]) or \
@@ -410,7 +410,7 @@ class PyVmomiHelper(PyVmomi):
                                     break
                             if not key_found:
                                 self.module.fail_json(msg="string(s)_send(keys_send) parameter: '%s' in %s not supported."
-                                                        % (str_replaced, str_special))
+                                                          % (str_replaced, str_special))
                     else:
                         fixed_str = re.sub(r'^\\(\<)', r'\1', str_part)
                         for char in fixed_str:
@@ -425,7 +425,7 @@ class PyVmomiHelper(PyVmomi):
                                     break
                             if not key_found:
                                 self.module.fail_json(msg="string(s)_send parameter: '%s' contains char: '%s' not supported."
-                                                        % (fixed_str, char))
+                                                          % (fixed_str, char))
 
         if key_queue:
             try:
