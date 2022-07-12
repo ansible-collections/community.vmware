@@ -187,8 +187,10 @@ class VMwareConfigurationBackup(PyVmomi):
                 file.write(request.read())
             self.module.exit_json(changed=True, dest_file=self.dest)
         except IOError as e:
-            self.module.fail_json(msg="Failed to write backup file. Ensure that "
-                                      "the dest path exists and is writable. Details : %s" % to_native(e))
+            error_msg = "Failed to save %s " % url
+            error_msg += "to %s. Ensure that the dest path exists and is writable. " % self.dest
+            error_msg += "Details: %s" % to_native(e)
+            self.module.fail_json(msg=error_msg)
         except Exception as e:
             self.module.fail_json(msg=to_native(e))
 
