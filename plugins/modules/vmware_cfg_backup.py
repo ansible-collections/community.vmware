@@ -108,6 +108,9 @@ class VMwareConfigurationBackup(PyVmomi):
         self.esxi_hostname = self.module.params.get('esxi_hostname', None)
         self.host = self.find_host_system()
 
+        # discard vim returned hostname if endpoint is a standalone ESXi host
+        self.cfg_hurl = self.hostname if (self.content.about.apiType == "HostAgent") else self.host.name
+
     def find_host_system(self):
         if self.esxi_hostname:
             host_system_obj = self.find_hostsystem_by_name(host_name=self.esxi_hostname)
@@ -134,7 +137,7 @@ class VMwareConfigurationBackup(PyVmomi):
             self.module.fail_json(msg="Source file {0} does not exist".format(self.src))
 
         url = self.host.configManager.firmwareSystem.QueryFirmwareConfigUploadURL()
-        url = url.replace('*', self.host.name)
+        url = url.replace('*', self.cfg_hurl)
         # find manually the url if there is a redirect because urllib2 -per RFC- doesn't do automatic redirects for PUT requests
         try:
             open_url(url=url, method='HEAD', validate_certs=self.validate_certs)
@@ -171,7 +174,7 @@ class VMwareConfigurationBackup(PyVmomi):
 
     def save_configuration(self):
         url = self.host.configManager.firmwareSystem.BackupFirmwareConfiguration()
-        url = url.replace('*', self.host.name)
+        url = url.replace('*', self.cfg_hurl)
         if self.module.params["port"] == 443:
             url = url.replace("http:", "https:")
         if os.path.isdir(self.dest):
