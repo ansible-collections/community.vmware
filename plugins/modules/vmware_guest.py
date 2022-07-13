@@ -1908,7 +1908,6 @@ class PyVmomiHelper(PyVmomi):
                 hasattr(net_obj.config, 'logicalSwitchUuid'):
                 # cover VMWare on AWS SDDC 1.16+
                 # https://kb.vmware.com/s/article/82487
-                self.module.fail_json(msg="EUW3 only")
                 nic.device.backing = vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo()
                 network_id = net_obj.config.logicalSwitchUuid
                 nic.device.backing.opaqueNetworkType = 'nsx.LogicalSwitch'
