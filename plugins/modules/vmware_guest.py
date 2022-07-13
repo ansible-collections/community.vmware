@@ -1855,8 +1855,11 @@ class PyVmomiHelper(PyVmomi):
                 nic_change_detected = True
 
             net_obj = self.cache.get_network(network_name)
-            if hasattr(net_obj, 'portKeys') and \
-                not hasattr(net_obj.config, 'logicalSwitchUuid'):
+            a,b,c=hasattr(net_obj, 'portKeys'),hasattr(net_obj.config, 'logicalSwitchUuid'),isinstance(net_obj, vim.dvs.DistributedVirtualPortgroup)
+            self.module.fail_json(msg=[a,b,c])
+            if hasattr(net_obj, 'portKeys') and not \
+                hasattr(net_obj.config, 'logicalSwitchUuid') and \
+                    isinstance(net_obj, vim.dvs.DistributedVirtualPortgroup):
                 # VDS switch
                 pg_obj = None
                 if 'dvswitch_name' in network_devices[key]:
