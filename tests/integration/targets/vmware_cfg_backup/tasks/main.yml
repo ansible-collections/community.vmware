@@ -1,0 +1,19 @@
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Save the ESXi configuration locally by authenticating against the vCenter and selecting the ESXi host
+  community.vmware.vmware_cfg_backup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: "{{ esxi1 }}"
+    dest: /tmp/
+    state: saved
+  register: cfg_backup
+
+- name: Ensure config was saved
+  assert:
+    that:
+      - cfg_backup is changed
