@@ -1855,11 +1855,9 @@ class PyVmomiHelper(PyVmomi):
                 nic_change_detected = True
 
             net_obj = self.cache.get_network(network_name)
-            a,b,c=hasattr(net_obj, 'portKeys'),hasattr(net_obj.config, 'logicalSwitchUuid'),isinstance(net_obj, vim.dvs.DistributedVirtualPortgroup)
-            self.module.fail_json(msg=[a,b,c])
-            if hasattr(net_obj, 'portKeys') and not \
+            if hasattr(net_obj, 'portKeys') and \
                 hasattr(net_obj.config, 'logicalSwitchUuid') and \
-                    isinstance(net_obj, vim.dvs.DistributedVirtualPortgroup):
+                    net_obj.config.logicalSwitchUuid is None:
                 # VDS switch
                 pg_obj = None
                 if 'dvswitch_name' in network_devices[key]:
@@ -1908,7 +1906,8 @@ class PyVmomiHelper(PyVmomi):
                 nic.device.backing.port = dvs_port_connection
 
             elif not isinstance(net_obj, vim.OpaqueNetwork) and \
-                hasattr(net_obj.config, 'logicalSwitchUuid'):
+                hasattr(net_obj.config, 'logicalSwitchUuid') and \
+                    net_obj.config.logicalSwitchUuid:
                 # cover VMWare on AWS SDDC 1.16+
                 # https://kb.vmware.com/s/article/82487
                 nic.device.backing = vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo()
