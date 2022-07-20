@@ -10,7 +10,9 @@ readme: README.md
 authors:
   - Ansible (https://github.com/ansible)
 description:
-license_file: LICENSE
+license:
+  - GPL-3.0-or-later
+  - BSD-2-Clause
 tags:
   - cloud
   - vmware
