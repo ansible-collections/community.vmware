@@ -351,8 +351,9 @@ class VmwareVmInfo(PyVmomi):
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
             datastore_attributes = ('name', 'url')
-            if vm.config.datastoreUrl:
-                for entry in vm.config.datastoreUrl:
+            vm_datastore_urls = _get_vm_prop(vm, ('config', 'datastoreUrl'))
+            if vm_datastore_urls:
+                for entry in vm_datastore_urls:
                     datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,
