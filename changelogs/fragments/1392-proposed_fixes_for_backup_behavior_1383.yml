@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_cfg_backup - Check if hostname is an ESXi host or a vCenter appliance, discard esxi_hostname if target is an ESXi host (https://github.com/ansible-collections/community.vmware/pull/1392).
