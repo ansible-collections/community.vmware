@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+#
 # This module is also sponsored by E.T.A.I. (www.etai.fr)
-# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
-# SPDX-License-Identifier: GPL-3.0-or-later
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+from cmath import exp
 __metaclass__ = type
 
 
@@ -497,9 +497,6 @@ options:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - All parameters and VMware object names are case sensitive.
-    - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
-      They are set by the customization via vmware-tools.
-      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
     type: list
     elements: dict
     suboptions:
@@ -2433,12 +2430,17 @@ class PyVmomiHelper(PyVmomi):
             disk_spec.device.capacityInKB = kb
             disk_modified = True
 
+        # set datastore per disk on creation only.
+        if expected_disk_spec.get('datastore'):
+            ds = find_obj(self.content, [vim.Datastore], expected_disk_spec.get('datastore'))
+            disk_spec.device.backing.datastore = ds
         return disk_modified
 
     def configure_multiple_controllers_disks(self, vm_obj):
         ctls = self.sanitize_disk_parameters(vm_obj)
         if len(ctls) == 0:
             return
+
         for ctl in ctls:
             # get existing specified disk controller and attached disks
             disk_ctl, disk_list = self.device_helper.get_controller_disks(vm_obj, ctl['type'], ctl['num'])
@@ -2458,6 +2460,7 @@ class PyVmomiHelper(PyVmomi):
             else:
                 disk_ctl_spec = vim.vm.device.VirtualDeviceSpec()
                 disk_ctl_spec.device = disk_ctl
+
             for j in range(0, len(ctl['disk'])):
                 hard_disk = None
                 hard_disk_exist = False
@@ -2482,6 +2485,14 @@ class PyVmomiHelper(PyVmomi):
                     hard_disk = self.device_helper.create_hard_disk(disk_ctl_spec, disk_unit_number)
                     hard_disk.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
                     disk_modified = self.set_disk_parameters(hard_disk, ctl['disk'][j])
+
+                    # Also apply the multi-datastore directory naming fix to this multi-disk add/reconfigure situation
+                    datastore_name = ctl['disk'][j]['datastore']
+                    datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
+                    parent_dc = self.cache.get_parent_datacenter(datastore)
+                    vmdk_file_name = self.create_directory_for_datadisk(datacenter=parent_dc, datastore=datastore, vm_name=self.params['name'], diskspec=hard_disk)
+                    hard_disk.device.backing.datastore = datastore
+                    hard_disk.device.backing.fileName = vmdk_file_name
                     self.configspec.deviceChange.append(hard_disk)
                 if disk_modified:
                     self.change_detected = True
@@ -2567,11 +2578,63 @@ class PyVmomiHelper(PyVmomi):
                     diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
 
             # which datastore?
+            if vm_obj is None:
+                 vm_name = self.params['name'].replace('.', '_')
+            else:
+                 vm_name = vm_obj.name
+ 
             if expected_disk_spec.get('datastore'):
-                # TODO: This is already handled by the relocation spec,
-                # but it needs to eventually be handled for all the
-                # other disks defined
-                pass
+                 # TODO: This is already handled by the relocation spec,
+                 # but it needs to eventually be handled for all the
+                 # other disks defined
+                 pass
+                 # User has specified datastore name
+                 datastore_name = expected_disk_spec['datastore']
+                 datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
+ 
+                 if datastore is None:
+                     self.module.fail_json(msg="Unable to find datastore named %s specified "
+                                               "in disk configuration at index %s" % (datastore_name,
+                                                                                      disk_index))
+                 parent_dc = self.cache.get_parent_datacenter(datastore)
+                 vmdk_file_name = self.create_directory_for_datadisk(datacenter=parent_dc,
+                                                                     datastore=datastore,
+                                                                     vm_name=vm_name,
+                                                                     diskspec=diskspec)
+                 diskspec.device.backing.datastore = datastore
+                 diskspec.device.backing.fileName = vmdk_file_name
+ 
+            elif 'autoselect_datastore' in expected_disk_spec and expected_disk_spec['autoselect_datastore']:
+                 # User has specified autoselect datastore option
+                 datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
+                 datastores = [x for x in datastores if
+                               self.cache.get_parent_datacenter(x).name == self.params['datacenter']]
+ 
+                 if datastores is None or len(datastores) == 0:
+                     self.module.fail_json(msg="Unable to find a datastore for disk at "
+                                               "index %s when autoselecting" % disk_index)
+                 datastore_freespace = 0
+                 for ds in datastores:
+                     if (ds.summary.freeSpace > datastore_freespace) or (
+                             ds.summary.freeSpace == datastore_freespace and not datastore):
+                         # If datastore field is provided, filter destination datastores
+                         if 'datastore' in expected_disk_spec \
+                                 and isinstance(expected_disk_spec['datastore'], str) \
+                                 and ds.name.find(expected_disk_spec['datastore']) < 0:
+                             continue
+ 
+                         datastore = ds
+                         datastore_name = datastore.name
+                         datastore_freespace = ds.summary.freeSpace
+ 
+                 parent_dc = self.cache.get_parent_datacenter(datastore)
+                 vmdk_file_name = self.create_directory_for_datadisk(datacenter=parent_dc,
+                                                                     datastore=datastore,
+                                                                     vm_name=vm_name,
+                                                                     diskspec=diskspec)
+                 diskspec.device.backing.fileName = vmdk_file_name
+                 diskspec.device.backing.datastore = datastore
+                
 
             kb = self.get_configured_disk_size(expected_disk_spec)
             # VMware doesn't allow to reduce disk sizes
@@ -2585,6 +2648,35 @@ class PyVmomiHelper(PyVmomi):
                 self.configspec.deviceChange.append(diskspec)
 
                 self.change_detected = True
+
+    def create_directory_for_datadisk(self, datacenter, datastore, vm_name, diskspec):
+         """
+         Helper function to create a directory for data disk
+         """
+         parent_dc = datacenter
+         datastore_name = datastore.name
+         # Try to create folder for virtual machine and disks inside datastore
+         path_on_ds = '[' + datastore_name + ']' + vm_name
+         try:
+             # patch on top of patch: This directory creation is not needed because VMware creates the directories itself
+             # When it is there, it causes extra incremented _1 directories to be created by VMware. (may only apply to 6.7, not 7.0)
+             pass
+             #self.content.fileManager.MakeDirectory(name=path_on_ds,
+             #                                       datacenter=parent_dc,
+             #                                       createParentDirectories=True)
+         except vim.fault.FileAlreadyExists as e:
+             pass
+         except vim.fault.InvalidDatastore as e:
+             self.module.fail_json(msg="Failed to create a directory %s required for data "
+                                       "disk on datastore %s: %s" % (path_on_ds, datastore_name, e.msg))
+         except vmodl.RuntimeFault as e:
+             self.module.fail_json(msg="Failed to create a directory %s for data "
+                                       "disk with datacenter %s: %s" % (path_on_ds, parent_dc.name, e.msg))
+ 
+         disk_file_name = str(diskspec.device.controllerKey) + '_' + str(diskspec.device.unitNumber)
+         vmdk_file_name = path_on_ds + '/' + vm_name + '_' + disk_file_name + '.vmdk'
+ 
+         return vmdk_file_name
 
     def select_host(self):
         hostsystem = self.cache.get_esx_host(self.params['esxi_hostname'])
@@ -2787,7 +2879,6 @@ class PyVmomiHelper(PyVmomi):
 
         # FIXME:
         #   - static IPs
-
         self.folder = self.params.get('folder', None)
         if self.folder is None:
             self.module.fail_json(msg="Folder is required parameter while deploying new virtual machine")
@@ -3374,13 +3465,13 @@ def main():
     # Check requirements for virtualization based security
     if pyv.params['hardware']['virt_based_security']:
         if not pyv.params['hardware']['nested_virt']:
-            pyv.module.fail_json(msg="Virtualization based security requires nested virtualization. Please enable nested_virt.")
+            pyv.module.fail("Virtualization based security requires nested virtualization. Please enable nested_virt.")
 
         if not pyv.params['hardware']['secure_boot']:
-            pyv.module.fail_json(msg="Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
+            pyv.module.fail("Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
 
         if not pyv.params['hardware']['iommu']:
-            pyv.module.fail_json(msg="Virtualization based security requires I/O MMU. Please enable iommu.")
+            pyv.module.fail("Virtualization based security requires I/O MMU. Please enable iommu.")
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()
