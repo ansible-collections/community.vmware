@@ -9,7 +9,6 @@
         vcenter_server: "{{ vcenter_server }}"
         vm_datastore1 : "{{ vm_datastore1 }}"
         vm_datastore2 : "{{ vm_datastore2 }}"
-        
         vcenter_cluster: "{{ vcenter_cluster }}"
         vcenter_user: "{{ vcenter_user }}"
         vcenter_pass: "{{ vcenter_pass }}"
