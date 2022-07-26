@@ -2490,8 +2490,8 @@ class PyVmomiHelper(PyVmomi):
                     datastore_name = ctl['disk'][j]['datastore']
                     datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
                     parent_dc = self.cache.get_parent_datacenter(datastore)
-                    state = datacenter = parent_dc
-                    vmdk_file_name = self.create_directory_for_datadisk(state, datastore=datastore, vm_name=self.params['name'], diskspec=hard_disk)
+                    dc = parent_dc
+                    vmdk_file_name = self.create_directory_for_datadisk(dc, datastore=datastore, vm_name=self.params['name'], diskspec=hard_disk)
                     hard_disk.device.backing.datastore = datastore
                     hard_disk.device.backing.fileName = vmdk_file_name
                     self.configspec.deviceChange.append(hard_disk)
@@ -2622,7 +2622,7 @@ class PyVmomiHelper(PyVmomi):
                         datastore_freespace = ds.summary.freeSpace
 
                 parent_dc = self.cache.get_parent_datacenter(datastore)
-                dcstate = datacenter = parent_dc
+                dcstate = parent_dc
                 vmdk_file_name = self.create_directory_for_datadisk(dcstate, datastore=datastore, vm_name=vm_name, diskspec=diskspec)
                 diskspec.device.backing.fileName = vmdk_file_name
                 diskspec.device.backing.datastore = datastore
@@ -2655,7 +2655,7 @@ class PyVmomiHelper(PyVmomi):
             # self.content.fileManager.MakeDirectory(name=path_on_ds,
             #                                        datacenter=parent_dc,
             #                                        createParentDirectories=True)
-        except vim.fault.FileAlreadyExists as e:
+        except vim.fault.FileAlreadyExists:
             pass
         except vim.fault.InvalidDatastore as e:
             self.module.fail_json(msg="Failed to create a directory %s required for data "
