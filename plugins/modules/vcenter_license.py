@@ -15,8 +15,6 @@ description:
 - Add and delete vCenter, ESXi server license keys.
 author:
 - Dag Wieers (@dagwieers)
-requirements:
-- pyVmomi
 options:
   labels:
     description:

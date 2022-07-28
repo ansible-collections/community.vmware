@@ -23,9 +23,6 @@ version_added: '1.16.0'
 notes:
 - Tested on vSphere 6.7
 - Tested on vSphere 7.0
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   name:
     description:

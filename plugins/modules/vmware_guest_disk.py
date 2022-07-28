@@ -23,9 +23,6 @@ author:
     - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
 notes:
     - Tested on vSphere 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

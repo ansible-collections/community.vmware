@@ -22,9 +22,6 @@ notes:
     - Tested on ESXi 6.0
     - Works only for ESXi hosts
     - For configuration load or reset, the host will be switched automatically to maintenance mode.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi installed
 options:
     esxi_hostname:
         description:

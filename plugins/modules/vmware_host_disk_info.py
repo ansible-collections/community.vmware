@@ -20,9 +20,6 @@ author:
 - Matt Proud (@laidbackware)
 notes:
 - Tested on vSphere 6.7 and 7.0
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

@@ -21,9 +21,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Nina Loser (@Nina2244)
-requirements:
-    - Tested on ESXi 7.0
-    - PyVmomi installed.
 options:
     cluster_name:
       description:

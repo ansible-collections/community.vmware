@@ -24,9 +24,6 @@ notes:
     - Tested on vSphere 6.0 and 6.5.
     - Disk UUID information is added in version 2.8.
     - Additional information about guest disk backings added in version 2.8.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

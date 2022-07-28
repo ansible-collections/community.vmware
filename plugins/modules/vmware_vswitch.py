@@ -23,9 +23,6 @@ author:
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
 notes:
 - Tested on vSphere 5.5 and 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   switch:
     description:

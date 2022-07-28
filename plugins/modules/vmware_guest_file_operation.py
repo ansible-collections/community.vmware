@@ -20,10 +20,6 @@ author:
 notes:
     - Tested on vSphere 6
     - Only the first match against vm_id is used, even if there are multiple matches
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
-    - requests
 options:
     datacenter:
         description:

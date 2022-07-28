@@ -33,8 +33,6 @@ author:
     - Tyler Gates (@tgates81)
 notes:
     - Tested on vSphere 6.0 and 6.5
-requirements:
-    - pyVmomi
 options:
    name:
      description:

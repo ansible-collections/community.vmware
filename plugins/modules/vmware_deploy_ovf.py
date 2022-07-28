@@ -134,8 +134,6 @@ options:
         - Wait until vCenter detects an IP address for the VM.
         - This requires vmware-tools (vmtoolsd) to properly work after creation.
         type: bool
-requirements:
-    - pyvmomi
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

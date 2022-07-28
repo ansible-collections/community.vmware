@@ -15,9 +15,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - In this module, can manage the iSCSI configuration of ESXi host
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   esxi_hostname:
     description:

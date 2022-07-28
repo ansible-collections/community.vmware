@@ -16,9 +16,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can be used to modify the TCP/IP stacks configuration.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 version_added: '1.10.0'
 options:
   esxi_hostname:

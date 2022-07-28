@@ -25,10 +25,6 @@ notes:
 - Tested on vSphere 6.5
 - Tested on vSphere 6.7
 - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
-requirements:
-- python >= 2.6
-- PyVmomi
-- System.View privilege
 options:
   datacenter:
     description:

@@ -17,9 +17,6 @@ description:
     - This module can be used to fetch logbundle file from ESXi.
 author:
     - sky-joker (@sky-joker)
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
     esxi_hostname:
       description:

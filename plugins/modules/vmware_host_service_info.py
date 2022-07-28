@@ -20,9 +20,6 @@ author:
 notes:
 - Tested on vSphere 6.5
 - If source package name is not available then fact is populated as null.
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

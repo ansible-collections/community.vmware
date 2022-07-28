@@ -24,8 +24,6 @@ author:
 notes:
 - Tested on vSphere 7.0
 requirements:
-- python >= 2.7
-- PyVmomi
 - vSphere Automation SDK
 options:
     decryption_key:

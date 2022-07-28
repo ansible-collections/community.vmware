@@ -21,9 +21,6 @@ author:
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 notes:
     - Tested on vSphere 7.0
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     portgroup_name:
         description:

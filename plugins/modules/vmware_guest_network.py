@@ -16,9 +16,6 @@ short_description: Manage network adapters of specified virtual machine in given
 description:
   - This module is used to add, reconfigure, remove network adapter of given virtual machine.
 version_added: '1.0.0'
-requirements:
-  - "python >= 2.7"
-  - "PyVmomi"
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 notes:

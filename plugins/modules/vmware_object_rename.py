@@ -22,8 +22,6 @@ author:
 notes:
 - Tested on vSphere 6.5
 requirements:
-- python >= 2.7
-- PyVmomi
 - vSphere Automation SDK
 options:
     object_type:

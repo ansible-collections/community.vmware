@@ -19,9 +19,6 @@ author:
 - Christian Kotte (@ckotte)
 notes:
     - Tested on vSphere 6.5 and 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     switch:
         description:

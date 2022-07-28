@@ -63,9 +63,6 @@ options:
     required: false
     type: list
     elements: str
-requirements:
-  - "python >= 2.7"
-  - PyVmomi
 short_description: "Creates vm/host group in a given cluster."
 '''
 

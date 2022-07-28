@@ -19,9 +19,6 @@ author:
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
 notes:
 - Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   policy:
     description:

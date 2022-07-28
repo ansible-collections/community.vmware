@@ -37,9 +37,6 @@ options:
       - "Datacenter to search for DRS VM/Host groups."
     required: false
     type: str
-requirements:
-  - "python >= 2.6"
-  - PyVmomi
 short_description: "Gathers info about DRS VM/Host groups on the given cluster"
 '''
 

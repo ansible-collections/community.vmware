@@ -18,9 +18,6 @@ description:
 - This module can be used to gather information about SCSI disk attached to the given ESXi.
 author:
 - Abhijeet Kasurde (@Akasurde)
-requirements:
-- Python >= 2.7
-- PyVmomi
 options:
   esxi_hostname:
     description:

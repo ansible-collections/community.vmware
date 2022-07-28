@@ -20,9 +20,6 @@ description:
     - All values and VMware object names are case sensitive.
 author:
 - Olivia Luetolf (@olilu)
-requirements:
-    - Tested on ESXi 6.7 and 7.0.
-    - PyVmomi installed.
 options:
     cluster_name:
       description:

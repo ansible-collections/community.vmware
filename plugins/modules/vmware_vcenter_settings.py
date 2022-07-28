@@ -20,9 +20,6 @@ author:
 - Christian Kotte (@ckotte)
 notes:
 - Tested with vCenter Server Appliance (vCSA) 6.5 and 6.7
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
     database:
         description:

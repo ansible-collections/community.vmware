@@ -15,9 +15,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can be used to gather information about user or group of a domain.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   domain:
     description:

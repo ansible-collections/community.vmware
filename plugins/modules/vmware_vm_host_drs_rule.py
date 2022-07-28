@@ -77,9 +77,6 @@ options:
       - "Name of VM group to use with rule."
       - "Effective only if C(state) is set to C(present)."
     type: str
-requirements:
-  - "python >= 2.6"
-  - PyVmomi
 short_description: "Creates vm/host group in a given cluster"
 
 '''

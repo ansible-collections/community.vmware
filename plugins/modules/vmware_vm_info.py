@@ -27,9 +27,6 @@ notes:
 - From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
 - Fact about C(datastore_url) is added in VMware collection 1.18.0.
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
     vm_type:
       description:

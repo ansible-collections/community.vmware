@@ -23,8 +23,6 @@ author:
 notes:
 - Tested on vSphere 6.5, 6.7, and 7.0
 requirements:
-- python >= 2.6
-- PyVmomi
 - vSphere Automation SDK
 options:
     library_name:

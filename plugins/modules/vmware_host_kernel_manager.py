@@ -22,9 +22,6 @@ author:
 - Aaron Longchamps (@alongchamps)
 notes:
 - Tested on vSphere 6.0
-requirements:
-- python >= 2.7
-- PyVmomi
 options:
   esxi_hostname:
     description:

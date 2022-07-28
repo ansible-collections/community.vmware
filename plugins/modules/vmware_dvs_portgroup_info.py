@@ -20,9 +20,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
 - Tested on vSphere 7.0
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datacenter:
     description:

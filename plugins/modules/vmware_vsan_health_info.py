@@ -34,7 +34,6 @@ options:
         default: false
         type: bool
 requirements:
-    - PyVmomi
     - VMware vSAN Python's SDK
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

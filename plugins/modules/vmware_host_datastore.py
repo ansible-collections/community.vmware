@@ -25,9 +25,6 @@ notes:
 - Tested on vSphere 6.0, 6.5 and ESXi 6.7
 - NFS v4.1 tested on vSphere 6.5
 - Kerberos authentication with NFS v4.1 isn't implemented
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datastore_name:
     description:

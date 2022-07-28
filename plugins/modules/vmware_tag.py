@@ -23,8 +23,6 @@ author:
 notes:
 - Tested on vSphere 6.5
 requirements:
-- python >= 2.6
-- PyVmomi
 - vSphere Automation SDK
 options:
     tag_name:

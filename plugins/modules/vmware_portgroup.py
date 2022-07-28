@@ -28,9 +28,6 @@ notes:
     - Complete configuration only tested on vSphere 6.5
     - 'C(inbound_policy) and C(rolling_order) are removed in 2.11.'
     - Those two options are only used during portgroup creation. Updating is not supported with those options.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     switch:
         description:

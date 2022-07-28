@@ -20,9 +20,6 @@ DOCUMENTATION = r"""
       - inventory_cache
       - constructed
     requirements:
-      - "Python >= 2.7"
-      - "PyVmomi"
-      - "requests >= 2.3"
       - "vSphere Automation SDK - For tag feature"
     version_added: "1.11.0"
     options:

@@ -22,9 +22,6 @@ description:
   - This module can be used to enable and disable VNC remote display on virtual machine.
 author:
   - Armin Ranjbar Daemi (@rmin)
-requirements:
-  - python >= 2.6
-  - PyVmomi
 options:
   datacenter:
     description:

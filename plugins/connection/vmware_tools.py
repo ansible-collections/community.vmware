@@ -16,7 +16,6 @@ DOCUMENTATION = r'''
       - In case of Windows VMs, set C(ansible_shell_type) to C(powershell).
       - Does not work with 'become'.
     requirements:
-      - pyvmomi (Python library)
       - requests (Python library)
     options:
       vmware_host:

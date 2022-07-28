@@ -23,9 +23,6 @@ notes:
     - Tested on ESXi 6.5, vSphere 6.7
     - The ESXi login user must have the appropriate rights to administer permissions.
     - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
   role:
     description:

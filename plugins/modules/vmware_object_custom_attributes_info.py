@@ -18,9 +18,6 @@ description:
   - This module can be gathered custom attributes of an object.
 notes:
   - Supports C(check_mode).
-requirements:
-  - python >= 3.6
-  - PyVmomi
 version_added: '1.11.0'
 options:
   object_type:

@@ -19,9 +19,6 @@ author:
 - David Martinez (@dx0xm)
 notes:
 - Tested on vSphere 6.5
-requirements:
-- python >= 2.7
-- PyVmomi
 options:
   dvswitch:
     description:

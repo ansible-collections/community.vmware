@@ -26,8 +26,6 @@ author:
 notes:
 - Tested on vSphere 5.5, 6.0, 6.5 and 6.7
 requirements:
-- python >= 2.6
-- PyVmomi
 - ssl
 - socket
 - hashlib

@@ -19,9 +19,6 @@ author:
 - Joseph Callen (@jcpowermac)
 notes:
     - Tested on vSphere 5.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 deprecated:
     removed_at_date: '2022-06-01'
     why: Will be replaced with new module M(community.vmware.vmware_host_dns).

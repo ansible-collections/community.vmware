@@ -22,9 +22,6 @@ author:
 - Dustin Scott (@scottd018)
 notes:
 - Tested on vSphere 6.5
-requirements:
-- python >= 2.7
-- PyVmomi
 options:
   name:
     description:

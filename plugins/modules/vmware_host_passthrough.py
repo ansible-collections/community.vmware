@@ -18,9 +18,6 @@ description:
   - This module can be managed PCI device passthrough settings on host.
 notes:
   - Supports C(check_mode).
-requirements:
-  - python >= 3.6
-  - PyVmomi
 version_added: '1.11.0'
 options:
   cluster:

@@ -20,9 +20,6 @@ description: >
   https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.security.doc/GUID-6DB1E745-9624-43EA-847C-DD2F767CB94B.html)
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-requirements:
-  - python >= 3.6
-  - PyVmomi
 options:
   name:
     description: Name of the Key Provider to be added, reconfigured or removed from vCenter.
