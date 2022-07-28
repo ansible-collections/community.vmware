@@ -17,8 +17,6 @@ description:
     - This module can be used to configure VSAN clustering on an ESXi host
 author:
 - Russell Teague (@mtnbikenc)
-notes:
-    - Tested on vSphere 5.5
 options:
     cluster_uuid:
         description:

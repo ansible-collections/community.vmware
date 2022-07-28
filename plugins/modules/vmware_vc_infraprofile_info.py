@@ -21,8 +21,6 @@ description:
 version_added: '1.0.0'
 author:
 - Naveenkumar G P (@ngp)
-notes:
-- Tested on vSphere 7.0
 requirements:
 - vSphere Automation SDK
 options:

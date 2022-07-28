@@ -21,8 +21,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Frederic Van Reet (@GBrawl)
-notes:
-- Tested on vSphere 6.5
 requirements:
 - vSphere Automation SDK
 options:

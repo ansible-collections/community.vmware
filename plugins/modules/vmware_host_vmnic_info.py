@@ -23,8 +23,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 6.5
 options:
   capabilities:
     description:

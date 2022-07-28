@@ -17,8 +17,6 @@ description:
     - This module can be used to register/deregister vCenter Extensions.
 author:
     - Michael Tipton (@castawayegr)
-notes:
-    - Tested on vSphere 6.5
 options:
   extension_key:
     description:

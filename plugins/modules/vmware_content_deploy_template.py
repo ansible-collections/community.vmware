@@ -22,8 +22,6 @@ description:
 - All variables and VMware object names are case sensitive.
 author:
 - Pavan Bidkar (@pgbidkar)
-notes:
-- Tested on vSphere 6.7 U3
 requirements:
 - vSphere Automation SDK
 options:

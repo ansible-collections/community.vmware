@@ -23,8 +23,6 @@ author:
 - Russell Teague (@mtnbikenc)
 - Maxime de Roucy (@tchernomax)
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 5.5, 6.0, 6.5 and 6.7
 requirements:
 - ssl
 - socket

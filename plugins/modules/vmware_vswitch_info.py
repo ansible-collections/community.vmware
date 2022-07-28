@@ -20,8 +20,6 @@ description:
 - See U(https://kb.vmware.com/s/article/2064511) for more details.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 options:
   policies:
     version_added: '2.4.0'

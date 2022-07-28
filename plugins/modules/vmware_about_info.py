@@ -17,8 +17,6 @@ description:
 - This module can be used to gather information about VMware server to which user is trying to connect.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

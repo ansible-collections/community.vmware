@@ -22,8 +22,6 @@ description:
 - You can supply an esxi_hostname or a cluster_name
 author:
 - Michael Eaton (@michaeldeaton)
-notes:
-- Tested on vSphere 6.0
 options:
   esxi_hostname:
     description:

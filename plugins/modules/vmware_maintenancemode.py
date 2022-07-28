@@ -20,8 +20,6 @@ description:
 author:
 - Jay Jahns (@jjahns) <jjahns@vmware.com>
 - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
 options:
     esxi_hostname:
         description:

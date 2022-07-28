@@ -20,9 +20,6 @@ description: >
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 version_added: '1.16.0'
-notes:
-- Tested on vSphere 6.7
-- Tested on vSphere 7.0
 options:
   name:
     description:

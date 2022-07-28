@@ -18,7 +18,6 @@ description:
 author:
 - David Hewitt (@davidmhewitt)
 notes:
-- Tested on vSphere 6.5
 - C(flat_folder_info) added in VMware collection 1.4.0.
 options:
   datacenter:

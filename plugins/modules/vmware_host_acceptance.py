@@ -18,8 +18,6 @@ description:
 - The host acceptance level controls the acceptance level of each VIB on a ESXi host.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 options:
   cluster_name:
     description:

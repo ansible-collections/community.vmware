@@ -19,7 +19,6 @@ description:
 author:
     - Andreas Nafpliotis (@nafpliot-ibm)
 notes:
-    - Tested on ESXi 6.0
     - Works only for ESXi hosts
     - For configuration load or reset, the host will be switched automatically to maintenance mode.
 options:

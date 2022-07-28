@@ -18,8 +18,6 @@ description:
     - Gather information about boot options for the given virtual machine.
 author:
     - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 6.5
 options:
    name:
      description:

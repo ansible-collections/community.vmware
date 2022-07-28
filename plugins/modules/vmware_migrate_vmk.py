@@ -18,8 +18,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Russell Teague (@mtnbikenc)
-notes:
-    - Tested on vSphere 6.7
 options:
     esxi_hostname:
         description:

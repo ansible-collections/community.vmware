@@ -17,8 +17,6 @@ description:
     - This module can be used to configure the uplink portgroup of a Distributed Switch.
 author:
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on vSphere 6.5 and 6.7
 options:
     switch:
         description:

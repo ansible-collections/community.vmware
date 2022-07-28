@@ -21,8 +21,6 @@ description:
 version_added: '1.0.0'
 author:
 - Viktor Tsymbalyuk (@victron)
-notes:
-- Tested on vSphere 6.0
 options:
   esxi_hostname:
     description:

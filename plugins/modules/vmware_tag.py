@@ -20,8 +20,6 @@ description:
 - All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 requirements:
 - vSphere Automation SDK
 options:

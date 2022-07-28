@@ -17,8 +17,6 @@ description:
     - Manage VMware ESXi DNS Configuration
 author:
 - Joseph Callen (@jcpowermac)
-notes:
-    - Tested on vSphere 5.5
 deprecated:
     removed_at_date: '2022-06-01'
     why: Will be replaced with new module M(community.vmware.vmware_host_dns).

@@ -19,8 +19,6 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
 options:
    state:
      description:

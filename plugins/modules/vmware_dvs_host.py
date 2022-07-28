@@ -22,8 +22,6 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Joseph Andreatta (@vmwjoseph)
-notes:
-    - Tested on vSphere 5.5
 options:
     esxi_hostname:
         description:

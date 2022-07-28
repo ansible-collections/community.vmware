@@ -18,8 +18,6 @@ description:
 - It also checks if the host needs to be restarted.
 author:
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
-notes:
-- Tested on vSphere 6.5
 options:
   state:
      description:

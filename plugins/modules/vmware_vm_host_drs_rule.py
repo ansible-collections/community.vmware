@@ -19,8 +19,6 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 module: vmware_vm_host_drs_rule
-notes:
-  - "Tested on vSphere 6.5 and 6.7"
 options:
   affinity_rule:
     default: true

@@ -17,8 +17,6 @@ description:
     - This module can be used to add/remove a resource pool to/from vCenter
 author:
 - Davis Phillips (@dav1x)
-notes:
-    - Tested on vSphere 6.5
 options:
     datacenter:
         description:

@@ -20,8 +20,6 @@ description:
 - You can use M(ansible.builtin.reboot) or M(community.vmware.vmware_host_powerstate) module to reboot all ESXi host systems.
 author:
 - Aaron Longchamps (@alongchamps)
-notes:
-- Tested on vSphere 6.0
 options:
   esxi_hostname:
     description:

@@ -18,8 +18,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Aaron Longchamps (@alongchamps)
-notes:
-- Tested on vSphere 6.0, vSphere 6.5
 options:
   cluster_name:
     description:

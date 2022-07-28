@@ -17,8 +17,6 @@ description:
     - This module can be used to wait for VMware tools to become available on the given VM and return facts.
 author:
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
-notes:
-    - Tested on vSphere 6.5
 options:
    name:
      description:

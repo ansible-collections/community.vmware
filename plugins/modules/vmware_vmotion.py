@@ -21,8 +21,6 @@ description:
 author:
 - Bede Carroll (@bedecarroll)
 - Olivier Boukili (@oboukili)
-notes:
-    - Tested on vSphere 6.0
 options:
     vm_name:
       description:

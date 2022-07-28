@@ -17,8 +17,6 @@ description:
 - This module can be used to gather information about vCenter extension.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

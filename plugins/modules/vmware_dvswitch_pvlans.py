@@ -17,8 +17,6 @@ description:
     - This module can be used to configure Private VLANs (PVLANs) on a Distributed Switch.
 author:
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on vSphere 6.5 and 6.7
 options:
     switch:
         description:

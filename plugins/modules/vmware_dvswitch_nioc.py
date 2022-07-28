@@ -18,8 +18,6 @@ description:
     - This module can be used to manage distributed switch Network IO Control configurations.
 author:
     - Joseph Andreatta (@vmwjoseph)
-notes:
-    - Tested on vSphere 6.7
 options:
     switch:
         description:

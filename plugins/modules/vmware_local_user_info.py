@@ -21,8 +21,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on ESXi 6.5
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

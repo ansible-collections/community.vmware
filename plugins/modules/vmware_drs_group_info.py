@@ -20,8 +20,6 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 module: vmware_drs_group_info
-notes:
-  - "Tested on vSphere 6.5 and 6.7"
 options:
   cluster_name:
     description:

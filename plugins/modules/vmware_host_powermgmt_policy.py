@@ -17,8 +17,6 @@ description:
 - This module can be used to manage the Power Management Policy of ESXi host systems in given vCenter infrastructure.
 author:
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
-notes:
-- Tested on vSphere 6.5
 options:
   policy:
     description:

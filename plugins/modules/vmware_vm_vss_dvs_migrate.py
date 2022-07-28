@@ -17,8 +17,6 @@ description:
     - Migrates a virtual machine from a standard vswitch to distributed
 author:
 - Joseph Callen (@jcpowermac)
-notes:
-    - Tested on vSphere 5.5
 options:
     vm_name:
         description:

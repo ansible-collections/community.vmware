@@ -19,8 +19,6 @@ description:
 - Renaming Host and Network is not supported by VMware APIs.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 requirements:
 - vSphere Automation SDK
 options:

@@ -19,8 +19,6 @@ description:
 author:
     - Jimmy Conner (@cigamit)
     - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 6.5
 options:
    name:
      description:

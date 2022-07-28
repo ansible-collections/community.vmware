@@ -18,7 +18,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
-- Tested on vSphere 6.5
 - If source package name is not available then fact is populated as null.
 options:
   cluster_name:

@@ -19,8 +19,6 @@ description:
     - All values and VMware object names are case sensitive.
 author:
     - Tim Rightnour (@garbled1)
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
 options:
    name:
      description:

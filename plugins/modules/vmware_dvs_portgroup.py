@@ -19,8 +19,6 @@ description:
 author:
     - Joseph Callen (@jcpowermac)
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
-notes:
-    - Tested on vSphere 7.0
 options:
     portgroup_name:
         description:

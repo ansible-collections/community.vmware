@@ -20,8 +20,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
 - Jan Meerkamp (@meerkampdvv)
-notes:
-- Tested on vSphere 6.5
 options:
   datacenter:
     description:

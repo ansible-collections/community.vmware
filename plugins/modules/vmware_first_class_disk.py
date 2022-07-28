@@ -18,8 +18,6 @@ description:
     - This module can be used to manage (create, delete, resize) VMware vSphere First Class Disks.
 author:
 - Mario Lenz (@mariolenz)
-notes:
-    - Tested on vSphere 7.0
 options:
     datacenter_name:
       description: The name of the datacenter.

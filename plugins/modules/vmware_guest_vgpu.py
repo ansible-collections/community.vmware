@@ -21,8 +21,6 @@ description:
 author:
     - Mohamed Alibi (@Medalibi)
     - Unknown (@matancarmeli7)
-notes:
-    - Tested on vSphere 6.7
 options:
    name:
      description:

@@ -17,8 +17,6 @@ description:
 - This module can be used to gather VMKernel information about an ESXi host from given ESXi hostname or cluster name.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 options:
   cluster_name:
     description:

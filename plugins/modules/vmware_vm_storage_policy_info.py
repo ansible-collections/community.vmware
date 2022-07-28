@@ -20,8 +20,6 @@ description:
   for virtual machines and storage capabilities of storage providers.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

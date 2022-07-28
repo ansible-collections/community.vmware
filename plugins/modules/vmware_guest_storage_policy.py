@@ -31,8 +31,6 @@ description:
 version_added: 1.9.0
 author:
     - Tyler Gates (@tgates81)
-notes:
-    - Tested on vSphere 6.0 and 6.5
 options:
    name:
      description:

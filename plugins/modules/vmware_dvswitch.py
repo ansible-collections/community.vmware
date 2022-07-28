@@ -22,8 +22,6 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on vSphere 6.5, 6.7 and 7.0
 options:
     datacenter_name:
         description:

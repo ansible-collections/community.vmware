@@ -18,8 +18,6 @@ description:
     - Gather information about a single VM on a VMware ESX cluster.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
-notes:
-    - Tested on vSphere 5.5, 6.7
 options:
    name:
      description:

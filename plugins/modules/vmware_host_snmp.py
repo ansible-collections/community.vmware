@@ -18,7 +18,6 @@ description:
 author:
 - Christian Kotte (@ckotte)
 notes:
-- Tested on vSphere 6.5
 - You need to reset the agent (to factory defaults) if you want to clear all community strings, trap targets, or filters
 - SNMP v3 configuration isn't implemented yet
 options:

@@ -21,8 +21,6 @@ description:
   - The module can be used to add VMs / Hosts to or remove them from a DRS group.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-notes:
-  - Tested on vSphere 6.5, and 6.7.
 options:
   cluster:
     description:

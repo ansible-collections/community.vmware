@@ -17,8 +17,6 @@ description:
 - This module can be used to gather information about an ESXi host's firewall configuration information when ESXi hostname or Cluster name is given.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 options:
   cluster_name:
     description:

@@ -19,8 +19,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Kamil Szczygiel (@kamsz)
-notes:
-    - Tested on vSphere 6.0, 6.5
 options:
     datacenter_name:
       description:

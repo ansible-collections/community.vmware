@@ -18,8 +18,6 @@ description:
 - The statistics can be configured with the module C(vmware_vcenter_statistics).
 author:
 - Christian Kotte (@ckotte)
-notes:
-- Tested with vCenter Server Appliance (vCSA) 6.5 and 6.7
 options:
     database:
         description:
