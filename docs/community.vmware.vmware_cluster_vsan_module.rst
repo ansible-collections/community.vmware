@@ -25,8 +25,6 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- Tested on ESXi 6.7.
-- PyVmomi installed.
 - vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 

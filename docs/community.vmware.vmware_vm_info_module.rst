@@ -21,13 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -295,8 +288,6 @@ Notes
 -----
 
 .. note::
-   - Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
-   - From 2.8 and onwards, information are returned as list of dict instead of dict.
    - Fact about ``moid`` added in VMware collection 1.4.0.
    - Fact about ``datastore_url`` is added in VMware collection 1.18.0.
    - All modules requires API write access and hence is not supported on a free ESXi license.

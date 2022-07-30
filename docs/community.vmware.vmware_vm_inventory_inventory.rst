@@ -25,8 +25,6 @@ Requirements
 ------------
 The below requirements are needed on the local Ansible controller node that executes this inventory.
 
-- Python >= 2.7
-- PyVmomi
 - requests >= 2.3
 - vSphere Automation SDK - For tag feature
 
