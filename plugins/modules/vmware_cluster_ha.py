@@ -186,7 +186,7 @@ options:
       - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
       type: int
       default: 180
-      version_added: ''
+      version_added: '2.8.0'
     apd_reaction:
       description:
       - VM response recovery reaction for storage failures categorized as All Paths Down (APD).
@@ -194,7 +194,7 @@ options:
       type: str
       default: 'reset'
       choices: [ 'reset', 'disabled' ]
-      version_added: ''
+      version_added: '2.8.0'
     pdl_response:
       description:
       - VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).
