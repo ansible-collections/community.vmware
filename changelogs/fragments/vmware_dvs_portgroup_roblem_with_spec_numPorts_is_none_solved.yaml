@@ -1,2 +1,5 @@
 minor_changes:
   - vmware_dvs_portgroup - AProblem with spec.numPorts is None solved (https://github.com/ansible-collections/community.vmware/pull/1419).
+  - vmware_dvswitch - Missing whitespace
+  - vmware_guest_register_operation - Missing whitespace
+  - vmware_vspan_sesseion - Missing whitespace
