@@ -393,21 +393,21 @@ class VMwareVspanSession(PyVmomi):
                 for port in session_ports:
                     if vspan_session.name == self.name:
                         ports_of_selected_session.append(port)
-                    elif not(port in ports):
+                    elif not (port in ports):
                         ports.append(port)
             if vspan_session.sourcePortTransmitted is not None:
                 session_ports = vspan_session.sourcePortTransmitted.portKey
                 for port in session_ports:
                     if vspan_session.name == self.name:
                         ports_of_selected_session.append(port)
-                    elif not(port in ports):
+                    elif not (port in ports):
                         ports.append(port)
             if vspan_session.destinationPort is not None:
                 session_ports = vspan_session.destinationPort.portKey
                 for port in session_ports:
                     if vspan_session.name == self.name:
                         ports_of_selected_session.append(port)
-                    elif not(port in ports):
+                    elif not (port in ports):
                         ports.append(port)
         promiscuous_ports = []
         if ports:
