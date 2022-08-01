@@ -239,13 +239,19 @@ class HostVmnicMgr(PyVmomi):
                                         pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
                                     else:
                                         pnic_info['lldp_info'] = 'N/A'
+                                    if hint.get('connectedSwitchPort'):
+                                        pnic_info['connectedSwitchPort'] = hint.get('connectedSwitchPort')
+                                    else:
+                                        pnic_info['cdp_info'] = 'N/A'
                             except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
                                 pnic_info['lldp_info'] = 'N/A'
+                                pnic_info['cdp_info'] = 'N/A'
                         else:
                             pnic_info['status'] = 'Disconnected'
                             pnic_info['actual_speed'] = 'N/A'
                             pnic_info['actual_duplex'] = 'N/A'
                             pnic_info['lldp_info'] = 'N/A'
+                            pnic_info['cdp_info'] = 'N/A'
                         if pnic.spec.linkSpeed:
                             pnic_info['configured_speed'] = pnic.spec.linkSpeed.speedMb
                             pnic_info['configured_duplex'] = 'Full Duplex' if pnic.spec.linkSpeed.duplex else 'Half Duplex'
