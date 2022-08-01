@@ -736,7 +736,7 @@ class VMwareDvSwitch(PyVmomi):
                 internalFlowsOnly_previous = current_config.internalFlowsOnly
                 new_config.internalFlowsOnly = self.netFlow_internal_flows_only
 
-        return(new_config, changed, changed_collectorIpAddress, collectorIpAddress_previous,
+        return (new_config, changed, changed_collectorIpAddress, collectorIpAddress_previous,
                changed_collectorPort, collectorPort_previous, changed_observationDomainId, observationDomainId_previous,
                changed_activeFlowTimeout, activeFlowTimeout_previous, changed_idleFlowTimeout, idleFlowTimeout_previous,
                changed_samplingRate, samplingRate_previous, changed_internalFlowsOnly, internalFlowsOnly_previous)
