@@ -240,7 +240,7 @@ class HostVmnicMgr(PyVmomi):
                                     else:
                                         pnic_info['lldp_info'] = 'N/A'
                                     if hint.get('connectedSwitchPort'):
-                                        pnic_info['connectedSwitchPort'] = hint.get('connectedSwitchPort')
+                                        pnic_info['cdp_info'] = hint.get('connectedSwitchPort')
                                     else:
                                         pnic_info['cdp_info'] = 'N/A'
                             except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
