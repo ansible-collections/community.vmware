@@ -174,9 +174,9 @@ class VMwareGuestRegisterOperation(PyVmomi):
         if not dcpath.endswith("/"):
             dcpath += "/"
 
-        if(self.folder in [None, "", "/"]):
+        if (self.folder in [None, "", "/"]):
             self.module.fail_json(msg="Please specify folder path other than blank or '/'")
-        elif(self.folder.startswith("/vm")):
+        elif (self.folder.startswith("/vm")):
             fullpath = "%s%s%s" % (dcpath, self.datacenter, self.folder)
         else:
             fullpath = "%s%s" % (dcpath, self.folder)
