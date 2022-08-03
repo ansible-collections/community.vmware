@@ -193,7 +193,7 @@ options:
       - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
       type: str
       default: 'reset'
-      choices: [ 'reset', 'disabled' ]
+      choices: [ 'reset', 'none' ]
       version_added: '2.8.0'
     pdl_response:
       description:
@@ -517,7 +517,7 @@ def main():
                           default='warning'),
         apd_delay=dict(type='int', default=180),
         apd_reaction=dict(type='str',
-                          choices=['reset', 'disabled'],
+                          choices=['reset', 'none'],
                           default='reset'),
         pdl_response=dict(type='str',
                           choices=['disabled', 'warning', 'restartAggressive'],
