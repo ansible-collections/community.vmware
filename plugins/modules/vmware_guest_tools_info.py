@@ -18,11 +18,6 @@ description:
     - Gather information about the VMware tools installed in virtual machine.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-notes:
-    - Tested on vSphere 6.0, 6.5, 6.7
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
    name:
      description:

@@ -18,11 +18,6 @@ description:
     - This module can be used to gather information about virtual machine's snapshots.
 author:
     - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

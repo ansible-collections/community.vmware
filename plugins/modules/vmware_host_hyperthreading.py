@@ -19,11 +19,6 @@ description:
 - The module informs the user if Hyperthreading is enabled but inactive because the processor is vulnerable to L1 Terminal Fault (L1TF).
 author:
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   state:
      description:

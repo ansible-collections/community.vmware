@@ -17,9 +17,6 @@ description:
 - Power on / Power off / Restart a virtual machine.
 author:
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datacenter:
     description:

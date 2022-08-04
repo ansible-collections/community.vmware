@@ -18,11 +18,6 @@ description:
 - 'This module can be used to gather information about DRS VM-VM and VM-HOST rules from the given cluster.'
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

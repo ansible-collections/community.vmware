@@ -20,11 +20,6 @@ description:
 author:
     - Abhijeet Kasurde (@Akasurde)
     - Christian Neugum (@digifuchsi)
-notes:
-    - Tested on vSphere 6.5, 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    datacenter:
      description:

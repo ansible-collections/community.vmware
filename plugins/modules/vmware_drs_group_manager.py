@@ -21,8 +21,6 @@ description:
   - The module can be used to add VMs / Hosts to or remove them from a DRS group.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-notes:
-  - Tested on vSphere 6.5, and 6.7.
 options:
   cluster:
     description:
@@ -64,9 +62,6 @@ options:
       - If set to C(present), VMs/hosts will be added to the given DRS group.
       - If set to C(absent), VMs/hosts will be removed from the given DRS group.
     type: str
-requirements:
-  - "python >= 2.7"
-  - PyVmomi
 version_added: '1.7.0'
 '''
 

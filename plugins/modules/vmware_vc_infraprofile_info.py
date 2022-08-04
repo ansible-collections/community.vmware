@@ -21,11 +21,7 @@ description:
 version_added: '1.0.0'
 author:
 - Naveenkumar G P (@ngp)
-notes:
-- Tested on vSphere 7.0
 requirements:
-- python >= 2.7
-- PyVmomi
 - vSphere Automation SDK
 options:
     decryption_key:

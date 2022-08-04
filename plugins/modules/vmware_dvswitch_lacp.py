@@ -18,11 +18,7 @@ description:
 author:
 - Christian Kotte (@ckotte)
 notes:
-    - Tested on vSphere 6.7
     - You need to run the task two times if you want to remove all LAGs and change the support mode to 'basic'
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     switch:
         description:

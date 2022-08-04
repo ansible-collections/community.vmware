@@ -21,11 +21,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on ESXi 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

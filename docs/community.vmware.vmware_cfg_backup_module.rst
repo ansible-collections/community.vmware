@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi installed
-
 
 Parameters
 ----------
@@ -244,7 +237,6 @@ Notes
 -----
 
 .. note::
-   - Tested on ESXi 6.0
    - Works only for ESXi hosts
    - For configuration load or reset, the host will be switched automatically to maintenance mode.
    - All modules requires API write access and hence is not supported on a free ESXi license.

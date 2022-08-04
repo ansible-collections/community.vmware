@@ -19,11 +19,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   policies:
     description:

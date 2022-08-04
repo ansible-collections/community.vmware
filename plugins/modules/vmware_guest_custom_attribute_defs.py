@@ -18,11 +18,6 @@ description:
 author:
     - Jimmy Conner (@cigamit)
     - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    attribute_key:
      description:

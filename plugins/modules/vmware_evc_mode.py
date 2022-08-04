@@ -17,11 +17,6 @@ description:
     - This module can be used to enable/disable EVC mode on vCenter.
 author:
     - Michael Tipton (@castawayegr)
-notes:
-    - Tested on vSphere 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
   datacenter_name:
     description:

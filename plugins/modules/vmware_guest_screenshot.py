@@ -19,11 +19,6 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-notes:
-    - Tested on vSphere 6.5 and 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

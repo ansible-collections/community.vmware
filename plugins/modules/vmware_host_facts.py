@@ -25,9 +25,6 @@ description:
       Users are recommended to check connection state value and take appropriate decision in the playbook.
 author:
     - Wei Gao (@woshihaoren)
-requirements:
-    - python >= 2.6
-    - PyVmomi
 options:
   esxi_hostname:
     description:

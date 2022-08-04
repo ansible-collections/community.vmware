@@ -20,10 +20,6 @@ author:
 - Mario Lenz (@mariolenz)
 notes:
 - This module is a replacement for the module C(vmware_dns_config)
-- Tested on vSphere 6.7
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   type:
     description:

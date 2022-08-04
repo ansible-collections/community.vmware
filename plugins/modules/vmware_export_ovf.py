@@ -18,9 +18,6 @@ description: >
    This module can be used to export a VMware virtual machine to OVF template from vCenter server or ESXi host.
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-requirements:
-- python >= 2.6
-- PyVmomi
 notes: []
 options:
   name:

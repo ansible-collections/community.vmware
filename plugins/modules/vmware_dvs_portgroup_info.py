@@ -18,11 +18,6 @@ description:
 - This module can be used to gather information about DVS portgroup configurations.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 7.0
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datacenter:
     description:

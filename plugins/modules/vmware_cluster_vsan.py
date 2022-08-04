@@ -22,8 +22,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Mario Lenz (@mariolenz)
 requirements:
-    - Tested on ESXi 6.7.
-    - PyVmomi installed.
     - vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 options:
     cluster_name:

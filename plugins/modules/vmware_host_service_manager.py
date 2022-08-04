@@ -19,11 +19,6 @@ description:
 - If specific esxi_hostname is provided, then specified service will be managed on given ESXi host only.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

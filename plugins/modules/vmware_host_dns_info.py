@@ -18,11 +18,6 @@ description:
 - All parameters and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

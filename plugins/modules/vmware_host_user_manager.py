@@ -15,9 +15,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can add, update or delete local users on ESXi host.
-requirements:
-  - python >= 3.6
-  - PyVmomi
 version_added: '2.1.0'
 options:
   esxi_hostname:

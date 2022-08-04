@@ -18,11 +18,6 @@ description:
 - The remaining settings can be configured with the module C(vmware_vcenter_settings).
 author:
 - Christian Kotte (@ckotte)
-notes:
-- Tested with vCenter Server Appliance (vCSA) 6.5 and 6.7
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
     interval_past_day:
         description:

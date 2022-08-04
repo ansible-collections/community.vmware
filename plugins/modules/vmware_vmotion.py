@@ -21,11 +21,6 @@ description:
 author:
 - Bede Carroll (@bedecarroll)
 - Olivier Boukili (@oboukili)
-notes:
-    - Tested on vSphere 6.0
-requirements:
-    - "python >= 2.6"
-    - pyVmomi
 options:
     vm_name:
       description:

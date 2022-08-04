@@ -22,11 +22,6 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Joseph Andreatta (@vmwjoseph)
-notes:
-    - Tested on vSphere 5.5
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
     esxi_hostname:
         description:

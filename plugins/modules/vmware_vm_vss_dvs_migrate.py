@@ -17,11 +17,6 @@ description:
     - Migrates a virtual machine from a standard vswitch to distributed
 author:
 - Joseph Callen (@jcpowermac)
-notes:
-    - Tested on vSphere 5.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     vm_name:
         description:

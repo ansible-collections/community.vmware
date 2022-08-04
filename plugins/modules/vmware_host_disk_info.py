@@ -18,11 +18,6 @@ description:
 - If I(esxi_hostname) is provided, then disk information about the given host system will be returned.
 author:
 - Matt Proud (@laidbackware)
-notes:
-- Tested on vSphere 6.7 and 7.0
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

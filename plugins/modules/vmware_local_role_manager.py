@@ -20,11 +20,7 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 notes:
-    - Tested on ESXi 6.5
     - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit roles
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
   local_role_name:
     description:

@@ -15,9 +15,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can be used to gather information about the iSCSI configuration of the ESXi host.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   esxi_hostname:
     description:

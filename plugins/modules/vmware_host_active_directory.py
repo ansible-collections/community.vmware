@@ -17,11 +17,6 @@ description:
 - This module can be used to join or leave an ESXi host to or from an Active Directory domain.
 author:
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   ad_domain:
     description:

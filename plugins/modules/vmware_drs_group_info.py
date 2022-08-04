@@ -20,8 +20,6 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 module: vmware_drs_group_info
-notes:
-  - "Tested on vSphere 6.5 and 6.7"
 options:
   cluster_name:
     description:
@@ -37,9 +35,6 @@ options:
       - "Datacenter to search for DRS VM/Host groups."
     required: false
     type: str
-requirements:
-  - "python >= 2.6"
-  - PyVmomi
 short_description: "Gathers info about DRS VM/Host groups on the given cluster"
 '''
 

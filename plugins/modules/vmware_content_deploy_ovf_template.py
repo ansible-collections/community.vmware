@@ -18,11 +18,7 @@ description:
 - All variables and VMware object names are case sensitive.
 author:
 - Lev Goncharv (@ultral)
-notes:
-- Tested on vSphere 6.7
 requirements:
-- python >= 2.6
-- PyVmomi
 - vSphere Automation SDK
 options:
     log_level:

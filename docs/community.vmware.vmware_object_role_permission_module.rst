@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.7
-- PyVmomi
-
 
 Parameters
 ----------
@@ -309,7 +302,6 @@ Notes
 -----
 
 .. note::
-   - Tested on ESXi 6.5, vSphere 6.7
    - The ESXi login user must have the appropriate rights to administer permissions.
    - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
    - All modules requires API write access and hence is not supported on a free ESXi license.

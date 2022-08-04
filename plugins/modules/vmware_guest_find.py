@@ -17,11 +17,6 @@ description:
     - Find the folder path(s) for a virtual machine by name or UUID
 author:
     - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-notes:
-    - Tested on vSphere 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

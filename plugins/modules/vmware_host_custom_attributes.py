@@ -17,10 +17,6 @@ description:
 author:
     - Hunter Christain (@exp-hc)
 version_added: '1.11.0'
-notes:
-    - Tested on vSphere 6.7
-requirements:
-    - PyVmomi
 options:
    esxi_hostname:
      description:

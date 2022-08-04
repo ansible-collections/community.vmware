@@ -20,11 +20,7 @@ description:
 - All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
 requirements:
-- python >= 2.6
-- PyVmomi
 - vSphere Automation SDK
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation

@@ -22,9 +22,6 @@ author:
 - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-requirements:
-- python >= 2.6
-- PyVmomi
 notes:
     - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
     - For example, following is the list of minimum privileges required by users to create virtual machines.
@@ -35,7 +32,6 @@ notes:
     - "   Network > Assign Network"
     - "   Resource > Assign Virtual Machine to Resource Pool"
     - "Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations."
-    - Tested on vSphere 5.5, 6.0, 6.5 and 6.7.
     - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
     - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
     - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add

@@ -18,12 +18,8 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
-    - Tested on ESXi 6.5
     - Be sure that the ESXi user used for login, has the appropriate rights to view roles
     - The module returns a list of dict in version 2.8 and above.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

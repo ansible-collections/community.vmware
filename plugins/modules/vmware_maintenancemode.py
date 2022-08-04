@@ -20,11 +20,6 @@ description:
 author:
 - Jay Jahns (@jjahns) <jjahns@vmware.com>
 - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     esxi_hostname:
         description:

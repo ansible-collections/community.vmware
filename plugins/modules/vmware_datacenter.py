@@ -19,11 +19,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Kamil Szczygiel (@kamsz)
-notes:
-    - Tested on vSphere 6.0, 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     datacenter_name:
       description:

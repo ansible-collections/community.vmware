@@ -20,8 +20,6 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 module: vmware_drs_group
-notes:
-  - Tested on vSphere 6.5, and 6.7
 options:
   cluster_name:
     description:
@@ -63,9 +61,6 @@ options:
     required: false
     type: list
     elements: str
-requirements:
-  - "python >= 2.7"
-  - PyVmomi
 short_description: "Creates vm/host group in a given cluster."
 '''
 

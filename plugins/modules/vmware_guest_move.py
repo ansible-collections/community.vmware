@@ -18,11 +18,6 @@ description:
     - This module can be used to move virtual machines between folders.
 author:
     - Jose Angel Munoz (@imjoseangel)
-notes:
-    - Tested on vSphere 5.5 and vSphere 6.5
-requirements:
-    - python >= 2.6
-    - PyVmomi
 options:
    name:
         description:

@@ -16,9 +16,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - In this module, can set up automatic startup and shutdown of virtual machines according to host startup or shutdown.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   esxi_hostname:
     description:

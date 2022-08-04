@@ -17,9 +17,6 @@ description:
     - This module can be used to gather information about dvswitch configurations.
 author:
     - sky-joker (@sky-joker)
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
     folder:
       description:

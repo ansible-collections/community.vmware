@@ -30,10 +30,6 @@ notes:
     - The option C(device) need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
     - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with C(device) specified.
     - You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
-    - Tested on vSphere 5.5 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     vswitch_name:
       description:

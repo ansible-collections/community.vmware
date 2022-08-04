@@ -17,11 +17,6 @@ description:
 - Find portgroup(s) based on different criteria such as distributed vSwitch, VLAN id or a string in the name.
 author:
 - David Martinez (@dx0xm)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.7
-- PyVmomi
 options:
   dvswitch:
     description:

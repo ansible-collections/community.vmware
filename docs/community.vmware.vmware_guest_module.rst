@@ -21,13 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -2299,7 +2292,6 @@ Notes
    -    Network > Assign Network
    -    Resource > Assign Virtual Machine to Resource Pool
    - Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations.
-   - Tested on vSphere 5.5, 6.0, 6.5 and 6.7.
    - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
    - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
    - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the ``state=present`` must be used to apply the changes.

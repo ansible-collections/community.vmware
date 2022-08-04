@@ -18,11 +18,6 @@ description:
     - This module can be used to manage maintenance mode of a datastore.
 author:
 - "Abhijeet Kasurde (@Akasurde)"
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     datastore:
       description:

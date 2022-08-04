@@ -21,11 +21,7 @@ author:
 - Alina Buzachis (@alinabuzachis)
 - Abhijeet Kasurde (@Akasurde)
 notes:
-- Tested on vSphere 6.7 and 7.0.2
 - Supports Check mode.
-requirements:
-- python >= 3
-- PyVmomi
 options:
   datacenter:
     description:

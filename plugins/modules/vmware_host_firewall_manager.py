@@ -18,11 +18,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Aaron Longchamps (@alongchamps)
-notes:
-- Tested on vSphere 6.0, vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

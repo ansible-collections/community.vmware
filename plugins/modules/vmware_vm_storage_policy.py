@@ -20,11 +20,6 @@ description:
 version_added: '1.0.0'
 author:
 - Dustin Scott (@scottd018)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.7
-- PyVmomi
 options:
   name:
     description:

@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -580,10 +573,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 5.5 and 6.5
-   - Complete configuration only tested on vSphere 6.5
-   - ``inbound_policy`` and ``rolling_order`` are removed in 2.11.
-   - Those two options are only used during portgroup creation. Updating is not supported with those options.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 

@@ -16,9 +16,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can register or unregister VMs to the inventory.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   datacenter:
     description:

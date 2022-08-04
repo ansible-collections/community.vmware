@@ -17,11 +17,6 @@ description:
 - This module can be used to gather information about NTP configurations on an ESXi host.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   cluster_name:
     description:

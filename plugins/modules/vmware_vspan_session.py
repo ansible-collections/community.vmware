@@ -20,11 +20,6 @@ description:
    - This module can be used to create, delete or edit different kind of port mirroring sessions.
 author:
 - Peter Gyorgy (@gyorgypeter)
-notes:
-    - Tested on vSphere 6.7
-requirements:
-    - "python > =  2.6"
-    - PyVmomi
 options:
     switch:
         description:

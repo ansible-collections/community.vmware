@@ -19,11 +19,7 @@ description:
 author:
 - Andreas Nafpliotis (@nafpliot-ibm)
 notes:
-    - Tested on ESXi 6.0
     - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit users
-requirements:
-    - "python >= 2.6"
-    - PyVmomi installed
 options:
     local_user_name:
         description:

@@ -21,12 +21,8 @@ description: This module can be used to gather object permissions on the given V
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
-    - Tested on ESXi 6.5, vSphere 6.7
     - The ESXi login user must have the appropriate rights to administer permissions.
     - Supports check mode.
-requirements:
-    - "python >= 3"
-    - PyVmomi
 options:
   principal:
     description:

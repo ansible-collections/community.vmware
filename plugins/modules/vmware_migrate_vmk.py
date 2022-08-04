@@ -18,11 +18,6 @@ description:
 author:
 - Joseph Callen (@jcpowermac)
 - Russell Teague (@mtnbikenc)
-notes:
-    - Tested on vSphere 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     esxi_hostname:
         description:

@@ -18,11 +18,7 @@ description:
 author:
 - David Hewitt (@davidmhewitt)
 notes:
-- Tested on vSphere 6.5
 - C(flat_folder_info) added in VMware collection 1.4.0.
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datacenter:
     description:
