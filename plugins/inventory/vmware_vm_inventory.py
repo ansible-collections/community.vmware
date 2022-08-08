@@ -1,9 +1,8 @@
-#
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2020, dacrystal
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
@@ -20,8 +19,6 @@ DOCUMENTATION = r'''
       - inventory_cache
       - constructed
     requirements:
-      - "Python >= 2.7"
-      - "PyVmomi"
       - "requests >= 2.3"
       - "vSphere Automation SDK - For tag feature"
     options:

@@ -4,7 +4,8 @@
 # Copyright: (c) 2019, NAER William Leemans (@bushvin) <willie@elaba.net>
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -19,13 +20,6 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-notes:
-    - Tested on vSphere 6.0 and 6.5.
-    - Disk UUID information is added in version 2.8.
-    - Additional information about guest disk backings added in version 2.8.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

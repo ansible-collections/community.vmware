@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2021, sky-joker
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,9 +18,6 @@ description:
   - This module can be managed PCI device passthrough settings on host.
 notes:
   - Supports C(check_mode).
-requirements:
-  - python >= 3.6
-  - PyVmomi
 version_added: '1.11.0'
 options:
   cluster:
@@ -37,13 +35,14 @@ options:
     type: str
   devices:
     description:
-      - List of PCI device name.
+      - List of PCI device name or id.
     suboptions:
-      device_name:
+      device:
         description:
           - Name of PCI device to enable passthrough.
         aliases:
           - name
+          - device_name
         type: str
     elements: dict
     required: True
@@ -82,6 +81,18 @@ EXAMPLES = r"""
     esxi_hostname: "{{ esxi1 }}"
     devices:
       - device_name: "Dual Band Wireless AC 3165"
+    state: present
+
+- name: Enable PCI device passthrough with PCI ids
+  community.vmware.vmware_host_passthrough:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi1 }}"
+    devices:
+      - device: '0000:03:00.0'
+      - device: '0000:00:02.0'
     state: present
 
 - name: Disable PCI device passthrough against the whole ESXi in a cluster
@@ -198,21 +209,27 @@ class VMwareHostPassthrough(PyVmomi):
         self.existent_devices = []
         self.non_existent_devices = []
 
+        # The keys use in checking pci devices existing.
+        keys = ['device_name', 'device_id']
+
         for host_pci_device in self.hosts_passthrough_pci_devices:
             pci_devices = []
             for esxi_hostname, value in host_pci_device.items():
                 for target_device in self.devices:
-                    device_name = target_device['device_name']
-                    if device_name in [device['device_name'] for device in value['pci_devices']]:
+                    device = target_device['device']
+                    if device in [pci_device.get(key) for key in keys for pci_device in value['pci_devices']]:
                         pci_devices.append(
-                            [device for device in value['pci_devices'] if device_name == device['device_name']]
+                            [
+                                pci_device for pci_device in value['pci_devices']
+                                if device == pci_device['device_name'] or device == pci_device['device_id']
+                            ]
                         )
                     else:
-                        self.non_existent_devices.append(device_name)
+                        self.non_existent_devices.append(device)
                 self.existent_devices.append({
                     esxi_hostname: {
                         'host_obj': value['host_obj'],
-                        'checked_pci_devices': sum(pci_devices, [])
+                        'checked_pci_devices': self.de_duplication(sum(pci_devices, []))
                     }
                 })
 
@@ -235,9 +252,9 @@ class VMwareHostPassthrough(PyVmomi):
                     'new_configs': []
                 }
                 for target_device in self.devices:
-                    device_name = target_device['device_name']
+                    device = target_device['device']
                     for checked_pci_device in value['checked_pci_devices']:
-                        if device_name == checked_pci_device['device_name']:
+                        if device == checked_pci_device['device_name'] or device == checked_pci_device['device_id']:
                             before = dict(checked_pci_device)
                             after = dict(copy.deepcopy(checked_pci_device))
 
@@ -249,6 +266,16 @@ class VMwareHostPassthrough(PyVmomi):
                             self.host_target_device_to_change_configuration[esxi_hostname]['host_obj'] = value['host_obj']
                             self.diff_config['before'][esxi_hostname].append(before)
                             self.diff_config['after'][esxi_hostname].append(after)
+
+                # De-duplicate pci device data and sort.
+                self.diff_config['before'][esxi_hostname] = sorted(
+                    self.de_duplication(self.diff_config['before'][esxi_hostname]),
+                    key=lambda d: d['device_name']
+                )
+                self.diff_config['after'][esxi_hostname] = sorted(
+                    self.de_duplication(self.diff_config['after'][esxi_hostname]),
+                    key=lambda d: d['device_name']
+                )
 
     def generate_passthrough_configurations_to_be_applied(self):
         """
@@ -268,6 +295,14 @@ class VMwareHostPassthrough(PyVmomi):
                     config.passthruEnabled = state
                     config.id = new_config['device_id']
                     self.host_passthrough_configs[esxi_hostname]['generated_new_configs'].append(config)
+
+    def de_duplication(self, data):
+        """
+        De-duplicate dictionaries in a list.
+        """
+        return [
+            dict(s) for s in set(frozenset(d.items()) for d in data)
+        ]
 
     def execute(self):
         self.collect_pci_device_ids_for_supported_passthrough()
@@ -306,7 +341,7 @@ def main():
         esxi_hostname=dict(type='str'),
         devices=dict(type='list', elements='dict', required=True,
                      options=dict(
-                         device_name=dict(type='str', aliases=['name'])
+                         device=dict(type='str', aliases=['name', 'device_name'])
                      )),
         state=dict(type='str', default='present', choices=['present', 'absent'])
     )

@@ -20,14 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-- requests
-
 
 Parameters
 ----------
@@ -539,7 +531,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6
    - Only the first match against vm_id is used, even if there are multiple matches
    - All modules requires API write access and hence is not supported on a free ESXi license.
 

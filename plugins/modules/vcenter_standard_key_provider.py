@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright: (c) 2021, Ansible Project
 # Copyright: (c) 2021, VMware, Inc. All Rights Reserved
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -18,9 +20,6 @@ description: >
   https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.security.doc/GUID-6DB1E745-9624-43EA-847C-DD2F767CB94B.html)
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-requirements:
-  - python >= 3.6
-  - PyVmomi
 options:
   name:
     description: Name of the Key Provider to be added, reconfigured or removed from vCenter.

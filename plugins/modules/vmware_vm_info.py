@@ -4,7 +4,8 @@
 # Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Fedor Vompe <f.vompe () comptek.ru>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -22,13 +23,8 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Fedor Vompe (@sumkincpp)
 notes:
-- Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
-- From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
 - Fact about C(datastore_url) is added in VMware collection 1.18.0.
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
     vm_type:
       description:
@@ -350,8 +346,9 @@ class VmwareVmInfo(PyVmomi):
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
             datastore_attributes = ('name', 'url')
-            if vm.config.datastoreUrl:
-                for entry in vm.config.datastoreUrl:
+            vm_datastore_urls = _get_vm_prop(vm, ('config', 'datastoreUrl'))
+            if vm_datastore_urls:
+                for entry in vm_datastore_urls:
                     datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,

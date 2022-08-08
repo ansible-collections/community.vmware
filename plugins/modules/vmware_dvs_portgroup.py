@@ -3,7 +3,8 @@
 
 # Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
 # Copyright: (c) 2017, Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -18,11 +19,6 @@ description:
 author:
     - Joseph Callen (@jcpowermac)
     - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
-notes:
-    - Tested on vSphere 7.0
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     portgroup_name:
         description:
@@ -464,7 +460,7 @@ class VMwareDvsPortgroup(PyVmomi):
         # Basic config
         config.name = self.module.params['portgroup_name']
 
-        if self.module.params['num_ports'] is not None:
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
             config.numPorts = self.module.params['num_ports']
 
         # Default port config
@@ -710,9 +706,9 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'absent'
 
         # Check config
-        if self.module.params['num_ports'] is not None and \
-                self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
-            return 'update'
+        if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
+            if self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
+                return 'update'
 
         # Default port config
         defaultPortConfig = self.dvs_portgroup.config.defaultPortConfig

@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2018, Karsten Kaj Jakobsen <kj@patientsky.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 
@@ -19,8 +20,6 @@ extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 module: vmware_drs_group
-notes:
-  - Tested on vSphere 6.5, and 6.7
 options:
   cluster_name:
     description:
@@ -62,9 +61,6 @@ options:
     required: false
     type: list
     elements: str
-requirements:
-  - "python >= 2.7"
-  - PyVmomi
 short_description: "Creates vm/host group in a given cluster."
 '''
 

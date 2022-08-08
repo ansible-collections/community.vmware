@@ -16,7 +16,7 @@
   register: pci_devices_result
 
 - name: Set the device_ids variable that includes to be enabled passthrough devices only
-  set_fact:
+  ansible.builtin.set_fact:
     device_ids: >-
       {{ device_ids | default([])
         + [item]
@@ -30,7 +30,7 @@
     - device_ids is defined
   block:
     - name: Set the list_of_pci_devices_that_can_be_enabled_passthrough variable
-      set_fact:
+      ansible.builtin.set_fact:
         list_of_pci_devices_that_can_be_enabled_passthrough: >-
           {{ list_of_pci_devices_that_can_be_enabled_passthrough | default([])
             + [item.1]

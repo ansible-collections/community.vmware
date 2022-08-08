@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#
+
 # Copyright: (c) 2018, Derek Rushing <derek.rushing@geekops.com>
 # Copyright: (c) 2018, VMware, Inc.
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
 
@@ -20,12 +20,8 @@ author:
 - Derek Rushing (@kryptsi)
 - Joseph Andreatta (@vmwjoseph)
 notes:
-    - Tested on ESXi 6.5, vSphere 6.7
     - The ESXi login user must have the appropriate rights to administer permissions.
     - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
   role:
     description:

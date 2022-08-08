@@ -21,13 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 3.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -71,14 +64,14 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>List of PCI device name.</div>
+                        <div>List of PCI device name or id.</div>
                 </td>
             </tr>
                                 <tr>
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>device_name</b>
+                    <b>device</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -88,7 +81,7 @@ Parameters
                 </td>
                 <td>
                         <div>Name of PCI device to enable passthrough.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: name</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: name, device_name</div>
                 </td>
             </tr>
 
@@ -294,6 +287,18 @@ Examples
         esxi_hostname: "{{ esxi1 }}"
         devices:
           - device_name: "Dual Band Wireless AC 3165"
+        state: present
+
+    - name: Enable PCI device passthrough with PCI ids
+      community.vmware.vmware_host_passthrough:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        devices:
+          - device: '0000:03:00.0'
+          - device: '0000:00:02.0'
         state: present
 
     - name: Disable PCI device passthrough against the whole ESXi in a cluster

@@ -1,8 +1,10 @@
 #!/usr/bin/python
 #  -*- coding: utf-8 -*-
-#  Copyright: (c) 2018, Ansible Project
-#  Copyright: (c) 2018, Diane Wang <dianew@vmware.com>
-#  GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+# Copyright: (c) 2018, Ansible Project
+# Copyright: (c) 2018, Diane Wang <dianew@vmware.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,11 +19,6 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-notes:
-    - Tested on vSphere 6.5 and 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:
@@ -79,7 +76,7 @@ options:
      description:
      - The list of the keys will be sent to the virtual machine.
      - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(HOME), C(DELETE), C(END), C(CTRL_ALT_DEL),
-        C(CTRL_C) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
+        C(CTRL_C), C(CTRL_X) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      - Values C(HOME) and C(END) are added in version 1.17.0.
      type: list
@@ -247,6 +244,7 @@ class PyVmomiHelper(PyVmomi):
             ('END', '0x4d', [('', [])]),
             ('CTRL_ALT_DEL', '0x4c', [('', ['CTRL', 'ALT'])]),
             ('CTRL_C', '0x06', [('', ['CTRL'])]),
+            ('CTRL_X', '0x1b', [('', ['CTRL'])]),
             ('RIGHTARROW', '0x4f', [('', [])]),
             ('LEFTARROW', '0x50', [('', [])]),
             ('DOWNARROW', '0x51', [('', [])]),

@@ -21,13 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- Tested on ESXi 6.7 and 7.0.
-- PyVmomi installed.
-
 
 Parameters
 ----------

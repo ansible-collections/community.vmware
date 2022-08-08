@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2015, Dag Wieers (@dagwieers) <dag@wieers.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -52,7 +53,6 @@ options:
 notes:
   - "This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer.
     It can be the normal remote target or you can change it either by using C(transport: local) or using C(delegate_to)."
-  - Tested on vSphere 5.5 and ESXi 6.7
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

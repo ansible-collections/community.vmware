@@ -21,12 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- pyVmomi
-
 
 Parameters
 ----------
@@ -338,7 +332,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.0 and 6.5
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 

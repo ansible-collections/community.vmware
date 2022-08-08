@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -321,7 +314,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.7
    - You need to run the task two times if you want to remove all LAGs and change the support mode to 'basic'
    - All modules requires API write access and hence is not supported on a free ESXi license.
 

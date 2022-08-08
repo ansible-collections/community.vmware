@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright: (c) 2018, VMware, Inc.
 # Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,11 +18,6 @@ description:
     - This module can be used to manage distributed switch Network IO Control configurations.
 author:
     - Joseph Andreatta (@vmwjoseph)
-notes:
-    - Tested on vSphere 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     switch:
         description:

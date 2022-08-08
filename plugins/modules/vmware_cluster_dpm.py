@@ -4,8 +4,8 @@
 # Copyright: (c) 2022, Swisscom (Schweiz) AG
 # Author(s): Olivia Luetolf <olivia.luetolf@swisscom.com>
 # Copyright: (c) 2018, Ansible Project
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -20,9 +20,6 @@ description:
     - All values and VMware object names are case sensitive.
 author:
 - Olivia Luetolf (@olilu)
-requirements:
-    - Tested on ESXi 6.7 and 7.0.
-    - PyVmomi installed.
 options:
     cluster_name:
       description:
