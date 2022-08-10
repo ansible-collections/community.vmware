@@ -159,18 +159,6 @@ action_groups:
 
 plugin_routing:
   modules:
-    vca_fw:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vca_nat:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vca_vapp:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
     vmware_dns_config:
       deprecation:
         removal_date: 2022-06-01
