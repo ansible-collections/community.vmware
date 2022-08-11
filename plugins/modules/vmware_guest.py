@@ -496,6 +496,7 @@ options:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - All parameters and VMware object names are case sensitive.
+    - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
     type: list
     elements: dict
     suboptions:
@@ -2431,8 +2432,10 @@ class PyVmomiHelper(PyVmomi):
 
         # set datastore per disk on creation only.
         if expected_disk_spec.get('datastore'):
+            datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
+            if datastores is None or len(datastores) == 0:
+                self.module.fail_json(msg="Unable to find a datastore list when autoselecting")
             ds = find_obj(self.content, [vim.Datastore], expected_disk_spec.get('datastore'))
-            disk_spec.device.backing.datastore = ds
         return disk_modified
 
     def configure_multiple_controllers_disks(self, vm_obj):
@@ -2587,7 +2590,6 @@ class PyVmomiHelper(PyVmomi):
                 # TODO: This is already handled by the relocation spec,
                 # but it needs to eventually be handled for all the
                 # other disks defined
-                pass
                 # User has specified datastore name
                 datastore_name = expected_disk_spec['datastore']
                 datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
@@ -2621,7 +2623,7 @@ class PyVmomiHelper(PyVmomi):
                         datastore_freespace = ds.summary.freeSpace
 
                 parent_dc = self.cache.get_parent_datacenter(datastore)
-                dcstate = parent_dc
+                dcstate = datacenter = parent_dc
                 vmdk_file_name = self.create_directory_for_datadisk(dcstate, datastore=datastore, vm_name=vm_name, diskspec=diskspec)
                 diskspec.device.backing.fileName = vmdk_file_name
                 diskspec.device.backing.datastore = datastore
