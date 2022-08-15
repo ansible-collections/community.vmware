@@ -2624,7 +2624,7 @@ class PyVmomiHelper(PyVmomi):
                         datastore_freespace = ds.summary.freeSpace
 
                 parent_dc = self.cache.get_parent_datacenter(datastore)
-                dcstate = datacenter = parent_dc
+                dcstate = parent_dc
                 vmdk_file_name = self.create_directory_for_datadisk(dcstate, datastore=datastore, vm_name=vm_name, diskspec=diskspec)
                 diskspec.device.backing.fileName = vmdk_file_name
                 diskspec.device.backing.datastore = datastore
