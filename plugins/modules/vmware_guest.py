@@ -2436,6 +2436,7 @@ class PyVmomiHelper(PyVmomi):
             if datastores is None or len(datastores) == 0:
                 self.module.fail_json(msg="Unable to find a datastore list when autoselecting")
             ds = find_obj(self.content, [vim.Datastore], expected_disk_spec.get('datastore'))
+            disk_spec.device.backing.datastore = ds
         return disk_modified
 
     def configure_multiple_controllers_disks(self, vm_obj):
