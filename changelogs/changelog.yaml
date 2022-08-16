@@ -1258,3 +1258,26 @@ releases:
     - 1365-vmware_host_passthrough.yml
     - 1382-vmware_guest_disk.yml
     release_date: '2022-07-08'
+  2.8.0:
+    changes:
+      bugfixes:
+      - vmware_cfg_backup - Fix a possible urlopen error when connecting directly
+        to an ESXi host (https://github.com/ansible-collections/community.vmware/issues/1383).
+      - vmware_guest - Fix no fail attribute issue (https://github.com/ansible-collections/community.vmware/issues/1401).
+      - vmware_vm_info - Fix 'NoneType' object has no attribute 'datastoreUrl' for
+        inaccessible VMs (https://github.com/ansible-collections/community.vmware/issues/1407).
+      minor_changes:
+      - vmware_cfg_backup - Improve error message (https://github.com/ansible-collections/community.vmware/pull/1388).
+      - vmware_dvs_portgroup - Fix a `spec.numPorts is None` issue when the `num_ports`
+        parameter isn't set (https://github.com/ansible-collections/community.vmware/pull/1419).
+      - vmware_guest_sendkey - Add CTRL_X binding support (https://github.com/ansible-collections/community.vmware/pull/1376).
+      - vmware_host_vmnic_info - add CDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/1418).
+    fragments:
+    - 1376-vmware_guest_sendkey-add-ctrl_x-support.yaml
+    - 1388-vmware_cfg_backup-improve_error_msg.yml
+    - 1392-proposed_fixes_for_backup_behavior_1383.yml
+    - 1402-vmware_guest_change_to_fail_json.yml
+    - 1407-vmware_vm_info-inaccessible_vm.yml
+    - 1418_vmware_host_vmnic_info.yml
+    - 1419-vmware_dvs_portgroup-problem_with_spec_numPorts_is_none_solved.yaml
+    release_date: '2022-08-16'

@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_cfg_backup - Improve error message (https://github.com/ansible-collections/community.vmware/pull/1388).

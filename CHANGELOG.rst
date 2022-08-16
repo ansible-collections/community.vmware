@@ -5,6 +5,24 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.8.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cfg_backup - Improve error message (https://github.com/ansible-collections/community.vmware/pull/1388).
+- vmware_dvs_portgroup - Fix a `spec.numPorts is None` issue when the `num_ports` parameter isn't set (https://github.com/ansible-collections/community.vmware/pull/1419).
+- vmware_guest_sendkey - Add CTRL_X binding support (https://github.com/ansible-collections/community.vmware/pull/1376).
+- vmware_host_vmnic_info - add CDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/1418).
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a possible urlopen error when connecting directly to an ESXi host (https://github.com/ansible-collections/community.vmware/issues/1383).
+- vmware_guest - Fix no fail attribute issue (https://github.com/ansible-collections/community.vmware/issues/1401).
+- vmware_vm_info - Fix 'NoneType' object has no attribute 'datastoreUrl' for inaccessible VMs (https://github.com/ansible-collections/community.vmware/issues/1407).
+
 v2.7.0
 ======
 

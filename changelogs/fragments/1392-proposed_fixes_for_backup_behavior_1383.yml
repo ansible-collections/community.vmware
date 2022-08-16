@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_cfg_backup - Fix a possible urlopen error when connecting directly to an ESXi host (https://github.com/ansible-collections/community.vmware/issues/1383).
