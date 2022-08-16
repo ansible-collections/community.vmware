@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_guest - Fix no fail attribute issue (https://github.com/ansible-collections/community.vmware/issues/1401).
