@@ -1,0 +1,4 @@
+breaking_changes:
+  - vmware_vm_config_option - Dict item names in result are changed from strings joined with spaces to strings joined with underlines,
+    e.g. `Guest fullname` is changed to `guest_fullname`
+    (https://github.com/ansible-collections/community.vmware/issues/1268).
