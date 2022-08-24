@@ -194,7 +194,7 @@ options:
       type: str
       default: 'reset'
       choices: [ 'reset', 'none' ]
-      version_added: '2.8.0'
+      version_added: '2.9.0'
     pdl_response:
       description:
       - VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).
