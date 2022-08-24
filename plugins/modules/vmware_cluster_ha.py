@@ -186,7 +186,7 @@ options:
       - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
       type: int
       default: 180
-      version_added: '2.8.0'
+      version_added: '2.9.0'
     apd_reaction:
       description:
       - VM response recovery reaction for storage failures categorized as All Paths Down (APD).
