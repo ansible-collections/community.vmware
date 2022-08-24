@@ -2696,7 +2696,7 @@ class PyVmomiHelper(PyVmomi):
                 datastore_freespace = ds.summary.freeSpace
 
         return datastore
-
+    
     def select_datastore(self, vm_obj=None):
         datastore = None
         datastore_name = None
@@ -2752,9 +2752,11 @@ class PyVmomiHelper(PyVmomi):
         if not datastore and self.params['template']:
             # use the template's existing DS
             disks = [x for x in vm_obj.config.hardware.device if isinstance(x, vim.vm.device.VirtualDisk)]
+            
             if disks:
                 datastore = disks[0].backing.datastore
                 datastore_name = datastore.name
+                    
             # validation
             if datastore:
                 dc = self.cache.get_parent_datacenter(datastore)
@@ -2863,7 +2865,7 @@ class PyVmomiHelper(PyVmomi):
             else:
                 self.module.fail_json(msg='Unable to find resource pool, need esxi_hostname, resource_pool, or cluster')
         return resource_pool
-
+    
     def deploy_vm(self):
         # https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/clone_vm.py
         # https://www.vmware.com/support/developer/vc-sdk/visdk25pubs/ReferenceGuide/vim.vm.CloneSpec.html
@@ -2981,7 +2983,6 @@ class PyVmomiHelper(PyVmomi):
                 # Only select specific host when ESXi hostname is provided
                 if self.params['esxi_hostname']:
                     self.relospec.host = self.select_host()
-                self.relospec.datastore = datastore
 
                 # Convert disk present in template if is set
                 if self.params['convert']:
@@ -2996,7 +2997,7 @@ class PyVmomiHelper(PyVmomi):
                             if self.params['convert'] == 'thick':
                                 disk_locator.diskBackingInfo.diskMode = "persistent"
                             disk_locator.diskId = device.key
-                            disk_locator.datastore = datastore
+                            # disk_locator.datastore = datastore
                             self.relospec.disk.append(disk_locator)
 
                 # https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.vm.RelocateSpec.html
