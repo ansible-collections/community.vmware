@@ -648,9 +648,10 @@ class VMwareHostVirtualSwitch(PyVmomi):
         # Check failback
         if teaming_failback is not None:
             results['failback'] = teaming_failback
-            if teaming_policy.rollingOrder is not teaming_failback:
-                results['notify_switches_previous'] = teaming_policy.rollingOrder
-                teaming_policy.rollingOrder = teaming_failback
+            current_failback = not teaming_policy.rollingOrder
+            if current_failback != teaming_failback:
+                results['failback_previous'] = current_failback
+                teaming_policy.rollingOrder = not teaming_failback
                 changed = True
 
         # Check teaming failover order
