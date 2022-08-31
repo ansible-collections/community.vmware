@@ -191,7 +191,6 @@ options:
                 type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -205,7 +204,6 @@ EXAMPLES = r'''
     enable_sdrs: True
     state: present
   delegate_to: localhost
-
 - name: Create/Modify datastore cluster with enable SDRS
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
@@ -216,7 +214,6 @@ EXAMPLES = r'''
     enable_sdrs: True
     state: present
   delegate_to: localhost
-
 - name: Create/Modify datastore cluster with enable SDRS and set the automation levels to manual
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
@@ -232,7 +229,6 @@ EXAMPLES = r'''
     policy_enforcement_automation_level: manual
     vm_evacuation_automation_level: manual
   delegate_to: localhost
-
 - name: Create datastore cluster using folder
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
@@ -242,7 +238,6 @@ EXAMPLES = r'''
     datastore_cluster_name: '{{ datastore_cluster_name }}'
     state: present
   delegate_to: localhost
-
 - name: Delete datastore cluster
   community.vmware.vmware_datastore_cluster:
     hostname: '{{ vcenter_hostname }}'
@@ -294,7 +289,6 @@ class VMwareDatastoreClusterManager(PyVmomi):
     def ensure(self):
         """
         Manage internal state of datastore cluster
-
         """
         results = dict(changed=False, result='')
         state = self.module.params.get('state')
@@ -367,25 +361,25 @@ class VMwareDatastoreClusterManager(PyVmomi):
                     change = True
 
                 # Automation overrides
-                if space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
+                if currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode is None or space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
                         if space_balance_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
                     change = True
 
-                if rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
+                if currentPodConfig.automationOverrides.ruleEnforcementAutomationMode is None or rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
                         if rule_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
                     change = True
 
-                if policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
+                if currentPodConfig.automationOverrides.policyEnforcementAutomationMode is None or policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
                         if policy_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
                     change = True
 
-                if vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
+                if currentPodConfig.automationOverrides.vmEvacuationAutomationMode is None or vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
                         if vm_evacuation_automation_level != "cluster_settings" else None
                     results['result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
