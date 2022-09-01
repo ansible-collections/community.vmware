@@ -478,7 +478,7 @@ class PyVmomiHelper(PyVmomi):
             )
             # If NIC is a SR-IOV adapter
             if isinstance(nic, vim.vm.device.VirtualSriovEthernetCard):
-                d_item['allow_guest_os_mtu_change'] = nic.allowGuesOSMtuChange
+                d_item['allow_guest_os_mtu_change'] = nic.allowGuestOSMtuChange
                 if isinstance(nic.sriovBacking, vim.vm.device.VirtualSriovEthernetCard.SriovBackingInfo):
                     if isinstance(nic.sriovBacking.physicalFunctionBacking, vim.vm.device.VirtualPCIPassthrough.DeviceBackingInfo):
                         d_item['physical_function_backing'] = nic.sriovBacking.physicalFunctionBacking.id
