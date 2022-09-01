@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_cfg_backup - Fix a bug that failed the restore when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1440).

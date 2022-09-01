@@ -135,6 +135,8 @@ class VMwareConfigurationBackup(PyVmomi):
 
         url = self.host.configManager.firmwareSystem.QueryFirmwareConfigUploadURL()
         url = url.replace('*', self.cfg_hurl)
+        if self.module.params["port"] == 443:
+            url = url.replace("http:", "https:")
         # find manually the url if there is a redirect because urllib2 -per RFC- doesn't do automatic redirects for PUT requests
         try:
             open_url(url=url, method='HEAD', validate_certs=self.validate_certs)
