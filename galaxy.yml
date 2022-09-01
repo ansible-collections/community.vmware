@@ -5,11 +5,14 @@ name: vmware
 # https://github.com/ansible-network/releases/tree/master/ansible_releases/cmd
 # A script based on https://pypi.org/project/pbr/ will generate the version
 # key. The version value depends on the tag or the last git tag.
+version: null
 readme: README.md
 authors:
   - Ansible (https://github.com/ansible)
 description:
-license_file: LICENSE
+license:
+  - GPL-3.0-or-later
+  - BSD-2-Clause
 tags:
   - cloud
   - vmware

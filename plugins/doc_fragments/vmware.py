@@ -3,7 +3,8 @@
 # Copyright: (c) 2016, Charles Paul <cpaul@ansible.com>
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -106,23 +107,17 @@ options:
       - Environment variable supported added in Ansible 2.6.
       type: int
       default: 443
-      version_added: '2.5'
-      version_added_collection: 'ansible.builtin'
     proxy_host:
       description:
       - Address of a proxy that will receive all HTTPS requests and relay them.
       - The format is a hostname or a IP.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_HOST) will be used instead.
       type: str
-      version_added: '2.9'
-      version_added_collection: 'ansible.builtin'
       required: False
     proxy_port:
       description:
       - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
       type: int
-      version_added: '2.9'
-      version_added_collection: 'ansible.builtin'
       required: False
     '''

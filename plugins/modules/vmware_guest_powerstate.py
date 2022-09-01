@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#
+
 # Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -16,9 +17,6 @@ description:
 - Power on / Power off / Restart a virtual machine.
 author:
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   datacenter:
     description:
@@ -186,7 +184,7 @@ EXAMPLES = r"""
 - name: Automatically answer if a question locked a virtual machine
   block:
     - name: Power on a virtual machine without the answer param
-      vmware_guest_powerstate:
+      community.vmware.vmware_guest_powerstate:
         hostname: "{{ esxi_hostname }}"
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
@@ -196,7 +194,7 @@ EXAMPLES = r"""
         state: powered-on
   rescue:
     - name: Power on a virtual machine with the answer param
-      vmware_guest_powerstate:
+      community.vmware.vmware_guest_powerstate:
         hostname: "{{ esxi_hostname }}"
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
@@ -260,6 +258,9 @@ def main():
     )
 
     result = dict(changed=False,)
+
+    if module.params['folder']:
+        module.params['folder'] = module.params['folder'].rstrip('/')
 
     pyv = PyVmomi(module)
 

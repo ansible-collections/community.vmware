@@ -3,7 +3,8 @@
 
 # Copyright: (c) 2015, VMware, Inc.
 # Copyright: (c) 2018, Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -19,11 +20,6 @@ description:
 author:
 - Jay Jahns (@jjahns) <jjahns@vmware.com>
 - Abhijeet Kasurde (@Akasurde)
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     esxi_hostname:
         description:
@@ -132,11 +128,14 @@ class VmwareMaintenanceMgr(PyVmomi):
             spec.vsanMode.objectAction = self.vsan
 
         try:
-            task = self.host.EnterMaintenanceMode_Task(self.module.params['timeout'],
-                                                       self.module.params['evacuate'],
-                                                       spec)
+            if not self.module.check_mode:
+                task = self.host.EnterMaintenanceMode_Task(self.module.params['timeout'],
+                                                           self.module.params['evacuate'],
+                                                           spec)
 
-            success, result = wait_for_task(task)
+                success, result = wait_for_task(task)
+            else:
+                success = True
 
             self.module.exit_json(changed=success,
                                   hostsystem=str(self.host),
@@ -156,9 +155,12 @@ class VmwareMaintenanceMgr(PyVmomi):
                                   msg='Host %s not in maintenance mode' % self.esxi_hostname)
 
         try:
-            task = self.host.ExitMaintenanceMode_Task(self.module.params['timeout'])
+            if not self.module.check_mode:
+                task = self.host.ExitMaintenanceMode_Task(self.module.params['timeout'])
 
-            success, result = wait_for_task(task)
+                success, result = wait_for_task(task)
+            else:
+                success = True
 
             self.module.exit_json(changed=success,
                                   hostsystem=str(self.host),
@@ -184,7 +186,8 @@ def main():
                      )
                 )
 
-    module = AnsibleModule(argument_spec=spec)
+    module = AnsibleModule(argument_spec=spec,
+                           supports_check_mode=True)
 
     host_maintenance_mgr = VmwareMaintenanceMgr(module=module)
 

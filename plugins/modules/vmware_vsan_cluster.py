@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2015, Russell Teague <rteague2 () csc.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -16,11 +17,6 @@ description:
     - This module can be used to configure VSAN clustering on an ESXi host
 author:
 - Russell Teague (@mtnbikenc)
-notes:
-    - Tested on vSphere 5.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     cluster_uuid:
         description:

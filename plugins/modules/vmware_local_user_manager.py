@@ -3,8 +3,8 @@
 
 # Copyright: (c) 2016, IBM Corp
 # Author(s): Andreas Nafpliotis <nafpliot@de.ibm.com>
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -19,11 +19,7 @@ description:
 author:
 - Andreas Nafpliotis (@nafpliot-ibm)
 notes:
-    - Tested on ESXi 6.0
     - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit users
-requirements:
-    - "python >= 2.6"
-    - PyVmomi installed
 options:
     local_user_name:
         description:

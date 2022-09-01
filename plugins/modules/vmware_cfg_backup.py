@@ -3,7 +3,8 @@
 
 # Copyright: (c) 2017, IBM Corp
 # Author(s): Andreas Nafpliotis <nafpliot@de.ibm.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -18,12 +19,8 @@ description:
 author:
     - Andreas Nafpliotis (@nafpliot-ibm)
 notes:
-    - Tested on ESXi 6.0
     - Works only for ESXi hosts
     - For configuration load or reset, the host will be switched automatically to maintenance mode.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi installed
 options:
     esxi_hostname:
         description:
@@ -108,6 +105,9 @@ class VMwareConfigurationBackup(PyVmomi):
         self.esxi_hostname = self.module.params.get('esxi_hostname', None)
         self.host = self.find_host_system()
 
+        # discard vim returned hostname if endpoint is a standalone ESXi host
+        self.cfg_hurl = self.hostname if (self.content.about.apiType == "HostAgent") else self.host.name
+
     def find_host_system(self):
         if self.esxi_hostname:
             host_system_obj = self.find_hostsystem_by_name(host_name=self.esxi_hostname)
@@ -134,7 +134,7 @@ class VMwareConfigurationBackup(PyVmomi):
             self.module.fail_json(msg="Source file {0} does not exist".format(self.src))
 
         url = self.host.configManager.firmwareSystem.QueryFirmwareConfigUploadURL()
-        url = url.replace('*', self.host.name)
+        url = url.replace('*', self.cfg_hurl)
         # find manually the url if there is a redirect because urllib2 -per RFC- doesn't do automatic redirects for PUT requests
         try:
             open_url(url=url, method='HEAD', validate_certs=self.validate_certs)
@@ -171,7 +171,9 @@ class VMwareConfigurationBackup(PyVmomi):
 
     def save_configuration(self):
         url = self.host.configManager.firmwareSystem.BackupFirmwareConfiguration()
-        url = url.replace('*', self.host.name)
+        url = url.replace('*', self.cfg_hurl)
+        if self.module.params["port"] == 443:
+            url = url.replace("http:", "https:")
         if os.path.isdir(self.dest):
             filename = url.rsplit('/', 1)[1]
             self.dest = os.path.join(self.dest, filename)
@@ -185,8 +187,10 @@ class VMwareConfigurationBackup(PyVmomi):
                 file.write(request.read())
             self.module.exit_json(changed=True, dest_file=self.dest)
         except IOError as e:
-            self.module.fail_json(msg="Failed to write backup file. Ensure that "
-                                      "the dest path exists and is writable. Details : %s" % to_native(e))
+            error_msg = "Failed to save %s " % url
+            error_msg += "to %s. Ensure that the dest path exists and is writable. " % self.dest
+            error_msg += "Details: %s" % to_native(e)
+            self.module.fail_json(msg=error_msg)
         except Exception as e:
             self.module.fail_json(msg=to_native(e))
 

@@ -240,7 +240,7 @@ class VMWareInventory(object):
         if PY3:
             config = configparser.ConfigParser()
         else:
-            config = configparser.SafeConfigParser()
+            config = configparser.ConfigParser()
 
         # where is the config?
         vmware_ini_path = os.environ.get('VMWARE_INI_PATH', defaults['vmware']['ini_path'])

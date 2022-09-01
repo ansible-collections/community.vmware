@@ -5,7 +5,8 @@
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2019, VMware Inc.
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -21,11 +22,6 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Joseph Andreatta (@vmwjoseph)
-notes:
-    - Tested on vSphere 5.5
-requirements:
-    - "python >= 2.7"
-    - PyVmomi
 options:
     esxi_hostname:
         description:
@@ -300,7 +296,7 @@ class VMwareDvsHost(PyVmomi):
                         switch_uplink_ports[name].append(port.key)
                         lag_uplinks.append(port.key)
 
-        for port in ports:
+        for port in sorted(ports, key=lambda port: port.config.name):
             if port.key in self.uplink_portgroup.portKeys and port.key not in lag_uplinks:
                 switch_uplink_ports['non_lag'].append(port.key)
 

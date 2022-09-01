@@ -4,9 +4,7 @@
 
 # Active Directory domain isn't available
 
-- when:
-    - vcsim is not defined
-    - active_directory_domain is defined
+- when: active_directory_domain is defined
   block:
     - name: Join an AD domain in check mode
       vmware_host_active_directory:

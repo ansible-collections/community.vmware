@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#
+
 # This module is also sponsored by E.T.A.I. (www.etai.fr)
 # Copyright (C) 2018 James E. King III (@jeking3) <jking@apache.org>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,11 +18,6 @@ description:
     - Gather information about a single VM on a VMware ESX cluster.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
-notes:
-    - Tested on vSphere 5.5, 6.7
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    name:
      description:

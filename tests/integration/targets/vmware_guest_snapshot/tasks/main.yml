@@ -35,21 +35,19 @@
     - a
     - b
 
-- when: vcsim is not defined
-  block:
 # Test0003: Reanme a to c
-  - name: 0003 - Rename snapshot
-    vmware_guest_snapshot:
-      validate_certs: false
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: "{{ dc1 }}"
-      name: "{{ virtual_machines[0].name }}"
-      folder: "{{ virtual_machines[0].folder }}"
-      state: present
-      snapshot_name: snap_a
-      new_snapshot_name: snap_c
+- name: 0003 - Rename snapshot
+  vmware_guest_snapshot:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: present
+    snapshot_name: snap_a
+    new_snapshot_name: snap_c
 
 # Test0004: Create snap_a again
 - name: 0004 - Re-create snapshot a
@@ -79,33 +77,31 @@
     snapshot_name: snap_c
     new_description: "renamed to snap_c from snap_a"
 
-- when: vcsim is not defined
-  block:
 # Test0006: Delete snap_b with child remove
-  - name: 0006 - Delete snap_b with child remove
-    vmware_guest_snapshot:
-      validate_certs: false
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: "{{ dc1 }}"
-      name: "{{ virtual_machines[0].name }}"
-      folder: "{{ virtual_machines[0].folder }}"
-      state: absent
-      snapshot_name: snap_b
-      remove_children: true
+- name: 0006 - Delete snap_b with child remove
+  vmware_guest_snapshot:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: absent
+    snapshot_name: snap_b
+    remove_children: true
 
-  # Test0007: Delete all snapshots
-  - name: 0007 - Delete all snapshots
-    vmware_guest_snapshot:
-      validate_certs: false
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: "{{ dc1 }}"
-      name: "{{ virtual_machines[0].name }}"
-      folder: "{{ virtual_machines[0].folder }}"
-      state: remove_all
+# Test0007: Delete all snapshots
+- name: 0007 - Delete all snapshots
+  vmware_guest_snapshot:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: remove_all
 
 # Test0008: Create snap_a again and revert to it
 - name: 0008 - Re-create snapshot a
@@ -121,19 +117,17 @@
     snapshot_name: snap_a
     description: "snap named a"
 
-- when: vcsim is not defined
-  block:
-  - name: 0008 - Revert to snap_a
-    vmware_guest_snapshot:
-      validate_certs: false
-      hostname: '{{ vcenter_hostname }}'
-      username: '{{ vcenter_username }}'
-      password: '{{ vcenter_password }}'
-      datacenter: "{{ dc1 }}"
-      name: "{{ virtual_machines[0].name }}"
-      folder: "{{ virtual_machines[0].folder }}"
-      state: revert
-      snapshot_name: snap_a
+- name: 0008 - Revert to snap_a
+  vmware_guest_snapshot:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: revert
+    snapshot_name: snap_a
 
 # Test0009: Create snap_a and check in result
 - name: 0009 - create snapshot a

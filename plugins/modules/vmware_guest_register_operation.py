@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2019, sky-joker
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -15,9 +16,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can register or unregister VMs to the inventory.
-requirements:
-  - python >= 2.7
-  - PyVmomi
 options:
   datacenter:
     description:
@@ -173,9 +171,9 @@ class VMwareGuestRegisterOperation(PyVmomi):
         if not dcpath.endswith("/"):
             dcpath += "/"
 
-        if(self.folder in [None, "", "/"]):
+        if (self.folder in [None, "", "/"]):
             self.module.fail_json(msg="Please specify folder path other than blank or '/'")
-        elif(self.folder.startswith("/vm")):
+        elif (self.folder.startswith("/vm")):
             fullpath = "%s%s%s" % (dcpath, self.datacenter, self.folder)
         else:
             fullpath = "%s%s" % (dcpath, self.folder)

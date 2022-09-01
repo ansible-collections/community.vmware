@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.11.0'
+requires_ansible: '>=2.12.0'
 
 action_groups:
   vmware:
@@ -74,6 +74,7 @@ action_groups:
   - vmware_guest_tools_info
   - vmware_guest_tools_upgrade
   - vmware_guest_tools_wait
+  - vmware_guest_vgpu
   - vmware_guest_video
   - vmware_guest_vnc
   - vmware_host

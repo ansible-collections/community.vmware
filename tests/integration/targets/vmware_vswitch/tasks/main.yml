@@ -2,14 +2,13 @@
 # Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
+- name: Run tests and clean up
   block:
   - import_role:
       name: prepare_vmware_tests
     vars:
       setup_attach_host: true
 
-  # TODO: akasurde: VCSIM does not suport network manager system
   - name: Ensure the vswitch is not already here
     include_tasks: teardown.yml
 
@@ -110,6 +109,115 @@
   - assert:
       that:
       - add_vswitch_with_host_system is changed
+
+  - name: Add a vSwitch with a network policy
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      nics:
+        - vmnic1
+        - vmnic2
+      state: present
+      security:
+        forged_transmits: true
+        mac_changes: true
+      traffic_shaping:
+        enabled: true
+        average_bandwidth: 100000
+        peak_bandwidth: 100000
+        burst_size: 102400
+      teaming:
+        active_adapters: vmnic1
+        standby_adapters: vmnic2
+    register: add_vswitch_netpol_run
+  - debug: var=add_vswitch_netpol_run
+  - assert:
+      that:
+      - add_vswitch_netpol_run.changed == true
+
+  - name: Add a vSwitch with a network policy again (idempotency check)
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      nics:
+        - vmnic1
+        - vmnic2
+      state: present
+      security:
+        forged_transmits: true
+        mac_changes: true
+      traffic_shaping:
+        enabled: true
+        average_bandwidth: 100000
+        peak_bandwidth: 100000
+        burst_size: 102400
+      teaming:
+        active_adapters: vmnic1
+        standby_adapters: vmnic2
+    register: add_vswitch_netpol_again_run
+  - assert:
+      that:
+      - add_vswitch_netpol_again_run.changed == false
+
+  - name: Update a vSwitch network policy
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      nics:
+        - vmnic1
+        - vmnic2
+      state: present
+      security:
+        forged_transmits: false
+        mac_changes: true
+      traffic_shaping:
+        enabled: false
+      teaming:
+        active_adapters:
+          - vmnic1
+          - vmnic2
+        standby_adapters: []
+    register: update_vswitch_netpol_run
+  - debug: var=update_vswitch_netpol_run
+  - assert:
+      that:
+      - update_vswitch_netpol_run.changed == true
+
+  - name: Update a vSwitch network policy again (idempotency check)
+    vmware_vswitch:
+      hostname: '{{ esxi1 }}'
+      username: '{{ esxi_user }}'
+      password: '{{ esxi_password }}'
+      validate_certs: false
+      switch: vmswitch_0001
+      nics:
+        - vmnic1
+        - vmnic2
+      state: present
+      security:
+        forged_transmits: false
+        mac_changes: true
+      traffic_shaping:
+        enabled: false
+      teaming:
+        active_adapters:
+          - vmnic1
+          - vmnic2
+        standby_adapters: []
+    register: update_vswitch_netpol_again_run
+  - assert:
+      that:
+      - update_vswitch_netpol_again_run.changed == false
+
   always:
   - include_tasks: teardown.yml
 

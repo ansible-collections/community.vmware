@@ -3,8 +3,8 @@
 
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -20,9 +20,6 @@ description:
 - State 'reboot-host', 'shutdown-host' and 'power-down-to-standby' are not supported by all the host systems.
 author:
 - Abhijeet Kasurde (@Akasurde)
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   state:
     description:
@@ -152,16 +149,20 @@ class VmwareHostPowerManager(PyVmomi):
                                           " does not have capability to standby supported." % (host.name, state))
 
             if state == 'reboot-host':
-                task = host.RebootHost_Task(force)
+                if not self.module.check_mode:
+                    task = host.RebootHost_Task(force)
                 verb = "reboot '%s'" % host.name
             elif state == 'shutdown-host':
-                task = host.ShutdownHost_Task(force)
+                if not self.module.check_mode:
+                    task = host.ShutdownHost_Task(force)
                 verb = "shutdown '%s'" % host.name
             elif state == 'power-down-to-standby':
-                task = host.PowerDownHostToStandBy_Task(timeout, force)
+                if not self.module.check_mode:
+                    task = host.PowerDownHostToStandBy_Task(timeout, force)
                 verb = "power down '%s' to standby" % host.name
             elif state == 'power-up-from-standby':
-                task = host.PowerUpHostFromStandBy_Task(timeout)
+                if not self.module.check_mode:
+                    task = host.PowerUpHostFromStandBy_Task(timeout)
                 verb = "power up '%s' from standby" % host.name
 
             if not self.module.check_mode:

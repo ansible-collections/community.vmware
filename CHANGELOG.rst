@@ -5,6 +5,139 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.8.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cfg_backup - Improve error message (https://github.com/ansible-collections/community.vmware/pull/1388).
+- vmware_dvs_portgroup - Fix a `spec.numPorts is None` issue when the `num_ports` parameter isn't set (https://github.com/ansible-collections/community.vmware/pull/1419).
+- vmware_guest_sendkey - Add CTRL_X binding support (https://github.com/ansible-collections/community.vmware/pull/1376).
+- vmware_host_vmnic_info - add CDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/1418).
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a possible urlopen error when connecting directly to an ESXi host (https://github.com/ansible-collections/community.vmware/issues/1383).
+- vmware_guest - Fix no fail attribute issue (https://github.com/ansible-collections/community.vmware/issues/1401).
+- vmware_vm_info - Fix 'NoneType' object has no attribute 'datastoreUrl' for inaccessible VMs (https://github.com/ansible-collections/community.vmware/issues/1407).
+
+v2.7.0
+======
+
+Minor Changes
+-------------
+
+- vmware_dvswitch.py - Add Netflow Settings. (https://github.com/ansible-collections/community.vmware/pull/1352)
+- vmware_dvswitch_nioc.py - Add backupNfc and nvmetcp to the resources. (https://github.com/ansible-collections/community.vmware/pull/1351)
+- vmware_guest_disk - Add a new disk type to support add/reconfigure/remove vPMem disk (https://github.com/ansible-collections/community.vmware/pull/1382).
+- vmware_host_passthrough - Support the PCI id in the devices parameter(https://github.com/ansible-collections/community.vmware/pull/1365).
+- vmware_object_role_permission.py - Add StoragePod to the list of object_types. (https://github.com/ansible-collections/community.vmware/pull/1338)
+- vmware_object_role_permission_info.py - Add StoragePod and DistributedVirtalPortgroup to the list of object_types. (https://github.com/ansible-collections/community.vmware/pull/1338)
+
+Bugfixes
+--------
+
+- vmware_content_deploy_ovf_template - Fixed a bug that ignored `resource_pool` in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+- vmware_content_deploy_template - Fixed a bug that ignored `resource_pool` in some cases. (https://github.com/ansible-collections/community.vmware/issues/1290).
+- vmware_guest_disk - Ignore datastores in maintenance mode (https://github.com/ansible-collections/community.vmware/pull/1321).
+- vmware_guest_instant_clone - Support FQPN in the folder parameter.
+- vmware_guest_network - Fix a typo in the code for SR-IOV NICs (https://github.com/ansible-collections/community.vmware/issues/1317).
+- vmware_guest_network - Fix an `AttributeError` when using SR-IOV NICs (https://github.com/ansible-collections/community.vmware/issues/1318).
+
+v2.6.0
+======
+
+Minor Changes
+-------------
+
+- vmware_vmotion - Add the feature to use cluster and datastore cluster (storage pods) to define where the vmotion shold go. (https://github.com/ansible-collections/community.vmware/pull/1240)
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a bug that failed the module when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1270).
+- vmware_host_facts - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/vmware/issues/184).
+- vmware_host_vmnic_info - Fix a bug that crashes the module when a host is disconnected (https://github.com/ansible-collections/community.vmware/pull/1337).
+
+v2.5.0
+======
+
+Minor Changes
+-------------
+
+- vmware_vm_info - Add the feature to get the output of allocated storage, cpu und memory. (https://github.com/ansible-collections/community.vmware/pull/1283)
+
+New Modules
+-----------
+
+- vmware_guest_vgpu - Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
+
+v2.4.0
+======
+
+Minor Changes
+-------------
+
+- vmware_maintenancemode - Add support for check_mode (https://github.com/ansible-collections/community.vmware/pull/1311).
+- vmware_migrate_vmk - Add `migrate_vlan_id` to use for the VMK interface when migrating from VDS to VSS (https://github.com/ansible-collections/community.vmware/issues/1297).
+- vmware_vswitch - Add support to manage security, teaming and traffic shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1298).
+- vmware_vswitch_info - Add support to return security, teaming and traffic shaping policies on vSwitches. (https://github.com/ansible-collections/community.vmware/pull/1309).
+
+v2.3.0
+======
+
+Major Changes
+-------------
+
+- Drop VCSIM as a test target (https://github.com/ansible-collections/community.vmware/pull/1294).
+
+Minor Changes
+-------------
+
+- vmware_dvs_portgroup - Add the feature to configure ingress and egress traffinc shaping and netflow on the dvs portgroup. (https://github.com/ansible-collections/community.vmware/pull/1224)
+- vmware_guest_network - Add parameters `physical_function_backing`, `virtual_function_backing` and `allow_guest_os_mtu_change` (https://github.com/ansible-collections/community.vmware/pull/1218)
+
+Bugfixes
+--------
+
+- vmware_dvs_portgroup - Fix an idempotency issue when `num_ports` is unset (https://github.com/ansible-collections/community.vmware/pull/1286).
+- vmware_guest_powerstate - Ignore trailing `/` in `folder` parameter like other guest modules do (https://github.com/ansible-collections/community.vmware/issues/1238).
+- vmware_host_powerstate - Do not execute the powerstate changes in check_mode. (https://github.com/ansible-collections/community.vmware/pull/1299).
+- vmware_vmotion - Like already define in the examples, allow Storage vMotion without defining a resource pool. (https://github.com/ansible-collections/community.vmware/pull/1236).
+
+v2.2.0
+======
+
+Minor Changes
+-------------
+
+- vmware_vm_info - Add the posibility to get the configuration informations of only one vm by name. (https://github.com/ansible-collections/community.vmware/pull/1241)
+
+Bugfixes
+--------
+
+- vmware_dvs_host - match the list of the host nics in the correct order based on the uplink port name in vCenter (https://github.com/ansible-collections/community.vmware/issues/1242).
+- vmware_guest_powerstate - `shutdownguest` power state is not idempotent (https://github.com/ansible-collections/community.vmware/pull/1227).
+
+v2.1.0
+======
+
+Minor Changes
+-------------
+
+- Remove `version_added` documentation that pre-dates the collection, that is refers to Ansible < 2.10 (https://github.com/ansible-collections/community.vmware/pull/1215).
+- vmware_guest_storage_policy - New parameter `controller_number` to support multiple SCSI controllers (https://github.com/ansible-collections/community.vmware/issues/1203).
+- vmware_object_role_permission - added VMware DV portgroup object_type for setting permissions (https://github.com/ansible-collections/community.vmware/pull/1176)
+- vmware_vm_config_option - Fix the parameter not correct issue when hostname is set to ESXi host(https://github.com/ansible-collections/community.vmware/pull/1171).
+- vmware_vm_info - adding fact about ``datastore_url`` to output (https://github.com/ansible-collections/community.vmware/pull/1143).
+
+New Modules
+-----------
+
+- vmware_host_user_manager - Manage users of ESXi
+
 v2.0.0
 ======
 

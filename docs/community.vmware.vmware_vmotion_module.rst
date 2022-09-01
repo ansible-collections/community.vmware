@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- pyVmomi
-
 
 Parameters
 ----------
@@ -39,6 +32,23 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>destination_cluster</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the destination cluster the virtual machine should be running on.</div>
+                        <div>Only works if drs is enabled for this cluster.</div>
+                </td>
+            </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -70,6 +80,23 @@ Parameters
                 <td>
                         <div>Name of the destination datastore the virtual machine&#x27;s vmdk should be moved on.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: datastore</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>destination_datastore_cluster</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.5.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the destination datastore cluster (storage pod) the virtual machine&#x27;s vmdk should be moved on.</div>
+                        <div>Only works if drs is enabled for the cluster the vm is running / should run.</div>
                 </td>
             </tr>
             <tr>
@@ -312,7 +339,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.0
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -369,6 +395,16 @@ Examples
         destination_datastore: 'destination_datastore_as_per_vcenter'
       delegate_to: localhost
 
+    - name: Perform storage vMotion to a Storage Cluster and vMotion to a Cluster of virtual machine
+      community.vmware.vmware_vmotion:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        vm_name: 'vm_name_as_per_vcenter'
+        destination_cluster: 'destination_cluster_as_per_vcenter'
+        destination_datastore_cluster: 'destination_datastore_cluster_as_per_vcenter'
+      delegate_to: localhost
+
 
 
 Return Values
@@ -386,6 +422,24 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>datastore</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>changed or success</td>
+                <td>
+                            <div>List the datastore the virtual machine is on.</div>
+                            <div>Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">datastore1</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
                     <b>running_host</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
@@ -394,7 +448,8 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>changed or success</td>
                 <td>
-                            <div>List the host the virtual machine is registered to</div>
+                            <div>List the host the virtual machine is registered to.</div>
+                            <div>Only returned if there is asked for a vMotion (Cluster or Host).</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">host1.example.com</div>

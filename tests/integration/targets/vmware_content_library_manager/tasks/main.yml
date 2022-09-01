@@ -7,227 +7,225 @@
     setup_attach_host: true
     setup_datastore: true
 
-- when: vcsim is not defined
-  block:
-    - &content_lib_delete
-      name: Delete content library if exists
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Library
-        state: absent
+- &content_lib_delete
+  name: Delete content library if exists
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Library
+    state: absent
 
-    - &content_lib_create
-      name: Create content library
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Library
-        library_description: Sample Description
-        datastore_name: '{{ rw_datastore }}'
-        state: present
-      register: content_lib_create_result
+- &content_lib_create
+  name: Create content library
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Library
+    library_description: Sample Description
+    datastore_name: '{{ rw_datastore }}'
+    state: present
+  register: content_lib_create_result
 
-    - name: Check content library is created
-      assert:
-        that:
-          - content_lib_create_result.changed
+- name: Check content library is created
+  assert:
+    that:
+      - content_lib_create_result.changed
 
-    - <<: *content_lib_create
-      name: Create content library again
+- <<: *content_lib_create
+  name: Create content library again
 
-    - name: Check if no changes are made
-      assert:
-        that:
-          - not content_lib_create_result.changed
+- name: Check if no changes are made
+  assert:
+    that:
+      - not content_lib_create_result.changed
 
-    # Testcase Update Content Library
-    - &update_content_lib
-      name: Update a content library
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Library
-        library_description: Update Sample Description
-        state: present
-      register: content_lib_update_result
+# Testcase Update Content Library
+- &update_content_lib
+  name: Update a content library
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Library
+    library_description: Update Sample Description
+    state: present
+  register: content_lib_update_result
 
-    - name: Check content library is updated
-      assert:
-        that:
-          - content_lib_update_result.changed
+- name: Check content library is updated
+  assert:
+    that:
+      - content_lib_update_result.changed
 
-    - <<: *update_content_lib
-      name: Update a content library again
+- <<: *update_content_lib
+  name: Update a content library again
 
-    - name: Check content library is not updated
-      assert:
-        that:
-          - not content_lib_update_result.changed
+- name: Check content library is not updated
+  assert:
+    that:
+      - not content_lib_update_result.changed
 
-    # Testcase Delete the content library
-    - <<: *content_lib_delete
-      name: Delete content library
-      register: content_lib_delete_result
+# Testcase Delete the content library
+- <<: *content_lib_delete
+  name: Delete content library
+  register: content_lib_delete_result
 
-    - name: Check content library is deleted
-      assert:
-        that:
-          - content_lib_delete_result.changed
+- name: Check content library is deleted
+  assert:
+    that:
+      - content_lib_delete_result.changed
 
-    - <<: *content_lib_delete
-      name: Delete content library again
-      register: content_lib_delete_result
+- <<: *content_lib_delete
+  name: Delete content library again
+  register: content_lib_delete_result
 
-    - name: Check if no changes are made
-      assert:
-        that:
-          - not content_lib_delete_result.changed
+- name: Check if no changes are made
+  assert:
+    that:
+      - not content_lib_delete_result.changed
 
-    - &subscribed_content_lib_delete
-      name: Delete subscribed content library if exists
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Subscribed_Library
-        library_type: subscribed
-        state: absent
+- &subscribed_content_lib_delete
+  name: Delete subscribed content library if exists
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Subscribed_Library
+    library_type: subscribed
+    state: absent
 
-    - name: get finger print
-      shell: echo | openssl s_client -connect wp-content.vmware.com:443 |& openssl x509 -fingerprint -noout
-      register: _finger_print
-    - debug: var=_finger_print
+- name: get finger print
+  shell: echo | openssl s_client -connect wp-content.vmware.com:443 |& openssl x509 -fingerprint -noout
+  register: _finger_print
+- debug: var=_finger_print
 
-    - &subscribed_content_lib_create
-      name: Create subscribed content library
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Subscribed_Library
-        library_description: Sample Description
-        subscription_url: "https://wp-content.vmware.com/v2/latest/lib.json"
-        update_on_demand: true
-        library_type: subscribed
-        ssl_thumbprint: '{{ _finger_print.stdout.split("=")[1] }}'
-        datastore_name: '{{ rw_datastore }}'
-        state: present
-      register: subscribed_content_lib_create_result
+- &subscribed_content_lib_create
+  name: Create subscribed content library
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Subscribed_Library
+    library_description: Sample Description
+    subscription_url: "https://wp-content.vmware.com/v2/latest/lib.json"
+    update_on_demand: true
+    library_type: subscribed
+    ssl_thumbprint: '{{ _finger_print.stdout.split("=")[1] }}'
+    datastore_name: '{{ rw_datastore }}'
+    state: present
+  register: subscribed_content_lib_create_result
 
-    - name: Check content library is created
-      assert:
-        that:
-          - subscribed_content_lib_create_result.changed
+- name: Check content library is created
+  assert:
+    that:
+      - subscribed_content_lib_create_result.changed
 
-    - <<: *subscribed_content_lib_create
-      name: Create content library again
+- <<: *subscribed_content_lib_create
+  name: Create content library again
 
-    - name: Check if no changes are made
-      assert:
-        that:
-          - not subscribed_content_lib_create_result.changed
+- name: Check if no changes are made
+  assert:
+    that:
+      - not subscribed_content_lib_create_result.changed
 
-    # Testcase Update Content Library
-    - &update_subscribed_content_lib
-      name: Update a subscribed content library
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Subscribed_Library
-        library_description: Update Sample Description
-        subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
-        update_on_demand: true
-        library_type: subscribed
-        ssl_thumbprint: '{{ _finger_print.stdout.split("=")[1] }}'
-        state: present
-      register: subscribed_content_lib_update_result
+# Testcase Update Content Library
+- &update_subscribed_content_lib
+  name: Update a subscribed content library
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Subscribed_Library
+    library_description: Update Sample Description
+    subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
+    update_on_demand: true
+    library_type: subscribed
+    ssl_thumbprint: '{{ _finger_print.stdout.split("=")[1] }}'
+    state: present
+  register: subscribed_content_lib_update_result
 
-    - name: Check subscribed content library is updated
-      assert:
-        that:
-          - subscribed_content_lib_update_result.changed
+- name: Check subscribed content library is updated
+  assert:
+    that:
+      - subscribed_content_lib_update_result.changed
 
-    - <<: *update_subscribed_content_lib
-      name: Update a subscribed content library again
+- <<: *update_subscribed_content_lib
+  name: Update a subscribed content library again
 
-    - name: Check content library is not updated
-      assert:
-        that:
-          - not subscribed_content_lib_update_result.changed
+- name: Check content library is not updated
+  assert:
+    that:
+      - not subscribed_content_lib_update_result.changed
 
-    # Testcase Update Subscribed Content Library as a Local Library
-    - name: Update a subscribed content library as a local library
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Subscribed_Library
-        library_description: Update Sample Description
-        library_type: local
-        state: present
-      register: subscribed_content_lib_invalid_update_result
-      ignore_errors: true
+# Testcase Update Subscribed Content Library as a Local Library
+- name: Update a subscribed content library as a local library
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Subscribed_Library
+    library_description: Update Sample Description
+    library_type: local
+    state: present
+  register: subscribed_content_lib_invalid_update_result
+  ignore_errors: true
 
-    - name: Check subscribed content library is not updated and errors cleanly
-      assert:
-        that:
-          - not subscribed_content_lib_invalid_update_result.changed
-          - '"cannot be changed to local" in subscribed_content_lib_invalid_update_result.msg'
+- name: Check subscribed content library is not updated and errors cleanly
+  assert:
+    that:
+      - not subscribed_content_lib_invalid_update_result.changed
+      - '"cannot be changed to local" in subscribed_content_lib_invalid_update_result.msg'
 
-    # Testcase Create Content Library with invalid thumbprint
-    - name: Update a subscribed content library with invalid thumbprint
-      vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: Sample_Subscribed_Library
-        library_description: Update Sample Description
-        subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
-        update_on_demand: true
-        library_type: subscribed
-        ssl_thumbprint: aa:bb:cc:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
-        state: present
-      register: subscribed_content_lib_invalid_thumbprint_result
-      ignore_errors: true
+# Testcase Create Content Library with invalid thumbprint
+- name: Update a subscribed content library with invalid thumbprint
+  vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: Sample_Subscribed_Library
+    library_description: Update Sample Description
+    subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
+    update_on_demand: true
+    library_type: subscribed
+    ssl_thumbprint: aa:bb:cc:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
+    state: present
+  register: subscribed_content_lib_invalid_thumbprint_result
+  ignore_errors: true
 
-    - debug:
-        msg: "{{ subscribed_content_lib_invalid_thumbprint_result }}"
+- debug:
+    msg: "{{ subscribed_content_lib_invalid_thumbprint_result }}"
 
-    - name: Check subscribed content library is not updated and errors cleanly
-      assert:
-        that:
-          - not subscribed_content_lib_invalid_thumbprint_result.changed
-          - '"vCenter Failed to make connection" in subscribed_content_lib_invalid_thumbprint_result.msg'
+- name: Check subscribed content library is not updated and errors cleanly
+  assert:
+    that:
+      - not subscribed_content_lib_invalid_thumbprint_result.changed
+      - '"vCenter Failed to make connection" in subscribed_content_lib_invalid_thumbprint_result.msg'
 
 
-    # Testcase Delete the content library
-    - <<: *subscribed_content_lib_delete
-      name: Delete subscribed content library
-      register: subscribed_content_lib_delete_result
+# Testcase Delete the content library
+- <<: *subscribed_content_lib_delete
+  name: Delete subscribed content library
+  register: subscribed_content_lib_delete_result
 
-    - name: Check subscribed content library is deleted
-      assert:
-        that:
-          - subscribed_content_lib_delete_result.changed
+- name: Check subscribed content library is deleted
+  assert:
+    that:
+      - subscribed_content_lib_delete_result.changed
 
-    - <<: *subscribed_content_lib_delete
-      name: Delete subscribed content library again
-      register: subscribed_content_lib_delete_result
+- <<: *subscribed_content_lib_delete
+  name: Delete subscribed content library again
+  register: subscribed_content_lib_delete_result
 
-    - name: Check if no changes are made
-      assert:
-        that:
-          - not subscribed_content_lib_delete_result.changed
+- name: Check if no changes are made
+  assert:
+    that:
+      - not subscribed_content_lib_delete_result.changed

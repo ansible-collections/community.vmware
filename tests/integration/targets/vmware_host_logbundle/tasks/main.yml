@@ -163,6 +163,7 @@
     performance_data:
       duration: 10
       interval: 5
+  retries: 3
   register: fetch_logbundle_result
 
 - assert:
@@ -200,6 +201,7 @@
     performance_data:
       duration: 10
       interval: 5
+  retries: 3
   register: fetch_logbundle_result
 
 - assert:

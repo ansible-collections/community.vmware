@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 # Copyright: (c) 2019, OVH SAS
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -33,7 +34,6 @@ options:
         default: false
         type: bool
 requirements:
-    - PyVmomi
     - VMware vSAN Python's SDK
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -115,6 +115,7 @@ except ImportError:
     HAS_PYVMOMI = False
     HAS_PYVMOMIJSON = False
 
+VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
     HAS_VSANPYTHONSDK = True

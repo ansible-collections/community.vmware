@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -18,12 +20,14 @@ description:
 - See U(https://kb.vmware.com/s/article/2064511) for more details.
 author:
 - Abhijeet Kasurde (@Akasurde)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
+  policies:
+    version_added: '2.4.0'
+    description:
+    - Gather information about Security, Traffic Shaping, as well as Teaming and failover.
+    - The property C(ts) stands for Traffic Shaping and C(lb) for Load Balancing.
+    type: bool
+    default: false
   cluster_name:
     description:
     - Name of the cluster.
@@ -72,7 +76,15 @@ hosts_vswitch_info:
                 "num_ports": 128,
                 "pnics": [
                     "vmnic0"
-                ]
+                ],
+                "failback": true,
+                "failover_active": ["vmnic0"],
+                "failover_standby": [],
+                "failure_detection": "link_status_only",
+                "lb": "loadbalance_srcid",
+                "notify": true,
+                "security": [false, false, false],
+                "ts": false
             },
             "vSwitch_0011": {
                 "mtu": 1500,
@@ -80,7 +92,15 @@ hosts_vswitch_info:
                 "pnics": [
                     "vmnic2",
                     "vmnic1"
-                    ]
+                    ],
+                "failback": true,
+                "failover_active": ["vmnic1"],
+                "failover_standby": ["vmnic2"],
+                "failure_detection": "link_status_only",
+                "lb": "loadbalance_srcid",
+                "notify": true,
+                "security": [false, false, false],
+                "ts": false,
             },
         },
     }
@@ -100,6 +120,7 @@ class VswitchInfoManager(PyVmomi):
         self.hosts = self.get_all_host_objs(cluster_name=cluster_name, esxi_host_name=esxi_host_name)
         if not self.hosts:
             self.module.fail_json(msg="Failed to find host system.")
+        self.policies = self.params.get('policies')
 
     @staticmethod
     def serialize_pnics(vswitch_obj):
@@ -110,6 +131,44 @@ class VswitchInfoManager(PyVmomi):
             pnics.append(pnic.split("-", 3)[-1])
         return pnics
 
+    @staticmethod
+    def normalize_vswitch_info(vswitch_obj, policy_info):
+        """Create vSwitch information"""
+        vswitch_info_dict = dict()
+        spec = vswitch_obj.spec
+        vswitch_info_dict['pnics'] = VswitchInfoManager.serialize_pnics(vswitch_obj)
+        vswitch_info_dict['mtu'] = vswitch_obj.mtu
+        vswitch_info_dict['num_ports'] = spec.numPorts
+
+        if policy_info:
+            # Security info
+            if spec.policy.security:
+                vswitch_info_dict['security'] = (
+                    [
+                        spec.policy.security.allowPromiscuous,
+                        spec.policy.security.macChanges,
+                        spec.policy.security.forgedTransmits
+                    ]
+                )
+
+            # Traffic Shaping info
+            if spec.policy.shapingPolicy:
+                vswitch_info_dict['ts'] = spec.policy.shapingPolicy.enabled
+
+            # Teaming and failover info
+            if spec.policy.nicTeaming:
+                vswitch_info_dict['lb'] = spec.policy.nicTeaming.policy
+                vswitch_info_dict['notify'] = spec.policy.nicTeaming.notifySwitches
+                vswitch_info_dict['failback'] = not spec.policy.nicTeaming.rollingOrder
+                vswitch_info_dict['failover_active'] = spec.policy.nicTeaming.nicOrder.activeNic
+                vswitch_info_dict['failover_standby'] = spec.policy.nicTeaming.nicOrder.standbyNic
+                if spec.policy.nicTeaming.failureCriteria.checkBeacon:
+                    vswitch_info_dict['failure_detection'] = "beacon_probing"
+                else:
+                    vswitch_info_dict['failure_detection'] = "link_status_only"
+
+        return vswitch_info_dict
+
     def gather_vswitch_info(self):
         """Gather vSwitch info"""
         hosts_vswitch_info = dict()
@@ -117,15 +176,8 @@ class VswitchInfoManager(PyVmomi):
             network_manager = host.configManager.networkSystem
             if network_manager:
                 temp_switch_dict = dict()
-                for available_vswitch in network_manager.networkInfo.vswitch:
-                    temp_switch_dict[available_vswitch.name] = dict(
-                        pnics=self.serialize_pnics(available_vswitch),
-                        mtu=available_vswitch.mtu,
-                        # we need to use the spec to get the ports
-                        # otherwise, the output might be different compared to the vswitch config module
-                        # (e.g. 5632 ports instead of 128)
-                        num_ports=available_vswitch.spec.numPorts
-                    )
+                for vswitch in network_manager.networkInfo.vswitch:
+                    temp_switch_dict[vswitch.name] = self.normalize_vswitch_info(vswitch_obj=vswitch, policy_info=self.policies)
                 hosts_vswitch_info[host.name] = temp_switch_dict
         return hosts_vswitch_info
 
@@ -136,6 +188,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
+        policies=dict(type='bool', required=False, default=False),
     )
 
     module = AnsibleModule(

@@ -27,8 +27,6 @@ Requirements
 ------------
 The below requirements are needed on the host that executes this module.
 
-- python >= 2.7
-- PyVmomi
 - vSphere Automation SDK
 
 
@@ -286,12 +284,6 @@ Parameters
     </table>
     <br/>
 
-
-Notes
------
-
-.. note::
-   - Tested on vSphere 7.0
 
 
 

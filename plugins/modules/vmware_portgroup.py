@@ -5,7 +5,8 @@
 # Copyright: (c) 2017, Ansible Project
 # Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2018, Christian Kotte <christian.kotte@gmx.de>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -22,14 +23,6 @@ author:
 - Russell Teague (@mtnbikenc)
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-    - Tested on vSphere 5.5 and 6.5
-    - Complete configuration only tested on vSphere 6.5
-    - 'C(inbound_policy) and C(rolling_order) are removed in 2.11.'
-    - Those two options are only used during portgroup creation. Updating is not supported with those options.
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     switch:
         description:

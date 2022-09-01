@@ -36,87 +36,85 @@
 #     that:
 #         - "{{ cluster_result_0001.changed == false }}"
 
-- when: vcsim is not defined
-  block:
-  - &del_cluster
-    name: delete cluster
-    vmware_cluster:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      cluster_name: test_cluster_0001
-      state: absent
-    register: cluster_result_0001
+- &del_cluster
+  name: delete cluster
+  vmware_cluster:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_0001
+    state: absent
+  register: cluster_result_0001
 
-  - <<: *ensure_changed
+- <<: *ensure_changed
 
-  - <<: *del_cluster
-    name: delete cluster (again)
+- <<: *del_cluster
+  name: delete cluster (again)
 
-  #- <<: *ensure_unchanged
-  - name: ensure cluster is unchanged
-    assert:
-      that:
-          - "{{ cluster_result_0001.changed == false }}"
+#- <<: *ensure_unchanged
+- name: ensure cluster is unchanged
+  assert:
+    that:
+        - "{{ cluster_result_0001.changed == false }}"
 
-  - name: Create Cluster with special characters
-    vmware_cluster:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      cluster_name: 'Cluster\/%'
-      state: present
-    register: create_cluster_with_special_characters_result
+- name: Create Cluster with special characters
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster\/%'
+    state: present
+  register: create_cluster_with_special_characters_result
 
-  - assert:
-      that:
-        - create_cluster_with_special_characters_result.changed is sameas true
+- assert:
+    that:
+      - create_cluster_with_special_characters_result.changed is sameas true
 
-  - name: Create Cluster with special characters(idempotency check)
-    vmware_cluster:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      cluster_name: 'Cluster\/%'
-      state: present
-    register: create_cluster_with_special_characters_idempotency_check_result
+- name: Create Cluster with special characters(idempotency check)
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster\/%'
+    state: present
+  register: create_cluster_with_special_characters_idempotency_check_result
 
-  - assert:
-      that:
-        - create_cluster_with_special_characters_idempotency_check_result.changed is sameas false
+- assert:
+    that:
+      - create_cluster_with_special_characters_idempotency_check_result.changed is sameas false
 
-  - name: Delete Cluster with special characters
-    vmware_cluster:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      cluster_name: 'Cluster\/%'
-      state: absent
-    register: delete_cluster_with_special_characters_result
+- name: Delete Cluster with special characters
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster\/%'
+    state: absent
+  register: delete_cluster_with_special_characters_result
 
-  - assert:
-      that:
-        - delete_cluster_with_special_characters_result.changed is sameas true
+- assert:
+    that:
+      - delete_cluster_with_special_characters_result.changed is sameas true
 
-  - name: Delete Cluster with special characters(idempotency check)
-    vmware_cluster:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: false
-      datacenter_name: "{{ dc1 }}"
-      cluster_name: 'Cluster\/%'
-      state: absent
-    register: delete_cluster_with_special_characters_idempotency_check_result
+- name: Delete Cluster with special characters(idempotency check)
+  vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: 'Cluster\/%'
+    state: absent
+  register: delete_cluster_with_special_characters_idempotency_check_result
 
-  - assert:
-      that:
-        - delete_cluster_with_special_characters_idempotency_check_result.changed is sameas false
+- assert:
+    that:
+      - delete_cluster_with_special_characters_idempotency_check_result.changed is sameas false

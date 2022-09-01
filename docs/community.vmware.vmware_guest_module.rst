@@ -21,13 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -1542,6 +1535,7 @@ Parameters
                         <div>A list of networks (in the order of the NICs).</div>
                         <div>Removing NICs is not allowed, while reconfiguring the virtual machine.</div>
                         <div>All parameters and VMware object names are case sensitive.</div>
+                        <div>The <em>type</em>, <em>ip</em>, <em>netmask</em>, <em>gateway</em>, <em>domain</em>, <em>dns_servers</em> options don&#x27;t set to a guest when creating a blank new virtual machine. They are set by the customization via vmware-tools. If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).</div>
                 </td>
             </tr>
                                 <tr>
@@ -2298,7 +2292,6 @@ Notes
    -    Network > Assign Network
    -    Resource > Assign Virtual Machine to Resource Pool
    - Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations.
-   - Tested on vSphere 5.5, 6.0, 6.5 and 6.7.
    - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
    - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
    - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the ``state=present`` must be used to apply the changes.

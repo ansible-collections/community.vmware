@@ -26,9 +26,6 @@ Requirements
 ------------
 The below requirements are needed on the local Ansible controller node that executes this inventory.
 
-- Python >= 2.7
-- PyVmomi
-- requests >= 2.3
 - vSphere Automation SDK - For tag feature
 
 
@@ -248,6 +245,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
                     </div>
                 </td>
                 <td>
@@ -469,6 +467,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
                     </div>
                 </td>
                 <td>
@@ -534,6 +533,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>

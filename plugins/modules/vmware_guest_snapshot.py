@@ -1,8 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
 # Copyright: (c) 2018, Ansible Project
 # This module is also sponsored by E.T.A.I. (www.etai.fr)
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,11 +19,6 @@ description:
     - All parameters and VMware object names are case sensitive.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
-notes:
-    - Tested on vSphere 5.5, 6.0 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
    state:
      description:

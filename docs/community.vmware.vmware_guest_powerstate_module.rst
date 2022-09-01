@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -548,7 +541,7 @@ Examples
     - name: Automatically answer if a question locked a virtual machine
       block:
         - name: Power on a virtual machine without the answer param
-          vmware_guest_powerstate:
+          community.vmware.vmware_guest_powerstate:
             hostname: "{{ esxi_hostname }}"
             username: "{{ esxi_username }}"
             password: "{{ esxi_password }}"
@@ -558,7 +551,7 @@ Examples
             state: powered-on
       rescue:
         - name: Power on a virtual machine with the answer param
-          vmware_guest_powerstate:
+          community.vmware.vmware_guest_powerstate:
             hostname: "{{ esxi_hostname }}"
             username: "{{ esxi_username }}"
             password: "{{ esxi_password }}"

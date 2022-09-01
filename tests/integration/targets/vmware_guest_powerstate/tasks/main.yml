@@ -40,7 +40,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    folder: '{{ f0 }}'
+    folder: '{{ f0 }}/' # Test with a trailing / because of issue 1238
     state: powered-off
   register: poweroff_d1_c1_f0
 
@@ -69,21 +69,19 @@
     that:
         - not (poweroff_d1_c1_f0_datacenter is changed)
 
-- when: vcsim is not defined
-  block:
-  - name: Set a schedule task for first VM
-    community.vmware.vmware_guest_powerstate:
-      validate_certs: false
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      name: test_vm1
-      folder: '{{ f0 }}'
-      scheduled_at: "10/10/2030 10:10"
-      state: powered-on
-    register: poweron_d1_c1_f0
+- name: Set a schedule task for first VM
+  community.vmware.vmware_guest_powerstate:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    folder: '{{ f0 }}'
+    scheduled_at: "10/10/2030 10:10"
+    state: powered-on
+  register: poweron_d1_c1_f0
 
-  - name: Check that task is schedule
-    assert:
-      that:
-        - poweron_d1_c1_f0 is changed
+- name: Check that task is schedule
+  assert:
+    that:
+      - poweron_d1_c1_f0 is changed

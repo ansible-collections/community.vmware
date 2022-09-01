@@ -2,39 +2,93 @@
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# TODO: vcsim does not support networkConfig related to operations
-- when: vcsim is not defined
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Gather vmnic info about a host
+  vmware_host_vmnic_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: host_vmnics
+- debug: var=host_vmnics
+- assert:
+    that:
+      - host_vmnics.hosts_vmnics_info is defined
+
+- name: Gather extended vmnic info about a host
+  vmware_host_vmnic_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    capabilities: true
+    directpath_io: true
+    sriov: true
+  register: host_vmnics_extended
+- debug: var=host_vmnics_extended
+- assert:
+    that:
+      - host_vmnics_extended.hosts_vmnics_info is defined
+
+- name: Get info from an ESXi host that is offline / disconnected / shut down
   block:
-    - import_role:
-        name: prepare_vmware_tests
-      vars:
-        setup_attach_host: true
+  - name: Disconnect ESXi host
+    community.vmware.vmware_host:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
+      esxi_hostname: "{{ esxi1 }}"
+      state: disconnected
 
-    - name: Gather vmnic info about a host
-      vmware_host_vmnic_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        esxi_hostname: '{{ esxi1 }}'
-        validate_certs: false
-      register: host_vmnics
-    - debug: var=host_vmnics
-    - assert:
-        that:
-          - host_vmnics.hosts_vmnics_info is defined
+  - name: Give the ESXi host time to disconnect
+    ansible.builtin.pause:
+      minutes: 1
 
-    - name: Gather extended vmnic info about a host
-      vmware_host_vmnic_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        esxi_hostname: '{{ esxi1 }}'
-        validate_certs: false
-        capabilities: true
-        directpath_io: true
-        sriov: true
-      register: host_vmnics_extended
-    - debug: var=host_vmnics_extended
-    - assert:
-        that:
-          - host_vmnics_extended.hosts_vmnics_info is defined
+  - name: Gather vmnic info about a host that is offline / disconnected / shut down
+    vmware_host_vmnic_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+    register: host_vmnics_disconnected
+  - debug: var=host_vmnics_disconnected
+  - assert:
+      that:
+        - host_vmnics_disconnected.hosts_vmnics_info is defined
+
+  - name: Gather extended vmnic info about a host that is offline / disconnected / shut down
+    vmware_host_vmnic_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      esxi_hostname: '{{ esxi1 }}'
+      validate_certs: false
+      capabilities: true
+      directpath_io: true
+      sriov: true
+    register: host_vmnics_extended_disconnected
+  - debug: var=host_vmnics_extended_disconnected
+  - assert:
+      that:
+        - host_vmnics_extended_disconnected.hosts_vmnics_info is defined
+  always:
+  - name: Reconnect ESXi host
+    community.vmware.vmware_host:
+      validate_certs: false
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter_name: '{{ dc1 }}'
+      cluster_name: '{{ ccr1 }}'
+      esxi_hostname: "{{ esxi1 }}"
+      state: reconnect

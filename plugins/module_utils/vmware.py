@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+
 # Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, James E. King III (@jeking3) <jking@apache.org>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -17,7 +19,7 @@ import time
 import traceback
 import datetime
 from collections import OrderedDict
-from distutils.version import StrictVersion
+from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
 from random import randint
 
 REQUESTS_IMP_ERR = None
@@ -982,9 +984,11 @@ def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
                     else:
                         result['failed'] = True
                         result['msg'] = "VMware tools should be installed for guest shutdown/reboot"
+                elif current_state == 'poweredoff':
+                    result['changed'] = False
                 else:
                     result['failed'] = True
-                    result['msg'] = "Virtual machine %s must be in poweredon state for guest shutdown/reboot" % vm.name
+                    result['msg'] = "Virtual machine %s must be in poweredon state for guest reboot" % vm.name
 
             else:
                 result['failed'] = True
@@ -1139,6 +1143,18 @@ class PyVmomi(object):
             return True
         elif api_type == 'HostAgent':
             return False
+
+    def vcenter_version_at_least(self, version=None):
+        """
+        Check that the vCenter server is at least a specific version number
+        Args:
+            version (tuple): a version tuple, for example (6, 7, 0)
+        Returns: bool
+        """
+        if version:
+            vc_version = self.content.about.version
+            return StrictVersion(vc_version) >= StrictVersion('.'.join(map(str, version)))
+        self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
 
     def get_managed_objects_properties(self, vim_type, properties=None):
         """

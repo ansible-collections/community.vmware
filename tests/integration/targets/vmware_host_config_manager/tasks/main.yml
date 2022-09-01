@@ -24,103 +24,100 @@
     that:
       - '"Unsupported option This.Is.No.Where" in invalid_key.msg'
 
-# TODO: vcsim does not support update host configuartion
-- when: vcsim is not defined
-  block:
-  - name: Change info about all hosts in given cluster
-    vmware_host_config_manager:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      cluster_name: "{{ ccr1 }}"
-      options:
-        'Config.HostAgent.log.level': 'verbose'
-      validate_certs: false
+- name: Change info about all hosts in given cluster
+  vmware_host_config_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: "{{ ccr1 }}"
+    options:
+      'Config.HostAgent.log.level': 'verbose'
+    validate_certs: false
 
-  - name: Change info about a given host
-    vmware_host_config_manager:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      esxi_hostname: '{{ esxi1 }}'
-      options:
-        'Config.HostAgent.log.level': 'info'
-      validate_certs: false
-    register: host_result
+- name: Change info about a given host
+  vmware_host_config_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    options:
+      'Config.HostAgent.log.level': 'info'
+    validate_certs: false
+  register: host_result
 
-  - debug: var=host_result
+- debug: var=host_result
 
-  - name: ensure change was applied
-    assert:
-      that:
-          - host_result is changed
+- name: ensure change was applied
+  assert:
+    that:
+        - host_result is changed
 
-  - name: Change info about all hosts in given cluster in check mode
-    vmware_host_config_manager:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      cluster_name: "{{ ccr1 }}"
-      options:
-        'Config.HostAgent.log.level': 'verbose'
-      validate_certs: false
-    register: all_hosts_result_check_mode
-    check_mode: true
+- name: Change info about all hosts in given cluster in check mode
+  vmware_host_config_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    cluster_name: "{{ ccr1 }}"
+    options:
+      'Config.HostAgent.log.level': 'verbose'
+    validate_certs: false
+  register: all_hosts_result_check_mode
+  check_mode: true
 
-  - name: ensure changes are done to all hosts
-    assert:
-      that:
-          - all_hosts_result_check_mode.changed
+- name: ensure changes are done to all hosts
+  assert:
+    that:
+        - all_hosts_result_check_mode.changed
 
-  - name: Change info about a given host in check mode
-    vmware_host_config_manager:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      esxi_hostname: '{{ esxi1 }}'
-      options:
-        'Config.HostAgent.log.level': 'info'
-      validate_certs: false
-    register: host_result_check_mode
-    check_mode: true
+- name: Change info about a given host in check mode
+  vmware_host_config_manager:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    options:
+      'Config.HostAgent.log.level': 'info'
+    validate_certs: false
+  register: host_result_check_mode
+  check_mode: true
 
-  - name: ensure changes are done to given hosts
-    assert:
-      that:
-          - all_hosts_result_check_mode.changed
+- name: ensure changes are done to given hosts
+  assert:
+    that:
+        - all_hosts_result_check_mode.changed
 
-  # Test that PR 332 doesn't break boolean settings for this module.
-  - name: Change a boolean setting for a given host (check-mode)
-    vmware_host_config_manager: &change_logDirUnique
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      esxi_hostname: '{{ esxi1 }}'
-      options:
-        'Syslog.global.logDirUnique': true
-      validate_certs: false
-    check_mode: true
-    register: change_logDirUnique_check
+# Test that PR 332 doesn't break boolean settings for this module.
+- name: Change a boolean setting for a given host (check-mode)
+  vmware_host_config_manager: &change_logDirUnique
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    options:
+      'Syslog.global.logDirUnique': true
+    validate_certs: false
+  check_mode: true
+  register: change_logDirUnique_check
 
-  - name: ensure changes would be done to given host
-    assert:
-      that:
-          - change_logDirUnique_check.changed
+- name: ensure changes would be done to given host
+  assert:
+    that:
+        - change_logDirUnique_check.changed
 
-  - name: Change a boolean setting for a given host
-    vmware_host_config_manager: *change_logDirUnique
-    register: change_logDirUnique
+- name: Change a boolean setting for a given host
+  vmware_host_config_manager: *change_logDirUnique
+  register: change_logDirUnique
 
-  - name: ensure changes are done to given host
-    assert:
-      that:
-          - change_logDirUnique.changed
+- name: ensure changes are done to given host
+  assert:
+    that:
+        - change_logDirUnique.changed
 
-  - name: Change a boolean setting for a given host again
-    vmware_host_config_manager: *change_logDirUnique
-    register: change_logDirUnique_again
+- name: Change a boolean setting for a given host again
+  vmware_host_config_manager: *change_logDirUnique
+  register: change_logDirUnique_again
 
-  - name: ensure changes are not done to given host
-    assert:
-      that:
-          - not change_logDirUnique_again.changed
+- name: ensure changes are not done to given host
+  assert:
+    that:
+        - not change_logDirUnique_again.changed

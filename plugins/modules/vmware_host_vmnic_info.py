@@ -3,7 +3,8 @@
 
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2018, Christian Kotte <christian.kotte@gmx.de>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -22,11 +23,6 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
-notes:
-- Tested on vSphere 6.5
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
   capabilities:
     description:
@@ -166,7 +162,7 @@ hosts_vmnics_info:
 '''
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
@@ -231,17 +227,26 @@ class HostVmnicMgr(PyVmomi):
                             pnic_info['status'] = 'Connected'
                             pnic_info['actual_speed'] = pnic.linkSpeed.speedMb
                             pnic_info['actual_duplex'] = 'Full Duplex' if pnic.linkSpeed.duplex else 'Half Duplex'
-                            network_hint = host_nw_system.QueryNetworkHint(pnic.device)
-                            for hint in self.to_json(network_hint):
-                                if hint.get('lldpInfo'):
-                                    pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
-                                else:
-                                    pnic_info['lldp_info'] = 'N/A'
+                            try:
+                                network_hint = host_nw_system.QueryNetworkHint(pnic.device)
+                                for hint in self.to_json(network_hint):
+                                    if hint.get('lldpInfo'):
+                                        pnic_info['lldp_info'] = {x['key']: x['value'] for x in hint['lldpInfo'].get('parameter')}
+                                    else:
+                                        pnic_info['lldp_info'] = 'N/A'
+                                    if hint.get('connectedSwitchPort'):
+                                        pnic_info['cdp_info'] = hint.get('connectedSwitchPort')
+                                    else:
+                                        pnic_info['cdp_info'] = 'N/A'
+                            except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
+                                pnic_info['lldp_info'] = 'N/A'
+                                pnic_info['cdp_info'] = 'N/A'
                         else:
                             pnic_info['status'] = 'Disconnected'
                             pnic_info['actual_speed'] = 'N/A'
                             pnic_info['actual_duplex'] = 'N/A'
                             pnic_info['lldp_info'] = 'N/A'
+                            pnic_info['cdp_info'] = 'N/A'
                         if pnic.spec.linkSpeed:
                             pnic_info['configured_speed'] = pnic.spec.linkSpeed.speedMb
                             pnic_info['configured_duplex'] = 'Full Duplex' if pnic.spec.linkSpeed.duplex else 'Half Duplex'

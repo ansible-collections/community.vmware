@@ -5,7 +5,8 @@
 # Copyright: (c) 2017-18, Ansible Project
 # Copyright: (c) 2017-18, Abhijeet Kasurde <akasurde@redhat.com>
 # Copyright: (c) 2018, Christian Kotte <christian.kotte@gmx.de>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -29,10 +30,6 @@ notes:
     - The option C(device) need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
     - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with C(device) specified.
     - You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
-    - Tested on vSphere 5.5 and 6.5
-requirements:
-    - "python >= 2.6"
-    - PyVmomi
 options:
     vswitch_name:
       description:

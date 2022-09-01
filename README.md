@@ -4,13 +4,20 @@ This repo hosts the `community.vmware` Ansible Collection.
 
 The collection includes the VMware modules and plugins supported by Ansible VMware community to help the management of VMware infrastructure.
 
+## Releases and maintenance
+
+| Release | Status                      | Expected end of life |
+| ------: | --------------------------: | -------------------: |
+|       2 | Maintained                  |             Nov 2023 |
+|       1 | Maintained (bug fixes only) |             Nov 2022 |
+
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.11.0**.
+This collection has been tested against following Ansible versions: **>=2.12.0**.
 
-For collections that support Ansible 2.9, please ensure you update your `network_os` to use the 
-fully qualified collection name (for example, `cisco.ios.ios`). 
+For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
+fully qualified collection name (for example, `cisco.ios.ios`).
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
 PEP440 is the schema used to describe the versions of Ansible.
@@ -33,7 +40,7 @@ collections:
 
 ### Required Python libraries
 
-VMware community collection depends upon following third party libraries:
+VMware community collection depends on Python 3.8+ and on following third party libraries:
 
 * [`Pyvmomi`](https://github.com/vmware/pyvmomi)
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
@@ -80,14 +87,17 @@ Name | Description
 [community.vmware.vcenter_extension_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_info_module.rst)|Gather info vCenter extensions
 [community.vmware.vcenter_folder](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_folder_module.rst)|Manage folders on given datacenter
 [community.vmware.vcenter_license](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_license_module.rst)|Manage VMware vCenter license keys
+[community.vmware.vcenter_standard_key_provider](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_standard_key_provider_module.rst)|Add, reconfigure or remove Standard Key Provider on vCenter server
 [community.vmware.vmware_about_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_about_info_module.rst)|Provides information about VMware server to which user is connecting to
 [community.vmware.vmware_category](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_module.rst)|Manage VMware categories
 [community.vmware.vmware_category_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_info_module.rst)|Gather info about VMware tag categories
 [community.vmware.vmware_cfg_backup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cfg_backup_module.rst)|Backup / Restore / Reset ESXi host configuration
 [community.vmware.vmware_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_module.rst)|Manage VMware vSphere clusters
+[community.vmware.vmware_cluster_dpm](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_dpm_module.rst)|Manage Distributed Power Management (DPM) on VMware vSphere clusters
 [community.vmware.vmware_cluster_drs](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_drs_module.rst)|Manage Distributed Resource Scheduler (DRS) on VMware vSphere clusters
 [community.vmware.vmware_cluster_ha](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_ha_module.rst)|Manage High Availability (HA) on VMware vSphere clusters
 [community.vmware.vmware_cluster_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_info_module.rst)|Gather info about clusters available in given vCenter
+[community.vmware.vmware_cluster_vcls](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_vcls_module.rst)|Override the default vCLS (vSphere Cluster Services) VM disk placement for this cluster.
 [community.vmware.vmware_cluster_vsan](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_vsan_module.rst)|Manages virtual storage area network (vSAN) configuration on VMware vSphere clusters
 [community.vmware.vmware_content_deploy_ovf_template](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_content_deploy_ovf_template_module.rst)|Deploy Virtual Machine from ovf template stored in content library.
 [community.vmware.vmware_content_deploy_template](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_content_deploy_template_module.rst)|Deploy Virtual Machine from template stored in content library.
@@ -147,6 +157,7 @@ Name | Description
 [community.vmware.vmware_guest_tools_upgrade](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_upgrade_module.rst)|Module to upgrade VMTools
 [community.vmware.vmware_guest_tools_wait](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tools_wait_module.rst)|Wait for VMware tools to become available
 [community.vmware.vmware_guest_tpm](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_tpm_module.rst)|Add or remove vTPM device for specified VM.
+[community.vmware.vmware_guest_vgpu](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_vgpu_module.rst)|Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 [community.vmware.vmware_guest_video](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_video_module.rst)|Modify video card configurations of specified virtual machine in given vCenter infrastructure
 [community.vmware.vmware_guest_vnc](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_guest_vnc_module.rst)|Manages VNC remote display on virtual machines in vCenter
 [community.vmware.vmware_host](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_module.rst)|Add, remove, or move an ESXi host to, from, or within vCenter
@@ -187,6 +198,7 @@ Name | Description
 [community.vmware.vmware_host_sriov](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_sriov_module.rst)|Manage SR-IOV settings on host
 [community.vmware.vmware_host_ssl_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ssl_info_module.rst)|Gather info of ESXi host system about SSL
 [community.vmware.vmware_host_tcpip_stacks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_tcpip_stacks_module.rst)|Manage the TCP/IP Stacks configuration of ESXi host
+[community.vmware.vmware_host_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_user_manager_module.rst)|Manage users of ESXi
 [community.vmware.vmware_host_vmhba_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_info_module.rst)|Gathers info about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmnic_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmnic_info_module.rst)|Gathers info about vmnics available on the given ESXi host
 [community.vmware.vmware_local_role_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_info_module.rst)|Gather info about local roles on an ESXi host
@@ -237,7 +249,7 @@ Name | Description
 
 If you want to develop new content for this collection or improve what is already here, the easiest way to work on the collection is to clone it into one of the configured [`COLLECTIONS_PATHS`](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#collections-paths), and work on it there.
 
-- [Guidelines for VMware module development](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html)
+- [Guidelines for VMware module development](https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/dev_guide.html)
 
 ### Testing with `ansible-test`
 
@@ -249,14 +261,22 @@ Refer [testing](testing.md) for more information.
 
 ## Publishing New Version
 
+Assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`:
+
 Prepare the release:
-- Make sure your fork is up to date; assuming your (local) repository has set `origin` to your GitHub fork and this repository is added as `upstream`: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
+- Make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
 - Run `ansible-playbook tools/prepare_release.yml`. The playbook tries to generate the next minor release automatically, but you can also set the version explicitly with `--extra-vars "version=$VERSION"`. You *will* have to set the version explicitly when publishing a new major release.
-- Push the created release branch `prepare_$VERSION_release` to your GitHub repo and open a PR for review.
+- Push the created release branch to your GitHub repo (`git push --set-upstream origin prepare_$VERSION_release`) and open a PR for review.
 
 Push the release:
+- After the PR has been merged, make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
 - Tag the release: `git tag -s $VERSION`
-- Push the tag: `git push origin $VERSION`
+- Push the tag: `git push upstream $VERSION`
+
+Revert the version in `galaxy.yml` back to `null`:
+- Make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
+- Run `ansible-playbook tools/unset_version.yml`.
+- Push the created branch to your GitHub repo (`git push --set-upstream origin unset_version_$VERSION`) and open a PR for review.
 
 ## Communication
 

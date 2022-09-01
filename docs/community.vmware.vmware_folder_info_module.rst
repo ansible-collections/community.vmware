@@ -20,13 +20,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
-
 
 Parameters
 ----------
@@ -191,7 +184,6 @@ Notes
 -----
 
 .. note::
-   - Tested on vSphere 6.5
    - ``flat_folder_info`` added in VMware collection 1.4.0.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 

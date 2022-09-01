@@ -2,8 +2,6 @@
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# TODO: Current pinned version of vcsim does not support custom fields
-# commenting testcase below
 - import_role:
     name: prepare_vmware_tests
   vars:
@@ -82,29 +80,24 @@
     that:
       - "guest_info_0004.changed"
 
-# TODO: vcsim returns duplicate values so removing custom attributes
-# results in change. vCenter show correct behavior. Commenting this
-# till this is supported by vcsim.
-- when: vcsim is not defined
-  block:
-    - name: Remove custom attribute to the given virtual machine again
-      vmware_guest_custom_attributes:
-        validate_certs: false
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        datacenter: "{{ dc1 }}"
-        name: "{{ virtual_machines[0].name }}"
-        folder: "{{ virtual_machines[0].folder }}"
-        state: absent
-        attributes:
-          - name: 'sample_1'
-          - name: 'sample_2'
-          - name: 'sample_3'
-      register: guest_info_0005
+- name: Remove custom attribute to the given virtual machine again
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: absent
+    attributes:
+      - name: 'sample_1'
+      - name: 'sample_2'
+      - name: 'sample_3'
+  register: guest_info_0005
 
-    - debug: var=guest_info_0005
+- debug: var=guest_info_0005
 
-    - assert:
-        that:
-          - not (guest_info_0005 is changed)
+- assert:
+    that:
+      - not (guest_info_0005 is changed)

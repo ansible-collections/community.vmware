@@ -21,15 +21,10 @@ Synopsis
 - If hostname or IP address of vCenter is provided as ``hostname`` and ``esxi_hostname`` is not specified, then the module will throw an error.
 - VSAN facts added in 2.7 version.
 - SYSTEM fact uuid added in 2.10 version.
+- Connection state fact added in VMware collection 2.6.0.
+- Please note that when ESXi host connection state is not ``connected``, facts returned from vCenter might be stale. Users are recommended to check connection state value and take appropriate decision in the playbook.
 
 
-
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- python >= 2.6
-- PyVmomi
 
 
 Parameters

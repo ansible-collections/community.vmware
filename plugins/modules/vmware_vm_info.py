@@ -4,7 +4,8 @@
 # Copyright: (c) 2015, Joseph Callen <jcallen () csc.com>
 # Copyright: (c) 2018, Ansible Project
 # Copyright: (c) 2018, Fedor Vompe <f.vompe () comptek.ru>
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -22,13 +23,8 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Fedor Vompe (@sumkincpp)
 notes:
-- Tested on ESXi 6.7, vSphere 5.5 and vSphere 6.5
-- From 2.8 and onwards, information are returned as list of dict instead of dict.
 - Fact about C(moid) added in VMware collection 1.4.0.
 - Fact about C(datastore_url) is added in VMware collection 1.18.0.
-requirements:
-- python >= 2.6
-- PyVmomi
 options:
     vm_type:
       description:
@@ -63,9 +59,18 @@ options:
         - Tags related to virtual machine are shown if set to C(True).
       default: False
       type: bool
+    show_allocated:
+      version_added: '2.5.0'
+      description:
+        - Allocated storage in byte and memory in MB are shown if it set to True.
+      default: False
+      type: bool
+    vm_name:
+      description:
+        - Name of the virtual machine to get related configurations information from.
+      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -76,6 +81,18 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
   delegate_to: localhost
   register: vminfo
+
+- debug:
+    var: vminfo.virtual_machines
+
+- name: Gather one specific VM
+  community.vmware.vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    vm_name: 'vm_name_as_per_vcenter'
+  delegate_to: localhost
+  register: vm_info
 
 - debug:
     var: vminfo.virtual_machines
@@ -212,7 +229,12 @@ virtual_machines:
                 "name": "tag_0001"
             }
         ],
-        "moid": "vm-24"
+        "moid": "vm-24",
+        "allocated": {
+            "storage": 500000000,
+            "cpu": 2,
+            "memory": 16
+        },
     }
   ]
 '''
@@ -223,7 +245,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, \
+    get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -241,9 +264,9 @@ class VmwareVmInfo(PyVmomi):
                     for v in vm.customValue if x.key == v.key)
 
     # https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/getallvms.py
-    def get_all_virtual_machines(self):
+    def get_virtual_machines(self):
         """
-        Get all virtual machines and related configurations information
+        Get one/all virtual machines and related configurations information.
         """
         folder = self.params.get('folder')
         folder_obj = None
@@ -252,7 +275,15 @@ class VmwareVmInfo(PyVmomi):
             if not folder_obj:
                 self.module.fail_json(msg="Failed to find folder specified by %(folder)s" % self.params)
 
-        virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
+        vm_name = self.params.get('vm_name')
+        if vm_name:
+            virtual_machine = find_vm_by_name(self.content, vm_name=vm_name, folder=folder_obj)
+            if not virtual_machine:
+                self.module.fail_json(msg="Failed to find virtual machine %s" % vm_name)
+            else:
+                virtual_machines = [virtual_machine]
+        else:
+            virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
         _virtual_machines = []
 
         for vm in virtual_machines:
@@ -300,12 +331,24 @@ class VmwareVmInfo(PyVmomi):
             if self.module.params.get('show_tag'):
                 vm_tags = self.get_tag_info(vm)
 
+            allocated = {}
+            if self.module.params.get('show_allocated'):
+                storage_allocated = 0
+                for device in vm.config.hardware.device:
+                    if isinstance(device, vim.vm.device.VirtualDisk):
+                        storage_allocated += device.capacityInBytes
+                allocated = {
+                    "storage": storage_allocated,
+                    "cpu": vm.config.hardware.numCPU,
+                    "memory": vm.config.hardware.memoryMB}
+
             vm_folder = PyVmomi.get_vm_path(content=self.content, vm_name=vm)
             datacenter = get_parent_datacenter(vm)
             datastore_url = list()
             datastore_attributes = ('name', 'url')
-            if vm.config.datastoreUrl:
-                for entry in vm.config.datastoreUrl:
+            vm_datastore_urls = _get_vm_prop(vm, ('config', 'datastoreUrl'))
+            if vm_datastore_urls:
+                for entry in vm_datastore_urls:
                     datastore_url.append({key: getattr(entry, key) for key in dir(entry) if key in datastore_attributes})
             virtual_machine = {
                 "guest_name": summary.config.name,
@@ -323,6 +366,7 @@ class VmwareVmInfo(PyVmomi):
                 "folder": vm_folder,
                 "moid": vm._moId,
                 "datastore_url": datastore_url,
+                "allocated": allocated
             }
 
             vm_type = self.module.params.get('vm_type')
@@ -342,7 +386,9 @@ def main():
         vm_type=dict(type='str', choices=['vm', 'all', 'template'], default='all'),
         show_attribute=dict(type='bool', default='no'),
         show_tag=dict(type='bool', default=False),
+        show_allocated=dict(type='bool', default=False),
         folder=dict(type='str'),
+        vm_name=dict(type='str')
     )
 
     module = AnsibleModule(
@@ -351,7 +397,7 @@ def main():
     )
 
     vmware_vm_info = VmwareVmInfo(module)
-    _virtual_machines = vmware_vm_info.get_all_virtual_machines()
+    _virtual_machines = vmware_vm_info.get_virtual_machines()
 
     module.exit_json(changed=False, virtual_machines=_virtual_machines)
 

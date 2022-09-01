@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-#
+
 # This module is also sponsored by E.T.A.I. (www.etai.fr)
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -21,9 +22,6 @@ author:
 - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-requirements:
-- python >= 2.6
-- PyVmomi
 notes:
     - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
     - For example, following is the list of minimum privileges required by users to create virtual machines.
@@ -34,7 +32,6 @@ notes:
     - "   Network > Assign Network"
     - "   Resource > Assign Virtual Machine to Resource Pool"
     - "Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations."
-    - Tested on vSphere 5.5, 6.0, 6.5 and 6.7.
     - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
     - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
     - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add
@@ -496,6 +493,9 @@ options:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - All parameters and VMware object names are case sensitive.
+    - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
+      They are set by the customization via vmware-tools.
+      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
     type: list
     elements: dict
     suboptions:
@@ -1959,8 +1959,7 @@ class PyVmomiHelper(PyVmomi):
 
         if vm_obj:
             # VM exists
-            # This is primarily for vcsim/integration tests, unset vAppConfig was not seen on my deployments
-            orig_spec = vm_obj.config.vAppConfig if vm_obj.config.vAppConfig else new_vmconfig_spec
+            orig_spec = vm_obj.config.vAppConfig
 
             vapp_properties_current = dict((x.id, x) for x in orig_spec.property)
             vapp_properties_to_change = dict((x['id'], x) for x in self.params['vapp_properties'])
@@ -3371,13 +3370,13 @@ def main():
     # Check requirements for virtualization based security
     if pyv.params['hardware']['virt_based_security']:
         if not pyv.params['hardware']['nested_virt']:
-            pyv.module.fail("Virtualization based security requires nested virtualization. Please enable nested_virt.")
+            pyv.module.fail_json(msg="Virtualization based security requires nested virtualization. Please enable nested_virt.")
 
         if not pyv.params['hardware']['secure_boot']:
-            pyv.module.fail("Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
+            pyv.module.fail_json(msg="Virtualization based security requires (U)EFI secure boot. Please enable secure_boot.")
 
         if not pyv.params['hardware']['iommu']:
-            pyv.module.fail("Virtualization based security requires I/O MMU. Please enable iommu.")
+            pyv.module.fail_json(msg="Virtualization based security requires I/O MMU. Please enable iommu.")
 
     # Check if the VM exists before continuing
     vm = pyv.get_vm()

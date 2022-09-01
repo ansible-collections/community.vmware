@@ -2,123 +2,120 @@
 # Copyright: (c) 2017, Karsten Kaj Jakobsen <kj@patientsky.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- when: vcsim is not defined
-  block:
-    - import_role:
-        name: prepare_vmware_tests
-      vars:
-        setup_attach_host: true
-        setup_datastore: true
-        setup_virtualmachines: true
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
 
-    - name: Create DRS VM group
-      vmware_drs_group:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        # Options
-        cluster_name: '{{ ccr1 }}'
-        datacenter_name: '{{ dc1 }}'
-        group_name: DC0_C0_VM_GR1
-        vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        state: present
-      register: drs_vm_group_01_results
-    - debug: var=drs_vm_group_01_results
+- name: Create DRS VM group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    # Options
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: DC0_C0_VM_GR1
+    vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
+    state: present
+  register: drs_vm_group_01_results
+- debug: var=drs_vm_group_01_results
 
-    - name: Create DRS Host group
-      vmware_drs_group:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        # Options
-        cluster_name: '{{ ccr1 }}'
-        datacenter_name: '{{ dc1 }}'
-        group_name: DC0_C0_HOST_GR1
-        hosts: '{{ esxi_hosts }}'
-        state: present
-      register: drs_host_group_01_results
-    - debug: var=drs_host_group_01_results
+- name: Create DRS Host group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    # Options
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: DC0_C0_HOST_GR1
+    hosts: '{{ esxi_hosts }}'
+    state: present
+  register: drs_host_group_01_results
+- debug: var=drs_host_group_01_results
 
-    - name: Create mandatory DRS Affinity rule for VM/Host
-      vmware_vm_host_drs_rule:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        drs_rule_name: drs_rule_host_aff_0001
-        vm_group_name: DC0_C0_VM_GR1
-        host_group_name: DC0_C0_HOST_GR1
-        cluster_name: "{{ ccr1 }}"
-        enabled: true
-        affinity_rule: true
-        mandatory: true
-      register: drs_rule_host_0001_results
-    - debug: var=drs_rule_host_0001_results
-    - assert:
-        that:
-            - "{{ drs_rule_host_0001_results.changed }}"
+- name: Create mandatory DRS Affinity rule for VM/Host
+  vmware_vm_host_drs_rule:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    drs_rule_name: drs_rule_host_aff_0001
+    vm_group_name: DC0_C0_VM_GR1
+    host_group_name: DC0_C0_HOST_GR1
+    cluster_name: "{{ ccr1 }}"
+    enabled: true
+    affinity_rule: true
+    mandatory: true
+  register: drs_rule_host_0001_results
+- debug: var=drs_rule_host_0001_results
+- assert:
+    that:
+        - "{{ drs_rule_host_0001_results.changed }}"
 
-    # TODO: create host/vm group when vcsim supports this
-    - name: Create non-mandatory DRS Anti-Affinity rule for VM/Host
-      vmware_vm_host_drs_rule:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        drs_rule_name: drs_rule_host_aff_0001
-        vm_group_name: DC0_C0_VM_GR1
-        host_group_name: DC0_C0_HOST_GR1
-        cluster_name: "{{ ccr1 }}"
-        enabled: true
-        affinity_rule: false
-        mandatory: false
-      register: drs_rule_host_0002_results
-    - debug: var=drs_rule_host_0002_results
-    - assert:
-        that:
-            - "{{ drs_rule_host_0001_results.changed }}"
+- name: Create non-mandatory DRS Anti-Affinity rule for VM/Host
+  vmware_vm_host_drs_rule:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    drs_rule_name: drs_rule_host_aff_0001
+    vm_group_name: DC0_C0_VM_GR1
+    host_group_name: DC0_C0_HOST_GR1
+    cluster_name: "{{ ccr1 }}"
+    enabled: true
+    affinity_rule: false
+    mandatory: false
+  register: drs_rule_host_0002_results
+- debug: var=drs_rule_host_0002_results
+- assert:
+    that:
+        - "{{ drs_rule_host_0001_results.changed }}"
 
-    - name: Delete rules
-      vmware_vm_host_drs_rule:
-        validate_certs: false
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        drs_rule_name: drs_rule_host_aff_0001
-        vm_group_name: DC0_C0_VM_GR1
-        host_group_name: DC0_C0_HOST_GR1
-        cluster_name: "{{ ccr1 }}"
-        state: absent
-      register: result
-    - debug: var=result
-    - assert:
-        that:
-            - result is changed
+- name: Delete rules
+  vmware_vm_host_drs_rule:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    drs_rule_name: drs_rule_host_aff_0001
+    vm_group_name: DC0_C0_VM_GR1
+    host_group_name: DC0_C0_HOST_GR1
+    cluster_name: "{{ ccr1 }}"
+    state: absent
+  register: result
+- debug: var=result
+- assert:
+    that:
+        - result is changed
 
-    - name: Delete DRS VM group
-      vmware_drs_group:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        # Options
-        cluster_name: '{{ ccr1 }}'
-        datacenter_name: '{{ dc1 }}'
-        group_name: DC0_C0_VM_GR1
-        vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
-        state: absent
+- name: Delete DRS VM group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    # Options
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: DC0_C0_VM_GR1
+    vms: "{{ virtual_machines_in_cluster | map(attribute='name') | list }}"
+    state: absent
 
-    - name: Delete DRS Host group
-      vmware_drs_group:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        # Options
-        cluster_name: '{{ ccr1 }}'
-        datacenter_name: '{{ dc1 }}'
-        group_name: DC0_C0_HOST_GR1
-        hosts: '{{ esxi_hosts }}'
-        state: absent
+- name: Delete DRS Host group
+  vmware_drs_group:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    # Options
+    cluster_name: '{{ ccr1 }}'
+    datacenter_name: '{{ dc1 }}'
+    group_name: DC0_C0_HOST_GR1
+    hosts: '{{ esxi_hosts }}'
+    state: absent

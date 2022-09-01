@@ -3,17 +3,11 @@
 
 # Copyright: (c) 2017, Wei Gao <gaowei3@qq.com>
 # Copyright: (c) 2018, Ansible Project
-#
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
-
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
 
 DOCUMENTATION = r'''
 ---
@@ -26,11 +20,11 @@ description:
       module will throw an error.
     - VSAN facts added in 2.7 version.
     - SYSTEM fact uuid added in 2.10 version.
+    - Connection state fact added in VMware collection 2.6.0.
+    - Please note that when ESXi host connection state is not C(connected), facts returned from vCenter might be stale.
+      Users are recommended to check connection state value and take appropriate decision in the playbook.
 author:
     - Wei Gao (@woshihaoren)
-requirements:
-    - python >= 2.6
-    - PyVmomi
 options:
   esxi_hostname:
     description:
@@ -240,7 +234,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 )
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
@@ -304,6 +298,12 @@ class VMwareHostFactManager(PyVmomi):
 
         try:
             status = config_mgr.QueryHostStatus()
+        except (vmodl.fault.HostNotConnected, vmodl.fault.HostNotReachable):
+            return {
+                'vsan_cluster_uuid': 'NA',
+                'vsan_node_uuid': 'NA',
+                'vsan_health': 'NA',
+            }
         except Exception as err:
             self.module.fail_json(msg="Unable to query VSAN status due to %s" % to_native(err))
 
@@ -370,6 +370,7 @@ class VMwareHostFactManager(PyVmomi):
             if info.identifierType.key == 'ServiceTag':
                 sn = info.identifierValue
         facts = {
+            'ansible_host_connection_state': self.host.runtime.connectionState,
             'ansible_distribution': self.host.config.product.name,
             'ansible_distribution_version': self.host.config.product.version,
             'ansible_distribution_build': self.host.config.product.build,
