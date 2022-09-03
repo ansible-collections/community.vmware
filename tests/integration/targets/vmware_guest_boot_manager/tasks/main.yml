@@ -25,20 +25,3 @@
   assert:
     that:
     - enter_bios_setup.changed
-
-- name: Enter BIOS setup again (check idempotency)
-  community.vmware.vmware_guest_boot_manager:
-    validate_certs: false
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    name: "{{ virtual_machines[0].name }}"
-    enter_bios_setup: true
-  register: enter_bios_setup_again
-
-- ansible.builtin.debug: var=enter_bios_setup_again
-
-- name: assert that configuration is not changed again
-  assert:
-    that:
-    - not enter_bios_setup_again.changed
