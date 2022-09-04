@@ -1,0 +1,27 @@
+# Test code for the vmware_guest_boot_manager module.
+# Copyright: (c) 2022, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+
+- name: Enter BIOS setup
+  community.vmware.vmware_guest_boot_manager:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+    enter_bios_setup: true
+  register: enter_bios_setup
+
+- ansible.builtin.debug: var=enter_bios_setup
+
+- name: assert that configuration is changed
+  assert:
+    that:
+    - enter_bios_setup.changed
