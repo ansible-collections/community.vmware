@@ -115,6 +115,7 @@ except ImportError:
     HAS_PYVMOMI = False
     HAS_PYVMOMIJSON = False
 
+VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
     HAS_VSANPYTHONSDK = True

@@ -126,6 +126,7 @@ try:
 except ImportError:
     pass
 
+VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
     HAS_VSANPYTHONSDK = True

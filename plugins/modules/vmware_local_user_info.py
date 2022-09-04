@@ -112,7 +112,7 @@ class VMwareUserInfoManager(PyVmomi):
                     )
                 except vmodl.fault.ManagedObjectNotFound as not_found:
                     self.module.fail_json(
-                        msg="The entity doesn't exist" % to_native(not_found)
+                        msg="The entity doesn't exist: %s" % to_native(not_found)
                     )
                 for permission in permissions:
                     if permission.principal == user.principal:

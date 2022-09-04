@@ -202,6 +202,7 @@ from time import sleep
 import traceback
 
 REQUESTS_IMP_ERR = None
+PYVMOMI_IMP_ERR = None
 try:
     import requests
     HAS_REQUESTS = True
