@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_content_library_info - Add Subscribed Libraries (https://github.com/ansible-collections/community.vmware/issues/1430).

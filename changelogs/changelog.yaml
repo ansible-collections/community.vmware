@@ -1281,3 +1281,20 @@ releases:
     - 1418_vmware_host_vmnic_info.yml
     - 1419-vmware_dvs_portgroup-problem_with_spec_numPorts_is_none_solved.yaml
     release_date: '2022-08-16'
+  2.9.0:
+    changes:
+      bugfixes:
+      - vmware_cfg_backup - Fix a bug that failed the restore when port 80 is blocked
+        (https://github.com/ansible-collections/community.vmware/issues/1440).
+      - vmware_vswitch - Fix broken logic of `failback` parameter (https://github.com/ansible-collections/community.vmware/issues/1431).
+      minor_changes:
+      - vmware_cluster_ha - Add APD settings (https://github.com/ansible-collections/community.vmware/pull/1420).
+      - vmware_content_library_info - Add Subscribed Libraries (https://github.com/ansible-collections/community.vmware/issues/1430).
+      - vmware_drs_group_manager - Improve error handling (https://github.com/ansible-collections/community.vmware/pull/1448).
+    fragments:
+    - 1420-vmware_cluster_ha-add_apd_settings.yaml
+    - 1430-vmware_content_library_info-add_subscribed_libraries.yaml
+    - 1431-vmware_vswitch-fix_failback.yml
+    - 1440-vmware_cfg_backup-fails-to-restore-port-80-blocked.yaml
+    - 1448-vmware_drs_group_manager-error_msg.yml
+    release_date: '2022-09-06'

@@ -52,6 +52,45 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>apd_delay</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">180</div>
+                </td>
+                <td>
+                        <div>The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).</div>
+                        <div>Only set if <code>apd_response</code> is <code>restartConservative</code> or <code>restartAggressive</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>apd_reaction</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>reset</b>&nbsp;&larr;</div></li>
+                                    <li>none</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>VM response recovery reaction for storage failures categorized as All Paths Down (APD).</div>
+                        <div>Only set if <code>apd_response</code> is <code>restartConservative</code> or <code>restartAggressive</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>apd_response</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
