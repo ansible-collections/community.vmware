@@ -5,6 +5,22 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.9.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_ha - Add APD settings (https://github.com/ansible-collections/community.vmware/pull/1420).
+- vmware_content_library_info - Add Subscribed Libraries (https://github.com/ansible-collections/community.vmware/issues/1430).
+- vmware_drs_group_manager - Improve error handling (https://github.com/ansible-collections/community.vmware/pull/1448).
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a bug that failed the restore when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1440).
+- vmware_vswitch - Fix broken logic of `failback` parameter (https://github.com/ansible-collections/community.vmware/issues/1431).
+
 v2.8.0
 ======
 

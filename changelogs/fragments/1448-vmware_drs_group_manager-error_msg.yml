@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_drs_group_manager - Improve error handling (https://github.com/ansible-collections/community.vmware/pull/1448).
