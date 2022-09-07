@@ -5,6 +5,14 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.9.1
+======
+
+Bugfixes
+--------
+
+- 2.9.0 wasn't released correctly, some changes are missing from the package. Releasing 2.9.1 to fix this.
+
 v2.9.0
 ======
 

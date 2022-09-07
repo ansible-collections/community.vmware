@@ -1298,3 +1298,11 @@ releases:
     - 1440-vmware_cfg_backup-fails-to-restore-port-80-blocked.yaml
     - 1448-vmware_drs_group_manager-error_msg.yml
     release_date: '2022-09-06'
+  2.9.1:
+    changes:
+      bugfixes:
+      - 2.9.0 wasn't released correctly, some changes are missing from the package.
+        Releasing 2.9.1 to fix this.
+    fragments:
+    - 2.9.1-fix-release.yml
+    release_date: '2022-09-07'
