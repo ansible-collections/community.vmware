@@ -76,7 +76,6 @@ action_groups:
   - vmware_guest_tools_wait
   - vmware_guest_vgpu
   - vmware_guest_video
-  - vmware_guest_vnc
   - vmware_host
   - vmware_host_acceptance
   - vmware_host_active_directory
@@ -162,8 +161,4 @@ plugin_routing:
     vmware_dns_config:
       deprecation:
         removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vmware_guest_vnc:
-      deprecation:
-        removal_date: 2022-10-15
         warning_text: see plugin documentation for details
