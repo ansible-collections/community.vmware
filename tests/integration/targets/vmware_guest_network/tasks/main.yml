@@ -11,7 +11,7 @@
     setup_dvswitch: true
 
 - name: Create VMs
-  vmware_guest:
+  community.vmware.vmware_guest:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -36,7 +36,7 @@
     networks:
     - name: VM Network
 
-- vmware_guest_tools_wait:
+- community.vmware.vmware_guest_tools_wait:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -45,7 +45,7 @@
     name: test_vm1
 
 - name: gather network adapters' facts of the virtual machine
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -56,48 +56,50 @@
 
 - debug: var=netadapter_info
 
-- name: get number of existing netowrk adapters
+- name: get number of existing network adapters
   set_fact:
     netadapter_num: "{{ netadapter_info.network_data | length }}"
 
 - name: add new network adapters to virtual machine
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "VM Network"
-        state: new
-        device_type: e1000e
-        manual_mac: "aa:50:56:58:59:60"
-        connected: true
-      - name: "VM Network"
-        state: new
-        connected: true
-        device_type: vmxnet3
-        manual_mac: "aa:50:56:58:59:61"
+    network_name: "{{ item.network_name }}"
+    device_type: "{{ item.device_type }}"
+    mac_address: "{{ item.mac_address }}"
+    connected: "{{ item.connected }}"
+    state: present
+  loop:
+    - network_name: "VM Network"
+      device_type: e1000e
+      mac_address: "aa:50:56:58:59:60"
+      connected: true
+    - network_name: "VM Network"
+      device_type: vmxnet3
+      mac_address: "aa:50:56:58:59:61"
+      connected: true
   register: add_netadapter
 
 - debug: var=add_netadapter
 
-- name: assert the new netowrk adapters were added to VM
+- name: assert the new network adapters were added to VM
   assert:
     that:
       - add_netadapter is changed
-      - "{{ add_netadapter.network_data | length | int }} == {{ netadapter_num | int + 2 }}"
+      - "{{ add_netadapter.results[1].network_info | length | int }} == {{ netadapter_num | int + 2 }}"
 
 - name: delete one specified network adapter
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - state: absent
-        mac: "aa:50:56:58:59:60"
+    mac_address: "aa:50:56:58:59:60"
+    state: absent
   register: del_netadapter
 
 - debug: var=del_netadapter
@@ -106,10 +108,10 @@
   assert:
     that:
       - del_netadapter is changed
-      - "{{ del_netadapter.network_data | length | int }} == {{ netadapter_num | int + 1 }}"
+      - "{{ del_netadapter.network_info | length | int }} == {{ netadapter_num | int + 1 }}"
 
 - name: get instance uuid of virtual machines
-  vmware_guest_info:
+  community.vmware.vmware_guest_info:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -121,19 +123,17 @@
 - set_fact: vm1_instance_uuid="{{ guest_info['instance']['instance_uuid'] }}"
 
 - name: add new network adapters to virtual machine with instance uuid
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     uuid: '{{ vm1_instance_uuid }}'
     use_instance_uuid: true
-    networks:
-      - name: "VM Network"
-        state: new
-        connected: true
-        device_type: e1000e
-        manual_mac: "bb:50:56:58:59:60"
+    network_name: "VM Network"
+    device_type: e1000e
+    mac_address: "bb:50:56:58:59:60"
+    connected: true
   register: add_netadapter_instanceuuid
 
 - debug: var=add_netadapter_instanceuuid
@@ -142,87 +142,82 @@
   assert:
     that:
       - add_netadapter_instanceuuid is changed
-      - "{{ add_netadapter_instanceuuid.network_data | length | int }} == {{ netadapter_num | int + 2 }}"
+      - "{{ add_netadapter_instanceuuid.network_info | length | int }} == {{ netadapter_num | int + 2 }}"
 
 - name: delete one specified network adapter
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - state: absent
-        mac: "bb:50:56:58:59:60"
+    mac_address: "bb:50:56:58:59:60"
+    state: absent
   register: del_netadapter
 
 - name: assert the network adapter was removed
   assert:
     that:
       - del_netadapter is changed
-      - "{{ del_netadapter.network_data | length | int }} == {{ netadapter_num | int + 1 }}"
+      - "{{ del_netadapter.network_info | length | int }} == {{ netadapter_num | int + 1 }}"
 
-- name: delete again one specified network adapter
-  vmware_guest_network:
+- name: delete again one specified network adapter (idempotency)
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - state: absent
-        mac: "bb:50:56:58:59:60"
+    mac_address: "bb:50:56:58:59:60"
+    state: absent
   register: del_again_netadapter
 
 - debug: var=del_again_netadapter
 
-- name: assert the network adapter was removed
+- name: assert no change (idempotency)
   assert:
     that:
       - not (del_again_netadapter is changed)
-      - "{{ del_again_netadapter.network_data | length | int }} == {{ netadapter_num | int + 1 }}"
+      - "{{ del_again_netadapter.network_info | length | int }} == {{ netadapter_num | int + 1 }}"
 
 - name: disable DirectPath I/O on a Vmxnet3 adapter
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "test_vm1"
-    networks:
-      - state: present
-        mac: "aa:50:56:58:59:61"
-        directpath_io: false
+    state: present
+    mac_address: "aa:50:56:58:59:61"
+    directpath_io: false
   register: disable_directpath_io
 
 - debug: var=disable_directpath_io
 
 - name: enable DirectPath I/O on a Vmxnet3 adapter
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "test_vm1"
-    networks:
-      - state: present
-        mac: "aa:50:56:58:59:61"
-        directpath_io: true
+    state: present
+    mac_address: "aa:50:56:58:59:61"
+    directpath_io: true
   register: enable_directpath_io
 
 - debug: var=enable_directpath_io
 
 - name: disconnect one specified network adapter
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - state: present
-        mac: "aa:50:56:58:59:61"
-        connected: false
+    state: present
+    mac_address: "aa:50:56:58:59:61"
+    connected: false
   register: disc_netadapter
 
 - debug: var=disc_netadapter
@@ -231,19 +226,18 @@
   assert:
     that:
       - disc_netadapter is changed
-      - "{{ disc_netadapter.network_data[netadapter_num]['connected'] }} == false"
+      - "{{ disc_netadapter.network_info[netadapter_num | int]['connected'] }} == false"
 
 - name: Check if network does not exists
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: non-existing-nw
-        manual_mac: "aa:50:56:11:22:33"
-        state: new
+    network_name: non-existing-nw
+    mac_address: "aa:50:56:11:22:33"
+    state: present
   register: no_nw_details
   ignore_errors: true
 
@@ -256,18 +250,17 @@
       - no_nw_details.failed
 
 - name: Change portgroup to dvPortgroup
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "{{ dvpg1 }}"
-        label: "Network adapter 1"
-        connected: false
-        start_connected: true
-        state: present
+    network_name: "{{ dvpg1 }}"
+    label: "Network adapter 1"
+    connected: false
+    start_connected: true
+    state: present
   register: change_netaddr_dvp
 
 - debug: var=change_netaddr_dvp
@@ -278,18 +271,17 @@
       - change_netaddr_dvp.changed is sameas true
 
 - name: Change portgroup to dvPortgroup
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "{{ dvpg1 }}"
-        label: "Network adapter 1"
-        connected: false
-        start_connected: true
-        state: present
+    network_name: "{{ dvpg1 }}"
+    label: "Network adapter 1"
+    connected: false
+    start_connected: true
+    state: present
   register: change_netaddr_dvp
 
 - debug: var=change_netaddr_dvp
@@ -300,18 +292,17 @@
       - change_netaddr_dvp.changed is sameas false
 
 - name: Change dvPortgroup to PortGroup
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "VM Network"
-        label: "Network adapter 1"
-        connected: false
-        start_connected: true
-        state: present
+    network_name: "VM Network"
+    label: "Network adapter 1"
+    connected: false
+    start_connected: true
+    state: present
   register: change_netaddr_pg
 
 - debug: var=change_netaddr_pg
@@ -320,21 +311,20 @@
   assert:
     that:
       - change_netaddr_pg.changed is sameas true
-      - change_netaddr_pg.network_data['0'].name == "VM Network"
+      - change_netaddr_pg.network_info[0].network_name == "VM Network"
 
 - name: Change dvPortgroup to PortGroup
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "VM Network"
-        label: "Network adapter 1"
-        connected: false
-        start_connected: true
-        state: present
+    network_name: "VM Network"
+    label: "Network adapter 1"
+    connected: false
+    start_connected: true
+    state: present
   register: change_netaddr_pg
 
 - debug: var=change_netaddr_pg
@@ -343,22 +333,21 @@
   assert:
     that:
       - change_netaddr_pg.changed is sameas false
-      - change_netaddr_pg.network_data['0'].name == "VM Network"
+      - change_netaddr_pg.network_info[0].network_name == "VM Network"
 
 # https://github.com/ansible/ansible/issues/65968
 - name: Create a network with dvPortgroup
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: test_vm1
-    networks:
-      - name: "{{ dvpg1 }}"
-        label: "Network adapter 2"
-        connected: true
-        start_connected: true
-        state: new
+    network_name: "{{ dvpg1 }}"
+    label: "Network adapter 2"
+    connected: true
+    start_connected: true
+    state: present
   register: create_netaddr_pg
 
 - debug: var=create_netaddr_pg
@@ -369,7 +358,7 @@
       - create_netaddr_pg.changed is sameas true
 
 - name: gather network adapters' facts of the virtual machine
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -384,7 +373,7 @@
       - nic_info.network_info is defined
 
 - name: Remove all network interfaces with loop
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -395,7 +384,7 @@
   loop: "{{ nic_info.network_info }}"
 
 - name: gather network adapters' facts of the virtual machine
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -410,7 +399,7 @@
       - "{{ nic_info2.network_info | length | int }} == 0"
 
 - name: add new adapter(s)
-  vmware_guest_network:
+  community.vmware.vmware_guest_network:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -429,7 +418,7 @@
 - name: "Change a dvpg with in same DVS(integration test for 204)"
   block:
     - name: "Prepare the integration test for 204"
-      vmware_dvs_portgroup:
+      community.vmware.vmware_dvs_portgroup:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
@@ -448,16 +437,15 @@
           - prepare_integration_test_204_result.changed is sameas true
 
     - name: "Change a port group to a dvport group"
-      vmware_guest_network:
+      community.vmware.vmware_guest_network:
         validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         name: test_vm1
-        networks:
-          - name: "{{ dvpg1 }}"
-            label: Network adapter 1
-            state: present
+        network_name: "{{ dvpg1 }}"
+        label: "Network adapter 1"
+        state: present
       register: change_port_group_result
 
     - assert:
@@ -465,16 +453,15 @@
           - change_port_group_result.changed is sameas true
 
     - name: "Change a dvport group with in same DVS"
-      vmware_guest_network:
+      community.vmware.vmware_guest_network:
         validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         name: test_vm1
-        networks:
-          - name: 204dvpg
-            label: Network adapter 1
-            state: present
+        network_name: 204dvpg
+        label: Network adapter 1
+        state: present
       register: change_dvport_group_result
 
     - assert:
@@ -482,16 +469,15 @@
           - change_dvport_group_result.changed is sameas true
 
     - name: "Revert a dvport group to port group"
-      vmware_guest_network:
+      community.vmware.vmware_guest_network:
         validate_certs: false
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         name: test_vm1
-        networks:
-          - name: VM Network
-            label: Network adapter 1
-            state: present
+        network_name: VM Network
+        label: "Network adapter 1"
+        state: present
       register: revert_dvport_group_result
 
     - assert:
@@ -499,7 +485,7 @@
           - revert_dvport_group_result.changed is sameas true
 
     - name: "Delete a dvport group for 204 integration test"
-      vmware_dvs_portgroup:
+      community.vmware.vmware_dvs_portgroup:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
