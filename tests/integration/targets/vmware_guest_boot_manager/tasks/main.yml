@@ -9,19 +9,68 @@
     setup_datastore: true
     setup_virtualmachines: true
 
-- name: Enter BIOS setup
+- name: Enable Secure Boot
   community.vmware.vmware_guest_boot_manager:
     validate_certs: false
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     name: "{{ virtual_machines[0].name }}"
-    enter_bios_setup: true
-  register: enter_bios_setup
+    boot_firmware: efi
+    secure_boot_enabled: true
+  register: enable_secure_boot
 
-- ansible.builtin.debug: var=enter_bios_setup
+- ansible.builtin.debug: var=enable_secure_boot
 
-- name: assert that configuration is changed
+- name: Get VM boot info 1
+  community.vmware.vmware_guest_boot_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+  register: boot_info1
+
+- ansible.builtin.debug: var=boot_info1
+
+- name: assert that Secure Boot is enabled
   assert:
     that:
-    - enter_bios_setup.changed
+    - enable_secure_boot.changed
+    - boot_info1.vm_boot_info.current_secure_boot_enabled is true
+
+- name: Issue https://github.com/ansible-collections/community.vmware/issues/1257
+  block:
+    - name: Enter BIOS setup
+      community.vmware.vmware_guest_boot_manager:
+        validate_certs: false
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        name: "{{ virtual_machines[0].name }}"
+        enter_bios_setup: true
+      register: enter_bios_setup
+
+    - ansible.builtin.debug: var=enter_bios_setup
+
+    - name: Get VM boot info 2
+      community.vmware.vmware_guest_boot_info:
+        validate_certs: false
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        name: "{{ virtual_machines[0].name }}"
+      register: boot_info2
+
+    - ansible.builtin.debug: var=boot_info2
+
+    - name: assert that configuration is changed
+      assert:
+        that:
+        - enter_bios_setup.changed
+        - boot_info2.vm_boot_info.current_enter_bios_setup is true
+
+    - name: assert that Secure Boot is still enabled
+      assert:
+        that:
+        - boot_info2.vm_boot_info.current_secure_boot_enabled is true
