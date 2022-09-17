@@ -1,0 +1,2 @@
+breaking_changes:
+  - vmware_guest_boot_manager - Remove default for `secure_boot_enabled` parameter (https://github.com/ansible-collections/community.vmware/issues/1257).

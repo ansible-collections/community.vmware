@@ -83,7 +83,6 @@ options:
      description:
      - Choose if EFI secure boot should be enabled.  EFI secure boot can only be enabled with boot_firmware = efi
      type: 'bool'
-     default: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -292,19 +291,16 @@ class VmBootManager(PyVmomi):
             change_needed = True
             boot_firmware_required = True
 
-        if self.vm.config.bootOptions.efiSecureBootEnabled != self.params.get('secure_boot_enabled'):
+        if self.params.get('secure_boot_enabled') is not None:
             if self.params.get('secure_boot_enabled') and self.params.get('boot_firmware') == "bios":
-                self.module.fail_json(msg="EFI secure boot cannot be enabled when boot_firmware = bios, but both are specified")
-
-            # If the user is not specifying boot_firmware, make sure they aren't trying to enable it on a
-            # system with boot_firmware already set to 'bios'
-            if self.params.get('secure_boot_enabled') and \
-               self.params.get('boot_firmware') is None and \
-               self.vm.config.firmware == 'bios':
-                self.module.fail_json(msg="EFI secure boot cannot be enabled when boot_firmware = bios.  VM's boot_firmware currently set to bios")
-
-            kwargs.update({'efiSecureBootEnabled': self.params.get('secure_boot_enabled')})
-            change_needed = True
+                self.module.fail_json(msg="Secure boot cannot be enabled when boot_firmware = bios")
+            elif self.params.get('secure_boot_enabled') and \
+                    self.params.get('boot_firmware') != 'efi' and \
+                    self.vm.config.firmware == 'bios':
+                self.module.fail_json(msg="Secure boot cannot be enabled since the VM's boot firmware is currently set to bios")
+            elif self.vm.config.bootOptions.efiSecureBootEnabled != self.params.get('secure_boot_enabled'):
+                kwargs.update({'efiSecureBootEnabled': self.params.get('secure_boot_enabled')})
+                change_needed = True
 
         changed = False
         results = dict(
@@ -381,7 +377,6 @@ def main():
         ),
         secure_boot_enabled=dict(
             type='bool',
-            default=False,
         ),
         boot_firmware=dict(
             type='str',
