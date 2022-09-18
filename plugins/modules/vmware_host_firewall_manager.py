@@ -41,6 +41,36 @@ options:
     default: []
     type: list
     elements: dict
+    suboptions:
+        name:
+            description:
+            - Rule set name.
+            type: str
+        enabled:
+            description:
+            - Whether the rule set is enabled or not.
+            type: bool
+        allowed_hosts:
+            description:
+            - Define the allowed hosts for this rule set.
+            type: dict
+            suboptions:
+                all_ip:
+                    description:
+                    - Whether all hosts should be allowed or not.
+                    type: bool
+                ip_address:
+                    description:
+                    - List of allowed IP addresses.
+                    type: list
+                    elements: str
+                    default: []
+                ip_network:
+                    description:
+                    - List of allowed IP networks.
+                    type: list
+                    elements: str
+                    default: []
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -235,21 +265,19 @@ class VmwareFirewallManager(PyVmomi):
                                           " %s as it is required parameter." % rule_name)
 
             allowed_hosts = rule_option.get('allowed_hosts', {})
-            ip_addresses = allowed_hosts.get('ip_address', [])
-            ip_networks = allowed_hosts.get('ip_network', [])
+            ip_addresses = allowed_hosts.get('ip_address')
+            ip_networks = allowed_hosts.get('ip_network')
             for ip_address in ip_addresses:
                 try:
                     is_ipaddress(ip_address)
                 except ValueError:
-                    self.module.fail_json(msg="The provided IP address %s is not a valid IP"
-                                              " for the rule %s" % (ip_address, rule_name))
+                    self.module.fail_json(msg="%s is not a valid IP." % ip_address)
 
             for ip_network in ip_networks:
                 try:
                     is_ipaddress(ip_network)
                 except ValueError:
-                    self.module.fail_json(msg="The provided IP network %s is not a valid network"
-                                              " for the rule %s" % (ip_network, rule_name))
+                    self.module.fail_json(msg="%s is not a valid network" % ip_network)
 
     def ensure(self):
         """
@@ -371,7 +399,24 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        rules=dict(type='list', default=list(), required=False, elements='dict'),
+        rules=dict(
+            type='list',
+            default=list(),
+            required=False,
+            elements='dict',
+            options=dict(
+                name=dict(type='str'),
+                enabled=dict(type='bool'),
+                allowed_hosts=dict(
+                    type='dict',
+                    options=dict(
+                        all_ip=dict(type='bool'),
+                        ip_address=dict(type='list', elements='str', default=list()),
+                        ip_network=dict(type='list', elements='str', default=list()),
+                    )
+                ),
+            ),
+        ),
     )
 
     module = AnsibleModule(
