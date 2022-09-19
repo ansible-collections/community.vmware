@@ -7,7 +7,7 @@
     setup_attach_host: true
 
 - name: Enable vvold rule set on all hosts of {{ ccr1 }}
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -37,7 +37,7 @@
     - '{{ esxi2 }}'
 
 - name: Disable vvold for {{ host1 }}
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -64,7 +64,7 @@
     - '{{ esxi1 }}'
 
 - name: Enable vvold rule set on all hosts of {{ ccr1 }} in check mode
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -92,7 +92,7 @@
         - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['desired_state'] == true
 
 - name: Disable vvold for {{ host1 }} in check mode
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -120,7 +120,7 @@
     - '{{ esxi1 }}'
 
 - name: Configure CIMHttpServer rule set on all hosts of {{ ccr1 }}
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -166,7 +166,7 @@
     - '{{ esxi2 }}'
 
 - name: Configure the NFC firewall rule to only allow traffic from one IP on one ESXi host
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -201,7 +201,7 @@
       - nfc_state.allowed_hosts.desired_allowed_networks == []
 
 - name: Ensure we can still pass the allowed_hosts configuration through a list for compat
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -223,7 +223,7 @@
     that:
       - nfc_state.allowed_hosts.current_allowed_ip == ["1.2.3.4"]
 - name: Clean up the firewall rules
-  vmware_host_firewall_manager:
+  community.vmware.vmware_host_firewall_manager:
     cluster_name: '{{ ccr1 }}'
     rules:
         - name: vvold
