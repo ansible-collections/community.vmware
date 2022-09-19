@@ -264,20 +264,19 @@ class VmwareFirewallManager(PyVmomi):
                 self.module.fail_json(msg="Please specify rules.enabled for rule set"
                                           " %s as it is required parameter." % rule_name)
 
-            allowed_hosts = rule_option.get('allowed_hosts', {})
-            ip_addresses = allowed_hosts.get('ip_address')
-            ip_networks = allowed_hosts.get('ip_network')
-            for ip_address in ip_addresses:
-                try:
-                    is_ipaddress(ip_address)
-                except ValueError:
-                    self.module.fail_json(msg="%s is not a valid IP." % ip_address)
+            allowed_hosts = rule_option.get('allowed_hosts')
+            if allowed_hosts is not None:
+                for ip_address in allowed_hosts.get('ip_address'):
+                    try:
+                        is_ipaddress(ip_address)
+                    except ValueError:
+                        self.module.fail_json(msg="%s is not a valid IP." % ip_address)
 
-            for ip_network in ip_networks:
-                try:
-                    is_ipaddress(ip_network)
-                except ValueError:
-                    self.module.fail_json(msg="%s is not a valid network" % ip_network)
+                for ip_network in allowed_hosts.get('ip_network'):
+                    try:
+                        is_ipaddress(ip_network)
+                    except ValueError:
+                        self.module.fail_json(msg="%s is not a valid network" % ip_network)
 
     def ensure(self):
         """
