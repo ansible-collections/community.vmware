@@ -19,7 +19,9 @@
         allowed_hosts:
           all_ip: true
   register: all_hosts_result
+
 - debug: msg="{{ all_hosts_result }}"
+
 - name: ensure everything is changed for all hosts of {{ ccr1 }}
   assert:
     that:
@@ -47,7 +49,9 @@
       - name: vvold
         enabled: false
   register: host_result
+
 - debug: msg="{{ host_result }}"
+
 - name: ensure vvold is disabled for {{ host1 }}
   assert:
     that:
@@ -77,7 +81,9 @@
           all_ip: true
   register: all_hosts_result_check_mode
   check_mode: true
+
 - debug: var=all_hosts_result_check_mode
+
 - name: ensure everything is changed for all hosts of {{ ccr1 }}
   assert:
     that:
@@ -103,7 +109,9 @@
         enabled: false
   register: host_result_check_mode
   check_mode: true
+
 - debug: msg="{{ host_result_check_mode }}"
+
 - name: ensure vvold is disabled for {{ host1 }}
   assert:
         that:
@@ -137,7 +145,9 @@
           ip_network:
             - "192.168.200.0/24"
   register: all_hosts_ip_specific
+
 - debug: var=all_hosts_ip_specific
+
 - name: ensure everything is changed for all hosts of {{ ccr1 }}
   assert:
     that:
@@ -180,10 +190,14 @@
           ip_address:
             - "192.168.100.11"
   register: single_host_ip_specific
+
 - set_fact:
     nfc_state: "{{ single_host_ip_specific.rule_set_state[esxi1]['NFC'] }}"
+
 - debug: var=single_host_ip_specific
+
 - debug: var=nfc_state
+
 - name: ensure NFC is configured on that host
   assert:
     that:
@@ -215,13 +229,17 @@
             ip_address:
               - "1.2.3.4"
   register: using_list
+
 - debug: var=using_list
+
 - set_fact:
     nfc_state: "{{ using_list.rule_set_state[esxi1]['NFC'] }}"
+
 - name: ensure the correct host is set
   assert:
     that:
       - nfc_state.allowed_hosts.current_allowed_ip == ["1.2.3.4"]
+
 - name: Clean up the firewall rules
   community.vmware.vmware_host_firewall_manager:
     cluster_name: '{{ ccr1 }}'
