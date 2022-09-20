@@ -96,7 +96,7 @@
       assert:
         that:
           - all_hosts_result_check_mode.rule_set_state[esxi1]['vvold']['current_state'] == true
-            - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['current_state'] == true
+          - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['current_state'] == true
           - all_hosts_result_check_mode.rule_set_state[esxi2]['vvold']['desired_state'] == true
 
     - name: Disable vvold for {{ host1 }} in check mode
@@ -227,9 +227,9 @@
           - name: NFC
             enabled: true
             allowed_hosts:
-            all_ip: false
-            ip_address:
-              - "1.2.3.4"
+              all_ip: false
+              ip_address:
+                - "1.2.3.4"
       register: using_list
 
     - debug: var=using_list
