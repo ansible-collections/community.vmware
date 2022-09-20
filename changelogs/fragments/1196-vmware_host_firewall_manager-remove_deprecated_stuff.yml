@@ -1,0 +1,3 @@
+removed_features:
+  - vmware_host_firewall_manager - The module doesn't accept a list for `allowed_hosts` anymore.
+  - vmware_host_firewall_manager - The module doesn't accept `allowed_hosts` without defining `all_ip` anymore.
