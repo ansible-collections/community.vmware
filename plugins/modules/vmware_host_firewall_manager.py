@@ -270,13 +270,15 @@ class VmwareFirewallManager(PyVmomi):
                     try:
                         is_ipaddress(ip_address)
                     except ValueError:
-                        self.module.fail_json(msg="%s is not a valid IP." % ip_address)
+                        self.module.fail_json(msg="The provided IP address %s is not a valid IP"
+                                                  " for the rule %s" % (ip_address, rule_name))
 
                 for ip_network in allowed_hosts.get('ip_network'):
                     try:
                         is_ipaddress(ip_network)
                     except ValueError:
-                        self.module.fail_json(msg="%s is not a valid network" % ip_network)
+                        self.module.fail_json(msg="The provided IP network %s is not a valid network"
+                                                  " for the rule %s" % (ip_network, rule_name))
 
     def ensure(self):
         """
@@ -324,10 +326,10 @@ class VmwareFirewallManager(PyVmomi):
                 rule_allowed_ips = set(permitted_networking['allowed_hosts']['ip_address'])
                 rule_allowed_networks = set(permitted_networking['allowed_hosts']['ip_network'])
 
-                allowed_hosts = rule_option.get('allowed_hosts', {})
-                playbook_allows_all = allowed_hosts.get('all_ip', False)
-                playbook_allowed_ips = set(allowed_hosts.get('ip_address', []))
-                playbook_allowed_networks = set(allowed_hosts.get('ip_network', []))
+                allowed_hosts = rule_option.get('allowed_hosts')
+                playbook_allows_all = False if allowed_hosts is None else allowed_hosts.get('all_ip')
+                playbook_allowed_ips = set([]) if allowed_hosts is None else set(allowed_hosts.get('ip_address'))
+                playbook_allowed_networks = set([]) if allowed_hosts is None else set(allowed_hosts.get('ip_network'))
 
                 # compare what is configured on the firewall rule with what the playbook provides
                 allowed_all_ips_different = bool(rule_allows_all != playbook_allows_all)
