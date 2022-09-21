@@ -657,6 +657,8 @@ class PyVmomiHelper(PyVmomi):
         results = dict(changed=False, disk_data=None, disk_changes=dict())
         new_added_disk_ctl = list()
 
+        sharesval = {'low':500,'normal':1000,'high':2000}
+
         # Deal with controller
         for disk in disk_data:
             ctl_found = False
@@ -706,8 +708,32 @@ class PyVmomiHelper(PyVmomi):
                             disk_found = True
                             if disk['state'] == 'present':
                                 disk_spec = vim.vm.device.VirtualDeviceSpec()
-                                # set the operation to edit so that it knows to keep other settings
                                 disk_spec.device = disk_device
+                                # Deal with iolimit. Note that if iolimit is set, you HAVE TO both set limit and shares,
+                                #  or ansible will break with "'NoneType' object is not subscriptable"
+                                if 'iolimit' in disk:
+                                    if disk['iolimit']['limit'] != disk_spec.device.storageIOAllocation.limit:
+                                        # set the operation to edit so that it knows to keep other settings
+                                        disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                                        disk_spec.device.storageIOAllocation.limit = disk['iolimit']['limit']
+                                        self.config_spec.deviceChange.append(disk_spec)
+                                        disk_change = True
+                                        disk_change_list.append(disk_change)
+                                    if 'shares' in disk['iolimit']:
+                                        if (disk['iolimit']['shares']['level'] != 'custom' and \
+                                            sharesval.get(disk['iolimit']['shares']['level'],0) != disk_spec.device.storageIOAllocation.shares.shares) or \
+                                            (disk['iolimit']['shares']['level'] == 'custom' and \
+                                            disk['iolimit']['shares']['level_value'] != disk_spec.device.storageIOAllocation.shares.shares):
+                                            # set the operation to edit so that it knows to keep other settings
+                                            disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+                                            disk_spec.device.storageIOAllocation.shares = vim.SharesInfo()
+                                            disk_spec.device.storageIOAllocation.shares.level = disk['iolimit']['shares']['level']
+                                            if disk_spec.device.storageIOAllocation.shares.level == 'custom':
+                                                disk_spec.device.storageIOAllocation.shares.shares = disk['iolimit']['shares']['level_value']
+                                            self.config_spec.deviceChange.append(disk_spec)
+                                            disk_change = True
+                                            disk_change_list.append(disk_change)
+
                                 # If this is an RDM ignore disk size
                                 if disk['disk_type'] != 'rdm':
                                     if disk['size'] < disk_spec.device.capacityInKB:
@@ -716,6 +742,7 @@ class PyVmomiHelper(PyVmomi):
                                                                   % (disk['disk_index'], disk['size'],
                                                                       disk_spec.device.capacityInKB))
                                     if disk['size'] != disk_spec.device.capacityInKB:
+                                        # set the operation to edit so that it knows to keep other settings
                                         disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
                                         if disk['disk_type'] != 'vpmemdisk':
                                             disk_spec = self.get_ioandshares_diskconfig(disk_spec, disk)
