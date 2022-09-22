@@ -283,6 +283,7 @@ class VmwareTagManager(VmwareRestClient):
             changed=False,
             tag_status=dict(),
         )
+        tag_objs = []
         changed = False
         action = self.params.get('state')
         try:
@@ -297,7 +298,6 @@ class VmwareTagManager(VmwareRestClient):
         results['tag_status']['desired_tags'] = self.tag_names
 
         # Check if category and tag combination exists as per user request
-        removed_tags_for_set = False
         for tag in self.tag_names:
             category_obj, category_name, tag_name = None, None, None
             if isinstance(tag, dict):
@@ -327,7 +327,10 @@ class VmwareTagManager(VmwareRestClient):
             if not tag_obj:
                 self.module.fail_json(msg="Unable to find the tag %s" % tag_name)
 
-            if action in ('add', 'present'):
+            tag_objs.append(tag_obj)
+
+        if action in ('add', 'present'):
+            for tag_obj in tag_objs:
                 if tag_obj not in available_tag_obj:
                     # Tag is not already applied
                     try:
@@ -336,19 +339,27 @@ class VmwareTagManager(VmwareRestClient):
                     except Error as error:
                         self.module.fail_json(msg="%s" % self.get_error_message(error))
 
-            elif action == 'set':
-                # Remove all tags first
-                try:
-                    if not removed_tags_for_set:
-                        for av_tag in available_tag_obj:
-                            self.tag_association_svc.detach(tag_id=av_tag.id, object_id=self.dynamic_managed_object)
-                        removed_tags_for_set = True
-                    self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
-                    changed = True
-                except Error as error:
-                    self.module.fail_json(msg="%s" % self.get_error_message(error))
+        elif action == 'set':
+            for tag_obj in tag_objs:
+                if tag_obj not in available_tag_obj:
+                    # Tag is not already applied
+                    try:
+                        self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
+                        changed = True
+                    except Error as error:
+                        self.module.fail_json(msg="%s" % self.get_error_message(error))
 
-            elif action in ('remove', 'absent'):
+            for av_tag in available_tag_obj:
+                if av_tag not in tag_objs:
+                    # Tag not in the defined list
+                    try:
+                        self.tag_association_svc.detach(tag_id=av_tag.id, object_id=self.dynamic_managed_object)
+                        changed = True
+                    except Error as error:
+                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+
+        elif action in ('remove', 'absent'):
+            for tag_obj in tag_objs:
                 if tag_obj in available_tag_obj:
                     try:
                         self.tag_association_svc.detach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
