@@ -1,5 +1,5 @@
 - name: Delete Tags
-  vmware_tag:
+  community.vmware.vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -10,7 +10,7 @@
   register: delete_tag
 
 - name: Delete Categories
-  vmware_category:
+  community.vmware.vmware_category:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
