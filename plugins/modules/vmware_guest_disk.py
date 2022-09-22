@@ -720,10 +720,10 @@ class PyVmomiHelper(PyVmomi):
                                         disk_change = True
                                         disk_change_list.append(disk_change)
                                     if 'shares' in disk['iolimit']:
-                                        if (disk['iolimit']['shares']['level'] != 'custom' and \
-                                            sharesval.get(disk['iolimit']['shares']['level'], 0) != disk_spec.device.storageIOAllocation.shares.shares) or \
-                                            (disk['iolimit']['shares']['level'] == 'custom' and \
-                                                disk['iolimit']['shares']['level_value'] != disk_spec.device.storageIOAllocation.shares.shares):
+                                        if (disk['iolimit']['shares']['level'] != 'custom' and
+                                            and sharesval.get(disk['iolimit']['shares']['level'], 0) != disk_spec.device.storageIOAllocation.shares.shares) or \
+                                            (disk['iolimit']['shares']['level'] == 'custom'
+                                             and disk['iolimit']['shares']['level_value'] != disk_spec.device.storageIOAllocation.shares.shares):
                                             # set the operation to edit so that it knows to keep other settings
                                             disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
                                             disk_spec.device.storageIOAllocation.shares = vim.SharesInfo()
