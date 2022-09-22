@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_tag_manager - Fix idempotency for state `set` (https://github.com/ansible-collections/community.vmware/issues/1265).
