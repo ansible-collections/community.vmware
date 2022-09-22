@@ -774,7 +774,8 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # NetFlow
         if self.module.params['net_flow'] is not None and \
-                (self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not False or self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']):
+                (self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not False
+                 or self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']):
             return 'update'
         elif self.module.params['net_flow'] is None and \
                 self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not True:
