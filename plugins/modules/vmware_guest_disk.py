@@ -720,7 +720,7 @@ class PyVmomiHelper(PyVmomi):
                                         disk_change = True
                                         disk_change_list.append(disk_change)
                                     if 'shares' in disk['iolimit']:
-                                        if (disk['iolimit']['shares']['level'] != 'custom' and
+                                        if (disk['iolimit']['shares']['level'] != 'custom'
                                             and sharesval.get(disk['iolimit']['shares']['level'], 0) != disk_spec.device.storageIOAllocation.shares.shares) or \
                                             (disk['iolimit']['shares']['level'] == 'custom'
                                              and disk['iolimit']['shares']['level_value'] != disk_spec.device.storageIOAllocation.shares.shares):
