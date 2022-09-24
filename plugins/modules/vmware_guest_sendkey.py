@@ -88,7 +88,6 @@ options:
        delay between keys and/or strings.
      type: int
      default: 0
-     version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

@@ -32,7 +32,6 @@ options:
       required: False
       default: 'normal'
       choices: [ 'debug', 'info', 'normal' ]
-      version_added: '1.9.0'
     template:
       description:
       - The name of template from which VM to be deployed.
@@ -70,7 +69,6 @@ options:
        - Required if I(datastore) is not provided.
        type: str
        required: False
-       version_added: '1.7.0'
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.

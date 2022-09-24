@@ -157,7 +157,6 @@ options:
         secure_boot:
             type: bool
             description: Whether to enable or disable (U)EFI secure boot.
-            version_added: '1.11.0'
         memory_reservation_lock:
             type: bool
             description:
@@ -211,7 +210,6 @@ options:
         iommu:
             type: bool
             description: Flag to specify if I/O MMU is enabled for this virtual machine.
-            version_added: '1.11.0'
   guest_id:
     type: str
     description:
@@ -320,7 +318,6 @@ options:
     - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
     - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
     type: dict
-    version_added: '1.13.0'
     suboptions:
         state:
              type: str
@@ -475,7 +472,6 @@ options:
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
-    version_added: '1.8.0'
   annotation:
     description:
     - A note or annotation to include in the virtual machine.
@@ -572,7 +568,6 @@ options:
             type: bool
             description:
             - Indicates whether the NIC is currently connected.
-            version_added: '1.5.0'
         start_connected:
             type: bool
             description:

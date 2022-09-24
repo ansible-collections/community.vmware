@@ -142,7 +142,6 @@ options:
             teaming_failover_interval: 0,
         }
     network_policy:
-        version_added: '1.11.0'
         description:
             - Dictionary which configures the different default security values for portgroups.
             - If set, these options are inherited by the portgroups of the DVS.

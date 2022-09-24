@@ -51,7 +51,6 @@ options:
         choices:
             - 'static'
             - 'ephemeral'
-        version_added: '1.10.0'
     port_allocation:
         description:
             - Elastic port groups automatically increase or decrease the number of ports as needed.
@@ -62,7 +61,6 @@ options:
         choices:
             - 'elastic'
             - 'fixed'
-        version_added: '1.10.0'
     state:
         description:
             - Determines if the portgroup should be present or not.
@@ -109,7 +107,6 @@ options:
                     - 'allow'
                     - 'drop'
         type: dict
-        version_added: '1.10.0'
     network_policy:
         description:
             - Dictionary which configures the different security values for portgroup.
@@ -168,13 +165,11 @@ options:
                 - List of active uplinks used for load balancing.
                 type: list
                 elements: str
-                version_added: '1.10.0'
             standby_uplinks:
                 description:
                 - List of standby uplinks used for failover.
                 type: list
                 elements: str
-                version_added: '1.10.0'
         default: {
             'notify_switches': True,
             'load_balance_policy': 'loadbalance_srcid',

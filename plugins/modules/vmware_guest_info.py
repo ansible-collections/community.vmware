@@ -82,7 +82,6 @@ options:
      - This parameter is added to maintain backward compatability.
      default: false
      type: bool
-     version_added: '1.4.0'
    schema:
      description:
      - Specify the output schema desired.

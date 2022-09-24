@@ -15,7 +15,6 @@ module: vmware_guest_network
 short_description: Manage network adapters of specified virtual machine in given vCenter infrastructure
 description:
   - This module is used to add, reconfigure, remove network adapter of given virtual machine.
-version_added: '1.0.0'
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 notes:

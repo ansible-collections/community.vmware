@@ -116,7 +116,6 @@ options:
            - The secondary machine holding the RDM uses C(True).
          type: bool
          default: False
-         version_added: '1.17.0'
        compatibility_mode:
          description: Compatibility mode for raw devices. Required when disk type C(type) is set to C(rdm).
          type: str
@@ -151,7 +150,6 @@ options:
          type: str
          choices: ['noSharing', 'physicalSharing', 'virtualSharing']
          default: 'noSharing'
-         version_added: '1.17.0'
        unit_number:
          description:
            - Disk Unit Number.

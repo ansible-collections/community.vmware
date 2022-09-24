@@ -40,7 +40,6 @@ options:
         type: list
         elements: str
     lag_uplinks:
-        version_added: '1.12.0'
         required: False
         type: list
         elements: dict
