@@ -18,7 +18,6 @@ description:
 - Module to manage VMware vCenter infra profile configs.
 - vCenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
-version_added: '1.0.0'
 author:
 - Naveenkumar G P (@ngp)
 requirements:

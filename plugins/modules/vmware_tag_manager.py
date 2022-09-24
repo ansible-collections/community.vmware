@@ -71,7 +71,6 @@ options:
       - Required if C(object_name) is not set.
       required: False
       type: str
-      version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 

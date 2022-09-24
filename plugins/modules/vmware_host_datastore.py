@@ -74,7 +74,6 @@ options:
     - A use case example in I(auto_expand), it can be used to expand a datastore capacity after increasing LUN volume.
     type: bool
     default: True
-    version_added: '1.13.0'
   state:
     description:
     - "present: Mount datastore on host if datastore is absent else do nothing."

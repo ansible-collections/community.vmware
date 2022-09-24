@@ -70,7 +70,6 @@ options:
      - Name of the datacenter.
      - The datacenter to search for a virtual machine.
      type: str
-     version_added: '1.15.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

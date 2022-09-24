@@ -227,7 +227,6 @@ options:
       - A dictionary of advanced settings.
       default: {}
       type: dict
-      version_added: '1.11.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

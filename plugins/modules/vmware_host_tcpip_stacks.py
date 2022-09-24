@@ -16,7 +16,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can be used to modify the TCP/IP stacks configuration.
-version_added: '1.10.0'
 options:
   esxi_hostname:
     description:
@@ -59,7 +58,6 @@ options:
         description:
           - The ipv6 gateway address.
         type: str
-        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -86,7 +84,6 @@ options:
         description:
           - The ipv6 gateway address.
         type: str
-        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -113,7 +110,6 @@ options:
         description:
           - The ipv6 gateway address.
         type: str
-        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.
@@ -140,7 +136,6 @@ options:
         description:
           - The ipv6 gateway address.
         type: str
-        version_added: '1.11.0'
       congestion_algorithm:
         description:
           - The TCP congest control algorithm.

@@ -17,7 +17,6 @@ description:
 - A vSphere storage policy defines metadata that describes storage requirements
   for virtual machines and storage capabilities of storage providers.
 - Currently, only tag-based storage policy creation is supported.
-version_added: '1.0.0'
 author:
 - Dustin Scott (@scottd018)
 options:
