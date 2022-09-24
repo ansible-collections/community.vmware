@@ -68,7 +68,6 @@ options:
      - Tags related to Datastore are shown if set to C(True).
      default: false
      type: bool
-     version_added: '1.16.0'
    properties:
      description:
      - Specify the properties to retrieve.

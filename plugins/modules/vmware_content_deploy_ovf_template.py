@@ -28,7 +28,6 @@ options:
       required: False
       default: 'normal'
       choices: [ 'debug', 'info', 'normal' ]
-      version_added: '1.12.0'
     template:
       description:
       - The name of OVF template from which VM to be deployed.
@@ -41,7 +40,6 @@ options:
       type: str
       required: False
       aliases: ['content_library', 'content_library_src']
-      version_added: '1.5.0'
     name:
       description:
       - The name of the VM to be deployed.
@@ -64,7 +62,6 @@ options:
       - If datastore is not specified, the recommended datastore from this cluster will be used.
       type: str
       required: False
-      version_added: '1.9.0'
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.

@@ -13,7 +13,6 @@ DOCUMENTATION = r'''
 ---
 module: vmware_first_class_disk
 short_description: Manage VMware vSphere First Class Disks
-version_added: '1.7.0'
 description:
     - This module can be used to manage (create, delete, resize) VMware vSphere First Class Disks.
 author:

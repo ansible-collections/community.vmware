@@ -62,7 +62,6 @@ options:
       - If set to C(present), VMs/hosts will be added to the given DRS group.
       - If set to C(absent), VMs/hosts will be removed from the given DRS group.
     type: str
-version_added: '1.7.0'
 '''
 
 EXAMPLES = r'''

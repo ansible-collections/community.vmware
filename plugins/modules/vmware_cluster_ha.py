@@ -176,7 +176,6 @@ options:
       type: str
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartConservative', 'restartAggressive' ]
-      version_added: '1.4.0'
     apd_delay:
       description:
       - The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).
@@ -198,7 +197,6 @@ options:
       type: str
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartAggressive' ]
-      version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

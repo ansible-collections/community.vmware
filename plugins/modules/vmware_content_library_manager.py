@@ -62,7 +62,6 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       required: False
-      version_added: '1.7.0'
     ssl_thumbprint:
       description:
       - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
@@ -72,7 +71,6 @@ options:
         C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
       required: False
-      version_added: '1.7.0'
     update_on_demand:
       description:
       - Whether to download all content on demand.
@@ -82,7 +80,6 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       type: bool
       default: False
-      version_added: '1.7.0'
     state:
       description:
       - The state of content library.
