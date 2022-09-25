@@ -47,7 +47,6 @@ options:
       type: bool
       default: false
     advanced_options:
-      version_added: "1.1.0"
       description:
       - Advanced VSAN Options.
       suboptions:

@@ -47,7 +47,6 @@ options:
      choices: ['summary', 'vsphere']
      default: 'summary'
      type: str
-     version_added: "1.0.0"
    properties:
      description:
        - Specify the properties to retrieve.
@@ -60,7 +59,6 @@ options:
        - Only valid when C(schema) is C(vsphere).
      type: list
      elements: str
-     version_added: "1.0.0"
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

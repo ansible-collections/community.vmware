@@ -19,7 +19,6 @@ description: >
    running in your environment must be ESXi 6.7 or later (Windows guest OS), or 7.0 Update 2 (Linux guest OS).
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-version_added: '1.16.0'
 options:
   name:
     description:

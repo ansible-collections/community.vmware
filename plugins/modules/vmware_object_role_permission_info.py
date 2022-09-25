@@ -30,7 +30,6 @@ options:
     - If provided, actual permissions on the specified object are returned for the principal, instead of roles.
     type: str
     required: False
-    version_added: '1.12.0'
   object_name:
     description:
     - The object name to assigned permission.
@@ -53,7 +52,6 @@ options:
     type: 'str'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: "1.11.0"
 """
 
 EXAMPLES = r"""

@@ -21,7 +21,6 @@ options:
         required: false
         type: str
         aliases: [ 'datacenter_name' ]
-        version_added: '1.6.0'
     cluster_name:
         description:
             - Name of the vSAN cluster.

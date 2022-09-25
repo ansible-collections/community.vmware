@@ -20,7 +20,6 @@ description: >
    for specified guest OS ID.
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-version_added: '1.15.0'
 notes:
 - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
 options:

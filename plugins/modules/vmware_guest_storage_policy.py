@@ -28,7 +28,6 @@ module: vmware_guest_storage_policy
 short_description: Set VM Home and disk(s) storage policy profiles.
 description:
     - This module can be used to enforce storage policy profiles per disk and/or VM Home on a virtual machine.
-version_added: 1.9.0
 author:
     - Tyler Gates (@tgates81)
 options:

@@ -35,7 +35,6 @@ options:
     required: True
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: '1.11.0'
 """
 
 

@@ -36,14 +36,12 @@ options:
             - This parameter is required if C(cluster) or C(parent_resource_pool) is not specified.
             - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
         type: str
-        version_added: '1.5.0'
     parent_resource_pool:
         description:
             - Name of the parent resource pool.
             - This parameter is required if C(cluster) or C(esxi_hostname) is not specified.
             - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
         type: str
-        version_added: '1.9.0'
     resource_pool:
         description:
             - Resource pool name to manage.
@@ -81,7 +79,6 @@ options:
             - This value is only set if I(cpu_shares) is set to C(custom).
         type: int
         default: 4000
-        version_added: '1.4.0'
     mem_expandable_reservations:
         description:
             - In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.
@@ -114,7 +111,6 @@ options:
             - This value is only set if I(mem_shares) is set to C(custom).
         type: int
         default: 163840
-        version_added: '1.4.0'
     state:
         description:
             - Add or remove the resource pool
