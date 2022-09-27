@@ -14,6 +14,7 @@ DOCUMENTATION = r'''
 ---
 module: vmware_datastore
 short_description: Configure Datastores
+version_added: '3.0.0'
 description:
     - Configure Storage I/O Control Settings of a Datastore.
 author:
