@@ -11,7 +11,7 @@
     setup_datastore: true
 
 - name: Configure Storage I/O Control
-  vmware_datastore_info:
+  vmware_datastore:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -28,7 +28,7 @@
       - config_storage_io_control is changed
 
 - name: Configure Storage I/O Control again (idempotency)
-  vmware_datastore_info:
+  vmware_datastore:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
