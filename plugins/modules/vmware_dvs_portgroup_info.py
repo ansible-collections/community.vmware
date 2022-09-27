@@ -138,7 +138,6 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec,
     PyVmomi,
-    dvs_supports_mac_learning,
     get_all_objs,
     find_dvs_by_name)
 from ansible.module_utils.six.moves.urllib.parse import unquote
@@ -195,7 +194,6 @@ class DVSPortgroupInfoManager(PyVmomi):
         dvs_lists = self.dvsls
         result = dict()
         for dvs in dvs_lists:
-            switch_supports_mac_learning = dvs_supports_mac_learning(dvs)
             result[dvs.name] = list()
             for dvs_pg in dvs.portgroup:
                 mac_learning = dict()
@@ -216,22 +214,14 @@ class DVSPortgroupInfoManager(PyVmomi):
                 else:
                     port_allocation = 'fixed'
 
-                # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
                 if self.module.params['show_network_policy']:
-                    if switch_supports_mac_learning and dvs_pg.config.defaultPortConfig.macManagementPolicy:
-                        network_policy = dict(
-                            forged_transmits=dvs_pg.config.defaultPortConfig.macManagementPolicy.forgedTransmits,
-                            promiscuous=dvs_pg.config.defaultPortConfig.macManagementPolicy.allowPromiscuous,
-                            mac_changes=dvs_pg.config.defaultPortConfig.macManagementPolicy.macChanges
-                        )
-                    elif dvs_pg.config.defaultPortConfig.securityPolicy:
-                        network_policy = dict(
-                            forged_transmits=dvs_pg.config.defaultPortConfig.securityPolicy.forgedTransmits.value,
-                            promiscuous=dvs_pg.config.defaultPortConfig.securityPolicy.allowPromiscuous.value,
-                            mac_changes=dvs_pg.config.defaultPortConfig.securityPolicy.macChanges.value
-                        )
+                    network_policy = dict(
+                        forged_transmits=dvs_pg.config.defaultPortConfig.macManagementPolicy.forgedTransmits,
+                        promiscuous=dvs_pg.config.defaultPortConfig.macManagementPolicy.allowPromiscuous,
+                        mac_changes=dvs_pg.config.defaultPortConfig.macManagementPolicy.macChanges
+                    )
 
-                if self.module.params['show_mac_learning'] and switch_supports_mac_learning:
+                if self.module.params['show_mac_learning']:
                     macLearningPolicy = dvs_pg.config.defaultPortConfig.macManagementPolicy.macLearningPolicy
                     mac_learning = dict(
                         allow_unicast_flooding=macLearningPolicy.allowUnicastFlooding,
