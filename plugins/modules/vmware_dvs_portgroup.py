@@ -394,7 +394,6 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    dvs_supports_mac_learning,
     find_dvs_by_name,
     find_dvspg_by_name,
     vmware_argument_spec,
@@ -479,30 +478,23 @@ class VMwareDvsPortgroup(PyVmomi):
 
         config.defaultPortConfig.vlan.inherited = False
 
-        # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
-        if dvs_supports_mac_learning(self.dv_switch):
-            config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
-            config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
-            config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
-            config.defaultPortConfig.macManagementPolicy.macChanges = self.module.params['network_policy']['mac_changes']
+        config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
+        config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
+        config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
+        config.defaultPortConfig.macManagementPolicy.macChanges = self.module.params['network_policy']['mac_changes']
 
-            macLearning = self.module.params['mac_learning']
-            if macLearning:
-                macLearningPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacLearningPolicy()
-                if macLearning['allow_unicast_flooding'] is not None:
-                    macLearningPolicy.allowUnicastFlooding = macLearning['allow_unicast_flooding']
-                if macLearning['enabled'] is not None:
-                    macLearningPolicy.enabled = macLearning['enabled']
-                if macLearning['limit'] is not None:
-                    macLearningPolicy.limit = macLearning['limit']
-                if macLearning['limit_policy']:
-                    macLearningPolicy.limitPolicy = macLearning['limit_policy']
-                config.defaultPortConfig.macManagementPolicy.macLearningPolicy = macLearningPolicy
-        else:
-            config.defaultPortConfig.securityPolicy = vim.dvs.VmwareDistributedVirtualSwitch.SecurityPolicy()
-            config.defaultPortConfig.securityPolicy.allowPromiscuous = vim.BoolPolicy(value=self.module.params['network_policy']['promiscuous'])
-            config.defaultPortConfig.securityPolicy.forgedTransmits = vim.BoolPolicy(value=self.module.params['network_policy']['forged_transmits'])
-            config.defaultPortConfig.securityPolicy.macChanges = vim.BoolPolicy(value=self.module.params['network_policy']['mac_changes'])
+        macLearning = self.module.params['mac_learning']
+        if macLearning:
+            macLearningPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacLearningPolicy()
+            if macLearning['allow_unicast_flooding'] is not None:
+                macLearningPolicy.allowUnicastFlooding = macLearning['allow_unicast_flooding']
+            if macLearning['enabled'] is not None:
+                macLearningPolicy.enabled = macLearning['enabled']
+            if macLearning['limit'] is not None:
+                macLearningPolicy.limit = macLearning['limit']
+            if macLearning['limit_policy']:
+                macLearningPolicy.limitPolicy = macLearning['limit_policy']
+            config.defaultPortConfig.macManagementPolicy.macLearningPolicy = macLearningPolicy
 
         # Teaming Policy
         teamingPolicy = vim.dvs.VmwareDistributedVirtualSwitch.UplinkPortTeamingPolicy()
@@ -723,28 +715,21 @@ class VMwareDvsPortgroup(PyVmomi):
             if defaultPortConfig.vlan.vlanId != int(self.module.params['vlan_id']):
                 return 'update'
 
-        # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
-        if dvs_supports_mac_learning(self.dv_switch):
-            if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
-                    defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
-                    defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:
-                return 'update'
+        if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
+                defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
+                defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:
+            return 'update'
 
-            macLearning = self.module.params['mac_learning']
-            if macLearning:
-                macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
-                if macLearning['allow_unicast_flooding'] is not None and macLearningPolicy.allowUnicastFlooding != macLearning['allow_unicast_flooding']:
-                    return 'update'
-                if macLearning['enabled'] is not None and macLearningPolicy.enabled != macLearning['enabled']:
-                    return 'update'
-                if macLearning['limit'] is not None and macLearningPolicy.limit != macLearning['limit']:
-                    return 'update'
-                if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
-                    return 'update'
-        else:
-            if defaultPortConfig.securityPolicy.allowPromiscuous.value != self.module.params['network_policy']['promiscuous'] or \
-                    defaultPortConfig.securityPolicy.forgedTransmits.value != self.module.params['network_policy']['forged_transmits'] or \
-                    defaultPortConfig.securityPolicy.macChanges.value != self.module.params['network_policy']['mac_changes']:
+        macLearning = self.module.params['mac_learning']
+        if macLearning:
+            macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
+            if macLearning['allow_unicast_flooding'] is not None and macLearningPolicy.allowUnicastFlooding != macLearning['allow_unicast_flooding']:
+                return 'update'
+            if macLearning['enabled'] is not None and macLearningPolicy.enabled != macLearning['enabled']:
+                return 'update'
+            if macLearning['limit'] is not None and macLearningPolicy.limit != macLearning['limit']:
+                return 'update'
+            if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
                 return 'update'
 
         # Teaming Policy
