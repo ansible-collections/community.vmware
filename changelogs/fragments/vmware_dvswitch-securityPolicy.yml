@@ -1,0 +1,2 @@
+breaking_changes:
+  - vmware_dvswitch - Remove support for vSphere API less than 6.7.
