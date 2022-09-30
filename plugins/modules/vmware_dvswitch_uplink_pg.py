@@ -268,7 +268,7 @@ class VMwareDvSwitchUplinkPortgroup(PyVmomi):
         uplink_pg_policy_spec.shapingOverrideAllowed = False
         uplink_pg_policy_spec.livePortMovingAllowed = False
         uplink_pg_policy_spec.uplinkTeamingOverrideAllowed = False
-        uplink_pg_policy_spec.securityPolicyOverrideAllowed = False
+        uplink_pg_policy_spec.macManagementOverrideAllowed = False
         uplink_pg_policy_spec.networkResourcePoolOverrideAllowed = False
         # Check policies
         if uplink_pg_config.policy.portConfigResetAtDisconnect != self.uplink_pg_reset:
