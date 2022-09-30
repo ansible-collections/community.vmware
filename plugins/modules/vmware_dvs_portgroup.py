@@ -520,7 +520,7 @@ class VMwareDvsPortgroup(PyVmomi):
         config.policy.livePortMovingAllowed = self.module.params['port_policy']['live_port_move']
         config.policy.networkResourcePoolOverrideAllowed = self.module.params['port_policy']['network_rp_override']
         config.policy.portConfigResetAtDisconnect = self.module.params['port_policy']['port_config_reset_at_disconnect']
-        config.policy.securityPolicyOverrideAllowed = self.module.params['port_policy']['security_override']
+        config.policy.macManagementOverrideAllowed = self.module.params['port_policy']['security_override']
         config.policy.shapingOverrideAllowed = self.module.params['port_policy']['shaping_override']
         config.policy.trafficFilterOverrideAllowed = self.module.params['port_policy']['traffic_filter_override']
         config.policy.uplinkTeamingOverrideAllowed = self.module.params['port_policy']['uplink_teaming_override']
@@ -815,7 +815,7 @@ class VMwareDvsPortgroup(PyVmomi):
                 policy.livePortMovingAllowed != self.module.params['port_policy']['live_port_move'] or \
                 policy.networkResourcePoolOverrideAllowed != self.module.params['port_policy']['network_rp_override'] or \
                 policy.portConfigResetAtDisconnect != self.module.params['port_policy']['port_config_reset_at_disconnect'] or \
-                policy.securityPolicyOverrideAllowed != self.module.params['port_policy']['security_override'] or \
+                policy.macManagementOverrideAllowed != self.module.params['port_policy']['security_override'] or \
                 policy.shapingOverrideAllowed != self.module.params['port_policy']['shaping_override'] or \
                 policy.trafficFilterOverrideAllowed != self.module.params['port_policy']['traffic_filter_override'] or \
                 policy.uplinkTeamingOverrideAllowed != self.module.params['port_policy']['uplink_teaming_override'] or \

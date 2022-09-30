@@ -251,7 +251,7 @@ class DVSPortgroupInfoManager(PyVmomi):
                         live_port_move=dvs_pg.config.policy.livePortMovingAllowed,
                         network_rp_override=dvs_pg.config.policy.networkResourcePoolOverrideAllowed,
                         port_config_reset_at_disconnect=dvs_pg.config.policy.portConfigResetAtDisconnect,
-                        security_override=dvs_pg.config.policy.securityPolicyOverrideAllowed,
+                        security_override=dvs_pg.config.policy.macManagementOverrideAllowed,
                         shaping_override=dvs_pg.config.policy.shapingOverrideAllowed,
                         traffic_filter_override=dvs_pg.config.policy.trafficFilterOverrideAllowed,
                         uplink_teaming_override=dvs_pg.config.policy.uplinkTeamingOverrideAllowed,
