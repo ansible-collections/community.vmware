@@ -111,24 +111,20 @@ options:
         description:
             - Dictionary which configures the different security values for portgroup.
         suboptions:
+            inherited:
+                type: bool
+                description: Inherit the settings from the switch or not.
+                required: True
             promiscuous:
                 type: bool
-                description: Indicates whether promiscuous mode is allowed.
-                default: False
+                description: Indicates whether promiscuous mode is allowed. Ignored if C(inherited) is true.
             forged_transmits:
                 type: bool
-                description: Indicates whether forged transmits are allowed.
-                default: False
+                description: Indicates whether forged transmits are allowed. Ignored if C(inherited) is true.
             mac_changes:
                 type: bool
-                description: Indicates whether mac changes are allowed.
-                default: False
+                description: Indicates whether mac changes are allowed. Ignored if C(inherited) is true.
         required: False
-        default: {
-            promiscuous: False,
-            forged_transmits: False,
-            mac_changes: False,
-        }
         type: dict
     teaming_policy:
         description:
@@ -478,13 +474,18 @@ class VMwareDvsPortgroup(PyVmomi):
 
         config.defaultPortConfig.vlan.inherited = False
 
-        config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
-        config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
-        config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
-        config.defaultPortConfig.macManagementPolicy.macChanges = self.module.params['network_policy']['mac_changes']
+        if self.module.params['network_policy'] is not None:
+            config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
+            config.defaultPortConfig.macManagementPolicy.inherited = self.module.params['network_policy']['inherited']
+            if not self.module.params['network_policy']['inherited']:
+                config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.module.params['network_policy']['promiscuous']
+                config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.module.params['network_policy']['forged_transmits']
+                config.defaultPortConfig.macManagementPolicy.macChanges = self.module.params['network_policy']['mac_changes']
 
         macLearning = self.module.params['mac_learning']
         if macLearning:
+            if config.defaultPortConfig.macManagementPolicy is None:
+                config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
             macLearningPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacLearningPolicy()
             if macLearning['allow_unicast_flooding'] is not None:
                 macLearningPolicy.allowUnicastFlooding = macLearning['allow_unicast_flooding']
@@ -715,10 +716,14 @@ class VMwareDvsPortgroup(PyVmomi):
             if defaultPortConfig.vlan.vlanId != int(self.module.params['vlan_id']):
                 return 'update'
 
-        if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
-                defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
-                defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:
-            return 'update'
+        if self.module.params['network_policy'] is not None:
+            if defaultPortConfig.macManagementPolicy.inherited != self.module.params['network_policy']['inherited']:
+                return 'update'
+            if not self.module.params['network_policy']['inherited']:
+                if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.module.params['network_policy']['promiscuous'] or \
+                        defaultPortConfig.macManagementPolicy.forgedTransmits != self.module.params['network_policy']['forged_transmits'] or \
+                        defaultPortConfig.macManagementPolicy.macChanges != self.module.params['network_policy']['mac_changes']:
+                    return 'update'
 
         macLearning = self.module.params['mac_learning']
         if macLearning:
@@ -855,15 +860,14 @@ def main():
             network_policy=dict(
                 type='dict',
                 options=dict(
-                    promiscuous=dict(type='bool', default=False),
-                    forged_transmits=dict(type='bool', default=False),
-                    mac_changes=dict(type='bool', default=False)
+                    inherited=dict(type='bool', required=True),
+                    promiscuous=dict(type='bool'),
+                    forged_transmits=dict(type='bool'),
+                    mac_changes=dict(type='bool')
                 ),
-                default=dict(
-                    promiscuous=False,
-                    forged_transmits=False,
-                    mac_changes=False
-                )
+                required_if=[
+                    ('inherited', False, ('promiscuous', 'forged_transmits', 'mac_changes'))
+                ],
             ),
             in_traffic_shaping=dict(
                 type='dict',
