@@ -148,6 +148,10 @@ options:
         num_cpu_cores_per_socket:
             type: int
             description: Number of Cores Per Socket.
+        cpu_share_level:
+            type: str
+            choices: [ 'low', 'normal', 'high', 'custom' ]
+            description: The allocation level of CPU resources for the virtual machine.
         scsi:
             type: str
             description:
@@ -174,6 +178,10 @@ options:
             type: int
             description: The amount of memory resource that is guaranteed available to the virtual machine.
             aliases: [ 'memory_reservation' ]
+        mem_share_level:
+            type: str
+            description: The allocation level of memory resources for the virtual machine.
+            choices: [ 'low', 'normal', 'high', 'custom']
         cpu_limit:
             type: int
             description:
@@ -792,6 +800,8 @@ EXAMPLES = r'''
       memory_reservation_lock: True
       mem_limit: 8096
       mem_reservation: 4096
+      cpu_share_level: "high"
+      mem_share_level: "high"
       cpu_limit: 8096
       cpu_reservation: 4096
       max_connections: 5
@@ -1194,6 +1204,26 @@ class PyVmomiHelper(PyVmomi):
         rai_change_detected = False
         memory_allocation = vim.ResourceAllocationInfo()
         cpu_allocation = vim.ResourceAllocationInfo()
+
+        memory_shares_info = vim.SharesInfo()
+        cpu_shares_info = vim.SharesInfo()
+
+        mem_share_level = self.params['hardware']['mem_share_level']
+        if mem_share_level is not None:
+            memory_shares_info.level = mem_share_level
+            memory_allocation.shares = memory_shares_info
+
+            if vm_obj is None or \
+                memory_allocation.shares.level != vm_obj.config.memoryAllocation.shares.level:
+                rai_change_detected = True
+
+        cpu_share_level = self.params['hardware']['cpu_share_level']
+        if cpu_share_level is not None:
+            cpu_shares_info.level = cpu_share_level
+            cpu_allocation.shares = cpu_shares_info
+            if vm_obj is None or \
+                cpu_allocation.shares.level != vm_obj.config.cpuAllocation.shares.level:
+                rai_change_detected = True
 
         mem_limit = self.params['hardware']['mem_limit']
         if mem_limit is not None:
@@ -3295,6 +3325,8 @@ def main():
                 hotremove_cpu=dict(type='bool'),
                 max_connections=dict(type='int'),
                 mem_limit=dict(type='int'),
+                cpu_share_level=dict(type='str'),
+                mem_share_level=dict(type='str'),
                 mem_reservation=dict(type='int', aliases=['memory_reservation']),
                 memory_mb=dict(type='int'),
                 memory_reservation_lock=dict(type='bool'),
