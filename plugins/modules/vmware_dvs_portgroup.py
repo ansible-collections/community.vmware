@@ -250,7 +250,15 @@ options:
         description:
             - Indicate whether or not the virtual machine IP traffic that flows through a vds gets analyzed by sending reports to a NetFlow collector.
         required: False
-        type: bool
+        type: 'str'
+        choices:
+        - 'true'
+        - 'on'
+        - 'yes'
+        - 'false'
+        - 'off'
+        - 'no'
+        - 'inherited'
         version_added: '2.3.0'
     in_traffic_shaping:
         description:
@@ -392,6 +400,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     find_dvs_by_name,
     find_dvspg_by_name,
+    is_boolean,
+    is_truthy,
     vmware_argument_spec,
     wait_for_task)
 
@@ -529,12 +539,14 @@ class VMwareDvsPortgroup(PyVmomi):
         config.policy.vlanOverrideAllowed = self.module.params['port_policy']['vlan_override']
 
         # NetFlow
-        config.defaultPortConfig.ipfixEnabled = vim.BoolPolicy()
-        if self.module.params['net_flow']:
-            config.defaultPortConfig.ipfixEnabled.inherited = False
-            config.defaultPortConfig.ipfixEnabled.value = self.module.params['net_flow']
-        else:
-            config.defaultPortConfig.ipfixEnabled.inherited = True
+        net_flow = self.module.params['net_flow']
+        if net_flow is not None:
+            config.defaultPortConfig.ipfixEnabled = vim.BoolPolicy()
+            if is_boolean(net_flow):
+                config.defaultPortConfig.ipfixEnabled.inherited = False
+                config.defaultPortConfig.ipfixEnabled.value = is_truthy(net_flow)
+            else:
+                config.defaultPortConfig.ipfixEnabled.inherited = True
 
         # Ingress traffic shaping
         config.defaultPortConfig.inShapingPolicy = vim.dvs.DistributedVirtualPort.TrafficShapingPolicy()
@@ -758,13 +770,14 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'update'
 
         # NetFlow
-        if self.module.params['net_flow'] is not None and \
-                (self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not False
-                 or self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != self.module.params['net_flow']):
-            return 'update'
-        elif self.module.params['net_flow'] is None and \
-                self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not True:
-            return 'update'
+        net_flow = self.module.params['net_flow']
+        if net_flow is not None:
+            if is_boolean(net_flow) and \
+                    (self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not False
+                     or self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.value != is_truthy(net_flow)):
+                return 'update'
+            elif self.dvs_portgroup.config.defaultPortConfig.ipfixEnabled.inherited is not True:
+                return 'update'
 
         # Ingress traffic shaping
         if self.module.params['in_traffic_shaping'] is not None and \
@@ -887,7 +900,18 @@ def main():
                     burst_size=dict(type='int'),
                 ),
             ),
-            net_flow=dict(type='bool'),
+            net_flow=dict(
+                type='str',
+                choices=[
+                    'true',
+                    'on',
+                    'yes',
+                    'false',
+                    'off',
+                    'no',
+                    'inherited',
+                ],
+            ),
             teaming_policy=dict(
                 type='dict',
                 options=dict(
