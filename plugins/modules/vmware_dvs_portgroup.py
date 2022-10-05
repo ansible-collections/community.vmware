@@ -904,7 +904,7 @@ def main():
                     burst_size=dict(type='int'),
                 ),
                 required_if=[
-                    ('inherited', False, ('average_bandwidth', 'peak_bandwith', 'burst_size'))
+                    ('inherited', False, ('average_bandwidth', 'peak_bandwidth', 'burst_size'))
                 ],
             ),
             out_traffic_shaping=dict(
