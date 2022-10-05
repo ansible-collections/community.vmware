@@ -395,6 +395,7 @@ EXAMPLES = r'''
     port_binding: static
     state: present
     network_policy:
+      inherited: false
       promiscuous: true
       forged_transmits: true
       mac_changes: true
