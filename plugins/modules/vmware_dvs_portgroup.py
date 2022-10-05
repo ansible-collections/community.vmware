@@ -294,20 +294,32 @@ options:
     out_traffic_shaping:
         description:
             - Dictionary which configures the egress traffic shaping settings for the portgroup.
-            - If not set the values get inherit.
         suboptions:
+            inherited:
+                type: bool
+                description:
+                - Inherit the settings from the switch or not.
+                required: True
             enabled:
                 type: bool
-                description: Indicates whether egress traffic shaping is activated or not.
+                description:
+                - Indicates whether egress traffic shaping is activated or not.
+                - Ignored if C(inherited) is true.
             average_bandwidth:
                 type: int
-                description: Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
+                description:
+                - Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
+                - Ignored if C(inherited) is true.
             burst_size:
                 type: int
-                description: The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.
+                description:
+                - The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.
+                - Ignored if C(inherited) is true.
             peak_bandwidth:
                 type: int
-                description: The maximum number of bytes to allow in a burst.
+                description:
+                - The maximum number of bytes to allow in a burst.
+                - Ignored if C(inherited) is true.
         required: False
         type: dict
         version_added: '2.3.0'
@@ -600,30 +612,32 @@ class VMwareDvsPortgroup(PyVmomi):
         config.defaultPortConfig.outShapingPolicy.peakBandwidth = vim.LongPolicy()
         config.defaultPortConfig.outShapingPolicy.enabled = vim.BoolPolicy()
 
-        if self.module.params['out_traffic_shaping']:
-            config.defaultPortConfig.outShapingPolicy.inherited = False
+        out_traffic_shaping = self.module.params['out_traffic_shaping']
+        if out_traffic_shaping is not None:
+            if out_traffic_shaping['inherited'] is False:
+                config.defaultPortConfig.outShapingPolicy.inherited = False
 
-            # enabled
-            config.defaultPortConfig.outShapingPolicy.enabled.inherited = False
-            config.defaultPortConfig.outShapingPolicy.enabled.value = self.module.params['out_traffic_shaping']['enabled']
+                # enabled
+                config.defaultPortConfig.outShapingPolicy.enabled.inherited = False
+                config.defaultPortConfig.outShapingPolicy.enabled.value = out_traffic_shaping['enabled']
 
-            # adverage bandwidth
-            config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited = False
-            config.defaultPortConfig.outShapingPolicy.averageBandwidth.value = self.module.params['out_traffic_shaping']['average_bandwidth'] * 1000
+                # adverage bandwidth
+                config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited = False
+                config.defaultPortConfig.outShapingPolicy.averageBandwidth.value = out_traffic_shaping['average_bandwidth'] * 1000
 
-            # burst size
-            config.defaultPortConfig.outShapingPolicy.burstSize.inherited = False
-            config.defaultPortConfig.outShapingPolicy.burstSize.value = self.module.params['out_traffic_shaping']['burst_size'] * 1024
+                # burst size
+                config.defaultPortConfig.outShapingPolicy.burstSize.inherited = False
+                config.defaultPortConfig.outShapingPolicy.burstSize.value = out_traffic_shaping['burst_size'] * 1024
 
-            # peak bandwidth
-            config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited = False
-            config.defaultPortConfig.outShapingPolicy.peakBandwidth.value = self.module.params['out_traffic_shaping']['peak_bandwidth'] * 1000
-        else:
-            config.defaultPortConfig.outShapingPolicy.inherited = True
-            config.defaultPortConfig.outShapingPolicy.enabled.inherited = True
-            config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited = True
-            config.defaultPortConfig.outShapingPolicy.burstSize.inherited = True
-            config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited = True
+                # peak bandwidth
+                config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited = False
+                config.defaultPortConfig.outShapingPolicy.peakBandwidth.value = out_traffic_shaping['peak_bandwidth'] * 1000
+            else:
+                config.defaultPortConfig.outShapingPolicy.inherited = True
+                config.defaultPortConfig.outShapingPolicy.enabled.inherited = True
+                config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited = True
+                config.defaultPortConfig.outShapingPolicy.burstSize.inherited = True
+                config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited = True
 
         # PG Type
         if self.module.params['port_binding'] == 'ephemeral':
@@ -815,28 +829,27 @@ class VMwareDvsPortgroup(PyVmomi):
                 return 'update'
 
         # Egress traffic shaping
-        if self.module.params['out_traffic_shaping'] is not None and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not False and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not False and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.value != \
-                self.module.params['out_traffic_shaping']['enabled'] and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not False and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.value != \
-                (self.module.params['out_traffic_shaping']['average_bandwidth'] * 1000) and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not False and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.value != \
-                (self.module.params['out_traffic_shaping']['burst_size'] * 1024) and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not False and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.value != \
-                (self.module.params['out_traffic_shaping']['peak_bandwidth'] * 1000):
-            return 'update'
-        elif self.module.params['out_traffic_shaping'] is None and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not True and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not True and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not True and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not True and \
-                self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not True:
-            return 'update'
+        out_traffic_shaping = self.module.params['out_traffic_shaping']
+        if out_traffic_shaping is not None:
+            if out_traffic_shaping['inherited'] is False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.value != out_traffic_shaping['enabled'] and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.value != \
+                    (out_traffic_shaping['average_bandwidth'] * 1000) and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.value != (out_traffic_shaping['burst_size'] * 1024) and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not False and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.value != (out_traffic_shaping['peak_bandwidth'] * 1000):
+                return 'update'
+            elif self.module.params['out_traffic_shaping'] is None and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.inherited is not True and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.enabled.inherited is not True and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.averageBandwidth.inherited is not True and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.burstSize.inherited is not True and \
+                    self.dvs_portgroup.config.defaultPortConfig.outShapingPolicy.peakBandwidth.inherited is not True:
+                return 'update'
 
         # PG policy (advanced_policy)
         policy = self.dvs_portgroup.config.policy
@@ -910,11 +923,15 @@ def main():
             out_traffic_shaping=dict(
                 type='dict',
                 options=dict(
+                    inherited=dict(type='bool', required=True),
                     enabled=dict(type='bool'),
                     average_bandwidth=dict(type='int'),
                     peak_bandwidth=dict(type='int'),
                     burst_size=dict(type='int'),
                 ),
+                required_if=[
+                    ('inherited', False, ('average_bandwidth', 'peak_bandwidth', 'burst_size'))
+                ],
             ),
             net_flow=dict(
                 type='str',
