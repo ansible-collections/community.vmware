@@ -1,2 +1,4 @@
 removed_features:
   - vmware_guest_vnc - The deprecated module ``vmware_guest_vnc`` has been removed.
+    The VNC support has been dropped with vSphere 7 and later
+    (https://github.com/ansible-collections/community.vmware/pull/1454).

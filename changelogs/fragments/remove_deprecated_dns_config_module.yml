@@ -1,2 +1,2 @@
 removed_features:
-  - vmware_dns_config - The deprecated module ``vmware_dns_config`` has been removed, can use ``vmware_host_dns`` instead.
+  - vmware_dns_config - The deprecated module ``vmware_dns_config`` has been removed, you can use ``vmware_host_dns`` instead.

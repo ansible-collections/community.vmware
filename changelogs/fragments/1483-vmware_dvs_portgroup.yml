@@ -1,9 +1,17 @@
 breaking_changes:
-  - vmware_dvs_portgroup - Remove the default for `network_policy` and add a new sub-option `inherited`
+  - vmware_dvs_portgroup - Remove the default for `network_policy` and add a new sub-option `inherited`.
+    This means you can keep the setting as-is by not defining the parameter,
+    but also that you have to define the setting as not `inherited` if you want to override it at the PG level
     (https://github.com/ansible-collections/community.vmware/pull/1483).
-  - vmware_dvs_portgroup - Change the type of `net_flow` to string to allow setting it implicitly to inherited or to keep the value as-is
+  - vmware_dvs_portgroup - Change the type of `net_flow` to string to allow setting it implicitly to inherited or to keep the value as-is.
+    This means you can keep the setting as-is by not defining the parameter,
+    but also that while `true` or `no` still work, `True` or `Off` (uppercase) won't
     (https://github.com/ansible-collections/community.vmware/pull/1483).
-  - vmware_dvs_portgroup - Add a new sub-option `inherited` to the `in_traffic_shaping` parameter
+  - vmware_dvs_portgroup - Add a new sub-option `inherited` to the `in_traffic_shaping` parameter.
+    This means you can keep the setting as-is by not defining the parameter,
+    but also that you have to define the setting as not `inherited` if you want to override it at the PG level
     (https://github.com/ansible-collections/community.vmware/pull/1483).
-  - vmware_dvs_portgroup - Add a new sub-option `inherited` to the `out_traffic_shaping` parameter
+  - vmware_dvs_portgroup - Add a new sub-option `inherited` to the `out_traffic_shaping` parameter.
+    This means you can keep the setting as-is by not defining the parameter,
+    but also that you have to define the setting as not `inherited` if you want to override it at the PG level
     (https://github.com/ansible-collections/community.vmware/pull/1483).
