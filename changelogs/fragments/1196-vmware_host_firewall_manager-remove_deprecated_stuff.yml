@@ -1,3 +1,3 @@
 removed_features:
-  - vmware_host_firewall_manager - The module doesn't accept a list for `allowed_hosts` anymore.
-  - vmware_host_firewall_manager - The module doesn't accept `allowed_hosts` without defining `all_ip` anymore.
+  - vmware_host_firewall_manager - The module doesn't accept a list for ``allowed_hosts`` anymore, use a dict instead.
+    Additionally, ``all_ip`` is now a required sub-option of ``allowed_hosts`` (https://github.com/ansible-collections/community.vmware/pull/1463).
