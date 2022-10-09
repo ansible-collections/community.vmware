@@ -8,7 +8,6 @@ community.vmware.vmware_guest_instant_clone
 **Instant Clone VM**
 
 
-Version added: 1.9.0
 
 .. contents::
    :local:
@@ -102,7 +101,6 @@ Parameters
                         <span style="color: purple">list</span>
                          / <span style="color: purple">elements=dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
                 </td>
                 <td>
                 </td>
@@ -497,7 +495,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -517,7 +514,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">300</div>

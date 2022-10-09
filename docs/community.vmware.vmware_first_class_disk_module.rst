@@ -8,7 +8,6 @@ community.vmware.vmware_first_class_disk
 **Manage VMware vSphere First Class Disks**
 
 
-Version added: 1.7.0
 
 .. contents::
    :local:
