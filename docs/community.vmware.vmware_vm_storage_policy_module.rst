@@ -8,7 +8,6 @@ community.vmware.vmware_vm_storage_policy
 **Create vSphere storage policies**
 
 
-Version added: 1.0.0
 
 .. contents::
    :local:

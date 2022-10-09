@@ -8,7 +8,6 @@ community.vmware.vmware_vm_config_option
 **Return supported guest ID list and VM recommended config option for specific guest OS**
 
 
-Version added: 1.15.0
 
 .. contents::
    :local:

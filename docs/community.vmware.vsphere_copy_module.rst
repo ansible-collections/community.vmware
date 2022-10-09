@@ -78,7 +78,6 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: host</div>
                 </td>
             </tr>
             <tr>
@@ -216,7 +215,7 @@ Parameters
                         <div>The username of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: login</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
                 </td>
             </tr>
             <tr>
