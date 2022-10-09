@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_dvs_portgroup - Fix update of NetFlow Setting (https://github.com/ansible-collections/community.vmware/pull/1443).

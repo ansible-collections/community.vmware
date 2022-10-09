@@ -8,7 +8,6 @@ community.vmware.vmware_vc_infraprofile_info
 **List and Export VMware vCenter infra profile configs.**
 
 
-Version added: 1.0.0
 
 .. contents::
    :local:

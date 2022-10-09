@@ -63,7 +63,6 @@ Parameters
                 </td>
                 <td>
                         <div>Dictionary which configures the ingress traffic shaping settings for the portgroup.</div>
-                        <div>If not set the values get inherit.</div>
                 </td>
             </tr>
                                 <tr>
@@ -80,6 +79,7 @@ Parameters
                 </td>
                 <td>
                         <div>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
             <tr>
@@ -96,6 +96,7 @@ Parameters
                 </td>
                 <td>
                         <div>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
             <tr>
@@ -116,6 +117,28 @@ Parameters
                 </td>
                 <td>
                         <div>Indicates whether ingress traffic shaping is activated or not.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
                 </td>
             </tr>
             <tr>
@@ -132,6 +155,7 @@ Parameters
                 </td>
                 <td>
                         <div>The maximum number of bytes to allow in a burst.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
 
@@ -143,7 +167,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
                 <td>
                 </td>
@@ -234,14 +257,19 @@ Parameters
                     <b>net_flow</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
+                        <span style="color: purple">string</span>
                     </div>
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
+                                    <li>true</li>
+                                    <li>on</li>
                                     <li>yes</li>
+                                    <li>false</li>
+                                    <li>off</li>
+                                    <li>no</li>
+                                    <li>inherited</li>
                         </ul>
                 </td>
                 <td>
@@ -258,7 +286,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">{"forged_transmits": false, "mac_changes": false, "promiscuous": false}</div>
                 </td>
                 <td>
                         <div>Dictionary which configures the different security values for portgroup.</div>
@@ -276,12 +303,33 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Indicates whether forged transmits are allowed.</div>
+                        <div>Indicates whether forged transmits are allowed. Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
                 </td>
             </tr>
             <tr>
@@ -296,12 +344,12 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Indicates whether mac changes are allowed.</div>
+                        <div>Indicates whether mac changes are allowed. Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
             <tr>
@@ -316,12 +364,12 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Indicates whether promiscuous mode is allowed.</div>
+                        <div>Indicates whether promiscuous mode is allowed. Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
 
@@ -354,7 +402,6 @@ Parameters
                 </td>
                 <td>
                         <div>Dictionary which configures the egress traffic shaping settings for the portgroup.</div>
-                        <div>If not set the values get inherit.</div>
                 </td>
             </tr>
                                 <tr>
@@ -371,6 +418,7 @@ Parameters
                 </td>
                 <td>
                         <div>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
             <tr>
@@ -387,6 +435,7 @@ Parameters
                 </td>
                 <td>
                         <div>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
             <tr>
@@ -407,6 +456,28 @@ Parameters
                 </td>
                 <td>
                         <div>Indicates whether egress traffic shaping is activated or not.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
                 </td>
             </tr>
             <tr>
@@ -423,6 +494,7 @@ Parameters
                 </td>
                 <td>
                         <div>The maximum number of bytes to allow in a burst.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
                 </td>
             </tr>
 
@@ -470,7 +542,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -494,7 +565,6 @@ Parameters
                         <span style="color: purple">string</span>
                          / <span style="color: red">required</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -856,7 +926,6 @@ Parameters
                         <span style="color: purple">list</span>
                          / <span style="color: purple">elements=string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
                 <td>
                 </td>
@@ -958,7 +1027,6 @@ Parameters
                         <span style="color: purple">list</span>
                          / <span style="color: purple">elements=string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.10.0</div>
                 </td>
                 <td>
                 </td>
@@ -1149,6 +1217,7 @@ Examples
         port_binding: static
         state: present
         network_policy:
+          inherited: false
           promiscuous: true
           forged_transmits: true
           mac_changes: true

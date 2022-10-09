@@ -8,7 +8,6 @@ community.vmware.vmware_host_passthrough
 **Manage PCI device passthrough settings on host**
 
 
-Version added: 1.11.0
 
 .. contents::
    :local:

@@ -8,7 +8,6 @@ community.vmware.vmware_host_sriov
 **Manage SR-IOV settings on host**
 
 
-Version added: 1.0.0
 
 .. contents::
    :local:

@@ -8,7 +8,6 @@ community.vmware.vmware_guest_storage_policy
 **Set VM Home and disk(s) storage policy profiles.**
 
 
-Version added: 1.9.0
 
 .. contents::
    :local:
