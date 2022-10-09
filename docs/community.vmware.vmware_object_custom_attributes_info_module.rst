@@ -8,7 +8,6 @@ community.vmware.vmware_object_custom_attributes_info
 **Gather custom attributes of an object**
 
 
-Version added: 1.11.0
 
 .. contents::
    :local:

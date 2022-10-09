@@ -61,7 +61,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>

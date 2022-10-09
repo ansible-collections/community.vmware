@@ -8,7 +8,6 @@ community.vmware.vmware_recommended_datastore
 **Returns the recommended datastore from a SDRS-enabled datastore cluster**
 
 
-Version added: 1.11.0
 
 .. contents::
    :local:
