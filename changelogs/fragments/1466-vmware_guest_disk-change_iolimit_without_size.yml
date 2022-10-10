@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_disk - Adding `iolimit` modifications of an existing disk without changing size (https://github.com/ansible-collections/community.vmware/pull/1466).

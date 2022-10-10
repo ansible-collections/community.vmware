@@ -1,2 +1,0 @@
-bugfixes:
-  - Fix required ansible-core version (https://github.com/ansible-collections/community.vmware/issues/1480).

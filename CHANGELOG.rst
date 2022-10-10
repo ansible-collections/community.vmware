@@ -5,6 +5,21 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.10.0
+=======
+
+Minor Changes
+-------------
+
+- vmware_guest_disk - Adding `iolimit` modifications of an existing disk without changing size (https://github.com/ansible-collections/community.vmware/pull/1466).
+
+Bugfixes
+--------
+
+- Fix required ansible-core version (https://github.com/ansible-collections/community.vmware/issues/1480).
+- vmware_dvs_portgroup - Fix update of NetFlow Setting (https://github.com/ansible-collections/community.vmware/pull/1443).
+- vmware_tag_manager - Fix idempotency for state `set` (https://github.com/ansible-collections/community.vmware/issues/1265).
+
 v2.9.1
 ======
 
