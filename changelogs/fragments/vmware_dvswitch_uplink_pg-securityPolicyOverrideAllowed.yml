@@ -1,2 +1,0 @@
-breaking_changes:
-  - vmware_dvswitch_uplink_pg - Remove support for vSphere API less than 6.7.

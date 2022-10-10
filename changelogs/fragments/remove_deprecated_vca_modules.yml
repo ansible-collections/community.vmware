@@ -1,4 +1,0 @@
-removed_features:
-  - vca_fw - The deprecated module ``vca_fw`` has been removed.
-  - vca_nat - The deprecated module ``vca_nat`` has been removed.
-  - vca_vapp - The deprecated module ``vca_vapp`` has been removed.
