@@ -1137,6 +1137,21 @@ releases:
       name: vmware_host_user_manager
       namespace: ''
     release_date: '2022-02-16'
+  2.10.0:
+    changes:
+      bugfixes:
+      - Fix required ansible-core version (https://github.com/ansible-collections/community.vmware/issues/1480).
+      - vmware_dvs_portgroup - Fix update of NetFlow Setting (https://github.com/ansible-collections/community.vmware/pull/1443).
+      - vmware_tag_manager - Fix idempotency for state `set` (https://github.com/ansible-collections/community.vmware/issues/1265).
+      minor_changes:
+      - vmware_guest_disk - Adding `iolimit` modifications of an existing disk without
+        changing size (https://github.com/ansible-collections/community.vmware/pull/1466).
+    fragments:
+    - 1265-vmware_tag_manager-set_idempotency.yml
+    - 1443-vmware_dvs_portgroup-update_netflow_not_work.yaml
+    - 1466-vmware_guest_disk-change_iolimit_without_size.yml
+    - 1481-required_ansible_version.yml
+    release_date: '2022-10-10'
   2.2.0:
     changes:
       bugfixes:
