@@ -623,6 +623,14 @@ options:
             description:
             - Specifies whether the hardware clock is in UTC or local time.
             - Specific to Linux customization.
+        script_text:
+            type: str
+            description:
+            - Script to run with shebang.
+            - Needs to be enabled in vmware tools with vmware-toolbox-cmd config set deployPkg enable-custom-scripts true
+            - https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-9A5093A5-C54F-4502-941B-3F9C0F573A39.html
+            - Specific to Linux customization.
+            version_added: '3.1.0'
         autologon:
             type: bool
             description:
@@ -869,6 +877,9 @@ EXAMPLES = r'''
       dns_suffix:
         - example.com
         - example2.com
+      script_text: |
+        #!/bin/bash
+        touch /tmp/touch-from-playbook
   delegate_to: localhost
 
 - name: Rename a virtual machine (requires the virtual machine's uuid)
@@ -2268,6 +2279,8 @@ class PyVmomiHelper(PyVmomi):
                 ident.timeZone = self.params['customization']['timezone']
             if self.params['customization']['hwclockUTC'] is not None:
                 ident.hwClockUTC = self.params['customization']['hwclockUTC']
+            if self.params['customization']['script_text'] is not None:
+                ident.scriptText = self.params['customization']['script_text']
 
         self.customspec = vim.vm.customization.Specification()
         self.customspec.nicSettingMap = adaptermaps
@@ -3339,6 +3352,7 @@ def main():
                 password=dict(type='str', no_log=True),
                 productid=dict(type='str'),
                 runonce=dict(type='list', elements='str'),
+                script_text=dict(type='str'),
                 timezone=dict(type='str')
             )),
         customization_spec=dict(type='str', default=None),
