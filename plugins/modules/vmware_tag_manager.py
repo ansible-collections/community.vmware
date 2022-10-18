@@ -319,7 +319,9 @@ class VmwareTagManager(VmwareRestClient):
                     # User specified only tag
                     tag_name = tag
 
-            if category_name:
+            if category_obj:
+                tag_obj = self.get_tag_by_category(tag_name=tag_name, category_id=category_obj.id)
+            elif category_name:
                 tag_obj = self.get_tag_by_category(tag_name=tag_name, category_name=category_name)
             else:
                 tag_obj = self.get_tag_by_name(tag_name=tag_name)
