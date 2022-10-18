@@ -486,29 +486,32 @@ class VmwareRestClient(object):
 
         return self.search_svc_object_by_name(service=self.api_client.tagging.Category, svc_obj_name=category_name)
 
-    def get_tag_by_category(self, tag_name=None, category_name=None):
+    def get_tag_by_category(self, tag_name=None, category_name=None, category_id=None):
         """
         Return tag object by name and category name specified
         Args:
             tag_name: Name of tag
-            category_name: Name of category
-
+            category_name: Name of category (mutually exclusive with 'category_id')
+            category_id: Id of category, if known in advance (mutually exclusive with 'category_name')
         Returns: Tag object if found else None
         """
 
         if not tag_name:
             return None
 
-        if category_name:
-            category_obj = self.get_category_by_name(category_name=category_name)
+        if category_id or category_name:
+            if not category_id:
+                category_obj = self.get_category_by_name(category_name=category_name)
 
-            if not category_obj:
-                return None
+                if not category_obj:
+                    return None
 
-            for tag_object in self.api_client.tagging.Tag.list():
+                category_id = category_obj.id
+
+            for tag_object in self.api_client.tagging.Tag.list_tags_for_category(category_id):
                 tag_obj = self.api_client.tagging.Tag.get(tag_object)
 
-                if tag_obj.name == tag_name and tag_obj.category_id == category_obj.id:
+                if tag_obj.name == tag_name:
                     return tag_obj
         else:
             return self.search_svc_object_by_name(service=self.api_client.tagging.Tag, svc_obj_name=tag_name)
