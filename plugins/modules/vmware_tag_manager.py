@@ -342,20 +342,20 @@ class VmwareTagManager(VmwareRestClient):
                         self.module.fail_json(msg="%s" % self.get_error_message(error))
 
         elif action == 'set':
-            for tag_obj in tag_objs:
-                if tag_obj not in available_tag_obj:
-                    # Tag is not already applied
-                    try:
-                        self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
-                        changed = True
-                    except Error as error:
-                        self.module.fail_json(msg="%s" % self.get_error_message(error))
-
             for av_tag in available_tag_obj:
                 if av_tag not in tag_objs:
                     # Tag not in the defined list
                     try:
                         self.tag_association_svc.detach(tag_id=av_tag.id, object_id=self.dynamic_managed_object)
+                        changed = True
+                    except Error as error:
+                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+
+            for tag_obj in tag_objs:
+                if tag_obj not in available_tag_obj:
+                    # Tag is not already applied
+                    try:
+                        self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
                         changed = True
                     except Error as error:
                         self.module.fail_json(msg="%s" % self.get_error_message(error))
