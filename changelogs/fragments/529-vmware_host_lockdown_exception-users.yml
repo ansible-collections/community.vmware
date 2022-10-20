@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_host_lockdown - Add option to configure lockdown exception users (https://github.com/ansible-collections/community.vmware/issues/529https://github.com/ansible-collections/community.vmware/issues/529).
+  
