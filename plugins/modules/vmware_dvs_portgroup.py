@@ -206,7 +206,7 @@ options:
                 description:
                 - Indicates if the security policy can be changed per port.
                 default: False
-                aliases: security_override
+                aliases: ['security_override']
                 type: bool
             shaping_override:
                 description:
