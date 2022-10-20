@@ -1,0 +1,195 @@
+# Test code for the vmware_host_lockdown_exceptions module.
+# # Copyright: (c) 2022, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Allow root login in lockdown mode (check mode)
+  community.vmware.vmware_host_lockdown_exceptions: &allow_root
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    exception_users:
+      - "root"
+    state: present
+  check_mode: true
+  register: result_allow_root
+
+- debug:
+    var: result_allow_root
+
+- name: Assert that root would be allowed in lockdown mode
+  assert:
+    that:
+      - result_allow_root is changed
+
+- name: Allow root login in lockdown mode
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *allow_root
+  register: result_allow_root
+
+- debug:
+    var: result_allow_root
+
+- name: Assert that root is allowed in lockdown mode
+  assert:
+    that:
+      - result_allow_root is changed
+
+- name: Allow root login in lockdown mode again (idempotency)
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *allow_root
+  register: result_allow_root
+
+- debug:
+    var: result_allow_root
+
+- name: Assert no changes (idempotency)
+  assert:
+    that:
+      - result_allow_root is not changed
+
+- name: Disallow root login in lockdown mode (check mode)
+  community.vmware.vmware_host_lockdown_exceptions: &disallow_root
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    exception_users:
+      - "root"
+    state: absent
+  check_mode: true
+  register: result_disallow_root
+
+- debug:
+    var: result_disallow_root
+
+- name: Assert that root would be disallowed in lockdown mode
+  assert:
+    that:
+      - result_disallow_root is changed
+
+- name: Disallow root login in lockdown mode
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *disallow_root
+  register: result_disallow_root
+
+- debug:
+    var: result_disallow_root
+
+- name: Assert that root is disallowed in lockdown mode
+  assert:
+    that:
+      - result_disallow_root is changed
+
+- name: Disllow root login in lockdown mode again (idempotency)
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *disallow_root
+  register: result_disallow_root
+
+- debug:
+    var: result_disallow_root
+
+- name: Assert no changes (idempotency)
+  assert:
+    that:
+      - result_disallow_root is not changed
+
+- name: Set the list of exception users to exactly root (check mode)
+  community.vmware.vmware_host_lockdown_exceptions: &set_exception_users
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    exception_users:
+      - "root"
+    state: set
+  check_mode: true
+  register: result_set_exception_users
+
+- debug:
+    var: result_set_exception_users
+
+- name: Assert that root would be allowed in lockdown mode
+  assert:
+    that:
+      - result_set_exception_users is changed
+
+- name: Set the list of exception users to exactly root
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *set_exception_users
+  register: result_set_exception_users
+
+- debug:
+    var: result_set_exception_users
+
+- name: Assert that root is allowed in lockdown mode
+  assert:
+    that:
+      - result_set_exception_users is changed
+
+- name: Set the list of exception users to exactly root again (idempotency)
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *set_exception_users
+  register: result_set_exception_users
+
+- debug:
+    var: result_set_exception_users
+
+- name: Assert no changes (idempotency)
+  assert:
+    that:
+      - result_set_exception_users is not changed
+
+- name: Remove all exception users (check mode)
+  community.vmware.vmware_host_lockdown_exceptions: &remove_all_exception_users
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    exception_users: []
+    state: set
+  check_mode: true
+  register: result_remove_all_exception_users
+
+- debug:
+    var: result_remove_all_exception_users
+
+- name: Assert that all exception users would be removed
+  assert:
+    that:
+      - result_remove_all_exception_users is changed
+
+- name: Remove all exception users
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *remove_all_exception_users
+  register: result_remove_all_exception_users
+
+- debug:
+    var: result_remove_all_exception_users
+
+- name: Assert that all exception users are removed
+  assert:
+    that:
+      - result_remove_all_exception_users is changed
+
+- name: Remove all exception users again (idempotency)
+  community.vmware.vmware_host_lockdown_exceptions:
+    <<: *remove_all_exception_users
+  register: result_remove_all_exception_users
+
+- debug:
+    var: result_remove_all_exception_users
+
+- name: Assert no changes (idempotency)
+  assert:
+    that:
+      - result_remove_all_exception_users is not changed
