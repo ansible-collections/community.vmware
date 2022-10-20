@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
+# Copyright: (c) 2022, Mario Lenz <m@riolenz.de>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,15 +11,15 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: vmware_host_lockdown
-short_description: Manage administrator permission for the local administrative account for the ESXi host
+module: vmware_host_lockdown_exceptions
+version_added: '3.1.0'
+short_description: Manage Lockdown Mode Exception Users
 description:
-- This module can be used to manage administrator permission for the local administrative account for the host when ESXi hostname is given.
+- This module can be used to manage Lockdown Mode Exception Users.
 - All parameters and VMware objects values are case sensitive.
-- This module is destructive as administrator permission are managed using APIs used, please read options carefully and proceed.
 - Please specify C(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 author:
-- Abhijeet Kasurde (@Akasurde)
+- Mario Lenz (@mariolenz)
 options:
   cluster_name:
     description:
@@ -42,61 +42,29 @@ options:
     - If set to C(absent), all host systems will be removed from lockdown mode.
     - If host system is already out of lockdown mode and set to C(absent), no action will be taken.
     default: present
-    choices: [ present, absent ]
+    choices: [ present, absent , set ]
     type: str
+  exception_users:
+    description:
+    - List of Lockdown Mode Exception Users.
+    - To remove all Exception Users, specify the empty list.
+    type: list
+    elements: str
+    required: True
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
 '''
 
 EXAMPLES = r'''
-- name: Enter host system into lockdown mode
+- name: Remove all Lockdown Mode Exception Users on a host
   community.vmware.vmware_host_lockdown:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
-    state: present
-  delegate_to: localhost
-
-- name: Exit host systems from lockdown mode
-  community.vmware.vmware_host_lockdown:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    esxi_hostname: '{{ esxi_hostname }}'
-    state: absent
-  delegate_to: localhost
-
-- name: Enter host systems into lockdown mode
-  community.vmware.vmware_host_lockdown:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    esxi_hostname:
-        - '{{ esxi_hostname_1 }}'
-        - '{{ esxi_hostname_2 }}'
-    state: present
-  delegate_to: localhost
-
-- name: Exit host systems from lockdown mode
-  community.vmware.vmware_host_lockdown:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    esxi_hostname:
-        - '{{ esxi_hostname_1 }}'
-        - '{{ esxi_hostname_2 }}'
-    state: absent
-  delegate_to: localhost
-
-- name: Enter all host system from cluster into lockdown mode
-  community.vmware.vmware_host_lockdown:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    cluster_name: '{{ cluster_name }}'
-    state: present
+    exception_users: []
+    state: set
   delegate_to: localhost
 '''
 
@@ -142,34 +110,42 @@ class VmwareLockdownManager(PyVmomi):
         """
         Function to manage internal state management
         """
-        results = dict(changed=False, host_lockdown_state=dict())
+        results = dict(changed=False, host_lockdown_exceptions=dict())
         change_list = []
         desired_state = self.params.get('state')
+        exception_users = self.params.get('exception_users')
         for host in self.hosts:
-            results['host_lockdown_state'][host.name] = dict(current_state='',
-                                                             desired_state=desired_state,
-                                                             previous_state=''
-                                                             )
+            current_exception_users = host.configManager.hostAccessManager.QueryLockdownExceptions()
+            current_exception_users.sort()
+            new_exception_users = current_exception_users
+            results['host_lockdown_exceptions'][host.name] = dict(previous_exception_users=current_exception_users)
             changed = False
+
+            if desired_state == 'present':
+                for user in exception_users:
+                    if user not in current_exception_users:
+                        new_exception_users.append(user)
+                        changed = True
+            elif desired_state == 'absent':
+                for user in exception_users:
+                    if user in current_exception_users:
+                        new_exception_users.remove(user)
+                        changed = True
+            elif desired_state == 'set':
+                if set(current_exception_users) != set(exception_users):
+                    new_exception_users = exception_users
+                    changed = True
+
+            new_exception_users.sort()
+            results['host_lockdown_exceptions'][host.name]['desired_exception_users'] = new_exception_users
+
             try:
-                if host.config.adminDisabled:
-                    results['host_lockdown_state'][host.name]['previous_state'] = 'present'
-                    if desired_state == 'absent':
-                        if not self.module.check_mode:
-                            host.ExitLockdownMode()
-                        results['host_lockdown_state'][host.name]['current_state'] = 'absent'
-                        changed = True
-                    else:
-                        results['host_lockdown_state'][host.name]['current_state'] = 'present'
-                elif not host.config.adminDisabled:
-                    results['host_lockdown_state'][host.name]['previous_state'] = 'absent'
-                    if desired_state == 'present':
-                        if not self.module.check_mode:
-                            host.EnterLockdownMode()
-                        results['host_lockdown_state'][host.name]['current_state'] = 'present'
-                        changed = True
-                    else:
-                        results['host_lockdown_state'][host.name]['current_state'] = 'absent'
+                if not self.module.check_mode:
+                    host.configManager.hostAccessManager.UpdateLockdownExceptions(new_exception_users)
+                    results['host_lockdown_exceptions'][host.name]['current_exception_users'] = new_exception_users
+                else:
+                    results['host_lockdown_exceptions'][host.name]['current_exception_users'] = current_exception_users
+
             except vim.fault.HostConfigFault as host_config_fault:
                 self.module.fail_json(msg="Failed to manage lockdown mode for esxi"
                                           " hostname %s : %s" % (host.name, to_native(host_config_fault.msg)))
@@ -193,7 +169,8 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='list', required=False, elements='str'),
-        state=dict(type='str', default='present', choices=['present', 'absent'], required=False),
+        exception_users=dict(type='list', required=True, elements='str'),
+        state=dict(type='str', default='present', choices=['present', 'absent', 'set'], required=False),
     )
 
     module = AnsibleModule(
