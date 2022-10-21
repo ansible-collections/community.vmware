@@ -117,7 +117,7 @@ class VmwareLockdownManager(PyVmomi):
         for host in self.hosts:
             current_exception_users = host.configManager.hostAccessManager.QueryLockdownExceptions()
             current_exception_users.sort()
-            new_exception_users = current_exception_users
+            new_exception_users = current_exception_users.copy()
             results['host_lockdown_exceptions'][host.name] = dict(previous_exception_users=current_exception_users)
             changed = False
 
