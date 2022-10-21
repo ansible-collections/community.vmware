@@ -24,30 +24,27 @@ options:
   cluster_name:
     description:
     - Name of cluster.
-    - All host systems from given cluster used to manage lockdown.
+    - All host systems from given cluster used to manage exception users.
     - Required parameter, if C(esxi_hostname) is not set.
     type: str
   esxi_hostname:
     description:
-    - List of ESXi hostname to manage lockdown.
+    - List of ESXi hostname to manage exception users.
     - Required parameter, if C(cluster_name) is not set.
-    - See examples for specifications.
     type: list
     elements: str
   state:
     description:
-    - State of hosts system
-    - If set to C(present), all host systems will be set in lockdown mode.
-    - If host system is already in lockdown mode and set to C(present), no action will be taken.
-    - If set to C(absent), all host systems will be removed from lockdown mode.
-    - If host system is already out of lockdown mode and set to C(absent), no action will be taken.
+    - If C(present), make sure the given users are defined as Lockdown Mode Exception Users.
+    - If C(absent), make sure the given users are NO Lockdown Mode Exception Users.
+    - If C(set), will replace Lockdown Mode Exception Users defined list of users.
     default: present
     choices: [ present, absent , set ]
     type: str
   exception_users:
     description:
     - List of Lockdown Mode Exception Users.
-    - To remove all Exception Users, specify the empty list.
+    - To remove all Exception Users, I(state=set) the empty list.
     type: list
     elements: str
     required: True
@@ -70,15 +67,17 @@ EXAMPLES = r'''
 
 RETURN = r'''
 results:
-    description: metadata about state of Host system lock down
+    description: metadata about exception users of Host systems
     returned: always
     type: dict
     sample: {
-                "host_lockdown_state": {
+                "host_lockdown_exceptions": {
                     "DC0_C0": {
-                        "current_state": "present",
-                        "previous_state": "absent",
-                        "desired_state": "present",
+                        "current_exception_users": [],
+                        "desired_exception_users": [],
+                        "previous_exception_users": [
+                            "root"
+                        ]
                     },
                 }
             }
