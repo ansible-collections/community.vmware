@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_file_operation - Add a new parameter for timeout(https://github.com/ansible-collections/community.vmware/pull/1513).
