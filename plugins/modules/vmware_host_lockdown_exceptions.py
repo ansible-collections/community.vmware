@@ -137,24 +137,22 @@ class VmwareLockdownManager(PyVmomi):
 
             new_exception_users.sort()
             results['host_lockdown_exceptions'][host.name]['desired_exception_users'] = new_exception_users
+            results['host_lockdown_exceptions'][host.name]['current_exception_users'] = new_exception_users
 
-            try:
-                if not self.module.check_mode:
+            if not self.module.check_mode:
+                try:
                     host.configManager.hostAccessManager.UpdateLockdownExceptions(new_exception_users)
-                    results['host_lockdown_exceptions'][host.name]['current_exception_users'] = new_exception_users
-                else:
-                    results['host_lockdown_exceptions'][host.name]['current_exception_users'] = current_exception_users
 
-            except vim.fault.HostConfigFault as host_config_fault:
-                self.module.fail_json(msg="Failed to manage lockdown mode for esxi"
-                                          " hostname %s : %s" % (host.name, to_native(host_config_fault.msg)))
-            except vim.fault.AdminDisabled as admin_disabled:
-                self.module.fail_json(msg="Failed to manage lockdown mode as administrator "
-                                          "permission has been disabled for "
-                                          "esxi hostname %s : %s" % (host.name, to_native(admin_disabled.msg)))
-            except Exception as generic_exception:
-                self.module.fail_json(msg="Failed to manage lockdown mode due to generic exception for esxi "
-                                          "hostname %s : %s" % (host.name, to_native(generic_exception)))
+                except vim.fault.HostConfigFault as host_config_fault:
+                    self.module.fail_json(msg="Failed to manage lockdown mode for esxi"
+                                              " hostname %s : %s" % (host.name, to_native(host_config_fault.msg)))
+                except vim.fault.AdminDisabled as admin_disabled:
+                    self.module.fail_json(msg="Failed to manage lockdown mode as administrator "
+                                              "permission has been disabled for "
+                                              "esxi hostname %s : %s" % (host.name, to_native(admin_disabled.msg)))
+                except Exception as generic_exception:
+                    self.module.fail_json(msg="Failed to manage lockdown mode due to generic exception for esxi "
+                                              "hostname %s : %s" % (host.name, to_native(generic_exception)))
             change_list.append(changed)
 
         if any(change_list):
