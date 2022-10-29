@@ -204,7 +204,7 @@ EXAMPLES = r'''
         dest: "files/test.zip"
   delegate_to: localhost
 
-- name: If a timeout error occurs, specify any timeout value
+- name: If a timeout error occurs, specify a high(er) timeout value
   community.vmware.vmware_guest_file_operation:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
