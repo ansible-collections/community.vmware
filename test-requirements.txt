@@ -3,6 +3,8 @@ flake8
 selinux_please_lie_to_me
 mock ; python_version < '3.5'
 pytest-xdist
+# Not exactly a test-req, but the CI relies on it.
+pytest-forked
 # We should avoid these two modules with py3
 pytest-mock
 mock
