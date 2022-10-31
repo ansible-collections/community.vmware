@@ -1152,6 +1152,16 @@ releases:
     - 1466-vmware_guest_disk-change_iolimit_without_size.yml
     - 1481-required_ansible_version.yml
     release_date: '2022-10-10'
+  2.10.1:
+    changes:
+      bugfixes:
+      - vmware_tag_manager - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1503).
+      - vmware_tag_manager - Fix an issue that causes a failure when changing a single
+        cardinal tag category (https://github.com/ansible-collections/community.vmware/issues/1501).
+    fragments:
+    - 1501-vmware_tag_manager-Fix_failure_when_changing_single_cardinal_tag_category.yml
+    - 1503-vmware_tag_manager-fix_performance_issue_during_tag_processing.yml
+    release_date: '2022-10-31'
   2.2.0:
     changes:
       bugfixes:
