@@ -1381,3 +1381,34 @@ releases:
       name: vmware_datastore
       namespace: ''
     release_date: '2022-10-10'
+  3.1.0:
+    changes:
+      bugfixes:
+      - vmware_guest_file_operation - Add a new parameter for timeout(https://github.com/ansible-collections/community.vmware/pull/1513).
+      - vmware_tag_manager - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1503).
+      - vmware_tag_manager - Fix an issue that causes a failure when changing a single
+        cardinal tag category (https://github.com/ansible-collections/community.vmware/issues/1501).
+      minor_changes:
+      - vmware_dvs_portgroup - Add deprecaded securityPolicyOverrideAllowed because
+        without it make problems if securityPolicyOverrideAllowed and macManagementOverrideAllowed
+        has not the same value (https://github.com/ansible-collections/community.vmware/pull/1508)
+      - vmware_guest - Adding `script_text` parameter to execute scripts in Linux
+        guests (https://github.com/ansible-collections/community.vmware/pull/1485).
+      - vmware_host_lockdown - Add the ability to enable ``strict`` lockdown mode
+        (https://github.com/ansible-collections/community.vmware/pull/1514).
+      - vmware_host_lockdown - Add two new choices for ``state``, ``disabled`` and
+        ``normal``, to replace ``absent`` and ``present``. Please note that ``absent``
+        and ``present`` will be removed in the next major release (https://github.com/ansible-collections/community.vmware/pull/1514).
+      - vmware_host_lockdown - Replace deprecated vSphere API calls (https://github.com/ansible-collections/community.vmware/pull/1514).
+    fragments:
+    - 1323-vmware_guest_file_operation.yml
+    - 1485-vmware_guest_add_script_text.yml
+    - 1501-vmware_tag_manager-Fix_failure_when_changing_single_cardinal_tag_category.yml
+    - 1503-vmware_tag_manager-fix_performance_issue_during_tag_processing.yml
+    - 1508-vmware_dvs_portgroup.yaml
+    - 1514-vmware_host_lockdown-remove-deprecated-api-calls.yml
+    modules:
+    - description: Manage Lockdown Mode Exception Users
+      name: vmware_host_lockdown_exceptions
+      namespace: ''
+    release_date: '2022-10-31'

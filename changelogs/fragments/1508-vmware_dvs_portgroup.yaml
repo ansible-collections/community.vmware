@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_dvs_portgroup - Add deprecaded securityPolicyOverrideAllowed because without it make problems if securityPolicyOverrideAllowed and macManagementOverrideAllowed has not the same value
-    (https://github.com/ansible-collections/community.vmware/pull/1508)

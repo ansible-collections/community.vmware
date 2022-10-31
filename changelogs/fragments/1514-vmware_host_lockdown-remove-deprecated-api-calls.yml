@@ -1,6 +1,0 @@
-minor_changes:
-  - vmware_host_lockdown - Replace deprecated vSphere API calls (https://github.com/ansible-collections/community.vmware/pull/1514).
-  - vmware_host_lockdown - Add the ability to enable ``strict`` lockdown mode (https://github.com/ansible-collections/community.vmware/pull/1514).
-  - vmware_host_lockdown - Add two new choices for ``state``, ``disabled`` and ``normal``, to replace ``absent`` and ``present``.
-    Please note that ``absent`` and ``present`` will be removed in the next major release
-    (https://github.com/ansible-collections/community.vmware/pull/1514).

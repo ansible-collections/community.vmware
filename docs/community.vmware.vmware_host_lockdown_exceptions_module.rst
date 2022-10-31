@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_host_lockdown_module:
+.. _community.vmware.vmware_host_lockdown_exceptions_module:
 
 
-*************************************
-community.vmware.vmware_host_lockdown
-*************************************
+************************************************
+community.vmware.vmware_host_lockdown_exceptions
+************************************************
 
-**Manage administrator permission for the local administrative account for the ESXi host**
+**Manage Lockdown Mode Exception Users**
 
 
+Version added: 3.1.0
 
 .. contents::
    :local:
@@ -16,9 +17,8 @@ community.vmware.vmware_host_lockdown
 
 Synopsis
 --------
-- This module can be used to manage administrator permission for the local administrative account for the host when ESXi hostname is given.
+- This module can be used to manage Lockdown Mode Exception Users.
 - All parameters and VMware objects values are case sensitive.
-- This module is destructive as administrator permission are managed using APIs used, please read options carefully and proceed.
 - Please specify ``hostname`` as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 
 
@@ -48,7 +48,7 @@ Parameters
                 </td>
                 <td>
                         <div>Name of cluster.</div>
-                        <div>All host systems from given cluster used to manage lockdown.</div>
+                        <div>All host systems from given cluster used to manage exception users.</div>
                         <div>Required parameter, if <code>esxi_hostname</code> is not set.</div>
                 </td>
             </tr>
@@ -65,9 +65,26 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>List of ESXi hostname to manage lockdown.</div>
+                        <div>List of ESXi hostname to manage exception users.</div>
                         <div>Required parameter, if <code>cluster_name</code> is not set.</div>
-                        <div>See examples for specifications.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>exception_users</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of Lockdown Mode Exception Users.</div>
+                        <div>To remove all Exception Users, <em>state=set</em> the empty list.</div>
                 </td>
             </tr>
             <tr>
@@ -168,21 +185,15 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>disabled</li>
-                                    <li><div style="color: blue"><b>normal</b>&nbsp;&larr;</div></li>
-                                    <li>strict</li>
-                                    <li>present</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
                                     <li>absent</li>
+                                    <li>set</li>
                         </ul>
                 </td>
                 <td>
-                        <div>State of hosts system</div>
-                        <div>If set to <code>disabled</code>, all host systems will be removed from lockdown mode.</div>
-                        <div>If host system is already out of lockdown mode and set to <code>disabled</code>, no action will be taken.</div>
-                        <div>If set to <code>normal</code>, all host systems will be set in lockdown mode.</div>
-                        <div>If host system is already in lockdown mode and set to <code>normal</code>, no action will be taken.</div>
-                        <div>If set to <code>strict</code>, all host systems will be set in strict lockdown mode.</div>
-                        <div>If host system is already in strict lockdown mode and set to <code>strict</code>, no action will be taken.</div>
+                        <div>If <code>present</code>, make sure the given users are defined as Lockdown Mode Exception Users.</div>
+                        <div>If <code>absent</code>, make sure the given users are NO Lockdown Mode Exception Users.</div>
+                        <div>If <code>set</code>, will replace Lockdown Mode Exception Users defined list of users.</div>
                 </td>
             </tr>
             <tr>
@@ -242,53 +253,14 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enter host system into lockdown mode
+    - name: Remove all Lockdown Mode Exception Users on a host
       community.vmware.vmware_host_lockdown:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
-        state: normal
-      delegate_to: localhost
-
-    - name: Exit host systems from lockdown mode
-      community.vmware.vmware_host_lockdown:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
-        state: disabled
-      delegate_to: localhost
-
-    - name: Enter host systems into lockdown mode
-      community.vmware.vmware_host_lockdown:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname:
-            - '{{ esxi_hostname_1 }}'
-            - '{{ esxi_hostname_2 }}'
-        state: normal
-      delegate_to: localhost
-
-    - name: Exit host systems from lockdown mode
-      community.vmware.vmware_host_lockdown:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname:
-            - '{{ esxi_hostname_1 }}'
-            - '{{ esxi_hostname_2 }}'
-        state: disabled
-      delegate_to: localhost
-
-    - name: Enter all host system from cluster into lockdown mode
-      community.vmware.vmware_host_lockdown:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
-        state: normal
+        exception_users: []
+        state: set
       delegate_to: localhost
 
 
@@ -316,10 +288,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>always</td>
                 <td>
-                            <div>metadata about state of Host system lock down</div>
+                            <div>metadata about exception users of Host systems</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;host_lockdown_state&#x27;: {&#x27;DC0_C0&#x27;: {&#x27;current_state&#x27;: &#x27;normal&#x27;, &#x27;previous_state&#x27;: &#x27;disabled&#x27;, &#x27;desired_state&#x27;: &#x27;normal&#x27;}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;host_lockdown_exceptions&#x27;: {&#x27;DC0_C0&#x27;: {&#x27;current_exception_users&#x27;: [], &#x27;desired_exception_users&#x27;: [], &#x27;previous_exception_users&#x27;: [&#x27;root&#x27;]}}}</div>
                 </td>
             </tr>
     </table>
@@ -333,4 +305,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Mario Lenz (@mariolenz)

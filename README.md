@@ -179,6 +179,7 @@ Name | Description
 [community.vmware.vmware_host_iscsi_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_iscsi_info_module.rst)|Gather iSCSI configuration information of ESXi host
 [community.vmware.vmware_host_kernel_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_kernel_manager_module.rst)|Manage kernel module options on ESXi hosts
 [community.vmware.vmware_host_lockdown](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_lockdown_module.rst)|Manage administrator permission for the local administrative account for the ESXi host
+[community.vmware.vmware_host_lockdown_exceptions](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_lockdown_exceptions_module.rst)|Manage Lockdown Mode Exception Users
 [community.vmware.vmware_host_logbundle](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_logbundle_module.rst)|Fetch logbundle file from ESXi
 [community.vmware.vmware_host_logbundle_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_logbundle_info_module.rst)|Gathers manifest info for logbundle
 [community.vmware.vmware_host_ntp](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ntp_module.rst)|Manage NTP server configuration of an ESXi host
