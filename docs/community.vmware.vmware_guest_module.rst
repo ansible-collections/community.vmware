@@ -570,6 +570,26 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>script_text</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.1.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Script to run with shebang.</div>
+                        <div>Needs to be enabled in vmware tools with vmware-toolbox-cmd config set deployPkg enable-custom-scripts true</div>
+                        <div>https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-9A5093A5-C54F-4502-941B-3F9C0F573A39.html</div>
+                        <div>Specific to Linux customization.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>timezone</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2430,6 +2450,9 @@ Examples
           dns_suffix:
             - example.com
             - example2.com
+          script_text: |
+            #!/bin/bash
+            touch /tmp/touch-from-playbook
       delegate_to: localhost
 
     - name: Rename a virtual machine (requires the virtual machine's uuid)

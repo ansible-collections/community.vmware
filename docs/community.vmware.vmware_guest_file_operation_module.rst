@@ -416,6 +416,23 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.1.0</div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">100</div>
+                </td>
+                <td>
+                        <div>Timeout seconds for fetching or copying a file.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -583,6 +600,22 @@ Examples
         fetch:
             src: "/root/test.zip"
             dest: "files/test.zip"
+      delegate_to: localhost
+
+    - name: If a timeout error occurs, specify a high(er) timeout value
+      community.vmware.vmware_guest_file_operation:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        vm_id: "{{ guest_name }}"
+        vm_username: "{{ guest_username }}"
+        vm_password: "{{ guest_userpassword }}"
+        timeout: 10000
+        copy:
+            src: "files/test.zip"
+            dest: "/root/test.zip"
+            overwrite: False
       delegate_to: localhost
 
 

@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_tag_manager - Fix an issue that causes a failure when changing a single cardinal tag category (https://github.com/ansible-collections/community.vmware/issues/1501).

@@ -587,7 +587,7 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">{"block_override": true, "ipfix_override": false, "live_port_move": false, "network_rp_override": false, "port_config_reset_at_disconnect": true, "security_override": false, "shaping_override": false, "traffic_filter_override": false, "uplink_teaming_override": false, "vendor_config_override": false, "vlan_override": false}</div>
+                        <b>Default:</b><br/><div style="color: blue">{"block_override": true, "ipfix_override": false, "live_port_move": false, "mac_management_override": false, "network_rp_override": false, "port_config_reset_at_disconnect": true, "shaping_override": false, "traffic_filter_override": false, "uplink_teaming_override": false, "vendor_config_override": false, "vlan_override": false}</div>
                 </td>
                 <td>
                         <div>Dictionary which configures the advanced policy settings for the portgroup.</div>
@@ -657,6 +657,27 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac_management_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the security policy can be changed per port.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: security_override</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>network_rp_override</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -691,26 +712,6 @@ Parameters
                 </td>
                 <td>
                         <div>Indicates if the configuration of a port is reset automatically after disconnect.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>security_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the security policy can be changed per port.</div>
                 </td>
             </tr>
             <tr>
@@ -1227,7 +1228,7 @@ Examples
           live_port_move: true
           network_rp_override: true
           port_config_reset_at_disconnect: true
-          security_override: true
+          mac_management_override: true
           shaping_override: true
           traffic_filter_override: true
           uplink_teaming_override: true
