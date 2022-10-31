@@ -145,7 +145,6 @@ DOCUMENTATION = r'''
           - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
           type: str
           required: False
-          version_added: '1.12.0'
           env:
             - name: VMWARE_PROXY_HOST
         proxy_port:
@@ -153,7 +152,6 @@ DOCUMENTATION = r'''
           - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
           type: int
           required: False
-          version_added: '1.12.0'
           env:
             - name: VMWARE_PROXY_PORT
 '''
