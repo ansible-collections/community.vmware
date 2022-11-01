@@ -22,15 +22,18 @@ options:
     description:
         - AD Domain to join.
     type: str
+    default: ''
     aliases: [ domain, domain_name ]
   ad_user:
     description:
         - Username for AD domain join.
     type: str
+    default: ''
   ad_password:
     description:
         - Password for AD domain join.
     type: str
+    default: ''
   ad_state:
      description:
         - Whether the ESXi host is joined to an AD domain or not.
