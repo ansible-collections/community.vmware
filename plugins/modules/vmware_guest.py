@@ -123,6 +123,7 @@ options:
     type: str
   hardware:
     type: dict
+    default: {}
     description:
     - "Manage virtual machine's hardware attributes."
     - All parameters case sensitive.
@@ -233,6 +234,7 @@ options:
     - 'Attributes C(controller_type), C(controller_number), C(unit_number) are used to configure multiple types of disk
       controllers and disks for creating or reconfiguring virtual machine. Added in Ansible 2.10.'
     type: list
+    default: []
     elements: dict
     suboptions:
         size:
@@ -320,6 +322,7 @@ options:
     - Make sure that the host or the cluster on which the virtual machine resides has available PMem resources.
     - To add or remove virtual NVDIMM device to the existing virtual machine, it must be in power off state.
     type: dict
+    default: {}
     version_added: '1.13.0'
     suboptions:
         state:
@@ -347,6 +350,7 @@ options:
       configuration support.'
     - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
     type: raw
+    default: []
     suboptions:
         type:
             type: str
@@ -475,6 +479,7 @@ options:
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
+    default: []
     version_added: '1.8.0'
   annotation:
     description:
@@ -487,6 +492,7 @@ options:
     - A custom value object takes two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
+    default: []
     type: list
   networks:
     description:
@@ -497,6 +503,7 @@ options:
       They are set by the customization via vmware-tools.
       If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
     type: list
+    default: []
     elements: dict
     suboptions:
         name:
@@ -695,11 +702,13 @@ options:
             - List of commands to run at first user logon.
             - Specific to Windows customization.
     type: dict
+    default: {}
   vapp_properties:
     description:
     - A list of vApp properties.
     - 'For full list of attributes and types refer to: U(https://code.vmware.com/apis/704/vsphere/vim.vApp.PropertyInfo.html)'
     type: list
+    default: []
     elements: dict
     suboptions:
         id:

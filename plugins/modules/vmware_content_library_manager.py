@@ -36,7 +36,6 @@ options:
       - Process of updating content library only allows description change.
       type: str
       required: False
-      default: ''
     library_type:
       description:
       - The content library type.
@@ -61,6 +60,7 @@ options:
       - This is required only if I(library_type) is set to C(subscribed).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
+      default: ''
       required: False
       version_added: '1.7.0'
     ssl_thumbprint:
@@ -71,6 +71,7 @@ options:
       - 'The information can be extracted using openssl using the following example:
         C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
+      default: ''
       required: False
       version_added: '1.7.0'
     update_on_demand:
