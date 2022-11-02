@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_dvs_portgroup - Fix an issue when deleting portgroups (https://github.com/ansible-collections/community.vmware/issues/1522).
