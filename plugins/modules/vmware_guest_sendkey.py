@@ -80,6 +80,7 @@ options:
      - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
      - Values C(HOME) and C(END) are added in version 1.17.0.
      type: list
+     default: []
      elements: str
    sleep_time:
      description:
