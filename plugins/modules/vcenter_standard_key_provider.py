@@ -47,6 +47,7 @@ options:
       - If C(kms_port) is not specified, the default port 5696 will be used.
       - C(kms_ip), C(kms_port) can be reconfigured for an existing KMS with name C(kms_name).
     type: list
+    default: []
     elements: dict
     suboptions:
       kms_name:
