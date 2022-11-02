@@ -628,6 +628,7 @@ class VMwareDvsPortgroup(PyVmomi):
     def process_state(self):
         dvspg_states = {
             'absent': {
+                'update': self.state_destroy_dvspg,
                 'present': self.state_destroy_dvspg,
                 'absent': self.state_exit_unchanged,
             },
