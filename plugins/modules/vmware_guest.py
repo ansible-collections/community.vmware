@@ -148,6 +148,9 @@ options:
         num_cpu_cores_per_socket:
             type: int
             description: Number of Cores Per Socket.
+        vpmc_enabled:
+            type: bool
+            description: Enable virtual CPU Performance Counters.
         scsi:
             type: str
             description:
@@ -1147,6 +1150,7 @@ class PyVmomiHelper(PyVmomi):
         self.relospec = None
         self.change_detected = False  # a change was detected and needs to be applied through reconfiguration
         self.change_applied = False   # a change was applied meaning at least one task succeeded
+        self.tracked_changes = {}     # dict of changes made or would-be-made in check mode, updated when change_applied is set
         self.customspec = None
         self.cache = PyVmomiCache(self.content, dc_name=self.params['datacenter'])
 
@@ -1238,7 +1242,8 @@ class PyVmomiHelper(PyVmomi):
         num_cpus = self.params['hardware']['num_cpus']
         if num_cpus is not None:
             # check VM power state and cpu hot-add/hot-remove state before re-config VM
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and not self.module.check_mode:
                 if not vm_obj.config.cpuHotRemoveEnabled and num_cpus < vm_obj.config.hardware.numCPU:
                     self.module.fail_json(msg="Configured cpu number is less than the cpu number of the VM, "
                                               "cpuHotRemove is not enabled")
@@ -1251,12 +1256,12 @@ class PyVmomiHelper(PyVmomi):
                 if num_cpus % num_cpu_cores_per_socket != 0:
                     self.module.fail_json(msg="hardware.num_cpus attribute should be a multiple "
                                               "of hardware.num_cpu_cores_per_socket")
-                self.configspec.numCoresPerSocket = num_cpu_cores_per_socket
-                if vm_obj is None or self.configspec.numCoresPerSocket != vm_obj.config.hardware.numCoresPerSocket:
+                if vm_obj is None or num_cpu_cores_per_socket != vm_obj.config.hardware.numCoresPerSocket:
                     self.change_detected = True
-            self.configspec.numCPUs = num_cpus
-            if vm_obj is None or self.configspec.numCPUs != vm_obj.config.hardware.numCPU:
+                    self.configspec.numCoresPerSocket = num_cpu_cores_per_socket
+            if vm_obj is None or num_cpus != vm_obj.config.hardware.numCPU:
                 self.change_detected = True
+                self.configspec.numCPUs = num_cpus
         # num_cpu is mandatory for VM creation
         elif vm_creation and not self.params['template']:
             self.module.fail_json(msg="hardware.num_cpus attribute is mandatory for VM creation")
@@ -1268,7 +1273,8 @@ class PyVmomiHelper(PyVmomi):
                 if vm_obj.config.memoryHotAddEnabled and memory_mb < vm_obj.config.hardware.memoryMB:
                     self.module.fail_json(msg="Configured memory is less than memory size of the VM, "
                                               "operation is not supported")
-                elif not vm_obj.config.memoryHotAddEnabled and memory_mb != vm_obj.config.hardware.memoryMB:
+                # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
+                elif not vm_obj.config.memoryHotAddEnabled and memory_mb != vm_obj.config.hardware.memoryMB and not self.module.check_mode:
                     self.module.fail_json(msg="memoryHotAdd is not enabled")
             self.configspec.memoryMB = memory_mb
             if vm_obj is None or self.configspec.memoryMB != vm_obj.config.hardware.memoryMB:
@@ -1279,8 +1285,9 @@ class PyVmomiHelper(PyVmomi):
 
         hotadd_memory = self.params['hardware']['hotadd_memory']
         if hotadd_memory is not None:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                    vm_obj.config.memoryHotAddEnabled != hotadd_memory:
+                    vm_obj.config.memoryHotAddEnabled != hotadd_memory and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd memory operation is not supported when VM is power on")
             self.configspec.memoryHotAddEnabled = hotadd_memory
             if vm_obj is None or self.configspec.memoryHotAddEnabled != vm_obj.config.memoryHotAddEnabled:
@@ -1288,8 +1295,9 @@ class PyVmomiHelper(PyVmomi):
 
         hotadd_cpu = self.params['hardware']['hotadd_cpu']
         if hotadd_cpu is not None:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                    vm_obj.config.cpuHotAddEnabled != hotadd_cpu:
+                    vm_obj.config.cpuHotAddEnabled != hotadd_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd cpu operation is not supported when VM is power on")
             self.configspec.cpuHotAddEnabled = hotadd_cpu
             if vm_obj is None or self.configspec.cpuHotAddEnabled != vm_obj.config.cpuHotAddEnabled:
@@ -1297,8 +1305,9 @@ class PyVmomiHelper(PyVmomi):
 
         hotremove_cpu = self.params['hardware']['hotremove_cpu']
         if hotremove_cpu is not None:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                    vm_obj.config.cpuHotRemoveEnabled != hotremove_cpu:
+                    vm_obj.config.cpuHotRemoveEnabled != hotremove_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotremove cpu operation is not supported when VM is power on")
             self.configspec.cpuHotRemoveEnabled = hotremove_cpu
             if vm_obj is None or self.configspec.cpuHotRemoveEnabled != vm_obj.config.cpuHotRemoveEnabled:
@@ -1308,6 +1317,16 @@ class PyVmomiHelper(PyVmomi):
         if memory_reservation_lock is not None:
             self.configspec.memoryReservationLockedToMax = memory_reservation_lock
             if vm_obj is None or self.configspec.memoryReservationLockedToMax != vm_obj.config.memoryReservationLockedToMax:
+                self.change_detected = True
+
+        vpmc_enabled = self.params['hardware']['vpmc_enabled']
+        if vpmc_enabled is not None:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    vm_obj.config.vPMCEnabled != vpmc_enabled and not self.module.check_mode:
+                self.module.fail_json(msg="Configure vPMC cpu operation is not supported when VM is power on")
+            self.configspec.vPMCEnabled = vpmc_enabled
+            if vm_obj is None or self.configspec.vPMCEnabled != vm_obj.config.vPMCEnabled:
                 self.change_detected = True
 
         boot_firmware = self.params['hardware']['boot_firmware']
@@ -1509,8 +1528,9 @@ class PyVmomiHelper(PyVmomi):
                     self.configspec.deviceChange.append(cdrom_spec)
                 # delete CD-ROM
                 elif cdrom_device and cdrom.get('state') == 'absent':
+                    # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
                     if vm_obj and vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff and \
-                            isinstance(ctl_device, vim.vm.device.VirtualIDEController):
+                            isinstance(ctl_device, vim.vm.device.VirtualIDEController) and not self.module.check_mode:
                         self.module.fail_json(msg='CD-ROM attach to IDE controller not support hot-remove.')
                     cdrom_spec = self.device_helper.remove_cdrom(cdrom_device)
                     self.change_detected = True
@@ -1539,14 +1559,22 @@ class PyVmomiHelper(PyVmomi):
             if temp_version.lower() == 'latest':
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
-                    try:
-                        task = vm_obj.UpgradeVM_Task()
-                        self.wait_for_task(task)
-                        if task.info.state == 'error':
-                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                    except vim.fault.AlreadyUpgraded:
-                        # Don't fail if VM is already upgraded.
-                        pass
+                    # TODO How to get what VMware thinks is the "latest" version to check if already at that version? (for check mode)
+                    # Otherwise, would need to check if "AlreadyUpgraded" exception is thrown, but that would require potentially changing the system.
+                    # For now, simply don't run in check mode and assume changed, with the assumption that users that care about check mode
+                    # will use explicit versions.
+                    self.tracked_changes['hardware.version'] = 'latest'
+                    if self.module.check_mode:
+                        self.change_applied = True
+                    else:
+                        try:
+                            task = vm_obj.UpgradeVM_Task()
+                            self.wait_for_task(task)
+                            if task.info.state == 'error':
+                                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
+                        except vim.fault.AlreadyUpgraded:
+                            # Don't fail if VM is already upgraded.
+                            pass
             else:
                 try:
                     temp_version = int(temp_version)
@@ -1572,15 +1600,19 @@ class PyVmomiHelper(PyVmomi):
                                               " not supported. Please specify version greater"
                                               " than the current version." % (version_digit,
                                                                               temp_version))
-                    new_version = "vmx-%02d" % temp_version
-                    try:
-                        task = vm_obj.UpgradeVM_Task(new_version)
-                        self.wait_for_task(task)
-                        if task.info.state == 'error':
-                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                    except vim.fault.AlreadyUpgraded:
-                        # Don't fail if VM is already upgraded.
-                        pass
+
+                    # Only perform the upgrade if not in check mode.
+                    # self.change_detected was already set above in the self.configspec.version != vm_obj.config.version check above
+                    if not self.module.check_mode:
+                        new_version = "vmx-%02d" % temp_version
+                        try:
+                            task = vm_obj.UpgradeVM_Task(new_version)
+                            self.wait_for_task(task)
+                            if task.info.state == 'error':
+                                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
+                        except vim.fault.AlreadyUpgraded:
+                            # Don't fail if VM is already upgraded.
+                            pass
 
         secure_boot = self.params['hardware']['secure_boot']
         if secure_boot is not None:
@@ -1643,7 +1675,8 @@ class PyVmomiHelper(PyVmomi):
                                           " when state is set to 'absent'.")
             # Reconfigure device requires VM in power off state
             if vm_obj and not vm_obj.config.template:
-                if vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+                # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
+                if vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff and not self.module.check_mode:
                     self.module.fail_json(msg="VM is not in power off state, can not do virtual NVDIMM configuration.")
 
             nvdimm_ctl_exists = False
@@ -2456,6 +2489,7 @@ class PyVmomiHelper(PyVmomi):
                 disk_ctl_spec.device = disk_ctl
             for j in range(0, len(ctl['disk'])):
                 hard_disk = None
+                hard_disk_spec = None
                 hard_disk_exist = False
                 disk_modified = False
                 disk_unit_number = ctl['disk'][j]['unit_number']
@@ -2472,15 +2506,19 @@ class PyVmomiHelper(PyVmomi):
                     hard_disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
                     hard_disk_spec.device = hard_disk
                     disk_modified = self.set_disk_parameters(hard_disk_spec, ctl['disk'][j], reconfigure=True)
-                    self.configspec.deviceChange.append(hard_disk_spec)
                 # if no disk or the specified one not exist do create new disk
                 if len(disk_list) == 0 or not hard_disk_exist:
                     hard_disk = self.device_helper.create_hard_disk(disk_ctl_spec, disk_unit_number)
                     hard_disk.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
                     disk_modified = self.set_disk_parameters(hard_disk, ctl['disk'][j])
-                    self.configspec.deviceChange.append(hard_disk)
+
                 if disk_modified:
                     self.change_detected = True
+                    # Only update the configspec that will be applied in reconfigure_vm if something actually changed
+                    if hard_disk_spec:
+                        self.configspec.deviceChange.append(hard_disk_spec)
+                    if hard_disk:
+                        self.configspec.deviceChange.append(hard_disk)
 
     def configure_disks(self, vm_obj):
         # Ignore empty disk list, this permits to keep disks when deploying a template/cloning a VM
@@ -3062,35 +3100,49 @@ class PyVmomiHelper(PyVmomi):
             self.relospec.pool = self.get_resource_pool()
 
             if self.relospec.pool != self.current_vm_obj.resourcePool:
-                task = self.current_vm_obj.RelocateVM_Task(spec=self.relospec)
-                self.wait_for_task(task)
-                if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'relocate'}
+                self.tracked_changes['resourcePool'] = str(self.relospec.pool)
+                if self.module.check_mode:
+                    self.change_applied = True
+                else:
+                    task = self.current_vm_obj.RelocateVM_Task(spec=self.relospec)
+                    self.wait_for_task(task)
+                    if task.info.state == 'error':
+                        return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'relocate'}
 
         # Only send VMware task if we see a modification
         if self.change_detected:
-            task = None
-            try:
-                task = self.current_vm_obj.ReconfigVM_Task(spec=self.configspec)
-            except vim.fault.RestrictedVersion as e:
-                self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
-                                          " product versioning restrictions: %s" % to_native(e.msg))
-            self.wait_for_task(task)
-            if task.info.state == 'error':
-                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'reconfig'}
+            self.tracked_changes['configspec'] = str(self.configspec)
+            if self.module.check_mode:
+                self.change_applied = True
+            else:
+                task = None
+                try:
+                    task = self.current_vm_obj.ReconfigVM_Task(spec=self.configspec)
+                except vim.fault.RestrictedVersion as e:
+                    self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
+                                              " product versioning restrictions: %s" % to_native(e.msg))
+                self.wait_for_task(task)
+                if task.info.state == 'error':
+                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'reconfig'}
 
         # Rename VM
         if self.params['uuid'] and self.params['name'] and self.params['name'] != self.current_vm_obj.config.name:
-            task = self.current_vm_obj.Rename_Task(self.params['name'])
-            self.wait_for_task(task)
-            if task.info.state == 'error':
-                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'rename'}
+            self.tracked_changes['name'] = self.params['name']
+            if self.module.check_mode:
+              self.change_applied = True
+            else:
+                task = self.current_vm_obj.Rename_Task(self.params['name'])
+                self.wait_for_task(task)
+                if task.info.state == 'error':
+                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'rename'}
 
         # Mark VM as Template
         if self.params['is_template'] and not self.current_vm_obj.config.template:
             try:
-                self.current_vm_obj.MarkAsTemplate()
+                if not self.module.check_mode:
+                    self.current_vm_obj.MarkAsTemplate()
                 self.change_applied = True
+                self.tracked_changes['MarkAsTemplate'] = True
             except vmodl.fault.NotSupported as e:
                 self.module.fail_json(msg="Failed to mark virtual machine [%s] "
                                           "as template: %s" % (self.params['name'], e.msg))
@@ -3105,8 +3157,10 @@ class PyVmomiHelper(PyVmomi):
                 kwargs.update(host=host_system_obj)
 
             try:
-                self.current_vm_obj.MarkAsVirtualMachine(**kwargs)
+                if not self.module.check_mode:
+                  self.current_vm_obj.MarkAsVirtualMachine(**kwargs)
                 self.change_applied = True
+                self.tracked_changes['MarkAsVirtualMachine'] = True
             except vim.fault.InvalidState as invalid_state:
                 self.module.fail_json(msg="Virtual machine is not marked"
                                           " as template : %s" % to_native(invalid_state.msg))
@@ -3134,6 +3188,8 @@ class PyVmomiHelper(PyVmomi):
                 uuid_action_opt.value = "create"
                 self.configspec.extraConfig.append(uuid_action_opt)
 
+            # TODO latent bug? self.change_detected isn't checked again after this
+            # Does the configspec.extraConfig uuid_action_opt append above ever get used?
             self.change_detected = True
 
         # add customize existing VM after VM re-configure
@@ -3142,12 +3198,19 @@ class PyVmomiHelper(PyVmomi):
                 self.module.fail_json(msg="VM is template, not support guest OS customization.")
             if self.current_vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
                 self.module.fail_json(msg="VM is not in poweroff state, can not do guest OS customization.")
-            cus_result = self.customize_exist_vm()
-            if cus_result['failed']:
-                return cus_result
+            # TODO not sure if it is possible to query the current customspec to compare against the one being provided to check in check mode.
+            # Maybe by breaking down the individual fields and querying, but it needs more research.
+            # For now, assume changed...
+            self.tracked_changes['customization'] = True
+            if self.module.check_mode:
+                self.change_applied = True
+            else:
+                cus_result = self.customize_exist_vm()
+                if cus_result['failed']:
+                    return cus_result
 
         vm_facts = self.gather_facts(self.current_vm_obj)
-        return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
+        return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts, 'changes': self.tracked_changes}
 
     def customize_exist_vm(self):
         task = None
@@ -3298,6 +3361,7 @@ def main():
                 hotadd_cpu=dict(type='bool'),
                 hotadd_memory=dict(type='bool'),
                 hotremove_cpu=dict(type='bool'),
+                vpmc_enabled=dict(type='bool'),
                 max_connections=dict(type='int'),
                 mem_limit=dict(type='int'),
                 mem_reservation=dict(type='int', aliases=['memory_reservation']),
@@ -3398,23 +3462,25 @@ def main():
                 set_vm_power_state(pyv.content, vm, 'poweredoff', module.params['force'])
             result = pyv.remove_vm(vm, module.params['delete_from_inventory'])
         elif module.params['state'] == 'present':
-            if module.check_mode:
-                result.update(
-                    vm_name=vm.name,
-                    changed=True,
-                    desired_operation='reconfigure_vm',
-                )
-                module.exit_json(**result)
+            # Note that check_mode is handled inside reconfigure_vm
             result = pyv.reconfigure_vm()
         elif module.params['state'] in ['poweredon', 'powered-on', 'poweredoff',
                                         'powered-off', 'restarted', 'suspended',
                                         'shutdownguest', 'shutdown-guest',
                                         'rebootguest', 'reboot-guest']:
             if module.check_mode:
+                # Identify if the power state would have changed if not in check mode
+                current_powerstate = vm.summary.runtime.powerState.lower()
+                powerstate_will_change = False
+                if ((current_powerstate == 'poweredon' and module.params['state'] not in ['poweredon', 'powered-on']) or
+                    (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off']) or
+                    (current_powerstate == 'suspended' and module.params['state'] != 'suspended')):
+                    powerstate_will_change = True
+
                 result.update(
                     vm_name=vm.name,
-                    changed=True,
-                    current_powerstate=vm.summary.runtime.powerState.lower(),
+                    changed=powerstate_will_change,
+                    current_powerstate=current_powerstate,
                     desired_operation='set_vm_power_state',
                 )
                 module.exit_json(**result)
