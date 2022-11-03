@@ -3129,7 +3129,7 @@ class PyVmomiHelper(PyVmomi):
         if self.params['uuid'] and self.params['name'] and self.params['name'] != self.current_vm_obj.config.name:
             self.tracked_changes['name'] = self.params['name']
             if self.module.check_mode:
-              self.change_applied = True
+                self.change_applied = True
             else:
                 task = self.current_vm_obj.Rename_Task(self.params['name'])
                 self.wait_for_task(task)
@@ -3158,7 +3158,7 @@ class PyVmomiHelper(PyVmomi):
 
             try:
                 if not self.module.check_mode:
-                  self.current_vm_obj.MarkAsVirtualMachine(**kwargs)
+                    self.current_vm_obj.MarkAsVirtualMachine(**kwargs)
                 self.change_applied = True
                 self.tracked_changes['MarkAsVirtualMachine'] = True
             except vim.fault.InvalidState as invalid_state:
@@ -3472,9 +3472,9 @@ def main():
                 # Identify if the power state would have changed if not in check mode
                 current_powerstate = vm.summary.runtime.powerState.lower()
                 powerstate_will_change = False
-                if ((current_powerstate == 'poweredon' and module.params['state'] not in ['poweredon', 'powered-on']) or
-                    (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off']) or
-                    (current_powerstate == 'suspended' and module.params['state'] != 'suspended')):
+                if ((current_powerstate == 'poweredon' and module.params['state'] not in ['poweredon', 'powered-on'])
+                        or (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off'])
+                        or (current_powerstate == 'suspended' and module.params['state'] != 'suspended')):
                     powerstate_will_change = True
 
                 result.update(
