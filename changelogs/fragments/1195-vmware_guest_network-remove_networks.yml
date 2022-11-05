@@ -1,2 +1,0 @@
-removed_features:
-  - vmware_guest_network - The deprecated parameter ``networks`` has been removed.

@@ -8,7 +8,6 @@ community.vmware.vmware_drs_group_manager
 **Manage VMs and Hosts in DRS group.**
 
 
-Version added: 1.7.0
 
 .. contents::
    :local:

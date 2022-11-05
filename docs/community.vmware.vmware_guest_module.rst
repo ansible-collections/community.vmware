@@ -42,7 +42,6 @@ Parameters
                         <span style="color: purple">list</span>
                          / <span style="color: purple">elements=dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.8.0</div>
                 </td>
                 <td>
                 </td>
@@ -565,6 +564,26 @@ Parameters
                 <td>
                         <div>List of commands to run at first user logon.</div>
                         <div>Specific to Windows customization.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>script_text</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.1.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Script to run with shebang.</div>
+                        <div>Needs to be enabled in vmware tools with vmware-toolbox-cmd config set deployPkg enable-custom-scripts true</div>
+                        <div>https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vm_admin.doc/GUID-9A5093A5-C54F-4502-941B-3F9C0F573A39.html</div>
+                        <div>Specific to Linux customization.</div>
                 </td>
             </tr>
             <tr>
@@ -1180,7 +1199,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -1364,7 +1382,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.11.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -1547,7 +1564,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.5.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
@@ -1789,7 +1805,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.13.0</div>
                 </td>
                 <td>
                 </td>
@@ -2435,6 +2450,9 @@ Examples
           dns_suffix:
             - example.com
             - example2.com
+          script_text: |
+            #!/bin/bash
+            touch /tmp/touch-from-playbook
       delegate_to: localhost
 
     - name: Rename a virtual machine (requires the virtual machine's uuid)

@@ -1,2 +1,0 @@
-removed_features:
-  - vmware_guest_vnc - The deprecated module ``vmware_guest_vnc`` has been removed.

@@ -1,2 +1,0 @@
-breaking_changes:
-  - vmware_dvs_portgroup - Remove support for vSphere API less than 6.7.

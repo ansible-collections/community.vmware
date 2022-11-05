@@ -14,7 +14,7 @@
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
     validate_certs: false
-    state: present
+    state: normal
   check_mode: true
   register: result_enable_lockdown
 
@@ -59,7 +59,7 @@
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
     validate_certs: false
-    state: absent
+    state: disabled
   check_mode: true
   register: result_disable_lockdown
 

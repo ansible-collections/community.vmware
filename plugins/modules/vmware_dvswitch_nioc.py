@@ -65,6 +65,7 @@ options:
                 - Ignored unless version is "version3".
                 - Amount of bandwidth resource that is guaranteed available to the host infrastructure traffic class.
                 type: int
+                default: 0
 
             shares_level:
                 description:
@@ -80,6 +81,7 @@ options:
                 type: int
         required: False
         type: list
+        default: []
         elements: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

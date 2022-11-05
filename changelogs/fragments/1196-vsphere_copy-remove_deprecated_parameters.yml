@@ -1,2 +1,0 @@
-removed_features:
-  - vsphere_copy - The deprecated parameters ``host`` and ``login`` have been removed.

@@ -8,7 +8,6 @@ community.vmware.vmware_host_custom_attributes
 **Manage custom attributes from VMware for the given ESXi host**
 
 
-Version added: 1.11.0
 
 .. contents::
    :local:
