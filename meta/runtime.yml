@@ -21,6 +21,8 @@ action_groups:
   - vmware_content_deploy_ovf_template
   - vmware_content_library_info
   - vmware_content_library_manager
+  - vmware_custom_attribute
+  - vmware_custom_attribute_manager
   - vmware_datacenter
   - vmware_datacenter_info
   - vmware_datastore_cluster
