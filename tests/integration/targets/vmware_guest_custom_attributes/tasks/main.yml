@@ -8,6 +8,33 @@
     setup_attach_host: true
     setup_datastore: true
     setup_virtualmachines: true
+
+- name: Add custom attribute to the given virtual machine with check_mode and diff
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: present
+    attributes:
+      - name: 'sample_1'
+        value: 'sample_1_value'
+      - name: 'sample_2'
+        value: 'sample_2_value'
+      - name: 'sample_3'
+        value: 'sample_3_value'
+  check_mode: true
+  diff: true
+  register: guest_info_0001_check_mode_diff
+
+- name: Make sure the target could be changed
+  assert:
+    that:
+      - guest_info_0001_check_mode_diff.changed is sameas true
+
 - name: Add custom attribute to the given virtual machine
   vmware_guest_custom_attributes:
     validate_certs: false
@@ -27,11 +54,13 @@
         value: 'sample_3_value'
   register: guest_info_0001
 
-- debug: var=guest_info_0001
-
-- assert:
+- name: Make sure the target is changed
+  assert:
     that:
-      - guest_info_0001 is changed
+      - guest_info_0001.changed is sameas true
+      - guest_info_0001.custom_attributes.sample_1 == "sample_1_value"
+      - guest_info_0001.custom_attributes.sample_2 == "sample_2_value"
+      - guest_info_0001.custom_attributes.sample_3 == "sample_3_value"
 
 - name: Add custom attribute to the given virtual machine again
   vmware_guest_custom_attributes:
@@ -52,11 +81,34 @@
         value: 'sample_3_value'
   register: guest_info_0002
 
-- debug: var=guest_info_0002
-
-- assert:
+- name: Make sure the task has the idempotency
+  assert:
     that:
       - not (guest_info_0002 is changed)
+      - guest_info_0002.custom_attributes | length == 0
+
+- name: Remove custom attribute to the given virtual machine with check_mode and diff
+  vmware_guest_custom_attributes:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+    folder: "{{ virtual_machines[0].folder }}"
+    state: absent
+    attributes:
+      - name: 'sample_1'
+      - name: 'sample_2'
+      - name: 'sample_3'
+  check_mode: true
+  diff: true
+  register: guest_info_0004_check_mode_diff
+
+- name: Make sure the target could be changed
+  assert:
+    that:
+      - guest_info_0004_check_mode_diff.changed is sameas true
 
 - name: Remove custom attribute to the given virtual machine
   vmware_guest_custom_attributes:
@@ -74,11 +126,13 @@
       - name: 'sample_3'
   register: guest_info_0004
 
-- debug: msg="{{ guest_info_0004 }}"
-
-- assert:
+- name: Make sure the target is changed
+  assert:
     that:
-      - "guest_info_0004.changed"
+      - guest_info_0004.changed is sameas true
+      - guest_info_0004.custom_attributes.sample_1 == ""
+      - guest_info_0004.custom_attributes.sample_2 == ""
+      - guest_info_0004.custom_attributes.sample_3 == ""
 
 - name: Remove custom attribute to the given virtual machine again
   vmware_guest_custom_attributes:
@@ -96,8 +150,8 @@
       - name: 'sample_3'
   register: guest_info_0005
 
-- debug: var=guest_info_0005
-
-- assert:
+- name: Make sure the task has the idempotency
+  assert:
     that:
       - not (guest_info_0005 is changed)
+      - guest_info_0005.custom_attributes | length == 0

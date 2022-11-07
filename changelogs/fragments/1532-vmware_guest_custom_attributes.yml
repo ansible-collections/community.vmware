@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_custom_attributes - Improve the code quality and added the return value for diff(https://github.com/ansible-collections/community.vmware/pull/1532).
