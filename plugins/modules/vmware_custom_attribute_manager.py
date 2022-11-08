@@ -58,9 +58,8 @@ options:
     required: True
   state:
     description:
-      - The action to take.
-      - If set to C(present), then custom attribute is added or updated.
-      - If set to C(absent), then custom attribute is removed.
+      - If set to C(present), the custom attribute is set to the given value.
+      - If set to C(absent), the custom attribute is cleared. The given value is ignored in this case.
     default: 'present'
     choices: ['present', 'absent']
     type: str
@@ -71,7 +70,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add virtual machine custom attributes
-  community.vmware.vmware_guest_custom_attributes:
+  community.vmware.vmware_custom_attribute_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -84,7 +83,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Add multiple virtual machine custom attributes
-  community.vmware.vmware_guest_custom_attributes:
+  community.vmware.vmware_custom_attribute_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -99,7 +98,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Remove virtual machine Attribute
-  community.vmware.vmware_guest_custom_attributes:
+  community.vmware.vmware_custom_attribute_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"

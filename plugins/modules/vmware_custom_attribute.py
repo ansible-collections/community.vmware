@@ -55,7 +55,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Add VM Custom Attribute Definition
-  community.vmware.vmware_guest_custom_attribute_defs:
+  community.vmware.vmware_custom_attribute:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
@@ -66,7 +66,7 @@ EXAMPLES = r'''
   register: defs
 
 - name: Remove VM Custom Attribute Definition
-  community.vmware.vmware_guest_custom_attribute_defs:
+  community.vmware.vmware_custom_attribute:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
