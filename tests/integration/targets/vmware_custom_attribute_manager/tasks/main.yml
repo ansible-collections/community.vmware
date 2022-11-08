@@ -95,7 +95,7 @@
     that:
       - guest_info_0002 is not changed
 
-- name: Remove custom attribute to the given virtual machine
+- name: Remove custom attribute from the given virtual machine
   community.vmware.vmware_custom_attribute_manager:
     validate_certs: false
     hostname: '{{ vcenter_hostname }}'
@@ -115,7 +115,7 @@
     that:
       - guest_info_0004 is changed
 
-- name: Remove custom attribute to the given virtual machine again
+- name: Remove custom attribute from the given virtual machine again
   community.vmware.vmware_custom_attribute_manager:
     validate_certs: false
     hostname: '{{ vcenter_hostname }}'
@@ -144,7 +144,7 @@
     object_name: "{{ esxi_hosts[0] }}"
     object_type: HostSystem
     state: present
-    attributes:
+    custom_attributes:
       - name: 'esx_attribute_1'
         value: 'esx_attribute_1_value'
       - name: 'esx_attribute_2'
@@ -166,7 +166,7 @@
     object_name: "{{ esxi_hosts[0] }}"
     object_type: HostSystem
     state: present
-    attributes:
+    custom_attributes:
       - name: 'esx_attribute_1'
         value: 'esx_attribute_1_value'
       - name: 'esx_attribute_2'
@@ -188,7 +188,7 @@
     object_name: "{{ esxi_hosts[0] }}"
     object_type: HostSystem
     state: absent
-    attributes:
+    custom_attributes:
       - name: 'esx_attribute_1'
       - name: 'esx_attribute_2'
   register: host_info_0003
@@ -208,7 +208,7 @@
     object_name: "{{ esxi_hosts[0] }}"
     object_type: HostSystem
     state: absent
-    attributes:
+    custom_attributes:
       - name: 'esx_attribute_1'
       - name: 'esx_attribute_2'
   register: host_info_0004
