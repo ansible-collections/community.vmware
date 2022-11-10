@@ -2491,7 +2491,8 @@ class PyVmomiHelper(PyVmomi):
                 hard_disk = None
                 hard_disk_spec = None
                 hard_disk_exist = False
-                disk_modified = False
+                disk_modified_for_spec = False
+                disk_modified_for_disk = False
                 disk_unit_number = ctl['disk'][j]['unit_number']
                 # from attached disk list find the specified one
                 if len(disk_list) != 0:
@@ -2505,20 +2506,20 @@ class PyVmomiHelper(PyVmomi):
                     hard_disk_spec = vim.vm.device.VirtualDeviceSpec()
                     hard_disk_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
                     hard_disk_spec.device = hard_disk
-                    disk_modified = self.set_disk_parameters(hard_disk_spec, ctl['disk'][j], reconfigure=True)
+                    disk_modified_for_spec = self.set_disk_parameters(hard_disk_spec, ctl['disk'][j], reconfigure=True)
                 # if no disk or the specified one not exist do create new disk
                 if len(disk_list) == 0 or not hard_disk_exist:
                     hard_disk = self.device_helper.create_hard_disk(disk_ctl_spec, disk_unit_number)
                     hard_disk.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
-                    disk_modified = self.set_disk_parameters(hard_disk, ctl['disk'][j])
+                    disk_modified_for_disk = self.set_disk_parameters(hard_disk, ctl['disk'][j])
 
-                if disk_modified:
+                # Only update the configspec that will be applied in reconfigure_vm if something actually changed
+                if disk_modified_for_spec:
                     self.change_detected = True
-                    # Only update the configspec that will be applied in reconfigure_vm if something actually changed
-                    if hard_disk_spec:
-                        self.configspec.deviceChange.append(hard_disk_spec)
-                    if hard_disk:
-                        self.configspec.deviceChange.append(hard_disk)
+                    self.configspec.deviceChange.append(hard_disk_spec)
+                if disk_modified_for_disk:
+                    self.change_detected = True
+                    self.configspec.deviceChange.append(hard_disk)
 
     def configure_disks(self, vm_obj):
         # Ignore empty disk list, this permits to keep disks when deploying a template/cloning a VM
