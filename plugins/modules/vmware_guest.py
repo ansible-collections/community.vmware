@@ -1242,7 +1242,6 @@ class PyVmomiHelper(PyVmomi):
         memory_shares_info = vim.SharesInfo()
         cpu_shares_info = vim.SharesInfo()
 
-
         mem_shares_level = self.params['hardware']['mem_shares_level']
         if mem_shares_level is not None:
             memory_shares_info.level = mem_shares_level
