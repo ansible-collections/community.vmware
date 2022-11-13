@@ -14,6 +14,7 @@
     datacenter: "{{ dc1 }}"
     hardware:
       num_cpus: 1
+      memory_mb: 128
       cpu_shares_level: high
     disk:
       - size: 1gb
@@ -53,6 +54,7 @@
     datacenter: "{{ dc1 }}"
     hardware:
       num_cpus: 1
+      memory_mb: 128
       mem_shares_level: high
     disk:
       - size: 1gb
@@ -92,6 +94,7 @@
     datacenter: "{{ dc1 }}"
     hardware:
       num_cpus: 1
+      memory_mb: 128
     disk:
       - size: 1gb
         type: thin
