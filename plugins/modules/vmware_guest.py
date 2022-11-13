@@ -1248,7 +1248,7 @@ class PyVmomiHelper(PyVmomi):
             memory_allocation.shares = memory_shares_info
 
             if vm_obj is None or \
-                memory_allocation.shares.level != vm_obj.config.memoryAllocation.shares.level:
+                    memory_allocation.shares.level != vm_obj.config.memoryAllocation.shares.level:
                 rai_change_detected = True
 
         cpu_shares_level = self.params['hardware']['cpu_shares_level']
@@ -1256,7 +1256,7 @@ class PyVmomiHelper(PyVmomi):
             cpu_shares_info.level = cpu_shares_level
             cpu_allocation.shares = cpu_shares_info
             if vm_obj is None or \
-                cpu_allocation.shares.level != vm_obj.config.cpuAllocation.shares.level:
+                    cpu_allocation.shares.level != vm_obj.config.cpuAllocation.shares.level:
                 rai_change_detected = True
 
         mem_shares = self.params['hardware']['mem_shares']
@@ -1265,7 +1265,7 @@ class PyVmomiHelper(PyVmomi):
             memory_shares_info.shares = mem_shares
             memory_allocation.shares = memory_shares_info
             if vm_obj is None or \
-                memory_allocation.shares != vm_obj.config.memoryAllocation.shares:
+                    memory_allocation.shares != vm_obj.config.memoryAllocation.shares:
                 rai_change_detected = True
 
         cpu_shares = self.params['hardware']['cpu_shares']
@@ -1274,7 +1274,7 @@ class PyVmomiHelper(PyVmomi):
             cpu_shares_info.shares = cpu_shares
             cpu_allocation.shares = cpu_shares_info
             if vm_obj is None or \
-                cpu_allocation.shares != vm_obj.config.cpuAllocation.shares:
+                    cpu_allocation.shares != vm_obj.config.cpuAllocation.shares:
                 rai_change_detected = True
 
         mem_limit = self.params['hardware']['mem_limit']
