@@ -46,15 +46,15 @@ options:
       - Type of the object the custom attribute is associated with.
     type: str
     choices:
-      - Datacenter
       - Cluster
+      - Datacenter
+      - Datastore
+      - DistributedVirtualPortgroup
+      - DistributedVirtualSwitch
+      - Folder
       - HostSystem
       - ResourcePool
-      - Folder
       - VirtualMachine
-      - DistributedVirtualSwitch
-      - DistributedVirtualPortgroup
-      - Datastore
     required: True
   state:
     description:
@@ -128,15 +128,15 @@ class CustomAttributeManager(PyVmomi):
         super(CustomAttributeManager, self).__init__(module)
 
         object_types_map = {
-            'Datacenter': vim.Datacenter,
             'Cluster': vim.ClusterComputeResource,
+            'Datacenter': vim.Datacenter,
+            'Datastore': vim.Datastore,
+            'DistributedVirtualPortgroup': vim.DistributedVirtualPortgroup,
+            'DistributedVirtualSwitch': vim.DistributedVirtualSwitch,
+            'Folder': vim.Folder,
             'HostSystem': vim.HostSystem,
             'ResourcePool': vim.ResourcePool,
-            'Folder': vim.Folder,
-            'VirtualMachine': vim.VirtualMachine,
-            'DistributedVirtualSwitch': vim.DistributedVirtualSwitch,
-            'DistributedVirtualPortgroup': vim.DistributedVirtualPortgroup,
-            'Datastore': vim.Datastore
+            'VirtualMachine': vim.VirtualMachine
         }
 
         self.object_type = object_types_map[self.params['object_type']]
@@ -204,15 +204,15 @@ def main():
         ),
         object_name=dict(type='str', required=True),
         object_type=dict(type='str', required=True, choices=[
-            'Datacenter',
             'Cluster',
+            'Datacenter',
+            'Datastore',
+            'DistributedVirtualPortgroup',
+            'DistributedVirtualSwitch',
+            'Folder',
             'HostSystem',
             'ResourcePool',
-            'Folder',
-            'VirtualMachine',
-            'DistributedVirtualSwitch',
-            'DistributedVirtualPortgroup',
-            'Datastore'
+            'VirtualMachine'
         ]),
         state=dict(type='str', default='present',
                    choices=['absent', 'present']),
