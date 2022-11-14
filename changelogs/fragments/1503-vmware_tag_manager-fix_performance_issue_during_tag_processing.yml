@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_tag_manager - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1503).

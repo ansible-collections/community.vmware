@@ -31,6 +31,7 @@ options:
     description:
         - List of SNMP community strings.
     type: list
+    default: []
     elements: str
   snmp_port:
     description:

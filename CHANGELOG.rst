@@ -5,6 +5,15 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.10.1
+=======
+
+Bugfixes
+--------
+
+- vmware_tag_manager - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1503).
+- vmware_tag_manager - Fix an issue that causes a failure when changing a single cardinal tag category (https://github.com/ansible-collections/community.vmware/issues/1501).
+
 v2.10.0
 =======
 

@@ -152,6 +152,7 @@ options:
     type: bool
   networks:
     type: list
+    default: []
     elements: dict
     description:
       - This method will be deprecated, use loops in your playbook for multiple interfaces instead.

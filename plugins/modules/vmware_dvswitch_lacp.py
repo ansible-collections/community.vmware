@@ -80,6 +80,7 @@ options:
                 default: 'srcDestIpTcpUdpPortVlan'
         elements: dict
         type: list
+        default: []
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
