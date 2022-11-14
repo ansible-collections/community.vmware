@@ -11,6 +11,16 @@
 
 - name: Create custom attributes needed for tests
   block:
+    - name: Add Global custom attribute
+      community.vmware.vmware_custom_attribute:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_type: Global
+        custom_attribute: global_attribute
+        state: present
+
     - name: Add VM custom attribute 1
       community.vmware.vmware_custom_attribute:
         validate_certs: false
@@ -65,6 +75,8 @@
         value: 'vm_attribute_1_value'
       - name: 'vm_attribute_2'
         value: 'vm_attribute_2_value'
+      - name: 'global_attribute'
+        value: 'global_attribute_value'
   register: guest_info_0001
 
 - debug: var=guest_info_0001
@@ -87,6 +99,8 @@
         value: 'vm_attribute_1_value'
       - name: 'vm_attribute_2'
         value: 'vm_attribute_2_value'
+      - name: 'global_attribute'
+        value: 'global_attribute_value'
   register: guest_info_0002
 
 - debug: var=guest_info_0002
@@ -107,6 +121,7 @@
     custom_attributes:
       - name: 'vm_attribute_1'
       - name: 'vm_attribute_2'
+      - name: 'global_attribute'
   register: guest_info_0004
 
 - debug: var=guest_info_0004
@@ -127,6 +142,7 @@
     custom_attributes:
       - name: 'vm_attribute_1'
       - name: 'vm_attribute_2'
+      - name: 'global_attribute'
   register: guest_info_0005
 
 - debug: var=guest_info_0005
@@ -221,6 +237,16 @@
 
 - name: Clean up custom attributes
   block:
+    - name: Remove Global custom attribute
+      community.vmware.vmware_custom_attribute:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_type: Global
+        custom_attribute: global_attribute
+        state: present
+
     - name: Remove VM custom attribute 1
       community.vmware.vmware_custom_attribute:
         validate_certs: false
