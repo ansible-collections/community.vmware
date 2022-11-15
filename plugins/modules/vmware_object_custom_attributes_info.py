@@ -156,7 +156,7 @@ class VmwareCustomAttributesInfo(PyVmomi):
         for key, value in available_fields.items():
             attribute_result = {
                 'attribute': value['name'],
-                'type': self.to_json(value['type']).replace('vim.', ''),
+                'type': self.to_json(value['type']).replace('vim.', '') if value['type'] is not None else 'Global',
                 'key': key,
                 'value': None
             }
