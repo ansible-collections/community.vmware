@@ -127,6 +127,9 @@ class CustomAttributeManager(PyVmomi):
     def __init__(self, module):
         super(CustomAttributeManager, self).__init__(module)
 
+        if not self.is_vcenter():
+            self.module.fail_json(msg="You have to connect to a vCenter server!")
+
         object_types_map = {
             'Cluster': vim.ClusterComputeResource,
             'Datacenter': vim.Datacenter,
