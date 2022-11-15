@@ -66,9 +66,14 @@ options:
       - A dictionary of advanced DRS settings.
       default: {}
       type: dict
+    predictive_drs:
+      description:
+      - In addition to real-time metrics, DRS will respond to forecasted metrics provided by vRealize Operations Manager.
+      - You must also configure Predictive DRS in a version of vRealize Operations that supports this feature.
+      type: bool
+      default: False
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -81,7 +86,6 @@ EXAMPLES = r'''
     cluster_name: cluster
     enable: true
   delegate_to: localhost
-
 - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
   community.vmware.vmware_cluster_drs:
     hostname: '{{ vcenter_hostname }}'
@@ -93,7 +97,6 @@ EXAMPLES = r'''
     advanced_settings:
       'TryBalanceVmsPerHost': '1'
   delegate_to: localhost
-
 - name: Enable DRS and set default VM behavior to partially automated
   community.vmware.vmware_cluster_drs:
     hostname: "{{ vcenter_hostname }}"
@@ -153,14 +156,14 @@ class VMwareCluster(PyVmomi):
         """
         Check DRS configuration diff
         Returns: True if there is diff, else False
-
         """
         drs_config = self.cluster.configurationEx.drsConfig
 
         if drs_config.enabled != self.enable_drs or \
                 drs_config.enableVmBehaviorOverrides != self.params.get('drs_enable_vm_behavior_overrides') or \
                 drs_config.defaultVmBehavior != self.params.get('drs_default_vm_behavior') or \
-                drs_config.vmotionRate != self.params.get('drs_vmotion_rate'):
+                drs_config.vmotionRate != self.params.get('drs_vmotion_rate') or \
+                self.cluster.configurationEx.proactiveDrsConfig.enabled != self.params.get('predictive_drs'):
             return True
 
         if self.changed_advanced_settings:
@@ -171,7 +174,6 @@ class VMwareCluster(PyVmomi):
     def configure_drs(self):
         """
         Manage DRS configuration
-
         """
         changed, result = False, None
 
@@ -179,10 +181,12 @@ class VMwareCluster(PyVmomi):
             if not self.module.check_mode:
                 cluster_config_spec = vim.cluster.ConfigSpecEx()
                 cluster_config_spec.drsConfig = vim.cluster.DrsConfigInfo()
+                cluster_config_spec.proactiveDrsConfig = vim.cluster.ProactiveDrsConfigInfo()
                 cluster_config_spec.drsConfig.enabled = self.enable_drs
                 cluster_config_spec.drsConfig.enableVmBehaviorOverrides = self.params.get('drs_enable_vm_behavior_overrides')
                 cluster_config_spec.drsConfig.defaultVmBehavior = self.params.get('drs_default_vm_behavior')
                 cluster_config_spec.drsConfig.vmotionRate = self.params.get('drs_vmotion_rate')
+                cluster_config_spec.proactiveDrsConfig.enabled = self.params.get('predictive_drs')
 
                 if self.changed_advanced_settings:
                     cluster_config_spec.drsConfig.option = self.changed_advanced_settings
@@ -220,6 +224,7 @@ def main():
                               choices=[1, 2, 3, 4, 5],
                               default=3),
         advanced_settings=dict(type='dict', default=dict(), required=False),
+        predictive_drs=dict(type='bool', default=False),
     ))
 
     module = AnsibleModule(
