@@ -149,10 +149,10 @@ class VmwareLockdownManager(PyVmomi):
         desired_state = self.params.get('state')
 
         if desired_state == 'present':
-            self.warn("'present' will be removed in a future version. Please use 'normal' instead.")
+            self.module.warn("'present' will be removed in a future version. Please use 'normal' instead.")
             desired_state = 'normal'
         elif desired_state == 'absent':
-            self.warn("'absent' will be removed in a future version. Please use 'disabled' instead.")
+            self.module.warn("'absent' will be removed in a future version. Please use 'disabled' instead.")
             desired_state = 'disabled'
 
         for host in self.hosts:
