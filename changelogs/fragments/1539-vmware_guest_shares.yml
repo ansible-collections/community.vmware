@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - Adding sub-options to configure CPU and memory shares (https://github.com/ansible-collections/community.vmware/issues/356).
