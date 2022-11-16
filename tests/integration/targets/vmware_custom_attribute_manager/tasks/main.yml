@@ -245,7 +245,7 @@
         password: "{{ vcenter_password }}"
         object_type: Global
         custom_attribute: global_attribute
-        state: present
+        state: absent
 
     - name: Remove VM custom attribute 1
       community.vmware.vmware_custom_attribute:
