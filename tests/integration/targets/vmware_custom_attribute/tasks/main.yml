@@ -1,0 +1,142 @@
+# Test code for the vmware_custom_attribute module.
+# Copyright: (c) 2022, Mario Lenz <@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+- name: add VM custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: sample_5
+    state: present
+  register: add_attrib_def
+
+- debug: var=add_attrib_def
+
+- assert:
+    that:
+      - add_attrib_def is changed
+
+- name: add VM custom attribute definition again
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: sample_5
+    state: present
+  register: add_attrib_def
+
+- debug: var=add_attrib_def
+
+- assert:
+    that:
+      - not (add_attrib_def is changed)
+
+- name: remove VM custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: sample_5
+    state: absent
+  register: remove_attrib_def
+
+- debug: var=remove_attrib_def
+
+- assert:
+    that:
+      - remove_attrib_def is changed
+
+- name: remove VM custom attribute definition again
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: sample_5
+    state: absent
+  register: remove_attrib_def
+
+- debug: var=remove_attrib_def
+
+- assert:
+    that:
+      - not (remove_attrib_def is changed)
+
+- name: add Global custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: sample_5
+    state: present
+  register: add_attrib_def
+
+- debug: var=add_attrib_def
+
+- assert:
+    that:
+      - add_attrib_def is changed
+
+- name: add Global custom attribute definition again
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: sample_5
+    state: present
+  register: add_attrib_def
+
+- debug: var=add_attrib_def
+
+- assert:
+    that:
+      - not (add_attrib_def is changed)
+
+- name: remove Global custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: sample_5
+    state: absent
+  register: remove_attrib_def
+
+- debug: var=remove_attrib_def
+
+- assert:
+    that:
+      - remove_attrib_def is changed
+
+- name: remove Global custom attribute definition again
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: sample_5
+    state: absent
+  register: remove_attrib_def
+
+- debug: var=remove_attrib_def
+
+- assert:
+    that:
+      - not (remove_attrib_def is changed)
