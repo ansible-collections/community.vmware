@@ -155,11 +155,13 @@ options:
             description:
             - The allocation level of CPU resources for the virtual machine.
             - Valid Values are C(low), C(normal), C(high) and C(custom).
+            version_added: '3.2.0'
         cpu_shares:
             type: int
             description:
             - The number of shares of CPU allocated to this virtual machine
             - cpu_shares_level will automatically be set to 'custom'
+            version_added: '3.2.0'
         scsi:
             type: str
             description:
@@ -192,11 +194,13 @@ options:
             - The allocation level of memory resources for the virtual machine.
             - Valid Values are C(low), C(normal), C(high) and C(custom).
             choices: [ 'low', 'normal', 'high', 'custom' ]
+            version_added: '3.2.0'
         mem_shares:
             type: int
             description:
             - The number of shares of memory allocated to this virtual machine
             - mem_shares_level will automatically be set to 'custom'
+            version_added: '3.2.0'
         cpu_limit:
             type: int
             description:
