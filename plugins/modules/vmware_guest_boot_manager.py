@@ -56,6 +56,7 @@ options:
      - Name of disk to be set as boot disk, which is case sensitive, e.g., 'Hard disk 1'.
      - This parameter is optional, if not set, will use the first virtual disk found in VM device list.
      type: str
+     version_added: '3.2.0'
    boot_delay:
      description:
      - Delay in milliseconds before starting the boot sequence.
@@ -253,7 +254,7 @@ class VmBootManager(PyVmomi):
                     first_hdd = [device for device in self.vm.config.hardware.device if isinstance(device, vim.vm.device.VirtualDisk)
                                  and device.deviceInfo.label == self.params.get('boot_hdd_name')]
                     if not first_hdd:
-                        self.module.fail_json(msg="Not found virtual disk with disk label '%d'" % (self.params.get('boot_hdd_name')))
+                        self.module.fail_json(msg="Not found virtual disk with disk label '%s'" % (self.params.get('boot_hdd_name')))
                 if first_hdd:
                     boot_order_list.append(vim.vm.BootOptions.BootableDiskDevice(deviceKey=first_hdd[0].key))
             elif device_order == 'ethernet':
@@ -268,7 +269,7 @@ class VmBootManager(PyVmomi):
         # Get previous boot disk name when boot_hdd_name is set
         if self.params.get('boot_hdd_name'):
             for i in range(0, len(self.vm.config.bootOptions.bootOrder)):
-                if type(self.vm.config.bootOptions.bootOrder[i]) is vim.vm.BootOptions.BootableDiskDevice:
+                if isinstance(self.vm.config.bootOptions.bootOrder[i], vim.vm.BootOptions.BootableDiskDevice):
                     if self.vm.config.bootOptions.bootOrder[i].deviceKey:
                         for dev in self.vm.config.hardware.device:
                             if isinstance(dev, vim.vm.device.VirtualDisk) and \
