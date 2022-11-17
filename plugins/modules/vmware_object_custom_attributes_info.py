@@ -111,6 +111,10 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 class VmwareCustomAttributesInfo(PyVmomi):
     def __init__(self, module):
         super(VmwareCustomAttributesInfo, self).__init__(module)
+
+        if not self.is_vcenter():
+            self.module.fail_json(msg="You have to connect to a vCenter server!")
+
         self.object_type = self.params['object_type']
         self.object_name = self.params['object_name']
         self.moid = self.params['moid']
