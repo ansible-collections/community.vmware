@@ -149,6 +149,19 @@ options:
         num_cpu_cores_per_socket:
             type: int
             description: Number of Cores Per Socket.
+        cpu_shares_level:
+            type: str
+            choices: [ 'low', 'normal', 'high', 'custom' ]
+            description:
+            - The allocation level of CPU resources for the virtual machine.
+            - Valid Values are C(low), C(normal), C(high) and C(custom).
+            version_added: '3.2.0'
+        cpu_shares:
+            type: int
+            description:
+            - The number of shares of CPU allocated to this virtual machine
+            - cpu_shares_level will automatically be set to 'custom'
+            version_added: '3.2.0'
         scsi:
             type: str
             description:
@@ -175,6 +188,19 @@ options:
             type: int
             description: The amount of memory resource that is guaranteed available to the virtual machine.
             aliases: [ 'memory_reservation' ]
+        mem_shares_level:
+            type: str
+            description:
+            - The allocation level of memory resources for the virtual machine.
+            - Valid Values are C(low), C(normal), C(high) and C(custom).
+            choices: [ 'low', 'normal', 'high', 'custom' ]
+            version_added: '3.2.0'
+        mem_shares:
+            type: int
+            description:
+            - The number of shares of memory allocated to this virtual machine
+            - mem_shares_level will automatically be set to 'custom'
+            version_added: '3.2.0'
         cpu_limit:
             type: int
             description:
@@ -809,6 +835,8 @@ EXAMPLES = r'''
       memory_reservation_lock: True
       mem_limit: 8096
       mem_reservation: 4096
+      cpu_shares_level: "high"
+      mem_shares_level: "high"
       cpu_limit: 8096
       cpu_reservation: 4096
       max_connections: 5
@@ -1214,6 +1242,44 @@ class PyVmomiHelper(PyVmomi):
         rai_change_detected = False
         memory_allocation = vim.ResourceAllocationInfo()
         cpu_allocation = vim.ResourceAllocationInfo()
+
+        memory_shares_info = vim.SharesInfo()
+        cpu_shares_info = vim.SharesInfo()
+
+        mem_shares_level = self.params['hardware']['mem_shares_level']
+        if mem_shares_level is not None:
+            memory_shares_info.level = mem_shares_level
+            memory_allocation.shares = memory_shares_info
+
+            if vm_obj is None or \
+                    memory_allocation.shares.level != vm_obj.config.memoryAllocation.shares.level:
+                rai_change_detected = True
+
+        cpu_shares_level = self.params['hardware']['cpu_shares_level']
+        if cpu_shares_level is not None:
+            cpu_shares_info.level = cpu_shares_level
+            cpu_allocation.shares = cpu_shares_info
+            if vm_obj is None or \
+                    cpu_allocation.shares.level != vm_obj.config.cpuAllocation.shares.level:
+                rai_change_detected = True
+
+        mem_shares = self.params['hardware']['mem_shares']
+        if mem_shares is not None:
+            memory_shares_info.level = 'custom'
+            memory_shares_info.shares = mem_shares
+            memory_allocation.shares = memory_shares_info
+            if vm_obj is None or \
+                    memory_allocation.shares != vm_obj.config.memoryAllocation.shares:
+                rai_change_detected = True
+
+        cpu_shares = self.params['hardware']['cpu_shares']
+        if cpu_shares is not None:
+            cpu_shares_info.level = 'custom'
+            cpu_shares_info.shares = cpu_shares
+            cpu_allocation.shares = cpu_shares_info
+            if vm_obj is None or \
+                    cpu_allocation.shares != vm_obj.config.cpuAllocation.shares:
+                rai_change_detected = True
 
         mem_limit = self.params['hardware']['mem_limit']
         if mem_limit is not None:
@@ -3317,6 +3383,10 @@ def main():
                 hotremove_cpu=dict(type='bool'),
                 max_connections=dict(type='int'),
                 mem_limit=dict(type='int'),
+                cpu_shares_level=dict(type='str', choices=['low', 'normal', 'high', 'custom']),
+                mem_shares_level=dict(type='str', choices=['low', 'normal', 'high', 'custom']),
+                cpu_shares=dict(type='int'),
+                mem_shares=dict(type='int'),
                 mem_reservation=dict(type='int', aliases=['memory_reservation']),
                 memory_mb=dict(type='int'),
                 memory_reservation_lock=dict(type='bool'),

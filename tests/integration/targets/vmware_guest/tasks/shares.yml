@@ -1,0 +1,122 @@
+# Test code for the vmware_guest module.
+# Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- &add_cpu_shares
+  name: Create new VMs with cpu shares level set to High
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    guest_id: centos64Guest
+    datacenter: "{{ dc1 }}"
+    hardware:
+      num_cpus: 1
+      memory_mb: 128
+      cpu_shares_level: high
+    disk:
+      - size: 1gb
+        type: thin
+        datastore: "{{ rw_datastore }}"
+    state: present
+    folder: "{{ virtual_machines[0].folder }}"
+  register: cpu_shares_level_result_0001
+
+- debug: var=cpu_shares_level_result_0001
+
+- name: Assert that changes were made
+  assert:
+    that:
+      - cpu_shares_level_result_0001 is changed
+
+- <<: *add_cpu_shares
+  name: Again create new VMs with CPU shares level set to High
+  register: cpu_shares_level_result_0002
+
+- debug: var=cpu_shares_level_result_0002
+
+- name: Assert that changes were not made
+  assert:
+    that:
+      - not (cpu_shares_level_result_0002 is changed)
+
+- &add_mem_shares
+  name: Create new VM with memory shares level set to High
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm2
+    guest_id: centos64Guest
+    datacenter: "{{ dc1 }}"
+    hardware:
+      num_cpus: 1
+      memory_mb: 128
+      mem_shares_level: high
+    disk:
+      - size: 1gb
+        type: thin
+        datastore: "{{ rw_datastore }}"
+    state: present
+    folder: "{{ virtual_machines[0].folder }}"
+  register: mem_shares_level_results_0003
+
+- debug: var=mem_shares_level_results_0003
+
+- name: Assert that changes were made
+  assert:
+    that:
+      - mem_shares_level_results_0003 is changed
+
+- <<: *add_mem_shares
+  name: Again create new VMs with memory shares level set to High
+  register: mem_shares_level_results_0004
+
+- debug: var=mem_shares_level_results_0004
+
+- name: Assert that changes were not made
+  assert:
+    that:
+      - not (mem_shares_level_results_0004 is changed)
+
+- &no_shares_levels
+  name: Create new VMs without CPU or Memory Shares level set
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm3
+    guest_id: centos64Guest
+    datacenter: "{{ dc1 }}"
+    hardware:
+      num_cpus: 1
+      memory_mb: 128
+    disk:
+      - size: 1gb
+        type: thin
+        datastore: "{{ rw_datastore }}"
+    state: present
+    folder: "{{ virtual_machines[0].folder }}"
+  register: no_shares_levels_results_0005
+
+- debug: var=no_shares_levels_results_0005
+
+- name: Assert that changes were made
+  assert:
+    that:
+      - no_shares_levels_results_0005 is changed
+
+- <<: *no_shares_levels
+  name: Again create new VMs without memory_reservation or mem_reservation
+  register: no_shares_levels_result_0006
+
+- debug: var=no_shares_levels_result_0006
+
+- name: Assert that changes were not made
+  assert:
+    that:
+      - not (no_shares_levels_result_0006 is changed)
