@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_portgroup_info - Fix an issue that can fail the module after manually updating a portgroup through vCenter
+    (https://github.com/ansible-collections/community.vmware/issues/1544).
