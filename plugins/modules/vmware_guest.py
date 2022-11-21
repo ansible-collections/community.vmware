@@ -3483,7 +3483,7 @@ def main():
                 current_powerstate = vm.summary.runtime.powerState.lower()
                 powerstate_will_change = False
                 if ((current_powerstate == 'poweredon' and module.params['state'] not in ['poweredon', 'powered-on'])
-                        or (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off'])
+                        or (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off', 'shutdownguest', 'shutdown-guest'])
                         or (current_powerstate == 'suspended' and module.params['state'] != 'suspended')):
                     powerstate_will_change = True
 

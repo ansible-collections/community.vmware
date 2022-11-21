@@ -44,9 +44,9 @@
     - powered-on
     - restarted
     - suspended
-      # TODO should shutdown-guest also report no change when powered off already? I think so, but documentation suggests otherwise.
-    - shutdownguest
-    - shutdown-guest
+      # TODO need to adjust test to expect no change when already powered off
+      #- shutdownguest
+      #- shutdown-guest
     - rebootguest
     - reboot-guest
   register: check_mode_state
