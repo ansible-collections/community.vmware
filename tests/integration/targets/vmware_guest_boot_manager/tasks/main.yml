@@ -81,6 +81,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
     name: "{{ virtual_machines[0].name }}"
   register: disk_info1
 
@@ -94,6 +95,7 @@
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
+        datacenter: "{{ dc1 }}"
         name: "{{ virtual_machines[0].name }}"
         disk:
           - size_mb: 10
@@ -124,6 +126,7 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     name: "{{ virtual_machines[0].name }}"
+    datacenter: "{{ dc1 }}"
   register: disk_info2
 
 - ansible.builtin.debug: var=disk_info2
@@ -147,6 +150,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
     name: "{{ virtual_machines[0].name }}"
     boot_order:
       - disk
@@ -169,6 +173,7 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
     name: "{{ virtual_machines[0].name }}"
     boot_order:
       - disk
