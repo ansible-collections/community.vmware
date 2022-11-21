@@ -150,7 +150,6 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    datacenter: "{{ dc1 }}"
     name: "{{ virtual_machines[0].name }}"
     boot_order:
       - disk
@@ -173,7 +172,6 @@
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
-    datacenter: "{{ dc1 }}"
     name: "{{ virtual_machines[0].name }}"
     boot_order:
       - disk
