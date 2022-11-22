@@ -3207,7 +3207,7 @@ class PyVmomiHelper(PyVmomi):
         if self.params['customization']['existing_vm']:
             if self.current_vm_obj.config.template:
                 self.module.fail_json(msg="VM is template, not support guest OS customization.")
-            if self.current_vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+            if self.current_vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff and not self.module.check_mode:
                 self.module.fail_json(msg="VM is not in poweroff state, can not do guest OS customization.")
             # TODO not sure if it is possible to query the current customspec to compare against the one being provided to check in check mode.
             # Maybe by breaking down the individual fields and querying, but it needs more research.
