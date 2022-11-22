@@ -1513,8 +1513,9 @@ class PyVmomiHelper(PyVmomi):
                         break
                 # create new CD-ROM
                 if not cdrom_device and cdrom.get('state') != 'absent':
+                    # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
                     if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
-                            isinstance(ctl_device, vim.vm.device.VirtualIDEController):
+                            isinstance(ctl_device, vim.vm.device.VirtualIDEController) and not self.module.check_mode:
                         self.module.fail_json(msg='CD-ROM attach to IDE controller not support hot-add.')
                     if len(ctl_device.device) == 2 and isinstance(ctl_device, vim.vm.device.VirtualIDEController):
                         self.module.fail_json(msg='Maximum number of CD-ROMs attached to IDE controller is 2.')
