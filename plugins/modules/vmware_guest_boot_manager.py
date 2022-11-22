@@ -39,40 +39,42 @@ options:
      - Whether to use the VMware instance UUID rather than the BIOS UUID.
      default: false
      type: bool
-   boot_order:
-     description:
-     - List of the boot devices.
-     default: []
-     type: list
-     elements: str
    name_match:
      description:
      - If multiple virtual machines matching the name, use the first or last found.
      default: 'first'
      choices: ['first', 'last']
      type: str
+   boot_order:
+     description:
+     - List of the boot devices.
+     default: []
+     type: list
+     elements: str
+   boot_hdd_name:
+     description:
+     - Name of disk to be set as boot disk, which is case sensitive, e.g., 'Hard disk 1'.
+     - This parameter is optional, if not set, will use the first virtual disk found in VM device list.
+     type: str
+     version_added: '3.2.0'
    boot_delay:
      description:
      - Delay in milliseconds before starting the boot sequence.
-     default: 0
      type: int
    enter_bios_setup:
      description:
      - If set to C(True), the virtual machine automatically enters BIOS setup the next time it boots.
      - The virtual machine resets this flag, so that the machine boots proceeds normally.
      type: 'bool'
-     default: False
    boot_retry_enabled:
      description:
      - If set to C(True), the virtual machine that fails to boot, will try to boot again after C(boot_retry_delay) is expired.
      - If set to C(False), the virtual machine waits indefinitely for user intervention.
      type: 'bool'
-     default: False
    boot_retry_delay:
      description:
      - Specify the time in milliseconds between virtual machine boot failure and subsequent attempt to boot again.
      - If set, will automatically set C(boot_retry_enabled) to C(True) as this parameter is required.
-     default: 0
      type: int
    boot_firmware:
      description:
@@ -229,11 +231,14 @@ class VmBootManager(PyVmomi):
         return results
 
     def ensure(self):
-        self._get_vm()
-
+        boot_order_list = []
+        change_needed = False
+        kwargs = dict()
+        previous_boot_disk = None
         valid_device_strings = ['cdrom', 'disk', 'ethernet', 'floppy']
 
-        boot_order_list = []
+        self._get_vm()
+
         for device_order in self.params.get('boot_order'):
             if device_order not in valid_device_strings:
                 self.module.fail_json(msg="Invalid device found [%s], please specify device from ['%s']" % (device_order,
@@ -243,7 +248,13 @@ class VmBootManager(PyVmomi):
                 if first_cdrom:
                     boot_order_list.append(vim.vm.BootOptions.BootableCdromDevice())
             elif device_order == 'disk':
-                first_hdd = [device for device in self.vm.config.hardware.device if isinstance(device, vim.vm.device.VirtualDisk)]
+                if not self.params.get('boot_hdd_name'):
+                    first_hdd = [device for device in self.vm.config.hardware.device if isinstance(device, vim.vm.device.VirtualDisk)]
+                else:
+                    first_hdd = [device for device in self.vm.config.hardware.device if isinstance(device, vim.vm.device.VirtualDisk)
+                                 and device.deviceInfo.label == self.params.get('boot_hdd_name')]
+                    if not first_hdd:
+                        self.module.fail_json(msg="Not found virtual disk with disk label '%s'" % (self.params.get('boot_hdd_name')))
                 if first_hdd:
                     boot_order_list.append(vim.vm.BootOptions.BootableDiskDevice(deviceKey=first_hdd[0].key))
             elif device_order == 'ethernet':
@@ -255,8 +266,16 @@ class VmBootManager(PyVmomi):
                 if first_floppy:
                     boot_order_list.append(vim.vm.BootOptions.BootableFloppyDevice())
 
-        change_needed = False
-        kwargs = dict()
+        # Get previous boot disk name when boot_hdd_name is set
+        if self.params.get('boot_hdd_name'):
+            for i in range(0, len(self.vm.config.bootOptions.bootOrder)):
+                if isinstance(self.vm.config.bootOptions.bootOrder[i], vim.vm.BootOptions.BootableDiskDevice):
+                    if self.vm.config.bootOptions.bootOrder[i].deviceKey:
+                        for dev in self.vm.config.hardware.device:
+                            if isinstance(dev, vim.vm.device.VirtualDisk) and \
+                                    dev.key == self.vm.config.bootOptions.bootOrder[i].deviceKey:
+                                previous_boot_disk = dev.deviceInfo.label
+
         if len(boot_order_list) != len(self.vm.config.bootOptions.bootOrder):
             kwargs.update({'bootOrder': boot_order_list})
             change_needed = True
@@ -267,27 +286,36 @@ class VmBootManager(PyVmomi):
                 if boot_device_type != vm_boot_device_type:
                     kwargs.update({'bootOrder': boot_order_list})
                     change_needed = True
+                else:
+                    if vm_boot_device_type is vim.vm.BootOptions.BootableDiskDevice and \
+                            boot_order_list[i].deviceKey != self.vm.config.bootOptions.bootOrder[i].deviceKey:
+                        kwargs.update({'bootOrder': boot_order_list})
+                        change_needed = True
 
-        if self.vm.config.bootOptions.bootDelay != self.params.get('boot_delay'):
+        if self.params.get('boot_delay') is not None and \
+                self.vm.config.bootOptions.bootDelay != self.params.get('boot_delay'):
             kwargs.update({'bootDelay': self.params.get('boot_delay')})
             change_needed = True
 
-        if self.vm.config.bootOptions.enterBIOSSetup != self.params.get('enter_bios_setup'):
+        if self.params.get('enter_bios_setup') is not None and \
+                self.vm.config.bootOptions.enterBIOSSetup != self.params.get('enter_bios_setup'):
             kwargs.update({'enterBIOSSetup': self.params.get('enter_bios_setup')})
             change_needed = True
 
-        if self.vm.config.bootOptions.bootRetryEnabled != self.params.get('boot_retry_enabled'):
+        if self.params.get('boot_retry_enabled') is not None and \
+                self.vm.config.bootOptions.bootRetryEnabled != self.params.get('boot_retry_enabled'):
             kwargs.update({'bootRetryEnabled': self.params.get('boot_retry_enabled')})
             change_needed = True
 
-        if self.vm.config.bootOptions.bootRetryDelay != self.params.get('boot_retry_delay'):
+        if self.params.get('boot_retry_delay') is not None and \
+                self.vm.config.bootOptions.bootRetryDelay != self.params.get('boot_retry_delay'):
             if not self.vm.config.bootOptions.bootRetryEnabled:
                 kwargs.update({'bootRetryEnabled': True})
             kwargs.update({'bootRetryDelay': self.params.get('boot_retry_delay')})
             change_needed = True
 
         boot_firmware_required = False
-        if self.vm.config.firmware != self.params.get('boot_firmware'):
+        if self.params.get('boot_firmware') is not None and self.vm.config.firmware != self.params.get('boot_firmware'):
             change_needed = True
             boot_firmware_required = True
 
@@ -311,8 +339,10 @@ class VmBootManager(PyVmomi):
             previous_boot_retry_delay=self.vm.config.bootOptions.bootRetryDelay,
             previous_boot_firmware=self.vm.config.firmware,
             previous_secure_boot_enabled=self.vm.config.bootOptions.efiSecureBootEnabled,
-            current_boot_order=[],
+            current_boot_order=[]
         )
+        if previous_boot_disk:
+            results.update({'previous_boot_disk': previous_boot_disk})
 
         if change_needed:
             vm_conf = vim.vm.ConfigSpec()
@@ -336,9 +366,11 @@ class VmBootManager(PyVmomi):
                 'current_boot_retry_enabled': self.vm.config.bootOptions.bootRetryEnabled,
                 'current_boot_retry_delay': self.vm.config.bootOptions.bootRetryDelay,
                 'current_boot_firmware': self.vm.config.firmware,
-                'current_secure_boot_enabled': self.vm.config.bootOptions.efiSecureBootEnabled,
+                'current_secure_boot_enabled': self.vm.config.bootOptions.efiSecureBootEnabled
             }
         )
+        if self.params.get('boot_hdd_name'):
+            results.update({'current_boot_disk': self.params.get('boot_hdd_name')})
 
         self.module.exit_json(changed=changed, vm_boot_status=results)
 
@@ -350,37 +382,24 @@ def main():
         uuid=dict(type='str'),
         moid=dict(type='str'),
         use_instance_uuid=dict(type='bool', default=False),
-        boot_order=dict(
-            type='list',
-            default=[],
-            elements='str',
-        ),
         name_match=dict(
             choices=['first', 'last'],
             default='first'
         ),
-        boot_delay=dict(
-            type='int',
-            default=0,
+        boot_order=dict(
+            type='list',
+            default=[],
+            elements='str'
         ),
-        enter_bios_setup=dict(
-            type='bool',
-            default=False,
-        ),
-        boot_retry_enabled=dict(
-            type='bool',
-            default=False,
-        ),
-        boot_retry_delay=dict(
-            type='int',
-            default=0,
-        ),
-        secure_boot_enabled=dict(
-            type='bool',
-        ),
+        boot_hdd_name=dict(type='str'),
+        boot_delay=dict(type='int'),
+        enter_bios_setup=dict(type='bool'),
+        boot_retry_enabled=dict(type='bool'),
+        boot_retry_delay=dict(type='int'),
+        secure_boot_enabled=dict(type='bool'),
         boot_firmware=dict(
             type='str',
-            choices=['efi', 'bios'],
+            choices=['efi', 'bios']
         )
     )
 

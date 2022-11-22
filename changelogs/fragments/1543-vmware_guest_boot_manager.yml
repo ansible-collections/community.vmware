@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_boot_manager - Add a new parameter boot_hdd_name to specify the boot disk name(https://github.com/ansible-collections/community.vmware/pull/1543).
