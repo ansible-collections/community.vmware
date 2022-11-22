@@ -1285,9 +1285,9 @@ class PyVmomiHelper(PyVmomi):
                 # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
                 elif not vm_obj.config.memoryHotAddEnabled and memory_mb != vm_obj.config.hardware.memoryMB and not self.module.check_mode:
                     self.module.fail_json(msg="memoryHotAdd is not enabled")
-            self.configspec.memoryMB = memory_mb
-            if vm_obj is None or self.configspec.memoryMB != vm_obj.config.hardware.memoryMB:
+            if vm_obj is None or memory_mb != vm_obj.config.hardware.memoryMB:
                 self.change_detected = True
+                self.configspec.memoryMB = memory_mb
         # memory_mb is mandatory for VM creation
         elif vm_creation and not self.params['template']:
             self.module.fail_json(msg="hardware.memory_mb attribute is mandatory for VM creation")
@@ -1298,9 +1298,9 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.memoryHotAddEnabled != hotadd_memory and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd memory operation is not supported when VM is power on")
-            self.configspec.memoryHotAddEnabled = hotadd_memory
-            if vm_obj is None or self.configspec.memoryHotAddEnabled != vm_obj.config.memoryHotAddEnabled:
+            if vm_obj is None or hotadd_memory != vm_obj.config.memoryHotAddEnabled:
                 self.change_detected = True
+                self.configspec.memoryHotAddEnabled = hotadd_memory
 
         hotadd_cpu = self.params['hardware']['hotadd_cpu']
         if hotadd_cpu is not None:
@@ -1308,9 +1308,9 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.cpuHotAddEnabled != hotadd_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd cpu operation is not supported when VM is power on")
-            self.configspec.cpuHotAddEnabled = hotadd_cpu
-            if vm_obj is None or self.configspec.cpuHotAddEnabled != vm_obj.config.cpuHotAddEnabled:
+            if vm_obj is None or hotadd_cpu != vm_obj.config.cpuHotAddEnabled:
                 self.change_detected = True
+                self.configspec.cpuHotAddEnabled = hotadd_cpu
 
         hotremove_cpu = self.params['hardware']['hotremove_cpu']
         if hotremove_cpu is not None:
@@ -1318,15 +1318,15 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.cpuHotRemoveEnabled != hotremove_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotremove cpu operation is not supported when VM is power on")
-            self.configspec.cpuHotRemoveEnabled = hotremove_cpu
-            if vm_obj is None or self.configspec.cpuHotRemoveEnabled != vm_obj.config.cpuHotRemoveEnabled:
+            if vm_obj is None or hotremove_cpu != vm_obj.config.cpuHotRemoveEnabled:
                 self.change_detected = True
+                self.configspec.cpuHotRemoveEnabled = hotremove_cpu
 
         memory_reservation_lock = self.params['hardware']['memory_reservation_lock']
         if memory_reservation_lock is not None:
-            self.configspec.memoryReservationLockedToMax = memory_reservation_lock
-            if vm_obj is None or self.configspec.memoryReservationLockedToMax != vm_obj.config.memoryReservationLockedToMax:
+            if vm_obj is None or memory_reservation_lock != vm_obj.config.memoryReservationLockedToMax:
                 self.change_detected = True
+                self.configspec.memoryReservationLockedToMax = memory_reservation_lock
 
         vpmc_enabled = self.params['hardware']['vpmc_enabled']
         if vpmc_enabled is not None:
@@ -1334,9 +1334,9 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.vPMCEnabled != vpmc_enabled and not self.module.check_mode:
                 self.module.fail_json(msg="Configure vPMC cpu operation is not supported when VM is power on")
-            self.configspec.vPMCEnabled = vpmc_enabled
-            if vm_obj is None or self.configspec.vPMCEnabled != vm_obj.config.vPMCEnabled:
+            if vm_obj is None or vpmc_enabled != vm_obj.config.vPMCEnabled:
                 self.change_detected = True
+                self.configspec.vPMCEnabled = vpmc_enabled
 
         boot_firmware = self.params['hardware']['boot_firmware']
         if boot_firmware is not None:
@@ -1553,15 +1553,15 @@ class PyVmomiHelper(PyVmomi):
         """
         max_connections = self.params['hardware']['max_connections']
         if max_connections is not None:
-            self.configspec.maxMksConnections = max_connections
-            if vm_obj is None or self.configspec.maxMksConnections != vm_obj.config.maxMksConnections:
+            if vm_obj is None or max_connections != vm_obj.config.maxMksConnections:
                 self.change_detected = True
+                self.configspec.maxMksConnections = max_connections
 
         nested_virt = self.params['hardware']['nested_virt']
         if nested_virt is not None:
-            self.configspec.nestedHVEnabled = nested_virt
-            if vm_obj is None or self.configspec.nestedHVEnabled != bool(vm_obj.config.nestedHVEnabled):
+            if vm_obj is None or nested_virt != bool(vm_obj.config.nestedHVEnabled):
                 self.change_detected = True
+                self.configspec.nestedHVEnabled = nested_virt
 
         temp_version = self.params['hardware']['version']
         if temp_version is not None:
@@ -1594,9 +1594,9 @@ class PyVmomiHelper(PyVmomi):
 
                 # Hardware version is denoted as "vmx-10"
                 version = "vmx-%02d" % temp_version
-                self.configspec.version = version
-                if vm_obj is None or self.configspec.version != vm_obj.config.version:
+                if vm_obj is None or version != vm_obj.config.version:
                     self.change_detected = True
+                    self.configspec.version = version
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
                     # VM exists and we need to update the hardware version
@@ -1625,26 +1625,26 @@ class PyVmomiHelper(PyVmomi):
 
         secure_boot = self.params['hardware']['secure_boot']
         if secure_boot is not None:
-            self.configspec.bootOptions = vim.vm.BootOptions()
-            self.configspec.bootOptions.efiSecureBootEnabled = True
-            if vm_obj is None or self.configspec.bootOptions.efiSecureBootEnabled != vm_obj.config.bootOptions.efiSecureBootEnabled:
+            if vm_obj is None or secure_boot != vm_obj.config.bootOptions.efiSecureBootEnabled:
                 self.change_detected = True
+                self.configspec.bootOptions = vim.vm.BootOptions()
+                self.configspec.bootOptions.efiSecureBootEnabled = secure_boot
 
         iommu = self.params['hardware']['iommu']
         if iommu is not None:
-            if self.configspec.flags is None:
-                self.configspec.flags = vim.vm.FlagInfo()
-            self.configspec.flags.vvtdEnabled = iommu
-            if vm_obj is None or self.configspec.flags.vvtdEnabled != vm_obj.config.flags.vvtdEnabled:
+            if vm_obj is None or iommu != vm_obj.config.flags.vvtdEnabled:
                 self.change_detected = True
+                if self.configspec.flags is None:
+                    self.configspec.flags = vim.vm.FlagInfo()
+                self.configspec.flags.vvtdEnabled = iommu
 
         virt_based_security = self.params['hardware']['virt_based_security']
         if virt_based_security is not None:
-            if self.configspec.flags is None:
-                self.configspec.flags = vim.vm.FlagInfo()
-            self.configspec.flags.vbsEnabled = virt_based_security
-            if vm_obj is None or vm_obj.config.flags.vbsEnabled != self.configspec.flags.vbsEnabled:
+            if vm_obj is None or virt_based_security != self.configspec.flags.vbsEnabled:
                 self.change_detected = True
+                if self.configspec.flags is None:
+                    self.configspec.flags = vim.vm.FlagInfo()
+                self.configspec.flags.vbsEnabled = virt_based_security
 
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
@@ -3483,7 +3483,8 @@ def main():
                 current_powerstate = vm.summary.runtime.powerState.lower()
                 powerstate_will_change = False
                 if ((current_powerstate == 'poweredon' and module.params['state'] not in ['poweredon', 'powered-on'])
-                        or (current_powerstate == 'poweredoff' and module.params['state'] not in ['poweredoff', 'powered-off', 'shutdownguest', 'shutdown-guest'])
+                        or (current_powerstate == 'poweredoff' and module.params['state']
+                            not in ['poweredoff', 'powered-off', 'shutdownguest', 'shutdown-guest'])
                         or (current_powerstate == 'suspended' and module.params['state'] != 'suspended')):
                     powerstate_will_change = True
 
