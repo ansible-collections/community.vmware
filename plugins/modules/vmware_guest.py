@@ -162,6 +162,10 @@ options:
             - The number of shares of CPU allocated to this virtual machine
             - cpu_shares_level will automatically be set to 'custom'
             version_added: '3.2.0'
+        vpmc_enabled:
+            version_added: '3.2.0'
+            type: bool
+            description: Enable virtual CPU Performance Counters.
         scsi:
             type: str
             description:
@@ -1390,6 +1394,16 @@ class PyVmomiHelper(PyVmomi):
             self.configspec.memoryReservationLockedToMax = memory_reservation_lock
             if vm_obj is None or self.configspec.memoryReservationLockedToMax != vm_obj.config.memoryReservationLockedToMax:
                 self.change_detected = True
+
+        vpmc_enabled = self.params['hardware']['vpmc_enabled']
+        if vpmc_enabled is not None:
+            # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
+            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    vm_obj.config.vPMCEnabled != vpmc_enabled and not self.module.check_mode:
+                self.module.fail_json(msg="Configure vPMC cpu operation is not supported when VM is power on")
+            if vm_obj is None or vpmc_enabled != vm_obj.config.vPMCEnabled:
+                self.change_detected = True
+                self.configspec.vPMCEnabled = vpmc_enabled
 
         boot_firmware = self.params['hardware']['boot_firmware']
         if boot_firmware is not None:
@@ -3381,6 +3395,7 @@ def main():
                 hotadd_cpu=dict(type='bool'),
                 hotadd_memory=dict(type='bool'),
                 hotremove_cpu=dict(type='bool'),
+                vpmc_enabled=dict(type='bool'),
                 max_connections=dict(type='int'),
                 mem_limit=dict(type='int'),
                 cpu_shares_level=dict(type='str', choices=['low', 'normal', 'high', 'custom']),
