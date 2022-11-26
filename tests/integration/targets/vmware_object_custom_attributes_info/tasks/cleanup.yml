@@ -1,0 +1,41 @@
+# Test code for the vmware_object_custom_attributes_info module.
+# Copyright: (c) 2022, sky-joker <sky.jokerxx@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Remove VM custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: "{{ item }}"
+    state: absent
+  loop:
+    - vm_example01
+    - vm_example02
+
+- name: Remove VM custom attribute definition for global type
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: "{{ item }}"
+    state: absent
+  loop:
+    - vm_example03_global
+
+- name: Remove ESXi custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: HostSystem
+    custom_attribute: "{{ item }}"
+    state: absent
+  loop:
+    - esxi_example01
+    - esxi_example02
