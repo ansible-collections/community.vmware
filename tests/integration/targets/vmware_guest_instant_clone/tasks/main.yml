@@ -33,6 +33,31 @@
     state: poweredon
   register: create_vm_for_test
 
+- name: get list of info about virtual machines
+  vmware_guest_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    name: "test_vm1"
+    folder: "{{ f0 }}"
+  register: guest_info_0001
+
+- debug:
+    var: guest_info_0001
+
+- name: get info about folders
+  vmware_folder_info:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ dc1 | basename }}"
+      validate_certs: false
+  register: folder_info_0001
+
+- debug: var=folder_info_0001
+
 - name: Instant Clone a VM with parent VM
   community.vmware.vmware_guest_instant_clone:
     hostname: "{{ vcenter_hostname }}"
