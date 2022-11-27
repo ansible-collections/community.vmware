@@ -17,6 +17,7 @@ module: vmware_guest_instant_clone
 short_description: Instant Clone VM
 
 description:
+- This is just a test, DO NOT MERGE!
 - This module can be used for Creating a powered-on Instant Clone of a virtual machine.
 - All variables and VMware object names are case sensitive.
 - M(community.vmware.vmware_guest) module is needed for creating a VM with poweredon state which would be used as a parent VM.
