@@ -139,7 +139,7 @@ class VMwareCluster(PyVmomi):
         self.enable_drs = module.params['enable']
         self.datacenter = None
         self.cluster = None
-        self.drs_vmotion_rate = [5, 4, 3, 2, 1][self.params.get('drs_vmotion_rate') -1]
+        self.drs_vmotion_rate = [5, 4, 3, 2, 1][self.params.get('drs_vmotion_rate') - 1]
 
         self.datacenter = find_datacenter_by_name(self.content, self.datacenter_name)
         if self.datacenter is None:
