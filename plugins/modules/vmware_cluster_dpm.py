@@ -95,7 +95,7 @@ class VMwareCluster(PyVmomi):
         self.datacenter_name = module.params['datacenter']
         self.enable_dpm = module.params['enable_dpm']
         self.default_dpm_behaviour = module.params['default_dpm_behaviour']
-        self.host_power_action_rate = [5, 4, 3, 2, 1][module.params['host_power_action_rate'] -1]
+        self.host_power_action_rate = [5, 4, 3, 2, 1][module.params['host_power_action_rate'] - 1]
         self.datacenter = None
         self.cluster = None
 
