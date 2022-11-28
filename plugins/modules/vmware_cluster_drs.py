@@ -58,6 +58,8 @@ options:
     drs_vmotion_rate:
       description:
       - Threshold for generated ClusterRecommendations.
+      - 1: lowest
+      - 5: highest
       type: int
       default: 3
       choices: [ 1, 2, 3, 4, 5 ]
@@ -137,6 +139,7 @@ class VMwareCluster(PyVmomi):
         self.enable_drs = module.params['enable']
         self.datacenter = None
         self.cluster = None
+        self.drs_vmotion_rate = [5, 4, 3, 2, 1][self.params.get('drs_vmotion_rate') -1]
 
         self.datacenter = find_datacenter_by_name(self.content, self.datacenter_name)
         if self.datacenter is None:
@@ -162,7 +165,7 @@ class VMwareCluster(PyVmomi):
         if drs_config.enabled != self.enable_drs or \
                 drs_config.enableVmBehaviorOverrides != self.params.get('drs_enable_vm_behavior_overrides') or \
                 drs_config.defaultVmBehavior != self.params.get('drs_default_vm_behavior') or \
-                drs_config.vmotionRate != self.params.get('drs_vmotion_rate') or \
+                drs_config.vmotionRate != self.drs_vmotion_rate or \
                 self.cluster.configurationEx.proactiveDrsConfig.enabled != self.params.get('predictive_drs'):
             return True
 
@@ -185,7 +188,7 @@ class VMwareCluster(PyVmomi):
                 cluster_config_spec.drsConfig.enabled = self.enable_drs
                 cluster_config_spec.drsConfig.enableVmBehaviorOverrides = self.params.get('drs_enable_vm_behavior_overrides')
                 cluster_config_spec.drsConfig.defaultVmBehavior = self.params.get('drs_default_vm_behavior')
-                cluster_config_spec.drsConfig.vmotionRate = self.params.get('drs_vmotion_rate')
+                cluster_config_spec.drsConfig.vmotionRate = self.drs_vmotion_rate
                 cluster_config_spec.proactiveDrsConfig.enabled = self.params.get('predictive_drs')
 
                 if self.changed_advanced_settings:
