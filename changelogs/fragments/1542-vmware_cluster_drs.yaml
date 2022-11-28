@@ -1,2 +1,2 @@
 minor_changes:
-  - vmware_cluster_drs - Add predictive DRS Setting (https://github.com/ansible-collections/community.vmware/pull/1542).
+  - vmware_cluster_drs - Add predictive DRS Setting and invert the drs_vmotion_rate => same like in the vcenter (https://github.com/ansible-collections/community.vmware/pull/1542).
