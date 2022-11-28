@@ -121,7 +121,7 @@
     datacenter_name: "{{ dc1 }}"
     cluster_name: test_cluster_drs
     enable: true
-    predictive_drs: false
+    predictive_drs: true
   check_mode: true
   register: change_predictive_drs_check
 
