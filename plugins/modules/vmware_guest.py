@@ -1642,22 +1642,19 @@ class PyVmomiHelper(PyVmomi):
             if temp_version.lower() == 'latest':
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
-                    # TODO How to get what VMware thinks is the "latest" version to check if already at that version? (for check mode)
-                    # Otherwise, would need to check if "AlreadyUpgraded" exception is thrown, but that would require potentially changing the system.
-                    # For now, simply don't run in check mode and assume changed, with the assumption that users that care about check mode
-                    # will use explicit versions.
-                    self.tracked_changes['hardware.version'] = 'latest'
-                    if self.module.check_mode:
+                    config_option_descriptors = vm_obj.environmentBrowser.QueryConfigOptionDescriptor()
+                    available_hw_versions = [int(option_desc.key.split("-")[1]) for option_desc in config_option_descriptors if option_desc.upgradeSupported]
+                    max_hw_version = max(available_hw_versions)
+                    if max_hw_version > int(vm_obj.config.version.split("-")[1]):
+                        self.change_detected = True
+                        self.tracked_changes['hardware.version'] = 'latest'
                         self.change_applied = True
-                    else:
-                        try:
-                            task = vm_obj.UpgradeVM_Task()
-                            self.wait_for_task(task)
-                            if task.info.state == 'error':
-                                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                        except vim.fault.AlreadyUpgraded:
-                            # Don't fail if VM is already upgraded.
-                            pass
+                        self.configspec.version = "vmx-%02d" % max_hw_version
+                    if not self.module.check_mode:
+                        task = vm_obj.UpgradeVM_Task()
+                        self.wait_for_task(task)
+                        if task.info.state == 'error':
+                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
             else:
                 try:
                     temp_version = int(temp_version)
@@ -1667,10 +1664,10 @@ class PyVmomiHelper(PyVmomi):
                                           " Please check VMware documentation for valid VM hardware versions." % temp_version)
 
                 # Hardware version is denoted as "vmx-10"
-                version = "vmx-%02d" % temp_version
-                if vm_obj is None or version != vm_obj.config.version:
+                new_version = "vmx-%02d" % temp_version
+                if vm_obj is None:
                     self.change_detected = True
-                    self.configspec.version = version
+                    self.configspec.version = new_version
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
                     # VM exists and we need to update the hardware version
@@ -1684,18 +1681,15 @@ class PyVmomiHelper(PyVmomi):
                                               " than the current version." % (version_digit,
                                                                               temp_version))
 
-                    # Only perform the upgrade if not in check mode.
-                    # self.change_detected was already set above in the self.configspec.version != vm_obj.config.version check above
-                    if not self.module.check_mode:
-                        new_version = "vmx-%02d" % temp_version
-                        try:
+                    if temp_version > version_digit:
+                        self.change_detected = True
+                        self.configspec.version = new_version
+                        # Only perform the upgrade if not in check mode.
+                        if not self.module.check_mode:
                             task = vm_obj.UpgradeVM_Task(new_version)
                             self.wait_for_task(task)
                             if task.info.state == 'error':
                                 return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
-                        except vim.fault.AlreadyUpgraded:
-                            # Don't fail if VM is already upgraded.
-                            pass
 
         secure_boot = self.params['hardware']['secure_boot']
         if secure_boot is not None:
