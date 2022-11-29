@@ -72,6 +72,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 '''
+
 try:
     from pyVmomi import vim, vmodl
 except ImportError:
