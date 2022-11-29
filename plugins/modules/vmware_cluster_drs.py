@@ -57,9 +57,7 @@ options:
       choices: [ fullyAutomated, manual, partiallyAutomated ]
     drs_vmotion_rate:
       description:
-      - Threshold for generated ClusterRecommendations.
-      - 1: lowest
-      - 5: highest
+      - Threshold for generated ClusterRecommendations ranging from 1 (lowest) to 5 (highest).
       type: int
       default: 3
       choices: [ 1, 2, 3, 4, 5 ]
