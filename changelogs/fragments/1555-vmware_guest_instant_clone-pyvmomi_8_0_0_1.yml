@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_instant_clone - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1555).
