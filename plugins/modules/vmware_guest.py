@@ -1645,8 +1645,6 @@ class PyVmomiHelper(PyVmomi):
                     config_option_descriptors = vm_obj.environmentBrowser.QueryConfigOptionDescriptor()
                     available_hw_versions = [int(option_desc.key.split("-")[1]) for option_desc in config_option_descriptors if option_desc.upgradeSupported]
                     temp_version = max(available_hw_versions)
-                else:
-                    new_version = None
             else:
                 try:
                     temp_version = int(temp_version)
@@ -1654,9 +1652,9 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="Failed to set hardware.version '%s' value as valid"
                                           " values are either 'latest' or a number."
                                           " Please check VMware documentation for valid VM hardware versions." % temp_version)
-                # Hardware version is denoted as "vmx-10"
-                new_version = "vmx-%02d" % temp_version
 
+            # Hardware version is denoted as "vmx-10"
+            new_version = "vmx-%02d" % temp_version
             if vm_obj is None:
                 self.change_detected = True
                 self.configspec.version = new_version
