@@ -1639,6 +1639,7 @@ class PyVmomiHelper(PyVmomi):
 
         temp_version = self.params['hardware']['version']
         if temp_version is not None:
+            new_version = None
             if temp_version.lower() == 'latest':
                 # Check is to make sure vm_obj is not of type template
                 if vm_obj and not vm_obj.config.template:
@@ -1653,8 +1654,10 @@ class PyVmomiHelper(PyVmomi):
                                           " values are either 'latest' or a number."
                                           " Please check VMware documentation for valid VM hardware versions." % temp_version)
 
-            # Hardware version is denoted as "vmx-10"
-            new_version = "vmx-%02d" % temp_version
+            if isinstance(temp_version, int):
+                # Hardware version is denoted as "vmx-10"
+                new_version = "vmx-%02d" % temp_version
+
             if vm_obj is None:
                 self.change_detected = True
                 self.configspec.version = new_version
