@@ -3262,10 +3262,6 @@ class PyVmomiHelper(PyVmomi):
                 uuid_action_opt.value = "create"
                 self.configspec.extraConfig.append(uuid_action_opt)
 
-            # TODO latent bug? self.change_detected isn't checked again after this
-            # Does the configspec.extraConfig uuid_action_opt append above ever get used?
-            self.change_detected = True
-
         # add customize existing VM after VM re-configure
         if self.params['customization']['existing_vm']:
             if self.current_vm_obj.config.template:
