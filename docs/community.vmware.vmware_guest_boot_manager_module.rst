@@ -42,7 +42,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
                 </td>
                 <td>
                         <div>Delay in milliseconds before starting the boot sequence.</div>
@@ -65,6 +64,23 @@ Parameters
                 </td>
                 <td>
                         <div>Choose which firmware should be used to boot the virtual machine.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>boot_hdd_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of disk to be set as boot disk, which is case sensitive, e.g., &#x27;Hard disk 1&#x27;.</div>
+                        <div>This parameter is optional, if not set, will use the first virtual disk found in VM device list.</div>
                 </td>
             </tr>
             <tr>
@@ -94,7 +110,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
                 </td>
                 <td>
                         <div>Specify the time in milliseconds between virtual machine boot failure and subsequent attempt to boot again.</div>
@@ -112,7 +127,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
@@ -132,7 +147,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>

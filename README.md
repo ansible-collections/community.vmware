@@ -101,6 +101,8 @@ Name | Description
 [community.vmware.vmware_content_deploy_template](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_content_deploy_template_module.rst)|Deploy Virtual Machine from template stored in content library.
 [community.vmware.vmware_content_library_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_content_library_info_module.rst)|Gather information about VMWare Content Library
 [community.vmware.vmware_content_library_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_content_library_manager_module.rst)|Create, update and delete VMware content library
+[community.vmware.vmware_custom_attribute](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_custom_attribute_module.rst)|Manage custom attributes definitions
+[community.vmware.vmware_custom_attribute_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_custom_attribute_manager_module.rst)|Manage custom attributes from VMware for the given vSphere object
 [community.vmware.vmware_datacenter](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datacenter_module.rst)|Manage VMware vSphere Datacenters
 [community.vmware.vmware_datacenter_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datacenter_info_module.rst)|Gather information about VMware vSphere Datacenters
 [community.vmware.vmware_datastore](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_module.rst)|Configure Datastores

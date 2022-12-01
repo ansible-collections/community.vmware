@@ -44,6 +44,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Define a list of advanced settings to be added to the VMX config.</div>
@@ -77,6 +78,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of CD-ROM configurations for the virtual machine. Added in version 2.9.</div>
@@ -240,6 +242,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Parameters for OS customization when cloning from the template or the virtual machine, or apply to the existing virtual machine directly.</div>
@@ -634,6 +637,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Define a list of custom values to set on virtual machine.</div>
@@ -706,6 +710,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of disks to add.</div>
@@ -1071,6 +1076,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Manage virtual machine&#x27;s hardware attributes.</div>
@@ -1128,6 +1134,48 @@ Parameters
                 </td>
                 <td>
                         <div>The amount of CPU resource that is guaranteed available to the virtual machine.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cpu_shares</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The number of shares of CPU allocated to this virtual machine</div>
+                        <div>cpu_shares_level will automatically be set to &#x27;custom&#x27;</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cpu_shares_level</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>low</li>
+                                    <li>normal</li>
+                                    <li>high</li>
+                                    <li>custom</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The allocation level of CPU resources for the virtual machine.</div>
+                        <div>Valid Values are <code>low</code>, <code>normal</code>, <code>high</code> and <code>custom</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -1258,6 +1306,48 @@ Parameters
                 <td>
                         <div>The amount of memory resource that is guaranteed available to the virtual machine.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: memory_reservation</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mem_shares</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The number of shares of memory allocated to this virtual machine</div>
+                        <div>mem_shares_level will automatically be set to &#x27;custom&#x27;</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mem_shares_level</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>low</li>
+                                    <li>normal</li>
+                                    <li>high</li>
+                                    <li>custom</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The allocation level of memory resources for the virtual machine.</div>
+                        <div>Valid Values are <code>low</code>, <code>normal</code>, <code>high</code> and <code>custom</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -1438,6 +1528,27 @@ Parameters
                         <div>Deploy on unsupported ESXi, hardware version or firmware may lead to failure or deployed VM with unexpected configurations.</div>
                 </td>
             </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vpmc_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.2.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable virtual CPU Performance Counters.</div>
+                </td>
+            </tr>
 
             <tr>
                 <td colspan="2">
@@ -1547,6 +1658,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of networks (in the order of the NICs).</div>
@@ -1807,6 +1919,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Add or remove a virtual NVDIMM device to the virtual machine.</div>
@@ -2143,6 +2256,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of vApp properties.</div>
@@ -2373,6 +2487,8 @@ Examples
           memory_reservation_lock: True
           mem_limit: 8096
           mem_reservation: 4096
+          cpu_shares_level: "high"
+          mem_shares_level: "high"
           cpu_limit: 8096
           cpu_reservation: 4096
           max_connections: 5

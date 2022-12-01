@@ -42,6 +42,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>AD Domain to join.</div>
@@ -58,6 +59,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>Password for AD domain join.</div>
@@ -93,6 +95,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>Username for AD domain join.</div>
