@@ -1162,6 +1162,21 @@ releases:
     - 1501-vmware_tag_manager-Fix_failure_when_changing_single_cardinal_tag_category.yml
     - 1503-vmware_tag_manager-fix_performance_issue_during_tag_processing.yml
     release_date: '2022-10-31'
+  2.10.2:
+    changes:
+      bugfixes:
+      - vmware_dvs_portgroup - Fix an issue when deleting portgroups (https://github.com/ansible-collections/community.vmware/issues/1522).
+      - vmware_guest_instant_clone - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1555).
+      - vmware_object_custom_attributes_info - Fixed an issue that has occurred an
+        error if a custom attribute is the global type (https://github.com/ansible-collections/community.vmware/issues/1477).
+      - vmware_portgroup_info - Fix an issue that can fail the module after manually
+        updating a portgroup through vCenter (https://github.com/ansible-collections/community.vmware/issues/1544).
+    fragments:
+    - 1477-vmware_object_custom_attributes_info.yml
+    - 1522-vmware_dvs_portgroup.yml
+    - 1544-vmware_portgroup_info.yml
+    - 1555-vmware_guest_instant_clone-pyvmomi_8_0_0_1.yml
+    release_date: '2022-12-01'
   2.2.0:
     changes:
       bugfixes:

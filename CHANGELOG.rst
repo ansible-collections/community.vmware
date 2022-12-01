@@ -5,6 +5,17 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.10.2
+=======
+
+Bugfixes
+--------
+
+- vmware_dvs_portgroup - Fix an issue when deleting portgroups (https://github.com/ansible-collections/community.vmware/issues/1522).
+- vmware_guest_instant_clone - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1555).
+- vmware_object_custom_attributes_info - Fixed an issue that has occurred an error if a custom attribute is the global type (https://github.com/ansible-collections/community.vmware/issues/1477).
+- vmware_portgroup_info - Fix an issue that can fail the module after manually updating a portgroup through vCenter (https://github.com/ansible-collections/community.vmware/issues/1544).
+
 v2.10.1
 =======
 
