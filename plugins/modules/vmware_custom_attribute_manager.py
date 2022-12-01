@@ -12,6 +12,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_custom_attribute_manager
+version_added: '3.2.0'
 short_description: Manage custom attributes from VMware for the given vSphere object
 description:
   - This module can be used to add, remove and update custom attributes for the given vSphere object.

@@ -12,6 +12,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_custom_attribute
+version_added: '3.2.0'
 short_description: Manage custom attributes definitions
 description:
   - This module can be used to add and remove custom attributes definitions for various vSphere objects.
