@@ -253,7 +253,7 @@ Parameters
                 <td>
                         <div>The action to take.</div>
                         <div>If set to <code>present</code>, then custom attribute is added or updated.</div>
-                        <div>If set to <code>absent</code>, then custom attribute is removed.</div>
+                        <div>If set to <code>absent</code>, then custom attribute value is removed.</div>
                 </td>
             </tr>
             <tr>

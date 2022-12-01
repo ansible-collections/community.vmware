@@ -85,7 +85,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The content library description.</div>
@@ -227,6 +226,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The SHA1 SSL thumbprint of the subscribed content library to subscribe to.</div>
@@ -268,6 +268,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The url of the content library to subscribe to.</div>

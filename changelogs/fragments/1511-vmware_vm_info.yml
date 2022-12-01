@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_vm_info - Adding resource pool of the VM to result (https://github.com/ansible-collections/community.vmware/pull/1551).

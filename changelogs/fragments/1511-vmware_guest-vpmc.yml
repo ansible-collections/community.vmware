@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest - Add sub-option to configure virtual performance counters (https://github.com/ansible-collections/community.vmware/issues/1511).

@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_dvswitch_lacp_module:
+.. _community.vmware.vmware_custom_attribute_manager_module:
 
 
-*************************************
-community.vmware.vmware_dvswitch_lacp
-*************************************
+************************************************
+community.vmware.vmware_custom_attribute_manager
+************************************************
 
-**Manage LACP configuration on a Distributed Switch**
+**Manage custom attributes from VMware for the given vSphere object**
 
 
+Version added: 3.2.0
 
 .. contents::
    :local:
@@ -16,7 +17,7 @@ community.vmware.vmware_dvswitch_lacp
 
 Synopsis
 --------
-- This module can be used to configure Link Aggregation Control Protocol (LACP) support mode and Link Aggregation Groups (LAGs).
+- This module can be used to add, remove and update custom attributes for the given vSphere object.
 
 
 
@@ -32,6 +33,59 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>custom_attributes</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A list of name and value of custom attributes that needs to be manage.</div>
+                        <div>Value of custom attribute is not required and will be ignored, if <code>state</code> is set to <code>absent</code>.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the attribute.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>value</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Value of the attribute.</div>
+                </td>
+            </tr>
+
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -52,113 +106,46 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>link_aggregation_groups</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                <td>
-                        <div>Can only be used if <code>lacp_support</code> is set to <code>enhanced</code>.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>load_balancing_mode</b>
+                    <b>object_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"srcDestIpTcpUdpPortVlan"</div>
                 </td>
                 <td>
-                        <div>Load balancing algorithm.</div>
-                        <div>Valid values are as follows</div>
-                        <div>- srcTcpUdpPort: Source TCP/UDP port number.</div>
-                        <div>- srcDestIpTcpUdpPortVlan: Source and destination IP, source and destination TCP/UDP port number and VLAN.</div>
-                        <div>- srcIpVlan: Source IP and VLAN.</div>
-                        <div>- srcDestTcpUdpPort: Source and destination TCP/UDP port number.</div>
-                        <div>- srcMac: Source MAC address.</div>
-                        <div>- destIp: Destination IP.</div>
-                        <div>- destMac: Destination MAC address.</div>
-                        <div>- vlan: VLAN only.</div>
-                        <div>- srcDestIp: Source and Destination IP.</div>
-                        <div>- srcIpTcpUdpPortVlan: Source IP, TCP/UDP port number and VLAN.</div>
-                        <div>- srcDestIpTcpUdpPort: Source and destination IP and TCP/UDP port number.</div>
-                        <div>- srcDestMac: Source and destination MAC address.</div>
-                        <div>- destIpTcpUdpPort: Destination IP and TCP/UDP port number.</div>
-                        <div>- srcPortId: Source Virtual Port Id.</div>
-                        <div>- srcIp: Source IP.</div>
-                        <div>- srcIpTcpUdpPort: Source IP and TCP/UDP port number.</div>
-                        <div>- destIpTcpUdpPortVlan: Destination IP, TCP/UDP port number and VLAN.</div>
-                        <div>- destTcpUdpPort: Destination TCP/UDP port number.</div>
-                        <div>- destIpVlan: Destination IP and VLAN.</div>
-                        <div>- srcDestIpVlan: Source and destination IP and VLAN.</div>
-                        <div>Please see examples for more information.</div>
+                        <div>Name of the vSphere object to work with.</div>
                 </td>
             </tr>
             <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mode</b>
+                    <b>object_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>active</li>
-                                    <li>passive</li>
+                                    <li>Cluster</li>
+                                    <li>Datacenter</li>
+                                    <li>Datastore</li>
+                                    <li>DistributedVirtualPortgroup</li>
+                                    <li>DistributedVirtualSwitch</li>
+                                    <li>Folder</li>
+                                    <li>HostSystem</li>
+                                    <li>ResourcePool</li>
+                                    <li>VirtualMachine</li>
                         </ul>
                 </td>
                 <td>
-                        <div>The negotiating state of the uplinks/ports.</div>
+                        <div>Type of the object the custom attribute is associated with.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the LAG.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uplink_number</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Number of uplinks.</div>
-                        <div>Can 1 to 30.</div>
-                </td>
-            </tr>
-
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -232,7 +219,7 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>support_mode</b>
+                    <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -240,31 +227,13 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>basic</b>&nbsp;&larr;</div></li>
-                                    <li>enhanced</li>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
                         </ul>
                 </td>
                 <td>
-                        <div>The LACP support mode.</div>
-                        <div><code>basic</code>: One Link Aggregation Control Protocol group in the switch (singleLag).</div>
-                        <div><code>enhanced</code>: Multiple Link Aggregation Control Protocol groups in the switch (multipleLag).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the Distributed Switch to manage.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: dvswitch</div>
+                        <div>If set to <code>present</code>, the custom attribute is set to the given value.</div>
+                        <div>If set to <code>absent</code>, the custom attribute is cleared. The given value is ignored in this case.</div>
                 </td>
             </tr>
             <tr>
@@ -315,7 +284,6 @@ Notes
 -----
 
 .. note::
-   - You need to run the task two times if you want to remove all LAGs and change the support mode to 'basic'
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -325,74 +293,48 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enable enhanced mode on a Distributed Switch
-      community.vmware.vmware_dvswitch_lacp:
-        hostname: '{{ inventory_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        switch: dvSwitch
-        support_mode: enhanced
-        validate_certs: "{{ validate_vcenter_certs }}"
+    - name: Add virtual machine custom attributes
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: present
+        custom_attributes:
+          - name: MyAttribute
+            value: MyValue
       delegate_to: localhost
-      loop_control:
-        label: "{{ item.name }}"
-      with_items: "{{ vcenter_distributed_switches }}"
 
-    - name: Enable enhanced mode and create two LAGs on a Distributed Switch
-      community.vmware.vmware_dvswitch_lacp:
-        hostname: '{{ inventory_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        switch: dvSwitch
-        support_mode: enhanced
-        link_aggregation_groups:
-            - name: lag1
-              uplink_number: 2
-              mode: active
-              load_balancing_mode: srcDestIpTcpUdpPortVlan
-            - name: lag2
-              uplink_number: 2
-              mode: passive
-              load_balancing_mode: srcDestIp
-        validate_certs: "{{ validate_vcenter_certs }}"
+    - name: Add multiple virtual machine custom attributes
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: present
+        custom_attributes:
+          - name: MyAttribute
+            value: MyValue
+          - name: MyAttribute2
+            value: MyValue2
       delegate_to: localhost
-      loop_control:
-        label: "{{ item.name }}"
-      with_items: "{{ vcenter_distributed_switches }}"
+
+    - name: Remove virtual machine Attribute
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: absent
+        custom_attributes:
+          - name: MyAttribute
+      delegate_to: localhost
+      register: attributes
 
 
-
-Return Values
--------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>information about performed operation</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;dvswitch&#x27;: &#x27;dvSwitch&#x27;, &#x27;link_aggregation_groups&#x27;: [{&#x27;load_balancing_mode&#x27;: &#x27;srcDestIpTcpUdpPortVlan&#x27;, &#x27;mode&#x27;: &#x27;active&#x27;, &#x27;name&#x27;: &#x27;lag1&#x27;, &#x27;uplink_number&#x27;: 2}, {&#x27;load_balancing_mode&#x27;: &#x27;srcDestIp&#x27;, &#x27;mode&#x27;: &#x27;active&#x27;, &#x27;name&#x27;: &#x27;lag2&#x27;, &#x27;uplink_number&#x27;: 2}], &#x27;link_aggregation_groups_previous&#x27;: [], &#x27;support_mode&#x27;: &#x27;enhanced&#x27;, &#x27;result&#x27;: &#x27;lacp lags changed&#x27;}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
 
 
 Status
@@ -402,4 +344,4 @@ Status
 Authors
 ~~~~~~~
 
-- Christian Kotte (@ckotte)
+- Mario Lenz (@mariolenz)

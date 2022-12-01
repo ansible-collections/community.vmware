@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_dvs_host_module:
+.. _community.vmware.vmware_custom_attribute_module:
 
 
-********************************
-community.vmware.vmware_dvs_host
-********************************
+****************************************
+community.vmware.vmware_custom_attribute
+****************************************
 
-**Add or remove a host from distributed virtual switch**
+**Manage custom attributes definitions**
 
 
+Version added: 3.2.0
 
 .. contents::
    :local:
@@ -16,7 +17,7 @@ community.vmware.vmware_dvs_host
 
 Synopsis
 --------
-- Manage a host system from distributed virtual switch.
+- This module can be used to add and remove custom attributes definitions for various vSphere objects.
 
 
 
@@ -28,14 +29,14 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="2">Parameter</th>
+            <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
+                    <b>custom_attribute</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -45,11 +46,11 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The ESXi hostname.</div>
+                        <div>Name of the custom attribute.</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -66,27 +67,9 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lag_uplinks</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                <td>
-                        <div>The ESXi hosts vmnics to use with specific LAGs.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lag</b>
+                    <b>object_type</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -94,32 +77,25 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>Cluster</li>
+                                    <li>Datacenter</li>
+                                    <li>Datastore</li>
+                                    <li>DistributedVirtualPortgroup</li>
+                                    <li>DistributedVirtualSwitch</li>
+                                    <li>Folder</li>
+                                    <li>Global</li>
+                                    <li>HostSystem</li>
+                                    <li>ResourcePool</li>
+                                    <li>VirtualMachine</li>
+                        </ul>
                 </td>
                 <td>
-                        <div>Name of the LAG.</div>
+                        <div>Type of the object the custom attribute is associated with.</div>
                 </td>
             </tr>
             <tr>
-                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vmnics</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                <td>
-                        <div>The ESXi hosts vmnics to use with the LAG.</div>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -137,7 +113,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -155,7 +131,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -173,7 +149,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -189,7 +165,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -204,27 +180,15 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If the host should be present or absent attached to the vSwitch.</div>
+                        <div>Manage definition of custom attributes.</div>
+                        <div>If set to <code>present</code> and definition not present, then custom attribute definition is created.</div>
+                        <div>If set to <code>present</code> and definition is present, then no action taken.</div>
+                        <div>If set to <code>absent</code> and definition is present, then custom attribute definition is removed.</div>
+                        <div>If set to <code>absent</code> and definition is absent, then no action taken.</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the Distributed vSwitch.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -242,7 +206,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -263,74 +227,6 @@ Parameters
                         <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vendor_specific_config</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>List of key, value dictionaries for the Vendor Specific Configuration.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>key</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Key of setting.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>value</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Value of setting.</div>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vmnics</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                <td>
-                        <div>The ESXi hosts vmnics to use with the Distributed vSwitch.</div>
-                </td>
-            </tr>
     </table>
     <br/>
 
@@ -348,53 +244,27 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Add Host to dVS
-      community.vmware.vmware_dvs_host:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
-        switch_name: dvSwitch
-        vmnics:
-            - vmnic0
-            - vmnic1
+    - name: Add VM Custom Attribute Definition
+      community.vmware.vmware_custom_attribute:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
         state: present
+        object_type: VirtualMachine
+        custom_attribute: custom_attr_def_1
       delegate_to: localhost
+      register: defs
 
-    - name: Add vmnics to LAGs
-      community.vmware.vmware_dvs_host:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
-        switch_name: dvSwitch
-        lag_uplinks:
-            - lag: lag1
-              vmnics:
-                  - vmnic0
-                  - vmnic1
-            - lag: lag2
-              vmnics:
-                  - vmnic2
-                  - vmnic3
-        state: present
+    - name: Remove VM Custom Attribute Definition
+      community.vmware.vmware_custom_attribute:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        state: absent
+        object_type: VirtualMachine
+        custom_attribute: custom_attr_def_1
       delegate_to: localhost
-
-    - name: Add Host to dVS/enable learnswitch (https://labs.vmware.com/flings/learnswitch)
-      community.vmware.vmware_dvs_host:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        esxi_hostname: '{{ esxi_hostname }}'
-        switch_name: dvSwitch
-        vendor_specific_config:
-            - key: com.vmware.netoverlay.layer1
-              value: learnswitch
-        vmnics:
-            - vmnic0
-            - vmnic1
-        state: present
-      delegate_to: localhost
+      register: defs
 
 
 
@@ -406,6 +276,4 @@ Status
 Authors
 ~~~~~~~
 
-- Joseph Callen (@jcpowermac)
-- Abhijeet Kasurde (@Akasurde)
-- Joseph Andreatta (@vmwjoseph)
+- Mario Lenz (@mariolenz)
