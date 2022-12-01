@@ -8,17 +8,20 @@ action_groups:
   - vcenter_extension_info
   - vcenter_folder
   - vcenter_license
+  - vcenter_standard_key_provider
   - vmware_about_info
   - vmware_category
   - vmware_category_info
   - vmware_cfg_backup
   - vmware_cluster
+  - vmware_cluster_dpm
   - vmware_cluster_drs
   - vmware_cluster_ha
   - vmware_cluster_info
+  - vmware_cluster_vcls
   - vmware_cluster_vsan
-  - vmware_content_deploy_template
   - vmware_content_deploy_ovf_template
+  - vmware_content_deploy_template
   - vmware_content_library_info
   - vmware_content_library_manager
   - vmware_custom_attribute
@@ -30,7 +33,6 @@ action_groups:
   - vmware_datastore_info
   - vmware_datastore_maintenancemode
   - vmware_deploy_ovf
-  - vmware_dns_config
   - vmware_drs_group
   - vmware_drs_group_info
   - vmware_drs_group_manager
@@ -76,6 +78,7 @@ action_groups:
   - vmware_guest_tools_info
   - vmware_guest_tools_upgrade
   - vmware_guest_tools_wait
+  - vmware_guest_tpm
   - vmware_guest_vgpu
   - vmware_guest_video
   - vmware_host
@@ -85,6 +88,7 @@ action_groups:
   - vmware_host_capability_info
   - vmware_host_config_info
   - vmware_host_config_manager
+  - vmware_host_custom_attributes
   - vmware_host_datastore
   - vmware_host_disk_info
   - vmware_host_dns
@@ -99,6 +103,7 @@ action_groups:
   - vmware_host_iscsi_info
   - vmware_host_kernel_manager
   - vmware_host_lockdown
+  - vmware_host_lockdown_exceptions
   - vmware_host_logbundle
   - vmware_host_logbundle_info
   - vmware_host_ntp
@@ -115,6 +120,7 @@ action_groups:
   - vmware_host_sriov
   - vmware_host_ssl_info
   - vmware_host_tcpip_stacks
+  - vmware_host_user_manager
   - vmware_host_vmhba_info
   - vmware_host_vmnic_info
   - vmware_local_role_info
@@ -140,16 +146,17 @@ action_groups:
   - vmware_vcenter_settings_info
   - vmware_vcenter_statistics
   - vmware_vc_infraprofile_info
+  - vmware_vm_config_option
   - vmware_vm_host_drs_rule
   - vmware_vm_info
+  - vmware_vmkernel
+  - vmware_vmkernel_info
+  - vmware_vmotion
   - vmware_vm_shell
   - vmware_vm_storage_policy
   - vmware_vm_storage_policy_info
   - vmware_vm_vm_drs_rule
   - vmware_vm_vss_dvs_migrate
-  - vmware_vmkernel
-  - vmware_vmkernel_info
-  - vmware_vmotion
   - vmware_vsan_cluster
   - vmware_vsan_health_info
   - vmware_vspan_session
