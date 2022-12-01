@@ -13,6 +13,7 @@ DOCUMENTATION = r'''
 ---
 module: vmware_custom_attribute
 short_description: Manage custom attributes definitions
+version_added: '3.2.0'
 description:
   - This module can be used to add and remove custom attributes definitions for various vSphere objects.
 author:
