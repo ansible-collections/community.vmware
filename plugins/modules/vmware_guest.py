@@ -3253,15 +3253,6 @@ class PyVmomiHelper(PyVmomi):
                 self.module.fail_json(msg="Failed to convert template to virtual machine"
                                           " due to generic error : %s" % to_native(generic_exc))
 
-            # Automatically update VMware UUID when converting template to VM.
-            # This avoids an interactive prompt during VM startup.
-            uuid_action = [x for x in self.current_vm_obj.config.extraConfig if x.key == "uuid.action"]
-            if not uuid_action:
-                uuid_action_opt = vim.option.OptionValue()
-                uuid_action_opt.key = "uuid.action"
-                uuid_action_opt.value = "create"
-                self.configspec.extraConfig.append(uuid_action_opt)
-
         # add customize existing VM after VM re-configure
         if self.params['customization']['existing_vm']:
             if self.current_vm_obj.config.template:
