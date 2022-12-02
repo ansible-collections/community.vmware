@@ -77,6 +77,7 @@ Parameters
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>The ESXi hosts vmnics to use with specific LAGs.</div>
@@ -111,6 +112,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>The ESXi hosts vmnics to use with the LAG.</div>
@@ -324,6 +326,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>The ESXi hosts vmnics to use with the Distributed vSwitch.</div>

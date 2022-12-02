@@ -130,6 +130,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>List of dicts containing.</div>
@@ -193,6 +194,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">0</div>
                 </td>
                 <td>
                         <div>Ignored if NIOC version is set to version2</div>

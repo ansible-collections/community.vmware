@@ -60,6 +60,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Can only be used if <code>lacp_support</code> is set to <code>enhanced</code>.</div>

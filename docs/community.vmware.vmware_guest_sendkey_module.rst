@@ -137,6 +137,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>The list of the keys will be sent to the virtual machine.</div>

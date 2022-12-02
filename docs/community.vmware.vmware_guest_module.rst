@@ -45,6 +45,7 @@ Parameters
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.8.0</div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Define a list of advanced settings to be added to the VMX config.</div>
@@ -78,6 +79,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of CD-ROM configurations for the virtual machine. Added in version 2.9.</div>
@@ -241,6 +243,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Parameters for OS customization when cloning from the template or the virtual machine, or apply to the existing virtual machine directly.</div>
@@ -615,6 +618,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>Define a list of custom values to set on virtual machine.</div>
@@ -687,6 +691,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of disks to add.</div>
@@ -1052,6 +1057,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Manage virtual machine&#x27;s hardware attributes.</div>
@@ -1530,6 +1536,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of networks (in the order of the NICs).</div>
@@ -1792,6 +1799,7 @@ Parameters
                     <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.13.0</div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
                 </td>
                 <td>
                         <div>Add or remove a virtual NVDIMM device to the virtual machine.</div>
@@ -2128,6 +2136,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
                 </td>
                 <td>
                         <div>A list of vApp properties.</div>
