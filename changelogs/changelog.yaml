@@ -1412,3 +1412,41 @@ releases:
       name: vmware_host_lockdown_exceptions
       namespace: ''
     release_date: '2022-10-31'
+  3.2.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_portgroup - Fix an issue when deleting portgroups (https://github.com/ansible-collections/community.vmware/issues/1522).
+      - vmware_guest_instant_clone - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1555).
+      - vmware_host_lockdown - Fix issue `'VmwareLockdownManager' object has no attribute
+        'warn'` (https://github.com/ansible-collections/community.vmware/pull/1540).
+      - vmware_object_custom_attributes_info - Fixed an issue that has occurred an
+        error if a custom attribute is the global type(https://github.com/ansible-collections/community.vmware/pull/1541).
+      - vmware_portgroup_info - Fix an issue that can fail the module after manually
+        updating a portgroup through vCenter (https://github.com/ansible-collections/community.vmware/issues/1544).
+      minor_changes:
+      - vmware_guest - Add sub-option to configure virtual performance counters (https://github.com/ansible-collections/community.vmware/issues/1511).
+      - vmware_guest - Adding sub-options to configure CPU and memory shares (https://github.com/ansible-collections/community.vmware/issues/356).
+      - vmware_guest_boot_manager - Add a new parameter boot_hdd_name to specify the
+        boot disk name(https://github.com/ansible-collections/community.vmware/pull/1543).
+      - vmware_guest_custom_attributes - Improve the code quality and added the return
+        value for diff(https://github.com/ansible-collections/community.vmware/pull/1532).
+      - vmware_vm_info - Adding resource pool of the VM to result (https://github.com/ansible-collections/community.vmware/pull/1551).
+    fragments:
+    - 1511-vmware_guest-vpmc.yml
+    - 1511-vmware_vm_info.yml
+    - 1522-vmware_dvs_portgroup.yml
+    - 1532-vmware_guest_custom_attributes.yml
+    - 1539-vmware_guest_shares.yml
+    - 1540-vmware_host_lockdown.yml
+    - 1541-vmware_object_custom_attributes_info.yml
+    - 1543-vmware_guest_boot_manager.yml
+    - 1544-vmware_portgroup_info.yml
+    - 1555-vmware_guest_instant_clone-pyvmomi_8_0_0_1.yml
+    modules:
+    - description: Manage custom attributes definitions
+      name: vmware_custom_attribute
+      namespace: ''
+    - description: Manage custom attributes from VMware for the given vSphere object
+      name: vmware_custom_attribute_manager
+      namespace: ''
+    release_date: '2022-12-01'
