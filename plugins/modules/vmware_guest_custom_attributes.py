@@ -250,7 +250,8 @@ class VmAttributeManager(PyVmomi):
         for k, n in [(x.key, x.name) for x in self.custom_field_mgr for v in user_fields if x.name == v['name']]:
             existing_custom_attributes.append({
                 "key": k,
-                "name": n
+                "name": n,
+                "value": ""
             })
 
         # Gather the values of set the custom attribute.
@@ -258,11 +259,6 @@ class VmAttributeManager(PyVmomi):
             for e in existing_custom_attributes:
                 if e['key'] == v.key:
                     e['value'] = v.value
-
-                # When add custom attribute as a new one, it has not the value key.
-                # Add the value key to avoid unintended behavior in the difference check.
-                if 'value' not in e:
-                    e['value'] = ''
 
         # Select the custom attribute and value to update the configuration.
         _user_fields_for_diff = []
