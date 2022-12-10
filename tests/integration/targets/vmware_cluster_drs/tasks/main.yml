@@ -95,6 +95,56 @@
     that:
       - not change_balance_vms_again.changed
 
+- name: Try to deactivate already off predictive drs setting (check-mode)
+  vmware_cluster_drs: &change_predictive_drs_deactivate
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_drs
+    enable: true
+    predictive_drs: false
+  check_mode: true
+  register: change_predictive_drs_check
+
+- assert:
+    that:
+      - not change_predictive_drs_check.changed
+
+- name: Try to activate predictive drs setting (check-mode)
+  vmware_cluster_drs: &change_predictive_drs_activate
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_drs
+    enable: true
+    predictive_drs: true
+  check_mode: true
+  register: change_predictive_drs_check
+
+- assert:
+    that:
+      - change_predictive_drs_check.changed
+
+- name: Try to deactivate already off predictive drs setting
+  vmware_cluster_drs: *change_predictive_drs_deactivate
+  register: change_predictive_drs_check
+
+- assert:
+    that:
+      - not change_predictive_drs_check.changed
+
+- name: Try to activate predictive drs setting 
+  vmware_cluster_drs: *change_predictive_drs_activate
+  register: change_predictive_drs_check
+
+- assert:
+    that:
+      - change_predictive_drs_check.changed
+
 # Delete test cluster
 - name: Delete test cluster
   vmware_cluster:
