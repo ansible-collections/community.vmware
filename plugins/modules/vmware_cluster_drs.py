@@ -67,6 +67,7 @@ options:
       default: {}
       type: dict
     predictive_drs:
+      version_added: '3.3.0'
       description:
       - In addition to real-time metrics, DRS will respond to forecasted metrics provided by vRealize Operations Manager.
       - You must also configure Predictive DRS in a version of vRealize Operations that supports this feature.
