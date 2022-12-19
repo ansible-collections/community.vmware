@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_custom_attributes  - Fix an issue when setting the custom fields on a newly created VM (https://github.com/ansible-collections/community.vmware/issues/1568).
