@@ -50,7 +50,8 @@ class PyVmomiDeviceHelper(object):
             'vmxnet3': vim.vm.device.VirtualVmxnet3,
             'e1000': vim.vm.device.VirtualE1000,
             'e1000e': vim.vm.device.VirtualE1000e,
-            'sriov': vim.vm.device.VirtualSriovEthernetCard
+            'sriov': vim.vm.device.VirtualSriovEthernetCard,
+            'pvrdma': vim.vm.device.VirtualVmxnet3Vrdma
         }
 
     def create_scsi_controller(self, scsi_type, bus_number, bus_sharing='noSharing'):
