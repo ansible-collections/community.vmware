@@ -167,8 +167,7 @@ def main():
         try:
             module.exit_json(vgpu=pyv.gather_vgpu_profile_facts(vm))
         except Exception as exc:
-            module.fail_json(msg="Failed to gather information with exception : %s" % to_text(exc))      
+            module.fail_json(msg="Failed to gather information with exception : %s" % to_text(exc))   
 
 if __name__ == "__main__":
     main()
-    
