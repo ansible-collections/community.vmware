@@ -99,16 +99,12 @@ vgpu_info:
     }
 """
 
-try:
-    from pyVmomi import vim
-except ImportError:
-    pass
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_text
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
-    wait_for_task,
+    vmware_argument_spec
 )
 
 
@@ -136,6 +132,7 @@ class PyVmomiHelper(PyVmomi):
                 )
                 vgpu_info.append(vgpu)
         return vgpu_info
+
 
 def main():
     argument_spec = vmware_argument_spec()
@@ -166,7 +163,6 @@ def main():
         module.fail_json(
             msg="Unable to gather vGPU information for non-existing VM %s" % vm_id
         )
-        
     else:
         try:
             module.exit_json(vgpu=pyv.gather_vgpu_profile_facts(vm))
@@ -175,3 +171,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
