@@ -15,7 +15,7 @@ DOCUMENTATION = r"""
 module: vmware_guest_vgpu_info
 short_description: Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure
 description:
-    - This module is used to gather metadata about vGPU card profiles of the given virtual machine.
+    - This module is used to gather metadata about vGPU profiles of the given virtual machine.
     - All parameters and VMware object names are case sensitive.
 author:
     - Jared Priddy (@jdptechnc)
