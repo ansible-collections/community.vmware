@@ -169,6 +169,6 @@ def main():
         except Exception as exc:
             module.fail_json(msg="Failed to gather information with exception : %s" % to_text(exc))
 
+
 if __name__ == "__main__":
     main()
-
