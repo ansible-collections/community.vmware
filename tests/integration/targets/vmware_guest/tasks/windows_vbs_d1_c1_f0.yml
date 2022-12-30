@@ -67,6 +67,32 @@
       - "vbs_vm.failed == false"
       - "vbs_vm.changed == true"
 
+- name: Enable VBS for Windows Server 2016 VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: "{{ f0 }}"
+    name: vbs-Test2
+    datacenter: "{{ f0 }}"
+    disk:
+    - size_mb: 256
+      type: thin
+      datastore: '{{ rw_datastore }}'
+    hardware:
+      virt_based_security: true
+    state: present
+  register: vbs_vm
+  check_mode: true
+
+- debug: var=vbs_vm
+
+- name: assert the VM would be changed
+  assert:
+    that:
+      - vbs_vm is changed
+
 - name: Enable VBS for Windows Server 2016 VM
   vmware_guest:
     validate_certs: false

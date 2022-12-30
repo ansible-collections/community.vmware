@@ -45,6 +45,44 @@
     that:
       - "cdrom_vm.changed == true"
 
+- name: Remove the last 2 CDROMs and update the first 2 for the new VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm1
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      type: client
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 1
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 0
+      state: absent
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 1
+      state: absent
+    state: present
+  register: cdrom_vm
+  check_mode: true
+
+- debug: var=cdrom_vm
+
+- name: assert the VM would be changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
 - name: Remove the last 2 CDROMs and update the first 2 for the new VM
   vmware_guest:
     validate_certs: false
@@ -129,6 +167,44 @@
     that:
       - "cdrom_vm.changed == true"
 
+- name: Remove the first 2 CDROMs and update the last 2 for the new VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm2
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      state: absent
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 1
+      state: absent
+    - controller_type: sata
+      controller_number: 2
+      unit_number: 0
+      type: client
+    - controller_type: sata
+      controller_number: 3
+      unit_number: 1
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    state: present
+  register: cdrom_vm
+  check_mode: true
+
+- debug: var=cdrom_vm
+
+- name: assert the VM would be changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
 - name: Remove the first 2 CDROMs and update the last 2 for the new VM
   vmware_guest:
     validate_certs: false
@@ -209,6 +285,44 @@
 - debug: var=cdrom_vm
 
 - name: assert the VM was created
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Remove the 2 CDROMs and update the other 2 for the new VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm3
+    datacenter: "{{ dc1 }}"
+    cdrom:
+    - controller_type: ide
+      controller_number: 0
+      unit_number: 0
+      state: absent
+    - controller_type: sata
+      controller_number: 0
+      unit_number: 0
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    - controller_type: ide
+      controller_number: 1
+      unit_number: 0
+      type: client
+    - controller_type: sata
+      controller_number: 1
+      unit_number: 0
+      state: absent
+    state: present
+  register: cdrom_vm
+  check_mode: true
+
+- debug: var=cdrom_vm
+
+- name: assert the VM would be changed
   assert:
     that:
       - "cdrom_vm.changed == true"

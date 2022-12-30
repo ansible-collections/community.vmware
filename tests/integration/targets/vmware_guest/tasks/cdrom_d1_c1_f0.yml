@@ -31,6 +31,30 @@
     that:
       - "cdrom_vm.changed == true"
 
+- name: Update CDROM to iso for the new VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: "vm"
+    name: test_vm1
+    datastore: "{{ rw_datastore }}"
+    datacenter: "{{ dc1 }}"
+    cdrom:
+      type: iso
+      iso_path: "[{{ ro_datastore }}] fedora.iso"
+    state: present
+  register: cdrom_vm
+  check_mode: true
+
+- debug: var=cdrom_vm
+
+- name: assert the VM would be changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
 - name: Update CDROM to iso for the new VM
   vmware_guest:
     validate_certs: false
@@ -50,6 +74,28 @@
 - debug: var=cdrom_vm
 
 - name: assert the VM was changed
+  assert:
+    that:
+      - "cdrom_vm.changed == true"
+
+- name: Update CDROM to client for the new VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    folder: vm
+    name: test_vm1
+    datacenter: "{{ dc1 }}"
+    cdrom:
+      type: client
+    state: present
+  register: cdrom_vm
+  check_mode: true
+
+- debug: var=cdrom_vm
+
+- name: assert the VM would be changed
   assert:
     that:
       - "cdrom_vm.changed == true"
