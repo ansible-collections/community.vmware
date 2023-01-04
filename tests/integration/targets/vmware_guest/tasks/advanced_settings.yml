@@ -29,6 +29,29 @@
     that:
       - r is changed
 
+- name: Change advance settings for VM in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    datacenter: "{{ dc1 }}"
+    state: present
+    folder: "{{ f0 }}"
+    advanced_settings:
+      - key: "svga.present"
+        value: "FALSE"
+  register: r
+  check_mode: true
+
+- debug: var=r
+
+- name: Assert that changes would be made
+  assert:
+    that:
+      - r is changed
+
 - name: Change advance settings for VM
   vmware_guest:
     validate_certs: false

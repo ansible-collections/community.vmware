@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - Fix check mode (https://github.com/ansible-collections/community.vmware/issues/1272).

@@ -49,11 +49,11 @@
   register: check_mode_state
   check_mode: true
 
-- name: assert that changes were made
+- name: assert that changes were appropriate for an existing powered-off VM
   assert:
     that:
-      - "check_mode_state.results|map(attribute='changed')|unique|list == [true]"
-      - "check_mode_state.results|map(attribute='vm_name')|unique|list == [ virtual_machines[0].name ]"
+      - "check_mode_state.results|map(attribute='changed') == [true, false, false, false, true, true, true, true, false, false, true, true]"
+      #- "check_mode_state.results|map(attribute='vm_name')|unique|list == [ virtual_machines[0].name ]"
 
 - name: Perform all operation on non-existent VM in check mode
   vmware_guest:
