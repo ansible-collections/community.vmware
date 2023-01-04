@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_host_lockdown_exceptions - Avoid setting exception users to what they already are
+    (https://github.com/ansible-collections/community.vmware/pull/1585).

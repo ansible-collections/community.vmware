@@ -139,7 +139,7 @@ class VmwareLockdownManager(PyVmomi):
             results['host_lockdown_exceptions'][host.name]['desired_exception_users'] = new_exception_users
             results['host_lockdown_exceptions'][host.name]['current_exception_users'] = new_exception_users
 
-            if not self.module.check_mode:
+            if changed and not self.module.check_mode:
                 try:
                     host.configManager.hostAccessManager.UpdateLockdownExceptions(new_exception_users)
 
