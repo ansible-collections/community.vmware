@@ -397,8 +397,6 @@ class PyVmomiHelper(PyVmomi):
                         d_item['virtual_function_backing'] = nic.sriovBacking.virtualFunctionBacking.id
             # If a distributed port group specified
             if isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.DistributedVirtualPortBackingInfo):
-                if hasattr(nic.backing.port, 'portKey'):
-                    d_item['port_id'] = nic.backing.port.portKey
                 key = nic.backing.port.portgroupKey
                 for portgroup in vm_obj.network:
                     if hasattr(portgroup, 'key') and portgroup.key == key:
