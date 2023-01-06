@@ -13,6 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: vmware_guest_vgpu_info
+version_added: '3.3.0'
 short_description: Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to gather metadata about vGPU profiles of the given virtual machine.
