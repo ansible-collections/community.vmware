@@ -80,6 +80,7 @@ action_groups:
   - vmware_guest_tools_wait
   - vmware_guest_tpm
   - vmware_guest_vgpu
+  - vmware_guest_vgpu_info
   - vmware_guest_video
   - vmware_host
   - vmware_host_acceptance
