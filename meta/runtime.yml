@@ -28,6 +28,7 @@ action_groups:
   - vmware_custom_attribute_manager
   - vmware_datacenter
   - vmware_datacenter_info
+  - vmware_datastore
   - vmware_datastore_cluster
   - vmware_datastore_cluster_manager
   - vmware_datastore_info
@@ -64,7 +65,7 @@ action_groups:
   - vmware_guest_file_operation
   - vmware_guest_find
   - vmware_guest_info
-  - vmware_guest_instant_clone 
+  - vmware_guest_instant_clone
   - vmware_guest_move
   - vmware_guest_network
   - vmware_guest_powerstate
@@ -80,6 +81,7 @@ action_groups:
   - vmware_guest_tools_wait
   - vmware_guest_tpm
   - vmware_guest_vgpu
+  - vmware_guest_vgpu_info
   - vmware_guest_video
   - vmware_host
   - vmware_host_acceptance
