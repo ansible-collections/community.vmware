@@ -26,7 +26,7 @@
       type: thin
       datastore: '{{ rw_datastore }}'
     hardware:
-      version: 11
+      version: 13
       memory_mb: 1024
       num_cpus: 1
       scsi: paravirtual

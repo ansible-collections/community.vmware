@@ -86,7 +86,7 @@ options:
     version_added: '3.3.0'
     description:
       - The PVRDMA device protocol used. Valid choices are - C(rocev1), C(rocev2).
-      - This parameter is only used on the VM with hardware version <= 19.
+      - This parameter is only used on the VM with hardware version >=14 and <= 19.
     type: str
   switch:
     description:
@@ -649,12 +649,12 @@ class PyVmomiHelper(PyVmomi):
             self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
 
         if self.params['device_type'] == 'pvrdma':
-            if int(vm_obj.config.version.split('vmx-')[-1]) > 19:
+            if int(vm_obj.config.version.split('vmx-')[-1]) > 19 or int(vm_obj.config.version.split('vmx-')[-1]) == 13:
                 self.params['pvrdma_device_protocol'] = None
             else:
                 if self.params['pvrdma_device_protocol'] and self.params['pvrdma_device_protocol'] not in ['rocev1', 'rocev2']:
                     self.module.fail_json(msg="Valid values of parameter 'pvrdma_device_protocol' are 'rocev1',"
-                                              " 'rocev2' for VM with hardware version <= 19.")
+                                              " 'rocev2' for VM with hardware version >= 14 and <= 19.")
                 if self.params['pvrdma_device_protocol'] is None:
                     self.params['pvrdma_device_protocol'] = 'rocev2'
 
