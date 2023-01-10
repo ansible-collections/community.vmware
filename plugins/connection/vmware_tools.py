@@ -229,7 +229,7 @@ from ansible.plugins.connection import ConnectionBase
 from ansible.module_utils.basic import missing_required_lib
 
 try:
-    from pyVim.connect import Disconnect, SmartConnect, SmartConnectNoSSL
+    from pyVim.connect import Disconnect, SmartConnect
     from pyVmomi import vim, vmodl
 
     HAS_PYVMOMI = True
@@ -292,15 +292,13 @@ class Connection(ConnectionBase):
             "port": self.get_option("vmware_port"),
         }
 
-        if self.validate_certs:
-            connect = SmartConnect
-        else:
+        if not self.validate_certs:
             if HAS_URLLIB3:
                 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            connect = SmartConnectNoSSL
+            connection_kwargs['disableSslCertValidation'] = True
 
         try:
-            self._si = connect(**connection_kwargs)
+            self._si = SmartConnect(**connection_kwargs)
         except SSLError:
             raise AnsibleError("SSL Error: Certificate verification failed.")
         except (gaierror):
