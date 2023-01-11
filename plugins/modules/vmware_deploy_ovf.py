@@ -198,6 +198,7 @@ from ansible.module_utils.six import string_types
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_network_by_name,
+    find_all_networks_by_name,
     find_vm_by_name,
     PyVmomi,
     gather_vm_facts,
@@ -385,14 +386,24 @@ class VMwareDeployOvf(PyVmomi):
                                       " datacenter" % self.params)
 
         for key, value in self.params['networks'].items():
-            network = find_network_by_name(self.content, value, datacenter_name=self.datacenter)
-            if not network:
+            # If we have the same network name defined in multiple clusters, check all networks to get the right one
+            networks = find_all_networks_by_name(self.content, value, datacenter_name=self.datacenter)
+            if not networks:
                 self.module.fail_json(msg='%(networks)s could not be located' % self.params)
-            network_mapping = vim.OvfManager.NetworkMapping()
-            network_mapping.name = key
-            network_mapping.network = network
-            self.network_mappings.append(network_mapping)
-
+            # Search for the network key of the same network name, that resides in a cluster parameter 
+            for network in networks:
+                if self.params['cluster']:
+                    for cnet in cluster.network:
+                        if network.key in cnet.key :
+                             network_mapping = vim.OvfManager.NetworkMapping()
+                             network_mapping.name = key
+                             network_mapping.network = network
+                             self.network_mappings.append(network_mapping)
+                else:
+                    network_mapping = vim.OvfManager.NetworkMapping()
+                    network_mapping.name = key
+                    network_mapping.network = network
+                    self.network_mappings.append(network_mapping)
         return self.datastore, self.datacenter, self.resource_pool, self.network_mappings
 
     def get_ovf_descriptor(self):
