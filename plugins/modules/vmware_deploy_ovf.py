@@ -390,7 +390,7 @@ class VMwareDeployOvf(PyVmomi):
             networks = find_all_networks_by_name(self.content, value, datacenter_name=self.datacenter)
             if not networks:
                 self.module.fail_json(msg='%(networks)s could not be located' % self.params)
-            # Search for the network key of the same network name, that resides in a cluster parameter 
+            # Search for the network key of the same network name, that resides in a cluster parameter
             for network in networks:
                 if self.params['cluster']:
                     for cnet in cluster.network:
