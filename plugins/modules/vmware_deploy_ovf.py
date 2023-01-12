@@ -394,11 +394,11 @@ class VMwareDeployOvf(PyVmomi):
             for network in networks:
                 if self.params['cluster']:
                     for cnet in cluster.network:
-                        if network.key in cnet.key :
-                             network_mapping = vim.OvfManager.NetworkMapping()
-                             network_mapping.name = key
-                             network_mapping.network = network
-                             self.network_mappings.append(network_mapping)
+                        if network.key in cnet.key:
+                            network_mapping = vim.OvfManager.NetworkMapping()
+                            network_mapping.name = key
+                            network_mapping.network = network
+                            self.network_mappings.append(network_mapping)
                 else:
                     network_mapping = vim.OvfManager.NetworkMapping()
                     network_mapping.name = key
