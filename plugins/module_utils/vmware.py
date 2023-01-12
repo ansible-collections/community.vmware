@@ -231,7 +231,7 @@ def find_all_objects_by_name(content, name, obj_type, folder=None, recurse=True)
             if unquote(obj.name) == name:
                 result.append(obj)
         except vmodl.fault.ManagedObjectNotFound:
-            pass    
+            pass
     return result
 
 def find_cluster_by_name(content, cluster_name, datacenter=None):
