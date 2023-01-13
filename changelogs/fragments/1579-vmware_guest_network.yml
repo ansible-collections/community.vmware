@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_network - Add PVRDMA network adapter type (https://github.com/ansible-collections/community.vmware/pull/1579).
