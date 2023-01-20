@@ -1177,6 +1177,13 @@ releases:
     - 1544-vmware_portgroup_info.yml
     - 1555-vmware_guest_instant_clone-pyvmomi_8_0_0_1.yml
     release_date: '2022-12-01'
+  2.10.3:
+    changes:
+      bugfixes:
+      - vmware_tools - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1578).
+    fragments:
+    - 1578-vmware_tools-pyvmomi_8_0_0_1.yml
+    release_date: '2023-01-20'
   2.2.0:
     changes:
       bugfixes:
