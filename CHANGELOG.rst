@@ -5,6 +5,29 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.3.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_drs - Add predictive DRS Setting (https://github.com/ansible-collections/community.vmware/pull/1542).
+- vmware_guest_network - Add PVRDMA network adapter type (https://github.com/ansible-collections/community.vmware/pull/1579).
+
+Bugfixes
+--------
+
+- vmware_cluster_dpm - Fix an issue that the slider and the values of the host_power_action_rate works invertet in the vCenter
+- vmware_cluster_drs - Fix drs_vmotion_rate so that the value corresponds to the vCenter UI. Previously, choosing 1 / 2 configured a migration threshold of 5 / 4 and vice versa (https://github.com/ansible-collections/community.vmware/pull/1542).
+- vmware_guest - Fix check mode (https://github.com/ansible-collections/community.vmware/issues/1272).
+- vmware_host_lockdown_exceptions - Avoid setting exception users to what they already are (https://github.com/ansible-collections/community.vmware/pull/1585).
+- vmware_tools - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1578).
+
+New Modules
+-----------
+
+- vmware_guest_vgpu_info - Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure
+
 v3.2.0
 ======
 

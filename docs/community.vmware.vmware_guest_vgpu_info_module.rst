@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_cluster_dpm_module:
+.. _community.vmware.vmware_guest_vgpu_info_module:
 
 
-***********************************
-community.vmware.vmware_cluster_dpm
-***********************************
+***************************************
+community.vmware.vmware_guest_vgpu_info
+***************************************
 
-**Manage Distributed Power Management (DPM) on VMware vSphere clusters**
+**Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure**
 
 
+Version added: 3.3.0
 
 .. contents::
    :local:
@@ -16,8 +17,8 @@ community.vmware.vmware_cluster_dpm
 
 Synopsis
 --------
-- Manages DPM on VMware vSphere clusters.
-- All values and VMware object names are case sensitive.
+- This module is used to gather metadata about vGPU profiles of the given virtual machine.
+- All parameters and VMware object names are case sensitive.
 
 
 
@@ -36,95 +37,45 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the cluster to be managed.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
                 </td>
                 <td>
-                        <div>The name of the datacenter.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
+                        <div>The datacenter name to which virtual machine belongs to.</div>
+                        <div>This parameter is case sensitive.</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>default_dpm_behaviour</b>
+                    <b>folder</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>automated</b>&nbsp;&larr;</div></li>
-                                    <li>manual</li>
-                        </ul>
                 </td>
                 <td>
-                        <div>Whether dpm should be automated or manual</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable_dpm</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to enable DPM.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>host_power_action_rate</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li><div style="color: blue"><b>3</b>&nbsp;&larr;</div></li>
-                                    <li>4</li>
-                                    <li>5</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>specify host power action rate</div>
-                        <div>1 is the lowest and 5 the highest</div>
+                        <div>Destination folder, absolute or relative path to find an existing guest.</div>
+                        <div>This is a required parameter, only if multiple VMs are found with same name.</div>
+                        <div>The folder should include the datacenter. ESXi server&#x27;s datacenter is ha-datacenter.</div>
+                        <div>Examples:</div>
+                        <div>folder: /ha-datacenter/vm</div>
+                        <div>folder: ha-datacenter/vm</div>
+                        <div>folder: /datacenter1/vm</div>
+                        <div>folder: datacenter1/vm</div>
+                        <div>folder: /datacenter1/vm/folder1</div>
+                        <div>folder: datacenter1/vm/folder1</div>
+                        <div>folder: /folder1/datacenter1/vm</div>
+                        <div>folder: folder1/datacenter1/vm</div>
+                        <div>folder: /folder1/datacenter1/vm/folder2</div>
                 </td>
             </tr>
             <tr>
@@ -142,6 +93,38 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>moid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
+                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the virtual machine.</div>
+                        <div>This is a required parameter, if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -217,6 +200,25 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>use_instance_uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -230,6 +232,22 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>UUID of the instance to gather facts if known, this is VMware&#x27;s unique identifier.</div>
+                        <div>This is a required parameter, if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -271,19 +289,50 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enable DPM
-      community.vmware.vmware_cluster_dpm:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        datacenter_name: datacenter
-        cluster_name: cluster
-        enable_dpm: true
-        default_dpm_behaviour: automated
-        host_power_action_rate: 2
+    - name: Gather information about vGPU profiles of a VM
+      community.vmware.vmware_guest_vgpu_info:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ datacenter_name }}"
+        validate_certs: no
+        name: UbuntuTest
       delegate_to: localhost
+      register: vgpu_info
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>vgpu_info</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>metadata about the virtual machine&#x27;s vGPU profiles</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;vgpu&#x27;: [{&#x27;Controller_Key&#x27;: 100, &#x27;Key&#x27;: 13000, &#x27;Label&#x27;: &#x27;PCI device 0&#x27;, &#x27;Summary&#x27;: &#x27;NVIDIA GRID vGPU grid_m10-8q&#x27;, &#x27;Unit_Number&#x27;: 18, &#x27;Vgpu&#x27;: &#x27;grid_m10-8q&#x27;}]}</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status
@@ -293,4 +342,4 @@ Status
 Authors
 ~~~~~~~
 
-- Olivia Luetolf (@olilu)
+- Jared Priddy (@jdptechnc)
