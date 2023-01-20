@@ -5,6 +5,14 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.10.3
+=======
+
+Bugfixes
+--------
+
+- vmware_tools - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1578).
+
 v2.10.2
 =======
 
