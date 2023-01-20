@@ -1450,3 +1450,31 @@ releases:
       name: vmware_custom_attribute_manager
       namespace: ''
     release_date: '2022-12-01'
+  3.3.0:
+    changes:
+      bugfixes:
+      - vmware_cluster_dpm - Fix an issue that the slider and the values of the host_power_action_rate
+        works invertet in the vCenter
+      - vmware_cluster_drs - Fix drs_vmotion_rate so that the value corresponds to
+        the vCenter UI. Previously, choosing 1 / 2 configured a migration threshold
+        of 5 / 4 and vice versa (https://github.com/ansible-collections/community.vmware/pull/1542).
+      - vmware_guest - Fix check mode (https://github.com/ansible-collections/community.vmware/issues/1272).
+      - vmware_host_lockdown_exceptions - Avoid setting exception users to what they
+        already are (https://github.com/ansible-collections/community.vmware/pull/1585).
+      - vmware_tools - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1578).
+      minor_changes:
+      - vmware_cluster_drs - Add predictive DRS Setting (https://github.com/ansible-collections/community.vmware/pull/1542).
+      - vmware_guest_network - Add PVRDMA network adapter type (https://github.com/ansible-collections/community.vmware/pull/1579).
+    fragments:
+    - 1272-vmware_guest-check_mode.yml
+    - 1542-vmware_cluster_drs.yaml
+    - 1556-vmware_cluster_dpm.yml
+    - 1578-vmware_tools-pyvmomi_8_0_0_1.yml
+    - 1579-vmware_guest_network.yml
+    - 1585-vmware_host_lockdown_exceptions-unnecessary_task.yml
+    modules:
+    - description: Gather information about vGPU profiles of the specified virtual
+        machine in the given vCenter infrastructure
+      name: vmware_guest_vgpu_info
+      namespace: ''
+    release_date: '2023-01-20'

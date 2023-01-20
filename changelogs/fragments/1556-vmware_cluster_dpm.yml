@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_cluster_dpm - Fix an issue that the slider and the values of the host_power_action_rate works invertet in the vCenter
