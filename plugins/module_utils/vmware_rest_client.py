@@ -165,18 +165,24 @@ class VmwareRestClient(object):
 
         return client
 
-    def get_tags_for_object(self, tag_service=None, tag_assoc_svc=None, dobj=None):
+    def get_tags_for_object(self, tag_service=None, tag_assoc_svc=None, dobj=None, tags=None):
         """
-        Return list of tag objects associated with an object
+        Return tag objects associated with an object
         Args:
             dobj: Dynamic object
             tag_service: Tag service object
             tag_assoc_svc: Tag Association object
-        Returns: List of tag objects associated with the given object
+            tags: List or set to which the tag objects are being added, reference is returned by the method
+        Returns: Tag objects associated with the given object
         """
-        # This method returns list of tag objects only,
+        # This method returns tag objects only,
         # Please use get_tags_for_dynamic_obj for more object details
-        tags = []
+        if tags is None:
+            tags = []
+
+        if not (isinstance(tags, list) or isinstance(tags, set)):
+            self.module.fail_json(msg="The parameter 'tags' must be of type 'list' or 'set', but type %s was passed" % type(tags))
+
         if not dobj:
             return tags
 
@@ -187,21 +193,29 @@ class VmwareRestClient(object):
             tag_assoc_svc = self.api_client.tagging.TagAssociation
 
         tag_ids = tag_assoc_svc.list_attached_tags(dobj)
+
+        add_tag = tags.append if isinstance(tags, list) else tags.add
         for tag_id in tag_ids:
-            tags.append(tag_service.get(tag_id))
+            add_tag(tag_service.get(tag_id))
 
         return tags
 
-    def get_tags_for_dynamic_obj(self, dobj=None):
+    def get_tags_for_dynamic_obj(self, dobj=None, tags=None):
         """
-        Return list of tag object details associated with object
+        Return tag object details associated with object
         Args:
             mid: Dynamic object for specified object
+            tags: List or set to which the tag objects are being added, reference is returned by the method
 
-        Returns: List of tag object details associated with the given object
+        Returns: Tag object details associated with the given object
 
         """
-        tags = []
+        if tags is None:
+            tags = []
+
+        if not (isinstance(tags, list) or isinstance(tags, set)):
+            self.module.fail_json(msg="The parameter 'tags' must be of type 'list' or 'set', but type %s was passed" % type(tags))
+
         if dobj is None:
             return tags
 
@@ -209,8 +223,9 @@ class VmwareRestClient(object):
 
         category_service = self.api_client.tagging.Category
 
+        add_tag = tags.append if isinstance(tags, list) else tags.add
         for tag_obj in temp_tags_model:
-            tags.append({
+            add_tag({
                 'id': tag_obj.id,
                 'category_name': category_service.get(tag_obj.category_id).name,
                 'name': tag_obj.name,
@@ -486,6 +501,45 @@ class VmwareRestClient(object):
 
         return self.search_svc_object_by_name(service=self.api_client.tagging.Category, svc_obj_name=category_name)
 
+    def get_tag_by_category_id(self, tag_name=None, category_id=None):
+        """
+        Return tag object by category id
+        Args:
+            tag_name: Name of tag
+            category_id: Id of category
+        Returns: Tag object if found else None
+        """
+        if tag_name is None:
+            return None
+
+        if category_id is None:
+            return self.search_svc_object_by_name(service=self.api_client.tagging.Tag, svc_obj_name=tag_name)
+
+        result = None
+        for tag_id in self.api_client.tagging.Tag.list_tags_for_category(category_id):
+            tag_obj = self.api_client.tagging.Tag.get(tag_id)
+            if tag_obj.name == tag_name:
+                result = tag_obj
+                break
+
+        return result
+
+    def get_tag_by_category_name(self, tag_name=None, category_name=None):
+        """
+        Return tag object by category name
+        Args:
+            tag_name: Name of tag
+            category_id: Id of category
+        Returns: Tag object if found else None
+        """
+        category_id = None
+        if category_name is not None:
+            category_obj = self.get_category_by_name(category_name=category_name)
+            if category_obj is not None:
+                category_id = category_obj.id
+
+        return self.get_tag_by_category_id(tag_name=tag_name, category_id=category_id)
+
     def get_tag_by_category(self, tag_name=None, category_name=None, category_id=None):
         """
         Return tag object by name and category name specified
@@ -495,6 +549,9 @@ class VmwareRestClient(object):
             category_id: Id of category, if known in advance (mutually exclusive with 'category_name')
         Returns: Tag object if found else None
         """
+        message = "The method 'get_tag_by_category' is deprecated and scheduled for removal. "\
+                  "Please update your code and use 'get_tag_by_category_id' or 'get_tag_by_category_name' instead"
+        self.module.deprecate(message, version='4.0.0', collection_name='community.vmware')
 
         if not tag_name:
             return None

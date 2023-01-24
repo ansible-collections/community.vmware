@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_tag - Allow to use category names for tag management (https://github.com/ansible-collections/community.vmware/issues/1614).

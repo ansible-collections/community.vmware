@@ -173,16 +173,16 @@ tag_status:
     returned: on success
     type: list
     sample: {
+        "attached_tags": [
+            "urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security",
+        ],
         "current_tags": [
-            "backup",
-            "security"
+            "urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup",
+            "urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security",
         ],
-        "desired_tags": [
-            "security"
-        ],
+        "detached_tags": [],
         "previous_tags": [
-            "backup",
-            "security"
+            "urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup",
         ]
     }
 '''
@@ -208,7 +208,7 @@ class VmwareTagManager(VmwareRestClient):
         self.object_type = self.params.get('object_type')
         managed_object_id = None
 
-        if moid:
+        if moid is not None:
             managed_object_id = moid
         else:
             object_name = self.params.get('object_name')
@@ -282,19 +282,20 @@ class VmwareTagManager(VmwareRestClient):
             changed=False,
             tag_status=dict(),
         )
-        tag_objs = []
+        desired_tag_objs = set()
         changed = False
         action = self.params.get('state')
         try:
-            available_tag_obj = self.get_tags_for_object(tag_service=self.tag_service,
-                                                         tag_assoc_svc=self.tag_association_svc,
-                                                         dobj=self.dynamic_managed_object)
+            current_tag_objs = self.get_tags_for_object(tag_service=self.tag_service,
+                                                        tag_assoc_svc=self.tag_association_svc,
+                                                        dobj=self.dynamic_managed_object,
+                                                        tags=set())
         except Error as error:
             self.module.fail_json(msg="%s" % self.get_error_message(error))
 
-        _temp_prev_tags = ["%s:%s" % (tag['category_name'], tag['name']) for tag in self.get_tags_for_dynamic_obj(self.dynamic_managed_object)]
-        results['tag_status']['previous_tags'] = _temp_prev_tags
-        results['tag_status']['desired_tags'] = self.tag_names
+        results['tag_status']['previous_tags'] = ["%s:%s" % (tag_obj.category_id, tag_obj.name) for tag_obj in current_tag_objs]
+        results['tag_status']['attached_tags'] = []
+        results['tag_status']['detached_tags'] = []
 
         # Check if category and tag combination exists as per user request
         for tag in self.tag_names:
@@ -302,74 +303,93 @@ class VmwareTagManager(VmwareRestClient):
             if isinstance(tag, dict):
                 tag_name = tag.get('tag')
                 category_name = tag.get('category')
-                if category_name:
+                if category_name is not None:
                     # User specified category
                     category_obj = self.search_svc_object_by_name(self.category_service, category_name)
-                    if not category_obj:
+                    if category_obj is None:
                         self.module.fail_json(msg="Unable to find the category %s" % category_name)
             elif isinstance(tag, str):
                 if ":" in tag:
                     # User specified category
                     category_name, tag_name = tag.split(":", 1)
                     category_obj = self.search_svc_object_by_name(self.category_service, category_name)
-                    if not category_obj:
+                    if category_obj is None:
                         self.module.fail_json(msg="Unable to find the category %s" % category_name)
                 else:
                     # User specified only tag
                     tag_name = tag
 
-            if category_obj:
-                tag_obj = self.get_tag_by_category(tag_name=tag_name, category_id=category_obj.id)
-            elif category_name:
-                tag_obj = self.get_tag_by_category(tag_name=tag_name, category_name=category_name)
+            if category_obj is not None:
+                tag_obj = self.get_tag_by_category_id(tag_name=tag_name, category_id=category_obj.id)
             else:
                 tag_obj = self.get_tag_by_name(tag_name=tag_name)
 
-            if not tag_obj:
+            if tag_obj is None:
                 self.module.fail_json(msg="Unable to find the tag %s" % tag_name)
 
-            tag_objs.append(tag_obj)
+            desired_tag_objs.add(tag_obj)
+
+        detached_tag_objs = set()
+        attached_tag_objs = set()
 
         if action in ('add', 'present'):
-            for tag_obj in tag_objs:
-                if tag_obj not in available_tag_obj:
-                    # Tag is not already applied
-                    try:
-                        self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
-                        changed = True
-                    except Error as error:
-                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+            # Tags that need to be attached
+            tag_objs_to_attach = desired_tag_objs.difference(current_tag_objs)
+            tag_ids_to_attach = [tag_obj.id for tag_obj in tag_objs_to_attach]
+            if len(tag_ids_to_attach) > 0:
+                try:
+                    self.tag_association_svc.attach_multiple_tags_to_object(object_id=self.dynamic_managed_object,
+                                                                            tag_ids=tag_ids_to_attach)
+                    attached_tag_objs.update(tag_objs_to_attach)
+                    current_tag_objs.update(tag_objs_to_attach)
+                    changed = True
+                except Error as error:
+                    self.module.fail_json(msg="%s" % self.get_error_message(error))
 
         elif action == 'set':
-            for av_tag in available_tag_obj:
-                if av_tag not in tag_objs:
-                    # Tag not in the defined list
-                    try:
-                        self.tag_association_svc.detach(tag_id=av_tag.id, object_id=self.dynamic_managed_object)
-                        changed = True
-                    except Error as error:
-                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+            # Tags that need to be detached
+            tag_objs_to_detach = current_tag_objs.difference(desired_tag_objs)
+            tag_ids_to_detach = [tag_obj.id for tag_obj in tag_objs_to_detach]
+            if len(tag_ids_to_detach) > 0:
+                try:
+                    self.tag_association_svc.detach_multiple_tags_from_object(object_id=self.dynamic_managed_object,
+                                                                              tag_ids=tag_ids_to_detach)
+                    detached_tag_objs.update(tag_objs_to_detach)
+                    current_tag_objs.difference_update(tag_objs_to_detach)
+                    changed = True
+                except Error as error:
+                    self.module.fail_json(msg="%s" % self.get_error_message(error))
 
-            for tag_obj in tag_objs:
-                if tag_obj not in available_tag_obj:
-                    # Tag is not already applied
-                    try:
-                        self.tag_association_svc.attach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
-                        changed = True
-                    except Error as error:
-                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+            # Tags that need to be attached
+            tag_objs_to_attach = desired_tag_objs.difference(current_tag_objs)
+            tag_ids_to_attach = [tag_obj.id for tag_obj in tag_objs_to_attach]
+            if len(tag_ids_to_attach) > 0:
+                try:
+                    self.tag_association_svc.attach_multiple_tags_to_object(object_id=self.dynamic_managed_object,
+                                                                            tag_ids=tag_ids_to_attach)
+                    attached_tag_objs.update(tag_objs_to_attach)
+                    current_tag_objs.update(tag_objs_to_attach)
+                    changed = True
+                except Error as error:
+                    self.module.fail_json(msg="%s" % self.get_error_message(error))
 
         elif action in ('remove', 'absent'):
-            for tag_obj in tag_objs:
-                if tag_obj in available_tag_obj:
-                    try:
-                        self.tag_association_svc.detach(tag_id=tag_obj.id, object_id=self.dynamic_managed_object)
-                        changed = True
-                    except Error as error:
-                        self.module.fail_json(msg="%s" % self.get_error_message(error))
+            # Tags that need to be detached
+            tag_objs_to_detach = current_tag_objs.intersection(desired_tag_objs)
+            tag_ids_to_detach = [tag_obj.id for tag_obj in tag_objs_to_detach]
+            if len(tag_ids_to_detach) > 0:
+                try:
+                    self.tag_association_svc.detach_multiple_tags_from_object(object_id=self.dynamic_managed_object,
+                                                                              tag_ids=tag_ids_to_detach)
+                    detached_tag_objs.update(tag_objs_to_detach)
+                    current_tag_objs.difference_update(tag_objs_to_detach)
+                    changed = True
+                except Error as error:
+                    self.module.fail_json(msg="%s" % self.get_error_message(error))
 
-        _temp_curr_tags = ["%s:%s" % (tag['category_name'], tag['name']) for tag in self.get_tags_for_dynamic_obj(self.dynamic_managed_object)]
-        results['tag_status']['current_tags'] = _temp_curr_tags
+        results['tag_status']['detached_tags'] = ["%s:%s" % (tag_obj.category_id, tag_obj.name) for tag_obj in detached_tag_objs]
+        results['tag_status']['attached_tags'] = ["%s:%s" % (tag_obj.category_id, tag_obj.name) for tag_obj in attached_tag_objs]
+        results['tag_status']['current_tags'] = ["%s:%s" % (tag_obj.category_id, tag_obj.name) for tag_obj in current_tag_objs]
         results['changed'] = changed
         self.module.exit_json(**results)
 
