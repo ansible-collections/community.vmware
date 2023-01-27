@@ -69,6 +69,10 @@ options:
       - Parameter to indicate if certification validation needs to be done on destination VCenter.
     type: bool
     default: False
+  destination_vcenter_thumbprint:
+    description:
+      - The sslThumbprint of destination VCenter. Required when the VCenters are not linked.
+    type: str
   destination_host:
     description:
       - The name of the destination host.
@@ -219,6 +223,7 @@ class CrossVCCloneManager(PyVmomi):
         self.destination_vcenter_password = self.params['destination_vcenter_password']
         self.destination_vcenter_port = self.params.get('port', 443)
         self.destination_vcenter_validate_certs = self.params.get('destination_vcenter_validate_certs', None)
+        self.destination_vcenter_thumbprint = self.params.get('destination_vcenter_thumbprint', None)
 
     def get_new_vm_info(self, vm):
         # to check if vm has been cloned in the destination vc
@@ -307,6 +312,9 @@ class CrossVCCloneManager(PyVmomi):
         creds.password = self.destination_vcenter_password
         self.service_locator.credential = creds
 
+        if self.destination_vcenter_thumbprint:
+          self.service_locator.sslThumbprint = self.destination_vcenter_thumbprint
+
         # populate relocate spec
         self.relocate_spec.datastore = self.destination_datastore
         self.relocate_spec.pool = self.destination_resource_pool
@@ -338,6 +346,7 @@ def main():
         destination_vcenter_password=dict(type='str', required=True, no_log=True),
         destination_vcenter_port=dict(type='int', default=443),
         destination_vcenter_validate_certs=dict(type='bool', default=False),
+        destination_vcenter_thumbprint=dict(type='str', required=False),
         destination_vm_folder=dict(type='str', required=True),
         destination_resource_pool=dict(type='str', default=None),
         is_template=dict(type='bool', default=False),
