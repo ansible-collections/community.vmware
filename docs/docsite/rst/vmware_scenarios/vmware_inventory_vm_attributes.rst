@@ -181,7 +181,7 @@ guestAutoLockSupported (bool)
 memoryReservationLockSupported (bool)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Indicates whether :ref:`memory_reservation_locked_to_max` may be set to true for the virtual machine.
+    Indicates whether :ref:`ansible_collections.community.vmware.docsite.memory_reservation_locked_to_max` may be set to true for the virtual machine.
 
 featureRequirementSupported (bool)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -239,7 +239,7 @@ name (str)
 guestFullName (str)
 ^^^^^^^^^^^^^^^^^^^
 
-    This is the full name of the guest operating system for the virtual machine. For example: Windows 2000 Professional. See :ref:`alternate_guest_name`.
+    This is the full name of the guest operating system for the virtual machine. For example: Windows 2000 Professional. See :ref:`ansible_collections.community.vmware.docsite.alternate_guest_name`.
 
 version (str)
 ^^^^^^^^^^^^^
@@ -312,7 +312,7 @@ guestId (str)
 alternateGuestName (str)
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-    Used as display name for the operating system if guestId isotherorother-64. See :ref:`guest_full_name`.
+    Used as display name for the operating system if guestId isotherorother-64. See :ref:`ansible_collections.community.vmware.docsite.guest_full_name`.
 
 annotation (str, optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -945,7 +945,7 @@ guestFamily (str, optional)
 guestFullName (str, optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    See :ref:`guest_full_name`.
+    See :ref:`ansible_collections.community.vmware.docsite.guest_full_name`.
 
 hostName (str, optional)
 ^^^^^^^^^^^^^^^^^^^^^^^^
