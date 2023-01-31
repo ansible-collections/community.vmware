@@ -117,19 +117,17 @@ def answer_question(vm, responses):
             raise TaskError("answer failed: %s" % to_text(e))
 
 
-def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
+def wait_for_task(task, max_backoff=64, vm=None, answers=None):
     """Wait for given task using exponential back-off algorithm.
 
     Args:
         task: VMware task object
         max_backoff: Maximum amount of sleep time in seconds
-        timeout: Timeout for the given task in seconds
 
     Returns: Tuple with True and result for successful task
     Raises: TaskError on failure
     """
     failure_counter = 0
-    start_time = time.time()
 
     while True:
         if check_answer_question_status(vm):
@@ -138,8 +136,6 @@ def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
                 answer_question(vm, responses)
             else:
                 raise TaskError("%s" % to_text(vm.runtime.question.text))
-        if time.time() - start_time >= timeout:
-            raise TaskError("Timeout")
         if task.info.state == vim.TaskInfo.State.success:
             return True, task.info.result
         if task.info.state == vim.TaskInfo.State.error:
