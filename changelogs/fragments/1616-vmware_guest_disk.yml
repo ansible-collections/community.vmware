@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_disk - Add support for IDE disk add, remove or reconfigure (https://github.com/ansible-collections/community.vmware/pull/1616).
