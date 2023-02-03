@@ -40,6 +40,7 @@ class PyVmomiDeviceHelper(object):
         }
         self.sata_device_type = vim.vm.device.VirtualAHCIController
         self.nvme_device_type = vim.vm.device.VirtualNVMEController
+        self.ide_device_type = vim.vm.device.VirtualIDEController
         self.usb_device_type = {
             'usb2': vim.vm.device.VirtualUSBController,
             'usb3': vim.vm.device.VirtualUSBXHCIController

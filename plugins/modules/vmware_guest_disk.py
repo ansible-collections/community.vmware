@@ -154,9 +154,10 @@ options:
          description:
            - Disk Unit Number.
            - Valid value range from 0 to 15, except 7 for SCSI Controller.
-           - Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher
+           - Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher.
            - Valid value range from 0 to 29 for SATA controller.
            - Valid value range from 0 to 14 for NVME controller.
+           - Valid value range from 0 to 1 for IDE controller.
          type: int
          required: True
        scsi_type:
@@ -189,9 +190,11 @@ options:
            - This parameter is added for managing disks attaching other types of controllers, e.g., SATA or NVMe.
            - If either C(controller_type) or C(scsi_type) is not specified, then use C(paravirtual) type.
          type: str
-         choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme']
+         choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme', 'ide']
        controller_number:
-         description: This parameter is used with C(controller_type) for specifying controller bus number.
+         description:
+           - This parameter is used with C(controller_type) for specifying controller bus number.
+           - For C(ide) controller type, valid value is 0 or 1.
          type: int
          choices: [0, 1, 2, 3]
        iolimit:
@@ -517,7 +520,9 @@ class PyVmomiHelper(PyVmomi):
         self.desired_disks = self.params['disk']  # Match with vmware_guest parameter
         self.vm = None
         self.ctl_device_type = self.device_helper.scsi_device_type.copy()
-        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type, 'nvme': self.device_helper.nvme_device_type})
+        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type,
+                                     'nvme': self.device_helper.nvme_device_type,
+                                     'ide': self.device_helper.ide_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
 
@@ -870,6 +875,10 @@ class PyVmomiHelper(PyVmomi):
             else:
                 self.module.fail_json(msg="Please specify either 'scsi_type' or 'controller_type' for disk index [%s]."
                                           % disk_index)
+            if current_disk['controller_type'] == 'ide':
+                if self.vm.runtime.powerState != vim.VirtualMachinePowerState.poweredOff:
+                    self.module.fail_json(msg="Please make sure VM is in powered off state before doing IDE disk"
+                                              " reconfiguration.")
 
             # Check controller bus number
             if disk['scsi_controller'] is not None and disk['controller_number'] is None and disk['controller_type'] is None:
@@ -885,6 +894,10 @@ class PyVmomiHelper(PyVmomi):
             except ValueError:
                 self.module.fail_json(msg="Invalid controller bus number '%s' specified"
                                           " for disk index [%s]" % (temp_disk_controller, disk_index))
+            if current_disk['controller_type'] == 'ide' and disk_controller not in [0, 1]:
+                self.module.fail_json(msg="Invalid controller bus number '%s' specified"
+                                          " for disk index [%s], valid value is 0 or 1" % (disk_controller, disk_index))
+
             current_disk['controller_number'] = disk_controller
 
             try:
@@ -921,6 +934,9 @@ class PyVmomiHelper(PyVmomi):
             elif current_disk['controller_type'] == 'nvme' and temp_disk_unit_number not in range(0, 15):
                 self.module.fail_json(msg="Invalid Disk unit number ID specified for NVMe disk [%s] at index [%s],"
                                           " please specify value between 0 to 14" % (temp_disk_unit_number, disk_index))
+            elif current_disk['controller_type'] == 'ide' and temp_disk_unit_number not in [0, 1]:
+                self.module.fail_json(msg="Invalid Disk unit number ID specified for IDE disk [%s] at index [%s],"
+                                          " please specify value 0 or 1" % (temp_disk_unit_number, disk_index))
             current_disk['disk_unit_number'] = temp_disk_unit_number
 
             # By default destroy file from datastore if 'destroy' parameter is not provided
@@ -1211,7 +1227,7 @@ def main():
                 destroy=dict(type='bool', default=True),
                 filename=dict(type='str'),
                 state=dict(type='str', default='present', choices=['present', 'absent']),
-                controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme']),
+                controller_type=dict(type='str', choices=['buslogic', 'lsilogic', 'paravirtual', 'lsilogicsas', 'sata', 'nvme', 'ide']),
                 controller_number=dict(type='int', choices=[0, 1, 2, 3]),
                 bus_sharing=dict(type='str', choices=['noSharing', 'physicalSharing', 'virtualSharing'], default='noSharing'),
                 cluster_disk=dict(type='bool', default=False),
