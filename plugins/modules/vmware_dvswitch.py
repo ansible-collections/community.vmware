@@ -725,6 +725,7 @@ class VMwareDvSwitch(PyVmomi):
         changed = True
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
+
         if self.module.check_mode:
             results['result'] = "DVS would be deleted"
         else:
@@ -742,6 +743,7 @@ class VMwareDvSwitch(PyVmomi):
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
         changed_list = []
+        message = ''
 
         config_spec = vim.dvs.VmwareDistributedVirtualSwitch.ConfigSpec()
         # Use the same version in the new spec; The version will be increased by one by the API automatically
