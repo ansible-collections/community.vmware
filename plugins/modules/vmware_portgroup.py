@@ -530,6 +530,7 @@ class VMwareHostPortGroup(PyVmomi):
         changed_list = []
         host_results = dict(changed=False, msg="")
         spec = portgroup_object.spec
+        message = ''
 
         # Check VLAN ID
         host_results['vlan_id'] = self.vlan_id

@@ -224,6 +224,7 @@ class VMwareDvSwitchUplinkPortgroup(PyVmomi):
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
         changed_list = []
+        message = ''
 
         uplink_pg_spec = vim.dvs.DistributedVirtualPortgroup.ConfigSpec()
         # Use the same version in the new spec; The version will be increased by one by the API automatically
