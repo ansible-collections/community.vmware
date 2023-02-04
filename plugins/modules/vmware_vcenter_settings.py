@@ -418,6 +418,8 @@ class VmwareVcenterSettings(PyVmomi):
     def ensure(self):
         """Manage settings for a vCenter server"""
         result = dict(changed=False, msg='')
+        message = ''
+
         db_max_connections = self.params['database'].get('max_connections')
         db_task_cleanup = self.params['database'].get('task_cleanup')
         db_task_retention = self.params['database'].get('task_retention')

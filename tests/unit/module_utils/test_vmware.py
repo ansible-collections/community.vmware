@@ -94,7 +94,7 @@ def fake_ansible_module():
 
 
 def fake_connect_to_api(module, return_si=None):
-    return None, mock.Mock(),
+    return None, mock.Mock()
 
 
 testdata = [
