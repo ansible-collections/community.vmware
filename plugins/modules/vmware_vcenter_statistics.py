@@ -236,6 +236,8 @@ class VmwareVcenterStatistics(PyVmomi):
         YEARLY_COUNTER = 4
 
         result = dict(changed=False, msg='')
+        message = ''
+
         past_day_enabled = self.params['interval_past_day'].get('enabled', True)
         past_day_seconds = self.params['interval_past_day'].get('interval_minutes', 5) * 60
         past_day_save_for_seconds = self.params['interval_past_day'].get('save_for_days', 1) * 86400
