@@ -519,10 +519,6 @@ class PyVmomiHelper(PyVmomi):
         self.device_helper = PyVmomiDeviceHelper(self.module)
         self.desired_disks = self.params['disk']  # Match with vmware_guest parameter
         self.vm = None
-        self.ctl_device_type = self.device_helper.scsi_device_type.copy()
-        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type,
-                                     'nvme': self.device_helper.nvme_device_type,
-                                     'ide': self.device_helper.ide_device_type})
         self.config_spec = vim.vm.ConfigSpec()
         self.config_spec.deviceChange = []
 
@@ -672,7 +668,7 @@ class PyVmomiHelper(PyVmomi):
             # check if disk controller already exists
             if not ctl_found:
                 for device in self.vm.config.hardware.device:
-                    if isinstance(device, self.ctl_device_type[disk['controller_type']]):
+                    if isinstance(device, self.device_helper.disk_ctl_device_type[disk['controller_type']]):
                         if device.busNumber == disk['controller_number']:
                             ctl_found = True
                             break
@@ -704,7 +700,7 @@ class PyVmomiHelper(PyVmomi):
             disk_change = False
             ctl_found = False
             for device in self.vm.config.hardware.device:
-                if isinstance(device, self.ctl_device_type[disk['controller_type']]) and device.busNumber == disk['controller_number']:
+                if isinstance(device, self.device_helper.disk_ctl_device_type[disk['controller_type']]) and device.busNumber == disk['controller_number']:
                     for disk_key in device.device:
                         disk_device = self.find_disk_by_key(disk_key, disk['disk_unit_number'])
                         if disk_device is not None:
@@ -818,7 +814,7 @@ class PyVmomiHelper(PyVmomi):
                 self.config_spec.deviceChange = []
         if any(disk_change_list):
             results['changed'] = True
-        results['disk_data'] = self.gather_disk_facts(vm_obj=self.vm)
+        results['disk_data'] = self.device_helper.gather_disk_info(self.vm)
         self.module.exit_json(**results)
 
     def sanitize_disk_inputs(self):
@@ -1139,60 +1135,6 @@ class PyVmomiHelper(PyVmomi):
         if datastore:
             return datastore.name
         return None
-
-    @staticmethod
-    def gather_disk_facts(vm_obj):
-        """
-        Gather facts about VM's disks
-        Args:
-            vm_obj: Managed object of virtual machine
-
-        Returns: A list of dict containing disks information
-
-        """
-        disks_facts = dict()
-        if vm_obj is None:
-            return disks_facts
-
-        disk_index = 0
-        for disk in vm_obj.config.hardware.device:
-            if isinstance(disk, vim.vm.device.VirtualDisk):
-                if disk.storageIOAllocation is None:
-                    disk.storageIOAllocation = vim.StorageResourceManager.IOAllocationInfo()
-                    disk.storageIOAllocation.shares = vim.SharesInfo()
-
-                if disk.shares is None:
-                    disk.shares = vim.SharesInfo()
-
-                disks_facts[disk_index] = dict(
-                    key=disk.key,
-                    label=disk.deviceInfo.label,
-                    summary=disk.deviceInfo.summary,
-                    backing_filename=disk.backing.fileName,
-                    backing_datastore=disk.backing.datastore.name,
-                    backing_disk_mode=disk.backing.diskMode,
-                    backing_sharing=disk.backing.sharing if hasattr(disk.backing, 'sharing') else None,
-                    backing_uuid=disk.backing.uuid,
-                    controller_key=disk.controllerKey,
-                    unit_number=disk.unitNumber,
-                    iolimit_limit=disk.storageIOAllocation.limit,
-                    iolimit_shares_level=disk.storageIOAllocation.shares.level,
-                    iolimit_shares_limit=disk.storageIOAllocation.shares.shares,
-                    shares_level=disk.shares.level,
-                    shares_limit=disk.shares.shares,
-                    capacity_in_kb=disk.capacityInKB,
-                    capacity_in_bytes=disk.capacityInBytes,
-                )
-                if isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):
-                    disks_facts[disk_index].update(backing_devicename=disk.backing.deviceName,
-                                                   backing_compatibility_mode=disk.backing.compatibilityMode)
-
-                elif not isinstance(disk.backing, vim.vm.device.VirtualDisk.LocalPMemBackingInfo):
-                    disks_facts[disk_index].update(backing_writethrough=disk.backing.writeThrough,
-                                                   backing_thinprovisioned=disk.backing.thinProvisioned,
-                                                   backing_eagerlyscrub=bool(disk.backing.eagerlyScrub))
-                disk_index += 1
-        return disks_facts
 
 
 def main():
