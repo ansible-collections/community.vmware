@@ -147,11 +147,6 @@ guest_disk_info:
     }
 '''
 
-try:
-    from pyVmomi import vim
-except ImportError:
-    pass
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
