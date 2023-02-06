@@ -472,7 +472,7 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-disk_status:
+disk_data:
     description: metadata about the virtual machine's disks after managing them
     returned: always
     type: dict

@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_disk - Fix wrong key in the documentation of the return values (https://github.com/ansible-collections/community.vmware/issues/1615)
