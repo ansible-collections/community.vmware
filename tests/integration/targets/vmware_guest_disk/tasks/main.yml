@@ -554,3 +554,57 @@
   assert:
     that:
       - test_remove_sata_nvme_disk is changed
+
+- name: create new disk with IDE controller
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: test_vm1
+    disk:
+      - datastore: "{{ rw_datastore }}"
+        disk_mode: "independent_persistent"
+        controller_type: 'ide'
+        controller_number: 0
+        unit_number: 1
+        size_gb: 1
+        state: present
+        type: thin
+        shares:
+          level: custom
+          level_value: 1200
+  register: test_create_ide_disk
+
+- debug:
+    msg: "{{ test_create_ide_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+      - test_create_ide_disk is changed
+
+- name: remove IDE disk
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: test_vm1
+    disk:
+      - state: "absent"
+        controller_type: 'ide'
+        controller_number: 0
+        unit_number: 1
+        destroy: true
+  register: test_remove_ide_disk
+
+- debug:
+    msg: "{{ test_remove_ide_disk }}"
+
+- name: assert that changes were made
+  assert:
+    that:
+      - test_remove_ide_disk is changed
