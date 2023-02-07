@@ -253,7 +253,6 @@ class VmAttributeManager(PyVmomi):
                 "name": n
             })
 
-
         # Gather the values of set the custom attribute.
         for e in existing_custom_attributes:
             for v in vm.customValue:
