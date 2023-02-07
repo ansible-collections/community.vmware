@@ -2,5 +2,5 @@
   ansible.builtin.pip:
     name: tox
 
-- name: Refresh the README.md
+- name: Refresh module documentation and README.md
   ansible.builtin.shell: tox -e add_docs
