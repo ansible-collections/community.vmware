@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_custom_attributes - Fixes assigning attributes to new VMs (https://github.com/ansible-collections/community.vmware/issues/1606).
