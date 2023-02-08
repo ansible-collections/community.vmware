@@ -80,6 +80,11 @@ options:
       - if not passed, resource_pool object will be retrived from host_obj parent.
       aliases: ['resource_pool']
       type: str
+    timeout:
+      description:
+      - The timeout in seconds. When the timeout is reached, the module will fail.
+      type: int
+      default: 3600
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -186,6 +191,7 @@ class VmotionManager(PyVmomi):
         self.vm_name = self.params.get('vm_name', None)
         self.moid = self.params.get('moid') or None
         self.destination_datacenter = self.params.get('destination_datacenter', None)
+        self.timeout = self.params.get('timeout')
         result = dict()
 
         self.get_vm()
@@ -407,7 +413,7 @@ class VmotionManager(PyVmomi):
             task_object = self.migrate_vm()
             # Wait for task to complete
             try:
-                wait_for_task(task_object)
+                wait_for_task(task_object, timeout=self.timeout)
             except TaskError as task_error:
                 self.module.fail_json(msg=to_native(task_error))
             # If task was a success the VM has moved, update running_host and complete module
@@ -526,7 +532,8 @@ def main():
             destination_datastore=dict(aliases=['datastore']),
             destination_datacenter=dict(type='str'),
             destination_cluster=dict(type='str'),
-            destination_datastore_cluster=dict(type='str')
+            destination_datastore_cluster=dict(type='str'),
+            timeout=dict(type='int', default=3600)
         )
     )
 
