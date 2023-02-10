@@ -64,7 +64,6 @@ options:
       portgroup such as promiscuous mode, where guest adapter listens
       to all the packets, MAC address changes and forged transmits.
     - Dict which configures the different security values for portgroup.
-    version_added: '2.4.0'
     suboptions:
       promiscuous_mode:
         type: bool
