@@ -142,7 +142,6 @@ options:
             teaming_failover_interval: 0,
         }
     network_policy:
-        version_added: '1.11.0'
         description:
             - Dictionary which configures the different default security values for portgroups.
             - If set, these options are inherited by the portgroups of the DVS.
@@ -335,7 +334,7 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi, TaskError, dvs_supports_mac_learning, find_dvs_by_name, vmware_argument_spec, wait_for_task
+    PyVmomi, TaskError, find_dvs_by_name, vmware_argument_spec, wait_for_task
 )
 
 
@@ -523,10 +522,7 @@ class VMwareDvSwitch(PyVmomi):
                 if changed_network_policy:
                     if spec.defaultPortConfig is None:
                         spec.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
-                    if isinstance(result[0], vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy):
-                        spec.defaultPortConfig.macManagementPolicy = result[0]
-                    else:
-                        spec.defaultPortConfig.securityPolicy = result[0]
+                    spec.defaultPortConfig.macManagementPolicy = result[0]
 
             # Set NetFlow config
             if self.netFlow_collector_ip is not None:
@@ -605,42 +601,22 @@ class VMwareDvSwitch(PyVmomi):
         promiscuous_previous = forged_transmits_previous = mac_changes_previous = None
         current_config = self.dvs.config.defaultPortConfig
 
-        # If the dvSwitch supports MAC learning, it's a version where securityPolicy is deprecated
-        if dvs_supports_mac_learning(self.dvs):
-            policy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
+        policy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
 
-            if 'promiscuous' in self.network_policy and current_config.macManagementPolicy.allowPromiscuous != self.network_policy['promiscuous']:
-                changed_promiscuous = True
-                promiscuous_previous = current_config.macManagementPolicy.allowPromiscuous
-                policy.allowPromiscuous = self.network_policy['promiscuous']
+        if 'promiscuous' in self.network_policy and current_config.macManagementPolicy.allowPromiscuous != self.network_policy['promiscuous']:
+            changed_promiscuous = True
+            promiscuous_previous = current_config.macManagementPolicy.allowPromiscuous
+            policy.allowPromiscuous = self.network_policy['promiscuous']
 
-            if 'forged_transmits' in self.network_policy and current_config.macManagementPolicy.forgedTransmits != self.network_policy['forged_transmits']:
-                changed_forged_transmits = True
-                forged_transmits_previous = current_config.macManagementPolicy.forgedTransmits
-                policy.forgedTransmits = self.network_policy['forged_transmits']
+        if 'forged_transmits' in self.network_policy and current_config.macManagementPolicy.forgedTransmits != self.network_policy['forged_transmits']:
+            changed_forged_transmits = True
+            forged_transmits_previous = current_config.macManagementPolicy.forgedTransmits
+            policy.forgedTransmits = self.network_policy['forged_transmits']
 
-            if 'mac_changes' in self.network_policy and current_config.macManagementPolicy.macChanges != self.network_policy['mac_changes']:
-                changed_mac_changes = True
-                mac_changes_previous = current_config.macManagementPolicy.macChanges
-                policy.macChanges = self.network_policy['mac_changes']
-
-        else:
-            policy = vim.dvs.VmwareDistributedVirtualSwitch.SecurityPolicy()
-
-            if 'promiscuous' in self.network_policy and current_config.securityPolicy.allowPromiscuous.value != self.network_policy['promiscuous']:
-                changed_promiscuous = True
-                promiscuous_previous = current_config.securityPolicy.allowPromiscuous.value
-                policy.allowPromiscuous = vim.BoolPolicy(value=self.network_policy['promiscuous'])
-
-            if 'forged_transmits' in self.network_policy and current_config.securityPolicy.forgedTransmits.value != self.network_policy['forged_transmits']:
-                changed_forged_transmits = True
-                forged_transmits_previous = current_config.securityPolicy.forgedTransmits.value
-                policy.forgedTransmits = vim.BoolPolicy(value=self.network_policy['forged_transmits'])
-
-            if 'mac_changes' in self.network_policy and current_config.securityPolicy.macChanges.value != self.network_policy['mac_changes']:
-                changed_mac_changes = True
-                mac_changes_previous = current_config.securityPolicy.macChanges.value
-                policy.macChanges = vim.BoolPolicy(value=self.network_policy['mac_changes'])
+        if 'mac_changes' in self.network_policy and current_config.macManagementPolicy.macChanges != self.network_policy['mac_changes']:
+            changed_mac_changes = True
+            mac_changes_previous = current_config.macManagementPolicy.macChanges
+            policy.macChanges = self.network_policy['mac_changes']
 
         changed = changed_promiscuous or changed_forged_transmits or changed_mac_changes
         return (policy, changed, changed_promiscuous, promiscuous_previous, changed_forged_transmits,
@@ -749,6 +725,7 @@ class VMwareDvSwitch(PyVmomi):
         changed = True
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
+
         if self.module.check_mode:
             results['result'] = "DVS would be deleted"
         else:
@@ -766,6 +743,7 @@ class VMwareDvSwitch(PyVmomi):
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
         changed_list = []
+        message = ''
 
         config_spec = vim.dvs.VmwareDistributedVirtualSwitch.ConfigSpec()
         # Use the same version in the new spec; The version will be increased by one by the API automatically
@@ -906,10 +884,7 @@ class VMwareDvSwitch(PyVmomi):
                 if config_spec.defaultPortConfig is None:
                     config_spec.defaultPortConfig = vim.dvs.VmwareDistributedVirtualSwitch.VmwarePortConfigPolicy()
 
-                if isinstance(policy, vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy):
-                    config_spec.defaultPortConfig.macManagementPolicy = policy
-                else:
-                    config_spec.defaultPortConfig.securityPolicy = policy
+                config_spec.defaultPortConfig.macManagementPolicy = policy
 
         # Check switch version
         if self.switch_version:

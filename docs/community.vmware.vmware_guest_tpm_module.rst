@@ -8,7 +8,6 @@ community.vmware.vmware_guest_tpm
 **Add or remove vTPM device for specified VM.**
 
 
-Version added: 1.16.0
 
 .. contents::
    :local:

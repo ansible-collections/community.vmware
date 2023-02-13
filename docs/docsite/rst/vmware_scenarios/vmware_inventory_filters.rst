@@ -96,7 +96,7 @@ A valid filter in the VMware inventory file for this example is:
     - config.guestId == "rhel7_64Guest" or config.guestId == "ubuntu64Guest"
 
 
-You can check all allowed properties for filters for the given virtual machine at :ref:`vmware_inventory_vm_attributes`.
+You can check all allowed properties for filters for the given virtual machine at :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`.
 
 If you are using the ``properties`` parameter with custom VM properties, make sure that you include all the properties used by filters as well in your VM property list.
 
@@ -193,7 +193,7 @@ Troubleshooting filters
 If the custom property specified in ``filters`` fails:
 
 - Check if the values provided for username and password are correct.
-- Make sure it is a valid property, see :ref:`vmware_inventory_vm_attributes`.
+- Make sure it is a valid property, see :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`.
 - Use ``strict: True`` to get more information about the error.
 - Please make sure that you are using latest version of the VMware collection.
 
@@ -208,7 +208,7 @@ If the custom property specified in ``filters`` fails:
         The GitHub Page of vSphere Automation SDK for Python
     `vSphere Automation SDK Issue Tracker <https://github.com/vmware/vsphere-automation-sdk-python/issues>`_
         The issue tracker for vSphere Automation SDK for Python
-    :ref:`vmware_inventory_vm_attributes`
+    :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`
         Using Virtual machine attributes in VMware dynamic inventory plugin
     :ref:`working_with_playbooks`
         An introduction to playbooks

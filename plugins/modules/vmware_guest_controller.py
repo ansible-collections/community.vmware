@@ -112,7 +112,6 @@ options:
          type: str
          choices: ['noSharing', 'physicalSharing', 'virtualSharing' ]
          default: 'noSharing'
-         version_added: 1.11.0
      type: list
      elements: dict
    gather_disk_controller_facts:

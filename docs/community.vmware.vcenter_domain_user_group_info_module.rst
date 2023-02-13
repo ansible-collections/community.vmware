@@ -8,7 +8,6 @@ community.vmware.vcenter_domain_user_group_info
 **Gather user or group information of a domain**
 
 
-Version added: 1.6.0
 
 .. contents::
    :local:

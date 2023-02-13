@@ -124,6 +124,7 @@ Parameters
                 </td>
                 <td>
                         <div>specify host power action rate</div>
+                        <div>1 is the lowest and 5 the highest</div>
                 </td>
             </tr>
             <tr>

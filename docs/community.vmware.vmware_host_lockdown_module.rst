@@ -168,16 +168,21 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>disabled</li>
+                                    <li><div style="color: blue"><b>normal</b>&nbsp;&larr;</div></li>
+                                    <li>strict</li>
+                                    <li>present</li>
                                     <li>absent</li>
                         </ul>
                 </td>
                 <td>
                         <div>State of hosts system</div>
-                        <div>If set to <code>present</code>, all host systems will be set in lockdown mode.</div>
-                        <div>If host system is already in lockdown mode and set to <code>present</code>, no action will be taken.</div>
-                        <div>If set to <code>absent</code>, all host systems will be removed from lockdown mode.</div>
-                        <div>If host system is already out of lockdown mode and set to <code>absent</code>, no action will be taken.</div>
+                        <div>If set to <code>disabled</code>, all host systems will be removed from lockdown mode.</div>
+                        <div>If host system is already out of lockdown mode and set to <code>disabled</code>, no action will be taken.</div>
+                        <div>If set to <code>normal</code>, all host systems will be set in lockdown mode.</div>
+                        <div>If host system is already in lockdown mode and set to <code>normal</code>, no action will be taken.</div>
+                        <div>If set to <code>strict</code>, all host systems will be set in strict lockdown mode.</div>
+                        <div>If host system is already in strict lockdown mode and set to <code>strict</code>, no action will be taken.</div>
                 </td>
             </tr>
             <tr>
@@ -243,7 +248,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
-        state: present
+        state: normal
       delegate_to: localhost
 
     - name: Exit host systems from lockdown mode
@@ -252,7 +257,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         esxi_hostname: '{{ esxi_hostname }}'
-        state: absent
+        state: disabled
       delegate_to: localhost
 
     - name: Enter host systems into lockdown mode
@@ -263,7 +268,7 @@ Examples
         esxi_hostname:
             - '{{ esxi_hostname_1 }}'
             - '{{ esxi_hostname_2 }}'
-        state: present
+        state: normal
       delegate_to: localhost
 
     - name: Exit host systems from lockdown mode
@@ -274,7 +279,7 @@ Examples
         esxi_hostname:
             - '{{ esxi_hostname_1 }}'
             - '{{ esxi_hostname_2 }}'
-        state: absent
+        state: disabled
       delegate_to: localhost
 
     - name: Enter all host system from cluster into lockdown mode
@@ -283,7 +288,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: '{{ cluster_name }}'
-        state: present
+        state: normal
       delegate_to: localhost
 
 
@@ -314,7 +319,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about state of Host system lock down</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;host_lockdown_state&#x27;: {&#x27;DC0_C0&#x27;: {&#x27;current_state&#x27;: &#x27;present&#x27;, &#x27;previous_state&#x27;: &#x27;absent&#x27;, &#x27;desired_state&#x27;: &#x27;present&#x27;}}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;host_lockdown_state&#x27;: {&#x27;DC0_C0&#x27;: {&#x27;current_state&#x27;: &#x27;normal&#x27;, &#x27;previous_state&#x27;: &#x27;disabled&#x27;, &#x27;desired_state&#x27;: &#x27;normal&#x27;}}}</div>
                 </td>
             </tr>
     </table>

@@ -42,6 +42,7 @@
     port_allocation: 'fixed'
     state: present
     network_policy:
+      inherited: false
       promiscuous: true
       forged_transmits: true
       mac_changes: true

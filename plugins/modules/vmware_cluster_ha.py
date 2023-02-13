@@ -176,14 +176,27 @@ options:
       type: str
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartConservative', 'restartAggressive' ]
-      version_added: '1.4.0'
+    apd_delay:
+      description:
+      - The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).
+      - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
+      type: int
+      default: 180
+      version_added: '2.9.0'
+    apd_reaction:
+      description:
+      - VM response recovery reaction for storage failures categorized as All Paths Down (APD).
+      - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
+      type: str
+      default: 'reset'
+      choices: [ 'reset', 'none' ]
+      version_added: '2.9.0'
     pdl_response:
       description:
       - VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).
       type: str
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartAggressive' ]
-      version_added: '1.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -357,6 +370,12 @@ class VMwareCluster(PyVmomi):
                 if das_config.admissionControlPolicy.failoverHosts != self.get_failover_hosts():
                     return True
 
+        if self.params.get('apd_response') != 'disabled' and self.params.get('apd_response') != 'warning':
+            if das_config.defaultVmSettings.vmComponentProtectionSettings.vmTerminateDelayForAPDSec != self.params.get('apd_delay'):
+                return True
+            if das_config.defaultVmSettings.vmComponentProtectionSettings.vmReactionOnAPDCleared != self.params.get('apd_reaction'):
+                return True
+
         if self.changed_advanced_settings:
             return True
 
@@ -391,6 +410,9 @@ class VMwareCluster(PyVmomi):
 
                     das_vm_config.vmComponentProtectionSettings = vim.cluster.VmComponentProtectionSettings()
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForAPD = self.params.get('apd_response')
+                    if self.params.get('apd_response') != 'disabled' and self.params.get('apd_response') != 'warning':
+                        das_vm_config.vmComponentProtectionSettings.vmTerminateDelayForAPDSec = self.params.get('apd_delay')
+                        das_vm_config.vmComponentProtectionSettings.vmReactionOnAPDCleared = self.params.get('apd_reaction')
                     das_vm_config.vmComponentProtectionSettings.vmStorageProtectionForPDL = self.params.get('pdl_response')
                     if (self.params['apd_response'] != "disabled" or self.params['pdl_response'] != "disabled"):
                         cluster_config_spec.dasConfig.vmComponentProtecting = 'enabled'
@@ -488,6 +510,10 @@ def main():
         apd_response=dict(type='str',
                           choices=['disabled', 'warning', 'restartConservative', 'restartAggressive'],
                           default='warning'),
+        apd_delay=dict(type='int', default=180),
+        apd_reaction=dict(type='str',
+                          choices=['reset', 'none'],
+                          default='reset'),
         pdl_response=dict(type='str',
                           choices=['disabled', 'warning', 'restartAggressive'],
                           default='warning'),

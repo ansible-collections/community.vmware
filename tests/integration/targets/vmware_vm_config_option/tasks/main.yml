@@ -73,7 +73,7 @@
         datacenter: "{{ dc1 }}"
         esxi_hostname: "{{ esxi_hosts[0] }}"
         get_guest_os_ids: true
-        hardware_version: "{{ config_option_keys_1['instance']['Supported hardware versions'][0] }}"
+        hardware_version: "{{ config_option_keys_1['instance']['supported_hardware_versions'][0] }}"
       register: guest_ids_2
       ignore_errors: true
 
@@ -89,7 +89,7 @@
         - not guest_ids_2.failed
   when:
     - "'instance' in config_option_keys_1"
-    - "'Supported hardware versions' in config_option_keys_1['instance']"
+    - "'supported_hardware_versions' in config_option_keys_1['instance']"
 
 # Ignore errors due to there is known issue on vSphere 7.0.x
 # https://github.com/vmware/pyvmomi/issues/915
@@ -138,7 +138,7 @@
     password: "{{ esxi_password }}"
     esxi_hostname: "{{ esxi_hosts[0] }}"
     get_guest_os_ids: true
-    hardware_version: "{{ config_option_keys_3['instance']['Supported hardware versions'][2] }}"
+    hardware_version: "{{ config_option_keys_3['instance']['supported_hardware_versions'][2] }}"
   register: guest_ids_3
   ignore_errors: true
 

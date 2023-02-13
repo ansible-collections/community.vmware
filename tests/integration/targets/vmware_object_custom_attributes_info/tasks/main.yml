@@ -6,7 +6,7 @@
     name: prepare_vmware_tests
   vars:
     setup_attach_host: true
-    setup_datastore: true 
+    setup_datastore: true
     setup_virtualmachines: true
 
 - name: Include tasks pre.yml
@@ -14,3 +14,6 @@
 
 - name: Include tasks vmware_object_custom_attributes_info_tests.yml
   include_tasks: vmware_object_custom_attributes_info_tests.yml
+
+- name: Include tasks cleanup
+  include_tasks: cleanup.yml

@@ -20,7 +20,6 @@ description: >
    for specified guest OS ID.
 author:
 - Diane Wang (@Tomorrow9) <dianew@vmware.com>
-version_added: '1.15.0'
 notes:
 - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
 options:
@@ -187,20 +186,20 @@ class VmConfigOption(PyVmomi):
                     if dev_type == guest_os_desc[0].recommendedCdromController:
                         default_cdrom_ctl = name
             guest_os_option_dict = {
-                'Hardware version': hwv_version,
-                'Guest ID': guest_os_desc[0].id,
-                'Guest fullname': guest_os_desc[0].fullName,
-                'Default CPU cores per socket': guest_os_desc[0].numRecommendedCoresPerSocket,
-                'Default CPU socket': guest_os_desc[0].numRecommendedPhysicalSockets,
-                'Default memory in MB': guest_os_desc[0].recommendedMemMB,
-                'Default firmware': guest_os_desc[0].recommendedFirmware,
-                'Default secure boot': guest_os_desc[0].defaultSecureBoot,
-                'Support secure boot': guest_os_desc[0].supportsSecureBoot,
-                'Default disk controller': default_disk_ctl,
-                'Default disk size in MB': guest_os_desc[0].recommendedDiskSizeMB,
-                'Default network adapter': default_ethernet,
-                'Default CDROM controller': default_cdrom_ctl,
-                'Default USB controller': default_usb_ctl,
+                'hardware_version': hwv_version,
+                'guest_id': guest_os_desc[0].id,
+                'guest_fullname': guest_os_desc[0].fullName,
+                'rec_cpu_cores_per_socket': guest_os_desc[0].numRecommendedCoresPerSocket,
+                'rec_cpu_socket': guest_os_desc[0].numRecommendedPhysicalSockets,
+                'rec_memory_mb': guest_os_desc[0].recommendedMemMB,
+                'rec_firmware': guest_os_desc[0].recommendedFirmware,
+                'default_secure_boot': guest_os_desc[0].defaultSecureBoot,
+                'support_secure_boot': guest_os_desc[0].supportsSecureBoot,
+                'default_disk_controller': default_disk_ctl,
+                'rec_disk_mb': guest_os_desc[0].recommendedDiskSizeMB,
+                'default_ethernet': default_ethernet,
+                'default_cdrom_controller': default_cdrom_ctl,
+                'default_usb_controller': default_usb_ctl,
                 'support_tpm_20': guest_os_desc[0].supportsTPM20,
                 'support_persistent_memory': guest_os_desc[0].persistentMemorySupported,
                 'rec_persistent_memory': guest_os_desc[0].recommendedPersistentMemoryMB,
@@ -262,8 +261,8 @@ class VmConfigOption(PyVmomi):
         # Get supported hardware versions list
         support_create_list, default_config = self.get_hardware_versions(env_browser=env_browser)
         if self.params.get('get_hardware_versions'):
-            results.update({'Supported hardware versions': support_create_list,
-                            'Default hardware version': default_config})
+            results.update({'supported_hardware_versions': support_create_list,
+                            'default_hardware_version': default_config})
 
         if self.params.get('get_guest_os_ids') or self.params.get('get_config_options'):
             # Get supported guest ID list
@@ -285,7 +284,7 @@ class VmConfigOption(PyVmomi):
                 guest_os_options = vm_config_option_guest.guestOSDescriptor
                 guest_os_option_dict = self.get_config_option_recommended(guest_os_desc=guest_os_options,
                                                                           hwv_version=vm_config_option_guest.version)
-                results.update({'Recommended config options': guest_os_option_dict})
+                results.update({'recommended_config_options': guest_os_option_dict})
 
         self.module.exit_json(changed=False, failed=False, instance=results)
 
@@ -309,9 +308,6 @@ def main():
             ['cluster_name', 'esxi_hostname'],
         ]
     )
-    module.deprecate(msg="Dict item names in 'instance' result will be changed from strings joined with spaces to"
-                         " strings joined with underlines, e.g., 'Guest fullname' will be changed to 'guest_fullname'.",
-                     version='3.0.0', collection_name="community.vmware")
     vm_config_option_guest = VmConfigOption(module)
     vm_config_option_guest.get_config_option_for_guest()
 

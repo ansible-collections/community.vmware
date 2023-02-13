@@ -1,0 +1,45 @@
+# Test code for the vmware_datastore_info module.
+# Copyright (c) 2022, Mario Lenz <m@riolenz.de>
+# Copyright (c) 2022, Ansible Project
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+
+- name: Configure Storage I/O Control
+  vmware_datastore:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    name: "{{ rw_datastore }}"
+    validate_certs: false
+    storage_io_control: 'enable_io_statistics'
+    congestion_threshold_manual: 30
+    statistic_collection: true
+  register: config_storage_io_control
+
+- assert:
+    that:
+      - config_storage_io_control is changed
+
+- name: Configure Storage I/O Control again (idempotency)
+  vmware_datastore:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    name: "{{ rw_datastore }}"
+    validate_certs: false
+    storage_io_control: 'enable_io_statistics'
+    congestion_threshold_manual: 30
+    statistic_collection: true
+  register: config_storage_io_control_again
+
+- assert:
+    that:
+      - config_storage_io_control_again is not changed

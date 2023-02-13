@@ -5,7 +5,7 @@
 # Testcase for https://github.com/ansible/ansible/issues/65765
 
 - name: Create tag with colon in name
-  vmware_tag:
+  community.vmware.vmware_tag:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -21,7 +21,7 @@
       - tag_one_create.changed
 
 - name: Get VM Facts
-  vmware_vm_info:
+  community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -33,7 +33,7 @@
     vm_moid: "{{ vm_info['virtual_machines'][0]['moid'] }}"
 
 - name: Assign tag to given virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -47,7 +47,7 @@
   register: vm_tag_info
 
 - name: Assign tag to rw_datastore
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -67,7 +67,7 @@
       - datastore_tag_info.changed
 
 - name: Remove tag to given virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -80,8 +80,61 @@
     state: remove
   register: vm_tag_info
 
+- name: Test idempotency for state set
+  block:
+    - name: Set the tags on a VM to a given list
+      community.vmware.vmware_tag_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        tag_names:
+          - category: "{{ cat_one }}"
+            tag: "{{ tag_one }}"
+        object_name: "{{ vm_name }}"
+        object_type: VirtualMachine
+        state: set
+      register: vm_tag_info
+
+    - name: Check the module assigned the tags
+      assert:
+        that:
+          - vm_tag_info.changed
+
+    - name: Set the tags on a VM to a given list again
+      community.vmware.vmware_tag_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        tag_names:
+          - category: "{{ cat_one }}"
+            tag: "{{ tag_one }}"
+        object_name: "{{ vm_name }}"
+        object_type: VirtualMachine
+        state: set
+      register: vm_tag_info
+
+    - name: Check idempotency
+      assert:
+        that:
+          - not vm_tag_info.changed
+
+    - name: Remove tag from given virtual machine
+      community.vmware.vmware_tag_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        tag_names:
+          - category: "{{ cat_one }}"
+            tag: "{{ tag_one }}"
+        object_name: "{{ vm_name }}"
+        object_type: VirtualMachine
+        state: remove
+
 - name: Assign tag to given virtual machine using moid
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -100,7 +153,7 @@
       - vm_tag_info.changed
 
 - name: Remove tag to datastore
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -114,7 +167,7 @@
   register: datastore_tag_info
 
 - name: Remove tag to given virtual machine
-  vmware_tag_manager:
+  community.vmware.vmware_tag_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'

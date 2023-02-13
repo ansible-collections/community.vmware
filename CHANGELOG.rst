@@ -5,6 +5,169 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.3.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_drs - Add predictive DRS Setting (https://github.com/ansible-collections/community.vmware/pull/1542).
+- vmware_guest_network - Add PVRDMA network adapter type (https://github.com/ansible-collections/community.vmware/pull/1579).
+
+Bugfixes
+--------
+
+- vmware_cluster_dpm - Fix an issue that the slider and the values of the host_power_action_rate works invertet in the vCenter
+- vmware_cluster_drs - Fix drs_vmotion_rate so that the value corresponds to the vCenter UI. Previously, choosing 1 / 2 configured a migration threshold of 5 / 4 and vice versa (https://github.com/ansible-collections/community.vmware/pull/1542).
+- vmware_guest - Fix check mode (https://github.com/ansible-collections/community.vmware/issues/1272).
+- vmware_host_lockdown_exceptions - Avoid setting exception users to what they already are (https://github.com/ansible-collections/community.vmware/pull/1585).
+- vmware_tools - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1578).
+
+New Modules
+-----------
+
+- vmware_guest_vgpu_info - Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure
+
+v3.2.0
+======
+
+Minor Changes
+-------------
+
+- vmware_guest - Add sub-option to configure virtual performance counters (https://github.com/ansible-collections/community.vmware/issues/1511).
+- vmware_guest - Adding sub-options to configure CPU and memory shares (https://github.com/ansible-collections/community.vmware/issues/356).
+- vmware_guest_boot_manager - Add a new parameter boot_hdd_name to specify the boot disk name(https://github.com/ansible-collections/community.vmware/pull/1543).
+- vmware_guest_custom_attributes - Improve the code quality and added the return value for diff(https://github.com/ansible-collections/community.vmware/pull/1532).
+- vmware_vm_info - Adding resource pool of the VM to result (https://github.com/ansible-collections/community.vmware/pull/1551).
+
+Bugfixes
+--------
+
+- vmware_dvs_portgroup - Fix an issue when deleting portgroups (https://github.com/ansible-collections/community.vmware/issues/1522).
+- vmware_guest_instant_clone - Fix an issue with pyVmomi 8.0.0.1 (https://github.com/ansible-collections/community.vmware/issues/1555).
+- vmware_host_lockdown - Fix issue `'VmwareLockdownManager' object has no attribute 'warn'` (https://github.com/ansible-collections/community.vmware/pull/1540).
+- vmware_object_custom_attributes_info - Fixed an issue that has occurred an error if a custom attribute is the global type(https://github.com/ansible-collections/community.vmware/pull/1541).
+- vmware_portgroup_info - Fix an issue that can fail the module after manually updating a portgroup through vCenter (https://github.com/ansible-collections/community.vmware/issues/1544).
+
+New Modules
+-----------
+
+- vmware_custom_attribute - Manage custom attributes definitions
+- vmware_custom_attribute_manager - Manage custom attributes from VMware for the given vSphere object
+
+v3.1.0
+======
+
+Minor Changes
+-------------
+
+- vmware_dvs_portgroup - Add deprecaded securityPolicyOverrideAllowed because without it make problems if securityPolicyOverrideAllowed and macManagementOverrideAllowed has not the same value (https://github.com/ansible-collections/community.vmware/pull/1508)
+- vmware_guest - Adding `script_text` parameter to execute scripts in Linux guests (https://github.com/ansible-collections/community.vmware/pull/1485).
+- vmware_host_lockdown - Add the ability to enable ``strict`` lockdown mode (https://github.com/ansible-collections/community.vmware/pull/1514).
+- vmware_host_lockdown - Add two new choices for ``state``, ``disabled`` and ``normal``, to replace ``absent`` and ``present``. Please note that ``absent`` and ``present`` will be removed in the next major release (https://github.com/ansible-collections/community.vmware/pull/1514).
+- vmware_host_lockdown - Replace deprecated vSphere API calls (https://github.com/ansible-collections/community.vmware/pull/1514).
+
+Bugfixes
+--------
+
+- vmware_guest_file_operation - Add a new parameter for timeout(https://github.com/ansible-collections/community.vmware/pull/1513).
+- vmware_tag_manager - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1503).
+- vmware_tag_manager - Fix an issue that causes a failure when changing a single cardinal tag category (https://github.com/ansible-collections/community.vmware/issues/1501).
+
+New Modules
+-----------
+
+- vmware_host_lockdown_exceptions - Manage Lockdown Mode Exception Users
+
+v3.0.0
+======
+
+Minor Changes
+-------------
+
+- vmware_guest_disk - Adding `iolimit` modifications of an existing disk without changing size (https://github.com/ansible-collections/community.vmware/pull/1466).
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- Removed support for ansible-core version < 2.13.0.
+- vmware_dvs_portgroup - Add a new sub-option `inherited` to the `in_traffic_shaping` parameter. This means you can keep the setting as-is by not defining the parameter, but also that you have to define the setting as not `inherited` if you want to override it at the PG level (https://github.com/ansible-collections/community.vmware/pull/1483).
+- vmware_dvs_portgroup - Add a new sub-option `inherited` to the `out_traffic_shaping` parameter. This means you can keep the setting as-is by not defining the parameter, but also that you have to define the setting as not `inherited` if you want to override it at the PG level (https://github.com/ansible-collections/community.vmware/pull/1483).
+- vmware_dvs_portgroup - Change the type of `net_flow` to string to allow setting it implicitly to inherited or to keep the value as-is. This means you can keep the setting as-is by not defining the parameter, but also that while `true` or `no` still work, `True` or `Off` (uppercase) won't (https://github.com/ansible-collections/community.vmware/pull/1483).
+- vmware_dvs_portgroup - Remove support for vSphere API less than 6.7.
+- vmware_dvs_portgroup - Remove the default for `network_policy` and add a new sub-option `inherited`. This means you can keep the setting as-is by not defining the parameter, but also that you have to define the setting as not `inherited` if you want to override it at the PG level (https://github.com/ansible-collections/community.vmware/pull/1483).
+- vmware_dvs_portgroup_info - Remove support for vSphere API less than 6.7.
+- vmware_dvswitch - Remove support for vSphere API less than 6.7.
+- vmware_dvswitch_uplink_pg - Remove support for vSphere API less than 6.7.
+- vmware_guest_boot_manager - Remove default for ``secure_boot_enabled`` parameter (https://github.com/ansible-collections/community.vmware/issues/1461).
+- vmware_vm_config_option - Dict item names in result are changed from strings joined with spaces to strings joined with underlines, e.g. `Guest fullname` is changed to `guest_fullname` (https://github.com/ansible-collections/community.vmware/issues/1268).
+- vmware_vspan_session - Remove support for vSphere API less than 6.7.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- vca_fw - The deprecated module ``vca_fw`` has been removed.
+- vca_nat - The deprecated module ``vca_nat`` has been removed.
+- vca_vapp - The deprecated module ``vca_vapp`` has been removed.
+- vmware_dns_config - The deprecated module ``vmware_dns_config`` has been removed, you can use ``vmware_host_dns`` instead.
+- vmware_guest_network - The deprecated parameter ``networks`` has been removed, use loops to handle multiple interfaces (https://github.com/ansible-collections/community.vmware/pull/1459).
+- vmware_guest_vnc - The deprecated module ``vmware_guest_vnc`` has been removed. The VNC support has been dropped with vSphere 7 and later (https://github.com/ansible-collections/community.vmware/pull/1454).
+- vmware_host_firewall_manager - The module doesn't accept a list for ``allowed_hosts`` anymore, use a dict instead. Additionally, ``all_ip`` is now a required sub-option of ``allowed_hosts`` (https://github.com/ansible-collections/community.vmware/pull/1463).
+- vsphere_copy - The deprecated parameters ``host`` and ``login`` have been removed. Use ``hostname`` and ``username`` instead (https://github.com/ansible-collections/community.vmware/pull/1456).
+
+Bugfixes
+--------
+
+- vmware_dvs_portgroup - Fix update of NetFlow Setting (https://github.com/ansible-collections/community.vmware/pull/1443).
+- vmware_tag_manager - Fix idempotency for state `set` (https://github.com/ansible-collections/community.vmware/issues/1265).
+
+New Modules
+-----------
+
+- vmware_datastore - Configure Datastores
+
+v2.9.1
+======
+
+Bugfixes
+--------
+
+- 2.9.0 wasn't released correctly, some changes are missing from the package. Releasing 2.9.1 to fix this.
+
+v2.9.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_ha - Add APD settings (https://github.com/ansible-collections/community.vmware/pull/1420).
+- vmware_content_library_info - Add Subscribed Libraries (https://github.com/ansible-collections/community.vmware/issues/1430).
+- vmware_drs_group_manager - Improve error handling (https://github.com/ansible-collections/community.vmware/pull/1448).
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a bug that failed the restore when port 80 is blocked (https://github.com/ansible-collections/community.vmware/issues/1440).
+- vmware_vswitch - Fix broken logic of `failback` parameter (https://github.com/ansible-collections/community.vmware/issues/1431).
+
+v2.8.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cfg_backup - Improve error message (https://github.com/ansible-collections/community.vmware/pull/1388).
+- vmware_dvs_portgroup - Fix a `spec.numPorts is None` issue when the `num_ports` parameter isn't set (https://github.com/ansible-collections/community.vmware/pull/1419).
+- vmware_guest_sendkey - Add CTRL_X binding support (https://github.com/ansible-collections/community.vmware/pull/1376).
+- vmware_host_vmnic_info - add CDP information to output when applicable (https://github.com/ansible-collections/community.vmware/pull/1418).
+
+Bugfixes
+--------
+
+- vmware_cfg_backup - Fix a possible urlopen error when connecting directly to an ESXi host (https://github.com/ansible-collections/community.vmware/issues/1383).
+- vmware_guest - Fix no fail attribute issue (https://github.com/ansible-collections/community.vmware/issues/1401).
+- vmware_vm_info - Fix 'NoneType' object has no attribute 'datastoreUrl' for inaccessible VMs (https://github.com/ansible-collections/community.vmware/issues/1407).
+
 v2.7.0
 ======
 

@@ -100,7 +100,6 @@ options:
       - Specifies whether or not the new virtual machine should be marked as a template.
     type: bool
     default: False
-    version_added: 1.16.0
   state:
     description:
       - The state of Virtual Machine deployed.

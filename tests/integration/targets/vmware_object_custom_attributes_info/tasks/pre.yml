@@ -2,28 +2,70 @@
 # Copyright: (c) 2021, sky-joker <sky.jokerxx@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+- name: Add VM custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: VirtualMachine
+    custom_attribute: "{{ item }}"
+    state: present
+  loop:
+    - vm_example01
+    - vm_example02
+
+- name: Add VM custom attribute definition for global type
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: Global
+    custom_attribute: "{{ item }}"
+    state: present
+  loop:
+    - vm_example03_global
+
+- name: Add ESXi custom attribute definition
+  community.vmware.vmware_custom_attribute:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    object_type: HostSystem
+    custom_attribute: "{{ item }}"
+    state: present
+  loop:
+    - esxi_example01
+    - esxi_example02
+
 - name: Add custom attributes to a virtual machine
-  community.vmware.vmware_guest_custom_attributes:
+  community.vmware.vmware_custom_attribute_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    name: "{{ virtual_machines.0.name }}"
-    attributes:
+    object_name: "{{ virtual_machines.0.name }}"
+    object_type: VirtualMachine
+    custom_attributes:
       - name: vm_example01
         value: test1
       - name: vm_example02
         value: test2
+      - name: vm_example03_global
+        value: test3
     state: present
 
 - name: Add custom attributes to an ESXi
-  community.vmware.vmware_host_custom_attributes:
+  community.vmware.vmware_custom_attribute_manager:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    attributes:
+    object_name: "{{ esxi1 }}"
+    object_type: HostSystem
+    custom_attributes:
       - name: esxi_example01
         value: test1
       - name: esxi_example02

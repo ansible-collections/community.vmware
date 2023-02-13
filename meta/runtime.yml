@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.12.0'
+requires_ansible: '>=2.13.0'
 
 action_groups:
   vmware:
@@ -8,27 +8,32 @@ action_groups:
   - vcenter_extension_info
   - vcenter_folder
   - vcenter_license
+  - vcenter_standard_key_provider
   - vmware_about_info
   - vmware_category
   - vmware_category_info
   - vmware_cfg_backup
   - vmware_cluster
+  - vmware_cluster_dpm
   - vmware_cluster_drs
   - vmware_cluster_ha
   - vmware_cluster_info
+  - vmware_cluster_vcls
   - vmware_cluster_vsan
-  - vmware_content_deploy_template
   - vmware_content_deploy_ovf_template
+  - vmware_content_deploy_template
   - vmware_content_library_info
   - vmware_content_library_manager
+  - vmware_custom_attribute
+  - vmware_custom_attribute_manager
   - vmware_datacenter
   - vmware_datacenter_info
+  - vmware_datastore
   - vmware_datastore_cluster
   - vmware_datastore_cluster_manager
   - vmware_datastore_info
   - vmware_datastore_maintenancemode
   - vmware_deploy_ovf
-  - vmware_dns_config
   - vmware_drs_group
   - vmware_drs_group_info
   - vmware_drs_group_manager
@@ -60,7 +65,7 @@ action_groups:
   - vmware_guest_file_operation
   - vmware_guest_find
   - vmware_guest_info
-  - vmware_guest_instant_clone 
+  - vmware_guest_instant_clone
   - vmware_guest_move
   - vmware_guest_network
   - vmware_guest_powerstate
@@ -74,9 +79,10 @@ action_groups:
   - vmware_guest_tools_info
   - vmware_guest_tools_upgrade
   - vmware_guest_tools_wait
+  - vmware_guest_tpm
   - vmware_guest_vgpu
+  - vmware_guest_vgpu_info
   - vmware_guest_video
-  - vmware_guest_vnc
   - vmware_host
   - vmware_host_acceptance
   - vmware_host_active_directory
@@ -84,6 +90,7 @@ action_groups:
   - vmware_host_capability_info
   - vmware_host_config_info
   - vmware_host_config_manager
+  - vmware_host_custom_attributes
   - vmware_host_datastore
   - vmware_host_disk_info
   - vmware_host_dns
@@ -98,6 +105,7 @@ action_groups:
   - vmware_host_iscsi_info
   - vmware_host_kernel_manager
   - vmware_host_lockdown
+  - vmware_host_lockdown_exceptions
   - vmware_host_logbundle
   - vmware_host_logbundle_info
   - vmware_host_ntp
@@ -114,6 +122,7 @@ action_groups:
   - vmware_host_sriov
   - vmware_host_ssl_info
   - vmware_host_tcpip_stacks
+  - vmware_host_user_manager
   - vmware_host_vmhba_info
   - vmware_host_vmnic_info
   - vmware_local_role_info
@@ -139,16 +148,17 @@ action_groups:
   - vmware_vcenter_settings_info
   - vmware_vcenter_statistics
   - vmware_vc_infraprofile_info
+  - vmware_vm_config_option
   - vmware_vm_host_drs_rule
   - vmware_vm_info
+  - vmware_vmkernel
+  - vmware_vmkernel_info
+  - vmware_vmotion
   - vmware_vm_shell
   - vmware_vm_storage_policy
   - vmware_vm_storage_policy_info
   - vmware_vm_vm_drs_rule
   - vmware_vm_vss_dvs_migrate
-  - vmware_vmkernel
-  - vmware_vmkernel_info
-  - vmware_vmotion
   - vmware_vsan_cluster
   - vmware_vsan_health_info
   - vmware_vspan_session
@@ -156,26 +166,3 @@ action_groups:
   - vmware_vswitch_info
   - vsphere_copy
   - vsphere_file
-
-plugin_routing:
-  modules:
-    vca_fw:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vca_nat:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vca_vapp:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vmware_dns_config:
-      deprecation:
-        removal_date: 2022-06-01
-        warning_text: see plugin documentation for details
-    vmware_guest_vnc:
-      deprecation:
-        removal_date: 2022-10-15
-        warning_text: see plugin documentation for details

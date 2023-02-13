@@ -80,6 +80,7 @@ options:
                 default: 'srcDestIpTcpUdpPortVlan'
         elements: dict
         type: list
+        default: []
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -176,6 +177,7 @@ class VMwareDvSwitchLacp(PyVmomi):
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
         changed_list = []
+        message = ''
 
         spec = vim.dvs.VmwareDistributedVirtualSwitch.ConfigSpec()
         spec.configVersion = self.dvs.config.configVersion

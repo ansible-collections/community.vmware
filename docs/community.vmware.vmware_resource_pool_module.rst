@@ -57,7 +57,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">4000</div>
@@ -164,7 +163,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.5.0</div>
                 </td>
                 <td>
                 </td>
@@ -200,7 +198,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.4.0</div>
                 </td>
                 <td>
                         <b>Default:</b><br/><div style="color: blue">163840</div>
@@ -291,7 +288,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.9.0</div>
                 </td>
                 <td>
                 </td>

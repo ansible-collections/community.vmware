@@ -47,7 +47,6 @@ options:
      choices: ['summary', 'vsphere']
      default: 'summary'
      type: str
-     version_added: "1.0.0"
    properties:
      description:
        - Specify the properties to retrieve.
@@ -60,7 +59,6 @@ options:
        - Only valid when C(schema) is C(vsphere).
      type: list
      elements: str
-     version_added: "1.0.0"
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -265,12 +263,12 @@ class VmwreClusterInfoManager(PyVmomi):
                 if das_config.admissionControlPolicy:
                     ha_failover_level = das_config.admissionControlPolicy.failoverLevel
                 if das_config.defaultVmSettings:
-                    ha_restart_priority = das_config.defaultVmSettings.restartPriority,
-                    ha_vm_tools_monitoring = das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring,
-                    ha_vm_min_up_time = das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime,
-                    ha_vm_max_failures = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures,
-                    ha_vm_max_failure_window = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow,
-                    ha_vm_failure_interval = das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval,
+                    ha_restart_priority = das_config.defaultVmSettings.restartPriority
+                    ha_vm_tools_monitoring = das_config.defaultVmSettings.vmToolsMonitoringSettings.vmMonitoring
+                    ha_vm_min_up_time = das_config.defaultVmSettings.vmToolsMonitoringSettings.minUpTime
+                    ha_vm_max_failures = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailures
+                    ha_vm_max_failure_window = das_config.defaultVmSettings.vmToolsMonitoringSettings.maxFailureWindow
+                    ha_vm_failure_interval = das_config.defaultVmSettings.vmToolsMonitoringSettings.failureInterval
 
                 # DRS
                 drs_config = cluster.configurationEx.drsConfig

@@ -49,6 +49,30 @@
     that:
         - deploy_vm_to_latest is changed
 
+- name: Upgrade VM to latest version in check mode
+  vmware_guest:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    guest_id: debian8_64Guest
+    datacenter: "{{ dc1 }}"
+    folder: "{{ f0 }}"
+    datastore: '{{ rw_datastore }}'
+    hardware:
+        num_cpus: 1
+        memory_mb: 1028
+        version: latest
+    state: present
+  register: upgrade_vm
+  check_mode: true
+
+- name: assert that changes would be made
+  assert:
+    that:
+        - upgrade_vm is changed
+
 - name: Upgrade VM to latest version
   vmware_guest:
     validate_certs: false

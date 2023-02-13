@@ -21,7 +21,6 @@ options:
         required: false
         type: str
         aliases: [ 'datacenter_name' ]
-        version_added: '1.6.0'
     cluster_name:
         description:
             - Name of the vSAN cluster.
@@ -115,6 +114,7 @@ except ImportError:
     HAS_PYVMOMI = False
     HAS_PYVMOMIJSON = False
 
+VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
     HAS_VSANPYTHONSDK = True

@@ -18,10 +18,6 @@ description:
 author:
 - Dag Wieers (@dagwieers)
 options:
-  hostname:
-    aliases: ['host']
-  username:
-    aliases: ['login']
   src:
     description:
       - The file to push to vCenter.
@@ -125,8 +121,6 @@ def vmware_path(datastore, datacenter, path):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(dict(
-        hostname=dict(required=False, aliases=['host']),
-        username=dict(required=False, aliases=['login']),
         src=dict(required=True, aliases=['name']),
         datacenter=dict(required=False),
         datastore=dict(required=True),
@@ -139,11 +133,6 @@ def main():
         # Implementing check-mode using HEAD is impossible, since size/date is not 100% reliable
         supports_check_mode=False,
     )
-
-    if module.params.get('host'):
-        module.deprecate("The 'host' option is being replaced by 'hostname'", version='3.0.0', collection_name='community.vmware')
-    if module.params.get('login'):
-        module.deprecate("The 'login' option is being replaced by 'username'", version='3.0.0', collection_name='community.vmware')
 
     hostname = module.params['hostname']
     username = module.params['username']

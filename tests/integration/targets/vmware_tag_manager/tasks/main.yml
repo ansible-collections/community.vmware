@@ -15,7 +15,7 @@
 
 - block:
   - name: Create first category
-    vmware_category:
+    community.vmware.vmware_category:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'

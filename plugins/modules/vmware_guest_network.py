@@ -15,11 +15,10 @@ module: vmware_guest_network
 short_description: Manage network adapters of specified virtual machine in given vCenter infrastructure
 description:
   - This module is used to add, reconfigure, remove network adapter of given virtual machine.
-version_added: '1.0.0'
 author:
   - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 notes:
-  - For backwards compatibility network_data is returned when using the gather_network_info and networks parameters
+  - For backwards compatibility network_data is returned when using the gather_network_info parameter
 options:
   name:
     description:
@@ -63,6 +62,12 @@ options:
       - MAC address of the NIC that should be altered, if a MAC address is not supplied a new nic will be created.
       - Required when I(state=absent).
     type: str
+  label:
+    description:
+      - 'Label of the NIC that should be altered. C(mac_address) or C(label) should be set to get the corresponding
+        device to reconfigure.'
+      - Alter the name of the network adapter.
+    type: str
   vlan_id:
     description:
       - VLAN id associated with the network.
@@ -75,11 +80,13 @@ options:
     default: vmxnet3
     description:
       - Type of virtual network device.
-      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).'
+      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov), C(pvrdma).'
     type: str
-  label:
+  pvrdma_device_protocol:
+    version_added: '3.3.0'
     description:
-      - Alter the name of the network adapter.
+      - The PVRDMA device protocol used. Valid choices are - C(rocev1), C(rocev2).
+      - This parameter is only used on the VM with hardware version >=14 and <= 19.
     type: str
   switch:
     description:
@@ -92,7 +99,7 @@ options:
     type: bool
   state:
     default: present
-    choices: [ 'present', 'absent' ]
+    choices: ['present', 'absent']
     description:
       - NIC state.
       - When C(state=present), a nic will be added if a mac address or label does not previously exists or is unset.
@@ -150,90 +157,6 @@ options:
     description:
       - Return information about current guest network adapters.
     type: bool
-  networks:
-    type: list
-    elements: dict
-    description:
-      - This method will be deprecated, use loops in your playbook for multiple interfaces instead.
-      - A list of network adapters.
-      - C(mac) or C(label) or C(device_type) is required to reconfigure or remove an existing network adapter.
-      - 'If there are multiple network adapters with the same C(device_type), you should set C(label) or C(mac) to match
-         one of them, or will apply changes on all network adapters with the C(device_type) specified.'
-      - 'C(mac), C(label), C(device_type) is the order of precedence from greatest to least if all set.'
-    suboptions:
-      mac:
-        type: str
-        description:
-        - MAC address of the existing network adapter to be reconfigured or removed.
-      label:
-        type: str
-        description:
-        - Label of the existing network adapter to be reconfigured or removed, e.g., "Network adapter 1".
-      device_type:
-        type: str
-        description:
-        - 'Valid virtual network device types are C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).'
-        - Used to add new network adapter, reconfigure or remove the existing network adapter with this type.
-        - If C(mac) and C(label) not specified or not find network adapter by C(mac) or C(label) will use this parameter.
-      name:
-        type: str
-        description:
-        - Name of the portgroup or distributed virtual portgroup for this interface.
-        - When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.
-      vlan:
-        type: int
-        description:
-        - VLAN number for this interface.
-      dvswitch_name:
-        type: str
-        description:
-        - Name of the distributed vSwitch.
-        - This value is required if multiple distributed portgroups exists with the same name.
-      state:
-        type: str
-        description:
-        - State of the network adapter.
-        - If set to C(present), then will do reconfiguration for the specified network adapter.
-        - If set to C(new), then will add the specified network adapter.
-        - If set to C(absent), then will remove this network adapter.
-      manual_mac:
-        type: str
-        description:
-        - Manual specified MAC address of the network adapter when creating, or reconfiguring.
-        - If not specified when creating new network adapter, mac address will be generated automatically.
-        - When reconfigure MAC address, VM should be in powered off state.
-        - There are restrictions on the MAC addresses you can set. Consult the documentation of your vSphere version as to allowed MAC addresses.
-      connected:
-        type: bool
-        description:
-        - Indicates that virtual network adapter connects to the associated virtual machine.
-      start_connected:
-        type: bool
-        description:
-        - Indicates that virtual network adapter starts with associated virtual machine powers on.
-      directpath_io:
-        type: bool
-        description:
-        - If set, Universal Pass-Through (UPT or DirectPath I/O) will be enabled on the network adapter.
-        - UPT is only compatible for Vmxnet3 adapter.
-      physical_function_backing:
-        version_added: '2.3.0'
-        type: str
-        description:
-        - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
-        - This option is only compatible for SR-IOV network adapters.
-      virtual_function_backing:
-        version_added: '2.3.0'
-        type: str
-        description:
-        - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
-        - This option is only compatible for SR-IOV network adapters.
-      allow_guest_os_mtu_change:
-        version_added: '2.3.0'
-        type: bool
-        description:
-        - Allows the guest OS to change the MTU on a SR-IOV network adapter.
-        - This option is only compatible for SR-IOV network adapters.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -323,7 +246,7 @@ network_info:
     ]
 network_data:
   description: For backwards compatibility, metadata about the virtual machine network adapters
-  returned: when using gather_network_info or networks parameters
+  returned: when using gather_network_info parameter
   type: dict
   sample:
     "network_data": {
@@ -370,26 +293,19 @@ import copy
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.change_detected = False
-        self.nic_device_type = dict(
-            pcnet32=vim.vm.device.VirtualPCNet32,
-            vmxnet2=vim.vm.device.VirtualVmxnet2,
-            vmxnet3=vim.vm.device.VirtualVmxnet3,
-            e1000=vim.vm.device.VirtualE1000,
-            e1000e=vim.vm.device.VirtualE1000e,
-            sriov=vim.vm.device.VirtualSriovEthernetCard,
-        )
+        self.device_helper = PyVmomiDeviceHelper(self.module)
 
-    def _get_network_object(self, vm_obj, network_params=None):
+    def _get_network_object(self, vm_obj):
         '''
         return network object matching given parameters
         :param vm_obj: vm object
-        :param network_params: dict containing parameters from deprecated networks list method
         :return: network object
         :rtype: object
         '''
@@ -399,14 +315,9 @@ class PyVmomiHelper(PyVmomi):
             compute_resource = self._get_compute_resource_by_name()
 
         pg_lookup = {}
-        if network_params:
-            vlan_id = network_params['vlan_id']
-            network_name = network_params['network_name']
-            switch_name = network_params['switch']
-        else:
-            vlan_id = self.params['vlan_id']
-            network_name = self.params['network_name']
-            switch_name = self.params['switch']
+        vlan_id = self.params['vlan_id']
+        network_name = self.params['network_name']
+        switch_name = self.params['switch']
 
         for pg in vm_obj.runtime.host.config.network.portgroup:
             pg_lookup[pg.spec.name] = {'switch': pg.spec.vswitchName, 'vlan_id': pg.spec.vlanId}
@@ -506,10 +417,16 @@ class PyVmomiHelper(PyVmomi):
                             d_item['switch'] = pg.spec.vswitchName
                             break
 
-            for k in self.nic_device_type:
-                if isinstance(nic, self.nic_device_type[k]):
+            for k in self.device_helper.nic_device_type:
+                if isinstance(nic, self.device_helper.nic_device_type[k]):
                     d_item['device_type'] = k
-                    break
+                    # VirtualVmxnet3Vrdma extends VirtualVmxnet3
+                    if k == 'vmxnet3':
+                        continue
+                    else:
+                        break
+            if d_item['device_type'] == 'pvrdma':
+                d_item['device_protocol'] = nic.deviceProtocol
 
             nic_info_lst.append(d_item)
 
@@ -544,7 +461,7 @@ class PyVmomiHelper(PyVmomi):
         return None
 
     def _new_nic_spec(self, vm_obj, nic_obj=None, network_params=None):
-        network = self._get_network_object(vm_obj, network_params)
+        network = self._get_network_object(vm_obj)
 
         if network_params:
             connected = network_params['connected']
@@ -570,9 +487,10 @@ class PyVmomiHelper(PyVmomi):
             pf_backing = self.params['physical_function_backing']
             vf_backing = self.params['virtual_function_backing']
             allow_guest_os_mtu_change = self.params['allow_guest_os_mtu_change']
+            pvrdma_device_protocol = self.params['pvrdma_device_protocol']
 
         if not nic_obj:
-            device_obj = self.nic_device_type[device_type]
+            device_obj = self.device_helper.nic_device_type[device_type]
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 device=device_obj()
             )
@@ -584,6 +502,9 @@ class PyVmomiHelper(PyVmomi):
                 nic_spec.device.deviceInfo = vim.Description(
                     label=label
                 )
+
+            if device_type == 'pvrdma' and pvrdma_device_protocol:
+                nic_spec.device.deviceProtocol = pvrdma_device_protocol
         else:
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 operation=vim.vm.device.VirtualDeviceSpec.Operation.edit,
@@ -713,69 +634,31 @@ class PyVmomiHelper(PyVmomi):
         rv['network_info'] = nic_info
         return rv
 
-    def _deprectated_list_config(self):
-        '''
-        this only exists to handle the old way of configuring interfaces, which
-        should be deprectated in favour of using loops in the playbook instead of
-        feeding lists directly into the module.
-        '''
-        diff = {'before': {}, 'after': {}}
-        changed = False
-        for i in self.params['networks']:
-            network_params = {}
-            network_params['mac_address'] = i.get('mac') or i.get('manual_mac')
-            network_params['network_name'] = i.get('name')
-            network_params['vlan_id'] = i.get('vlan')
-            network_params['switch'] = i.get('dvswitch_name')
-            network_params['guest_control'] = i.get('allow_guest_control', self.params['guest_control'])
-            network_params['physical_function_backing'] = i.get('physical_function_backing')
-            network_params['virtual_function_backing'] = i.get('virtual_function_backing')
-            network_params['allow_guest_os_mtu_change'] = i.get('allow_guest_os_mtu_change')
-
-            for k in ['connected', 'device_type', 'directpath_io', 'force', 'label', 'start_connected', 'state', 'wake_onlan']:
-                network_params[k] = i.get(k, self.params[k])
-
-            if network_params['state'] in ['new', 'present']:
-                n_diff, n_changed, network_info = self._nic_present(network_params)
-                diff['before'].update(n_diff['before'])
-                diff['after'] = n_diff['after']
-                if n_changed:
-                    changed = True
-
-            if network_params['state'] == 'absent':
-                n_diff, n_changed, network_info = self._nic_absent(network_params)
-                diff['before'].update(n_diff['before'])
-                diff['after'] = n_diff['after']
-                if n_changed:
-                    changed = True
-
-        return diff, changed, network_info
-
-    def _nic_present(self, network_params=None):
+    def _nic_present(self):
         changed = False
         diff = {'before': {}, 'after': {}}
-        # backwards compatibility, clean up when params['networks']
-        # has been removed
-        if network_params:
-            force = network_params['force']
-            label = network_params['label']
-            mac_address = network_params['mac_address']
-            network_name = network_params['network_name']
-            switch = network_params['switch']
-            vlan_id = network_params['vlan_id']
-        else:
-            force = self.params['force']
-            label = self.params['label']
-            mac_address = self.params['mac_address']
-            network_name = self.params['network_name']
-            switch = self.params['switch']
-            vlan_id = self.params['vlan_id']
+        force = self.params['force']
+        label = self.params['label']
+        mac_address = self.params['mac_address']
+        network_name = self.params['network_name']
+        switch = self.params['switch']
+        vlan_id = self.params['vlan_id']
 
         vm_obj = self.get_vm()
         if not vm_obj:
             self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
 
-        network_obj = self._get_network_object(vm_obj, network_params)
+        if self.params['device_type'] == 'pvrdma':
+            if int(vm_obj.config.version.split('vmx-')[-1]) > 19 or int(vm_obj.config.version.split('vmx-')[-1]) == 13:
+                self.params['pvrdma_device_protocol'] = None
+            else:
+                if self.params['pvrdma_device_protocol'] and self.params['pvrdma_device_protocol'] not in ['rocev1', 'rocev2']:
+                    self.module.fail_json(msg="Valid values of parameter 'pvrdma_device_protocol' are 'rocev1',"
+                                              " 'rocev2' for VM with hardware version >= 14 and <= 19.")
+                if self.params['pvrdma_device_protocol'] is None:
+                    self.params['pvrdma_device_protocol'] = 'rocev2'
+
+        network_obj = self._get_network_object(vm_obj)
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
         label_lst = [d.get('label') for d in nic_info]
         mac_addr_lst = [d.get('mac_address') for d in nic_info]
@@ -783,7 +666,7 @@ class PyVmomiHelper(PyVmomi):
         network_name_lst = [d.get('network_name') for d in nic_info]
 
         # TODO: make checks below less inelegant
-        if ((vlan_id in vlan_id_lst or network_name in network_name_lst)
+        if ((vlan_id and vlan_id in vlan_id_lst) or (network_name and network_name in network_name_lst)
                 and not mac_address
                 and not label
                 and not force):
@@ -805,7 +688,7 @@ class PyVmomiHelper(PyVmomi):
         if (mac_address and mac_address in mac_addr_lst) or (label and label in label_lst):
             for nic_obj in nic_obj_lst:
                 if (mac_address and nic_obj.macAddress == mac_address) or (label and label == nic_obj.deviceInfo.label):
-                    device_spec = self._new_nic_spec(vm_obj, nic_obj, network_params)
+                    device_spec = self._new_nic_spec(vm_obj, nic_obj)
 
             # fabricate diff for check_mode
             if self.module.check_mode:
@@ -826,7 +709,7 @@ class PyVmomiHelper(PyVmomi):
                         diff['after'].update({nic_mac: copy.deepcopy(nic)})
 
         if (not mac_address or mac_address not in mac_addr_lst) and (not label or label not in label_lst):
-            device_spec = self._new_nic_spec(vm_obj, None, network_params)
+            device_spec = self._new_nic_spec(vm_obj, None)
             device_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
             if self.module.check_mode:
                 # fabricate diff/returns for checkmode
@@ -891,6 +774,7 @@ def main():
         vlan_id=dict(type='int'),
         network_name=dict(type='str'),
         device_type=dict(type='str', default='vmxnet3'),
+        pvrdma_device_protocol=dict(type='str'),
         label=dict(type='str'),
         switch=dict(type='str'),
         connected=dict(type='bool', default=True),
@@ -902,7 +786,6 @@ def main():
         allow_guest_os_mtu_change=dict(type='bool', default=True),
         force=dict(type='bool', default=False),
         gather_network_info=dict(type='bool', default=False, aliases=['gather_network_facts']),
-        networks=dict(type='list', default=[], elements='dict'),
         guest_control=dict(type='bool', default=True),
         state=dict(type='str', default='present', choices=['absent', 'present'])
     )
@@ -930,23 +813,6 @@ def main():
             network_data[key_name].update({'mac_addr': i['mac_address'], 'name': i['network_name']})
 
         module.exit_json(network_info=nics.get('network_info'), network_data=network_data, changed=False)
-
-    if module.params['networks']:
-        network_data = {}
-        module.deprecate(
-            msg='The old way of configuring interfaces by supplying an arbitrary list will be removed, loops should be used to handle multiple interfaces',
-            version='3.0.0',
-            collection_name='community.vmware'
-        )
-        diff, changed, network_info = pyv._deprectated_list_config()
-        nd = copy.deepcopy(network_info)
-        nics_sorted = sorted(nd, key=lambda k: k['unit_number'])
-        for n, i in enumerate(nics_sorted):
-            key_name = '{0}'.format(n)
-            network_data[key_name] = i
-            network_data[key_name].update({'mac_addr': i['mac_address'], 'name': i['network_name']})
-
-        module.exit_json(changed=changed, network_info=network_info, network_data=network_data, diff=diff)
 
     if module.params['state'] == 'present':
         diff, changed, network_info = pyv._nic_present()

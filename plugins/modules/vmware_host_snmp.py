@@ -31,6 +31,7 @@ options:
     description:
         - List of SNMP community strings.
     type: list
+    default: []
     elements: str
   snmp_port:
     description:
@@ -73,12 +74,10 @@ options:
     description:
         - System contact who manages the system.
     type: str
-    version_added: '1.17.0'
   sys_location:
     description:
         - System location.
     type: str
-    version_added: '1.17.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

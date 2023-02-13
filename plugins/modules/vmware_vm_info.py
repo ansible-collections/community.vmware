@@ -323,6 +323,10 @@ class VmwareVmInfo(PyVmomi):
             if esxi_parent and isinstance(esxi_parent, vim.ClusterComputeResource):
                 cluster_name = summary.runtime.host.parent.name
 
+            resource_pool = None
+            if vm.resourcePool and vm.resourcePool != vm.resourcePool.owner.resourcePool:
+                resource_pool = vm.resourcePool.name
+
             vm_attributes = dict()
             if self.module.params.get('show_attribute'):
                 vm_attributes = self.get_vm_attributes(vm)
@@ -361,6 +365,7 @@ class VmwareVmInfo(PyVmomi):
                 "esxi_hostname": esxi_hostname,
                 "datacenter": datacenter.name,
                 "cluster": cluster_name,
+                "resource_pool": resource_pool,
                 "attributes": vm_attributes,
                 "tags": vm_tags,
                 "folder": vm_folder,

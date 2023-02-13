@@ -24,7 +24,6 @@ options:
       - This parameter is case sensitive.
     default: ha-datacenter
     type: str
-    version_added: '1.13.0'
   state:
     description:
     - Set the state of the virtual machine.
@@ -127,7 +126,6 @@ options:
         required: True
     type: list
     elements: dict
-    version_added: '1.11.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 """

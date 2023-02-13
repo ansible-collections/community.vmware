@@ -16,9 +16,19 @@
   assert:
     that:
       - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
+        | selectattr('type', 'equalto', 'VirtualMachine')
       - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+
       - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
+        | selectattr('type', 'equalto', 'VirtualMachine')
       - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')
+
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example03_global')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example03_global')
+        | selectattr('type', 'equalto', 'Global')
+      - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test3')
 
 - name: Gather custom attributes of an ESXi
   community.vmware.vmware_object_custom_attributes_info:
@@ -34,8 +44,13 @@
   assert:
     that:
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+       | selectattr('type', 'equalto', 'HostSystem')
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+       | selectattr('type', 'equalto', 'HostSystem')
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')
 
 - name: Gather custom attributes of a virtual machine with moid
@@ -51,10 +66,20 @@
 - name: Make sure if custom attributes exist
   assert:
     that:
-      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
-      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('value', 'equalto', 'test1')
-      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
-      - vm_custom_attributes_with_moid_result.custom_attributes | selectattr('value', 'equalto', 'test2')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example01')
+        | selectattr('type', 'equalto', 'VirtualMachine')
+      - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example02')
+        | selectattr('type', 'equalto', 'VirtualMachine')
+      - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')
+
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example03_global')
+      - vm_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'vm_example03_global')
+        | selectattr('type', 'equalto', 'Global')
+      - vm_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test3')
 
 - name: Gather custom attributes of an ESXi with moid
   community.vmware.vmware_object_custom_attributes_info:
@@ -70,6 +95,11 @@
   assert:
     that:
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+       | selectattr('type', 'equalto', 'HostSystem')
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1')
+
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+       | selectattr('type', 'equalto', 'HostSystem')
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2')

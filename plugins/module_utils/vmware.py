@@ -289,7 +289,7 @@ def find_folder_by_fqpn(content, folder_name, datacenter_name=None, folder_type=
         for part in folder_parts:
             folder_obj = None
             for part_obj in parent_obj.childEntity:
-                if part_obj.name == part and 'Folder' in part_obj.childType:
+                if part_obj.name == part and ('Folder' in part_obj.childType or vim.Folder in part_obj.childType):
                     folder_obj = part_obj
                     parent_obj = part_obj
                     break
@@ -1096,13 +1096,6 @@ def quote_obj_name(object_name=None):
             object_name = object_name.replace(key, SPECIAL_CHARS[key])
 
     return object_name
-
-
-def dvs_supports_mac_learning(dvs):
-    """
-    Test if the switch supports MAC learning
-    """
-    return hasattr(dvs.capability.featuresSupported, 'macLearningSupported') and dvs.capability.featuresSupported.macLearningSupported
 
 
 class PyVmomi(object):

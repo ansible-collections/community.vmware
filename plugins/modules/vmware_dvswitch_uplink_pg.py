@@ -224,6 +224,7 @@ class VMwareDvSwitchUplinkPortgroup(PyVmomi):
         results = dict(changed=changed)
         results['dvswitch'] = self.switch_name
         changed_list = []
+        message = ''
 
         uplink_pg_spec = vim.dvs.DistributedVirtualPortgroup.ConfigSpec()
         # Use the same version in the new spec; The version will be increased by one by the API automatically
@@ -268,7 +269,7 @@ class VMwareDvSwitchUplinkPortgroup(PyVmomi):
         uplink_pg_policy_spec.shapingOverrideAllowed = False
         uplink_pg_policy_spec.livePortMovingAllowed = False
         uplink_pg_policy_spec.uplinkTeamingOverrideAllowed = False
-        uplink_pg_policy_spec.securityPolicyOverrideAllowed = False
+        uplink_pg_policy_spec.macManagementOverrideAllowed = False
         uplink_pg_policy_spec.networkResourcePoolOverrideAllowed = False
         # Check policies
         if uplink_pg_config.policy.portConfigResetAtDisconnect != self.uplink_pg_reset:

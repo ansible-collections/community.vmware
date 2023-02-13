@@ -47,7 +47,6 @@ options:
       type: bool
       default: false
     advanced_options:
-      version_added: "1.1.0"
       description:
       - Advanced VSAN Options.
       suboptions:
@@ -123,6 +122,7 @@ try:
 except ImportError:
     pass
 
+VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
     HAS_VSANPYTHONSDK = True

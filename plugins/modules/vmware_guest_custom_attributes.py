@@ -29,7 +29,7 @@ options:
      description:
      - The action to take.
      - If set to C(present), then custom attribute is added or updated.
-     - If set to C(absent), then custom attribute is removed.
+     - If set to C(absent), then custom attribute value is removed.
      default: 'present'
      choices: ['present', 'absent']
      type: str
@@ -161,43 +161,142 @@ class VmAttributeManager(PyVmomi):
     def __init__(self, module):
         super(VmAttributeManager, self).__init__(module)
 
+        # Initialize the variables.
+        # Make the diff_config variable to check the difference between a new and existing config.
+        # https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#diff
+        self.diff_config = dict(before={}, after={})
+
+        # reuslt_fields is the variable for the return value after the job finish.
+        self.result_fields = {}
+
+        # update_custom_attributes is the variable for storing the custom attributes to update.
+        self.update_custom_attributes = []
+
+        # changed variable is the flag of whether the target changed.
+        # https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#changed
+        self.changed = False
+
     def set_custom_field(self, vm, user_fields):
-        result_fields = dict()
-        change_list = list()
-        changed = False
+        """Add or update the custom attribute and value.
 
-        for field in user_fields:
-            field_key = self.check_exists(field['name'])
-            found = False
-            field_value = field.get('value', '')
+        Args:
+            vm (vim.VirtualMachine): The managed object of a virtual machine.
+            user_fields (list): list of the specified custom attributes by user.
 
-            for k, v in [(x.name, v.value) for x in self.custom_field_mgr for v in vm.customValue if x.key == v.key]:
-                if k == field['name']:
-                    found = True
-                    if v != field_value:
-                        if not self.module.check_mode:
-                            self.content.customFieldsManager.SetField(entity=vm, key=field_key.key, value=field_value)
-                            result_fields[k] = field_value
-                        change_list.append(True)
-            if not found and field_value != "":
-                if not field_key and not self.module.check_mode:
-                    field_key = self.content.customFieldsManager.AddFieldDefinition(name=field['name'], moType=vim.VirtualMachine)
-                change_list.append(True)
-                if not self.module.check_mode:
-                    self.content.customFieldsManager.SetField(entity=vm, key=field_key.key, value=field_value)
-                result_fields[field['name']] = field_value
+        Returns:
+            The dictionary for the ansible return value.
+        """
+        self.check_exists(vm, user_fields)
+        if self.module.check_mode is True:
+            self.module.exit_json(changed=self.changed, diff=self.diff_config)
 
-        if any(change_list):
-            changed = True
+        # If update_custom_attributes variable has elements, add or update the custom attributes and values.
+        for field in self.update_custom_attributes:
+            if 'key' in field:
+                self.content.customFieldsManager.SetField(entity=vm, key=field['key'], value=field['value'])
+            else:
+                field_key = self.content.customFieldsManager.AddFieldDefinition(name=field['name'],
+                                                                                moType=vim.VirtualMachine)
+                self.content.customFieldsManager.SetField(entity=vm, key=field_key.key, value=field['value'])
 
-        return {'changed': changed, 'failed': False, 'custom_attributes': result_fields}
+            # Set result_fields for the return value.
+            self.result_fields[field['name']] = field['value']
 
-    def check_exists(self, field):
-        for x in self.custom_field_mgr:
-            # The custom attribute should be either global (managedObjectType == None) or VM specific
-            if x.managedObjectType in (None, vim.VirtualMachine) and x.name == field:
-                return x
-        return False
+        return {'changed': self.changed, 'failed': False, 'custom_attributes': self.result_fields}
+
+    def remove_custom_field(self, vm, user_fields):
+        """Remove the value from the existing custom attribute.
+
+        Args:
+            vm (vim.VirtualMachine): The managed object of a virtual machine.
+            user_fields (list): list of the specified custom attributes by user.
+
+        Returns:
+            The dictionary for the ansible return value.
+        """
+        # All custom attribute values will set blank to remove the value.
+        for v in user_fields:
+            v['value'] = ''
+
+        self.check_exists(vm, user_fields)
+        if self.module.check_mode is True:
+            self.module.exit_json(changed=self.changed, diff=self.diff_config)
+
+        # If update_custom_attributes variable has elements, remove the custom attribute values.
+        for field in self.update_custom_attributes:
+            self.content.customFieldsManager.SetField(entity=vm, key=field['key'], value=field['value'])
+
+            # Set result_fields for the return value.
+            self.result_fields[field['name']] = field['value']
+
+        return {'changed': self.changed, 'failed': False, 'custom_attributes': self.result_fields}
+
+    def check_exists(self, vm, user_fields):
+        """Check the existing custom attributes and values.
+
+        In the function, the below processing is executed.
+
+        Gather the existing custom attributes from the virtual machine and make update_custom_attributes for updating
+        if it has differences between the existing configuration and the user_fields.
+
+        And set diff key for checking between before and after configuration to self.diff_config.
+
+        Args:
+            vm (vim.VirtualMachine): The managed object of a virtual machine.
+            user_fields (list): list of the specified custom attributes by user.
+        """
+        # Gather the available existing custom attributes based on user_fields
+        existing_custom_attributes = []
+        for k, n in [(x.key, x.name) for x in self.custom_field_mgr for v in user_fields if x.name == v['name']]:
+            existing_custom_attributes.append({
+                "key": k,
+                "name": n
+            })
+
+        # Gather the values of set the custom attribute.
+        for e in existing_custom_attributes:
+            for v in vm.customValue:
+                if e['key'] == v.key:
+                    e['value'] = v.value
+
+            # When add custom attribute as a new one, it has not the value key.
+            # Add the value key to avoid unintended behavior in the difference check.
+            if 'value' not in e:
+                e['value'] = ''
+
+        # Select the custom attribute and value to update the configuration.
+        _user_fields_for_diff = []
+        for v in user_fields:
+            for e in existing_custom_attributes:
+                if v['name'] == e['name'] and v['value'] != e['value']:
+                    self.update_custom_attributes.append({
+                        "name": v['name'],
+                        "value": v['value'],
+                        "key": e['key']
+                    })
+
+                if v['name'] == e['name']:
+                    _user_fields_for_diff.append({
+                        "name": v['name'],
+                        "value": v['value']
+                    })
+            # Add the custom attribute as a new one if the state is present and existing_custom_attribute has not the custom attribute name.
+            if v['name'] not in [x['name'] for x in existing_custom_attributes] and self.params['state'] == "present":
+                self.update_custom_attributes.append(v)
+                _user_fields_for_diff.append({
+                    "name": v['name'],
+                    "value": v['value']
+                })
+
+        # If the custom attribute exists to update, the changed is set to True.
+        if self.update_custom_attributes:
+            self.changed = True
+
+        # Add custom_attributes key for the difference between before and after configuration to check.
+        self.diff_config['before']['custom_attributes'] = sorted(
+            [x for x in existing_custom_attributes if x.pop('key', None)], key=lambda k: k['name']
+        )
+        self.diff_config['after']['custom_attributes'] = sorted(_user_fields_for_diff, key=lambda k: k['name'])
 
 
 def main():
@@ -246,7 +345,7 @@ def main():
         if module.params['state'] == "present":
             results = pyv.set_custom_field(vm, module.params['attributes'])
         elif module.params['state'] == "absent":
-            results = pyv.set_custom_field(vm, module.params['attributes'])
+            results = pyv.remove_custom_field(vm, module.params['attributes'])
         module.exit_json(**results)
     else:
         # virtual machine does not exists

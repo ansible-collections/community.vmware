@@ -62,7 +62,6 @@ options:
       - If set to C(present), VMs/hosts will be added to the given DRS group.
       - If set to C(absent), VMs/hosts will be removed from the given DRS group.
     type: str
-version_added: '1.7.0'
 '''
 
 EXAMPLES = r'''
@@ -192,16 +191,19 @@ class VmwareDrsGroupMemberManager(PyVmomi):
             self._datacenter_obj = self.find_datacenter_by_name(self._datacenter_name)
 
             if self._datacenter_obj is None:
-                raise Exception("Datacenter '%s' not found" % self._datacenter_name)
+                self.module.fail_json(msg="Datacenter '%s' not found" % self._datacenter_name)
 
         self._cluster_obj = self.find_cluster_by_name(self._cluster_name, self._datacenter_obj)
 
         # Throw error if cluster does not exist
         if self._cluster_obj is None:
-            raise Exception("Cluster '%s' not found" % self._cluster_name)
+            self.module.fail_json(msg="Cluster '%s' not found" % self._cluster_name)
 
         # get group
         self._group_obj = self._get_group_by_name()
+        if self._group_obj is None:
+            self.module.fail_json(msg="Cluster %s does not have a DRS group %s" % (self._cluster_name, self._group_name))
+
         # Set result here. If nothing is to be updated, result is already set
         self._set_result(self._group_obj)
 
@@ -251,8 +253,7 @@ class VmwareDrsGroupMemberManager(PyVmomi):
                     vm_obj = find_vm_by_id(content=self.content, vm_id=vm,
                                            vm_id_type='vm_name', cluster=cluster_obj)
                     if vm_obj is None:
-                        raise Exception("VM %s does not exist in cluster %s" % (vm,
-                                                                                self._cluster_name))
+                        self.module.fail_json(msg="VM %s does not exist in cluster %s" % (vm, self._cluster_name))
                     self._vm_obj_list.append(vm_obj)
 
     def _set_host_obj_list(self, host_list=None):
@@ -274,7 +275,7 @@ class VmwareDrsGroupMemberManager(PyVmomi):
                     # Get host data
                     host_obj = self.find_hostsystem_by_name(host)
                     if host_obj is None and self.module.check_mode is False:
-                        raise Exception("ESXi host %s does not exist in cluster %s" % (host, self._cluster_name))
+                        self.module.fail_json(msg="ESXi host %s does not exist in cluster %s" % (host, self._cluster_name))
                     self._host_obj_list.append(host_obj)
 
     def _get_group_by_name(self, group_name=None, cluster_obj=None):
@@ -469,7 +470,7 @@ class VmwareDrsGroupMemberManager(PyVmomi):
         elif self._host_list is None:
             self._manage_vm_group()
         else:
-            raise Exception('Failed, no hosts or vms defined')
+            self.module.fail_json(msg="Failed, no hosts or vms defined")
 
 
 def main():

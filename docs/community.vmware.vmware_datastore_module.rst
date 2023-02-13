@@ -1,29 +1,23 @@
-.. _community.vmware.vmware_guest_vnc_module:
+.. _community.vmware.vmware_datastore_module:
 
 
 *********************************
-community.vmware.vmware_guest_vnc
+community.vmware.vmware_datastore
 *********************************
 
-**Manages VNC remote display on virtual machines in vCenter**
+**Configure Datastores**
 
 
+Version added: 3.0.0
 
 .. contents::
    :local:
    :depth: 1
 
-DEPRECATED
-----------
-:Removed in collection release after 2022-10-15
-:Why: VNC has been removed in 7.0 and 2022-10-15 is the End of General Support date for 6.5 / 6.7.
-:Alternative: Users should use the VM Console via the vSphere Client, the ESXi Host Client, or the VMware Remote Console to connect to virtual machines.
-
-
 
 Synopsis
 --------
-- This module can be used to enable and disable VNC remote display on virtual machine.
+- Configure Storage I/O Control Settings of a Datastore.
 
 
 
@@ -42,6 +36,43 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>congestion_threshold_manual</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Storage I/O congestion threshold in ms.</div>
+                        <div>Only use <code>congestion_threshold_percentage</code> or <code>congestion_threshold_manual</code>.</div>
+                        <div>Only valid when <code>storage_io_control</code> is <code>enable_io_statistics</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>congestion_threshold_percentage</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">90</div>
+                </td>
+                <td>
+                        <div>Storage I/O congestion threshold in percentage of peak throughput.</div>
+                        <div>A value between 50% and 100%.</div>
+                        <div>Recommended: 90%</div>
+                        <div>Only use <code>congestion_threshold_percentage</code> or <code>congestion_threshold_manual</code>.</div>
+                        <div>Only valid when <code>storage_io_control</code> is <code>enable_io_statistics</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>datacenter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -49,27 +80,10 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">"ha-datacenter"</div>
                 </td>
                 <td>
-                        <div>Destination datacenter for the deploy operation.</div>
-                        <div>This parameter is case sensitive.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>folder</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Destination folder, absolute or relative path to find an existing guest.</div>
-                        <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</div>
+                        <div>Datacenter to search for the datastores.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
                 </td>
             </tr>
             <tr>
@@ -92,52 +106,17 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>moid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
-                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Name of the virtual machine to work with.</div>
-                        <div>Virtual machine names in vCenter are not necessarily unique, which may be problematic, see <code>name_match</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name_match</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>first</b>&nbsp;&larr;</div></li>
-                                    <li>last</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If multiple virtual machines matching the name, use the first or last found.</div>
+                        <div>Name of the datastore.</div>
                 </td>
             </tr>
             <tr>
@@ -213,20 +192,42 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
+                    <b>statistic_collection</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">boolean</span>
                     </div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                 <td>
-                        <div>Set the state of VNC on virtual machine.</div>
+                        <div>Include I/O statistics for SDRS.</div>
+                        <div>Only valid when <code>storage_io_control</code> is <code>enable_io_statistics</code> or <code>enable_statistics</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>storage_io_control</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>enable_io_statistics</li>
+                                    <li>enable_statistics</li>
+                                    <li>disable</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specify datastore typ.</div>
                 </td>
             </tr>
             <tr>
@@ -245,22 +246,6 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uuid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>UUID of the instance to manage if known, this is VMware&#x27;s unique identifier.</div>
-                        <div>This is required, if <code>name</code> or <code>moid</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -285,57 +270,6 @@ Parameters
                         <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vnc_ip</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"0.0.0.0"</div>
-                </td>
-                <td>
-                        <div>Sets an IP for VNC on virtual machine.</div>
-                        <div>This is required only when <em>state</em> is set to present and will be ignored if <em>state</em> is absent.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vnc_password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
-                </td>
-                <td>
-                        <div>Sets a password for VNC on virtual machine.</div>
-                        <div>This is required only when <em>state</em> is set to present and will be ignored if <em>state</em> is absent.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vnc_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>The port that VNC listens on. Usually a number between 5900 and 7000 depending on your config.</div>
-                        <div>This is required only when <em>state</em> is set to present and will be ignored if <em>state</em> is absent.</div>
-                </td>
-            </tr>
     </table>
     <br/>
 
@@ -353,41 +287,18 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enable VNC remote display on the VM
-      community.vmware.vmware_guest_vnc:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        folder: /mydatacenter/vm
-        name: testvm1
-        vnc_port: 5990
-        vnc_password: vNc5ecr3t
-        datacenter: "{{ datacenter_name }}"
-        state: present
+    - name: Configure Storage I/O Control of an mounted datastore
+      community.vmware.vmware_datastore_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter_name: '{{ datacenter_name }}'
+        name: datastore1
+        storage_io_control: 'enable_io_statistics'
+        congestion_threshold_manual: 30
+        statistic_collection: true
       delegate_to: localhost
-      register: vnc_result
-
-    - name: Disable VNC remote display on the VM
-      community.vmware.vmware_guest_vnc:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ datacenter_name }}"
-        uuid: 32074771-7d6b-699a-66a8-2d9cf8236fff
-        state: absent
-      delegate_to: localhost
-      register: vnc_result
-
-    - name: Disable VNC remote display on the VM using MoID
-      community.vmware.vmware_guest_vnc:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        datacenter: "{{ datacenter_name }}"
-        moid: vm-42
-        state: absent
-      delegate_to: localhost
-      register: vnc_result
+      register: info
 
 
 
@@ -406,46 +317,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>changed</b>
+                    <b>result</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">boolean</span>
+                      <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>always</td>
                 <td>
-                            <div>If anything changed on VM&#x27;s extraConfig.</div>
+                            <div>Information about datastore operation.</div>
                     <br/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>failed</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>If changes failed.</div>
-                    <br/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>instance</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>On success in both <em>state</em></td>
-                <td>
-                            <div>Dictionary describing the VM, including VNC info.</div>
-                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Datastore configured successfully.</div>
                 </td>
             </tr>
     </table>
@@ -456,11 +339,7 @@ Status
 ------
 
 
-- This module will be removed in a release after 2022-10-15. *[deprecated]*
-- For more information see `DEPRECATED`_.
-
-
 Authors
 ~~~~~~~
 
-- Armin Ranjbar Daemi (@rmin)
+- Nina Loser (@Nina2244)

@@ -1,0 +1,190 @@
+# Test code for the vmware_guest_boot_manager module.
+# Copyright: (c) 2022, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_virtualmachines: true
+
+- name: Enable Secure Boot
+  community.vmware.vmware_guest_boot_manager:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+    boot_firmware: efi
+    secure_boot_enabled: true
+  register: enable_secure_boot
+
+- ansible.builtin.debug: var=enable_secure_boot
+
+- name: Get VM boot info 1
+  community.vmware.vmware_guest_boot_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+  register: boot_info1
+
+- ansible.builtin.debug: var=boot_info1
+
+- name: assert that Secure Boot is enabled
+  assert:
+    that:
+    - enable_secure_boot.changed
+    - boot_info1.vm_boot_info.current_secure_boot_enabled is true
+
+- name: Issue https://github.com/ansible-collections/community.vmware/issues/1257
+  block:
+    - name: Enter BIOS setup
+      community.vmware.vmware_guest_boot_manager:
+        validate_certs: false
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        name: "{{ virtual_machines[0].name }}"
+        enter_bios_setup: true
+      register: enter_bios_setup
+
+    - ansible.builtin.debug: var=enter_bios_setup
+
+    - name: Get VM boot info 2
+      community.vmware.vmware_guest_boot_info:
+        validate_certs: false
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        name: "{{ virtual_machines[0].name }}"
+      register: boot_info2
+
+    - ansible.builtin.debug: var=boot_info2
+
+    - name: assert that configuration is changed
+      assert:
+        that:
+        - enter_bios_setup.changed
+        - boot_info2.vm_boot_info.current_enter_bios_setup is true
+
+    - name: assert that Secure Boot is still enabled
+      assert:
+        that:
+        - boot_info2.vm_boot_info.current_secure_boot_enabled is true
+
+- name: Get VM disk info 1
+  community.vmware.vmware_guest_disk_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: "{{ dc1 }}"
+    name: "{{ virtual_machines[0].name }}"
+  register: disk_info1
+
+- ansible.builtin.debug: var=disk_info1
+
+- name: Add a new disk for boot disk config test
+  block:
+    - name: Add a new disk to VM
+      community.vmware.vmware_guest_disk:
+        validate_certs: false
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        datacenter: "{{ dc1 }}"
+        name: "{{ virtual_machines[0].name }}"
+        disk:
+          - size_mb: 10
+            type: thin
+            datastore: "{{ rw_datastore }}"
+            state: present
+            controller_number: "{{ disk_info1.guest_disk_info['0'].controller_bus_number }}"
+            unit_number: "{{ disk_info1.guest_disk_info['0'].unit_number | int + 1 }}"
+            controller_type: "{{ disk_info1.guest_disk_info['0'].controller_type }}"
+      register: add_disk_result
+
+    - ansible.builtin.debug: var=add_disk_result
+
+    - name: assert that new disk is added
+      assert:
+        that:
+          - add_disk_result.changed
+          - add_disk_result.disk_data | length == 2
+  when:
+    - disk_info1 is defined
+    - disk_info1.guest_disk_info is defined
+    - disk_info1.guest_disk_info | length == 1
+
+- name: Get VM disk info 2
+  community.vmware.vmware_guest_disk_info:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+    datacenter: "{{ dc1 }}"
+  register: disk_info2
+
+- ansible.builtin.debug: var=disk_info2
+
+- name: Get disk with label 'Hard disk 2'
+  ansible.builtin.set_fact:
+    get_hard_disk_2: "{{ item }}"
+  when: item.value.label == 'Hard disk 2'
+  with_dict: "{{ disk_info2.guest_disk_info }}"
+
+- name: assert that 'Hard disk 2' found in disk info
+  assert:
+    that:
+      - get_hard_disk_2 is defined
+
+- ansible.builtin.debug: var=get_hard_disk_2
+
+- name: Set boot disk to 'Hard disk 2'
+  community.vmware.vmware_guest_boot_manager:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+    boot_order:
+      - disk
+      - cdrom
+      - ethernet
+    boot_hdd_name: 'Hard disk 2'
+  register: set_boot_hdd_result1
+
+- ansible.builtin.debug: var=set_boot_hdd_result1
+
+- name: assert that boot disk is set to 'Hard disk 2'
+  assert:
+    that:
+      - set_boot_hdd_result1.changed
+      - set_boot_hdd_result1.vm_boot_status.current_boot_disk == 'Hard disk 2'
+
+- name: Set boot disk to 'Hard disk 2' again to test idempotency
+  community.vmware.vmware_guest_boot_manager:
+    validate_certs: false
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    name: "{{ virtual_machines[0].name }}"
+    boot_order:
+      - disk
+      - cdrom
+      - ethernet
+    boot_hdd_name: 'Hard disk 2'
+  register: set_boot_hdd_result2
+
+- ansible.builtin.debug: var=set_boot_hdd_result2
+
+- name: assert that task is not changed
+  assert:
+    that:
+      - not set_boot_hdd_result2.changed
+      - set_boot_hdd_result2.vm_boot_status.current_boot_disk == 'Hard disk 2'
+      - set_boot_hdd_result2.vm_boot_status.previous_boot_disk == 'Hard disk 2'

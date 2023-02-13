@@ -38,11 +38,12 @@ options:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
         required: False
         type: list
+        default: []
         elements: str
     lag_uplinks:
-        version_added: '1.12.0'
         required: False
         type: list
+        default: []
         elements: dict
         description:
         - The ESXi hosts vmnics to use with specific LAGs.
@@ -57,6 +58,7 @@ options:
                 - The ESXi hosts vmnics to use with the LAG.
                 required: False
                 type: list
+                default: []
                 elements: str
     state:
         description:

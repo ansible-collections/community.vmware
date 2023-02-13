@@ -1,29 +1,23 @@
-.. _community.vmware.vmware_dns_config_module:
+.. _community.vmware.vmware_custom_attribute_manager_module:
 
 
-**********************************
-community.vmware.vmware_dns_config
-**********************************
+************************************************
+community.vmware.vmware_custom_attribute_manager
+************************************************
 
-**Manage VMware ESXi DNS Configuration**
+**Manage custom attributes from VMware for the given vSphere object**
 
 
+Version added: 3.2.0
 
 .. contents::
    :local:
    :depth: 1
 
-DEPRECATED
-----------
-:Removed in collection release after 2022-06-01
-:Why: Will be replaced with new module :ref:`community.vmware.vmware_host_dns <community.vmware.vmware_host_dns_module>`.
-:Alternative: Use :ref:`community.vmware.vmware_host_dns <community.vmware.vmware_host_dns_module>` instead.
-
-
 
 Synopsis
 --------
-- Manage VMware ESXi DNS Configuration
+- This module can be used to add, remove and update custom attributes for the given vSphere object.
 
 
 
@@ -35,47 +29,33 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>change_hostname_to</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname that an ESXi host should be changed to.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>dns_servers</b>
+                    <b>custom_attributes</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
+                         / <span style="color: purple">elements=dictionary</span>
                          / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>The DNS servers that the host should be configured to use.</div>
+                        <div>A list of name and value of custom attributes that needs to be manage.</div>
+                        <div>Value of custom attribute is not required and will be ignored, if <code>state</code> is set to <code>absent</code>.</div>
                 </td>
             </tr>
-            <tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>domainname</b>
+                    <b>name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -85,11 +65,29 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The domain the ESXi host should be apart of.</div>
+                        <div>Name of the attribute.</div>
                 </td>
             </tr>
             <tr>
+                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>value</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Value of the attribute.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>hostname</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -106,7 +104,50 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>object_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the vSphere object to work with.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>object_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>Cluster</li>
+                                    <li>Datacenter</li>
+                                    <li>Datastore</li>
+                                    <li>DistributedVirtualPortgroup</li>
+                                    <li>DistributedVirtualSwitch</li>
+                                    <li>Folder</li>
+                                    <li>HostSystem</li>
+                                    <li>ResourcePool</li>
+                                    <li>VirtualMachine</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Type of the object the custom attribute is associated with.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>password</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -124,7 +165,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -142,7 +183,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -160,7 +201,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_port</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -176,7 +217,27 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If set to <code>present</code>, the custom attribute is set to the given value.</div>
+                        <div>If set to <code>absent</code>, the custom attribute is cleared. The given value is ignored in this case.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -194,7 +255,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>validate_certs</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -232,17 +293,46 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Configure ESXi hostname and DNS servers
-      community.vmware.vmware_dns_config:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        change_hostname_to: esx01
-        domainname: foo.org
-        dns_servers:
-            - 8.8.8.8
-            - 8.8.4.4
+    - name: Add virtual machine custom attributes
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: present
+        custom_attributes:
+          - name: MyAttribute
+            value: MyValue
       delegate_to: localhost
+
+    - name: Add multiple virtual machine custom attributes
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: present
+        custom_attributes:
+          - name: MyAttribute
+            value: MyValue
+          - name: MyAttribute2
+            value: MyValue2
+      delegate_to: localhost
+
+    - name: Remove virtual machine Attribute
+      community.vmware.vmware_custom_attribute_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: vm1
+        object_type: VirtualMachine
+        state: absent
+        custom_attributes:
+          - name: MyAttribute
+      delegate_to: localhost
+      register: attributes
 
 
 
@@ -251,11 +341,7 @@ Status
 ------
 
 
-- This module will be removed in a release after 2022-06-01. *[deprecated]*
-- For more information see `DEPRECATED`_.
-
-
 Authors
 ~~~~~~~
 
-- Joseph Callen (@jcpowermac)
+- Mario Lenz (@mariolenz)

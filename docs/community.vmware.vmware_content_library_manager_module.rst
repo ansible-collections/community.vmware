@@ -85,7 +85,6 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The content library description.</div>
@@ -192,7 +191,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
                 </td>
@@ -210,7 +208,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.12.0</div>
                 </td>
                 <td>
                 </td>
@@ -227,9 +224,9 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The SHA1 SSL thumbprint of the subscribed content library to subscribe to.</div>
@@ -269,9 +266,9 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
                 </td>
                 <td>
                         <div>The url of the content library to subscribe to.</div>
@@ -287,7 +284,6 @@ Parameters
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
                     </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 1.7.0</div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
