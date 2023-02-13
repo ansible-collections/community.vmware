@@ -272,7 +272,7 @@ class VmwareObjectRename(VmwareRestClient):
             self.module.exit_json(**results)
 
         if not all_vmware_objs:
-            msg = "Failed to find object with %s '%s' and %s' object type"
+            msg = "Failed to find object with %s '%s' and '%s' object type"
             if self.object_name:
                 msg = msg % ('name', self.object_name, self.object_type)
             elif self.object_moid:
