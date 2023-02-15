@@ -497,6 +497,14 @@ disk_data:
             "unit_number": 0
         },
     }
+disk_changes:
+    description: result of each task, key is the 0-based index with the same sequence in which the tasks were defined
+    returned: always
+    type: dict
+    sample: {
+        "0": "Disk deleted.",
+        "1": "Disk created."
+    }
 '''
 
 import re
