@@ -20,8 +20,8 @@ except ImportError:
 
 PYVMOMI_IMP_ERR = None
 try:
-    from pyVim import connect  # noqa: F401
-    from pyVmomi import vim  # noqa: F401
+    from pyVim import connect  # noqa: F401, pylint: disable=unused-import
+    from pyVmomi import vim  # noqa: F401, pylint: disable=unused-import
     HAS_PYVMOMI = True
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
