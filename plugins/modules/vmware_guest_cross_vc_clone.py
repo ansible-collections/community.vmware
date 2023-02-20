@@ -313,7 +313,7 @@ class CrossVCCloneManager(PyVmomi):
         self.service_locator.credential = creds
 
         if self.destination_vcenter_thumbprint:
-          self.service_locator.sslThumbprint = self.destination_vcenter_thumbprint
+            self.service_locator.sslThumbprint = self.destination_vcenter_thumbprint
 
         # populate relocate spec
         self.relocate_spec.datastore = self.destination_datastore
