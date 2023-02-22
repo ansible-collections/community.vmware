@@ -14,7 +14,9 @@ import ansible.module_utils.common._collections_compat as collections_compat
 import json
 import os
 import re
+import socket
 import ssl
+import hashlib
 import time
 import traceback
 import datetime
@@ -1148,6 +1150,36 @@ class PyVmomi(object):
             vc_version = self.content.about.version
             return StrictVersion(vc_version) >= StrictVersion('.'.join(map(str, version)))
         self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
+
+    def get_cert_fingerprint(self, fqdn, port, proxy_host=None, proxy_port=None):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        if proxy_host:
+            sock.connect((
+                proxy_host,
+                proxy_port))
+            command = "CONNECT %s:%d HTTP/1.0\r\n\r\n" % (fqdn, port)
+            sock.send(command.encode())
+            buf = sock.recv(8192).decode()
+            if buf.split()[1] != '200':
+                self.module.fail_json(msg="Failed to connect to the proxy")
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            der_cert_bin = ctx.wrap_socket(sock, server_hostname=fqdn).getpeercert(True)
+            sock.close()
+        else:
+            wrapped_socket = ssl.wrap_socket(sock)
+            try:
+                wrapped_socket.connect((fqdn, port))
+            except socket.error as socket_error:
+                self.module.fail_json(msg="Cannot connect to host : %s" % socket_error)
+            else:
+                der_cert_bin = wrapped_socket.getpeercert(True)
+                wrapped_socket.close()
+
+        string = str(hashlib.sha1(der_cert_bin).hexdigest())
+        return ':'.join(a + b for a, b in zip(string[::2], string[1::2]))
 
     def get_managed_objects_properties(self, vim_type, properties=None):
         """
