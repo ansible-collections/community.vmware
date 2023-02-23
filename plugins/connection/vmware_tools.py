@@ -73,6 +73,7 @@ DOCUMENTATION = r'''
         type: bool
       vm_path:
         description:
+          - Mutually exclusive with vm_uuid
           - VM path absolute to the connection.
           - "vCenter Example: C(Datacenter/vm/Discovered virtual machine/testVM)."
           - "ESXi Host Example: C(ha-datacenter/vm/testVM)."
@@ -82,7 +83,15 @@ DOCUMENTATION = r'''
           - Folder I(vm) is not visible in the vSphere Web Client but necessary for VMware API to work.
         vars:
           - name: ansible_vmware_guest_path
-        required: True
+        required: False
+      vm_uuid:
+        description:
+          - Mutually exclusive with vm_path
+          - VM UUID to the connection.
+          - UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin
+        vars:
+          - name: ansible_vmware_guest_uuid
+        required: False
       vm_user:
         description:
           - VM username.
@@ -308,10 +317,15 @@ class Connection(ConnectionBase):
 
     def _establish_vm(self, check_vm_credentials=True):
         searchIndex = self._si.content.searchIndex
-        self.vm = searchIndex.FindByInventoryPath(self.get_option("vm_path"))
-
-        if self.vm is None:
-            raise AnsibleError("Unable to find VM by path '%s'" % to_native(self.get_option("vm_path")))
+        self.vm = None
+        if self.get_option("vm_path") is not None:
+            self.vm = searchIndex.FindByInventoryPath(self.get_option("vm_path"))
+            if self.vm is None:
+                raise AnsibleError("Unable to find VM by path '%s'" % to_native(self.get_option("vm_path")))
+        elif self.get_option("vm_uuid") is not None:
+            self.vm = searchIndex.FindByUuid(None, self.get_option("vm_uuid"), True)
+            if self.vm is None:
+                raise AnsibleError("Unable to find VM by uuid '%s'" % to_native(self.get_option("vm_uuid")))
 
         self.vm_auth = vim.NamePasswordAuthentication(
             username=self.get_option("vm_user"), password=self.get_option("vm_password"), interactiveSession=False
