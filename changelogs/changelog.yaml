@@ -1478,3 +1478,39 @@ releases:
       name: vmware_guest_vgpu_info
       namespace: ''
     release_date: '2023-01-20'
+  3.4.0:
+    changes:
+      bugfixes:
+      - scenario guides - Fix broken references (https://github.com/ansible-collections/community.vmware/issues/1610).
+      - various - Fix new pylint issues (https://github.com/ansible-collections/community.vmware/pull/1637).
+      - vmware_cluster_info - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_dvswitch - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_dvswitch_lacp - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_dvswitch_uplink_pg - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_guest_custom_attributes - Fixes assigning attributes to new VMs (https://github.com/ansible-collections/community.vmware/issues/1606).
+      - vmware_guest_disk - Fix wrong key in the documentation of the return values
+        (https://github.com/ansible-collections/community.vmware/issues/1615)
+      - vmware_object_rename - Add missing quotation mark to error message (https://github.com/ansible-collections/community.vmware/issues/1633)
+      - vmware_portgroup - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_vcenter_settings - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      - vmware_vcenter_statistics - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+      minor_changes:
+      - vmware_guest_disk - Add support for IDE disk add, remove or reconfigure, and
+        change to gather same VM disk info as in vmware_guest_disk_info (https://github.com/ansible-collections/community.vmware/issues/1428).
+      - vmware_guest_disk - Extend return value documentation for vmware_guest_disk
+        (https://github.com/ansible-collections/community.vmware/pull/1641)
+      - vmware_guest_disk_info - Move gather VM disk info function to vm_device_helper.py
+        (https://github.com/ansible-collections/community.vmware/issues/1617)
+      - vmware_vmotion - New parameter timeout in order to allow vmotions running
+        longer than 1 hour (https://github.com/ansible-collections/community.vmware/pulls/1629).
+    fragments:
+    - 1606-vmware_guest_custom_attributes.yml
+    - 1610-scenario_guides.yml
+    - 1615-wrong_key_for_return_value.yml
+    - 1616-vmware_guest_disk.yml
+    - 1618_pylint.yml
+    - 1629-vmware_vmotion.yml
+    - 1633-missing_quotation_mark.yml
+    - 1637-pylint-issues.yml
+    - 1641_extend_result_docs_guest_disk
+    release_date: '2023-02-25'

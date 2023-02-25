@@ -1,2 +1,0 @@
-bugfixes:
-  - scenario guides - Fix broken references (https://github.com/ansible-collections/community.vmware/issues/1610).

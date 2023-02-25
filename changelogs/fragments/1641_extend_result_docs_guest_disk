@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_disk - Extend return value documentation for vmware_guest_disk (https://github.com/ansible-collections/community.vmware/pull/1641)

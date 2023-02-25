@@ -175,6 +175,7 @@ Parameters
                 </td>
                 <td>
                         <div>This parameter is used with <code>controller_type</code> for specifying controller bus number.</div>
+                        <div>For <code>ide</code> controller type, valid value is 0 or 1.</div>
                 </td>
             </tr>
             <tr>
@@ -195,6 +196,7 @@ Parameters
                                     <li>paravirtual</li>
                                     <li>sata</li>
                                     <li>nvme</li>
+                                    <li>ide</li>
                         </ul>
                 </td>
                 <td>
@@ -666,9 +668,10 @@ Parameters
                 <td>
                         <div>Disk Unit Number.</div>
                         <div>Valid value range from 0 to 15, except 7 for SCSI Controller.</div>
-                        <div>Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher</div>
+                        <div>Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher.</div>
                         <div>Valid value range from 0 to 29 for SATA controller.</div>
                         <div>Valid value range from 0 to 14 for NVME controller.</div>
+                        <div>Valid value range from 0 to 1 for IDE controller.</div>
                 </td>
             </tr>
 
@@ -1159,6 +1162,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <th>Returned</th>
             <th width="100%">Description</th>
         </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>disk_changes</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>result of each task, key is the 0-based index with the same sequence in which the tasks were defined</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;0&#x27;: &#x27;Disk deleted.&#x27;, &#x27;1&#x27;: &#x27;Disk created.&#x27;}</div>
+                </td>
+            </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
