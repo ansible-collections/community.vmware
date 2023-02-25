@@ -5,6 +5,23 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v2.10.4
+=======
+
+Bugfixes
+--------
+
+- scenario guides - Fix broken references (https://github.com/ansible-collections/community.vmware/issues/1610).
+- various - Fix new pylint issues (https://github.com/ansible-collections/community.vmware/pull/1638).
+- vmware_cluster_info - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_dvswitch - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_dvswitch_lacp - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_dvswitch_uplink_pg - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_guest_disk - Fix wrong key in the documentation of the return values (https://github.com/ansible-collections/community.vmware/issues/1615)
+- vmware_portgroup - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_vcenter_settings - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+- vmware_vcenter_statistics - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
+
 v2.10.3
 =======
 
