@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_object_rename - Add missing quotation mark to error message (https://github.com/ansible-collections/community.vmware/issues/1633)

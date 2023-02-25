@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_vmotion - New parameter timeout in order to allow vmotions running longer than 1 hour
-    (https://github.com/ansible-collections/community.vmware/pulls/1629).

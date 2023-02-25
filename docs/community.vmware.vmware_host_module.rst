@@ -21,14 +21,6 @@ Synopsis
 
 
 
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- ssl
-- socket
-- hashlib
-
 
 Parameters
 ----------

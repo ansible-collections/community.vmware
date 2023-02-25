@@ -1,2 +1,0 @@
-bugfixes:
-  - various - Fix new pylint issues (https://github.com/ansible-collections/community.vmware/pull/1637).

@@ -1,8 +1,0 @@
-bugfixes:
-  - vmware_dvswitch - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_dvswitch_lacp - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_dvswitch_uplink_pg - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_portgroup - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_vcenter_settings - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_vcenter_statistics - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
-  - vmware_cluster_info - Fix pylint issues (https://github.com/ansible-collections/community.vmware/issues/1618).
