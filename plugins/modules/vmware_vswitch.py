@@ -64,6 +64,7 @@ options:
       portgroup such as promiscuous mode, where guest adapter listens
       to all the packets, MAC address changes and forged transmits.
     - Dict which configures the different security values for portgroup.
+    version_added: '2.4.0'
     suboptions:
       promiscuous_mode:
         type: bool
@@ -255,6 +256,8 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 from ansible.module_utils._text import to_native
 
+
+# Meaningless diff with no code changes to trigger CI
 
 class VMwareHostVirtualSwitch(PyVmomi):
     def __init__(self, module):
