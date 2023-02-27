@@ -214,6 +214,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareHost(PyVmomi):
     """Class to manage vCenter connection"""
+    # trigger CI
 
     def __init__(self, module):
         super(VMwareHost, self).__init__(module)
