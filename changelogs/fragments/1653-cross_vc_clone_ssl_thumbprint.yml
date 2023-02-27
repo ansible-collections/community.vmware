@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_cross_vc_clone - Fix SSL Thumbprint validation to ignore if destination_vcenter_validate_certs is false
