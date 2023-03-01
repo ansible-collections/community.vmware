@@ -306,7 +306,7 @@ class CrossVCCloneManager(PyVmomi):
         if not self.destination_vcenter_validate_certs:
             self.service_locator.sslThumbprint = self.get_cert_fingerprint(
                 self.destination_vcenter,
-                self.params['port'],
+                self.destination_vcenter_port,
                 self.module.params['proxy_host'],
                 self.module.params['proxy_port'])
         creds = vim.ServiceLocatorNamePassword()
