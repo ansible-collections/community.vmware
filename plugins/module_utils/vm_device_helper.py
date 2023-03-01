@@ -360,9 +360,9 @@ class PyVmomiDeviceHelper(object):
         nvdimm_dev_spec.device.capacityInMB = nvdimm_dev_size_mb
         nvdimm_dev_spec.device.deviceInfo = vim.Description()
         nvdimm_dev_spec.device.backing = vim.vm.device.VirtualNVDIMM.BackingInfo()
-        profile = vim.vm.DefinedProfileSpec()
-        profile.profileId = pmem_profile_id
-        nvdimm_dev_spec.profile = [profile]
+        # profile = vim.vm.DefinedProfileSpec()
+        # profile.profileId = pmem_profile_id
+        # nvdimm_dev_spec.profile = [profile]
 
         return nvdimm_dev_spec
 
