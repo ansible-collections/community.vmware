@@ -109,7 +109,7 @@ EXAMPLES = r'''
       datastore_type: '{{ item.type }}'
       nfs_server: '{{ item.server }}'
       nfs_path: '{{ item.path }}'
-      nfs_ro: no
+      nfs_ro: false
       esxi_hostname: '{{ inventory_hostname }}'
       state: present
   delegate_to: localhost
@@ -126,7 +126,7 @@ EXAMPLES = r'''
       datastore_type: '{{ item.type }}'
       nfs_server: '{{ item.server }}'
       nfs_path: '{{ item.path }}'
-      nfs_ro: no
+      nfs_ro: false
       esxi_hostname: '{{ inventory_hostname }}'
       state: present
   delegate_to: localhost

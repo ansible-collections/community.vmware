@@ -300,7 +300,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: "Test_VM"
     disk:
       - type: rdm
@@ -316,7 +316,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: "Test_VM"
     disk:
       - type: rdm
@@ -333,7 +333,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: "Test_VM"
     disk:
       - type: rdm
@@ -351,7 +351,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: "Test_VM"
     disk:
       - type: rdm
@@ -424,7 +424,7 @@ EXAMPLES = r'''
       - state: absent
         scsi_controller: 1
         unit_number: 2
-        destroy: no
+        destroy: false
   delegate_to: localhost
   register: disk_facts
 
@@ -434,7 +434,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     uuid: 421e4592-c069-924d-ce20-7e7533fab926
     disk:
       - size_mb: 256
@@ -461,7 +461,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: VM_226
     disk:
       - type: vpmemdisk

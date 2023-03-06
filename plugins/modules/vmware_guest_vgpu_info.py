@@ -74,7 +74,7 @@ EXAMPLES = r"""
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datacenter: "{{ datacenter_name }}"
-    validate_certs: no
+    validate_certs: false
     name: UbuntuTest
   delegate_to: localhost
   register: vgpu_info

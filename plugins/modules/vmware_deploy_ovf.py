@@ -157,7 +157,7 @@ EXAMPLES = r'''
     datastore: vsandatastore
     name: NewVM
     networks: "{u'VM Network':u'{{ ProvisioningNetworkLabel }}'}"
-    power_on: no
+    power_on: false
     ovf: /absolute/path/to/template/mytemplate.ova
   delegate_to: localhost
 
