@@ -318,7 +318,7 @@ class VmwareStoragePolicyManager(SPBM):
                 self.module.fail_json(msg="%s is not found in vCenter Server tag categories" % self.params.get('tag_category'))
 
             # ensure if the tag exists
-            tag_result = self.rest_client.get_tag_by_category(self.params.get('tag_name'), self.params.get('tag_category'))
+            tag_result = self.rest_client.get_tag_by_category_name(self.params.get('tag_name'), self.params.get('tag_category'))
             if tag_result is None:
                 self.module.fail_json(msg="%s is not found in vCenter Server tags" % self.params.get('tag_name'))
 
