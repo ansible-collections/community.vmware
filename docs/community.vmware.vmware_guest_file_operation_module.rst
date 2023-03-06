@@ -570,7 +570,7 @@ Examples
         directory:
           path: "/test"
           operation: create
-          recurse: no
+          recurse: false
       delegate_to: localhost
 
     - name: copy file to vm
