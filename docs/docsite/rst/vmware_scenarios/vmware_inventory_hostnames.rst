@@ -66,7 +66,7 @@ Here's an example of a valid inventory file with custom hostname for the given V
 Here, we have configured a custom hostname by setting the ``hostnames`` parameter to ``config.name``. This will retrieve
 the ``config.name`` property from the virtual machine and populate it in the inventory.
 
-You can check all allowed properties for the given virtual machine at :ref:`vmware_inventory_vm_attributes`.
+You can check all allowed properties for the given virtual machine at :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`.
 
 Executing ``ansible-inventory --list -i <filename>.vmware.yml`` creates a list of the virtual machines that are ready to be configured using Ansible.
 
@@ -105,7 +105,7 @@ Troubleshooting
 If the custom property specified in ``hostnames`` fails:
 
 - Check if the values provided for username and password are correct.
-- Make sure it is a valid property, see :ref:`vmware_inventory_vm_attributes`.
+- Make sure it is a valid property, see :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`.
 - Use ``strict: True`` to get more information about the error.
 - Please make sure that you are using latest version VMware collection.
 
@@ -120,7 +120,7 @@ If the custom property specified in ``hostnames`` fails:
         The GitHub Page of vSphere Automation SDK for Python
     `vSphere Automation SDK Issue Tracker <https://github.com/vmware/vsphere-automation-sdk-python/issues>`_
         The issue tracker for vSphere Automation SDK for Python
-    :ref:`vmware_inventory_vm_attributes`
+    :ref:`ansible_collections.community.vmware.docsite.vmware_inventory_vm_attributes`
         Using Virtual machine attributes in VMware dynamic inventory plugin
     :ref:`working_with_playbooks`
         An introduction to playbooks

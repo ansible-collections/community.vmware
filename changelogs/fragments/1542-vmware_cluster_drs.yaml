@@ -1,5 +1,0 @@
-minor_changes:
-  - vmware_cluster_drs - Add predictive DRS Setting (https://github.com/ansible-collections/community.vmware/pull/1542).
-bugfixes:
-  - vmware_cluster_drs - Fix drs_vmotion_rate so that the value corresponds to the vCenter UI.
-    Previously, choosing 1 / 2 configured a migration threshold of 5 / 4 and vice versa (https://github.com/ansible-collections/community.vmware/pull/1542).

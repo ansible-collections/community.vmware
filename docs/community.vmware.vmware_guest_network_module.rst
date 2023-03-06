@@ -117,7 +117,7 @@ Parameters
                 </td>
                 <td>
                         <div>Type of virtual network device.</div>
-                        <div>Valid choices are - <code>e1000</code>, <code>e1000e</code>, <code>pcnet32</code>, <code>vmxnet2</code>, <code>vmxnet3</code> (default), <code>sriov</code>.</div>
+                        <div>Valid choices are - <code>e1000</code>, <code>e1000e</code>, <code>pcnet32</code>, <code>vmxnet2</code>, <code>vmxnet3</code> (default), <code>sriov</code>, <code>pvrdma</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -257,6 +257,7 @@ Parameters
                 <td>
                 </td>
                 <td>
+                        <div>Label of the NIC that should be altered. <code>mac_address</code> or <code>label</code> should be set to get the corresponding device to reconfigure.</div>
                         <div>Alter the name of the network adapter.</div>
                 </td>
             </tr>
@@ -408,6 +409,23 @@ Parameters
                 <td>
                         <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>pvrdma_device_protocol</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The PVRDMA device protocol used. Valid choices are - <code>rocev1</code>, <code>rocev2</code>.</div>
+                        <div>This parameter is only used on the VM with hardware version &gt;=14 and &lt;= 19.</div>
                 </td>
             </tr>
             <tr>

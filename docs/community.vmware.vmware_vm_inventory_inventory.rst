@@ -940,6 +940,23 @@ Examples
         properties:
           - guest.net
 
+    # Group hosts using Jinja2 conditionals
+        plugin: community.vmware.vmware_vm_inventory
+        strict: False
+        hostname: 10.65.13.37
+        username: administrator@vsphere.local
+        password: Esxi@123$%
+        validate_certs: False
+        hostnames:
+        - config.name
+        properties:
+        - 'name'
+        - 'config.name'
+        - 'config.datastoreUrl'
+        groups:
+          slow_storage: "'Nas01' in config.datastoreUrl[0].name"
+          fast_storage: "'SSD' in config.datastoreUrl[0].name"
+
 
 
 

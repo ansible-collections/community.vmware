@@ -26,7 +26,7 @@
       type: thin
       datastore: '{{ rw_datastore }}'
     hardware:
-      version: 11
+      version: 13
       memory_mb: 1024
       num_cpus: 1
       scsi: paravirtual
@@ -413,6 +413,39 @@
   assert:
     that:
       - "{{ new_nic.network_info | length | int }} > 0"
+
+- name: add new PVRDMA adapter
+  community.vmware.vmware_guest_network:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    network_name: "{{ dvpg1 }}"
+    device_type: pvrdma
+    state: present
+  register: new_nic_pvrdma
+
+- name: check that PVRDMA nic was created
+  assert:
+    that:
+      - "{{ new_nic_pvrdma.network_info | length | int }} == {{ new_nic.network_info | length | int + 1 }}"
+
+- name: remove PVRDMA adapter
+  community.vmware.vmware_guest_network:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: test_vm1
+    mac_address: "{{ (new_nic_pvrdma.diff.after | difference(new_nic_pvrdma.diff.before))[0] }}"
+    state: absent
+  register: remove_nic_pvrdma
+
+- name: check that PVRDMA nic was removed
+  assert:
+    that:
+      - "{{ new_nic_pvrdma.network_info | length | int - 1 }} == {{ remove_nic_pvrdma.network_info | length | int }}"
 
 # https://github.com/ansible-collections/community.vmware/issues/204
 - name: "Change a dvpg with in same DVS(integration test for 204)"

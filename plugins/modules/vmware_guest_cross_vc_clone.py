@@ -302,6 +302,13 @@ class CrossVCCloneManager(PyVmomi):
         # populate service locator
         self.service_locator.instanceUuid = self.destination_content.about.instanceUuid
         self.service_locator.url = "https://" + self.destination_vcenter + ":" + str(self.params['port']) + "/sdk"
+        # If ssl verify is false, we ignore it also in the clone task by fetching thumbprint automatically
+        if not self.destination_vcenter_validate_certs:
+            self.service_locator.sslThumbprint = self.get_cert_fingerprint(
+                self.destination_vcenter,
+                self.destination_vcenter_port,
+                self.module.params['proxy_host'],
+                self.module.params['proxy_port'])
         creds = vim.ServiceLocatorNamePassword()
         creds.username = self.destination_vcenter_username
         creds.password = self.destination_vcenter_password

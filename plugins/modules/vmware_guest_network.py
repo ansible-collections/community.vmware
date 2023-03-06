@@ -62,6 +62,12 @@ options:
       - MAC address of the NIC that should be altered, if a MAC address is not supplied a new nic will be created.
       - Required when I(state=absent).
     type: str
+  label:
+    description:
+      - 'Label of the NIC that should be altered. C(mac_address) or C(label) should be set to get the corresponding
+        device to reconfigure.'
+      - Alter the name of the network adapter.
+    type: str
   vlan_id:
     description:
       - VLAN id associated with the network.
@@ -74,11 +80,13 @@ options:
     default: vmxnet3
     description:
       - Type of virtual network device.
-      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov).'
+      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov), C(pvrdma).'
     type: str
-  label:
+  pvrdma_device_protocol:
+    version_added: '3.3.0'
     description:
-      - Alter the name of the network adapter.
+      - The PVRDMA device protocol used. Valid choices are - C(rocev1), C(rocev2).
+      - This parameter is only used on the VM with hardware version >=14 and <= 19.
     type: str
   switch:
     description:
@@ -91,7 +99,7 @@ options:
     type: bool
   state:
     default: present
-    choices: [ 'present', 'absent' ]
+    choices: ['present', 'absent']
     description:
       - NIC state.
       - When C(state=present), a nic will be added if a mac address or label does not previously exists or is unset.
@@ -285,20 +293,14 @@ import copy
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
 class PyVmomiHelper(PyVmomi):
     def __init__(self, module):
         super(PyVmomiHelper, self).__init__(module)
         self.change_detected = False
-        self.nic_device_type = dict(
-            pcnet32=vim.vm.device.VirtualPCNet32,
-            vmxnet2=vim.vm.device.VirtualVmxnet2,
-            vmxnet3=vim.vm.device.VirtualVmxnet3,
-            e1000=vim.vm.device.VirtualE1000,
-            e1000e=vim.vm.device.VirtualE1000e,
-            sriov=vim.vm.device.VirtualSriovEthernetCard,
-        )
+        self.device_helper = PyVmomiDeviceHelper(self.module)
 
     def _get_network_object(self, vm_obj):
         '''
@@ -415,10 +417,16 @@ class PyVmomiHelper(PyVmomi):
                             d_item['switch'] = pg.spec.vswitchName
                             break
 
-            for k in self.nic_device_type:
-                if isinstance(nic, self.nic_device_type[k]):
+            for k in self.device_helper.nic_device_type:
+                if isinstance(nic, self.device_helper.nic_device_type[k]):
                     d_item['device_type'] = k
-                    break
+                    # VirtualVmxnet3Vrdma extends VirtualVmxnet3
+                    if k == 'vmxnet3':
+                        continue
+                    else:
+                        break
+            if d_item['device_type'] == 'pvrdma':
+                d_item['device_protocol'] = nic.deviceProtocol
 
             nic_info_lst.append(d_item)
 
@@ -479,9 +487,10 @@ class PyVmomiHelper(PyVmomi):
             pf_backing = self.params['physical_function_backing']
             vf_backing = self.params['virtual_function_backing']
             allow_guest_os_mtu_change = self.params['allow_guest_os_mtu_change']
+            pvrdma_device_protocol = self.params['pvrdma_device_protocol']
 
         if not nic_obj:
-            device_obj = self.nic_device_type[device_type]
+            device_obj = self.device_helper.nic_device_type[device_type]
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 device=device_obj()
             )
@@ -493,6 +502,9 @@ class PyVmomiHelper(PyVmomi):
                 nic_spec.device.deviceInfo = vim.Description(
                     label=label
                 )
+
+            if device_type == 'pvrdma' and pvrdma_device_protocol:
+                nic_spec.device.deviceProtocol = pvrdma_device_protocol
         else:
             nic_spec = vim.vm.device.VirtualDeviceSpec(
                 operation=vim.vm.device.VirtualDeviceSpec.Operation.edit,
@@ -636,6 +648,16 @@ class PyVmomiHelper(PyVmomi):
         if not vm_obj:
             self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
 
+        if self.params['device_type'] == 'pvrdma':
+            if int(vm_obj.config.version.split('vmx-')[-1]) > 19 or int(vm_obj.config.version.split('vmx-')[-1]) == 13:
+                self.params['pvrdma_device_protocol'] = None
+            else:
+                if self.params['pvrdma_device_protocol'] and self.params['pvrdma_device_protocol'] not in ['rocev1', 'rocev2']:
+                    self.module.fail_json(msg="Valid values of parameter 'pvrdma_device_protocol' are 'rocev1',"
+                                              " 'rocev2' for VM with hardware version >= 14 and <= 19.")
+                if self.params['pvrdma_device_protocol'] is None:
+                    self.params['pvrdma_device_protocol'] = 'rocev2'
+
         network_obj = self._get_network_object(vm_obj)
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
         label_lst = [d.get('label') for d in nic_info]
@@ -644,7 +666,7 @@ class PyVmomiHelper(PyVmomi):
         network_name_lst = [d.get('network_name') for d in nic_info]
 
         # TODO: make checks below less inelegant
-        if ((vlan_id in vlan_id_lst or network_name in network_name_lst)
+        if ((vlan_id and vlan_id in vlan_id_lst) or (network_name and network_name in network_name_lst)
                 and not mac_address
                 and not label
                 and not force):
@@ -752,6 +774,7 @@ def main():
         vlan_id=dict(type='int'),
         network_name=dict(type='str'),
         device_type=dict(type='str', default='vmxnet3'),
+        pvrdma_device_protocol=dict(type='str'),
         label=dict(type='str'),
         switch=dict(type='str'),
         connected=dict(type='bool', default=True),

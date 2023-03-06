@@ -23,10 +23,6 @@ author:
 - Russell Teague (@mtnbikenc)
 - Maxime de Roucy (@tchernomax)
 - Christian Kotte (@ckotte)
-requirements:
-- ssl
-- socket
-- hashlib
 options:
   datacenter_name:
     description:
@@ -205,9 +201,6 @@ result:
 
 try:
     from pyVmomi import vim, vmodl
-    import ssl
-    import socket
-    import hashlib
 except ImportError:
     pass
 
@@ -490,34 +483,8 @@ class VMwareHost(PyVmomi):
         """
         # Get the thumbprint of the SSL certificate
         if self.fetch_ssl_thumbprint and self.esxi_ssl_thumbprint == '':
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.settimeout(1)
-            if self.module.params['proxy_host']:
-                sock.connect((
-                    self.module.params['proxy_host'],
-                    self.module.params['proxy_port']))
-                command = "CONNECT %s:443 HTTP/1.0\r\n\r\n" % (self.esxi_hostname)
-                sock.send(command.encode())
-                buf = sock.recv(8192).decode()
-                if buf.split()[1] != '200':
-                    self.module.fail_json(msg="Failed to connect to the proxy")
-                ctx = ssl.create_default_context()
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
-                der_cert_bin = ctx.wrap_socket(sock, server_hostname=self.esxi_hostname).getpeercert(True)
-                sock.close()
-            else:
-                wrapped_socket = ssl.wrap_socket(sock)
-                try:
-                    wrapped_socket.connect((self.esxi_hostname, 443))
-                except socket.error as socket_error:
-                    self.module.fail_json(msg="Cannot connect to host : %s" % socket_error)
-                else:
-                    der_cert_bin = wrapped_socket.getpeercert(True)
-                    wrapped_socket.close()
-
-            thumb_sha1 = self.format_number(hashlib.sha1(der_cert_bin).hexdigest())
-            sslThumbprint = thumb_sha1
+            sslThumbprint = self.get_cert_fingerprint(self.esxi_hostname, self.module.params['port'],
+                                                      self.module.params['proxy_host'], self.module.params['proxy_port'])
         else:
             sslThumbprint = self.esxi_ssl_thumbprint
 
@@ -528,12 +495,6 @@ class VMwareHost(PyVmomi):
         host_connect_spec.password = self.esxi_password
         host_connect_spec.force = self.force_connection
         return host_connect_spec
-
-    @staticmethod
-    def format_number(number):
-        """Format number"""
-        string = str(number)
-        return ':'.join(a + b for a, b in zip(string[::2], string[1::2]))
 
     def state_reconnect_host(self):
         """Reconnect host to vCenter"""

@@ -144,7 +144,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Threshold for generated ClusterRecommendations.</div>
+                        <div>Threshold for generated ClusterRecommendations ranging from 1 (lowest) to 5 (highest).</div>
                 </td>
             </tr>
             <tr>
@@ -217,6 +217,27 @@ Parameters
                         <div>The port number of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>predictive_drs</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.3.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>In addition to real-time metrics, DRS will respond to forecasted metrics provided by vRealize Operations Manager.</div>
+                        <div>You must also configure Predictive DRS in a version of vRealize Operations that supports this feature.</div>
                 </td>
             </tr>
             <tr>
@@ -319,7 +340,6 @@ Examples
         cluster_name: cluster
         enable: true
       delegate_to: localhost
-
     - name: Enable DRS and distribute a more even number of virtual machines across hosts for availability
       community.vmware.vmware_cluster_drs:
         hostname: '{{ vcenter_hostname }}'
@@ -331,7 +351,6 @@ Examples
         advanced_settings:
           'TryBalanceVmsPerHost': '1'
       delegate_to: localhost
-
     - name: Enable DRS and set default VM behavior to partially automated
       community.vmware.vmware_cluster_drs:
         hostname: "{{ vcenter_hostname }}"
