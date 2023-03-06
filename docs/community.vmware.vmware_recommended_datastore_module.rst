@@ -214,7 +214,7 @@ Examples
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        validate_certs: no
+        validate_certs: false
         datastore_cluster: '{{ datastore_cluster_name }}'
         datacenter: '{{ datacenter }}'
       register: recommended_ds

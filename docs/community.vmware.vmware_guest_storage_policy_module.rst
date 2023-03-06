@@ -345,7 +345,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         uuid: cefd316c-fc19-45f3-a539-2cd03427a78d
         disk:
           - unit_number: 0
@@ -362,7 +362,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: no
+        validate_certs: false
         name: hostname1
         vm_home: storepol1
       delegate_to: localhost
