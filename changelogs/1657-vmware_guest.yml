@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - Fixes adding new NVDIMM device issue by connecting to ESXi host (https://github.com/ansible-collections/community.vmware/issues/1644).

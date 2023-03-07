@@ -1787,12 +1787,16 @@ class PyVmomiHelper(PyVmomi):
             # New VM or existing VM without label specified, add new NVDIMM device
             if vm_obj is None or (vm_obj and not vm_obj.config.template and self.params['nvdimm']['label'] is None):
                 if self.params['nvdimm']['state'] == 'present':
-                    # Get host default PMem storage policy
-                    storage_profile_name = "Host-local PMem Default Storage Policy"
-                    spbm = SPBM(self.module)
-                    pmem_profile = spbm.find_storage_profile_by_name(profile_name=storage_profile_name)
-                    if pmem_profile is None:
-                        self.module.fail_json(msg="Can not find PMem storage policy with name '%s'." % storage_profile_name)
+                    vc_pmem_profile_id = None
+                    # Get default PMem storage policy when host is vCenter
+                    if self.is_vcenter():
+                        storage_profile_name = "Host-local PMem Default Storage Policy"
+                        spbm = SPBM(self.module)
+                        pmem_profile = spbm.find_storage_profile_by_name(profile_name=storage_profile_name)
+                        if pmem_profile is None:
+                            self.module.fail_json(msg="Can not find PMem storage policy with name '%s'." % storage_profile_name)
+                        vc_pmem_profile_id = pmem_profile.profileId.uniqueId
+
                     if not nvdimm_ctl_exists:
                         nvdimm_ctl_spec = self.device_helper.create_nvdimm_controller()
                         self.configspec.deviceChange.append(nvdimm_ctl_spec)
@@ -1800,7 +1804,7 @@ class PyVmomiHelper(PyVmomi):
 
                     nvdimm_dev_spec = self.device_helper.create_nvdimm_device(
                         nvdimm_ctl_dev_key=nvdimm_ctl_key,
-                        pmem_profile_id=pmem_profile.profileId.uniqueId,
+                        pmem_profile_id=vc_pmem_profile_id,
                         nvdimm_dev_size_mb=self.params['nvdimm']['size_mb']
                     )
                     self.change_detected = True
