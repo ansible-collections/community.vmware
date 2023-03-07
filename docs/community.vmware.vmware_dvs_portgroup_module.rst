@@ -1173,7 +1173,7 @@ Examples
         portgroup_name: vlan-trunk-portrgoup
         switch_name: dvSwitch
         vlan_id: 1-1000, 1005, 1100-1200
-        vlan_trunk: True
+        vlan_trunk: true
         num_ports: 120
         port_binding: static
         state: present
@@ -1187,7 +1187,7 @@ Examples
         portgroup_name: private-vlan-portrgoup
         switch_name: dvSwitch
         vlan_id: 1001
-        vlan_private: True
+        vlan_private: true
         num_ports: 120
         port_binding: static
         state: present

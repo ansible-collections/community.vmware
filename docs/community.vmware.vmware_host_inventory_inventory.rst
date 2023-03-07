@@ -738,19 +738,19 @@ Examples
 
     # Sample configuration file for VMware Host dynamic inventory
         plugin: community.vmware.vmware_host_inventory
-        strict: False
+        strict: false
         hostname: 10.65.223.31
         username: administrator@vsphere.local
         password: Esxi@123$%
-        validate_certs: False
-        with_tags: True
+        validate_certs: false
+        with_tags: true
 
     # Using compose
         plugin: community.vmware.vmware_host_inventory
         hostname: 10.65.223.31
         username: administrator@vsphere.local
         password: Esxi@123$%
-        validate_certs: False
+        validate_certs: false
         properties:
         - name
         - summary

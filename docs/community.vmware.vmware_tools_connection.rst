@@ -155,7 +155,6 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">-</span>
-                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
@@ -164,6 +163,7 @@ Parameters
                                 <div>var: ansible_vmware_guest_path</div>
                     </td>
                 <td>
+                        <div>Mutually exclusive with vm_uuid</div>
                         <div>VM path absolute to the connection.</div>
                         <div>vCenter Example: <code>Datacenter/vm/Discovered virtual machine/testVM</code>.</div>
                         <div>ESXi Host Example: <code>ha-datacenter/vm/testVM</code>.</div>
@@ -193,6 +193,26 @@ Parameters
                         <div>VM username.</div>
                         <div><code>ansible_vmware_tools_user</code> is used for connecting to the VM.</div>
                         <div><code>ansible_user</code> is used by Ansible on the VM.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vm_uuid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">-</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>var: ansible_vmware_guest_uuid</div>
+                    </td>
+                <td>
+                        <div>Mutually exclusive with vm_path</div>
+                        <div>VM UUID to the connection.</div>
+                        <div>UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin</div>
                 </td>
             </tr>
             <tr>

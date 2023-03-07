@@ -484,16 +484,16 @@ Examples
         switch: dvSwitch
         name: dvSwitch-DVUplinks
         advanced:
-          port_config_reset_at_disconnect: True
-          block_override: True
-          vendor_config_override: False
-          vlan_override: False
-          netflow_override: False
-          traffic_filter_override: False
+          port_config_reset_at_disconnect: true
+          block_override: true
+          vendor_config_override: false
+          vlan_override: false
+          netflow_override: false
+          traffic_filter_override: false
         vlan_trunk_range:
           - '0-4094'
-        netflow_enabled: False
-        block_all_ports: False
+        netflow_enabled: false
+        block_all_ports: false
       delegate_to: localhost
 
     - name: Enabled LACP on Uplink portgroup

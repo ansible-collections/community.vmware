@@ -585,7 +585,7 @@ Examples
         copy:
             src: "files/test.zip"
             dest: "/root/test.zip"
-            overwrite: False
+            overwrite: false
       delegate_to: localhost
 
     - name: fetch file from vm
@@ -615,7 +615,7 @@ Examples
         copy:
             src: "files/test.zip"
             dest: "/root/test.zip"
-            overwrite: False
+            overwrite: false
       delegate_to: localhost
 
 

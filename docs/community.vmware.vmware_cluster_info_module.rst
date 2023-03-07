@@ -297,7 +297,7 @@ Examples
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
         cluster_name: DC0_C0
-        show_tag: True
+        show_tag: true
       delegate_to: localhost
       register: cluster_info
 
