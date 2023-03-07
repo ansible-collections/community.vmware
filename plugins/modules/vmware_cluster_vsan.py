@@ -97,7 +97,7 @@ EXAMPLES = r'''
     cluster_name: cluster
     enable: true
     advanced_options:
-      automatic_rebalance: True
+      automatic_rebalance: true
   delegate_to: localhost
 
 - name: Enable vSAN and claim storage automatically
@@ -107,8 +107,8 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
-    enable: True
-    vsan_auto_claim_storage: True
+    enable: true
+    vsan_auto_claim_storage: true
   delegate_to: localhost
 '''
 

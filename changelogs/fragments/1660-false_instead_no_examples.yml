@@ -1,9 +1,0 @@
-minor_changes:
-  - vmware_deploy_ovf - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_guest_disk - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_guest_file_operation - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_guest_storage_policy - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_guest_vgpu_info - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_guest_vgpu - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_host_datastore - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).
-  - vmware_recommended_datastore - Use false instead of no in examples (https://github.com/ansible-collections/community.vmware/issues/1660).

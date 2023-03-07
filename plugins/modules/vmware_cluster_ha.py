@@ -220,7 +220,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
-    enable: True
+    enable: true
     ha_vm_monitoring: vmMonitoringOnly
   delegate_to: localhost
 
@@ -233,7 +233,7 @@ EXAMPLES = r'''
     cluster_name: cluster
     enable: true
     reservation_based_admission_control:
-      auto_compute_percentages: False
+      auto_compute_percentages: false
       failover_level: 1
       cpu_failover_resources_percent: 50
       memory_failover_resources_percent: 50
