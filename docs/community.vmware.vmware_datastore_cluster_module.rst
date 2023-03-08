@@ -355,7 +355,7 @@ Examples
         password: '{{ vcenter_password }}'
         datacenter_name: '{{ datacenter_name }}'
         datastore_cluster_name: '{{ datastore_cluster_name }}'
-        enable_sdrs: True
+        enable_sdrs: true
         state: present
       delegate_to: localhost
 

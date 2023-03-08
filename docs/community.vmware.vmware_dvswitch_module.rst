@@ -816,7 +816,7 @@ Examples
             active_flow_timeout: 60
             idle_flow_timeout: 15
             sampling_rate: 4096
-            internal_flows_only: False
+            internal_flows_only: false
         state: present
       delegate_to: localhost
 

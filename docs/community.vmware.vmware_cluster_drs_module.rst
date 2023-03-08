@@ -358,7 +358,7 @@ Examples
         password: "{{ vcenter_password }}"
         datacenter_name: DC0
         cluster_name: "{{ cluster_name }}"
-        enable: True
+        enable: true
         drs_default_vm_behavior: partiallyAutomated
       delegate_to: localhost
 

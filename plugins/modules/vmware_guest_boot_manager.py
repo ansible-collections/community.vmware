@@ -98,11 +98,11 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     name: testvm
     boot_delay: 2000
-    enter_bios_setup: True
-    boot_retry_enabled: True
+    enter_bios_setup: true
+    boot_retry_enabled: true
     boot_retry_delay: 22300
     boot_firmware: bios
-    secure_boot_enabled: False
+    secure_boot_enabled: false
     boot_order:
       - floppy
       - cdrom
@@ -118,11 +118,11 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     moid: vm-42
     boot_delay: 2000
-    enter_bios_setup: True
-    boot_retry_enabled: True
+    enter_bios_setup: true
+    boot_retry_enabled: true
     boot_retry_delay: 22300
     boot_firmware: bios
-    secure_boot_enabled: False
+    secure_boot_enabled: false
     boot_order:
       - floppy
       - cdrom

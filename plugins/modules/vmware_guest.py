@@ -836,7 +836,7 @@ EXAMPLES = r'''
       num_cpus: 6
       num_cpu_cores_per_socket: 3
       scsi: paravirtual
-      memory_reservation_lock: True
+      memory_reservation_lock: true
       mem_limit: 8096
       mem_reservation: 4096
       cpu_shares_level: "high"
@@ -844,9 +844,9 @@ EXAMPLES = r'''
       cpu_limit: 8096
       cpu_reservation: 4096
       max_connections: 5
-      hotadd_cpu: True
-      hotremove_cpu: True
-      hotadd_memory: False
+      hotadd_cpu: true
+      hotremove_cpu: true
+      hotadd_memory: false
       version: 12 # Hardware version of virtual machine
       boot_firmware: "efi"
     cdrom:
@@ -909,7 +909,7 @@ EXAMPLES = r'''
       - name: VM Network
         ip: 192.168.10.11
         netmask: 255.255.255.0
-    wait_for_ip_address: True
+    wait_for_ip_address: true
     customization:
       domain: "{{ guest_domain }}"
       dns_servers:
@@ -948,7 +948,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: vm_name
-    delete_from_inventory: True
+    delete_from_inventory: true
     state: absent
   delegate_to: localhost
 

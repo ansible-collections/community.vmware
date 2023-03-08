@@ -932,7 +932,7 @@ Examples
           - size_gb: 10
             type: eagerzeroedthick
             state: present
-            autoselect_datastore: True
+            autoselect_datastore: true
             scsi_controller: 2
             scsi_type: 'buslogic'
             unit_number: 12
@@ -940,7 +940,7 @@ Examples
           - size: 10Gb
             type: eagerzeroedthick
             state: present
-            autoselect_datastore: True
+            autoselect_datastore: true
             scsi_controller: 2
             scsi_type: 'buslogic'
             unit_number: 1
@@ -1122,7 +1122,7 @@ Examples
             disk_mode: 'persistent'
           - size_gb: 1
             state: present
-            autoselect_datastore: True
+            autoselect_datastore: true
             controller_type: nvme
             controller_number: 2
             unit_number: 3

@@ -474,7 +474,7 @@ Examples
         password: "{{ vcenter_password }}"
         name: 'test_standard_kp'
         state: 'present'
-        mark_default: True
+        mark_default: true
         kms_info:
           - kms_name: test_kms_1
             kms_ip: 192.168.1.10
@@ -492,7 +492,7 @@ Examples
         state: 'present'
         kms_info:
           - kms_name: test_kms_1
-            remove_kms: True
+            remove_kms: true
       register: remove_kms_result
 
     - name: Remove the Standard Key Provider
