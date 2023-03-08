@@ -174,7 +174,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     state: present
     name: Basic Session
-    enabled: True
+    enabled: true
     description: "Example description"
     source_port_transmitted: 817
     source_port_received: 817
@@ -189,7 +189,7 @@ EXAMPLES = r'''
     switch_name: dvSwitch
     state: present
     name: Remote Session
-    enabled: True
+    enabled: true
     description: "Example description"
     source_port_received: 105
     destination_port: 815

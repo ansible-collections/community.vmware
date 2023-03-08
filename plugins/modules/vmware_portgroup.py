@@ -162,7 +162,7 @@ EXAMPLES = r'''
     switch: "{{ vswitch_name }}"
     portgroup: "{{ portgroup_name }}"
     security:
-        promiscuous_mode: True
+        promiscuous_mode: true
   delegate_to: localhost
 
 - name: Add Management Network VM Portgroup to specific hosts
@@ -209,11 +209,11 @@ EXAMPLES = r'''
     portgroup: "{{ portgroup_name }}"
     vlan_id: 10
     security:
-        promiscuous_mode: False
-        mac_changes: False
-        forged_transmits: False
+        promiscuous_mode: false
+        mac_changes: false
+        forged_transmits: false
     traffic_shaping:
-        enabled: True
+        enabled: true
         average_bandwidth: 100000
         peak_bandwidth: 100000
         burst_size: 102400
