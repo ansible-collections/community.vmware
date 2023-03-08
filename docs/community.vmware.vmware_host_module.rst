@@ -444,7 +444,7 @@ Examples
         esxi_username: '{{ esxi_username }}'
         esxi_password: '{{ esxi_password }}'
         state: present
-        add_connected: True
+        add_connected: true
       delegate_to: localhost
 
     - name: Reconnect ESXi Host (with username/password set)

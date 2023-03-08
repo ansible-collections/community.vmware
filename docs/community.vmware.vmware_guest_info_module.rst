@@ -450,8 +450,8 @@ Examples
         password: "{{ vcenter_password }}"
         datacenter: "{{ datacenter_name }}"
         name: "{{ vm_name }}"
-        tags: True
-        tag_details: True
+        tags: true
+        tag_details: true
       register: detailed_tag_info
 
 
