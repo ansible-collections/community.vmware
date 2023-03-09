@@ -23,13 +23,13 @@ options:
     datacenter_name:
       description:
       - The name of the datacenter.
-      required: False
+      required: false
       aliases: [ datacenter ]
       type: str
     datastore_cluster_name:
       description:
       - The name of the datastore cluster.
-      required: True
+      required: true
       type: str
       aliases: [ datastore_cluster ]
     state:
@@ -44,7 +44,7 @@ options:
         - A list of datastores to be manage.
         type: list
         elements: str
-        required: True
+        required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''

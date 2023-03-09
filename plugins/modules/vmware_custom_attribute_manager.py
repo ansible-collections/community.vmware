@@ -28,20 +28,20 @@ options:
         description:
           - Name of the attribute.
         type: str
-        required: True
+        required: true
       value:
         description:
           - Value of the attribute.
         type: str
         default: ''
-    required: True
+    required: true
     type: list
     elements: dict
   object_name:
     description:
       - Name of the vSphere object to work with.
     type: str
-    required: True
+    required: true
   object_type:
     description:
       - Type of the object the custom attribute is associated with.
@@ -56,7 +56,7 @@ options:
       - HostSystem
       - ResourcePool
       - VirtualMachine
-    required: True
+    required: true
   state:
     description:
       - If set to C(present), the custom attribute is set to the given value.

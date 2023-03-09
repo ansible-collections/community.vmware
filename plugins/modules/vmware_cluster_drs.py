@@ -42,7 +42,7 @@ options:
       - Whether DRS Behavior overrides for individual virtual machines are enabled.
       - If set to C(True), overrides C(drs_default_vm_behavior).
       type: bool
-      default: True
+      default: true
     drs_default_vm_behavior:
       description:
       - Specifies the cluster-wide default DRS behavior for virtual machines.
@@ -72,7 +72,7 @@ options:
       - In addition to real-time metrics, DRS will respond to forecasted metrics provided by vRealize Operations Manager.
       - You must also configure Predictive DRS in a version of vRealize Operations that supports this feature.
       type: bool
-      default: False
+      default: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''

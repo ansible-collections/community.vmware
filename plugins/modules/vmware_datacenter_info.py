@@ -48,7 +48,7 @@ options:
     show_tag:
       description:
       - Tags related to Datacenter are shown if set to C(True).
-      default: False
+      default: false
       type: bool
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -22,7 +22,7 @@ options:
         description:
             - The name of the Distributed Switch.
         type: str
-        required: True
+        required: true
         aliases: ['dvswitch']
     name:
         description:
@@ -41,40 +41,40 @@ options:
                 description:
                 - Indicates if the configuration of a port is reset automatically after disconnect.
                 type: bool
-                default: True
+                default: true
             block_override:
                 description:
                 - Indicates if the block policy can be changed per port.
                 type: bool
-                default: True
+                default: true
             netflow_override:
                 type: bool
                 description:
                 - Indicates if the NetFlow policy can be changed per port.
-                default: False
+                default: false
             traffic_filter_override:
                 description:
                 - Indicates if the traffic filter can be changed per port.
                 type: bool
-                default: False
+                default: false
             vendor_config_override:
                 type: bool
                 description:
                 - Indicates if the vendor config can be changed per port.
-                default: False
+                default: false
             vlan_override:
                 type: bool
                 description:
                 - Indicates if the vlan can be changed per port.
-                default: False
-        required: False
+                default: false
+        required: false
         default: {
-            port_config_reset_at_disconnect: True,
-            block_override: True,
-            vendor_config_override: False,
-            vlan_override: False,
-            netflow_override: False,
-            traffic_filter_override: False,
+            port_config_reset_at_disconnect: true,
+            block_override: true,
+            vendor_config_override: false,
+            vlan_override: false,
+            netflow_override: false,
+            traffic_filter_override: false,
         }
         aliases: ['port_policy']
         type: dict
@@ -100,7 +100,7 @@ options:
                 default: 'passive'
                 type: str
                 choices: [ 'active', 'passive' ]
-        required: False
+        required: false
         default: {
             status: 'disabled',
             mode: 'passive',
@@ -110,12 +110,12 @@ options:
         description:
             - Indicates if NetFlow is enabled on the uplink portgroup.
         type: bool
-        default: False
+        default: false
     block_all_ports:
         description:
             - Indicates if all ports are blocked on the uplink portgroup.
         type: bool
-        default: False
+        default: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

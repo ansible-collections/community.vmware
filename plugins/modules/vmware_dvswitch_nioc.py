@@ -22,7 +22,7 @@ options:
     switch:
         description:
         - The name of the distributed switch.
-        required: True
+        required: true
         aliases: ['dvswitch']
         type: str
     version:
@@ -31,14 +31,14 @@ options:
         choices:
         - 'version2'
         - 'version3'
-        required: False
+        required: false
         type: str
     state:
         description:
         - Enable or disable NIOC on the distributed switch.
         default: 'present'
         choices: ['present', 'absent']
-        required: False
+        required: false
         type: str
     resources:
         description:
@@ -48,7 +48,7 @@ options:
                 description:
                 - Resource name.
                 choices: ["faultTolerance", "hbr", "iSCSI", "management", "nfs", "vdp", "virtualMachine", "vmotion", "vsan", "backupNfc", "nvmetcp"]
-                required: True
+                required: true
                 type: str
             limit:
                 description:
@@ -79,7 +79,7 @@ options:
                 - The number of shares allocated.
                 - Ignored unless C(shares_level) is "custom".
                 type: int
-        required: False
+        required: false
         type: list
         default: []
         elements: dict

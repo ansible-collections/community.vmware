@@ -21,14 +21,14 @@ options:
   datacenter_name:
     description:
     - The name of the datacenter the cluster belongs to that you want to enable or disable EVC mode on.
-    required: True
+    required: true
     type: str
     aliases:
       - datacenter
   cluster_name:
     description:
     - The name of the cluster to enable or disable EVC mode on.
-    required: True
+    required: true
     type: str
     aliases:
       - cluster

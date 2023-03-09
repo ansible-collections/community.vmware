@@ -23,12 +23,12 @@ options:
     portgroup_name:
         description:
             - The name of the portgroup that is to be created or deleted.
-        required: True
+        required: true
         type: str
     switch_name:
         description:
             - The name of the distributed vSwitch the port group should be created on.
-        required: True
+        required: true
         type: str
     vlan_id:
         description:
@@ -36,7 +36,7 @@ options:
             - 'If C(vlan_trunk) is configured to be I(true), this can be a combination of multiple ranges and numbers, example: 1-200, 205, 400-4094.'
             - The valid C(vlan_id) range is from 0 to 4094. Overlapping ranges are allowed.
             - 'If C(vlan_private) is configured to be I(true), the corresponding private VLAN should already be configured in the distributed vSwitch.'
-        required: True
+        required: true
         type: str
     num_ports:
         description:
@@ -46,7 +46,7 @@ options:
         description:
             - The type of port binding determines when ports in a port group are assigned to virtual machines.
             - See VMware KB 1022312 U(https://kb.vmware.com/s/article/1022312) for more details.
-        required: True
+        required: true
         type: str
         choices:
             - 'static'
@@ -64,7 +64,7 @@ options:
     state:
         description:
             - Determines if the portgroup should be present or not.
-        required: True
+        required: true
         type: str
         choices:
             - 'present'
@@ -73,15 +73,15 @@ options:
         description:
             - Indicates whether this is a VLAN trunk or not.
             - Mutually exclusive with C(vlan_private) parameter.
-        required: False
-        default: False
+        required: false
+        default: false
         type: bool
     vlan_private:
         description:
             - Indicates whether this is for a private VLAN or not.
             - Mutually exclusive with C(vlan_trunk) parameter.
-        required: False
-        default: False
+        required: false
+        default: false
         type: bool
     mac_learning:
         description:
@@ -90,19 +90,19 @@ options:
             allow_unicast_flooding:
                 type: bool
                 description: The flag to allow flooding of unlearned MAC for ingress traffic.
-                required: False
+                required: false
             enabled:
                 type: bool
                 description: The flag to indicate if source MAC address learning is allowed.
-                required: False
+                required: false
             limit:
                 type: int
                 description: The maximum number of MAC addresses that can be learned.
-                required: False
+                required: false
             limit_policy:
                 type: str
                 description: The default switching policy after MAC limit is exceeded.
-                required: False
+                required: false
                 choices:
                     - 'allow'
                     - 'drop'
@@ -114,7 +114,7 @@ options:
             inherited:
                 type: bool
                 description: Inherit the settings from the switch or not.
-                required: True
+                required: true
             promiscuous:
                 type: bool
                 description: Indicates whether promiscuous mode is allowed. Ignored if C(inherited) is true.
@@ -124,7 +124,7 @@ options:
             mac_changes:
                 type: bool
                 description: Indicates whether mac changes are allowed. Ignored if C(inherited) is true.
-        required: False
+        required: false
         type: dict
     teaming_policy:
         description:
@@ -145,7 +145,7 @@ options:
             notify_switches:
                 description:
                 - Indicate whether or not to notify the physical switch if a link fails.
-                default: True
+                default: true
                 type: bool
             inbound_policy:
                 description:
@@ -154,7 +154,7 @@ options:
             rolling_order:
                 description:
                 - Indicate whether or not to use a rolling policy when restoring links.
-                default: False
+                default: false
                 type: bool
             active_uplinks:
                 description:
@@ -167,9 +167,9 @@ options:
                 type: list
                 elements: str
         default: {
-            'notify_switches': True,
+            'notify_switches': true,
             'load_balance_policy': 'loadbalance_srcid',
-            'rolling_order': False
+            'rolling_order': false
         }
         type: dict
     port_policy:
@@ -179,78 +179,78 @@ options:
             block_override:
                 description:
                 - Indicates if the block policy can be changed per port.
-                default: True
+                default: true
                 type: bool
             port_config_reset_at_disconnect:
                 description:
                 - Indicates if the configuration of a port is reset automatically after disconnect.
-                default: True
+                default: true
                 type: bool
-                required: False
+                required: false
             ipfix_override:
                 description:
                 - Indicates if the ipfix policy can be changed per port.
-                default: False
+                default: false
                 type: bool
             live_port_move:
                 description:
                 - Indicates if a live port can be moved in or out of the portgroup.
-                default: False
+                default: false
                 type: bool
             network_rp_override:
                 description:
                 - Indicates if the network resource pool can be changed per port.
-                default: False
+                default: false
                 type: bool
             mac_management_override:
                 description:
                 - Indicates if the security policy can be changed per port.
-                default: False
+                default: false
                 aliases: ['security_override']
                 type: bool
             shaping_override:
                 description:
                 - Indicates if the shaping policy can be changed per port.
-                default: False
+                default: false
                 type: bool
             traffic_filter_override:
                 description:
                 - Indicates if the traffic filter can be changed per port.
-                default: False
+                default: false
                 type: bool
             uplink_teaming_override:
                 description:
                 - Indicates if the uplink teaming policy can be changed per port.
-                default: False
+                default: false
                 type: bool
             vendor_config_override:
                 description:
                 - Indicates if the vendor config can be changed per port.
                 type: bool
-                default: False
+                default: false
             vlan_override:
                 description:
                 - Indicates if the vlan can be changed per port.
                 type: bool
-                default: False
+                default: false
         default: {
-            'traffic_filter_override': False,
-            'network_rp_override': False,
-            'live_port_move': False,
-            'mac_management_override': False,
-            'vendor_config_override': False,
-            'port_config_reset_at_disconnect': True,
-            'uplink_teaming_override': False,
-            'block_override': True,
-            'shaping_override': False,
-            'vlan_override': False,
-            'ipfix_override': False
+            'traffic_filter_override': false,
+            'network_rp_override': false,
+            'live_port_move': false,
+            'mac_management_override': false,
+            'vendor_config_override': false,
+            'port_config_reset_at_disconnect': true,
+            'uplink_teaming_override': false,
+            'block_override': true,
+            'shaping_override': false,
+            'vlan_override': false,
+            'ipfix_override': false
         }
         type: dict
     net_flow:
         description:
             - Indicate whether or not the virtual machine IP traffic that flows through a vds gets analyzed by sending reports to a NetFlow collector.
-        required: False
+        required: false
         type: 'str'
         choices:
         - 'true'
@@ -268,7 +268,7 @@ options:
             inherited:
                 type: bool
                 description: Inherit the settings from the switch or not.
-                required: True
+                required: true
             enabled:
                 type: bool
                 description:
@@ -289,7 +289,7 @@ options:
                 description:
                 - The maximum number of bytes to allow in a burst.
                 - Ignored if C(inherited) is true.
-        required: False
+        required: false
         type: dict
         version_added: '2.3.0'
     out_traffic_shaping:
@@ -300,7 +300,7 @@ options:
                 type: bool
                 description:
                 - Inherit the settings from the switch or not.
-                required: True
+                required: true
             enabled:
                 type: bool
                 description:

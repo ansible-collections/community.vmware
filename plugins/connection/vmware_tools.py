@@ -27,7 +27,7 @@ DOCUMENTATION = r'''
         vars:
           - name: ansible_host
           - name: ansible_vmware_host
-        required: True
+        required: true
       vmware_user:
         description:
           - Username for the connection.
@@ -40,7 +40,7 @@ DOCUMENTATION = r'''
           - name: VMWARE_USER
         vars:
           - name: ansible_vmware_user
-        required: True
+        required: true
       vmware_password:
         description:
           - Password for the connection.
@@ -49,7 +49,7 @@ DOCUMENTATION = r'''
           - name: VMWARE_PASSWORD
         vars:
           - name: ansible_vmware_password
-        required: True
+        required: true
       vmware_port:
         description:
           - Port for the connection.
@@ -59,7 +59,7 @@ DOCUMENTATION = r'''
         vars:
           - name: ansible_port
           - name: ansible_vmware_port
-        required: False
+        required: false
         default: 443
       validate_certs:
         description:
@@ -69,7 +69,7 @@ DOCUMENTATION = r'''
           - name: VMWARE_VALIDATE_CERTS
         vars:
           - name: ansible_vmware_validate_certs
-        default: True
+        default: true
         type: bool
       vm_path:
         description:
@@ -83,7 +83,7 @@ DOCUMENTATION = r'''
           - Folder I(vm) is not visible in the vSphere Web Client but necessary for VMware API to work.
         vars:
           - name: ansible_vmware_guest_path
-        required: False
+        required: false
       vm_uuid:
         description:
           - Mutually exclusive with vm_path
@@ -91,7 +91,7 @@ DOCUMENTATION = r'''
           - UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin
         vars:
           - name: ansible_vmware_guest_uuid
-        required: False
+        required: false
       vm_user:
         description:
           - VM username.
@@ -100,14 +100,14 @@ DOCUMENTATION = r'''
         vars:
           - name: ansible_user
           - name: ansible_vmware_tools_user
-        required: True
+        required: true
       vm_password:
         description:
           - Password for the user in guest operating system.
         vars:
           - name: ansible_password
           - name: ansible_vmware_tools_password
-        required: True
+        required: true
       exec_command_sleep_interval:
         description:
           - Time in seconds to sleep between execution of command.

@@ -27,7 +27,7 @@ options:
       description:
       - The name of VMware content library to manage.
       type: str
-      required: True
+      required: true
     library_description:
       description:
       - The content library description.
@@ -35,14 +35,14 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       - Process of updating content library only allows description change.
       type: str
-      required: False
+      required: false
     library_type:
       description:
       - The content library type.
       - This is required only if I(state) is set to C(present).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
-      required: False
+      required: false
       default: 'local'
       choices: [ 'local', 'subscribed' ]
     datastore_name:
@@ -52,7 +52,7 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       - Currently only datastore backing creation is supported.
       type: str
-      required: False
+      required: false
       aliases: ['datastore']
     subscription_url:
       description:
@@ -61,7 +61,7 @@ options:
       - This parameter is ignored, when I(state) is set to C(absent).
       type: str
       default: ''
-      required: False
+      required: false
     ssl_thumbprint:
       description:
       - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
@@ -71,7 +71,7 @@ options:
         C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
       default: ''
-      required: False
+      required: false
     update_on_demand:
       description:
       - Whether to download all content on demand.
@@ -80,7 +80,7 @@ options:
       - This is required only if I(library_type) is set to C(subscribed).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: bool
-      default: False
+      default: false
     state:
       description:
       - The state of content library.
@@ -89,7 +89,7 @@ options:
       - If set to C(absent) and library exists, then content library is deleted.
       - If set to C(absent) and library does not exists, no action is taken.
       type: str
-      required: False
+      required: false
       default: 'present'
       choices: [ 'present', 'absent' ]
 extends_documentation_fragment:

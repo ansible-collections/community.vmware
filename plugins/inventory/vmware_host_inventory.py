@@ -24,7 +24,7 @@ DOCUMENTATION = r"""
     options:
         hostname:
             description: Name of vCenter or ESXi server.
-            required: True
+            required: true
             env:
               - name: VMWARE_HOST
               - name: VMWARE_SERVER
@@ -32,7 +32,7 @@ DOCUMENTATION = r"""
             description:
             - Name of vSphere user.
             - Accepts vault encrypted variable.
-            required: True
+            required: true
             env:
               - name: VMWARE_USER
               - name: VMWARE_USERNAME
@@ -40,7 +40,7 @@ DOCUMENTATION = r"""
             description:
             - Password of vSphere user.
             - Accepts vault encrypted variable.
-            required: True
+            required: true
             env:
               - name: VMWARE_PASSWORD
         port:
@@ -53,7 +53,7 @@ DOCUMENTATION = r"""
             description:
             - Allows connection when SSL certificates are not valid.
             - Set to C(false) when certificates are not trusted.
-            default: True
+            default: true
             type: bool
             env:
               - name: VMWARE_VALIDATE_CERTS
@@ -63,7 +63,7 @@ DOCUMENTATION = r"""
             - Requires 'vSphere Automation SDK' library to be installed on the given controller machine.
             - Please refer following URLs for installation steps
             - U(https://code.vmware.com/web/sdk/7.0/vsphere-automation-python)
-            default: False
+            default: false
             type: bool
         hostnames:
             description:
@@ -91,7 +91,7 @@ DOCUMENTATION = r"""
             description:
             - This option transform flatten properties name to nested dictionary.
             type: bool
-            default: True
+            default: true
         keyed_groups:
             description:
             - Add hosts to group based on the values of a variable.
@@ -111,7 +111,7 @@ DOCUMENTATION = r"""
             - A list of resources to limit search scope.
             - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
             - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
-            required: False
+            required: false
             type: list
             elements: dict
             default: []
@@ -119,28 +119,28 @@ DOCUMENTATION = r"""
             description:
             - Include ESXi hostsystem's path.
             - Set this option to a string value to replace root name from I('Datacenters').
-            default: False
+            default: false
             type: bool
         with_sanitized_property_name:
             description:
                 - This option allows property name sanitization to create safe property names for use in Ansible.
                 - Also, transforms property name to snake case.
             type: bool
-            default: False
+            default: false
         proxy_host:
           description:
           - Address of a proxy that will receive all HTTPS requests and relay them.
           - The format is a hostname or a IP.
           - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
           type: str
-          required: False
+          required: false
           env:
             - name: VMWARE_PROXY_HOST
         proxy_port:
           description:
           - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
           type: int
-          required: False
+          required: false
           env:
             - name: VMWARE_PROXY_PORT
 """

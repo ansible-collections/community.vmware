@@ -22,7 +22,7 @@ options:
   custom_attribute:
     description:
       - Name of the custom attribute.
-    required: True
+    required: true
     type: str
   object_type:
     description:
@@ -39,7 +39,7 @@ options:
       - HostSystem
       - ResourcePool
       - VirtualMachine
-    required: True
+    required: true
   state:
     description:
       - Manage definition of custom attributes.

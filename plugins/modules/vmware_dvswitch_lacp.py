@@ -23,7 +23,7 @@ options:
     switch:
         description:
             - The name of the Distributed Switch to manage.
-        required: True
+        required: true
         aliases: ['dvswitch']
         type: str
     support_mode:

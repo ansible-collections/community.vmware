@@ -25,7 +25,7 @@ options:
     esxi_hostname:
         description:
             - Name of ESXi server. This is required only if authentication against a vCenter is done.
-        required: False
+        required: false
         type: str
     dest:
         description:
@@ -44,7 +44,7 @@ options:
             - If C(loaded), the backup file in I(src) will be loaded to the ESXi host rewriting the hosts settings.
         choices: [saved, absent, loaded]
         type: str
-        required: True
+        required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

@@ -24,7 +24,7 @@ options:
   datacenter:
     description:
     - Name of the datacenter.
-    required: True
+    required: true
     aliases: ['datacenter_name']
     type: str
   folder_name:
@@ -32,7 +32,7 @@ options:
     - Name of folder to be managed.
     - This is case sensitive parameter.
     - Folder name should be under 80 characters. This is a VMware restriction.
-    required: True
+    required: true
     type: str
   parent_folder:
     description:
@@ -40,7 +40,7 @@ options:
     - This is case sensitive parameter.
     - "If user wants to create a folder under '/DC0/vm/vm_folder', this value will be 'vm_folder'."
     - "If user wants to create a folder under '/DC0/vm/folder1/folder2', this value will be 'folder1/folder2'."
-    required: False
+    required: false
     type: str
   folder_type:
     description:
@@ -53,7 +53,7 @@ options:
     - This option is ignored, if C(parent_folder) is set.
     default: vm
     type: str
-    required: False
+    required: false
     choices: [ datastore, host, network, vm ]
   state:
     description:

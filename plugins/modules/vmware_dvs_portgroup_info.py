@@ -33,32 +33,32 @@ options:
     description:
     - Show or hide MAC learning information of the DVS portgroup.
     type: bool
-    default: True
+    default: true
   show_network_policy:
     description:
     - Show or hide network policies of DVS portgroup.
     type: bool
-    default: True
+    default: true
   show_port_policy:
     description:
     - Show or hide port policies of DVS portgroup.
     type: bool
-    default: True
+    default: true
   show_teaming_policy:
     description:
     - Show or hide teaming policies of DVS portgroup.
     type: bool
-    default: True
+    default: true
   show_uplinks:
     description:
     - Show or hide uplinks of DVS portgroup.
     type: bool
-    default: True
+    default: true
   show_vlan_info:
     description:
     - Show or hide vlan information of the DVS portgroup.
     type: bool
-    default: False
+    default: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

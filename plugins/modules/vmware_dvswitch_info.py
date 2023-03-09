@@ -29,14 +29,14 @@ options:
         - '   folder: /folder1/datacenter1/network'
         - '   folder: folder1/datacenter1/network'
         - '   folder: /folder1/datacenter1/network/folder2'
-      required: False
+      required: false
       type: str
     switch_name:
       description:
         - Name of a dvswitch to look for.
         - If C(switch_name) not specified gather all dvswitch information.
       aliases: ['switch', 'dvswitch']
-      required: False
+      required: false
       type: str
     schema:
       description:
@@ -62,7 +62,7 @@ options:
         - Only valid when C(schema) is C(vsphere).
       type: list
       elements: str
-      required: False
+      required: false
 extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''

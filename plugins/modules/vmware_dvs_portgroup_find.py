@@ -38,7 +38,7 @@ options:
     - Show or hide uplink portgroups.
     - Only relevant when C(vlanid) is supplied.
     type: bool
-    default: False
+    default: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

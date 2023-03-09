@@ -66,7 +66,7 @@ options:
           description:
           - Name of the attribute.
           type: str
-          required: True
+          required: true
         value:
           description:
           - Value of the attribute.

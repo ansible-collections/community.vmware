@@ -23,7 +23,7 @@ options:
      description:
      - Name of the custom attribute definition.
      - This is required parameter, if C(state) is set to C(present) or C(absent).
-     required: False
+     required: false
      type: str
    state:
      description:
