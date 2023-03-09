@@ -88,9 +88,9 @@ EXAMPLES = r'''
     cluster_name: cluster_name
     rules:
         - name: vvold
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: True
+            all_ip: true
   delegate_to: localhost
 
 - name: Enable vvold rule set for an ESXi Host
@@ -101,9 +101,9 @@ EXAMPLES = r'''
     esxi_hostname: '{{ esxi_hostname }}'
     rules:
         - name: vvold
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: True
+            all_ip: true
   delegate_to: localhost
 
 - name: Manage multiple rule set for an ESXi Host
@@ -114,11 +114,11 @@ EXAMPLES = r'''
     esxi_hostname: '{{ esxi_hostname }}'
     rules:
         - name: vvold
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: True
+            all_ip: true
         - name: CIMHttpServer
-          enabled: False
+          enabled: false
   delegate_to: localhost
 
 - name: Manage IP and network based firewall permissions for ESXi
@@ -129,22 +129,22 @@ EXAMPLES = r'''
     esxi_hostname: '{{ esxi_hostname }}'
     rules:
         - name: gdbserver
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: False
+            all_ip: false
             ip_address:
               - 192.168.20.10
               - 192.168.20.11
         - name: CIMHttpServer
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: False
+            all_ip: false
             ip_network:
               - 192.168.100.0/24
         - name: remoteSerialPort
-          enabled: True
+          enabled: true
           allowed_hosts:
-            all_ip: False
+            all_ip: false
             ip_address:
               - 192.168.100.11
             ip_network:

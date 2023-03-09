@@ -288,7 +288,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: "{{ esxi_hostname }}"
-        show_tag: True
+        show_tag: true
       register: host_facts_tag
       delegate_to: localhost
 

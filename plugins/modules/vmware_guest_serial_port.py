@@ -133,7 +133,7 @@ EXAMPLES = r'''
     - type: 'network'
       direction: 'client'
       service_uri: 'tcp://6000'
-      yield_on_poll: True
+      yield_on_poll: true
     - type: 'pipe'
       pipe_name: 'serial_pipe'
       endpoint: 'client'
@@ -141,7 +141,7 @@ EXAMPLES = r'''
       device_name: '/dev/char/serial/uart0'
     - type: 'file'
       file_path: '[datastore1]/file1'
-      yield_on_poll:  True
+      yield_on_poll:  true
     register: create_multiple_ports
 
 # Modify existing serial port

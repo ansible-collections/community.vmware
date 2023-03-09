@@ -577,7 +577,7 @@ Examples
         switch_name: dvSwitch
         state: present
         name: Basic Session
-        enabled: True
+        enabled: true
         description: "Example description"
         source_port_transmitted: 817
         source_port_received: 817
@@ -592,7 +592,7 @@ Examples
         switch_name: dvSwitch
         state: present
         name: Remote Session
-        enabled: True
+        enabled: true
         description: "Example description"
         source_port_received: 105
         destination_port: 815

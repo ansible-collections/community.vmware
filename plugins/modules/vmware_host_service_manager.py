@@ -88,7 +88,7 @@ EXAMPLES = r'''
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
     service_name: ntpd
-    service_policy: on
+    service_policy: 'on'
     state: present
   delegate_to: localhost
 

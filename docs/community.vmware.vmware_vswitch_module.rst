@@ -634,7 +634,7 @@ Examples
         nic_name: vmnic0
         mtu: 9000
         security:
-            promiscuous_mode: True
+            promiscuous_mode: true
       delegate_to: localhost
 
     - name: Add a VMware vSwitch to a specific host system with active/standby teaming
@@ -665,7 +665,7 @@ Examples
           - vmnic0
           - vmnic1
         traffic_shaping:
-            enabled: True
+            enabled: true
             average_bandwidth: 100000
             peak_bandwidth: 100000
             burst_size: 102400

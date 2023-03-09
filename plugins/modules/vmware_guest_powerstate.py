@@ -164,7 +164,7 @@ EXAMPLES = r"""
     scheduled_at: "09/01/2018 10:18"
     schedule_task_name: "task_00001"
     schedule_task_description: "Sample task to poweroff VM"
-    schedule_task_enabled: True
+    schedule_task_enabled: true
   delegate_to: localhost
   register: deploy_at_schedule_datetime
 

@@ -544,7 +544,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         folder: "{{ f0 }}"
         datastore: "{{ rw_datastore }}"
         datacenter: "{{ dc1 }}"
@@ -587,7 +587,7 @@ Examples
         password: "{{ vcenter_password }}"
         vm_username: "root"
         vm_password: "SuperSecret"
-        validate_certs: False
+        validate_certs: false
         folder: "{{ f0 }}"
         datastore: "{{ rw_datastore }}"
         datacenter: "{{ dc1 }}"
@@ -610,7 +610,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         name: "{{ Clone_vm }}"
         parent_vm: "{{ testvm_1 }}"
         datacenter: "{{ dc1 }}"
@@ -624,7 +624,7 @@ Examples
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: False
+        validate_certs: false
         folder: "{{ f0 }}"
         datastore: "{{ rw_datastore }}"
         datacenter: "{{ dc1 }}"

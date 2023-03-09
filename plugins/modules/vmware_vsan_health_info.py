@@ -47,7 +47,7 @@ EXAMPLES = r'''
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     cluster_name: 'vSAN01'
-    fetch_from_cache: False
+    fetch_from_cache: false
 
 - name: Gather health info from a vSAN's cluster with datacenter
   community.vmware.vmware_vsan_health_info:
@@ -56,7 +56,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     cluster_name: 'vSAN01'
     datacenter: 'Datacenter_01'
-    fetch_from_cache: True
+    fetch_from_cache: true
 '''
 
 RETURN = r'''

@@ -569,7 +569,7 @@ Examples
             ip_address: 192.168.127.10
             subnet_mask: 255.255.255.0
           state: present
-          enable_mgmt: True
+          enable_mgmt: true
        delegate_to: localhost
 
     -  name: Add Management vmkernel port using DHCP network type
@@ -583,7 +583,7 @@ Examples
           state: present
           network:
             type: 'dhcp'
-          enable_mgmt: True
+          enable_mgmt: true
        delegate_to: localhost
 
     -  name: Change IP allocation from static to dhcp
@@ -598,7 +598,7 @@ Examples
           device: vmk1
           network:
             type: 'dhcp'
-          enable_mgmt: True
+          enable_mgmt: true
        delegate_to: localhost
 
     -  name: Delete VMkernel port
@@ -625,7 +625,7 @@ Examples
             ip_address: 192.168.127.10
             subnet_mask: 255.255.255.0
           state: present
-          enable_mgmt: True
+          enable_mgmt: true
        delegate_to: localhost
 
     -  name: Add vMotion vmkernel port with vMotion TCP/IP stack

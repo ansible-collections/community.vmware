@@ -201,7 +201,7 @@ EXAMPLES = r'''
 
 # Filter VMs based upon condition
     plugin: community.vmware.vmware_vm_inventory
-    strict: False
+    strict: false
     hostname: 10.65.223.31
     username: administrator@vsphere.local
     password: Esxi@123$%

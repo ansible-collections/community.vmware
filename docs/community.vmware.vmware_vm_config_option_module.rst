@@ -324,7 +324,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: "{{ esxi_hostname }}"
-        get_guest_os_ids: True
+        get_guest_os_ids: true
       delegate_to: localhost
 
     - name: Get VM recommended config option for Windows 10 guest OS on given ESXi host
@@ -333,7 +333,7 @@ Examples
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         esxi_hostname: "{{ esxi_hostname }}"
-        get_config_options: True
+        get_config_options: true
         guest_id: "windows9_64Guest"
       delegate_to: localhost
 

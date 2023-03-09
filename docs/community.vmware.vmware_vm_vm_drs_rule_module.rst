@@ -317,9 +317,9 @@ Examples
             - vm1
             - vm2
         drs_rule_name: vm1-vm2-affinity-rule-001
-        enabled: True
-        mandatory: True
-        affinity_rule: True
+        enabled: true
+        mandatory: true
+        affinity_rule: true
       delegate_to: localhost
 
     - name: Create DRS Anti-Affinity Rule for VM-VM
@@ -328,13 +328,13 @@ Examples
         username: "{{ esxi_username }}"
         password: "{{ esxi_password }}"
         cluster_name: "{{ cluster_name }}"
-        enabled: True
+        enabled: true
         vms:
             - vm1
             - vm2
         drs_rule_name: vm1-vm2-affinity-rule-001
-        mandatory: True
-        affinity_rule: False
+        mandatory: true
+        affinity_rule: false
       delegate_to: localhost
 
     - name: Delete DRS Affinity Rule for VM-VM

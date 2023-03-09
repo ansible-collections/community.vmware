@@ -347,9 +347,9 @@ Examples
         drs_rule_name: drs_rule_host_aff_0001
         host_group_name: DC0_C0_HOST_GR1
         vm_group_name: DC0_C0_VM_GR1
-        mandatory: True
-        enabled: True
-        affinity_rule: True
+        mandatory: true
+        enabled: true
+        affinity_rule: true
 
 
 
