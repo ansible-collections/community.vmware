@@ -25,13 +25,13 @@ options:
       - The name of the datacenter.
       - You must specify either a C(datacenter_name) or a C(folder).
       - Mutually exclusive with C(folder) parameter.
-      required: False
+      required: false
       aliases: [ datacenter ]
       type: str
     datastore_cluster_name:
       description:
       - The name of the datastore cluster.
-      required: True
+      required: true
       type: str
     state:
       description:
@@ -53,39 +53,39 @@ options:
       - '   folder: /folder1/datacenter1/datastore'
       - '   folder: folder1/datacenter1/datastore'
       - '   folder: /folder1/datacenter1/datastore/folder2'
-      required: False
+      required: false
       type: str
     enable_sdrs:
       description:
       - Whether or not storage DRS is enabled.
-      default: False
+      default: false
       type: bool
-      required: False
+      required: false
     automation_level:
       description:
       - Run SDRS automated or manually.
       choices: [ automated, manual ]
       default: manual
       type: str
-      required: False
+      required: false
     keep_vmdks_together:
       description:
       - Specifies whether or not each VM in this datastore cluster should have its virtual disks on the same datastore by default.
-      default: True
+      default: true
       type: bool
-      required: False
+      required: false
     loadbalance_interval:
       description:
       - Specify the interval in minutes that storage DRS runs to load balance among datastores.
       default: 480
       type: int
-      required: False
+      required: false
     enable_io_loadbalance:
       description:
       - Whether or not storage DRS takes into account storage I/O workload when making load balancing and initial placement recommendations.
-      default: False
+      default: false
       type: bool
-      required: False
+      required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

@@ -26,7 +26,7 @@ options:
     category_name:
       description:
       - The name of category to manage.
-      required: True
+      required: true
       type: str
     category_description:
       description:

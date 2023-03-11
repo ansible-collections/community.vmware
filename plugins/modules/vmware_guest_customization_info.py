@@ -23,7 +23,7 @@ options:
    spec_name:
      description:
      - Name of customization specification to find.
-     required: False
+     required: false
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -22,7 +22,7 @@ options:
         description:
             - The name of the Distributed Switch.
         type: str
-        required: True
+        required: true
         aliases: ['dvswitch']
     primary_pvlans:
         description:

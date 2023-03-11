@@ -58,13 +58,13 @@ options:
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_HOST) will be used instead.
       - This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
       type: str
-      required: False
+      required: false
     proxy_port:
       description:
       - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
       type: int
-      required: False
+      required: false
 '''
 
     # This doc fragment is specific to vcenter modules like vcenter_license
@@ -113,11 +113,11 @@ options:
       - The format is a hostname or a IP.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_HOST) will be used instead.
       type: str
-      required: False
+      required: false
     proxy_port:
       description:
       - Port of the HTTP proxy that will receive all HTTPS requests and relay them.
       - If the value is not specified in the task, the value of environment variable C(VMWARE_PROXY_PORT) will be used instead.
       type: int
-      required: False
+      required: false
     '''

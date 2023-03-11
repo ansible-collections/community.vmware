@@ -60,7 +60,7 @@ options:
    datacenter:
      description:
      - The datacenter name to which virtual machine belongs to.
-     required: True
+     required: true
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

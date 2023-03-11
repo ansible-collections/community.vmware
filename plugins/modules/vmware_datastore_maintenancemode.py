@@ -43,7 +43,7 @@ options:
       - If set to C(absent) and datastore is not in maintenance mode, then no action will be taken.
       choices: [ present, absent ]
       default: present
-      required: False
+      required: false
       type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

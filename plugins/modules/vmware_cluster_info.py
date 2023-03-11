@@ -25,19 +25,19 @@ options:
      description:
      - Datacenter to search for cluster/s.
      - This parameter is required, if C(cluster_name) is not supplied.
-     required: False
+     required: false
      type: str
    cluster_name:
      description:
      - Name of the cluster.
      - If set, information of this cluster will be returned.
      - This parameter is required, if C(datacenter) is not supplied.
-     required: False
+     required: false
      type: str
    show_tag:
     description:
     - Tags related to cluster are shown if set to C(True).
-    default: False
+    default: false
     type: bool
    schema:
      description:

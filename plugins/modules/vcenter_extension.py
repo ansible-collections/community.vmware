@@ -21,12 +21,12 @@ options:
   extension_key:
     description:
     - The extension key of the extension to install or uninstall.
-    required: True
+    required: true
     type: str
   version:
     description:
     - The version of the extension you are installing or uninstalling.
-    required: True
+    required: true
     type: str
   name:
     description:
@@ -65,7 +65,7 @@ options:
   visible:
     description:
     - Show the extension in solution manager inside vCenter.
-    default: True
+    default: true
     type: bool
   state:
     description:

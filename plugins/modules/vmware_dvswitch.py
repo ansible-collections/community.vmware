@@ -28,13 +28,13 @@ options:
             - The name of the datacenter that will contain the Distributed Switch.
             - This parameter is optional, if C(folder) is provided.
             - Mutually exclusive with C(folder) parameter.
-        required: False
+        required: false
         aliases: ['datacenter']
         type: str
     switch_name:
         description:
         - The name of the distribute vSwitch to create or remove.
-        required: True
+        required: true
         aliases: ['switch', 'dvswitch']
         type: str
     switch_version:
@@ -117,11 +117,11 @@ options:
             vlan_mtu:
                 type: bool
                 description: VLAN and MTU health check.
-                default: False
+                default: false
             teaming_failover:
                 type: bool
                 description: Teaming and failover health check.
-                default: False
+                default: false
             vlan_mtu_interval:
                 type: int
                 description:
@@ -136,8 +136,8 @@ options:
                 default: 0
         type: dict
         default: {
-            vlan_mtu: False,
-            teaming_failover: False,
+            vlan_mtu: false,
+            teaming_failover: false,
             vlan_mtu_interval: 0,
             teaming_failover_interval: 0,
         }
@@ -149,16 +149,16 @@ options:
             promiscuous:
                 type: bool
                 description: Indicates whether promiscuous mode is allowed.
-                default: False
+                default: false
             forged_transmits:
                 type: bool
                 description: Indicates whether forged transmits are allowed.
-                default: False
+                default: false
             mac_changes:
                 type: bool
                 description: Indicates whether mac changes are allowed.
-                default: False
-        required: False
+                default: false
+        required: false
         type: dict
     state:
         description:
@@ -181,7 +181,7 @@ options:
             - '   folder: /folder1/datacenter1/network'
             - '   folder: folder1/datacenter1/network'
             - '   folder: /folder1/datacenter1/network/folder2'
-        required: False
+        required: false
         type: str
     net_flow:
         version_added: '2.7.0'
@@ -218,7 +218,7 @@ options:
             internal_flows_only:
                 type: bool
                 description: If True, data on network activity between vms on the same host will be collected only.
-                default: False
+                default: false
         type: dict
         default: {
             'collector_port': 0,
@@ -226,7 +226,7 @@ options:
             'active_flow_timeout': 60,
             'idle_flow_timeout': 15,
             'sampling_rate': 4096,
-            'internal_flows_only': False
+            'internal_flows_only': false
         }
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -313,7 +313,7 @@ result:
         "net_flow_active_flow_timeout": 60,
         "net_flow_idle_flow_timeout": 15,
         "net_flow_sampling_rate": 4096,
-        "net_flow_internal_flows_only": False,
+        "net_flow_internal_flows_only": false,
         "mtu": 9000,
         "multicast_filtering_mode": "basic",
         "result": "DVS already configured properly",

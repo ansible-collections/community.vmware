@@ -29,46 +29,46 @@ options:
       description:
       - The level of logging desired in this module.
       type: str
-      required: False
+      required: false
       default: 'normal'
       choices: [ 'debug', 'info', 'normal' ]
     template:
       description:
       - The name of template from which VM to be deployed.
       type: str
-      required: True
+      required: true
       aliases: ['template_src']
     library:
       description:
       - The name of the content library from where the template resides.
       type: str
-      required: False
+      required: false
       aliases: ['content_library', 'content_library_src']
     name:
       description:
       - The name of the VM to be deployed.
       type: str
-      required: True
+      required: true
       aliases: ['vm_name']
     datacenter:
       description:
       - Name of the datacenter, where VM to be deployed.
       type: str
-      required: True
+      required: true
     datastore:
       description:
       - Name of the datastore to store deployed VM and disk.
       - Required if I(datastore_cluster) is not provided.
       type: str
-      required: False
+      required: false
     datastore_cluster:
-       description:
-       - Name of the datastore cluster to store deployed VM and disk.
-       - Please make sure Storage DRS is active for recommended datastore from the given datastore cluster.
-       - If Storage DRS is not enabled, datastore with largest free storage space is selected.
-       - Required if I(datastore) is not provided.
-       type: str
-       required: False
+      description:
+      - Name of the datastore cluster to store deployed VM and disk.
+      - Please make sure Storage DRS is active for recommended datastore from the given datastore cluster.
+      - If Storage DRS is not enabled, datastore with largest free storage space is selected.
+      - Required if I(datastore) is not provided.
+      type: str
+      required: false
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.
@@ -81,7 +81,7 @@ options:
       - Required with I(resource_pool) to find resource pool details. This will be used as additional
         information when there are resource pools with same name.
       type: str
-      required: False
+      required: false
     resource_pool:
       description:
       - Name of the resource pool in datacenter in which to place deployed VM.
@@ -89,13 +89,13 @@ options:
       - For default or non-unique resource pool names, specify I(host) and I(cluster).
       - C(Resources) is the default name of resource pool.
       type: str
-      required: False
+      required: false
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
       - Required if I(resource_pool) is not specified.
       type: str
-      required: False
+      required: false
     state:
       description:
       - The state of Virtual Machine deployed from template in content library.
@@ -104,7 +104,7 @@ options:
       - If set to C(poweredon) and VM does not exists, then VM is created with powered on state.
       - If set to C(poweredon) and VM exists, no action is taken.
       type: str
-      required: False
+      required: false
       default: 'present'
       choices: [ 'present', 'poweredon' ]
 extends_documentation_fragment:

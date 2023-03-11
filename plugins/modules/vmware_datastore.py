@@ -22,7 +22,7 @@ author:
 options:
    name:
      description: Name of the datastore.
-     required: True
+     required: true
      type: str
    datacenter:
      description:
@@ -34,7 +34,7 @@ options:
      - Specify datastore typ.
      type: str
      choices: ['enable_io_statistics', 'enable_statistics', 'disable']
-     required: True
+     required: true
    congestion_threshold_percentage:
      description:
      - Storage I/O congestion threshold in percentage of peak throughput.

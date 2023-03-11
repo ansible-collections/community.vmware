@@ -23,11 +23,11 @@ options:
       type: str
     datastore_name:
       description: Name of datastore or datastore cluster to be used for the disk.
-      required: True
+      required: true
       type: str
     disk_name:
       description: The name of the disk.
-      required: True
+      required: true
       type: str
     size:
       description:

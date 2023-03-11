@@ -24,13 +24,13 @@ options:
      description:
      - Name of the datastore to match.
      - If set, information of specific datastores are returned.
-     required: False
+     required: false
      type: str
    datacenter:
      description:
      - Datacenter to search for datastores.
      - This parameter is required, if C(cluster) is not supplied.
-     required: False
+     required: false
      aliases: ['datacenter_name']
      type: str
    cluster:
@@ -38,7 +38,7 @@ options:
      - Cluster to search for datastores.
      - If set, information of datastores belonging this clusters will be returned.
      - This parameter is required, if C(datacenter) is not supplied.
-     required: False
+     required: false
      type: str
    gather_nfs_mount_info:
     description:
@@ -82,7 +82,7 @@ options:
      - '   ]'
      - Only valid when C(schema) is C(vsphere).
      type: list
-     required: False
+     required: false
      elements: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

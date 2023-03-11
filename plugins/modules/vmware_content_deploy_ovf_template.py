@@ -25,43 +25,43 @@ options:
       description:
       - The level of logging desired in this module.
       type: str
-      required: False
+      required: false
       default: 'normal'
       choices: [ 'debug', 'info', 'normal' ]
     template:
       description:
       - The name of OVF template from which VM to be deployed.
       type: str
-      required: True
+      required: true
       aliases: ['ovf', 'ovf_template', 'template_src']
     library:
       description:
       - The name of the content library from where the template resides.
       type: str
-      required: False
+      required: false
       aliases: ['content_library', 'content_library_src']
     name:
       description:
       - The name of the VM to be deployed.
       type: str
-      required: True
+      required: true
       aliases: ['vm_name']
     datacenter:
       description:
       - Name of the datacenter, where VM to be deployed.
       type: str
-      required: True
+      required: true
     datastore:
       description:
       - Name of the datastore to store deployed VM and disk.
       type: str
-      required: False
+      required: false
     datastore_cluster:
       description:
       - Name of the datastore cluster housing a datastore to store deployed VM and disk.
       - If datastore is not specified, the recommended datastore from this cluster will be used.
       type: str
-      required: False
+      required: false
     folder:
       description:
       - Name of the folder in datacenter in which to place deployed VM.
@@ -71,17 +71,17 @@ options:
       description:
       - Name of the ESX Host in datacenter in which to place deployed VM. The host has to be a member of the cluster that contains the resource pool.
       type: str
-      required: False
+      required: false
     resource_pool:
       description:
       - Name of the resourcepool in datacenter in which to place deployed VM.
       type: str
-      required: False
+      required: false
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
       type: str
-      required: False
+      required: false
     storage_provisioning:
       description:
       - Default storage provisioning type to use for all sections of type vmw:StorageSection in the OVF descriptor.

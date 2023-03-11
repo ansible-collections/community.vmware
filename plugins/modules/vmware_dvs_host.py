@@ -26,22 +26,22 @@ options:
     esxi_hostname:
         description:
         - The ESXi hostname.
-        required: True
+        required: true
         type: str
     switch_name:
         description:
         - The name of the Distributed vSwitch.
-        required: True
+        required: true
         type: str
     vmnics:
         description:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
-        required: False
+        required: false
         type: list
         default: []
         elements: str
     lag_uplinks:
-        required: False
+        required: false
         type: list
         default: []
         elements: dict
@@ -52,11 +52,11 @@ options:
                 description:
                 - Name of the LAG.
                 type: str
-                required: True
+                required: true
             vmnics:
                 description:
                 - The ESXi hosts vmnics to use with the LAG.
-                required: False
+                required: false
                 type: list
                 default: []
                 elements: str
@@ -74,13 +74,13 @@ options:
               description:
               - Key of setting.
               type: str
-              required: True
+              required: true
             value:
               description:
               - Value of setting.
               type: str
-              required: True
-        required: False
+              required: true
+        required: false
         type: list
         elements: dict
 extends_documentation_fragment:

@@ -28,7 +28,7 @@ options:
       description:
       - content library id for which details needs to be fetched.
       type: str
-      required: False
+      required: false
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 

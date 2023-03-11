@@ -24,7 +24,7 @@ options:
   name:
     description: Name of the Key Provider to be added, reconfigured or removed from vCenter.
     type: str
-    required: True
+    required: true
   mark_default:
     description:
       - Set specified Key Provider with name C(name) as the default Key Provider.

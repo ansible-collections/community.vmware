@@ -43,22 +43,22 @@ options:
     description:
       - The name of the cloned VM.
     type: str
-    required: True
+    required: true
   destination_vcenter:
     description:
       - The hostname or IP address of the destination VCenter.
     type: str
-    required: True
+    required: true
   destination_vcenter_username:
     description:
       - The username of the destination VCenter.
     type: str
-    required: True
+    required: true
   destination_vcenter_password:
     description:
       - The password of the destination VCenter.
     type: str
-    required: True
+    required: true
   destination_vcenter_port:
     description:
       - The port to establish connection in the destination VCenter.
@@ -68,18 +68,18 @@ options:
     description:
       - Parameter to indicate if certification validation needs to be done on destination VCenter.
     type: bool
-    default: False
+    default: false
   destination_host:
     description:
       - The name of the destination host.
     type: str
-    required: True
+    required: true
   destination_datastore:
     description:
       - The name of the destination datastore or the datastore cluster.
       - If datastore cluster name is specified, we will find the Storage DRS recommended datastore in that cluster.
     type: str
-    required: True
+    required: true
   destination_vm_folder:
     description:
       - Destination folder, absolute path to deploy the cloned vm.
@@ -89,7 +89,7 @@ options:
       - '   folder: ha-datacenter/vm'
       - '   folder: /datacenter1/vm'
     type: str
-    required: True
+    required: true
   destination_resource_pool:
     description:
       - Destination resource pool.
@@ -99,7 +99,7 @@ options:
     description:
       - Specifies whether or not the new virtual machine should be marked as a template.
     type: bool
-    default: False
+    default: false
   state:
     description:
       - The state of Virtual Machine deployed.
@@ -108,7 +108,7 @@ options:
       - If set to C(poweredon) and VM does not exists, then VM is created with powered on state.
       - If set to C(poweredon) and VM exists, no action is taken.
     type: str
-    required: False
+    required: false
     default: 'present'
     choices: [ 'present', 'poweredon' ]
 

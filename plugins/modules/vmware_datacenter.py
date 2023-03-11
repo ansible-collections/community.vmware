@@ -23,7 +23,7 @@ options:
     datacenter_name:
       description:
       - The name of the datacenter the cluster will be created in.
-      required: True
+      required: true
       type: str
     state:
       description:
