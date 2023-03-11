@@ -24,14 +24,12 @@ options:
    datacenter:
      description:
      - Datacenter to search for cluster/s.
-     - This parameter is required, if C(cluster_name) is not supplied.
      required: False
      type: str
    cluster_name:
      description:
      - Name of the cluster.
      - If set, information of this cluster will be returned.
-     - This parameter is required, if C(datacenter) is not supplied.
      required: False
      type: str
    show_tag:
@@ -65,6 +63,14 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
+- name: Gather all cluster info
+  community.vmware.vmware_cluster_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  delegate_to: localhost
+  register: cluster_info
+
 - name: Gather cluster info from given datacenter
   community.vmware.vmware_cluster_info:
     hostname: '{{ vcenter_hostname }}'
@@ -208,6 +214,12 @@ class VmwreClusterInfoManager(PyVmomi):
                 self.module.fail_json(msg="Failed to find cluster '%s'" % cluster_name)
 
             self.cluster_objs = [cluster_obj]
+        else:
+            self.cluster_objs = []
+            datacenters = self.get_datacenter_info()
+            for datacenter in datacenters:
+                datacenter_obj = find_datacenter_by_name(self.content, datacenter_name=datacenter['name'])
+                [self.cluster_objs.append(x) for x in self.get_all_cluster_objs(parent=datacenter_obj)]
 
     def get_all_cluster_objs(self, parent):
         """
@@ -330,9 +342,6 @@ def main():
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
-        required_one_of=[
-            ['cluster_name', 'datacenter'],
-        ],
         supports_check_mode=True,
     )
 

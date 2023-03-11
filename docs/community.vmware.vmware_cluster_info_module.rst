@@ -47,7 +47,6 @@ Parameters
                 <td>
                         <div>Name of the cluster.</div>
                         <div>If set, information of this cluster will be returned.</div>
-                        <div>This parameter is required, if <code>datacenter</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -63,7 +62,6 @@ Parameters
                 </td>
                 <td>
                         <div>Datacenter to search for cluster/s.</div>
-                        <div>This parameter is required, if <code>cluster_name</code> is not supplied.</div>
                 </td>
             </tr>
             <tr>
@@ -273,6 +271,14 @@ Examples
 
 .. code-block:: yaml
 
+    - name: Gather all cluster info
+      community.vmware.vmware_cluster_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+      delegate_to: localhost
+      register: cluster_info
+      
     - name: Gather cluster info from given datacenter
       community.vmware.vmware_cluster_info:
         hostname: '{{ vcenter_hostname }}'
