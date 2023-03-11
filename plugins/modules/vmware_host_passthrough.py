@@ -44,7 +44,7 @@ options:
           - device_name
         type: str
     elements: dict
-    required: True
+    required: true
     type: list
   state:
     description:

@@ -20,7 +20,7 @@ options:
     description:
     - The ESXi hostname on which to change iSCSI settings.
     type: str
-    required: True
+    required: true
   iscsi_config:
     description:
     - The iSCSI configs.
@@ -48,7 +48,7 @@ options:
             description:
             - Whether to enable CHAP authentication.
             type: bool
-            default: False
+            default: false
           chap_authentication_type:
             description:
               - The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.
@@ -95,12 +95,12 @@ options:
         description:
         - Force port bind VMkernels to be removed.
         type: bool
-        default: False
+        default: false
       vmhba_name:
         description:
         - The iSCSI adapter name.
         type: str
-        required: True
+        required: true
       send_target:
         description:
         - The iSCSI dynamic target settings.
@@ -110,7 +110,7 @@ options:
             description:
             - The IP address or hostname of the storage device.
             type: str
-            required: True
+            required: true
           port:
             description:
             - The TCP port of the storage device.
@@ -126,7 +126,7 @@ options:
                 description:
                 - Whether to enable CHAP authentication.
                 type: bool
-                default: False
+                default: false
               chap_authentication_type:
                 description:
                   - The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.
@@ -141,7 +141,7 @@ options:
                 description:
                 - Whether or not to inherit CHAP settings from the parent settings.
                 type: bool
-                default: True
+                default: true
               chap_name:
                 description:
                 - CHAP user name if CHAP is enabled.
@@ -163,7 +163,7 @@ options:
                 description:
                 - Whether or not to inherit Mutual-CHAP settings from the parent settings.
                 type: bool
-                default: True
+                default: true
               mutual_chap_name:
                 description:
                 - The user name that the target needs to use to authenticate with the initiator if Mutual-CHAP is enabled.
@@ -182,12 +182,12 @@ options:
             description:
             - The name of the iSCSI target to connect to.
             type: str
-            required: True
+            required: true
           address:
             description:
             - The IP address or hostname of the storage device.
             type: str
-            required: True
+            required: true
           port:
             description:
             - The TCP port of the storage device.
@@ -203,7 +203,7 @@ options:
                 description:
                 - Whether to enable CHAP authentication.
                 type: bool
-                default: False
+                default: false
               chap_authentication_type:
                 description:
                   - The preference for CHAP or non-CHAP protocol of CHAP if CHAP is enabled.
@@ -218,7 +218,7 @@ options:
                 description:
                 - Whether or not to inherit CHAP settings from the parent settings.
                 type: bool
-                default: True
+                default: true
               chap_name:
                 description:
                 - CHAP user name if CHAP is enabled.
@@ -240,7 +240,7 @@ options:
                 description:
                 - Whether or not to inherit Mutual-CHAP settings from the parent settings.
                 type: bool
-                default: True
+                default: true
               mutual_chap_name:
                 description:
                 - The user name that the target needs to use to authenticate with the initiator if Mutual-CHAP is enabled.

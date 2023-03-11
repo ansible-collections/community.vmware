@@ -26,7 +26,7 @@ options:
       description:
       - Type of object to work with.
       - Valid options are Cluster, ClusterComputeResource, Datacenter, Datastore, Folder, ResourcePool, VM or VirtualMachine.
-      required: True
+      required: true
       type: str
       choices:
         - 'ClusterComputeResource'
@@ -51,7 +51,7 @@ options:
     new_name:
       description:
       - New name for VMware object.
-      required: True
+      required: true
       aliases: ['object_new_name']
       type: str
 extends_documentation_fragment:

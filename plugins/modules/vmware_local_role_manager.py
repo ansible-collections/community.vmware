@@ -25,7 +25,7 @@ options:
   local_role_name:
     description:
     - The local role name to be managed.
-    required: True
+    required: true
     type: str
   local_privilege_ids:
     description:
@@ -44,7 +44,7 @@ options:
   force_remove:
     description:
     - If set to C(False) then prevents the role from being removed if any permissions are using it.
-    default: False
+    default: false
     type: bool
   action:
     description:

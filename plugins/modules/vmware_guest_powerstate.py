@@ -82,24 +82,24 @@ options:
     - Name of schedule task.
     - Valid only if C(scheduled_at) is specified.
     type: str
-    required: False
+    required: false
   schedule_task_description:
     description:
     - Description of schedule task.
     - Valid only if C(scheduled_at) is specified.
     type: str
-    required: False
+    required: false
   schedule_task_enabled:
     description:
     - Flag to indicate whether the scheduled task is enabled or disabled.
     type: bool
-    required: False
-    default: True
+    required: false
+    default: true
   force:
     description:
     - Ignore warnings and complete the actions.
     - This parameter is useful while forcing virtual machine state.
-    default: False
+    default: false
     type: bool
   state_change_timeout:
     description:
@@ -118,12 +118,12 @@ options:
         description:
         - The message id, for example C(msg.uuid.altered).
         type: str
-        required: True
+        required: true
       response:
         description:
         - The choice key, for example C(button.uuid.copiedTheVM).
         type: str
-        required: True
+        required: true
     type: list
     elements: dict
 extends_documentation_fragment:

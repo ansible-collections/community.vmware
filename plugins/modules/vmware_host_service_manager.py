@@ -53,7 +53,7 @@ options:
     description:
     - Name of Service to be managed. This is a brief identifier for the service, for example, ntpd, vxsyslogd etc.
     - This value should be a valid ESXi service name.
-    required: True
+    required: true
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -29,7 +29,7 @@ options:
     - The optional name of an entity, such as a user, assigned permissions on an object.
     - If provided, actual permissions on the specified object are returned for the principal, instead of roles.
     type: str
-    required: False
+    required: false
   object_name:
     description:
     - The object name to assigned permission.

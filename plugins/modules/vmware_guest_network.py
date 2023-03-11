@@ -33,7 +33,7 @@ options:
   use_instance_uuid:
     description:
       - Whether to use the VMware instance UUID rather than the BIOS UUID.
-    default: False
+    default: false
     type: bool
   moid:
     description:
@@ -106,22 +106,22 @@ options:
       - When C(state=absent), the I(mac_address) parameter has to be set.
     type: str
   start_connected:
-    default: True
+    default: true
     description:
       - If NIC should be connected to network on startup.
     type: bool
   wake_onlan:
-    default: False
+    default: false
     description:
       - Enable wake on LAN.
     type: bool
   connected:
-    default: True
+    default: true
     description:
       - If NIC should be connected to the network.
     type: bool
   directpath_io:
-    default: False
+    default: false
     description:
       - Enable Universal Pass-through (UPT).
       - Only compatible with the C(vmxnet3) device type.
@@ -140,7 +140,7 @@ options:
       - This option is only compatible for SR-IOV network adapters.
   allow_guest_os_mtu_change:
     version_added: '2.3.0'
-    default: True
+    default: true
     type: bool
     description:
       - Allows the guest OS to change the MTU on a SR-IOV network adapter.
@@ -153,7 +153,7 @@ options:
   gather_network_info:
     aliases:
       - gather_network_facts
-    default: False
+    default: false
     description:
       - Return information about current guest network adapters.
     type: bool

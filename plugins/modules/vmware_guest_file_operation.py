@@ -51,7 +51,7 @@ options:
     vm_id:
         description:
             - Name of the virtual machine to work with.
-        required: True
+        required: true
         type: str
     vm_id_type:
         description:
@@ -67,12 +67,12 @@ options:
     vm_username:
         description:
             - The user to login in to the virtual machine.
-        required: True
+        required: true
         type: str
     vm_password:
         description:
             - The password used to login-in to the virtual machine.
-        required: True
+        required: true
         type: str
     directory:
         description:
@@ -85,7 +85,7 @@ options:
                 description:
                 - Operation to perform.
                 type: str
-                required: True
+                required: true
                 choices: [ 'create', 'delete', 'mktemp' ]
             path:
                 type: str
@@ -106,8 +106,8 @@ options:
                 type: bool
                 description:
                 - Not required.
-                default: False
-        required: False
+                default: false
+        required: false
         type: dict
     copy:
         description:
@@ -116,19 +116,19 @@ options:
             src:
                 description:
                 - File source absolute or relative.
-                required: True
+                required: true
                 type: str
             dest:
                 description:
                 - File destination, path must be exist.
-                required: True
+                required: true
                 type: str
             overwrite:
                 description:
                 - Overwrite or not.
                 type: bool
-                default: False
-        required: False
+                default: false
+        required: false
         type: dict
     fetch:
         description:
@@ -138,14 +138,14 @@ options:
                 description:
                 - The file on the remote system to fetch.
                 - This I(must) be a file, not a directory.
-                required: True
+                required: true
                 type: str
             dest:
                 description:
                 - File destination on localhost, path must be exist.
-                required: True
+                required: true
                 type: str
-        required: False
+        required: false
         type: dict
     timeout:
         description:

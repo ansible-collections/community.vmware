@@ -20,7 +20,7 @@ options:
     description:
     - The ESXi hostname on which to gather iSCSI settings.
     type: str
-    required: True
+    required: true
 extends_documentation_fragment:
   - community.vmware.vmware.documentation
 '''

@@ -56,7 +56,7 @@ options:
    datacenter:
      description:
      - The datacenter name to which virtual machine belongs to.
-     required: True
+     required: true
      type: str
    use_instance_uuid:
      description:
@@ -115,7 +115,7 @@ options:
            - The primary machine holding the RDM uses the default C(False).
            - The secondary machine holding the RDM uses C(True).
          type: bool
-         default: False
+         default: false
        compatibility_mode:
          description: Compatibility mode for raw devices. Required when disk type C(type) is set to C(rdm).
          type: str
@@ -126,7 +126,7 @@ options:
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
            - Sharing can only be set if C(type) is set to C(eagerzeroedthick) or C(rdm).
          type: bool
-         default: False
+         default: false
        datastore:
          description:
            - Name of datastore or datastore cluster to be used for the disk.
@@ -159,7 +159,7 @@ options:
            - Valid value range from 0 to 14 for NVME controller.
            - Valid value range from 0 to 1 for IDE controller.
          type: int
-         required: True
+         required: true
        scsi_type:
          description:
            - Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.
@@ -169,7 +169,7 @@ options:
        destroy:
          description: If C(state) is C(absent), make sure the disk file is deleted from the datastore. Added in version 2.10.
          type: bool
-         default: True
+         default: true
        filename:
          description:
            - Existing disk image to be used. Filename must already exist on the datastore.

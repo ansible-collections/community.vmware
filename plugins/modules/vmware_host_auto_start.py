@@ -21,7 +21,7 @@ options:
     description:
     - ESXi hostname where the VM to set auto power on or off exists.
     type: str
-    required: True
+    required: true
   name:
     description:
     - VM name to set auto power on or off.
@@ -52,7 +52,7 @@ options:
         description:
         - Enable automatically start or stop of virtual machines.
         type: bool
-        default: False
+        default: false
       start_delay:
         description:
         - Default auto start delay in seconds.
@@ -75,7 +75,7 @@ options:
         - If this parameter is enabled to powers on the next virtual machine without waiting for the delay to pass.
         - However, the virtual machine must have VMware Tools installed.
         type: bool
-        default: False
+        default: false
   power_info:
     description:
     - Startup or shutdown settings of virtual machine.

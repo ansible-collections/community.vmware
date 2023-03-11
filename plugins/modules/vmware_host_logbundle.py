@@ -22,12 +22,12 @@ options:
       description:
         - Name of the host system to fetch the logbundle.
       type: str
-      required: True
+      required: true
     dest:
       description:
         - file destination on localhost, path must be exist.
       type: str
-      required: True
+      required: true
     manifests:
       description:
         - Logs to include in the logbundle file.
@@ -89,12 +89,12 @@ options:
         - IntegrityChecks:md5sums
       type: list
       elements: str
-      required: False
+      required: false
     performance_data:
       description:
         - Gather performance data for ESXi.
       type: dict
-      required: False
+      required: false
       suboptions:
         duration:
           description:

@@ -61,7 +61,7 @@ options:
    use_instance_uuid:
      description:
        - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: False
+     default: false
      type: bool
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

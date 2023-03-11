@@ -24,17 +24,17 @@ options:
     local_user_name:
         description:
             - The local user name to be changed.
-        required: True
+        required: true
         type: str
     local_user_password:
         description:
             - The password to be set.
-        required: False
+        required: false
         type: str
     local_user_description:
         description:
             - Description for the user.
-        required: False
+        required: false
         type: str
     state:
         description:

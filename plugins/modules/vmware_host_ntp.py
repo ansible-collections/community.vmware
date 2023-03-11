@@ -37,7 +37,7 @@ options:
     - "IP or FQDN of NTP server(s)."
     - This accepts a list of NTP servers. For multiple servers, please look at the examples.
     type: list
-    required: True
+    required: true
     elements: str
   state:
     description:

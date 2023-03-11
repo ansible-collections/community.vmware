@@ -162,13 +162,13 @@ rule_set_state:
                 "rule_set_state": {
                     "localhost.localdomain": {
                         "CIMHttpServer": {
-                            "current_state": False,
-                            "desired_state": False,
-                            "previous_state": True,
+                            "current_state": false,
+                            "desired_state": false,
+                            "previous_state": true,
                             "allowed_hosts": {
-                                "current_allowed_all": True,
-                                "previous_allowed_all": True,
-                                "desired_allowed_all": True,
+                                "current_allowed_all": true,
+                                "previous_allowed_all": true,
+                                "desired_allowed_all": true,
                                 "current_allowed_ip": [],
                                 "previous_allowed_ip": [],
                                 "desired_allowed_ip": [],
@@ -178,13 +178,13 @@ rule_set_state:
                             }
                         },
                         "remoteSerialPort": {
-                            "current_state": True,
-                            "desired_state": True,
-                            "previous_state": True,
+                            "current_state": true,
+                            "desired_state": true,
+                            "previous_state": true,
                             "allowed_hosts": {
-                                "current_allowed_all": False,
-                                "previous_allowed_all": True,
-                                "desired_allowed_all": False,
+                                "current_allowed_all": false,
+                                "previous_allowed_all": true,
+                                "desired_allowed_all": false,
                                 "current_allowed_ip": ["192.168.100.11"],
                                 "previous_allowed_ip": [],
                                 "desired_allowed_ip": ["192.168.100.11"],

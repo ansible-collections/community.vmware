@@ -22,7 +22,7 @@ options:
       description:
         - Name of the host system to fetch the manifests for logbundle.
       type: str
-      required: True
+      required: true
 extends_documentation_fragment:
     - community.vmware.vmware.documentation
 '''
