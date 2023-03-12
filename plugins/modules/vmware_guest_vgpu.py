@@ -74,12 +74,12 @@ options:
    force:
      description:
        - Force operation.
-     default: False
+     default: false
      type: bool
    use_instance_uuid:
      description:
        - Whether to use the VMware instance UUID rather than the BIOS UUID.
-     default: False
+     default: false
      type: bool
    cluster:
      description:

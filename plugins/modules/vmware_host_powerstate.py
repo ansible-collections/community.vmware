@@ -46,7 +46,7 @@ options:
     - 'If C(state) set to C(power-down-to-standby) and C(force) to C(true), then all powered off VMs will evacuated.'
     - 'Not applicable if C(state) set to C(power-up-from-standby).'
     type: bool
-    default: False
+    default: false
   timeout:
     description:
     - 'This parameter defines timeout for C(state) set to C(power-down-to-standby) or C(power-up-from-standby).'

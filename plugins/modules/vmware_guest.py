@@ -477,7 +477,7 @@ options:
   delete_from_inventory:
     description:
     - Whether to delete Virtual machine from inventory or delete from disk.
-    default: False
+    default: false
     type: bool
   datacenter:
     description:

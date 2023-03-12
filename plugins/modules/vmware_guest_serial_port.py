@@ -42,13 +42,13 @@ options:
     description:
       - A list of backings for serial ports.
       - 'C(backing_type) (str): is required to add or reconfigure or remove an existing serial port.'
-    required: True
+    required: true
     suboptions:
       backing_type:
         description:
           - Backing type is required for the serial ports to be added or reconfigured or removed.
         type: str
-        required: True
+        required: true
         aliases:
           - type
       state:
@@ -67,7 +67,7 @@ options:
         description:
           - Enables CPU yield behavior.
         type: bool
-        default: True
+        default: true
       pipe_name:
         description:
           - Pipe name for the host pipe.
@@ -87,7 +87,7 @@ options:
           - Enables optimized data transfer over the pipe.
           - Required when I(backing_type=pipe).
         type: bool
-        default: False
+        default: false
       service_uri:
         description:
           - Identifies the local host or a system on the network, depending on the value of I(direction).

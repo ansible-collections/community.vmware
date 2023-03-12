@@ -36,20 +36,20 @@ options:
     description:
     - Interface name, like vmnic0.
     type: str
-    required: True
+    required: true
   num_virt_func:
     description:
     - number of functions to activate on interface.
     - 0 means SR-IOV disabled.
     - number greater than 0 means SR-IOV enabled.
     type: int
-    required: True
+    required: true
   sriov_on:
     description:
     - optional parameter, related to C(num_virt_func).
     - SR-IOV can be enabled only if C(num_virt_func) > 0.
     type: bool
-    required: False
+    required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''

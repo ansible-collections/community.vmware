@@ -47,7 +47,7 @@ options:
     - To remove all Exception Users, I(state=set) the empty list.
     type: list
     elements: str
-    required: True
+    required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

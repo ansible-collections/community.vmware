@@ -22,32 +22,32 @@ options:
     esxi_hostname:
         description:
             - ESXi hostname to be managed
-        required: True
+        required: true
         type: str
     device:
         description:
             - VMK interface name
-        required: True
+        required: true
         type: str
     current_switch_name:
         description:
             - Switch VMK interface is currently on
-        required: True
+        required: true
         type: str
     current_portgroup_name:
         description:
             - Portgroup name VMK interface is currently on
-        required: True
+        required: true
         type: str
     migrate_switch_name:
         description:
             - Switch name to migrate VMK interface to
-        required: True
+        required: true
         type: str
     migrate_portgroup_name:
         description:
             - Portgroup name to migrate VMK interface to
-        required: True
+        required: true
         type: str
     migrate_vlan_id:
         version_added: '2.4.0'

@@ -27,20 +27,20 @@ options:
     switch:
         description:
             - vSwitch to modify.
-        required: True
+        required: true
         aliases: [ 'switch_name', 'vswitch' ]
         type: str
     portgroup:
         description:
             - Portgroup name to add.
-        required: True
+        required: true
         aliases: [ 'portgroup_name' ]
         type: str
     vlan_id:
         description:
             - VLAN ID to assign to portgroup.
             - Set to 0 (no VLAN tagging) by default.
-        required: False
+        required: false
         default: 0
         aliases: [ 'vlan' ]
         type: int
@@ -60,7 +60,7 @@ options:
             mac_changes:
                 type: bool
                 description: Indicates whether mac changes are allowed.
-        required: False
+        required: false
         aliases: [ 'security_policy', 'network_policy' ]
         type: dict
     teaming:
@@ -95,7 +95,7 @@ options:
                 - List of standby adapters used for failover.
                 - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
                 elements: str
-        required: False
+        required: false
         aliases: [ 'teaming_policy' ]
         type: dict
     traffic_shaping:
@@ -114,7 +114,7 @@ options:
             burst_size:
                 type: int
                 description: Burst size (KB).
-        required: False
+        required: false
         type: dict
     cluster_name:
         description:

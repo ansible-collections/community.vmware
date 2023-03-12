@@ -24,7 +24,7 @@ options:
     esxi_hostname:
         description:
             - Name of the host as defined in vCenter.
-        required: True
+        required: true
         type: str
     vsan:
         description:
@@ -33,19 +33,19 @@ options:
             - 'ensureObjectAccessibility'
             - 'evacuateAllData'
             - 'noAction'
-        required: False
+        required: false
         aliases: [ 'vsan_mode' ]
         type: str
     evacuate:
         description:
             - If set to C(True), evacuate all powered off VMs.
-        default: False
-        required: False
+        default: false
+        required: false
         type: bool
     timeout:
         description:
             - Specify a timeout for the operation.
-        required: False
+        required: false
         default: 0
         type: int
     state:
@@ -55,7 +55,7 @@ options:
             - present
             - absent
         default: present
-        required: False
+        required: false
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

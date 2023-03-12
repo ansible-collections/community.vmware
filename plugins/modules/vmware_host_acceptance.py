@@ -37,7 +37,7 @@ options:
     - 'If set to C(list), then will return current acceptance level of given host system/s.'
     - If set to C(present), then will set given acceptance level.
     choices: [ list, present ]
-    required: False
+    required: false
     default: 'list'
     type: str
   acceptance_level:
@@ -48,7 +48,7 @@ options:
     - If set to C(vmware_accepted), then accept VIBs that have been accepted by VMware.
     - If set to C(community), then accept all VIBs, even those that are not signed.
     choices: [ community, partner, vmware_accepted, vmware_certified ]
-    required: False
+    required: false
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

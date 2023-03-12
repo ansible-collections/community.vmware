@@ -21,7 +21,7 @@ options:
      description:
      - Name of the ESXi host to work with.
      - This is a required parameter
-     required: True
+     required: true
      type: str
    state:
      description:
@@ -40,7 +40,7 @@ options:
           description:
           - Name of the attribute.
           type: str
-          required: True
+          required: true
         value:
           description:
           - Value of the attribute.

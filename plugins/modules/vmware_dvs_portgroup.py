@@ -321,7 +321,7 @@ options:
                 description:
                 - The maximum number of bytes to allow in a burst.
                 - Ignored if C(inherited) is true.
-        required: False
+        required: false
         type: dict
         version_added: '2.3.0'
 extends_documentation_fragment:

@@ -59,7 +59,7 @@ options:
    datacenter:
      description:
      - Name of the datacenter.
-     required: True
+     required: true
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

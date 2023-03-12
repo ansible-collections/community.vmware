@@ -33,7 +33,7 @@ options:
       - DistributedVirtualSwitch
       - DistributedVirtualPortgroup
       - Datastore
-    required: True
+    required: true
   object_name:
     description:
       - Name of the object to work with.

@@ -79,7 +79,7 @@ options:
    datacenter:
      description:
      - Destination datacenter for the deploy operation.
-     required: True
+     required: true
      type: str
    snapshot_name:
      description:
@@ -97,23 +97,23 @@ options:
      - Note that VMware Tools are required for this flag.
      - If virtual machine is powered off or VMware Tools are not available, then this flag is set to C(false).
      - If virtual machine does not provide capability to take quiesce snapshot, then this flag is set to C(false).
-     required: False
+     required: false
      type: bool
-     default: False
+     default: false
    memory_dump:
      description:
      - If set to C(true), memory dump of virtual machine is also included in snapshot.
      - Note that memory snapshots take time and resources, this will take longer time to create.
      - If virtual machine does not provide capability to take memory snapshot, then this flag is set to C(false).
-     required: False
+     required: false
      type: bool
-     default: False
+     default: false
    remove_children:
      description:
      - If set to C(true) and state is set to C(absent), then entire snapshot subtree is set for removal.
-     required: False
+     required: false
      type: bool
-     default: False
+     default: false
    new_snapshot_name:
      description:
      - Value to rename the existing snapshot to.

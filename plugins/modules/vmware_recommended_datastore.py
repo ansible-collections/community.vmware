@@ -27,12 +27,12 @@ options:
     description:
     - Name of the datacenter.
     type: str
-    required: True
+    required: true
   datastore_cluster:
     description:
     - Name of the datastore cluster.
     type: str
-    required: True
+    required: true
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 """

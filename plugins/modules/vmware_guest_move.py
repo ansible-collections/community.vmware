@@ -60,12 +60,12 @@ options:
             - '   dest_folder: /folder1/datacenter1/vm'
             - '   dest_folder: folder1/datacenter1/vm'
             - '   dest_folder: /folder1/datacenter1/vm/folder2'
-        required: True
+        required: true
         type: str
    datacenter:
         description:
             - Destination datacenter for the move operation
-        required: True
+        required: true
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

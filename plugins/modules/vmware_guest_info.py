@@ -64,7 +64,7 @@ options:
    datacenter:
      description:
      - Destination datacenter for the deploy operation
-     required: True
+     required: true
      type: str
    tags:
      description:
@@ -106,7 +106,7 @@ options:
      - Only valid when C(schema) is C(vsphere).
      type: list
      elements: str
-     required: False
+     required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

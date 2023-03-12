@@ -31,7 +31,7 @@ options:
       - User can also specify tag and category as dict, when tag or category contains colon.
         See example for more information. Added in version 2.10.
       - User can skip category name if you have unique tag names.
-      required: True
+      required: true
       type: list
       elements: raw
     state:
@@ -45,7 +45,7 @@ options:
     object_type:
       description:
       - Type of object to work with.
-      required: True
+      required: true
       choices:
         - VirtualMachine
         - Datacenter
@@ -63,13 +63,13 @@ options:
       - Name of the object to work with.
       - For DistributedVirtualPortgroups the format should be "switch_name:portgroup_name"
       - Required if C(moid) is not set.
-      required: False
+      required: false
       type: str
     moid:
       description:
       - Managed object ID for the given object.
       - Required if C(object_name) is not set.
-      required: False
+      required: false
       type: str
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation

@@ -59,7 +59,7 @@ options:
    datacenter:
         description:
             - Destination datacenter where the virtual machine exists.
-        required: True
+        required: true
         type: str
    force_upgrade:
         description:
@@ -67,9 +67,9 @@ options:
             - "This is useful when VMware tools is too old and unable to detect the 'guestFamily' value."
             - 'Using this flag may sometime give unexpected results since module will override the default'
             - "behaviour of 'guestFamily' detection."
-        default: False
+        default: false
         type: bool
-        required: False
+        required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

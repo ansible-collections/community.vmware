@@ -35,9 +35,9 @@ options:
   show_tag:
     description:
     - Tags related to Host are shown if set to C(True).
-    default: False
+    default: false
     type: bool
-    required: False
+    required: false
   schema:
     description:
     - Specify the output schema desired.
@@ -62,7 +62,7 @@ options:
       - Only valid when C(schema) is C(vsphere).
     type: list
     elements: str
-    required: False
+    required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

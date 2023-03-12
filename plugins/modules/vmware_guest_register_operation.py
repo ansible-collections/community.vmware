@@ -43,7 +43,7 @@ options:
   name:
     description:
     - Specify VM name to be registered in the inventory.
-    required: True
+    required: true
     type: str
   uuid:
     description:
@@ -58,7 +58,7 @@ options:
   template:
     description:
     - Whether to register VM as a template.
-    default: False
+    default: false
     type: bool
   path:
     description:

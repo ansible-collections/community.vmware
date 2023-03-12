@@ -21,7 +21,7 @@ options:
     datacenter:
         description:
             - Name of the datacenter.
-        required: True
+        required: true
         type: str
     cluster:
         description:
@@ -45,12 +45,12 @@ options:
     resource_pool:
         description:
             - Resource pool name to manage.
-        required: True
+        required: true
         type: str
     cpu_expandable_reservations:
         description:
             - In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.
-        default: True
+        default: true
         type: bool
     cpu_reservation:
         description:
@@ -82,7 +82,7 @@ options:
     mem_expandable_reservations:
         description:
             - In a resource pool with an expandable reservation, the reservation on a resource pool can grow beyond the specified value.
-        default: True
+        default: true
         type: bool
     mem_reservation:
         description:

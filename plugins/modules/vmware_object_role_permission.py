@@ -27,7 +27,7 @@ options:
     description:
     - The role to be assigned permission.
     - User can also specify role name presented in Web UI. Supported added in 1.5.0.
-    required: True
+    required: true
     type: str
   principal:
     description:
@@ -44,7 +44,7 @@ options:
     description:
     - The object name to assigned permission.
     type: str
-    required: True
+    required: true
   object_type:
     description:
     - The object type being targeted.
@@ -57,7 +57,7 @@ options:
   recursive:
     description:
     - Should the permissions be recursively applied.
-    default: True
+    default: true
     type: bool
   state:
     description:
