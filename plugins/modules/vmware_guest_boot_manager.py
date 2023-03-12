@@ -63,18 +63,18 @@ options:
      type: int
    enter_bios_setup:
      description:
-     - If set to C(True), the virtual machine automatically enters BIOS setup the next time it boots.
+     - If set to C(true), the virtual machine automatically enters BIOS setup the next time it boots.
      - The virtual machine resets this flag, so that the machine boots proceeds normally.
      type: 'bool'
    boot_retry_enabled:
      description:
-     - If set to C(True), the virtual machine that fails to boot, will try to boot again after C(boot_retry_delay) is expired.
-     - If set to C(False), the virtual machine waits indefinitely for user intervention.
+     - If set to C(true), the virtual machine that fails to boot, will try to boot again after C(boot_retry_delay) is expired.
+     - If set to C(false), the virtual machine waits indefinitely for user intervention.
      type: 'bool'
    boot_retry_delay:
      description:
      - Specify the time in milliseconds between virtual machine boot failure and subsequent attempt to boot again.
-     - If set, will automatically set C(boot_retry_enabled) to C(True) as this parameter is required.
+     - If set, will automatically set C(boot_retry_enabled) to C(true) as this parameter is required.
      type: int
    boot_firmware:
      description:

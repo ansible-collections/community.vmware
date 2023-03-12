@@ -65,7 +65,7 @@ options:
      type: str
    show_tag:
      description:
-     - Tags related to Datastore are shown if set to C(True).
+     - Tags related to Datastore are shown if set to C(true).
      default: false
      type: bool
    properties:

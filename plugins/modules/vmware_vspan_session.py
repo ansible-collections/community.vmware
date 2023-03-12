@@ -24,13 +24,13 @@ options:
     switch:
         description:
             - The name of the distributed vSwitch on which to add or remove the mirroring session.
-        required: True
+        required: true
         aliases: [ 'switch_name' ]
         type: str
     name:
         description:
             - Name of the session.
-        required: True
+        required: true
         type: str
     state:
         choices:
@@ -38,7 +38,7 @@ options:
             - 'absent'
         description:
             - Create or remove the session.
-        required: True
+        required: true
         type: str
     session_type:
         default: 'dvPortMirror'
@@ -57,39 +57,39 @@ options:
               entities, and uplink ports name can be used as destination entities.
             - In C(dvPortMirror) session, Distributed Ports can be used as both source and
               destination entities.
-        required: False
+        required: false
         type: str
     enabled:
         type: bool
-        default: True
+        default: true
         description:
             - Whether the session is enabled.
     description:
         description:
             - The description for the session.
-        required: False
+        required: false
         type: str
     source_port_transmitted:
         description:
             - Source port for which transmitted packets are mirrored.
-        required: False
+        required: false
         type: str
     source_port_received:
         description:
             - Source port for which received packets are mirrored.
-        required: False
+        required: false
         type: str
     destination_port:
         description:
             - Destination port that received the mirrored packets.
             - Also any port designated in the value of this
               property can not match the source port in any of the Distributed Port Mirroring session.
-        required: False
+        required: false
         type: str
     encapsulation_vlan_id:
         description:
             - VLAN ID used to encapsulate the mirrored traffic.
-        required: False
+        required: false
         type: int
     strip_original_vlan:
         description:
@@ -98,28 +98,28 @@ options:
             - If C(encapsulationVlanId) has been set and this property is false, the frames will be double tagged
               with the original VLAN ID as the inner tag.
         type: bool
-        required: False
+        required: false
     mirrored_packet_length:
         description:
             - An integer that describes how much of each frame to mirror.
             - If unset, all of the frame would be mirrored.
             - Setting this property to a smaller value is useful when the consumer will look only at the headers.
             - The value cannot be less than 60.
-        required: False
+        required: false
         type: int
     normal_traffic_allowed:
         description:
             - Whether or not destination ports can send and receive "normal" traffic.
             - Setting this to false will make mirror ports be used solely for mirroring and not double as normal access ports.
         type: bool
-        required: False
+        required: false
     sampling_rate:
         description:
             - Sampling rate of the session.
             - If its value is n, one of every n packets is mirrored.
             - Valid values are between 1 to 65535.
         type: int
-        required: False
+        required: false
     source_vm_transmitted:
         description:
             - With this parameter it is possible, to add a NIC of a VM to a port mirroring session.
@@ -158,7 +158,7 @@ options:
                 description:
                 - Label of the network interface card to use.
                 type: str
-        required: False
+        required: false
         type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

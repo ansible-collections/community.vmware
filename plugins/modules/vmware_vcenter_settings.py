@@ -46,9 +46,9 @@ options:
         type: dict
         default: {
             max_connections: 50,
-            task_cleanup: True,
+            task_cleanup: true,
             task_retention: 30,
-            event_cleanup: True,
+            event_cleanup: true,
             event_retention: 30,
         }
     runtime_settings:
@@ -92,9 +92,9 @@ options:
         type: dict
         default: {
             timeout: 60,
-            query_limit: True,
+            query_limit: true,
             query_limit_size: 5000,
-            validation: True,
+            validation: true,
             validation_period: 1440,
         }
     mail:
@@ -123,7 +123,7 @@ options:
             snmp_receiver_1_enabled:
                 type: bool
                 description: Enable receiver.
-                default: True
+                default: true
             snmp_receiver_1_port:
                 type: int
                 description: Receiver port.
@@ -139,7 +139,7 @@ options:
             snmp_receiver_2_enabled:
                 type: bool
                 description: Enable receiver.
-                default: False
+                default: false
             snmp_receiver_2_port:
                 type: int
                 description: Receiver port.
@@ -155,7 +155,7 @@ options:
             snmp_receiver_3_enabled:
                 type: bool
                 description: Enable receiver.
-                default: False
+                default: false
             snmp_receiver_3_port:
                 type: int
                 description: Receiver port.
@@ -171,7 +171,7 @@ options:
             snmp_receiver_4_enabled:
                 type: bool
                 description: Enable receiver.
-                default: False
+                default: false
             snmp_receiver_4_port:
                 type: int
                 description: Receiver port.
@@ -183,19 +183,19 @@ options:
         type: dict
         default: {
             snmp_receiver_1_url: 'localhost',
-            snmp_receiver_1_enabled: True,
+            snmp_receiver_1_enabled: true,
             snmp_receiver_1_port: 162,
             snmp_receiver_1_community: 'public',
             snmp_receiver_2_url: '',
-            snmp_receiver_2_enabled: False,
+            snmp_receiver_2_enabled: false,
             snmp_receiver_2_port: 162,
             snmp_receiver_2_community: '',
             snmp_receiver_3_url: '',
-            snmp_receiver_3_enabled: False,
+            snmp_receiver_3_enabled: false,
             snmp_receiver_3_port: 162,
             snmp_receiver_3_community: '',
             snmp_receiver_4_url: '',
-            snmp_receiver_4_enabled: False,
+            snmp_receiver_4_enabled: false,
             snmp_receiver_4_port: 162,
             snmp_receiver_4_community: '',
         }

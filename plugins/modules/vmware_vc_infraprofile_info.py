@@ -27,35 +27,35 @@ options:
       description:
       - decryption_key argument for while doing import profile task as of now its not taken into account form API team.
       type: str
-      required: False
+      required: false
     encryption_key:
       description:
       - encryption_key argument for while doing import profile task as of now its not taken into account form API team.
       type: str
-      required: False
+      required: false
     api:
       description:
       - API which needs to be executed
       type: str
-      required: False
+      required: false
       choices: [ export, import, list, validate ]
     config_path:
       description:
       - Config file path which contains infra profile config JSON data, supports both relative and absolute path.
       - This parameter is required only when C(import),C(validate) APIs are being used.
       type: str
-      required: False
+      required: false
     profiles:
       description:
       - A list of profile names to be exported, imported, and validated.
       - This parameter is not required while running for List API, not for C(export),C(import) and C(validate).
       type: str
-      required: False
+      required: false
     description:
       description:
       - Description of about encryption or decryption key.
       type: str
-      required: False
+      required: false
 extends_documentation_fragment:
 - community.vmware.vmware_rest_client.documentation
 '''

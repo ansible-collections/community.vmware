@@ -117,7 +117,7 @@ options:
    gather_disk_controller_facts:
      description:
      - Whether to collect existing disk and USB controllers facts only.
-     - When this parameter is set to C(True), C(controllers) parameter will be ignored.
+     - When this parameter is set to C(true), C(controllers) parameter will be ignored.
      type: bool
      default: false
    sleep_time:

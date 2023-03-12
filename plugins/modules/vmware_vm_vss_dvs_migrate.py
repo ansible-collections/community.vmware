@@ -21,12 +21,12 @@ options:
     vm_name:
         description:
             - Name of the virtual machine to migrate to a dvSwitch
-        required: True
+        required: true
         type: str
     dvportgroup_name:
         description:
             - Name of the portgroup to migrate to the virtual machine to
-        required: True
+        required: true
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

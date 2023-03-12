@@ -43,7 +43,7 @@ options:
     type: str
   force_remove:
     description:
-    - If set to C(False) then prevents the role from being removed if any permissions are using it.
+    - If set to C(false) then prevents the role from being removed if any permissions are using it.
     default: false
     type: bool
   action:

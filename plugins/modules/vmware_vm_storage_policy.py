@@ -23,36 +23,36 @@ options:
   name:
     description:
     - Name of the storage policy to create, update, or delete.
-    required: True
+    required: true
     type: str
   description:
     description:
     - Description of the storage policy to create or update.
     - This parameter is ignored when C(state=absent).
     type: str
-    required: False
+    required: false
   tag_category:
     description:
     - Name of the pre-existing tag category to assign to the storage policy.
     - This parameter is ignored when C(state=absent).
     - This parameter is required when C(state=present).
-    required: False
+    required: false
     type: str
   tag_name:
     description:
     - Name of the pre-existing tag to assign to the storage policy.
     - This parameter is ignored when C(state=absent).
     - This parameter is required when C(state=present).
-    required: False
+    required: false
     type: str
   tag_affinity:
     description:
     - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement.
     - If set to C(false), the storage policy enforces that virtual machines require the absence of a tag for datastore placement.
     - This parameter is ignored when C(state=absent).
-    required: False
+    required: false
     type: bool
-    default: True
+    default: true
   state:
     description:
     - State of storage policy.

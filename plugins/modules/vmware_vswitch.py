@@ -75,7 +75,7 @@ options:
       mac_changes:
         type: bool
         description: Indicates whether mac changes are allowed.
-    required: False
+    required: false
     aliases: [ 'security_policy', 'network_policy' ]
     type: dict
   teaming:
@@ -111,7 +111,7 @@ options:
         - List of standby adapters used for failover.
         - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
         elements: str
-    required: False
+    required: false
     aliases: [ 'teaming_policy' ]
     type: dict
   traffic_shaping:
@@ -131,7 +131,7 @@ options:
       burst_size:
         type: int
         description: Burst size (KB).
-    required: False
+    required: false
     type: dict
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

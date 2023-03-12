@@ -31,7 +31,7 @@ options:
       - If set to C(vm), then information are gathered for virtual machines only.
       - If set to C(template), then information are gathered for virtual machine templates only.
       - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
-      required: False
+      required: false
       default: 'all'
       choices: [ all, vm, template ]
       type: str
@@ -56,14 +56,14 @@ options:
       type: str
     show_tag:
       description:
-        - Tags related to virtual machine are shown if set to C(True).
-      default: False
+        - Tags related to virtual machine are shown if set to C(true).
+      default: false
       type: bool
     show_allocated:
       version_added: '2.5.0'
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
-      default: False
+      default: false
       type: bool
     vm_name:
       description:

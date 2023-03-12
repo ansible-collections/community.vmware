@@ -98,7 +98,7 @@ DOCUMENTATION = r'''
         with_nested_properties:
             description:
             - This option transform flatten properties name to nested dictionary.
-            - From 1.10.0 and onwards, default value is set to C(True).
+            - From 1.10.0 and onwards, default value is set to C(true).
             type: bool
             default: true
         keyed_groups:

@@ -23,8 +23,8 @@ options:
   affinity_rule:
     default: true
     description:
-      - "If set to C(True), the DRS rule will be an Affinity rule."
-      - "If set to C(False), the DRS rule will be an Anti-Affinity rule."
+      - "If set to C(true), the DRS rule will be an Affinity rule."
+      - "If set to C(false), the DRS rule will be an Anti-Affinity rule."
       - "Effective only if C(state) is set to C(present)."
     type: bool
   datacenter:
@@ -47,7 +47,7 @@ options:
   enabled:
     default: false
     description:
-      - "If set to C(True), the DRS rule will be enabled."
+      - "If set to C(true), the DRS rule will be enabled."
       - "Effective only if C(state) is set to C(present)."
     type: bool
   host_group_name:
@@ -58,7 +58,7 @@ options:
   mandatory:
     default: false
     description:
-      - "If set to C(True), the DRS rule will be mandatory."
+      - "If set to C(true), the DRS rule will be mandatory."
       - "Effective only if C(state) is set to C(present)."
     type: bool
   state:

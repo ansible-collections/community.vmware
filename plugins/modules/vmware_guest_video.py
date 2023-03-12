@@ -59,14 +59,14 @@ options:
      type: str
    gather_video_facts:
      description:
-     - If set to C(True), return settings of the video card, other attributes are ignored.
-     - If set to C(False), will do reconfiguration and return video card settings.
+     - If set to C(true), return settings of the video card, other attributes are ignored.
+     - If set to C(false), will do reconfiguration and return video card settings.
      type: bool
      default: false
    use_auto_detect:
      description:
-     - 'If set to C(True), applies common video settings to the guest operating system, attributes C(display_number) and C(video_memory_mb) are ignored.'
-     - 'If set to C(False), the number of display and the total video memory will be reconfigured using C(display_number) and C(video_memory_mb).'
+     - 'If set to C(true), applies common video settings to the guest operating system, attributes C(display_number) and C(video_memory_mb) are ignored.'
+     - 'If set to C(false), the number of display and the total video memory will be reconfigured using C(display_number) and C(video_memory_mb).'
      type: bool
    display_number:
      description:

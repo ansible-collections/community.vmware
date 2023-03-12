@@ -75,8 +75,8 @@ options:
     update_on_demand:
       description:
       - Whether to download all content on demand.
-      - If set to C(True), all content will be downloaded on demand.
-      - If set to C(False) content will be downloaded ahead of time.
+      - If set to C(true), all content will be downloaded on demand.
+      - If set to C(false) content will be downloaded ahead of time.
       - This is required only if I(library_type) is set to C(subscribed).
       - This parameter is ignored, when I(state) is set to C(absent).
       type: bool
