@@ -26,7 +26,7 @@ options:
             enabled:
                 type: bool
                 description: Past day statistics collection enabled.
-                default: True
+                default: true
             interval_minutes:
                 type: int
                 description: Interval duration in minutes.
@@ -50,7 +50,7 @@ options:
             enabled:
                 type: bool
                 description: Past week statistics collection enabled.
-                default: True
+                default: true
             interval_minutes:
                 type: int
                 description: Interval duration in minutes.
@@ -74,7 +74,7 @@ options:
             enabled:
                 type: bool
                 description: Past month statistics collection enabled.
-                default: True
+                default: true
             interval_hours:
                 type: int
                 description: Interval duration in hours.
@@ -98,7 +98,7 @@ options:
             enabled:
                 type: bool
                 description: Past month statistics collection enabled.
-                default: True
+                default: true
             interval_days:
                 type: int
                 description: Interval duration in days.

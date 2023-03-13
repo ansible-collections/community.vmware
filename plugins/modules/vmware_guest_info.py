@@ -69,14 +69,14 @@ options:
    tags:
      description:
      - Whether to show tags or not.
-     - If set C(True), shows tags information. Returns a list of tag names.
-     - If set C(False), hides tags information.
+     - If set C(true), shows tags information. Returns a list of tag names.
+     - If set C(false), hides tags information.
      - vSphere Automation SDK is required.
      default: false
      type: bool
    tag_details:
      description:
-     - If set C(True), detail information about 'tags' returned.
+     - If set C(true), detail information about 'tags' returned.
      - Without this flag, the 'tags' returns a list of tag names.
      - With this flag, the 'tags' returns a list of dict about tag information with additional details like category name, category id, and tag id.
      - This parameter is added to maintain backward compatability.

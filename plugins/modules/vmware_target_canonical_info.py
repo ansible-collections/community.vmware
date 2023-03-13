@@ -24,7 +24,7 @@ options:
     description:
     - The target id based on order of scsi device.
     - version 2.6 onwards, this parameter is optional.
-    required: False
+    required: false
     type: int
   cluster_name:
     description:

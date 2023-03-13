@@ -51,7 +51,7 @@ options:
     type: str
   add_connected:
     description:
-    - If set to C(True), then the host should be connected as soon as it is added.
+    - If set to C(true), then the host should be connected as soon as it is added.
     - This parameter is ignored if state is set to a value other than C(present).
     default: true
     type: bool

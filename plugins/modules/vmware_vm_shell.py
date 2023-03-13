@@ -51,7 +51,7 @@ options:
     vm_id:
       description:
       - Name of the virtual machine to work with.
-      required: True
+      required: true
       type: str
     vm_id_type:
       description:
@@ -62,18 +62,18 @@ options:
     vm_username:
       description:
       - The user to login-in to the virtual machine.
-      required: True
+      required: true
       type: str
     vm_password:
       description:
       - The password used to login-in to the virtual machine.
-      required: True
+      required: true
       type: str
     vm_shell:
       description:
       - The absolute path to the program to start.
       - On Linux, shell is executed via bash.
-      required: True
+      required: true
       type: str
     vm_shell_args:
       description:
@@ -92,8 +92,8 @@ options:
       type: str
     wait_for_process:
       description:
-      - If set to C(True), module will wait for process to complete in the given virtual machine.
-      default: False
+      - If set to C(true), module will wait for process to complete in the given virtual machine.
+      default: false
       type: bool
     timeout:
       description:

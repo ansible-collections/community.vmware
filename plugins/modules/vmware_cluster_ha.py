@@ -43,7 +43,7 @@ options:
       - Whether HA restarts virtual machines after a host fails.
       - If set to C(enabled), HA restarts virtual machines after a host fails.
       - If set to C(disabled), HA does not restart virtual machines after a host fails.
-      - If C(enable) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(false), then this value is ignored.
       type: str
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
@@ -53,7 +53,7 @@ options:
       - If set to C(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
       - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
       - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
-      - If C(enable) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(false), then this value is ignored.
       type: str
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'

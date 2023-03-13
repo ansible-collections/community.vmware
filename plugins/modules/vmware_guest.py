@@ -621,7 +621,7 @@ options:
         existing_vm:
             type: bool
             description:
-            - If set to C(True), do OS customization on the specified virtual machine directly.
+            - If set to C(true), do OS customization on the specified virtual machine directly.
             - Common for Linux and Windows customization.
         dns_servers:
             type: list
@@ -678,7 +678,7 @@ options:
             description:
             - Number of autologon after reboot.
             - Specific to Windows customization.
-            - Ignored if C(autologon) is unset or set to C(False).
+            - Ignored if C(autologon) is unset or set to C(false).
             - If unset, 1 will be used.
         domainadmin:
             type: str

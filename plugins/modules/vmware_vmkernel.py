@@ -48,7 +48,7 @@ options:
     portgroup_name:
       description:
       - The name of the port group for the VMKernel interface.
-      required: True
+      required: true
       aliases: ['portgroup']
       type: str
     network:
@@ -101,44 +101,44 @@ options:
       - Enable VSAN traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     enable_vmotion:
       description:
       - Enable vMotion traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       - You cannot enable vMotion on an additional adapter if you already have an adapter with the vMotion TCP/IP stack configured.
       type: bool
-      default: False
+      default: false
     enable_mgmt:
       description:
       - Enable Management traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     enable_ft:
       description:
       - Enable Fault Tolerance traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     enable_provisioning:
       description:
       - Enable Provisioning traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     enable_replication:
       description:
       - Enable vSphere Replication traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     enable_replication_nfc:
       description:
       - Enable vSphere Replication NFC traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
-      default: False
+      default: false
     state:
       description:
       - If set to C(present), the VMKernel adapter will be created with the given specifications.
@@ -151,7 +151,7 @@ options:
       description:
       - Name of ESXi host to which VMKernel is to be managed.
       - "From version 2.5 onwards, this parameter is required."
-      required: True
+      required: true
       type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
