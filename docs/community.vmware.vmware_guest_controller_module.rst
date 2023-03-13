@@ -210,7 +210,7 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to collect existing disk and USB controllers facts only.</div>
-                        <div>When this parameter is set to <code>True</code>, <code>controllers</code> parameter will be ignored.</div>
+                        <div>When this parameter is set to <code>true</code>, <code>controllers</code> parameter will be ignored.</div>
                 </td>
             </tr>
             <tr>

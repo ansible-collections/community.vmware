@@ -1,0 +1,2 @@
+major_changes:
+  - Use true/false (lowercase) for boolean values in documentation and examples (https://github.com/ansible-collections/community.vmware/issues/1660).

@@ -48,8 +48,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, the DRS rule will be an Affinity rule.</div>
-                        <div>If set to <code>False</code>, the DRS rule will be an Anti-Affinity rule.</div>
+                        <div>If set to <code>true</code>, the DRS rule will be an Affinity rule.</div>
+                        <div>If set to <code>false</code>, the DRS rule will be an Anti-Affinity rule.</div>
                         <div>Effective only if <code>state</code> is set to <code>present</code>.</div>
                 </td>
             </tr>
@@ -101,7 +101,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, the DRS rule will be enabled.</div>
+                        <div>If set to <code>true</code>, the DRS rule will be enabled.</div>
                         <div>Effective only if <code>state</code> is set to <code>present</code>.</div>
                 </td>
             </tr>
@@ -138,7 +138,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, the DRS rule will be mandatory.</div>
+                        <div>If set to <code>true</code>, the DRS rule will be mandatory.</div>
                         <div>Effective only if <code>state</code> is set to <code>present</code>.</div>
                 </td>
             </tr>

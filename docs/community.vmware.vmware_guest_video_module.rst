@@ -127,8 +127,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, return settings of the video card, other attributes are ignored.</div>
-                        <div>If set to <code>False</code>, will do reconfiguration and return video card settings.</div>
+                        <div>If set to <code>true</code>, return settings of the video card, other attributes are ignored.</div>
+                        <div>If set to <code>false</code>, will do reconfiguration and return video card settings.</div>
                 </td>
             </tr>
             <tr>
@@ -303,8 +303,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, applies common video settings to the guest operating system, attributes <code>display_number</code> and <code>video_memory_mb</code> are ignored.</div>
-                        <div>If set to <code>False</code>, the number of display and the total video memory will be reconfigured using <code>display_number</code> and <code>video_memory_mb</code>.</div>
+                        <div>If set to <code>true</code>, applies common video settings to the guest operating system, attributes <code>display_number</code> and <code>video_memory_mb</code> are ignored.</div>
+                        <div>If set to <code>false</code>, the number of display and the total video memory will be reconfigured using <code>display_number</code> and <code>video_memory_mb</code>.</div>
                 </td>
             </tr>
             <tr>

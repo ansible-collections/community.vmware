@@ -288,7 +288,7 @@ Parameters
                 <td>
                         <div>Number of autologon after reboot.</div>
                         <div>Specific to Windows customization.</div>
-                        <div>Ignored if <code>autologon</code> is unset or set to <code>False</code>.</div>
+                        <div>Ignored if <code>autologon</code> is unset or set to <code>false</code>.</div>
                         <div>If unset, 1 will be used.</div>
                 </td>
             </tr>
@@ -399,7 +399,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, do OS customization on the specified virtual machine directly.</div>
+                        <div>If set to <code>true</code>, do OS customization on the specified virtual machine directly.</div>
                         <div>Common for Linux and Windows customization.</div>
                 </td>
             </tr>

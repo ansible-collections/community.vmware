@@ -293,8 +293,8 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to download all content on demand.</div>
-                        <div>If set to <code>True</code>, all content will be downloaded on demand.</div>
-                        <div>If set to <code>False</code> content will be downloaded ahead of time.</div>
+                        <div>If set to <code>true</code>, all content will be downloaded on demand.</div>
+                        <div>If set to <code>false</code> content will be downloaded ahead of time.</div>
                         <div>This is required only if <em>library_type</em> is set to <code>subscribed</code>.</div>
                         <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
                 </td>
@@ -333,7 +333,7 @@ Parameters
                 </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>False</code> when certificates are not trusted.</div>
+                        <div>Set to <code>false</code> when certificates are not trusted.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                 </td>
             </tr>

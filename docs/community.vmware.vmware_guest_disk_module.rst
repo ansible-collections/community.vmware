@@ -131,8 +131,8 @@ Parameters
                 </td>
                 <td>
                         <div>This value allows for the sharing of an RDM between two machines.</div>
-                        <div>The primary machine holding the RDM uses the default <code>False</code>.</div>
-                        <div>The secondary machine holding the RDM uses <code>True</code>.</div>
+                        <div>The primary machine holding the RDM uses the default <code>false</code>.</div>
+                        <div>The secondary machine holding the RDM uses <code>true</code>.</div>
                 </td>
             </tr>
             <tr>

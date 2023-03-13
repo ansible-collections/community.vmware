@@ -659,7 +659,7 @@ Parameters
                     </td>
                 <td>
                         <div>This option transform flatten properties name to nested dictionary.</div>
-                        <div>From 1.10.0 and onwards, default value is set to <code>True</code>.</div>
+                        <div>From 1.10.0 and onwards, default value is set to <code>true</code>.</div>
                 </td>
             </tr>
             <tr>
