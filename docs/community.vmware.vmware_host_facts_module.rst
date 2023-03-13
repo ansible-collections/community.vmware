@@ -205,7 +205,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Tags related to Host are shown if set to <code>True</code>.</div>
+                        <div>Tags related to Host are shown if set to <code>true</code>.</div>
                 </td>
             </tr>
             <tr>

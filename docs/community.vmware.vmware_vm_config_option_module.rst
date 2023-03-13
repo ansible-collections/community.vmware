@@ -154,8 +154,8 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The guest OS ID from the returned list when <code>get_guest_os_ids</code> is set to <code>True</code>, e.g., &#x27;rhel8_64Guest&#x27;.</div>
-                        <div>This parameter must be set when <code>get_config_options</code> is set to <code>True</code>.</div>
+                        <div>The guest OS ID from the returned list when <code>get_guest_os_ids</code> is set to <code>true</code>, e.g., &#x27;rhel8_64Guest&#x27;.</div>
+                        <div>This parameter must be set when <code>get_config_options</code> is set to <code>true</code>.</div>
                 </td>
             </tr>
             <tr>
@@ -170,7 +170,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The hardware version from the returned list when <code>get_hardware_versions</code> is set to <code>True</code>, e.g., &#x27;vmx-19&#x27;.</div>
+                        <div>The hardware version from the returned list when <code>get_hardware_versions</code> is set to <code>true</code>, e.g., &#x27;vmx-19&#x27;.</div>
                 </td>
             </tr>
             <tr>

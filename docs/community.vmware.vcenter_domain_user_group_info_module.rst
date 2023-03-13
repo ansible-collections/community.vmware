@@ -94,7 +94,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>exact_match</em> is <code>True</code>, it indicates the <em>search_string</em> passed should match a user or group name exactly.</div>
+                        <div>If <em>exact_match</em> is <code>true</code>, it indicates the <em>search_string</em> passed should match a user or group name exactly.</div>
                 </td>
             </tr>
             <tr>
@@ -113,7 +113,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>find_groups</em> is <code>True</code>, domain groups will be included in the result.</div>
+                        <div>If <em>find_groups</em> is <code>true</code>, domain groups will be included in the result.</div>
                 </td>
             </tr>
             <tr>
@@ -132,7 +132,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If <em>find_users</em> is <code>True</code>, domain users will be included in the result.</div>
+                        <div>If <em>find_users</em> is <code>true</code>, domain users will be included in the result.</div>
                 </td>
             </tr>
             <tr>

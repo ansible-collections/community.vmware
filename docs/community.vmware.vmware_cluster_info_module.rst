@@ -213,7 +213,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Tags related to cluster are shown if set to <code>True</code>.</div>
+                        <div>Tags related to cluster are shown if set to <code>true</code>.</div>
                 </td>
             </tr>
             <tr>

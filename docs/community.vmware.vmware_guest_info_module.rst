@@ -276,7 +276,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set <code>True</code>, detail information about &#x27;tags&#x27; returned.</div>
+                        <div>If set <code>true</code>, detail information about &#x27;tags&#x27; returned.</div>
                         <div>Without this flag, the &#x27;tags&#x27; returns a list of tag names.</div>
                         <div>With this flag, the &#x27;tags&#x27; returns a list of dict about tag information with additional details like category name, category id, and tag id.</div>
                         <div>This parameter is added to maintain backward compatability.</div>
@@ -299,8 +299,8 @@ Parameters
                 </td>
                 <td>
                         <div>Whether to show tags or not.</div>
-                        <div>If set <code>True</code>, shows tags information. Returns a list of tag names.</div>
-                        <div>If set <code>False</code>, hides tags information.</div>
+                        <div>If set <code>true</code>, shows tags information. Returns a list of tag names.</div>
+                        <div>If set <code>false</code>, hides tags information.</div>
                         <div>vSphere Automation SDK is required.</div>
                 </td>
             </tr>

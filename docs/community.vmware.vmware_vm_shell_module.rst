@@ -385,7 +385,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, module will wait for process to complete in the given virtual machine.</div>
+                        <div>If set to <code>true</code>, module will wait for process to complete in the given virtual machine.</div>
                 </td>
             </tr>
     </table>

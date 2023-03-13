@@ -71,7 +71,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>False</code> then prevents the role from being removed if any permissions are using it.</div>
+                        <div>If set to <code>false</code> then prevents the role from being removed if any permissions are using it.</div>
                 </td>
             </tr>
             <tr>

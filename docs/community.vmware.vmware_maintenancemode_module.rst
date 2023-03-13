@@ -65,7 +65,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, evacuate all powered off VMs.</div>
+                        <div>If set to <code>true</code>, evacuate all powered off VMs.</div>
                 </td>
             </tr>
             <tr>

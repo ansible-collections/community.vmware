@@ -86,7 +86,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div><code>True</code> to return the result from cache directly instead of running the full health check.</div>
+                        <div><code>true</code> to return the result from cache directly instead of running the full health check.</div>
                 </td>
             </tr>
             <tr>

@@ -92,7 +92,7 @@ Parameters
                 </td>
                 <td>
                         <div>For vSAN stretched clusters, reads to vSAN objects occur on the site the VM resides on.</div>
-                        <div>Setting to <code>True</code> will force reads across all mirrors.</div>
+                        <div>Setting to <code>true</code> will force reads across all mirrors.</div>
                 </td>
             </tr>
             <tr>

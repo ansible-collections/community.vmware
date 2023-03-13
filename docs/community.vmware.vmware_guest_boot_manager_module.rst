@@ -113,7 +113,7 @@ Parameters
                 </td>
                 <td>
                         <div>Specify the time in milliseconds between virtual machine boot failure and subsequent attempt to boot again.</div>
-                        <div>If set, will automatically set <code>boot_retry_enabled</code> to <code>True</code> as this parameter is required.</div>
+                        <div>If set, will automatically set <code>boot_retry_enabled</code> to <code>true</code> as this parameter is required.</div>
                 </td>
             </tr>
             <tr>
@@ -132,8 +132,8 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, the virtual machine that fails to boot, will try to boot again after <code>boot_retry_delay</code> is expired.</div>
-                        <div>If set to <code>False</code>, the virtual machine waits indefinitely for user intervention.</div>
+                        <div>If set to <code>true</code>, the virtual machine that fails to boot, will try to boot again after <code>boot_retry_delay</code> is expired.</div>
+                        <div>If set to <code>false</code>, the virtual machine waits indefinitely for user intervention.</div>
                 </td>
             </tr>
             <tr>
@@ -152,7 +152,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If set to <code>True</code>, the virtual machine automatically enters BIOS setup the next time it boots.</div>
+                        <div>If set to <code>true</code>, the virtual machine automatically enters BIOS setup the next time it boots.</div>
                         <div>The virtual machine resets this flag, so that the machine boots proceeds normally.</div>
                 </td>
             </tr>
