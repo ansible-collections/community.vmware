@@ -13,14 +13,14 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_local_role_manager
-short_description: Manage local roles on an ESXi host
+short_description: Manage local roles on an ESXi host or vCenter
 description:
-    - This module can be used to manage local roles on an ESXi host.
+    - This module can be used to manage local roles on an ESXi host or vCenter.
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 notes:
-    - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit roles
+    - Be sure that the user used for login, has the appropriate rights to create / delete / edit roles
 options:
   local_role_name:
     description:
@@ -70,11 +70,11 @@ EXAMPLES = r'''
     state: present
   delegate_to: localhost
 
-- name: Add local role with privileges to ESXi
+- name: Add local role with privileges to vCenter
   community.vmware.vmware_local_role_manager:
-    hostname: '{{ esxi_hostname }}'
-    username: '{{ esxi_username }}'
-    password: '{{ esxi_password }}'
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
     local_role_name: vmware_qa
     local_privilege_ids: [ 'Folder.Create', 'Folder.Delete']
     state: present
@@ -91,9 +91,9 @@ EXAMPLES = r'''
 
 - name: Add a privilege to an existing local role
   community.vmware.vmware_local_role_manager:
-    hostname: '{{ esxi_hostname }}'
-    username: '{{ esxi_username }}'
-    password: '{{ esxi_password }}'
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
     local_role_name: vmware_qa
     local_privilege_ids: [ 'Folder.Create' ]
     action: add
@@ -111,9 +111,9 @@ EXAMPLES = r'''
 
 - name: Set a privilege to an existing local role
   community.vmware.vmware_local_role_manager:
-    hostname: '{{ esxi_hostname }}'
-    username: '{{ esxi_username }}'
-    password: '{{ esxi_password }}'
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
     local_role_name: vmware_qa
     local_privilege_ids: [ 'Folder.Create' ]
     action: set
@@ -126,7 +126,7 @@ role_name:
     returned: always
     type: str
 role_id:
-    description: ESXi generated local role id
+    description: Generated local role id
     returned: always
     type: int
 privileges:
@@ -178,7 +178,7 @@ class VMwareLocalRoleManager(PyVmomi):
         if self.content.authorizationManager is None:
             self.module.fail_json(
                 msg="Failed to get local authorization manager settings.",
-                details="It seems that '%s' is a vCenter server instead of an ESXi server" % self.params['hostname']
+                details="It seems that '%s' does not support this functionality" % self.params['hostname']
             )
 
     def process_state(self):
