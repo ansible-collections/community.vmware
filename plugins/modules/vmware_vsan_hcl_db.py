@@ -13,6 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vsan_hcl_db
+version_added: '3.5.0'
 short_description: Manages the vSAN Hardware Compatibility List (HCL) database
 description:
   - Manages vSAN HCL db on vSphere
@@ -36,7 +37,7 @@ EXAMPLES = r'''
   ansible.builtin.get_url:
     url: https://partnerweb.vmware.com/service/vsan/all.json
     dest: hcl_db.json
-    force: yes
+    force: true
   delegate_to: localhost
 
 - name: Upload HCL db file to vCenter
@@ -92,7 +93,6 @@ def main():
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        supports_check_mode=True,
     )
 
     source = module.params['source']
