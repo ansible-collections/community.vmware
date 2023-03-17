@@ -12,13 +12,13 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_local_role_info
-short_description: Gather info about local roles on an ESXi host
+short_description: Gather info about local roles on an ESXi host or vCenter
 description:
-    - This module can be used to gather information about local role info on an ESXi host
+    - This module can be used to gather information about local role info on an ESXi host or vCenter
 author:
 - Abhijeet Kasurde (@Akasurde)
 notes:
-    - Be sure that the ESXi user used for login, has the appropriate rights to view roles
+    - Be sure that the user used for login, has the appropriate rights to view roles
     - The module returns a list of dict in version 2.8 and above.
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -26,7 +26,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Gather info about local role from an ESXi
+- name: Gather info about local role from an ESXi (or vCenter)
   community.vmware.vmware_local_role_info:
     hostname: '{{ esxi_hostname }}'
     username: '{{ esxi_username }}'
@@ -96,7 +96,7 @@ class VMwareLocalRoleInfo(PyVmomi):
         if self.content.authorizationManager is None:
             self.module.fail_json(
                 msg="Failed to get local authorization manager settings.",
-                details="It seems that '%s' is a vCenter server instead of an ESXi server" % self.params['hostname']
+                details="It seems that '%s' does not support this functionality" % self.params['hostname']
             )
 
     def gather_local_role_info(self):
