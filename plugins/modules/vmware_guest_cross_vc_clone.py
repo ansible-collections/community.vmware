@@ -111,7 +111,11 @@ options:
     required: false
     default: 'present'
     choices: [ 'present', 'poweredon' ]
-
+  timeout:
+    description:
+    - The timeout in seconds. When the timeout is reached, the module will fail.
+    type: int
+    default: 3600
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -219,12 +223,21 @@ class CrossVCCloneManager(PyVmomi):
         self.destination_vcenter_password = self.params['destination_vcenter_password']
         self.destination_vcenter_port = self.params.get('port', 443)
         self.destination_vcenter_validate_certs = self.params.get('destination_vcenter_validate_certs', None)
+        self.timeout = self.params.get('timeout')
 
     def get_new_vm_info(self, vm):
         # to check if vm has been cloned in the destination vc
+        # connect to destination VC
         # query for the vm in destination vc
         # get the host and datastore info
         # get the power status of the newly cloned vm
+        self.destination_content = connect_to_api(
+            self.module,
+            hostname=self.destination_vcenter,
+            username=self.destination_vcenter_username,
+            password=self.destination_vcenter_password,
+            port=self.destination_vcenter_port,
+            validate_certs=self.destination_vcenter_validate_certs)
         info = {}
         vm_obj = find_vm_by_name(content=self.destination_content, vm_name=vm)
         if vm_obj is None:
@@ -246,7 +259,7 @@ class CrossVCCloneManager(PyVmomi):
             self.module.fail_json(msg="Destination folder does not exist. Please refer to the documentation to correctly specify the folder.")
         vm_name = self.params['destination_vm_name']
         task = self.vm_obj.Clone(folder=vm_folder, name=vm_name, spec=self.clone_spec)
-        wait_for_task(task)
+        wait_for_task(task, timeout=self.timeout)
         if task.info.state == 'error':
             result = {'changed': False, 'failed': True, 'msg': task.info.error.msg}
         else:
@@ -349,7 +362,8 @@ def main():
         destination_resource_pool=dict(type='str', default=None),
         is_template=dict(type='bool', default=False),
         state=dict(type='str', default='present',
-                   choices=['present', 'poweredon'])
+                   choices=['present', 'poweredon']),
+        timeout=dict(type='int', default=3600)
     )
 
     module = AnsibleModule(
