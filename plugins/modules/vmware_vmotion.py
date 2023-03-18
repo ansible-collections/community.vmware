@@ -85,6 +85,7 @@ options:
       - The timeout in seconds. When the timeout is reached, the module will fail.
       type: int
       default: 3600
+      version_added: '3.4.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
