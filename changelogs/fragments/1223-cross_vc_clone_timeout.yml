@@ -1,4 +1,4 @@
 bugfixes:
-  - vmware_cross_vc_clone - New parameter timeout in order to allow clone running longer than 1 hour
-  - vmware_cross_vc_clone - Fix vim.fault.NotAuthenticated issue
+  - vmware_guest_cross_vc_clone - New parameter timeout in order to allow clone running longer than 1 hour
+  - vmware_guest_cross_vc_clone - Fix vim.fault.NotAuthenticated issue
     (https://github.com/ansible-collections/community.vmware/issues/1223).
