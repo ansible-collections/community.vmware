@@ -203,6 +203,8 @@ class VMwareMigrateVmk(object):
                     if vnic.spec.distributedVirtualPort.switchUuid == dvs.uuid:
                         return "migrate_vds_vss"
 
+        self.module.fail_json(msg='Unable to find the specified device %s.' % self.device)
+
 
 def main():
 
