@@ -23,11 +23,10 @@
         vswitch_pg_name_for_test: vSwitchForVMwareMigrateVmkPG
         dvswitch_pg_name_for_test: dvSwitchForVMwareMigrateVmkPG
         device_name: >-
-          {{ ( gather_host_facts_from_vcenter_result.ansible_facts.ansible_interfaces
+          vmk{{ ( gather_host_facts_from_vcenter_result.ansible_facts.ansible_interfaces
             | last
             | regex_replace('vmk(.*)', '\1')
             | int + 1 )
-            | regex_replace('(.*)', 'vmk\1')
           }}
 
     - name: "Gather vSwitch info"
@@ -160,80 +159,81 @@
         that:
           - prepare_integration_tests_result.changed is sameas true
 
-- name: "Migrate Management vmk from vSwitch to dvSwitch"
-  vmware_migrate_vmk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    device: "{{ device_name }}"
-    current_switch_name: "{{ switch1 }}"
-    current_portgroup_name: "{{ vswitch_pg_name_for_test }}"
-    migrate_switch_name: "{{ dvswitch1 }}"
-    migrate_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
-  register: migrate_management_vmk_vswitch_to_dvswitch_result
-
-- assert:
-    that:
-      - migrate_management_vmk_vswitch_to_dvswitch_result.changed is sameas true
-
-- name: "Migrate Management vmk from vSwitch to dvSwitch (idempotency check)"
-  vmware_migrate_vmk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    device: "{{ device_name }}"
-    current_switch_name: "{{ switch1 }}"
-    current_portgroup_name: "{{ vswitch_pg_name_for_test }}"
-    migrate_switch_name: "{{ dvswitch1 }}"
-    migrate_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
-  register: migrate_management_vmk_vswitch_to_dvswitch_idempotency_check_result
-
-- assert:
-    that:
-      - migrate_management_vmk_vswitch_to_dvswitch_idempotency_check_result.changed is sameas false
-
-- name: "Migrate Management vmk from dvSwitch to vSwitch"
-  vmware_migrate_vmk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    device: "{{ device_name }}"
-    current_switch_name: "{{ dvswitch1 }}"
-    current_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
-    migrate_switch_name: "{{ switch1 }}"
-    migrate_portgroup_name: "{{ vswitch_pg_name_for_test }}"
-  register: migrate_management_vmk_dvswitch_to_vswitch_result
-
-- assert:
-    that:
-      - migrate_management_vmk_dvswitch_to_vswitch_result.changed is sameas true
-
-- name: "Migrate Management vmk from dvSwitch to vSwitch (idempotency check)"
-  vmware_migrate_vmk:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: false
-    esxi_hostname: "{{ esxi1 }}"
-    device: "{{ device_name }}"
-    current_switch_name: "{{ dvswitch1 }}"
-    current_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
-    migrate_switch_name: "{{ switch1 }}"
-    migrate_portgroup_name: "{{ vswitch_pg_name_for_test }}"
-  register: migrate_management_vmk_dvswitch_to_vswitch_idempotency_check_result
-
-- assert:
-    that:
-      - migrate_management_vmk_dvswitch_to_vswitch_idempotency_check_result.changed is sameas false
-
-- name: "Delete the used objects for integration test"
+- name: "Run integration tests for vmware_migrate_vmk module"
   block:
+    - name: "Migrate Management vmk from vSwitch to dvSwitch"
+      vmware_migrate_vmk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        device: "{{ device_name }}"
+        current_switch_name: "{{ switch1 }}"
+        current_portgroup_name: "{{ vswitch_pg_name_for_test }}"
+        migrate_switch_name: "{{ dvswitch1 }}"
+        migrate_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
+      register: migrate_management_vmk_vswitch_to_dvswitch_result
+
+    - assert:
+        that:
+          - migrate_management_vmk_vswitch_to_dvswitch_result.changed is sameas true
+
+    - name: "Migrate Management vmk from vSwitch to dvSwitch (idempotency check)"
+      vmware_migrate_vmk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        device: "{{ device_name }}"
+        current_switch_name: "{{ switch1 }}"
+        current_portgroup_name: "{{ vswitch_pg_name_for_test }}"
+        migrate_switch_name: "{{ dvswitch1 }}"
+        migrate_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
+      register: migrate_management_vmk_vswitch_to_dvswitch_idempotency_check_result
+
+    - assert:
+        that:
+          - migrate_management_vmk_vswitch_to_dvswitch_idempotency_check_result.changed is sameas false
+
+    - name: "Migrate Management vmk from dvSwitch to vSwitch"
+      vmware_migrate_vmk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        device: "{{ device_name }}"
+        current_switch_name: "{{ dvswitch1 }}"
+        current_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
+        migrate_switch_name: "{{ switch1 }}"
+        migrate_portgroup_name: "{{ vswitch_pg_name_for_test }}"
+      register: migrate_management_vmk_dvswitch_to_vswitch_result
+
+    - assert:
+        that:
+          - migrate_management_vmk_dvswitch_to_vswitch_result.changed is sameas true
+
+    - name: "Migrate Management vmk from dvSwitch to vSwitch (idempotency check)"
+      vmware_migrate_vmk:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        esxi_hostname: "{{ esxi1 }}"
+        device: "{{ device_name }}"
+        current_switch_name: "{{ dvswitch1 }}"
+        current_portgroup_name: "{{ dvswitch_pg_name_for_test }}"
+        migrate_switch_name: "{{ switch1 }}"
+        migrate_portgroup_name: "{{ vswitch_pg_name_for_test }}"
+      register: migrate_management_vmk_dvswitch_to_vswitch_idempotency_check_result
+
+    - assert:
+        that:
+          - migrate_management_vmk_dvswitch_to_vswitch_idempotency_check_result.changed is sameas false
+
+  always:
     - name: "Delete the used vmkernel for integration test"
       vmware_vmkernel:
         hostname: "{{ vcenter_hostname }}"
@@ -245,11 +245,6 @@
         portgroup_name: "{{ vswitch_pg_name_for_test }}"
         device: "{{ device_name }}"
         state: absent
-      register: delete_vmk_result
-
-    - assert:
-        that:
-          - delete_vmk_result.changed is sameas true
 
     - name: "Delete the used dvSwitch for integration test"
       vmware_dvswitch:
@@ -261,27 +256,6 @@
         switch: "{{ dvswitch1 }}"
         uplink_quantity: 1
         state: absent
-      register: delete_dvswitch_result
-
-    - assert:
-        that:
-          - delete_dvswitch_result.changed is sameas true
-
-    - name: "Delete the used port group for integration test"
-      vmware_portgroup:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        esxi_hostname: "{{ esxi1 }}"
-        switch: "{{ switch1 }}"
-        portgroup: "{{ vswitch_pg_name_for_test }}"
-        state: absent
-      register: delete_vswitch_pg_result
-
-    - assert:
-        that:
-          - delete_vswitch_pg_result.changed is sameas true
 
     - name: "Delete the used vSwitch for integration test"
       vmware_vswitch:
@@ -292,8 +266,3 @@
         esxi_hostname: "{{ esxi1 }}"
         switch: "{{ switch1 }}"
         state: absent
-      register: delete_vswitch_result
-
-    - assert:
-        that:
-          - delete_vswitch_result.changed is sameas true
