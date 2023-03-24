@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_vm_info - Add several parameters to skip discovering some information (https://github.com/ansible-collections/community.vmware/issues/1682)
