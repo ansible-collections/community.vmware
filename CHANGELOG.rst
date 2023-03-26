@@ -5,6 +5,37 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.5.0
+======
+
+Major Changes
+-------------
+
+- Use true/false (lowercase) for boolean values in documentation and examples (https://github.com/ansible-collections/community.vmware/issues/1660).
+
+Minor Changes
+-------------
+
+- vmware_migrate_vmk - Improve error handling (https://github.com/ansible-collections/community.vmware/issues/1118).
+- vmware_tag - Allow to use category names for tag management (https://github.com/ansible-collections/community.vmware/issues/1614).
+- vmware_tag_manager - Improve performance of tag attachments and detachments (https://github.com/ansible-collections/community.vmware/issues/1603).
+- vmware_tools - ansible_vmware_guest_uuid added for easier use of vmware_tools connection plugin with vmware_vm_inventory plugin
+- vmware_vm_info - Add several parameters to skip discovering some information (https://github.com/ansible-collections/community.vmware/issues/1682)
+
+Bugfixes
+--------
+
+- vmware_cross_vc_clone - Fix SSL Thumbprint validation to ignore if destination_vcenter_validate_certs is false (https://github.com/ansible-collections/community.vmware/issues/1433).
+- vmware_guest - Fixes adding new NVDIMM device issue by connecting to ESXi host (https://github.com/ansible-collections/community.vmware/issues/1644).
+- vmware_guest_cross_vc_clone - Fix vim.fault.NotAuthenticated issue (https://github.com/ansible-collections/community.vmware/issues/1223).
+- vmware_guest_cross_vc_clone - New parameter timeout in order to allow clone running longer than 1 hour
+- vmware_tag - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1603).
+
+New Modules
+-----------
+
+- vmware_vsan_hcl_db - Manages the vSAN Hardware Compatibility List (HCL) database
+
 v3.4.0
 ======
 
@@ -14,7 +45,7 @@ Minor Changes
 - vmware_guest_disk - Add support for IDE disk add, remove or reconfigure, and change to gather same VM disk info as in vmware_guest_disk_info (https://github.com/ansible-collections/community.vmware/issues/1428).
 - vmware_guest_disk - Extend return value documentation for vmware_guest_disk (https://github.com/ansible-collections/community.vmware/pull/1641)
 - vmware_guest_disk_info - Move gather VM disk info function to vm_device_helper.py (https://github.com/ansible-collections/community.vmware/issues/1617)
-- vmware_vmotion - New parameter timeout in order to allow vmotions running longer than 1 hour (https://github.com/ansible-collections/community.vmware/pull/1629).
+- vmware_vmotion - New parameter timeout in order to allow vmotions running longer than 1 hour (https://github.com/ansible-collections/community.vmware/pulls/1629).
 
 Bugfixes
 --------

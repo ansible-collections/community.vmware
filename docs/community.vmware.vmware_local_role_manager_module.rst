@@ -5,7 +5,7 @@
 community.vmware.vmware_local_role_manager
 ******************************************
 
-**Manage local roles on an ESXi host**
+**Manage local roles on an ESXi host or vCenter**
 
 
 
@@ -16,7 +16,7 @@ community.vmware.vmware_local_role_manager
 
 Synopsis
 --------
-- This module can be used to manage local roles on an ESXi host.
+- This module can be used to manage local roles on an ESXi host or vCenter.
 
 
 
@@ -263,7 +263,7 @@ Notes
 -----
 
 .. note::
-   - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit roles
+   - Be sure that the user used for login, has the appropriate rights to create / delete / edit roles
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -282,11 +282,11 @@ Examples
         state: present
       delegate_to: localhost
 
-    - name: Add local role with privileges to ESXi
+    - name: Add local role with privileges to vCenter
       community.vmware.vmware_local_role_manager:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
         local_role_name: vmware_qa
         local_privilege_ids: [ 'Folder.Create', 'Folder.Delete']
         state: present
@@ -303,9 +303,9 @@ Examples
 
     - name: Add a privilege to an existing local role
       community.vmware.vmware_local_role_manager:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
         local_role_name: vmware_qa
         local_privilege_ids: [ 'Folder.Create' ]
         action: add
@@ -323,9 +323,9 @@ Examples
 
     - name: Set a privilege to an existing local role
       community.vmware.vmware_local_role_manager:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
         local_role_name: vmware_qa
         local_privilege_ids: [ 'Folder.Create' ]
         action: set
@@ -431,7 +431,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 </td>
                 <td>always</td>
                 <td>
-                            <div>ESXi generated local role id</div>
+                            <div>Generated local role id</div>
                     <br/>
                 </td>
             </tr>

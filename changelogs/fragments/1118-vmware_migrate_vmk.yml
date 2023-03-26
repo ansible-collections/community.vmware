@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_migrate_vmk - Improve error handling (https://github.com/ansible-collections/community.vmware/issues/1118).
