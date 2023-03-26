@@ -1514,3 +1514,41 @@ releases:
     - 1637-pylint-issues.yml
     - 1641_extend_result_docs_guest_disk
     release_date: '2023-02-25'
+  3.5.0:
+    changes:
+      bugfixes:
+      - vmware_cross_vc_clone - Fix SSL Thumbprint validation to ignore if destination_vcenter_validate_certs
+        is false (https://github.com/ansible-collections/community.vmware/issues/1433).
+      - vmware_guest - Fixes adding new NVDIMM device issue by connecting to ESXi
+        host (https://github.com/ansible-collections/community.vmware/issues/1644).
+      - vmware_guest_cross_vc_clone - Fix vim.fault.NotAuthenticated issue (https://github.com/ansible-collections/community.vmware/issues/1223).
+      - vmware_guest_cross_vc_clone - New parameter timeout in order to allow clone
+        running longer than 1 hour
+      - vmware_tag - Fix a performance issue during tag processing (https://github.com/ansible-collections/community.vmware/issues/1603).
+      major_changes:
+      - Use true/false (lowercase) for boolean values in documentation and examples
+        (https://github.com/ansible-collections/community.vmware/issues/1660).
+      minor_changes:
+      - vmware_migrate_vmk - Improve error handling (https://github.com/ansible-collections/community.vmware/issues/1118).
+      - vmware_tag - Allow to use category names for tag management (https://github.com/ansible-collections/community.vmware/issues/1614).
+      - vmware_tag_manager - Improve performance of tag attachments and detachments
+        (https://github.com/ansible-collections/community.vmware/issues/1603).
+      - vmware_tools - ansible_vmware_guest_uuid added for easier use of vmware_tools
+        connection plugin with vmware_vm_inventory plugin
+      - vmware_vm_info - Add several parameters to skip discovering some information
+        (https://github.com/ansible-collections/community.vmware/issues/1682)
+    fragments:
+    - 1118-vmware_migrate_vmk.yml
+    - 1223-cross_vc_clone_timeout.yml
+    - 1603-fix_tagging_performance_issue.yml
+    - 1614-allow_to_use_category_names_for_tag_management.yml
+    - 1647-uuid_vmware_tools_connections.yml
+    - 1653-cross_vc_clone_ssl_thumbprint.yml
+    - 1657-vmware_guest.yml
+    - 1660_truthy.yml
+    - 1682_vmware_vm_info
+    modules:
+    - description: Manages the vSAN Hardware Compatibility List (HCL) database
+      name: vmware_vsan_hcl_db
+      namespace: ''
+    release_date: '2023-03-26'

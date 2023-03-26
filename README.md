@@ -202,8 +202,8 @@ Name | Description
 [community.vmware.vmware_host_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_user_manager_module.rst)|Manage users of ESXi
 [community.vmware.vmware_host_vmhba_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmhba_info_module.rst)|Gathers info about vmhbas available on the given ESXi host
 [community.vmware.vmware_host_vmnic_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_vmnic_info_module.rst)|Gathers info about vmnics available on the given ESXi host
-[community.vmware.vmware_local_role_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_info_module.rst)|Gather info about local roles on an ESXi host
-[community.vmware.vmware_local_role_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_manager_module.rst)|Manage local roles on an ESXi host
+[community.vmware.vmware_local_role_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_info_module.rst)|Gather info about local roles on an ESXi host or vCenter
+[community.vmware.vmware_local_role_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_role_manager_module.rst)|Manage local roles on an ESXi host or vCenter
 [community.vmware.vmware_local_user_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_user_info_module.rst)|Gather info about users on the given ESXi host
 [community.vmware.vmware_local_user_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_local_user_manager_module.rst)|Manage local users on an ESXi host
 [community.vmware.vmware_maintenancemode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_maintenancemode_module.rst)|Place a host into maintenance mode
@@ -237,6 +237,7 @@ Name | Description
 [community.vmware.vmware_vmkernel_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vmkernel_info_module.rst)|Gathers VMKernel info about an ESXi host
 [community.vmware.vmware_vmotion](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vmotion_module.rst)|Move a virtual machine using vMotion, and/or its vmdks using storage vMotion.
 [community.vmware.vmware_vsan_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_cluster_module.rst)|Configure VSAN clustering on an ESXi host
+[community.vmware.vmware_vsan_hcl_db](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_hcl_db_module.rst)|Manages the vSAN Hardware Compatibility List (HCL) database
 [community.vmware.vmware_vsan_health_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_health_info_module.rst)|Gather information about a VMware vSAN cluster's health
 [community.vmware.vmware_vspan_session](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vspan_session_module.rst)|Create or remove a Port Mirroring session.
 [community.vmware.vmware_vswitch](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_module.rst)|Manage a VMware Standard Switch to an ESXi host.
