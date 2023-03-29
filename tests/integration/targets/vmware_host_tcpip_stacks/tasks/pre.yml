@@ -66,21 +66,36 @@
     that:
       - vmkernel_vmotion_result.changed is sameas true
 
-- name: Gather vmk info
-  vmware_vmkernel_info:
+- name: Gather host facts
+  vmware_host_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi_hosts[0] }}"
-  register: vmk0_info_result
+    schema: vsphere
+  register: gather_host_facts_from_vcenter_result
 
-- name: set the variable of vmk0 ipaddr
+- name: Backup default stack
   set_fact:
-    vmk0_ipaddr: "{{ item.ipv4_address }}"
-  loop: "{{ vmk0_info_result.host_vmk_info[esxi_hosts[0]] }}"
+    default_stack_backup: "{{ item }}"
+  loop: "{{ gather_host_facts_from_vcenter_result.ansible_facts.config.network.netStackInstance }}"
   when:
-    - item.device == "vmk0"
+    - item.key == "defaultTcpipStack"
+
+- name: Backup provisioning stack
+  set_fact:
+    provisioning_stack_backup: "{{ item }}"
+  loop: "{{ gather_host_facts_from_vcenter_result.ansible_facts.config.network.netStackInstance }}"
+  when:
+    - item.key == "vSphereProvisioning"
+
+- name: Backup vmotion stack
+  set_fact:
+    vmotion_stack_backup: "{{ item }}"
+  loop: "{{ gather_host_facts_from_vcenter_result.ansible_facts.config.network.netStackInstance }}"
+  when:
+    - item.key == "vmotion"
 
 - name: set the variable for each vmk
   set_fact:
@@ -90,6 +105,8 @@
 - name: Make sure if defined the variables
   assert:
     that:
-      - vmk0_ipaddr is defined
+      - default_stack_backup is defined
+      - provisioning_stack_backup is defined
+      - vmotion_stack_backup is defined
       - provisioning_vmk is defined
       - vmotion_vmk is defined

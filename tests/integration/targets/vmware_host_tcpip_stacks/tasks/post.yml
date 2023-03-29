@@ -52,3 +52,27 @@
   loop:
     - provisioning
     - vmotion
+
+- name: Restore original configuration
+  vmware_host_tcpip_stacks:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_hostname: "{{ esxi_hosts[0] }}"
+    default:
+      hostname: "{{ default_stack_backup.dnsConfig.hostName }}"
+      domain: "{{ default_stack_backup.dnsConfig.domainName }}"
+      #preferred_dns: "{{ default_stack_backup.dnsConfig.address }}"
+      search_domains: "{{ default_stack_backup.dnsConfig.searchDomain }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
+      congestion_algorithm: "{{ default_stack_backup.congestionControlAlgorithm }}"
+      max_num_connections: "{{ default_stack_backup.requestedMaxNumberOfConnections }}"
+    provisioning:
+      gateway: "{{ provisioning_stack_backup.ipRouteConfig.defaultGateway }}"
+      congestion_algorithm: "{{ provisioning_stack_backup.congestionControlAlgorithm }}"
+      max_num_connections: "{{ provisioning_stack_backup.requestedMaxNumberOfConnections }}"
+    vmotion:
+      gateway: "{{ vmotion_stack_backup.ipRouteConfig.defaultGateway }}"
+      congestion_algorithm: "{{ vmotion_stack_backup.congestionControlAlgorithm }}"
+      max_num_connections: "{{ vmotion_stack_backup.requestedMaxNumberOfConnections }}"
