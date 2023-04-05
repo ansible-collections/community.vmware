@@ -167,7 +167,7 @@ class VSANInfoManager(PyVmomi):
 
         health = json.dumps(cluster_health, cls=VmomiSupport.VmomiJSONEncoder, sort_keys=True, strip_dynamic=True)
 
-        self.module.exit_json(changed=False, vsan_health_info=health)
+        self.module.exit_json(changed=False, vsan_health_info=json.loads(health))
 
 
 def main():
