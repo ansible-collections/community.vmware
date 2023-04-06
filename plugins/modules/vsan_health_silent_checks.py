@@ -13,6 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vsan_health_silent_checks
+version_added: '3.6.0'
 short_description: Silence vSAN health checks
 description:
   - Take a list of vSAN health checks and silence them
@@ -128,7 +129,6 @@ def main():
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        supports_check_mode=True,
     )
 
     api = VsanApi(module)
