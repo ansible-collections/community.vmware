@@ -96,26 +96,34 @@ class VsanApi(PyVmomi):
         apiVersion = vsanapiutils.GetLatestVmodlVersion(module.params['hostname'])
         vcMos = vsanapiutils.GetVsanVcMos(client_stub, context=ssl_context, version=apiVersion)
         self.vsanClusterHealthSystem = vcMos['vsan-cluster-health-system']
+        self.get_cluster()
 
-        self.cluster = None
-
-    def silence_checks(self):
+    def get_cluster(self):
         cluster_name = self.params.get('cluster_name')
-        if cluster_name:
-            self.cluster = self.find_cluster_by_name(cluster_name=cluster_name)
-            if self.cluster is None:
-                self.module.fail_json(msg="Cluster %s does not exist." % cluster_name)
+        self.cluster = self.find_cluster_by_name(cluster_name=cluster_name)
+        if self.cluster is None:
+            self.module.fail_json(msg=f"Cluster {cluster_name} does not exist.")
 
+    def process_state(self):
         kwargs = {'cluster': self.cluster}
-        checks = self.params.get('checks')
+        silent_checks = self.vsanClusterHealthSystem.VsanHealthGetVsanClusterSilentChecks(**kwargs)
+
         state = self.params.get('state')
         if state == 'present':
+            checks = [check for check in self.params.get('checks') if check not in silent_checks]
             kwargs['addSilentChecks'] = checks
         else:
+            checks = [check for check in self.params.get('checks') if check in silent_checks]
             kwargs['removeSilentChecks'] = checks
 
+        if not checks:
+            return False
+
         success = self.vsanClusterHealthSystem.VsanHealthSetVsanClusterSilentChecks(**kwargs)
-        self.module.exit_json(changed=success)
+        if not success:
+            raise Exception(f"Unknown error modifying checks {checks}")
+
+        return True
 
 
 def main():
@@ -133,7 +141,8 @@ def main():
 
     api = VsanApi(module)
     try:
-        api.silence_checks()
+        changed = api.process_state()
+        module.exit_json(changed=changed)
     except Exception as e:
         module.fail_json(msg=str(e))
 
