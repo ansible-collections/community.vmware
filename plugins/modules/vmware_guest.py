@@ -3124,7 +3124,10 @@ class PyVmomiHelper(PyVmomi):
                 task = vm.ReconfigVM_Task(vm_custom_spec)
                 self.wait_for_task(task)
                 if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'customvalues'}
+                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'advanced_settings'}
+
+            if self.params['customvalues']:
+                self.customize_customvalues(vm_obj=vm)
 
             if self.params['wait_for_ip_address'] or self.params['wait_for_customization'] or self.params['state'] in ['poweredon', 'powered-on', 'restarted']:
                 set_vm_power_state(self.content, vm, 'poweredon', force=False)
