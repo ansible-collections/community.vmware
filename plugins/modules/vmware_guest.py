@@ -110,6 +110,7 @@ options:
     - "The folder should include the datacenter. ESXi's datacenter is ha-datacenter."
     - This parameter is case sensitive.
     - 'If multiple machines are found with same name, this parameter is used to identify'
+    - 'uniqueness of the virtual machine. Added in Ansible 2.5.'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
