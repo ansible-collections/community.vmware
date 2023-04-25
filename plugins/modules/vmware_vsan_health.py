@@ -13,6 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vsan_health
+version_added: '3.6.0'
 short_description: Repair vSAN cluster objects
 description:
   - Repair absent or degraded vSAN objects immediately
@@ -109,7 +110,6 @@ def main():
 
     module = AnsibleModule(
         argument_spec=argument_spec,
-        supports_check_mode=True,
     )
 
     api = VsanApi(module)
