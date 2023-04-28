@@ -36,7 +36,7 @@ options:
     - Set or list acceptance level of the given ESXi host.
     - 'If set to C(list), then will return current acceptance level of given host system/s.'
     - If set to C(present), then will set given acceptance level.
-    choices: [ list, present ]
+    choices: [ 'list', 'present' ]
     required: false
     default: 'list'
     type: str
