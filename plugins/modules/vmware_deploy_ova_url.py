@@ -190,7 +190,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     set_vm_power_state)
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible.module_utils.six.moves.urllib.request import Request, urlopen
+from ansible.module_utils.urls import open_url
 import xml.etree.ElementTree as ET
 import re
 import hashlib
@@ -216,19 +216,11 @@ class WebHandle(object):
 
         self.https = self.parsed_url.group('scheme') == 'https://'
 
-        if self.https:
-            self.ssl_context = ssl._create_default_https_context()
-            self.ssl_context.check_hostname = False
-            self.ssl_context.verify_mode = ssl.CERT_NONE
+        req = open_url(url, validate_certs=False)
 
-            self.thumbprint = self._get_thumbprint(
-                self.parsed_url.group('hostname'))
-            r = urlopen(url=url, context=self.ssl_context)
-        else:
-            r = urlopen(url)
-        if r.code != 200:
-            raise FileNotFoundError(url)
-        self.headers = self._headers_to_dict(r)
+        if req.code != 200:
+            raise Exception(f"'{self.url}' can't be opened. Code: {req.code}")
+        self.headers = self._headers_to_dict(req)
         if 'accept-ranges' not in self.headers:
             raise Exception("Site does not accept ranges")
         self.st_size = int(self.headers['content-length'])
@@ -276,13 +268,11 @@ class WebHandle(object):
     def read(self, amount):
         start = self.offset
         end = self.offset + amount - 1
-        req = Request(self.url,
-                      headers={'Range': 'bytes=%d-%d' % (start, end)})
-        r = urlopen(req) if not self.ssl_context else urlopen(
-            req, context=self.ssl_context)
+
+        req = open_url(url=self.url, headers={'Range': f"bytes={start}-{end}"}, validate_certs=False)
         self.offset += amount
-        result = r.read(amount)
-        r.close()
+        result = req.read(amount)
+        req.close()
         return result
 
     # A slightly more accurate percentage
