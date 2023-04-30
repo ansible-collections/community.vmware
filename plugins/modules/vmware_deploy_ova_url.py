@@ -7,28 +7,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    find_network_by_name,
-    find_vm_by_name,
-    PyVmomi,
-    gather_vm_facts,
-    vmware_argument_spec,
-    wait_for_task,
-    wait_for_vm_ip,
-    set_vm_power_state)
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
-from six.moves.urllib.request import Request, urlopen
-import xml.etree.ElementTree as ET
-import re
-import hashlib
-import ssl
-import time
-import tarfile
 __metaclass__ = type
 
 DOCUMENTATION = r'''
-author: 'Matt Martz (@sivel)'
 author: 'Alexander Nikitin (@ihumster)'
 short_description: 'Deploys a VMware virtual machine from an OVA file placed on HTTP server'
 description:
@@ -197,6 +178,25 @@ instance:
     type: dict
     sample: None
 '''
+
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    find_network_by_name,
+    find_vm_by_name,
+    PyVmomi,
+    gather_vm_facts,
+    vmware_argument_spec,
+    wait_for_task,
+    wait_for_vm_ip,
+    set_vm_power_state)
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils._text import to_native
+from ansible.module_utils.six.moves.urllib.request import Request, urlopen
+import xml.etree.ElementTree as ET
+import re
+import hashlib
+import ssl
+import time
+import tarfile
 
 
 try:
