@@ -227,7 +227,9 @@ class WebHandle(object):
         self.offset = 0
 
     def _parse_url(self, url):
-        exp = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
+        exp = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))" \
+            r"(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)" \
+            r"(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
         return re.match(exp, url)
 
     def _get_thumbprint(self, hostname):
@@ -238,16 +240,16 @@ class WebHandle(object):
 
         return None if sha1 is None else colon_notion
 
-    def _headers_to_dict(self, r):
+    def _headers_to_dict(self, req):
         result = {}
-        if hasattr(r, 'getheaders'):
-            for n, v in r.getheaders():
-                result[n.lower()] = v.strip()
+        if hasattr(req, 'getheaders'):
+            for name, value in req.getheaders():
+                result[name.lower()] = value.strip()
         else:
-            for line in r.info().headers:
+            for line in req.info().headers:
                 if line.find(':') != -1:
-                    n, v = line.split(': ', 1)
-                    result[n.lower()] = v.strip()
+                    name, value = line.split(': ', 1)
+                    result[name.lower()] = value.strip()
         return result
 
     def tell(self):
@@ -364,7 +366,7 @@ class OVAUploader(PyVmomi):
                 self.content, value, datacenter_name=self.datacenter)
             if not network:
                 self.module.fail_json(
-                    msg='%(networks)s could not be located' % self.params)
+                    msg=f"{value} could not be located")
             network_mapping = vim.OvfManager.NetworkMapping()
             network_mapping.name = key
             network_mapping.network = network
@@ -384,7 +386,7 @@ class OVAUploader(PyVmomi):
             return self.ovf_descriptor
         else:
             self.module.fail_json(
-                msg='Could not locate OVF file in %(ovf)s' % self.params)
+                msg=f"Could not locate OVF desciptor in {self.params['ova']}")
 
     def get_lease(self):
         datastore, datacenter, resource_pool, network_mappings = self.get_objects()
