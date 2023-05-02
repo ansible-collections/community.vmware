@@ -10,6 +10,8 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+import re
+
 
 DOCUMENTATION = r'''
 ---
@@ -43,6 +45,7 @@ options:
     folder:
       description:
         - Specify a folder location of VMs to gather information from.
+        - Can't be used if C(cluster) is set.
         - 'Examples:'
         - '   folder: /ha-datacenter/vm'
         - '   folder: ha-datacenter/vm'
@@ -110,7 +113,32 @@ options:
     vm_name:
       description:
         - Name of the virtual machine to get related configurations information from.
+        - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+        - Can't be used if C(cluster) is set.
       type: str
+    regex:
+      description:
+        - If C(vm_name) is used as an Regex Filter.
+        - Metacharacters use in the C(vm_name):
+        - [] -> A set of characters
+        - \ -> Signals a special sequence (can also be used to escape special characters)
+        - . -> Any character (except newline character)
+        - ^ -> Starts with
+        - $ -> Ends with
+        - * -> Zero or more occurrences
+        - + -> One or more occurrences
+        - ? -> Zero or one occurrences
+        - {} -> Exactly the specified number of occurrences
+        - | -> Either or
+        - () -> Capture and group
+        - For more: Python RegEx
+      type: bool
+      default: False
+    cluster:
+      description:
+        - Name of the cluster to gather information from VMs of this cluster.
+      type: str
+      aliases: [ cluster_name ]
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -121,6 +149,18 @@ EXAMPLES = r'''
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
+  delegate_to: localhost
+  register: vminfo
+
+- debug:
+    var: vminfo.virtual_machines
+    
+- name: Gather all registered virtual machines of this cluster
+  community.vmware.vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster: DC0_C0
   delegate_to: localhost
   register: vminfo
 
@@ -239,6 +279,8 @@ virtual_machines:
         "esxi_hostname": "10.76.33.226",
         "folder": "/Datacenter-1/vm",
         "guest_fullname": "Ubuntu Linux (64-bit)",
+        "running_guest_fullname": "Ubuntu Linux (64-bit)",
+        "running_guest_id": "ubuntu64Guest",
         "ip_address": "",
         "mac_address": [
             "00:50:56:87:a5:9a"
@@ -282,13 +324,13 @@ virtual_machines:
 '''
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, \
-    get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name
+    get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name, find_cluster_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -318,14 +360,24 @@ class VmwareVmInfo(PyVmomi):
                 self.module.fail_json(msg="Failed to find folder specified by %(folder)s" % self.params)
 
         vm_name = self.params.get('vm_name')
-        if vm_name:
+        if vm_name and not self.params.get('regex'):
             virtual_machine = find_vm_by_name(self.content, vm_name=vm_name, folder=folder_obj)
             if not virtual_machine:
                 self.module.fail_json(msg="Failed to find virtual machine %s" % vm_name)
             else:
                 virtual_machines = [virtual_machine]
         else:
-            virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
+            cluster = self.params.get('cluster')
+            if cluster:
+                cluster_obj = find_cluster_by_name(self.content, cluster_name=cluster)
+                if cluster_obj is None:
+                    self.module.fail_json(msg="Failed to find cluster '%s'" % cluster)
+
+                virtual_machines = []
+                for host in cluster_obj.host:
+                    virtual_machines.extend(host.vm)
+            else:
+                virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
         _virtual_machines = []
 
         for vm in virtual_machines:
