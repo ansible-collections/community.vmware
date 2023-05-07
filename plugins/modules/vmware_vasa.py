@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2023, Pure Storage, Inc.
-# Author(s): Eugenio Grosso, <egrosso@purestorage.com>
+# Author(s): Eugenio Grosso, <eugenio.grosso@purestorage.com>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
