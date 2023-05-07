@@ -22,6 +22,7 @@ description:
 author:
 - Ludovic Rivallain (@lrivallain) <ludovic.rivallain@gmail.com>
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
+- Eugenio Grosso <eugenio.grosso@purestorage.com>
 notes:
 - Kerberos authentication with NFS v4.1 isn't implemented
 options:
@@ -64,7 +65,7 @@ options:
     type: int
   vasa_provider:
     description:
-    - hostname or ipaddress of the VASA providere to use for vVols provisioning
+    - hostname or ipaddress of the VASA provider to use for vVols provisioning
     type: str
     required: false
   esxi_hostname:
@@ -350,14 +351,13 @@ class VMwareHostDatastore(SMS):
                     for unres_vol in host_unres_volumes:
                         for ext in unres_vol.extent:
                             unres_vol_extents[ext.device.diskName] = ext
-                    ds_name = None
                     if self.vmfs_device_name in unres_vol_extents:
                         spec = vim.host.UnresolvedVmfsResignatureSpec()
                         spec.extentDevicePath = unres_vol_extents[self.vmfs_device_name].devicePath
                         task = host_ds_system.ResignatureUnresolvedVmfsVolume_Task(spec)
                         wait_for_task(task=task)
                         task.info.result.result.RenameDatastore(self.datastore_name)
-                else:    
+                else:
                     vmfs_ds_options = ds_system.QueryVmfsDatastoreCreateOptions(host_ds_system,
                                                                                 ds_path,
                                                                                 self.vmfs_version)
@@ -399,7 +399,7 @@ class VMwareHostDatastore(SMS):
             host_ds_system = self.esxi.configManager.datastoreSystem
             error_message_mount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
             try:
-                vvols_datastore = host_ds_system.CreateVvolDatastore(vvol_spec)
+                host_ds_system.CreateVvolDatastore(vvol_spec)
             except Exception as e:
                 self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(e)))
         self.module.exit_json(changed=True, result="Datastore %s on host %s" % (self.datastore_name, self.esxi.name))
