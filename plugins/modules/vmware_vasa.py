@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2023, Pure Storage, Inc. 
+# Copyright: (c) 2023, Pure Storage, Inc.
 # Author(s): Eugenio Grosso, <egrosso@purestorage.com>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
@@ -14,7 +14,7 @@ DOCUMENTATION = r'''
 module: vmware_vasa
 short_description: Manage VMware Virtual Volumes storage provider
 author:
-  - Eugenio Grosso (egrosso@purestorage.com)
+  - Eugenio Grosso <eugenio.grosso@purestorage.com>
 description:
   - This module can be used to register and unregister a VASA provider
 options:
@@ -82,7 +82,7 @@ EXAMPLES = r'''
 RETURN = r'''
 '''
 try:
-    from pyVmomi import sms, vmodl
+    from pyVmomi import sms
 except ImportError:
     pass
 
@@ -145,37 +145,36 @@ class VMwareVASA(SMS):
                 # This second step is required to register self-signed certs,
                 # since the previous task returns the certificate back waiting
                 # for confirmation
-                if isinstance(result, sms.fault.CertificateNotTrusted): 
+                if isinstance(result, sms.fault.CertificateNotTrusted):
                     vasa_provider_spec.certificate = result.certificate
                     task = self.storage_manager.RegisterProvider_Task(vasa_provider_spec)
                     changed, result = wait_for_sms_task(task)
                 if isinstance(result, sms.provider.VasaProvider):
                     provider_info = result.QueryProviderInfo()
                     temp_provider_info = {
-                         'name': provider_info.name,
-                         'uid': provider_info.uid,
-                         'description': provider_info.description,
-                         'version': provider_info.version,
-                         'certificate_status': provider_info.certificateStatus,
-                         'url': provider_info.url,
-                         'status': provider_info.status,
-                         'related_storage_array': []
+                        'name': provider_info.name,
+                        'uid': provider_info.uid,
+                        'description': provider_info.description,
+                        'version': provider_info.version,
+                        'certificate_status': provider_info.certificateStatus,
+                        'url': provider_info.url,
+                        'status': provider_info.status,
+                        'related_storage_array': []
                     }
                     for a in provider_info.relatedStorageArray:
                         temp_storage_array = {
-                             'active': str(a.active),
-                             'array_id': a.arrayId,
-                             'manageable': str(a.manageable),
-                             'priority': str(a.priority)
+                            'active': str(a.active),
+                            'array_id': a.arrayId,
+                            'manageable': str(a.manageable),
+                            'priority': str(a.priority)
                         }
                         temp_provider_info['related_storage_array'].append(temp_storage_array)
                     result = temp_provider_info
 
             self.module.exit_json(changed=changed, result=result)
         except TaskError as task_err:
-            self.module.fail_json(
-                      msg="Failed to register VASA provider"
-                          " due to task exception %s" % to_native(task_err))
+            self.module.fail_json(msg="Failed to register VASA provider"
+                                      " due to task exception %s" % to_native(task_err))
         except Exception as generic_exc:
             self.module.fail_json(msg="Failed to register VASA"
                                       " due to generic exception %s" % to_native(generic_exc))
@@ -220,7 +219,6 @@ class VMwareVASA(SMS):
                         raise Exception("VASA provider '%s' URL '%s' is inconsistent  with task parameter '%s'" % (self.vasa_name, provider_info.url, self.vasa_url))
                     self.vasa_provider_info = provider_info
                     break
-                
             if self.vasa_provider_info is None:
                 return 'absent'
             return 'present'
