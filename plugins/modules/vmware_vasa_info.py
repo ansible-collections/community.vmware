@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2023, Eugenio Grosso <egrosso@purestorage.com>
+# Copyright: (c) 2023, Eugenio Grosso <eugenio.grosso@purestorage.com>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,7 +17,7 @@ description:
 - Returns basic information on the vSphere VASA providers registered in the
   vcenter.
 author:
-- Eugenio Grosso
+- Eugenio Grosso <eugenio.grosso@purestorage.com>
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -59,10 +59,6 @@ vasa_providers:
     ]
 '''
 
-try:
-    from pyVmomi import sms
-except ImportError:
-    pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_sms import SMS
