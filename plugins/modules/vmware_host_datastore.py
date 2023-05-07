@@ -404,6 +404,7 @@ class VMwareHostDatastore(SMS):
                 self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(e)))
         self.module.exit_json(changed=True, result="Datastore %s on host %s" % (self.datastore_name, self.esxi.name))
 
+
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(

@@ -16,9 +16,11 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 from random import randint
 import time
 
+
 class TaskError(Exception):
     def __init__(self, *args, **kwargs):
         super(TaskError, self).__init__(*args, **kwargs)
+
 
 class SMS(PyVmomi):
     def __init__(self, module):
@@ -44,7 +46,6 @@ class SMS(PyVmomi):
                                sslContext=ssl_context, requestContext=additional_headers)
 
         self.sms_si = sms.ServiceInstance("ServiceInstance", stub)
-
 
 
 def wait_for_sms_task(task, max_backoff=64, timeout=3600):
