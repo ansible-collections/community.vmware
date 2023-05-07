@@ -1,3 +1,0 @@
----
-bugfixes:
-  - vmware_guest - Fixed issue where custom attributes were not getting set on VM creation (https://github.com/ansible-collections/community.vmware/pull/1713)

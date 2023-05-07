@@ -221,6 +221,8 @@ Name | Description
 [community.vmware.vmware_tag_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_tag_info_module.rst)|Manage VMware tag info
 [community.vmware.vmware_tag_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_tag_manager_module.rst)|Manage association of VMware tags with VMware objects
 [community.vmware.vmware_target_canonical_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_target_canonical_info_module.rst)|Return canonical (NAA) from an ESXi host system
+[community.vmware.vmware_vasa](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vasa_module.rst)|Manage VMware Virtual Volumes storage provider
+[community.vmware.vmware_vasa_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vasa_info_module.rst)|Gather information about vSphere VASA providers.
 [community.vmware.vmware_vc_infraprofile_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vc_infraprofile_info_module.rst)|List and Export VMware vCenter infra profile configs.
 [community.vmware.vmware_vcenter_settings](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vcenter_settings_module.rst)|Configures general settings on a vCenter server
 [community.vmware.vmware_vcenter_settings_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vcenter_settings_info_module.rst)|Gather info vCenter settings
@@ -242,6 +244,7 @@ Name | Description
 [community.vmware.vmware_vspan_session](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vspan_session_module.rst)|Create or remove a Port Mirroring session.
 [community.vmware.vmware_vswitch](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_module.rst)|Manage a VMware Standard Switch to an ESXi host.
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
+[community.vmware.vsan_health_silent_checks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsan_health_silent_checks_module.rst)|Silence vSAN health checks
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
 

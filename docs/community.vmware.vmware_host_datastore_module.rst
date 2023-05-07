@@ -86,6 +86,7 @@ Parameters
                                     <li>nfs</li>
                                     <li>nfs41</li>
                                     <li>vmfs</li>
+                                    <li>vvol</li>
                         </ul>
                 </td>
                 <td>
@@ -311,6 +312,21 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vasa_provider</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>hostname or ipaddress of the VASA providere to use for vVols provisioning</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>vmfs_device_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -404,6 +420,30 @@ Examples
       loop:
           - { 'name': 'NasDS_vol03', 'server': 'nas01,nas02', 'path': '/mnt/vol01', 'type': 'nfs41'}
           - { 'name': 'NasDS_vol04', 'server': 'nas01,nas02', 'path': '/mnt/vol02', 'type': 'nfs41'}
+
+    - name: Mount vVols datastore to ESXi
+      community.vmware.vmware_host_datastore:
+          hostname: '{{ vcenter_hostname }}'
+          username: '{{ vcenter_username }}'
+          password: '{{ vcenter_password }}'
+          datastore_name: myvvolds
+          datastore_type: vvol
+          vasa_provider: pure-X90a
+          esxi_hostname: esxi-1
+          state: absent
+      delegate_to: localhost
+
+    - name: Mount unresolved VMFS datastores to ESXi
+      community.vmware.vmware_host_datastore:
+          hostname: '{{ vcenter_hostname }}'
+          username: '{{ vcenter_username }}'
+          password: '{{ vcenter_password }}'
+          datastore_name: mydatastore01
+          vmfs_device_name: 'naa.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+          vmfs_version: 6
+          esxi_hostname:  esxi01
+          state: present
+      delegate_to: localhost
 
     - name: Remove/Umount Datastores from a ESXi
       community.vmware.vmware_host_datastore:

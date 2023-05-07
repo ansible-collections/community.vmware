@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2018, Ansible Project
+# Copyright: (c) 2023, Pure Storage, Inc.
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,7 +33,7 @@ options:
   datastore_type:
     description:
     - Type of the datastore to configure (nfs/nfs41/vmfs).
-    choices: [ 'nfs', 'nfs41', 'vmfs' ]
+    choices: [ 'nfs', 'nfs41', 'vmfs', 'vvol' ]
     type: str
   nfs_server:
     description:
@@ -61,6 +62,11 @@ options:
     - VMFS version to use for datastore creation.
     - Unused if datastore type is not set to C(vmfs) and state is not set to C(present).
     type: int
+  vasa_provider:
+    description:
+    - hostname or ipaddress of the VASA providere to use for vVols provisioning
+    type: str
+    required: false
   esxi_hostname:
     description:
     - ESXi hostname to manage the datastore.
@@ -134,6 +140,30 @@ EXAMPLES = r'''
       - { 'name': 'NasDS_vol03', 'server': 'nas01,nas02', 'path': '/mnt/vol01', 'type': 'nfs41'}
       - { 'name': 'NasDS_vol04', 'server': 'nas01,nas02', 'path': '/mnt/vol02', 'type': 'nfs41'}
 
+- name: Mount vVols datastore to ESXi
+  community.vmware.vmware_host_datastore:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datastore_name: myvvolds
+      datastore_type: vvol
+      vasa_provider: pure-X90a
+      esxi_hostname: esxi-1
+      state: absent
+  delegate_to: localhost
+
+- name: Mount unresolved VMFS datastores to ESXi
+  community.vmware.vmware_host_datastore:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      datastore_name: mydatastore01
+      vmfs_device_name: 'naa.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+      vmfs_version: 6
+      esxi_hostname:  esxi01
+      state: present
+  delegate_to: localhost
+
 - name: Remove/Umount Datastores from a ESXi
   community.vmware.vmware_host_datastore:
       hostname: '{{ esxi_hostname }}'
@@ -153,11 +183,12 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, find_datastore_by_name, find_obj
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, find_datastore_by_name, find_obj, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware_sms import SMS
 from ansible.module_utils._text import to_native
 
 
-class VMwareHostDatastore(PyVmomi):
+class VMwareHostDatastore(SMS):
     def __init__(self, module):
         super(VMwareHostDatastore, self).__init__(module)
 
@@ -167,7 +198,9 @@ class VMwareHostDatastore(PyVmomi):
         self.nfs_path = module.params['nfs_path']
         self.nfs_ro = module.params['nfs_ro']
         self.vmfs_device_name = module.params['vmfs_device_name']
+        self.vasa_provider_name = module.params['vasa_provider']
         self.vmfs_version = module.params['vmfs_version']
+        self.resignature = module.params['resignature']
         self.esxi_hostname = module.params['esxi_hostname']
         self.auto_expand = module.params['auto_expand']
         self.state = module.params['state']
@@ -264,6 +297,8 @@ class VMwareHostDatastore(PyVmomi):
             self.mount_nfs_datastore_host()
         if self.datastore_type == 'vmfs':
             self.mount_vmfs_datastore_host()
+        if self.datastore_type == 'vvol':
+            self.mount_vvol_datastore_host()
 
     def mount_nfs_datastore_host(self):
         if self.module.check_mode is False:
@@ -308,13 +343,28 @@ class VMwareHostDatastore(PyVmomi):
                 self.module.fail_json(msg="%s" % error_message_used_disk)
             error_message_mount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
             try:
-                vmfs_ds_options = ds_system.QueryVmfsDatastoreCreateOptions(host_ds_system,
-                                                                            ds_path,
-                                                                            self.vmfs_version)
-                vmfs_ds_options[0].spec.vmfs.volumeName = self.datastore_name
-                ds_system.CreateVmfsDatastore(
-                    host_ds_system,
-                    vmfs_ds_options[0].spec)
+                if self.resignature:
+                    storage_system = self.esxi.configManager.storageSystem
+                    host_unres_volumes = storage_system.QueryUnresolvedVmfsVolume()
+                    unres_vol_extents = {}
+                    for unres_vol in host_unres_volumes:
+                        for ext in unres_vol.extent:
+                            unres_vol_extents[ext.device.diskName] = ext
+                    ds_name = None
+                    if self.vmfs_device_name in unres_vol_extents:
+                        spec = vim.host.UnresolvedVmfsResignatureSpec()
+                        spec.extentDevicePath = unres_vol_extents[self.vmfs_device_name].devicePath
+                        task = host_ds_system.ResignatureUnresolvedVmfsVolume_Task(spec)
+                        wait_for_task(task=task)
+                        task.info.result.result.RenameDatastore(self.datastore_name)
+                else:    
+                    vmfs_ds_options = ds_system.QueryVmfsDatastoreCreateOptions(host_ds_system,
+                                                                                ds_path,
+                                                                                self.vmfs_version)
+                    vmfs_ds_options[0].spec.vmfs.volumeName = self.datastore_name
+                    ds_system.CreateVmfsDatastore(
+                        host_ds_system,
+                        vmfs_ds_options[0].spec)
             except (vim.fault.NotFound, vim.fault.DuplicateName,
                     vim.fault.HostConfigFault, vmodl.fault.InvalidArgument) as fault:
                 self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(fault.msg)))
@@ -322,19 +372,52 @@ class VMwareHostDatastore(PyVmomi):
                 self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(e)))
         self.module.exit_json(changed=True, result="Datastore %s on host %s" % (self.datastore_name, self.esxi.name))
 
+    def mount_vvol_datastore_host(self):
+        if self.module.check_mode is False:
+            self.get_sms_connection()
+            storage_manager = self.sms_si.QueryStorageManager()
+            container_result = storage_manager.QueryStorageContainer()
+            provider = None
+            for p in container_result.providerInfo:
+                if p.name == self.vasa_provider_name:
+                    provider = p
+                    break
+            if provider is None:
+                error_message_provider = "VASA provider %s not found" % self.vasa_provider_name
+                self.module.fail_json(msg="%s" % error_message_provider)
+
+            container = None
+            for sc in container_result.storageContainer:
+                if sc.providerId[0] == provider.uid:
+                    container = sc
+                    break
+            if container is None:
+                error_message_container = "vVol container for provider %s not found" % provider.uid
+                self.module.fail_json(msg="%s" % error_message_container)
+
+            vvol_spec = vim.HostDatastoreSystem.VvolDatastoreSpec(name=self.datastore_name, scId=container.uuid)
+            host_ds_system = self.esxi.configManager.datastoreSystem
+            error_message_mount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
+            try:
+                vvols_datastore = host_ds_system.CreateVvolDatastore(vvol_spec)
+            except Exception as e:
+                self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(e)))
+        self.module.exit_json(changed=True, result="Datastore %s on host %s" % (self.datastore_name, self.esxi.name))
 
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         datastore_name=dict(type='str', required=True),
-        datastore_type=dict(type='str', choices=['nfs', 'nfs41', 'vmfs']),
+        datastore_type=dict(type='str', choices=['nfs', 'nfs41', 'vmfs', 'vvol']),
         nfs_server=dict(type='str'),
         nfs_path=dict(type='str'),
         nfs_ro=dict(type='bool', default=False),
         vmfs_device_name=dict(type='str'),
         vmfs_version=dict(type='int'),
+        resignature=dict(type='bool', default=False),
         esxi_hostname=dict(type='str', required=False),
         auto_expand=dict(type='bool', default=True),
+        vasa_provider=dict(type='str'),
         state=dict(type='str', default='present', choices=['absent', 'present'])
     )
 
@@ -346,6 +429,7 @@ def main():
             ['datastore_type', 'vmfs', ['vmfs_device_name']],
             ['datastore_type', 'nfs', ['nfs_server', 'nfs_path']],
             ['datastore_type', 'nfs41', ['nfs_server', 'nfs_path']],
+            ['datastore_type', 'vvol', ['vasa_provider']],
         ]
     )
 
