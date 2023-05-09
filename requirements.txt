@@ -1,2 +1,2 @@
 pyVmomi>=6.7
-git+https://github.com/vmware/vsphere-automation-sdk-python.git ; python_version >= '2.7'  # Python 2.6 is not supported
+git+https://github.com/vmware/vsphere-automation-sdk-python.git@v8.0.0.0 ; python_version >= '2.7'  # Python 2.6 is not supported
