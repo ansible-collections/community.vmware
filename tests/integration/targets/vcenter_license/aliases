@@ -1,2 +1,3 @@
 cloud/vcenter
 zuul/vmware/vcenter_only
+disabled
