@@ -10,10 +10,11 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+import time
 
 DOCUMENTATION = r'''
 ---
-module: vmware_vmotion
+module: vmware_vmotion.yaml
 short_description: Move a virtual machine using vMotion, and/or its vmdks using storage vMotion.
 description:
     - Using VMware vCenter, move a virtual machine using vMotion to a different
@@ -93,7 +94,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Perform vMotion of virtual machine
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -102,7 +103,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform vMotion of virtual machine
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -111,7 +112,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform vMotion of virtual machine to resource_pool
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -121,7 +122,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion of virtual machine
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -130,7 +131,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion and host vMotion of virtual machine
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -140,7 +141,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion to a Storage Cluster and vMotion to a Cluster of virtual machine
-  community.vmware.vmware_vmotion:
+  community.vmware.vmware_vmotion.yaml:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -475,16 +476,27 @@ class VmotionManager(PyVmomi):
             storagePods = [self.datastore_cluster_object]
         else:
             storagePods = None
-        placement_spec = vim.cluster.PlacementSpec(storagePods=storagePods,
-                                                   hosts=self.cluster_hosts,
-                                                   vm=self.vm,
-                                                   relocateSpec=relocate_spec)
-        placement = self.cluster_object.PlaceVm(placement_spec)
 
-        if self.host_object is None:
-            self.host_object = placement.recommendations[0].action[0].targetHost
-        if self.datastore_object is None:
-            self.datastore_object = placement.recommendations[0].action[0].relocateSpec.datastore
+        if self.host_object is None or self.datastore_object is None:
+            placement_spec = vim.cluster.PlacementSpec(storagePods=storagePods,
+                                                       hosts=self.cluster_hosts,
+                                                       vm=self.vm,
+                                                       relocateSpec=relocate_spec)
+            placement = self.cluster_object.PlaceVm(placement_spec)
+
+            counter = 0  # Try it 10 times every minute
+            while len(placement.recommendations) < 1:
+                if counter == 10:
+                    vm_id = self.vm_uuid or self.vm_name or self.moid
+                    self.module.fail_json(msg="Failed to find a placement recommendation for vm: " % vm_id)
+                counter = counter + 1
+                time.sleep(60)
+                placement = self.cluster_object.PlaceVm(placement_spec)
+
+            if self.host_object is None:
+                self.host_object = placement.recommendations[0].action[0].targetHost
+            if self.datastore_object is None:
+                self.datastore_object = placement.recommendations[0].action[0].relocateSpec.datastore
 
     def get_vm(self):
         """

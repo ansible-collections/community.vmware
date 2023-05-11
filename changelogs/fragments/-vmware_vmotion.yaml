@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - vmware_vmotion - Add the function that it trys to find an placement recommendation 10 times every 1 minute
+    (https://github.com/ansible-collections/community.vmware/pull/)
