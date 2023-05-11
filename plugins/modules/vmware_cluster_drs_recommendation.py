@@ -87,6 +87,7 @@ class VMwareCluster(PyVmomi):
     def recommendations(self):
         results = []
         changed = False
+        self.cluster.RefreshRecommendation()
         if len(self.cluster.recommendation) == 0:
             self.module.exit_json(changed=changed, result="No recommendations.")
         else:
@@ -97,7 +98,7 @@ class VMwareCluster(PyVmomi):
                 if not self.module.check_mode:
                     task = self.cluster.ApplyRecommendation(recommendation.key)
                     changed = True
-                    if index == len(self.cluster.recommendation) - 1:
+                    if index == len(self.cluster.recommendation) - 1 and hasattr(task, 'info'):
                         wait_for_task(task)
             self.module.exit_json(changed=changed, result=results)
 
