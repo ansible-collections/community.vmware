@@ -43,7 +43,7 @@ options:
       - Whether HA restarts virtual machines after a host fails.
       - If set to C(enabled), HA restarts virtual machines after a host fails.
       - If set to C(disabled), HA does not restart virtual machines after a host fails.
-      - If C(enable) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(false), then this value is ignored.
       type: str
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
@@ -53,7 +53,7 @@ options:
       - If set to C(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
       - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
       - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
-      - If C(enable) is set to C(False), then this value is ignored.
+      - If C(enable) is set to C(false), then this value is ignored.
       type: str
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'
@@ -225,7 +225,7 @@ EXAMPLES = r'''
     password: "{{ vcenter_password }}"
     datacenter_name: DC0
     cluster_name: "{{ cluster_name }}"
-    enable: True
+    enable: true
     ha_vm_monitoring: vmMonitoringOnly
   delegate_to: localhost
 
@@ -238,7 +238,7 @@ EXAMPLES = r'''
     cluster_name: cluster
     enable: true
     reservation_based_admission_control:
-      auto_compute_percentages: False
+      auto_compute_percentages: false
       failover_level: 1
       cpu_failover_resources_percent: 50
       memory_failover_resources_percent: 50
