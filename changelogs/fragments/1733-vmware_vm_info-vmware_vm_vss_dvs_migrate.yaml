@@ -1,0 +1,6 @@
+---
+minor_changes:
+  - vmware_vm_info - Add the try except vmodl.fault.ManagedObjectNotFound and the possibility to use regex for the vm name
+    (https://github.com/ansible-collections/community.vmware/pull/1733)
+  - vmware_vm_vss_dvs_migrate - Replace find_vm_by_name with the find_vm_by_name from module_utils.vmware
+    (https://github.com/ansible-collections/community.vmware/pull/1733)
