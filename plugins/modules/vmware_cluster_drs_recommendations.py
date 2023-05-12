@@ -46,12 +46,13 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-description: 
-    - list of the recommendations
-    - What server moved from which host to which host.
-returned: always
-type: list
-sample: ["server1 move from host1 to host2.", "server2 move from host1 to host2."]
+result: 
+    description: 
+        - list of the recommendations
+        - What server moved from which host to which host.
+    returned: always
+    type: list
+    sample: ["server1 move from host1 to host2.", "server2 move from host1 to host2."]
 '''
 
 try:
