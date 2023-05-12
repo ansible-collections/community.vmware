@@ -5,6 +5,20 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.6.0
+======
+
+Bugfixes
+--------
+
+- vmware_guest - Fixed issue where custom attributes were not getting set on VM creation (https://github.com/ansible-collections/community.vmware/pull/1713)
+- vmware_vsan_health_info - Fix return value (https://github.com/ansible-collections/community.vmware/pull/1706).
+
+New Modules
+-----------
+
+- vsan_health_silent_checks - Silence vSAN health checks
+
 v3.5.0
 ======
 
