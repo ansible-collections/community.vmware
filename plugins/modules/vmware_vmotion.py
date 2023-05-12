@@ -10,8 +10,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-import time
-
 DOCUMENTATION = r'''
 ---
 module: vmware_vmotion
@@ -172,6 +170,8 @@ try:
     from pyVmomi import vim, VmomiSupport
 except ImportError:
     pass
+
+import time
 
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
