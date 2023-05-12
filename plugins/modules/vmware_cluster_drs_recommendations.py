@@ -89,8 +89,8 @@ class VMwareCluster(PyVmomi):
         else:
             for index, recommendation in enumerate(self.cluster.recommendation):
                 results.append("%s move from %s to %s." % (recommendation.action[0].target.name,
-                                                      recommendation.action[0].drsMigration.source.name,
-                                                      recommendation.action[0].drsMigration.destination.name))
+                                                           recommendation.action[0].drsMigration.source.name,
+                                                           recommendation.action[0].drsMigration.destination.name))
                 if not self.module.check_mode:
                     task = self.cluster.ApplyRecommendation(recommendation.key)
                     changed = True
