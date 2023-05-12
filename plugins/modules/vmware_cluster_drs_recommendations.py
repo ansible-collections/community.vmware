@@ -46,19 +46,14 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-result: 
-    description: 
+result:
+    description:
         - list of the recommendations
         - What server moved from which host to which host.
     returned: always
     type: list
     sample: ["server1 move from host1 to host2.", "server2 move from host1 to host2."]
 '''
-
-try:
-    from pyVmomi import vim
-except ImportError:
-    pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
@@ -102,6 +97,7 @@ class VMwareCluster(PyVmomi):
                     if index == len(self.cluster.recommendation) - 1 and hasattr(task, 'info'):
                         wait_for_task(task)
             self.module.exit_json(changed=changed, result=results)
+
 
 def main():
     argument_spec = vmware_argument_spec()
