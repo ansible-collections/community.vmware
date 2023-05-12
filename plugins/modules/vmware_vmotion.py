@@ -14,7 +14,7 @@ import time
 
 DOCUMENTATION = r'''
 ---
-module: vmware_vmotion.yaml
+module: vmware_vmotion
 short_description: Move a virtual machine using vMotion, and/or its vmdks using storage vMotion.
 description:
     - Using VMware vCenter, move a virtual machine using vMotion to a different
@@ -94,7 +94,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Perform vMotion of virtual machine
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -103,7 +103,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform vMotion of virtual machine
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -112,7 +112,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform vMotion of virtual machine to resource_pool
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -122,7 +122,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion of virtual machine
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -131,7 +131,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion and host vMotion of virtual machine
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -141,7 +141,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Perform storage vMotion to a Storage Cluster and vMotion to a Cluster of virtual machine
-  community.vmware.vmware_vmotion.yaml:
+  community.vmware.vmware_vmotion:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
