@@ -1552,3 +1552,17 @@ releases:
       name: vmware_vsan_hcl_db
       namespace: ''
     release_date: '2023-03-26'
+  3.6.0:
+    changes:
+      bugfixes:
+      - vmware_guest - Fixed issue where custom attributes were not getting set on
+        VM creation (https://github.com/ansible-collections/community.vmware/pull/1713)
+      - vmware_vsan_health_info - Fix return value (https://github.com/ansible-collections/community.vmware/pull/1706).
+    fragments:
+    - 1706-vmware_vsan_health_info.yml
+    - 1713-vmware_guest-custom_attributes_on_create.yaml
+    modules:
+    - description: Silence vSAN health checks
+      name: vsan_health_silent_checks
+      namespace: ''
+    release_date: '2023-05-12'
