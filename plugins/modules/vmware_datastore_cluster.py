@@ -365,25 +365,29 @@ class VMwareDatastoreClusterManager(PyVmomi):
                     change = True
 
                 # Automation overrides
-                if currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode is None or space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
+                if currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode is None or \
+                        space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
                         if space_balance_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.ruleEnforcementAutomationMode is None or rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
+                if currentPodConfig.automationOverrides.ruleEnforcementAutomationMode is None or \
+                        rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
                         if rule_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.policyEnforcementAutomationMode is None or policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
+                if currentPodConfig.automationOverrides.policyEnforcementAutomationMode is None or \
+                        policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
                         if policy_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.vmEvacuationAutomationMode is None or vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
+                if currentPodConfig.automationOverrides.vmEvacuationAutomationMode is None or \
+                        vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
                         if vm_evacuation_automation_level != "cluster_settings" else None
                     results['result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
