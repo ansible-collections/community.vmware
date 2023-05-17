@@ -13,7 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vsan_release_catalog
-version_added: '3.6.0'
+version_added: '3.7.0'
 short_description: Uploads the vSAN Release Catalog
 description:
   - Manually upload the vSAN Release Catalog the the vCenter
