@@ -299,6 +299,7 @@ class PyVmomiHelper(PyVmomi):
         if set(required_params).issubset(backing_info.keys()):
             backing = serial_port.URIBackingInfo()
             backing.serviceURI = backing_info['service_uri']
+            backing.proxyURI = backing_info['proxy_uri']
             backing.direction = backing_info['direction']
         else:
             self.module.fail_json(msg="Failed to create a new serial port of network backing type due to insufficient parameters."
@@ -431,6 +432,7 @@ def get_serial_port_info(vm_obj):
                 backing['backing_type'] = 'network'
                 backing['direction'] = port.backing.direction
                 backing['service_uri'] = port.backing.serviceURI
+                backing['proxy_uri'] = port.backing.proxyURI
             elif isinstance(port.backing, vim.vm.device.VirtualSerialPort.PipeBackingInfo):
                 backing['backing_type'] = 'pipe'
                 backing['pipe_name'] = port.backing.pipeName
@@ -455,7 +457,8 @@ def diff_serial_port_config(serial_port, backing):
                 return True
         if backing['service_uri'] is not None:
             if serial_port.backing.serviceURI != backing['service_uri'] or \
-                    serial_port.backing.direction != backing['direction']:
+                    serial_port.backing.direction != backing['direction'] or \
+                    serial_port.backing.proxyURI != backing['proxy_uri']:
                 return True
         if backing['pipe_name'] is not None:
             if serial_port.backing.pipeName != backing['pipe_name'] or \
@@ -471,7 +474,8 @@ def diff_serial_port_config(serial_port, backing):
 
     if backing['state'] == 'absent':
         if backing['service_uri'] is not None:
-            if serial_port.backing.serviceURI == backing['service_uri']:
+            if serial_port.backing.serviceURI == backing['service_uri'] and \
+                    serial_port.backing.proxyURI == backing['proxy_uri']:
                 return True
         if backing['pipe_name'] is not None:
             if serial_port.backing.pipeName == backing['pipe_name']:
@@ -503,6 +507,7 @@ def main():
                           endpoint=dict(type='str', choices=['client', 'server'], default='client'),
                           no_rx_loss=dict(type='bool', default=False),
                           service_uri=dict(type='str', default=None),
+                          proxy_uri=dict(type='str', default=None),
                           direction=dict(type='str', choices=['client', 'server'], default='client'),
                           device_name=dict(type='str', default=None),
                           file_path=dict(type='str', default=None),
