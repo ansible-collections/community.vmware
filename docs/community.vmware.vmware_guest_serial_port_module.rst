@@ -186,6 +186,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_uri</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Identifies a vSPC proxy service that provides network access to the <em>service_uri</em>.</div>
+                        <div>If you specify a proxy URI, the virtual machine initiates a connection with the proxy service and forwards the serviceURI and direction to the proxy.</div>
+                        <div>The <code>Use Virtual Serial Port Concentrator</code> option is automatically enabled when <em>proxy_uri</em> is set.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>service_uri</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">

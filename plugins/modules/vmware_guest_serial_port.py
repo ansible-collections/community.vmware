@@ -96,6 +96,13 @@ options:
           - If you use the virtual machine as a client, the URI identifies the remote system on the network.
           - Required when I(backing_type=network).
         type: str
+      proxy_uri:
+        description:
+          - Identifies a vSPC proxy service that provides network access to the I(service_uri).
+          - If you specify a proxy URI, the virtual machine initiates a connection with the proxy service
+            and forwards the serviceURI and direction to the proxy.
+          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set. 
+        type: str
       direction:
         description:
           - The direction of the connection.
