@@ -101,7 +101,7 @@ options:
           - Identifies a vSPC proxy service that provides network access to the I(service_uri).
           - If you specify a proxy URI, the virtual machine initiates a connection with the proxy service
             and forwards the serviceURI and direction to the proxy.
-          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set. 
+          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set.
         type: str
       direction:
         description:
@@ -151,7 +151,7 @@ EXAMPLES = r'''
       yield_on_poll:  true
     register: create_multiple_ports
 
-# Create vSPC port    
+# Create vSPC port
 - name: Create network serial port with vSPC
   community.vmware.vmware_guest_serial_port:
     hostname: "{{ vcenter_hostname }}"

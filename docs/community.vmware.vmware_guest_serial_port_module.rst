@@ -497,7 +497,7 @@ Examples
           yield_on_poll:  true
         register: create_multiple_ports
 
-    # Create vSPC port    
+    # Create vSPC port
     - name: Create network serial port with vSPC
       community.vmware.vmware_guest_serial_port:
         hostname: "{{ vcenter_hostname }}"
