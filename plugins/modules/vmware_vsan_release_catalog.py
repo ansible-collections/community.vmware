@@ -33,13 +33,6 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Fetch vSAN release catalog file
-  ansible.builtin.get_url:
-    url: https://vcsa.vmware.com/ph/api/v1/results?deploymentId=2d02e861-7e93-4954-9a73-b08692a330d1&collectorId=VsanCloudHealth.6_5&objectId=0c3e9009-ba5d-4e5f6-bae8-f25ec506d219&type=vsan-updates-json
-    dest: release_catalog.json
-    force: true
-  delegate_to: localhost
-
 - name: Upload release catalog file to vCenter
   community.vmware.vmware_vsan_release_catalog:
     hostname: "{{ vcenter_hostname }}"
