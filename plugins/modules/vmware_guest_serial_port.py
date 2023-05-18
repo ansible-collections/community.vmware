@@ -96,6 +96,13 @@ options:
           - If you use the virtual machine as a client, the URI identifies the remote system on the network.
           - Required when I(backing_type=network).
         type: str
+      proxy_uri:
+        description:
+          - Identifies a vSPC proxy service that provides network access to the I(service_uri).
+          - If you specify a proxy URI, the virtual machine initiates a connection with the proxy service
+            and forwards the serviceURI and direction to the proxy.
+          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set. 
+        type: str
       direction:
         description:
           - The direction of the connection.
@@ -144,6 +151,20 @@ EXAMPLES = r'''
       yield_on_poll:  true
     register: create_multiple_ports
 
+# Create vSPC port    
+- name: Create network serial port with vSPC
+  community.vmware.vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: "test_vm1"
+    backings:
+    - type: 'network'
+      direction: 'server'
+      service_uri: 'vSPC.py'
+      proxy_uri: 'telnets://<host>:<port>'
+      yield_on_poll: true
+
 # Modify existing serial port
 - name: Modify Network backing type
   community.vmware.vmware_guest_serial_port:
@@ -169,7 +190,6 @@ EXAMPLES = r'''
     - type: 'pipe'
       state: 'absent'
   delegate_to: localhost
-
 '''
 
 RETURN = r'''
