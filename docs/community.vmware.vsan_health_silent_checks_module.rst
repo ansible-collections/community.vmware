@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_local_role_info_module:
+.. _community.vmware.vsan_health_silent_checks_module:
 
 
-***************************************
-community.vmware.vmware_local_role_info
-***************************************
+******************************************
+community.vmware.vsan_health_silent_checks
+******************************************
 
-**Gather info about local roles on an ESXi host or vCenter**
+**Silence vSAN health checks**
 
 
+Version added: 3.6.0
 
 .. contents::
    :local:
@@ -16,9 +17,16 @@ community.vmware.vmware_local_role_info
 
 Synopsis
 --------
-- This module can be used to gather information about local role info on an ESXi host or vCenter
+- Take a list of vSAN health checks and silence them
+- Re-enable alerts for previously silenced health checks
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 
 Parameters
@@ -32,6 +40,38 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>checks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The checks to silence.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cluster_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the vSAN cluster.</div>
+                </td>
+            </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -122,6 +162,27 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The state of the health checks.</div>
+                        <div>If set to <code>present</code>, all given health checks will be silenced.</div>
+                        <div>If set to <code>absent</code>, all given health checks will be removed from the list of silent checks.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -167,8 +228,6 @@ Notes
 -----
 
 .. note::
-   - Be sure that the user used for login, has the appropriate rights to view roles
-   - The module returns a list of dict in version 2.8 and above.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -178,52 +237,28 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather info about local role from an ESXi (or vCenter)
-      community.vmware.vmware_local_role_info:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-      register: fact_details
+    - name: Disable the vSAN Support Insight health check
+      community.vmware.vsan_health_silent_checks:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        checks: vsanenablesupportinsight
+        cluster_name: 'vSAN01'
       delegate_to: localhost
-    - name: Get Admin privileges
-      set_fact:
-        admin_priv: "{{ fact_details.local_role_info | selectattr('role_name', 'equalto', 'Admin') | map(attribute='privileges') | first  }}"
-    - debug:
-        msg: "{{ admin_priv }}"
+
+    - name: Re-enable health check alerts for release catalog and HCL DB
+      community.vmware.vsan_health_silent_checks:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        checks:
+          - releasecataloguptodate
+          - autohclupdate
+        state: absent
+        cluster_name: 'vSAN01'
+      delegate_to: localhost
 
 
-
-Return Values
--------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>local_role_info</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>A list of dict about role information present on ESXi host</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;privileges&#x27;: [&#x27;Alarm.Acknowledge&#x27;, &#x27;Alarm.Create&#x27;, &#x27;Alarm.Delete&#x27;, &#x27;Alarm.DisableActions&#x27;], &#x27;role_id&#x27;: -12, &#x27;role_info_label&#x27;: &#x27;Ansible User&#x27;, &#x27;role_info_summary&#x27;: &#x27;Ansible Automation user&#x27;, &#x27;role_name&#x27;: &#x27;AnsiUser1&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [], &#x27;role_id&#x27;: -5, &#x27;role_info_label&#x27;: &#x27;No access&#x27;, &#x27;role_info_summary&#x27;: &#x27;Used for restricting granted access&#x27;, &#x27;role_name&#x27;: &#x27;NoAccess&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [&#x27;System.Anonymous&#x27;, &#x27;System.View&#x27;], &#x27;role_id&#x27;: -3, &#x27;role_info_label&#x27;: &#x27;View&#x27;, &#x27;role_info_summary&#x27;: &#x27;Visibility access (cannot be granted)&#x27;, &#x27;role_name&#x27;: &#x27;View&#x27;, &#x27;role_system&#x27;: True}]</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
 
 
 Status
@@ -233,4 +268,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Philipp Fruck (@p-fruck)

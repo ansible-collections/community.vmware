@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_local_role_info_module:
+.. _community.vmware.vmware_vsan_hcl_db_module:
 
 
-***************************************
-community.vmware.vmware_local_role_info
-***************************************
+***********************************
+community.vmware.vmware_vsan_hcl_db
+***********************************
 
-**Gather info about local roles on an ESXi host or vCenter**
+**Manages the vSAN Hardware Compatibility List (HCL) database**
 
 
+Version added: 3.5.0
 
 .. contents::
    :local:
@@ -16,9 +17,16 @@ community.vmware.vmware_local_role_info
 
 Synopsis
 --------
-- This module can be used to gather information about local role info on an ESXi host or vCenter
+- Manages vSAN HCL db on vSphere
+- DB file can be downloaded from https://partnerweb.vmware.com/service/vsan/all.json
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 
 Parameters
@@ -122,6 +130,22 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>source</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The path to the HCL db file</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -167,8 +191,6 @@ Notes
 -----
 
 .. note::
-   - Be sure that the user used for login, has the appropriate rights to view roles
-   - The module returns a list of dict in version 2.8 and above.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -178,52 +200,22 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather info about local role from an ESXi (or vCenter)
-      community.vmware.vmware_local_role_info:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-      register: fact_details
+    - name: Fetch HCL db file
+      ansible.builtin.get_url:
+        url: https://partnerweb.vmware.com/service/vsan/all.json
+        dest: hcl_db.json
+        force: true
       delegate_to: localhost
-    - name: Get Admin privileges
-      set_fact:
-        admin_priv: "{{ fact_details.local_role_info | selectattr('role_name', 'equalto', 'Admin') | map(attribute='privileges') | first  }}"
-    - debug:
-        msg: "{{ admin_priv }}"
+
+    - name: Upload HCL db file to vCenter
+      community.vmware.vmware_vsan_hcl_db:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        source: hcl_db.json
+      delegate_to: localhost
 
 
-
-Return Values
--------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>local_role_info</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>A list of dict about role information present on ESXi host</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;privileges&#x27;: [&#x27;Alarm.Acknowledge&#x27;, &#x27;Alarm.Create&#x27;, &#x27;Alarm.Delete&#x27;, &#x27;Alarm.DisableActions&#x27;], &#x27;role_id&#x27;: -12, &#x27;role_info_label&#x27;: &#x27;Ansible User&#x27;, &#x27;role_info_summary&#x27;: &#x27;Ansible Automation user&#x27;, &#x27;role_name&#x27;: &#x27;AnsiUser1&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [], &#x27;role_id&#x27;: -5, &#x27;role_info_label&#x27;: &#x27;No access&#x27;, &#x27;role_info_summary&#x27;: &#x27;Used for restricting granted access&#x27;, &#x27;role_name&#x27;: &#x27;NoAccess&#x27;, &#x27;role_system&#x27;: True}, {&#x27;privileges&#x27;: [&#x27;System.Anonymous&#x27;, &#x27;System.View&#x27;], &#x27;role_id&#x27;: -3, &#x27;role_info_label&#x27;: &#x27;View&#x27;, &#x27;role_info_summary&#x27;: &#x27;Visibility access (cannot be granted)&#x27;, &#x27;role_name&#x27;: &#x27;View&#x27;, &#x27;role_system&#x27;: True}]</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
 
 
 Status
@@ -233,4 +225,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Philipp Fruck (@p-fruck)

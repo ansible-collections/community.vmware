@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_tools - ansible_vmware_guest_uuid added for easier use of vmware_tools connection plugin with vmware_vm_inventory plugin

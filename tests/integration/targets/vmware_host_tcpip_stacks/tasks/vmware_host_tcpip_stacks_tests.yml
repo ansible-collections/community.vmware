@@ -16,7 +16,7 @@
       alternate_dns: 9.9.9.9
       search_domains:
         - example.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: cubic
       max_num_connections: 12000
   check_mode: true
@@ -43,7 +43,7 @@
       alternate_dns: 9.9.9.9
       search_domains:
         - example.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: cubic
       max_num_connections: 12000
   register: update_default_config_result
@@ -58,7 +58,7 @@
       - update_default_config_result.default.preferred_dns == "8.8.8.8"
       - update_default_config_result.default.alternate_dns == "9.9.9.9"
       - update_default_config_result.default.search_domains.0 == "example.com"
-      - update_default_config_result.default.gateway == vmk0_ipaddr
+      - update_default_config_result.default.gateway == default_stack_backup.ipRouteConfig.defaultGateway
       - update_default_config_result.default.congestion_algorithm == "cubic"
       - update_default_config_result.default.max_num_connections == 12000
 
@@ -76,7 +76,7 @@
       alternate_dns: 9.9.9.9
       search_domains:
         - example.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: cubic
       max_num_connections: 12000
   register: update_default_config_idempotency_result
@@ -223,7 +223,7 @@
       search_domains:
         - example.com
         - hoge.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: newreno
       max_num_connections: 11000
     provisioning:
@@ -259,7 +259,7 @@
       search_domains:
         - example.com
         - hoge.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: newreno
       max_num_connections: 11000
     provisioning:
@@ -283,7 +283,7 @@
       - update_all_config_result.default.alternate_dns == "8.8.8.8"
       - update_all_config_result.default.search_domains.0 == "example.com"
       - update_all_config_result.default.search_domains.1 == "hoge.com"
-      - update_all_config_result.default.gateway == vmk0_ipaddr
+      - update_all_config_result.default.gateway == default_stack_backup.ipRouteConfig.defaultGateway
       - update_all_config_result.default.congestion_algorithm == "newreno"
       - update_all_config_result.default.max_num_connections == 11000
       - update_all_config_result.provisioning.gateway == "100.64.0.2"
@@ -308,7 +308,7 @@
       search_domains:
         - example.com
         - hoge.com
-      gateway: "{{ vmk0_ipaddr }}"
+      gateway: "{{ default_stack_backup.ipRouteConfig.defaultGateway }}"
       congestion_algorithm: newreno
       max_num_connections: 11000
     provisioning:

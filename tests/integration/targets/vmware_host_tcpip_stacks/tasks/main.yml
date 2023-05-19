@@ -14,4 +14,4 @@
 - block:
   - include_tasks: vmware_host_tcpip_stacks_tests.yml
   always:
-  - include_tasks: destroy.yml
+  - include_tasks: post.yml
