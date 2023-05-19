@@ -103,6 +103,7 @@ options:
             and forwards the serviceURI and direction to the proxy.
           - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set.
         type: str
+        version_added: '3.7.0'
       direction:
         description:
           - The direction of the connection.
