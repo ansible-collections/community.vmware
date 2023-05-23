@@ -339,7 +339,7 @@ class VMwareCluster(PyVmomi):
             das_config.vmMonitoring != self.params.get("ha_vm_monitoring")
             or das_config.hostMonitoring != self.params.get("ha_host_monitoring")
             or das_config.admissionControlEnabled != self.ha_admission_control
-            or [ds for ds in das_config.heartbeatDatastore if ds.name not in set(ds.name for ds in self.heartbeat_datastores)] != 0
+            or len([ds for ds in das_config.heartbeatDatastore if ds.name not in set(ds.name for ds in self.heartbeat_datastores)]) != 0
             or das_config.defaultVmSettings.restartPriority
             != self.params.get("ha_restart_priority")
             or das_config.defaultVmSettings.isolationResponse
