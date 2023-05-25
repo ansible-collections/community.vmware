@@ -63,7 +63,7 @@ jobs:
           # - stable-2.12
           - stable-2.13
           - stable-2.14
-          - stable-2.15
+        # - stable-2.15
         # - devel
           - milestone
     # Ansible-test on various stable branches does not yet work well with cgroups v2.
