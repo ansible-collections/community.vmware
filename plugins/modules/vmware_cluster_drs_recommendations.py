@@ -12,6 +12,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_cluster_drs_recommendations
+version_added: '3.7.0'
 short_description: Apply DRS Recommendations
 description:
     - Apply DRS Recommendations for Cluster.
