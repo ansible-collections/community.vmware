@@ -71,7 +71,7 @@ options:
                 type: str
                 description:
                 - Network adapter teaming policy.
-                choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, failover_explicit, None ]
+                choices: [ loadbalance_ip, loadbalance_srcmac, loadbalance_srcid, failover_explicit ]
                 aliases: [ 'load_balance_policy' ]
             network_failure_detection:
                 type: str
@@ -1003,7 +1003,6 @@ def main():
                 load_balancing=dict(
                     type='str',
                     choices=[
-                        None,
                         'loadbalance_ip',
                         'loadbalance_srcmac',
                         'loadbalance_srcid',
