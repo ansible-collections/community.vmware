@@ -923,7 +923,7 @@ EXAMPLES = r'''
         touch /tmp/touch-from-playbook
   delegate_to: localhost
 
-# you can initialize the metadata template to a varable as
+# you can initialize the metadata template to a variable as
 # follows.
 # - name: set the cloud-init templates
 #   ansible.builtin.set_fact:
