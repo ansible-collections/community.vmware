@@ -81,6 +81,7 @@ options:
     show_folder:
       description:
         - Show folders
+      version_added: '3.7.0'
       default: true
       type: bool
     show_mac_address:
