@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vm_info - Add missing show_folder parameter (https://github.com/ansible-collections/community.vmware/issues/1709).

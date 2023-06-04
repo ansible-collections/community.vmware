@@ -78,6 +78,12 @@ options:
       version_added: '3.5.0'
       default: true
       type: bool
+    show_folder:
+      description:
+        - Show folders
+      version_added: '3.7.0'
+      default: true
+      type: bool
     show_mac_address:
       description:
         - Tags virtual machine's mac address is shown if set to C(true).
@@ -447,6 +453,7 @@ def main():
         show_cluster=dict(type='bool', default=True),
         show_datacenter=dict(type='bool', default=True),
         show_datastore=dict(type='bool', default=True),
+        show_folder=dict(type='bool', default=True),
         show_esxi_hostname=dict(type='bool', default=True),
         show_mac_address=dict(type='bool', default=True),
         show_net=dict(type='bool', default=True),
