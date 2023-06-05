@@ -1,0 +1,2 @@
+bugfixes:
+  - Add missing modules to runtime.yml (https://github.com/ansible-collections/community.vmware/pull/1764).
