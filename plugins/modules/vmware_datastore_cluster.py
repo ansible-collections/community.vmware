@@ -7,8 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
-__metaclass__ = type
 
+__metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
@@ -543,6 +543,13 @@ class VMwareDatastoreClusterManager(PyVmomi):
                         sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
 
                         # Automation Overrides
+                        if policy_enforcement_automation_level is not None or \
+                                rule_enforcement_automation_level is not None or \
+                                space_balance_automation_level is not None or \
+                                vm_evacuation_automation_level is not None or \
+                                io_balance_automation_level is not None:
+                            sdrs_spec.podConfigSpec.automationOverrides = vim.storageDrs.AutomationConfig()
+
                         if policy_enforcement_automation_level:
                             sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
                                 if policy_enforcement_automation_level != "cluster_settings" else None
@@ -557,6 +564,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
                                 if vm_evacuation_automation_level != "cluster_settings" else None
 
                         # Space Load Balance Config
+                        sdrs_spec.podConfigSpec.spaceLoadBalanceConfig = vim.storageDrs.SpaceLoadBalanceConfig()
                         sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.minSpaceUtilizationDifference = min_space_utilization_difference
 
                         if free_space_threshold_gb:
@@ -571,6 +579,9 @@ class VMwareDatastoreClusterManager(PyVmomi):
                         if io_balance_automation_level:
                             sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
                                 if io_balance_automation_level != "cluster_settings" else None
+
+                        if io_latency_threshold is not None or io_load_imbalanc_threshold is not None:
+                            sdrs_spec.podConfigSpec.ioLoadBalanceConfig = vim.storageDrs.IoLoadBalanceConfig()
 
                         if io_latency_threshold:
                             sdrs_spec.podConfigSpec.ioLoadBalanceConfig.ioLatencyThreshold = io_latency_threshold
@@ -649,7 +660,7 @@ def main():
                 vm_name=dict(type='str', required=True),
                 keep_vmdks_together=dict(type='bool', default=None),
                 automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none'))
-            )
+                              )
         )
     )
     module = AnsibleModule(
