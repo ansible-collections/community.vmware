@@ -91,7 +91,6 @@ options:
         - Specifies whether the space balance automation level is automated, manual or use the cluster settings.
         - Specifies the Storage DRS behavior when it generates recommendations for correcting space load imbalance in a datastore cluster.
         choices: [automated, manual, cluster_settings]
-        default: automated
         type: str
         version_added: '2.3.0'
     rule_enforcement_automation_level:
@@ -99,7 +98,6 @@ options:
         - Specifies whether the rule enforcement automation level is automated, manual or use the cluster settings.
         - Specifies the Storage DRS behavior when it generates recommendations for correcting affinity rule violations in a datastore cluster.
         choices: [automated, manual, cluster_settings]
-        default: automated
         type: str
         version_added: '2.3.0'
     policy_enforcement_automation_level:
@@ -107,7 +105,6 @@ options:
         - Specifies whether the policy enforcement automation level is automated, manual or use the cluster settings.
         - Specifies the Storage DRS behavior when it generates recommendations for correcting storage and VM policy violations in a datastore cluster
         choices: [automated, manual, cluster_settings]
-        default: automated
         type: str
         version_added: '2.3.0'
     vm_evacuation_automation_level:
@@ -115,7 +112,6 @@ options:
         - Specifies whether the vm evacuation enforcement automation level is automated, manual or use the cluster settings.
         - Specifies the Storage DRS behavior when it generates recommendations for VM evacuations from datastores in a datastore cluster.
         choices: [automated, manual, cluster_settings]
-        default: automated
         type: str
         version_added: '2.3.0'
     min_space_utilization_difference:
@@ -145,7 +141,6 @@ options:
         - Specifies whether the I/O balance automation level is automated, manual or use the cluster settings.
         - Specifies the Storage DRS behavior when it generates recommendations for correcting I/O load imbalance in a datastore cluster.
         choices: [automated, manual, cluster_settings]
-        default: automated
         type: str
         version_added: '2.3.0'
     io_latency_threshold:
@@ -365,29 +360,29 @@ class VMwareDatastoreClusterManager(PyVmomi):
                     change = True
 
                 # Automation overrides
-                if currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode is None or \
-                        space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode:
+                if space_balance_automation_level is not None and (currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode is None or \
+                        space_balance_automation_level != currentPodConfig.automationOverrides.spaceLoadBalanceAutomationMode):
                     sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
                         if space_balance_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Space balance automation level to '%s'." % space_balance_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.ruleEnforcementAutomationMode is None or \
-                        rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode:
+                if rule_enforcement_automation_level is not None and (currentPodConfig.automationOverrides.ruleEnforcementAutomationMode is None or \
+                        rule_enforcement_automation_level != currentPodConfig.automationOverrides.ruleEnforcementAutomationMode):
                     sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
                         if rule_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Rule enforcement automation level to '%s'." % rule_enforcement_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.policyEnforcementAutomationMode is None or \
-                        policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode:
+                if policy_enforcement_automation_level is not None and (currentPodConfig.automationOverrides.policyEnforcementAutomationMode is None or \
+                        policy_enforcement_automation_level != currentPodConfig.automationOverrides.policyEnforcementAutomationMode):
                     sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
                         if policy_enforcement_automation_level != "cluster_settings" else None
                     results['result'] += " Changed Policy enforcement automation level to '%s'." % policy_enforcement_automation_level
                     change = True
 
-                if currentPodConfig.automationOverrides.vmEvacuationAutomationMode is None or \
-                        vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode:
+                if vm_evacuation_automation_level is not None and (currentPodConfig.automationOverrides.vmEvacuationAutomationMode is None or \
+                        vm_evacuation_automation_level != currentPodConfig.automationOverrides.vmEvacuationAutomationMode):
                     sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
                         if vm_evacuation_automation_level != "cluster_settings" else None
                     results['result'] += " Changed VM evacuation automation level to '%s'." % vm_evacuation_automation_level
@@ -406,14 +401,15 @@ class VMwareDatastoreClusterManager(PyVmomi):
                     results['result'] += " Changed Space threshold to '%s'GB." % free_space_threshold_gb
                     change = True
 
-                if space_utilization_threshold is not None and space_utilization_threshold != currentPodConfig.spaceLoadBalanceConfig.spaceUtilizationThreshold:
+                if space_utilization_threshold is not None and \
+                        space_utilization_threshold != currentPodConfig.spaceLoadBalanceConfig.spaceUtilizationThreshold:
                     sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceUtilizationThreshold = space_utilization_threshold
                     sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "utilization"
                     results['result'] += " Changed Space threshold to '%s' prozent." % space_utilization_threshold
                     change = True
 
                 # IO Load Balance Config
-                if io_balance_automation_level != currentPodConfig.automationOverrides.ioLoadBalanceAutomationMode:
+                if io_balance_automation_level is not None and io_balance_automation_level != currentPodConfig.automationOverrides.ioLoadBalanceAutomationMode:
                     sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
                         if io_balance_automation_level != "cluster_settings" else None
                     results['result'] += " Changed I/O balance automation level to '%s'." % io_balance_automation_level
@@ -543,14 +539,18 @@ class VMwareDatastoreClusterManager(PyVmomi):
                         sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
 
                         # Automation Overrides
-                        sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
-                            if policy_enforcement_automation_level != "cluster_settings" else None
-                        sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
-                            if rule_enforcement_automation_level != "cluster_settings" else None
-                        sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
-                            if space_balance_automation_level != "cluster_settings" else None
-                        sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
-                            if vm_evacuation_automation_level != "cluster_settings" else None
+                        if policy_enforcement_automation_level:
+                            sdrs_spec.podConfigSpec.automationOverrides.policyEnforcementAutomationMode = policy_enforcement_automation_level \
+                                if policy_enforcement_automation_level != "cluster_settings" else None
+                        if rule_enforcement_automation_level:
+                            sdrs_spec.podConfigSpec.automationOverrides.ruleEnforcementAutomationMode = rule_enforcement_automation_level \
+                                if rule_enforcement_automation_level != "cluster_settings" else None
+                        if space_balance_automation_level:
+                            sdrs_spec.podConfigSpec.automationOverrides.spaceLoadBalanceAutomationMode = space_balance_automation_level \
+                                if space_balance_automation_level != "cluster_settings" else None
+                        if vm_evacuation_automation_level:
+                            sdrs_spec.podConfigSpec.automationOverrides.vmEvacuationAutomationMode = vm_evacuation_automation_level \
+                                if vm_evacuation_automation_level != "cluster_settings" else None
 
                         # Space Load Balance Config
                         sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.minSpaceUtilizationDifference = min_space_utilization_difference
@@ -564,8 +564,9 @@ class VMwareDatastoreClusterManager(PyVmomi):
                             sdrs_spec.podConfigSpec.spaceLoadBalanceConfig.spaceThresholdMode = "utilization"
 
                         # IO Load Balance Config
-                        sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
-                            if io_balance_automation_level != "cluster_settings" else None
+                        if io_balance_automation_level:
+                            sdrs_spec.podConfigSpec.automationOverrides.ioLoadBalanceAutomationMode = io_balance_automation_level \
+                                if io_balance_automation_level != "cluster_settings" else None
 
                         if io_latency_threshold:
                             sdrs_spec.podConfigSpec.ioLoadBalanceConfig.ioLatencyThreshold = io_latency_threshold
@@ -627,16 +628,16 @@ def main():
             enable_io_loadbalance=dict(type='bool', default=False, required=False),
             loadbalance_interval=dict(type='int', default=480, required=False),
             # Automation overrides
-            space_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
-            rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
-            policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
-            vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            space_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings']),
+            rule_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings']),
+            policy_enforcement_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings']),
+            vm_evacuation_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings']),
             # Space Load Balance Config
             min_space_utilization_difference=dict(type='int', required=False),
             free_space_threshold_gb=dict(type='int', required=False),
             space_utilization_threshold=dict(type='int', required=False),
             # IO Load Balance Config
-            io_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings'], default='automated'),
+            io_balance_automation_level=dict(type='str', choices=['automated', 'manual', 'cluster_settings']),
             io_latency_threshold=dict(type='int', required=False),
             io_load_imbalanc_threshold=dict(type='int', required=False),
             # VM overrides
