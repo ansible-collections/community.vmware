@@ -1,3 +1,0 @@
----
-minor_changes:
-  - vmware_cluster_drs_recommendations - Add the Module to apply the drs recommendations (https://github.com/ansible-collections/community.vmware/pull/1736)

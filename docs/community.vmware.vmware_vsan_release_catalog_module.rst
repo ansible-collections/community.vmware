@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_object_role_permission_info_module:
+.. _community.vmware.vmware_vsan_release_catalog_module:
 
 
-***************************************************
-community.vmware.vmware_object_role_permission_info
-***************************************************
+********************************************
+community.vmware.vmware_vsan_release_catalog
+********************************************
 
-**Gather information about object's permissions**
+**Uploads the vSAN Release Catalog**
 
 
+Version added: 3.7.0
 
 .. contents::
    :local:
@@ -16,9 +17,16 @@ community.vmware.vmware_object_role_permission_info
 
 Synopsis
 --------
-- This module can be used to gather object permissions on the given VMware object.
+- Manually upload the vSAN Release Catalog the the vCenter
+- See https://kb.vmware.com/s/article/58891 for more details
 
 
+
+Requirements
+------------
+The below requirements are needed on the host that executes this module.
+
+- vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 
 Parameters
@@ -47,68 +55,6 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>moid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Managed object ID for the given object.</div>
-                        <div>Mutually exclusive with <em>object_name</em>.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: object_moid</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The object name to assigned permission.</div>
-                        <div>Mutually exclusive with <em>moid</em>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>Folder</b>&nbsp;&larr;</div></li>
-                                    <li>VirtualMachine</li>
-                                    <li>Datacenter</li>
-                                    <li>ResourcePool</li>
-                                    <li>Datastore</li>
-                                    <li>Network</li>
-                                    <li>HostSystem</li>
-                                    <li>ComputeResource</li>
-                                    <li>ClusterComputeResource</li>
-                                    <li>DistributedVirtualSwitch</li>
-                                    <li>DistributedVirtualPortgroup</li>
-                                    <li>StoragePod</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The object type being targeted.</div>
                 </td>
             </tr>
             <tr>
@@ -150,22 +96,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>principal</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The optional name of an entity, such as a user, assigned permissions on an object.</div>
-                        <div>If provided, actual permissions on the specified object are returned for the principal, instead of roles.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -195,6 +125,22 @@ Parameters
                 <td>
                         <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>source</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The path to the release catalog file</div>
                 </td>
             </tr>
             <tr>
@@ -245,8 +191,6 @@ Notes
 -----
 
 .. note::
-   - The ESXi or vCenter login user must have the appropriate rights to administer permissions.
-   - Supports check mode.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -256,58 +200,15 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Gather role information about Datastore
-      community.vmware.vmware_object_role_permission_info:
+    - name: Upload release catalog file to vCenter
+      community.vmware.vmware_vsan_release_catalog:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        validate_certs: false
-        object_name: ds_200
-        object_type: Datastore
-
-    - name: Gather permissions on Datastore for a User
-      community.vmware.vmware_object_role_permission_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        principal: some.user@company.com
-        object_name: ds_200
-        object_type: Datastore
+        source: release_catalog.json
+      delegate_to: localhost
 
 
-
-Return Values
--------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>permission_info</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>information about object&#x27;s permission</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;principal&#x27;: &#x27;VSPHERE.LOCAL\\vpxd-extension-12e0b667-892c-4694-8a5e-f13147e45dbd&#x27;, &#x27;propagate&#x27;: True, &#x27;role_id&#x27;: -1, &#x27;role_name&#x27;: &#x27;Admin&#x27;}]</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
 
 
 Status
@@ -317,4 +218,4 @@ Status
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Philipp Fruck (@p-fruck)
