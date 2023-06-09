@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_serial_port - add support for proxyURI parameter to enable use of a virtual serial port concentrator (https://github.com/ansible-collections/community.vmware/issues/1742)

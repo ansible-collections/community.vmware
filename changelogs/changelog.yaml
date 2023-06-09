@@ -1566,3 +1566,26 @@ releases:
       name: vsan_health_silent_checks
       namespace: ''
     release_date: '2023-05-12'
+  3.7.0:
+    changes:
+      bugfixes:
+      - Add missing modules to runtime.yml (https://github.com/ansible-collections/community.vmware/pull/1764).
+      - vmware_vm_info - Add missing show_folder parameter (https://github.com/ansible-collections/community.vmware/issues/1709).
+      minor_changes:
+      - vmware_cluster_drs_recommendations - Add the Module to apply the drs recommendations
+        (https://github.com/ansible-collections/community.vmware/pull/1736)
+      - vmware_guest_serial_port - add support for proxyURI parameter to enable use
+        of a virtual serial port concentrator (https://github.com/ansible-collections/community.vmware/issues/1742)
+    fragments:
+    - 1710_vmware_vm_info.yaml
+    - 1736-vmware_cluster_drs_recommendations.yaml
+    - 1742-vmware_guest_serial_port-vspc.yml
+    - 1764_runtime.yaml
+    modules:
+    - description: Apply DRS Recommendations
+      name: vmware_cluster_drs_recommendations
+      namespace: ''
+    - description: Uploads the vSAN Release Catalog
+      name: vmware_vsan_release_catalog
+      namespace: ''
+    release_date: '2023-06-09'
