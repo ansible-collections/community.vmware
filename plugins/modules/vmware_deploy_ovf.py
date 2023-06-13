@@ -197,7 +197,6 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    find_network_by_name,
     find_all_networks_by_name,
     find_vm_by_name,
     PyVmomi,
