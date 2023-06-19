@@ -116,7 +116,15 @@ options:
         - Name of the virtual machine to get related configurations information from.
         - Or if V(regex) is True, it will be used as an Filter for the Names of the virtual machines.
         - Can't be used if V(cluster) is set.
+        - Or if V(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+        - Can't be used if V(cluster) or V(vm_names) is set.
       type: str
+    vm_names:
+      description:
+        - List of the names of the virtual machines to get related configurations information from.
+        - Can't be used if V(regex) is set.
+      type: list
+      element: str
     regex:
       description:
         - If V(vm_name) is used as an Regex Filter.
@@ -155,7 +163,7 @@ EXAMPLES = r'''
 
 - debug:
     var: vminfo.virtual_machines
-    
+
 - name: Gather all registered virtual machines of this cluster
   community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
@@ -369,6 +377,7 @@ class VmwareVmInfo(PyVmomi):
                 virtual_machines = [virtual_machine]
         else:
             cluster = self.params.get('cluster')
+            vm_names = self.params.get('vm_names')
             if cluster:
                 cluster_obj = find_cluster_by_name(self.content, cluster_name=cluster)
                 if cluster_obj is None:
@@ -383,6 +392,8 @@ class VmwareVmInfo(PyVmomi):
 
         for vm in virtual_machines:
             try:
+                if self.params.get('vm_names') and vm.name not in vm_names:
+                    continue
                 if self.params.get('regex') and not re.search(vm_name, vm.name):
                     continue
 
@@ -499,7 +510,10 @@ class VmwareVmInfo(PyVmomi):
                     _virtual_machines.append(virtual_machine)
             except vmodl.fault.ManagedObjectNotFound:
                 continue
-            return _virtual_machines
+
+        if _virtual_machines == None:
+            self.module.fail_json(msg="No virtual machines found.")
+        return _virtual_machines
 
 
 def main():
@@ -520,6 +534,7 @@ def main():
         folder=dict(type='str'),
         cluster=dict(type='str', aliases=['cluster_name']),
         vm_name=dict(type='str'),
+        vm_names=dict(type='list', elements='str'),
         regex=dict(type='bool', default=False)
     )
 
@@ -527,7 +542,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         mutually_exclusive=[
-            ['cluster', 'folder'], ['vm_name', 'cluster']
+            ['cluster', 'folder'], ['vm_name', 'vm_names', 'cluster'], ['vm_names', 'regex']
         ]
     )
 
