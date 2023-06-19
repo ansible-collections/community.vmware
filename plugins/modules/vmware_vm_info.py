@@ -57,6 +57,18 @@ options:
         - '   folder: folder1/datacenter1/vm'
         - '   folder: /folder1/datacenter1/vm/folder2'
       type: str
+    vm_name:
+      description:
+        - Name of the virtual machine to get related configurations information from.
+        - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+        - Can´t be used if C(cluster) or C(vm_names) is set.
+      type: str
+    vm_names:
+      description:
+        - List of the names of the virtual machines to get related configurations information from.
+        - Can´t be used if C(regex) is set.
+      type: list
+      element: str
     show_cluster:
       description:
         - Tags virtual machine's cluster is shown if set to C(true).
@@ -110,18 +122,6 @@ options:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: False
       type: bool
-    vm_name:
-      description:
-        - Name of the virtual machine to get related configurations information from.
-        - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-        - Can´t be used if C(cluster) or C(vm_names) is set.
-      type: str
-    vm_names:
-      description:
-        - List of the names of the virtual machines to get related configurations information from.
-        - Can´t be used if C(regex) is set.
-      type: list
-      element: str
     regex:
       description:
         - If C(vm_name) is used as an Regex Filter.
