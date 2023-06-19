@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_host_datastore - added new parameter resignature for supporting resignaturing an existing VMFS datastore on an imported/cloned LUN.
