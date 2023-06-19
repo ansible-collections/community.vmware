@@ -8,10 +8,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 import re
-
 
 DOCUMENTATION = r'''
 ---
@@ -33,7 +33,7 @@ options:
       - If set to C(vm), then information are gathered for virtual machines only.
       - If set to C(template), then information are gathered for virtual machine templates only.
       - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
-      required: false
+      required: False
       default: 'all'
       choices: [ all, vm, template ]
       type: str
@@ -101,21 +101,27 @@ options:
       type: bool
     show_tag:
       description:
-        - Tags related to virtual machine are shown if set to C(true).
-      default: false
+        - Tags related to virtual machine are shown if set to C(True).
+      default: False
       type: bool
     show_allocated:
       version_added: '2.5.0'
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
-      default: false
+      default: False
       type: bool
     vm_name:
       description:
         - Name of the virtual machine to get related configurations information from.
         - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-        - Can't be used if C(cluster) is set.
+        - Can't be used if C(cluster) or C(vm_names) is set.
       type: str
+    vm_names:
+      description:
+        - List of the names of the virtual machines to get related configurations information from.
+        - Can't be used if C(regex) is set.
+      type: list
+      element: str
     regex:
       description:
         - If C(vm_name) is used as an Regex Filter.
@@ -154,7 +160,7 @@ EXAMPLES = r'''
 
 - debug:
     var: vminfo.virtual_machines
-    
+
 - name: Gather all registered virtual machines of this cluster
   community.vmware.vmware_vm_info:
     hostname: '{{ vcenter_hostname }}'
@@ -368,6 +374,7 @@ class VmwareVmInfo(PyVmomi):
                 virtual_machines = [virtual_machine]
         else:
             cluster = self.params.get('cluster')
+            vm_names = self.params.get('vm_names')
             if cluster:
                 cluster_obj = find_cluster_by_name(self.content, cluster_name=cluster)
                 if cluster_obj is None:
@@ -382,6 +389,8 @@ class VmwareVmInfo(PyVmomi):
 
         for vm in virtual_machines:
             try:
+                if self.params.get('vm_names') and vm.name not in vm_names:
+                    continue
                 if self.params.get('regex') and not re.search(vm_name, vm.name):
                     continue
 
@@ -500,7 +509,10 @@ class VmwareVmInfo(PyVmomi):
                     _virtual_machines.append(virtual_machine)
             except vmodl.fault.ManagedObjectNotFound:
                 continue
-            return _virtual_machines
+
+        if _virtual_machines == None:
+            self.module.fail_json(msg="No virtual machines found.")
+        return _virtual_machines
 
 
 def main():
@@ -520,6 +532,7 @@ def main():
         folder=dict(type='str'),
         cluster=dict(type='str', aliases=['cluster_name']),
         vm_name=dict(type='str'),
+        vm_names=dict(type='list', elements='str'),
         regex=dict(type='bool', default=False)
     )
 
@@ -527,7 +540,7 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         mutually_exclusive=[
-            ['cluster', 'folder'], ['vm_name', 'cluster']
+            ['cluster', 'folder'], ['vm_name', 'vm_names', 'cluster'], ['vm_names', 'regex']
         ]
     )
 
