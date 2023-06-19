@@ -45,7 +45,7 @@ options:
     folder:
       description:
         - Specify a folder location of VMs to gather information from.
-        - Can't be used if C(cluster) is set.
+        - Can´t be used if C(cluster) is set.
         - 'Examples:'
         - '   folder: /ha-datacenter/vm'
         - '   folder: ha-datacenter/vm'
@@ -114,12 +114,12 @@ options:
       description:
         - Name of the virtual machine to get related configurations information from.
         - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-        - Can't be used if C(cluster) or C(vm_names) is set.
+        - Can´t be used if C(cluster) or C(vm_names) is set.
       type: str
     vm_names:
       description:
         - List of the names of the virtual machines to get related configurations information from.
-        - Can't be used if C(regex) is set.
+        - Can´t be used if C(regex) is set.
       type: list
       element: str
     regex:
