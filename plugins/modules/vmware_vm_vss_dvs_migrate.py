@@ -52,7 +52,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import HAS_PYVMOMI, \
-    connect_to_api, get_all_objs,vmware_argument_spec, wait_for_task, find_vm_by_name
+    connect_to_api, get_all_objs, vmware_argument_spec, wait_for_task, find_vm_by_name
 
 
 class VMwareVmVssDvsMigrate(object):
@@ -110,7 +110,7 @@ class VMwareVmVssDvsMigrate(object):
 
     def check_vm_network_state(self):
         try:
-            self.vm = self.find_vm_by_name()
+            self.vm = self.find_vm_by_name(self.content, vm_name=self.vm_name)
 
             if self.vm is None:
                 self.module.fail_json(msg="A virtual machine with name %s does not exist" % self.vm_name)
