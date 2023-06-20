@@ -33,7 +33,7 @@ options:
       - If set to C(vm), then information are gathered for virtual machines only.
       - If set to C(template), then information are gathered for virtual machine templates only.
       - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
-      required: False
+      required: false
       default: 'all'
       choices: [ all, vm, template ]
       type: str
@@ -44,107 +44,81 @@ options:
       type: bool
     folder:
       description:
-      - Specify a folder location of VMs to gather information from.
-      - Can´t be used if C(cluster) is set.
-      - 'Examples:'
-      - '   folder: /ha-datacenter/vm'
-      - '   folder: ha-datacenter/vm'
-      - '   folder: /datacenter1/vm'
-      - '   folder: datacenter1/vm'
-      - '   folder: /datacenter1/vm/folder1'
-      - '   folder: datacenter1/vm/folder1'
-      - '   folder: /folder1/datacenter1/vm'
-      - '   folder: folder1/datacenter1/vm'
-      - '   folder: /folder1/datacenter1/vm/folder2'
+        - Specify a folder location of VMs to gather information from.
+        - 'Examples:'
+        - '   folder: /ha-datacenter/vm'
+        - '   folder: ha-datacenter/vm'
+        - '   folder: /datacenter1/vm'
+        - '   folder: datacenter1/vm'
+        - '   folder: /datacenter1/vm/folder1'
+        - '   folder: datacenter1/vm/folder1'
+        - '   folder: /folder1/datacenter1/vm'
+        - '   folder: folder1/datacenter1/vm'
+        - '   folder: /folder1/datacenter1/vm/folder2'
       type: str
-    vm_name:
-      description:
-      - Name of the virtual machine to get related configurations information from.
-      - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-      - Can´t be used if C(cluster) or C(vm_names) is set.
-      type: str
-    vm_names:
-      description:
-      - List of the names of the virtual machines to get related configurations information from.
-      - Can´t be used if C(regex) is set.
-      type: list
-      element: str
     show_cluster:
       description:
-      - Tags virtual machine's cluster is shown if set to C(true).
+        - Tags virtual machine's cluster is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datacenter:
       description:
-      - Tags virtual machine's datacenter is shown if set to C(true).
+        - Tags virtual machine's datacenter is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datastore:
       description:
-      - Tags virtual machine's datastore is shown if set to C(true).
+        - Tags virtual machine's datastore is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_esxi_hostname:
       description:
-      - Tags virtual machine's ESXi host is shown if set to C(true).
+        - Tags virtual machine's ESXi host is shown if set to C(true).
       version_added: '3.5.0'
+      default: true
+      type: bool
+    show_folder:
+      description:
+        - Show folders
+      version_added: '3.7.0'
       default: true
       type: bool
     show_mac_address:
       description:
-      - Tags virtual machine's mac address is shown if set to C(true).
+        - Tags virtual machine's mac address is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_net:
       description:
-      - Tags virtual machine's network is shown if set to C(true).
+        - Tags virtual machine's network is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_resource_pool:
       description:
-      - Tags virtual machine's resource pool is shown if set to C(true).
+        - Tags virtual machine's resource pool is shown if set to C(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_tag:
       description:
-      - Tags related to virtual machine are shown if set to C(True).
-      default: False
+        - Tags related to virtual machine are shown if set to C(true).
+      default: false
       type: bool
     show_allocated:
       version_added: '2.5.0'
       description:
-      - Allocated storage in byte and memory in MB are shown if it set to True.
-      default: False
+        - Allocated storage in byte and memory in MB are shown if it set to True.
+      default: false
       type: bool
-    regex:
+    vm_name:
       description:
-- If C(vm_name) is used as an Regex Filter.
-      - Metacharacters use in the C(vm_name):
-      - \[\] -> A set of characters
-      - \ -> Signals a special sequence (can also be used to escape special characters)
-      - . -> Any character (except newline character)
-      - ^ -> Starts with
-      - $ -> Ends with
-      - \* -> Zero or more occurrences
-      - + -> One or more occurrences
-      - ? -> Zero or one occurrences
-      - \{\} -> Exactly the specified number of occurrences
-      - \| -> Either or
-      - () -> Capture and group
-      - For more: Python RegEx
-      type: bool
-      default: False
-    cluster:
-      description:
-      - Name of the cluster to gather information from VMs of this cluster.
+        - Name of the virtual machine to get related configurations information from.
       type: str
-      aliases: [ cluster_name ]
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -523,6 +497,7 @@ def main():
         show_cluster=dict(type='bool', default=True),
         show_datacenter=dict(type='bool', default=True),
         show_datastore=dict(type='bool', default=True),
+        show_folder=dict(type='bool', default=True),
         show_esxi_hostname=dict(type='bool', default=True),
         show_mac_address=dict(type='bool', default=True),
         show_net=dict(type='bool', default=True),
