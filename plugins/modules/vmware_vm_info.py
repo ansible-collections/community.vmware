@@ -40,29 +40,29 @@ options:
       type: bool
     folder:
       description:
-        - Specify a folder location of VMs to gather information from.
-        - Can't be used if V(cluster) is set.
-        - 'Examples:'
-        - '   folder: /ha-datacenter/vm'
-        - '   folder: ha-datacenter/vm'
-        - '   folder: /datacenter1/vm'
-        - '   folder: datacenter1/vm'
-        - '   folder: /datacenter1/vm/folder1'
-        - '   folder: datacenter1/vm/folder1'
-        - '   folder: /folder1/datacenter1/vm'
-        - '   folder: folder1/datacenter1/vm'
-        - '   folder: /folder1/datacenter1/vm/folder2'
+      - Specify a folder location of VMs to gather information from.
+      - Can't be used if V(cluster) is set.
+      - 'Examples:'
+      - '   folder: /ha-datacenter/vm'
+      - '   folder: ha-datacenter/vm'
+      - '   folder: /datacenter1/vm'
+      - '   folder: datacenter1/vm'
+      - '   folder: /datacenter1/vm/folder1'
+      - '   folder: datacenter1/vm/folder1'
+      - '   folder: /folder1/datacenter1/vm'
+      - '   folder: folder1/datacenter1/vm'
+      - '   folder: /folder1/datacenter1/vm/folder2'
       type: str
     vm_name:
       description:
-        - Name of the virtual machine to get related configurations information from.
-        - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-        - Can´t be used if C(cluster) or C(vm_names) is set.
+      - Name of the virtual machine to get related configurations information from.
+      - Or if V(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+      - Can´t be used if V(cluster) or V(vm_names) is set.
       type: str
     vm_names:
       description:
-        - List of the names of the virtual machines to get related configurations information from.
-        - Can´t be used if C(regex) is set.
+      - List of the names of the virtual machines to get related configurations information from.
+      - Can´t be used if V(regex) is set.
       type: list
       element: str
     show_cluster:
@@ -143,7 +143,7 @@ options:
       default: False
     cluster:
       description:
-        - Name of the cluster to gather information from VMs of this cluster.
+      - Name of the cluster to gather information from VMs of this cluster.
       type: str
       aliases: [ cluster_name ]
 extends_documentation_fragment:
