@@ -110,7 +110,7 @@ class VMwareVmVssDvsMigrate(object):
 
     def check_vm_network_state(self):
         try:
-            self.vm = self.find_vm_by_name(self.content, vm_name=self.vm_name)
+            self.vm = find_vm_by_name(self.content, vm_name=self.vm_name)
 
             if self.vm is None:
                 self.module.fail_json(msg="A virtual machine with name %s does not exist" % self.vm_name)
