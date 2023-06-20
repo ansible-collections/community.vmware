@@ -30,21 +30,22 @@ notes:
 options:
     vm_type:
       description:
-      - If set to C(vm), then information are gathered for virtual machines only.
-      - If set to C(template), then information are gathered for virtual machine templates only.
-      - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
+        - If set to C(vm), then information are gathered for virtual machines only.
+        - If set to C(template), then information are gathered for virtual machine templates only.
+        - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
       required: false
       default: 'all'
       choices: [ all, vm, template ]
       type: str
     show_attribute:
       description:
-      - Attributes related to VM guest shown in information only when this is set C(true).
+        - Attributes related to VM guest shown in information only when this is set C(true).
       default: false
       type: bool
     folder:
       description:
         - Specify a folder location of VMs to gather information from.
+        - Can´t be used if C(cluster) is set.
         - 'Examples:'
         - '   folder: /ha-datacenter/vm'
         - '   folder: ha-datacenter/vm'
@@ -115,10 +116,23 @@ options:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: false
       type: bool
+    cluster:
+      description:
+        - Name of the cluster to gather information from VMs of this cluster.
+      type: str
+      aliases: [ cluster_name ]
     vm_name:
       description:
         - Name of the virtual machine to get related configurations information from.
+        - Or if C(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+        - Can´t be used if C(cluster) or C(vm_names) is set.
       type: str
+    vm_names:
+      description:
+        - List of the names of the virtual machines to get related configurations information from.
+        - Can´t be used if C(regex) is set.
+      type: list
+      element: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
