@@ -508,7 +508,7 @@ class VmwareVmInfo(PyVmomi):
             except vmodl.fault.ManagedObjectNotFound:
                 continue
 
-        if _virtual_machines == None:
+        if _virtual_machines is None:
             self.module.fail_json(msg="No virtual machines found.")
         return _virtual_machines
 
