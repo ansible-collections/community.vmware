@@ -133,6 +133,24 @@ options:
         - Can´t be used if C(regex) is set.
       type: list
       element: str
+    regex:
+      description:
+        - If C(vm_name) is used as an Regex Filter.
+        - Metacharacters use in the C(vm_name)
+        - [] -> A set of characters
+        - \ -> Signals a special sequence (can also be used to escape special characters)
+        - . -> Any character (except newline character)
+        - ^ -> Starts with
+        - $ -> Ends with
+        - * -> Zero or more occurrences
+        - + -> One or more occurrences
+        - ? -> Zero or one occurrences
+        - {} -> Exactly the specified number of occurrences
+        - | -> Either or
+        - () -> Capture and group
+        - For more: Python RegEx
+      type: bool
+      default: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
@@ -498,7 +516,7 @@ class VmwareVmInfo(PyVmomi):
             except vmodl.fault.ManagedObjectNotFound:
                 continue
 
-        if _virtual_machines == None:
+        if _virtual_machines is None:
             self.module.fail_json(msg="No virtual machines found.")
         return _virtual_machines
 
