@@ -12,7 +12,6 @@ __metaclass__ = type
 
 import re
 
-
 DOCUMENTATION = r'''
 ---
 module: vmware_vm_info
