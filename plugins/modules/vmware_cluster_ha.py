@@ -173,8 +173,17 @@ options:
     heartbeat_datastores:
       description:
       - A list of the heartbeat datastores.
+      - If list ist [] then all datastores of the cluster will be set as heartbeat_datastores.
       type: list
       elements: str
+    heartbeat_datastore_candidate_policy:
+      description:
+      - Heartbeat datastore selection policy
+      - allFeasibleDs -> Automatically select datastores accessible from the hosts. Causes that C(heartbeat_datastores) will be ignored.
+      - userSelectedDs -> Use datastores only from the specified list.
+      - allFeasibleDsWithUserPreference -> Use datastores from the specified list and complement automatically if needed.
+      type: str
+      choices: ['allFeasibleDs', 'userSelectedDs', 'allFeasibleDsWithUserPreference']
     apd_response:
       description:
       - VM storage protection setting for storage failures categorized as All Paths Down (APD).
@@ -299,14 +308,21 @@ class VMwareCluster(PyVmomi):
         else:
             self.changed_advanced_settings = None
 
-        self.heartbeat_datastore_names = self.params.get('heartbeat_datastores') or []
-        self.heartbeat_datastores = []
-        for ds_name in self.heartbeat_datastore_names:
-            ds = find_datastore_by_name(self.content, ds_name, self.datacenter)
-            if ds is None:
-                self.module.fail_json(msg="Datastore %s does not exist." % ds_name)
-            else:
-                self.heartbeat_datastores.append(ds)
+        if self.params.get('heartbeat_datastore_candidate_policy') == "allFeasibleDs":
+            self.heartbeat_datastores_var = None
+        else:
+            self.heartbeat_datastores_var = self.params.get('heartbeat_datastores')
+
+        if self.heartbeat_datastores_var == []:
+            self.heartbeat_datastores = self.cluster.datastore
+        else:
+            self.heartbeat_datastores = []
+            for ds_name in (self.self.heartbeat_datastores_var or []):
+                ds = find_datastore_by_name(self.content, ds_name, self.datacenter)
+                if ds is None:
+                    self.module.fail_json(msg="Datastore %s does not exist." % ds_name)
+                else:
+                    self.heartbeat_datastores.append(ds)
 
     def get_failover_hosts(self):
         """
@@ -339,7 +355,10 @@ class VMwareCluster(PyVmomi):
             das_config.vmMonitoring != self.params.get("ha_vm_monitoring")
             or das_config.hostMonitoring != self.params.get("ha_host_monitoring")
             or das_config.admissionControlEnabled != self.ha_admission_control
-            or len([ds for ds in das_config.heartbeatDatastore if ds.name not in set(ds.name for ds in self.heartbeat_datastores)]) != 0
+            or self.params.get("heartbeat_datastore_candidate_policy")  # Only needed if no default value is there
+            and das_config.heartbeat_datastore_candidate_policy != self.params.get("heartbeat_datastore_candidate_policy")
+            or self.heartbeat_datastores_var  # Only needed if no default value is there
+            and len([ds for ds in das_config.heartbeatDatastore if ds.name not in set(ds.name for ds in self.heartbeat_datastores)]) != 0
             or das_config.defaultVmSettings.restartPriority
             != self.params.get("ha_restart_priority")
             or das_config.defaultVmSettings.isolationResponse
@@ -463,10 +482,11 @@ class VMwareCluster(PyVmomi):
                 cluster_config_spec.dasConfig.hostMonitoring = self.params.get('ha_host_monitoring')
                 cluster_config_spec.dasConfig.vmMonitoring = self.params.get('ha_vm_monitoring')
 
-                if self.heartbeat_datastores:
+                if self.params.get("heartbeat_datastore_candidate_policy"):
+                    cluster_config_spec.dasConfig.hBDatastoreCandidatePolicy = self.params.get("heartbeat_datastore_candidate_policy")
+
+                if self.heartbeat_datastores_var:
                     cluster_config_spec.dasConfig.heartbeatDatastore = self.heartbeat_datastores
-                else:
-                    cluster_config_spec.dasConfig.heartbeatDatastore = self.cluster.configurationEx.dasConfig.heartbeatDatastore
 
                 if self.changed_advanced_settings:
                     cluster_config_spec.dasConfig.option = self.changed_advanced_settings
@@ -504,6 +524,9 @@ def main():
                                      choices=['none', 'powerOff', 'shutdown']),
         advanced_settings=dict(type='dict', default=dict(), required=False),
         heartbeat_datastores=dict(type='list', elements='str', required=False),
+        heartbeat_datastore_candidate_policy=dict(type='str',
+                                                  required=False,
+                                                  choices=['allFeasibleDs', 'userSelectedDs', 'allFeasibleDsWithUserPreference']),
         # HA VM Monitoring related parameters
         ha_vm_monitoring=dict(type='str',
                               choices=['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled'],
