@@ -317,7 +317,7 @@ class VMwareCluster(PyVmomi):
             self.heartbeat_datastores = self.cluster.datastore
         else:
             self.heartbeat_datastores = []
-            for ds_name in (self.self.heartbeat_datastores_var or []):
+            for ds_name in (self.heartbeat_datastores_var or []):
                 ds = find_datastore_by_name(self.content, ds_name, self.datacenter)
                 if ds is None:
                     self.module.fail_json(msg="Datastore %s does not exist." % ds_name)
