@@ -356,7 +356,6 @@ Parameters
                                     <li>loadbalance_srcmac</li>
                                     <li>loadbalance_srcid</li>
                                     <li>failover_explicit</li>
-                                    <li>None</li>
                         </ul>
                 </td>
                 <td>

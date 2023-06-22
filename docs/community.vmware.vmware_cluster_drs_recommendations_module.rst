@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_object_role_permission_module:
+.. _community.vmware.vmware_cluster_drs_recommendations_module:
 
 
-**********************************************
-community.vmware.vmware_object_role_permission
-**********************************************
+***************************************************
+community.vmware.vmware_cluster_drs_recommendations
+***************************************************
 
-**Manage local roles on an ESXi host or vCenter**
+**Apply DRS Recommendations**
 
 
+Version added: 3.7.0
 
 .. contents::
    :local:
@@ -16,7 +17,7 @@ community.vmware.vmware_object_role_permission
 
 Synopsis
 --------
-- This module can be used to manage object permissions on the given host or vCenter.
+- Apply DRS Recommendations for Cluster.
 
 
 
@@ -35,17 +36,34 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>group</b>
+                    <b>cluster_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>The group to be assigned permission.</div>
-                        <div>Required if <code>principal</code> is not specified.</div>
+                        <div>The name of the cluster to be managed.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>datacenter</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the datacenter.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
                 </td>
             </tr>
             <tr>
@@ -63,51 +81,6 @@ Parameters
                         <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The object name to assigned permission.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>Folder</b>&nbsp;&larr;</div></li>
-                                    <li>VirtualMachine</li>
-                                    <li>Datacenter</li>
-                                    <li>ResourcePool</li>
-                                    <li>Datastore</li>
-                                    <li>Network</li>
-                                    <li>HostSystem</li>
-                                    <li>ComputeResource</li>
-                                    <li>ClusterComputeResource</li>
-                                    <li>DistributedVirtualSwitch</li>
-                                    <li>DistributedVirtualPortgroup</li>
-                                    <li>StoragePod</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The object type being targeted.</div>
                 </td>
             </tr>
             <tr>
@@ -149,23 +122,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>principal</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The user to be assigned permission.</div>
-                        <div>Required if <code>group</code> is not specified.</div>
-                        <div>If specifying domain user, required separator of domain uses backslash.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>proxy_host</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -195,63 +151,6 @@ Parameters
                 <td>
                         <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>recursive</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Should the permissions be recursively applied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>role</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The role to be assigned permission.</div>
-                        <div>User can also specify role name presented in Web UI. Supported added in 1.5.0.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicate desired state of the object&#x27;s permission.</div>
-                        <div>When <code>state=present</code>, the permission will be added if it doesn&#x27;t already exist.</div>
-                        <div>When <code>state=absent</code>, the permission is removed if it exists.</div>
                 </td>
             </tr>
             <tr>
@@ -302,8 +201,6 @@ Notes
 -----
 
 .. note::
-   - The login user must have the appropriate rights to administer permissions.
-   - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -313,60 +210,13 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Assign user to VM folder
-      community.vmware.vmware_object_role_permission:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        role: Admin
-        principal: user_bob
-        object_name: services
-        state: present
-      delegate_to: localhost
-
-    - name: Remove user from VM folder
-      community.vmware.vmware_object_role_permission:
+    - name: Apply DRS Recommendations for Cluster
+      community.vmware.vmware_cluster:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        role: Admin
-        principal: user_bob
-        object_name: services
-        state: absent
-      delegate_to: localhost
-
-    - name: Assign finance group to VM folder
-      community.vmware.vmware_object_role_permission:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        role: Limited Users
-        group: finance
-        object_name: Accounts
-        state: present
-      delegate_to: localhost
-
-    - name: Assign view_user Read Only permission at root folder
-      community.vmware.vmware_object_role_permission:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
-        role: ReadOnly
-        principal: view_user
-        object_name: rootFolder
-        state: present
-      delegate_to: localhost
-
-    - name: Assign domain user to VM folder
-      community.vmware.vmware_object_role_permission:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        validate_certs: false
-        role: Admin
-        principal: "vsphere.local\\domainuser"
-        object_name: services
-        state: present
+        datacenter_name: datacenter
+        cluster_name: cluster
       delegate_to: localhost
 
 
@@ -386,16 +236,19 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>changed</b>
+                    <b>result</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">boolean</span>
+                      <span style="color: purple">list</span>
                     </div>
                 </td>
                 <td>always</td>
                 <td>
-                            <div>whether or not a change was made to the object&#x27;s role</div>
+                            <div>list of the recommendations</div>
+                            <div>What server moved from which host to which host.</div>
                     <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;server1 move from host1 to host2.&#x27;, &#x27;server2 move from host1 to host2.&#x27;]</div>
                 </td>
             </tr>
     </table>
@@ -409,5 +262,4 @@ Status
 Authors
 ~~~~~~~
 
-- Derek Rushing (@kryptsi)
-- Joseph Andreatta (@vmwjoseph)
+- Nina Loser (@Nina2244)

@@ -96,6 +96,14 @@ options:
           - If you use the virtual machine as a client, the URI identifies the remote system on the network.
           - Required when I(backing_type=network).
         type: str
+      proxy_uri:
+        description:
+          - Identifies a vSPC proxy service that provides network access to the I(service_uri).
+          - If you specify a proxy URI, the virtual machine initiates a connection with the proxy service
+            and forwards the serviceURI and direction to the proxy.
+          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set.
+        type: str
+        version_added: '3.7.0'
       direction:
         description:
           - The direction of the connection.
@@ -144,6 +152,20 @@ EXAMPLES = r'''
       yield_on_poll:  true
     register: create_multiple_ports
 
+# Create vSPC port
+- name: Create network serial port with vSPC
+  community.vmware.vmware_guest_serial_port:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: "test_vm1"
+    backings:
+    - type: 'network'
+      direction: 'server'
+      service_uri: 'vSPC.py'
+      proxy_uri: 'telnets://<host>:<port>'
+      yield_on_poll: true
+
 # Modify existing serial port
 - name: Modify Network backing type
   community.vmware.vmware_guest_serial_port:
@@ -169,7 +191,6 @@ EXAMPLES = r'''
     - type: 'pipe'
       state: 'absent'
   delegate_to: localhost
-
 '''
 
 RETURN = r'''
@@ -299,6 +320,7 @@ class PyVmomiHelper(PyVmomi):
         if set(required_params).issubset(backing_info.keys()):
             backing = serial_port.URIBackingInfo()
             backing.serviceURI = backing_info['service_uri']
+            backing.proxyURI = backing_info['proxy_uri']
             backing.direction = backing_info['direction']
         else:
             self.module.fail_json(msg="Failed to create a new serial port of network backing type due to insufficient parameters."
@@ -431,6 +453,7 @@ def get_serial_port_info(vm_obj):
                 backing['backing_type'] = 'network'
                 backing['direction'] = port.backing.direction
                 backing['service_uri'] = port.backing.serviceURI
+                backing['proxy_uri'] = port.backing.proxyURI
             elif isinstance(port.backing, vim.vm.device.VirtualSerialPort.PipeBackingInfo):
                 backing['backing_type'] = 'pipe'
                 backing['pipe_name'] = port.backing.pipeName
@@ -455,7 +478,8 @@ def diff_serial_port_config(serial_port, backing):
                 return True
         if backing['service_uri'] is not None:
             if serial_port.backing.serviceURI != backing['service_uri'] or \
-                    serial_port.backing.direction != backing['direction']:
+                    serial_port.backing.direction != backing['direction'] or \
+                    serial_port.backing.proxyURI != backing['proxy_uri']:
                 return True
         if backing['pipe_name'] is not None:
             if serial_port.backing.pipeName != backing['pipe_name'] or \
@@ -471,7 +495,8 @@ def diff_serial_port_config(serial_port, backing):
 
     if backing['state'] == 'absent':
         if backing['service_uri'] is not None:
-            if serial_port.backing.serviceURI == backing['service_uri']:
+            if serial_port.backing.serviceURI == backing['service_uri'] and \
+                    serial_port.backing.proxyURI == backing['proxy_uri']:
                 return True
         if backing['pipe_name'] is not None:
             if serial_port.backing.pipeName == backing['pipe_name']:
@@ -503,6 +528,7 @@ def main():
                           endpoint=dict(type='str', choices=['client', 'server'], default='client'),
                           no_rx_loss=dict(type='bool', default=False),
                           service_uri=dict(type='str', default=None),
+                          proxy_uri=dict(type='str', default=None),
                           direction=dict(type='str', choices=['client', 'server'], default='client'),
                           device_name=dict(type='str', default=None),
                           file_path=dict(type='str', default=None),

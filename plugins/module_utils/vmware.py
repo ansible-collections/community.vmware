@@ -24,6 +24,7 @@ from collections import OrderedDict
 from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
 from random import randint
 
+
 REQUESTS_IMP_ERR = None
 try:
     # requests is required for exception handling of the ConnectionError
@@ -219,6 +220,23 @@ def find_object_by_name(content, name, obj_type, folder=None, recurse=True):
     return None
 
 
+def find_all_objects_by_name(content, name, obj_type, folder=None, recurse=True):
+    if not isinstance(obj_type, list):
+        obj_type = [obj_type]
+
+    name = name.strip()
+    result = []
+
+    objects = get_all_objs(content, obj_type, folder=folder, recurse=recurse)
+    for obj in objects:
+        try:
+            if unquote(obj.name) == name:
+                result.append(obj)
+        except vmodl.fault.ManagedObjectNotFound:
+            pass
+    return result
+
+
 def find_cluster_by_name(content, cluster_name, datacenter=None):
     if datacenter and hasattr(datacenter, 'hostFolder'):
         folder = datacenter.hostFolder
@@ -324,6 +342,10 @@ def find_resource_pool_by_cluster(content, resource_pool_name='Resources', clust
 
 def find_network_by_name(content, network_name, datacenter_name=None):
     return find_object_by_name(content, network_name, [vim.Network], datacenter_name)
+
+
+def find_all_networks_by_name(content, network_name, datacenter_name=None):
+    return find_all_objects_by_name(content, network_name, [vim.Network], datacenter_name)
 
 
 def find_vm_by_id(content, vm_id, vm_id_type="vm_name", datacenter=None,
