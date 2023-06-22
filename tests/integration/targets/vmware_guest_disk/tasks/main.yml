@@ -608,3 +608,27 @@
   assert:
     that:
       - test_remove_ide_disk is changed
+
+- name: Try to remove non-existing SCSI disk
+  vmware_guest_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
+    validate_certs: false
+    name: test_vm1
+    disk:
+      - state: "absent"
+        controller_type: 'paravirtual'
+        controller_number: 0
+        unit_number: 15
+  register: test_remove_non_existing_disk
+  ignore_errors: true
+
+- debug:
+    msg: "{{ test_remove_non_existing_disk }}"
+
+- name: assert that removing non existing disk does not fail
+  assert:
+    that:
+      - test_remove_non_existing_disk is not failed

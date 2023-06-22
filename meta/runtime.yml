@@ -16,6 +16,7 @@ action_groups:
   - vmware_cluster
   - vmware_cluster_dpm
   - vmware_cluster_drs
+  - vmware_cluster_drs_recommendations
   - vmware_cluster_ha
   - vmware_cluster_info
   - vmware_cluster_vcls
@@ -160,9 +161,12 @@ action_groups:
   - vmware_vm_vm_drs_rule
   - vmware_vm_vss_dvs_migrate
   - vmware_vsan_cluster
+  - vmware_vsan_hcl_db
   - vmware_vsan_health_info
+  - vmware_vsan_release_catalog
   - vmware_vspan_session
   - vmware_vswitch
   - vmware_vswitch_info
+  - vsan_health_silent_checks
   - vsphere_copy
   - vsphere_file

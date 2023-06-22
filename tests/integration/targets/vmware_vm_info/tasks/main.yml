@@ -6,6 +6,7 @@
 - import_role:
     name: prepare_vmware_tests
   vars:
+    setup_attach_host: true
     setup_datastore: true
     setup_virtualmachines: true
 
@@ -15,13 +16,6 @@
     hostname: '{{ esxi1 }}'
     username: '{{ esxi_user }}'
     password: '{{ esxi_password }}'
-
-- import_role:
-    name: prepare_vmware_tests
-  vars:
-    setup_attach_host: true
-    setup_datastore: true
-    setup_virtualmachines: true
 
 - &vm_data
   name: Get info about available vms
