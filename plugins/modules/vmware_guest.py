@@ -252,11 +252,11 @@ options:
         encrypted_vmotion:
             type: str
             description: Controlls encryption for live migrations with vmotion
-            choices: [ 'disabled', 'opportunistic', 'required' ]
+            choices: ['disabled', 'opportunistic', 'required']
         encrypted_ft:
             type: str
             description: Controlls encryption for fault tolerance replication
-            choices: [ 'disabled', 'opportunistic', 'required' ]
+            choices: ['disabled', 'opportunistic', 'required']
   guest_id:
     type: str
     description:
@@ -1743,7 +1743,6 @@ class PyVmomiHelper(PyVmomi):
             if vm_obj is None or encrypted_ft_cfg != vm_obj.config.ftEncryptionMode:
                 self.change_detected = True
                 self.configspec.ftEncryptionMode = encrypted_ft_cfg
-
 
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
@@ -3491,8 +3490,8 @@ def main():
             type='dict',
             default={},
             options=dict(
-                encrypted_vmotion=dict(type='str', choices=[ 'disabled', 'opportunistic', 'required' ]),
-                encrypted_ft=dict(type='str', choices=[ 'disabled', 'opportunistic', 'required' ])
+                encrypted_vmotion=dict(type='str', choices=['disabled', 'opportunistic', 'required']),
+                encrypted_ft=dict(type='str', choices=['disabled', 'opportunistic', 'required'])
             )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
