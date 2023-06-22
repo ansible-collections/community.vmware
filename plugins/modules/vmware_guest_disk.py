@@ -810,10 +810,6 @@ class PyVmomiHelper(PyVmomi):
                         disk_change_list.append(disk_change)
                         results['disk_changes'][disk['disk_index']] = "Disk created."
                         break
-                    if not disk_found and disk['state'] == 'absent':
-                        self.module.fail_json(msg="Not found disk with 'controller_type': '%s',"
-                                                  " 'controller_number': '%s', 'unit_number': '%s' to remove."
-                                                  % (disk['controller_type'], disk['controller_number'], disk['disk_unit_number']))
             if disk_change:
                 # Adding multiple disks in a single attempt raises weird errors
                 # So adding single disk at a time.

@@ -93,6 +93,7 @@ Name | Description
 [community.vmware.vmware_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_module.rst)|Manage VMware vSphere clusters
 [community.vmware.vmware_cluster_dpm](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_dpm_module.rst)|Manage Distributed Power Management (DPM) on VMware vSphere clusters
 [community.vmware.vmware_cluster_drs](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_drs_module.rst)|Manage Distributed Resource Scheduler (DRS) on VMware vSphere clusters
+[community.vmware.vmware_cluster_drs_recommendations](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_drs_recommendations_module.rst)|Apply DRS Recommendations
 [community.vmware.vmware_cluster_ha](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_ha_module.rst)|Manage High Availability (HA) on VMware vSphere clusters
 [community.vmware.vmware_cluster_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_info_module.rst)|Gather info about clusters available in given vCenter
 [community.vmware.vmware_cluster_vcls](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_cluster_vcls_module.rst)|Override the default vCLS (vSphere Cluster Services) VM disk placement for this cluster.
@@ -210,7 +211,7 @@ Name | Description
 [community.vmware.vmware_migrate_vmk](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_migrate_vmk_module.rst)|Migrate a VMK interface from VSS to VDS
 [community.vmware.vmware_object_custom_attributes_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_custom_attributes_info_module.rst)|Gather custom attributes of an object
 [community.vmware.vmware_object_rename](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_rename_module.rst)|Renames VMware objects
-[community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host
+[community.vmware.vmware_object_role_permission](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_module.rst)|Manage local roles on an ESXi host or vCenter
 [community.vmware.vmware_object_role_permission_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_object_role_permission_info_module.rst)|Gather information about object's permissions
 [community.vmware.vmware_portgroup](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_module.rst)|Create a VMware portgroup
 [community.vmware.vmware_portgroup_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_portgroup_info_module.rst)|Gathers info about an ESXi host's Port Group configuration
@@ -239,9 +240,11 @@ Name | Description
 [community.vmware.vmware_vsan_cluster](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_cluster_module.rst)|Configure VSAN clustering on an ESXi host
 [community.vmware.vmware_vsan_hcl_db](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_hcl_db_module.rst)|Manages the vSAN Hardware Compatibility List (HCL) database
 [community.vmware.vmware_vsan_health_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_health_info_module.rst)|Gather information about a VMware vSAN cluster's health
+[community.vmware.vmware_vsan_release_catalog](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vsan_release_catalog_module.rst)|Uploads the vSAN Release Catalog
 [community.vmware.vmware_vspan_session](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vspan_session_module.rst)|Create or remove a Port Mirroring session.
 [community.vmware.vmware_vswitch](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_module.rst)|Manage a VMware Standard Switch to an ESXi host.
 [community.vmware.vmware_vswitch_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_vswitch_info_module.rst)|Gathers info about an ESXi host's vswitch configurations
+[community.vmware.vsan_health_silent_checks](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsan_health_silent_checks_module.rst)|Silence vSAN health checks
 [community.vmware.vsphere_copy](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_copy_module.rst)|Copy a file to a VMware datastore
 [community.vmware.vsphere_file](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vsphere_file_module.rst)|Manage files on a vCenter datastore
 

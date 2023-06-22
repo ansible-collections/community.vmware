@@ -14,13 +14,13 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_object_role_permission
-short_description: Manage local roles on an ESXi host
-description: This module can be used to manage object permissions on the given host.
+short_description: Manage local roles on an ESXi host or vCenter
+description: This module can be used to manage object permissions on the given host or vCenter.
 author:
 - Derek Rushing (@kryptsi)
 - Joseph Andreatta (@vmwjoseph)
 notes:
-    - The ESXi login user must have the appropriate rights to administer permissions.
+    - The login user must have the appropriate rights to administer permissions.
     - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
 options:
   role:
@@ -86,9 +86,9 @@ EXAMPLES = r'''
 
 - name: Remove user from VM folder
   community.vmware.vmware_object_role_permission:
-    hostname: '{{ esxi_hostname }}'
-    username: '{{ esxi_username }}'
-    password: '{{ esxi_password }}'
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
     role: Admin
     principal: user_bob
     object_name: services

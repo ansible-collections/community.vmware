@@ -5,6 +5,41 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.7.0
+======
+
+Minor Changes
+-------------
+
+- vmware_cluster_drs_recommendations - Add the Module to apply the drs recommendations (https://github.com/ansible-collections/community.vmware/pull/1736)
+- vmware_guest_serial_port - add support for proxyURI parameter to enable use of a virtual serial port concentrator (https://github.com/ansible-collections/community.vmware/issues/1742)
+
+Bugfixes
+--------
+
+- Add missing modules to runtime.yml (https://github.com/ansible-collections/community.vmware/pull/1764).
+- vmware_vm_info - Add missing show_folder parameter (https://github.com/ansible-collections/community.vmware/issues/1709).
+
+New Modules
+-----------
+
+- vmware_cluster_drs_recommendations - Apply DRS Recommendations
+- vmware_vsan_release_catalog - Uploads the vSAN Release Catalog
+
+v3.6.0
+======
+
+Bugfixes
+--------
+
+- vmware_guest - Fixed issue where custom attributes were not getting set on VM creation (https://github.com/ansible-collections/community.vmware/pull/1713)
+- vmware_vsan_health_info - Fix return value (https://github.com/ansible-collections/community.vmware/pull/1706).
+
+New Modules
+-----------
+
+- vsan_health_silent_checks - Silence vSAN health checks
+
 v3.5.0
 ======
 
