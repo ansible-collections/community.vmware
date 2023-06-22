@@ -86,7 +86,7 @@ DOCUMENTATION = r'''
             - Use C(all) to populate all the properties of the virtual machine.
               The value C(all) is time consuming operation, do not use unless required absolutely.
             - Please refer more VMware guest attributes which can be used as properties
-              U(https://github.com/ansible/ansible/blob/devel/docs/docsite/rst/scenario_guides/vmware_scenarios/vmware_inventory_vm_attributes.rst)
+              U(https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html)
             type: list
             elements: string
             default: [ 'name', 'config.cpuHotAddEnabled', 'config.cpuHotRemoveEnabled',
