@@ -488,7 +488,7 @@ class VmotionManager(PyVmomi):
             while len(placement.recommendations) < 1:
                 if counter == 10:
                     vm_id = self.vm_uuid or self.vm_name or self.moid
-                    self.module.fail_json(msg="Failed to find a placement recommendation for vm: " % str(vm_id))
+                    self.module.fail_json(msg="Failed to find a placement recommendation for vm: %s" % vm_id)
                 counter = counter + 1
                 time.sleep(60)
                 placement = self.cluster_object.PlaceVm(placement_spec)
