@@ -26,7 +26,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get VASA providers info
-  community.vmware.vmware__info:
+  community.vmware.vmware_vasa_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
