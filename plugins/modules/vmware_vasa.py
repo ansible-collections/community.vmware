@@ -12,6 +12,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 module: vmware_vasa
+version_added: '3.8.0'
 short_description: Manage VMware Virtual Volumes storage provider
 author:
   - Eugenio Grosso (@genegr) <eugenio.grosso@purestorage.com>

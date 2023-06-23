@@ -12,6 +12,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_vasa_info
+version_added: '3.8.0'
 short_description: Gather information about vSphere VASA providers.
 description:
 - Returns basic information on the vSphere VASA providers registered in the
