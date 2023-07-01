@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - add support for configuring vMotion and FT encryption (https://github.com/ansible-collections/community.vmware/issues/1069)
