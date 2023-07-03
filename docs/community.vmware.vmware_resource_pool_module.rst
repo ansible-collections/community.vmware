@@ -3,12 +3,11 @@
 community.vmware.vmware_resource_pool module -- Add/remove resource pools to/from vCenter
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_resource_pool`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_resource_pool`.
 
 
 .. contents::
@@ -594,14 +593,13 @@ Parameters
 Notes
 -----
 
-.. note::
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Add resource pool to vCenter

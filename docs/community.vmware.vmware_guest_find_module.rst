@@ -3,12 +3,11 @@
 community.vmware.vmware_guest_find module -- Find the folder path(s) for a virtual machine by name or UUID
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_find`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_guest_find`.
 
 
 .. contents::
@@ -289,14 +288,13 @@ Parameters
 Notes
 -----
 
-.. note::
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Find Guest's Folder using name

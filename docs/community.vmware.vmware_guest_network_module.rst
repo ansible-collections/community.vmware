@@ -3,12 +3,11 @@
 community.vmware.vmware_guest_network module -- Manage network adapters of specified virtual machine in given vCenter infrastructure
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_network`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_guest_network`.
 
 
 .. contents::
@@ -821,15 +820,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - For backwards compatibility network\_data is returned when using the gather\_network\_info parameter
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- For backwards compatibility network\_data is returned when using the gather\_network\_info parameter
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: change network for 00:50:56:11:22:33 on vm01.domain.fake

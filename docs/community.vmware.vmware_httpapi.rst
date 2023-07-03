@@ -3,12 +3,11 @@
 community.vmware.vmware httpapi -- HttpApi Plugin for VMware REST API
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This httpapi plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This httpapi plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware`.
+To use it in a playbook, specify: :code:`community.vmware.vmware`.
 
 
 .. contents::

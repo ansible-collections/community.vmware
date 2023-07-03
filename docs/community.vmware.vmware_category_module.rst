@@ -3,14 +3,13 @@
 community.vmware.vmware_category module -- Manage VMware categories
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this module,
-    see `Requirements <ansible_collections.community.vmware.vmware_category_module_requirements_>`_ for details.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+You need further requirements to be able to use this module,
+see `Requirements <ansible_collections.community.vmware.vmware_category_module_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_category`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_category`.
 
 
 .. contents::
@@ -416,7 +415,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Create a category

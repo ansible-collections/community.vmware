@@ -3,12 +3,11 @@
 community.vmware.vmware_object_custom_attributes_info module -- Gather custom attributes of an object
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_object_custom_attributes_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_object_custom_attributes_info`.
 
 
 .. contents::
@@ -297,15 +296,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Supports \ :literal:`check\_mode`\ .
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Supports \ :literal:`check\_mode`\ .
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Gather custom attributes of a virtual machine

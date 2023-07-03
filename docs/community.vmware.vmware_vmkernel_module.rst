@@ -3,12 +3,11 @@
 community.vmware.vmware_vmkernel module -- Manages a VMware VMkernel Adapter of an ESXi host.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_vmkernel`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vmkernel`.
 
 
 .. contents::
@@ -719,17 +718,16 @@ Parameters
 Notes
 -----
 
-.. note::
-   - The option \ :literal:`device`\  need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
-   - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with \ :literal:`device`\  specified.
-   - You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- The option \ :literal:`device`\  need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
+- You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with \ :literal:`device`\  specified.
+- You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     -  name: Add Management vmkernel port using static network type

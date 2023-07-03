@@ -3,12 +3,11 @@
 community.vmware.vmware_guest_tools_upgrade module -- Module to upgrade VMTools
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_tools_upgrade`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_guest_tools_upgrade`.
 
 
 .. contents::
@@ -403,15 +402,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module \ `community.vmware.vmware\_guest\_powerstate <vmware_guest_powerstate_module.rst>`__\ .
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or using module \ `community.vmware.vmware\_guest\_powerstate <vmware_guest_powerstate_module.rst>`__\ .
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Get VM UUID

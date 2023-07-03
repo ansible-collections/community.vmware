@@ -3,14 +3,13 @@
 community.vmware.vmware_tools connection -- Execute tasks inside a VM via VMware Tools
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This connection plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This connection plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this connection plugin,
-    see `Requirements <ansible_collections.community.vmware.vmware_tools_connection_requirements_>`_ for details.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+You need further requirements to be able to use this connection plugin,
+see `Requirements <ansible_collections.community.vmware.vmware_tools_connection_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_tools`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_tools`.
 
 
 .. contents::

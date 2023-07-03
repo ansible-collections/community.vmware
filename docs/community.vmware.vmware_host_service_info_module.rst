@@ -3,12 +3,11 @@
 community.vmware.vmware_host_service_info module -- Gathers info about an ESXi host's services
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_host_service_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_host_service_info`.
 
 
 .. contents::
@@ -268,15 +267,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - If source package name is not available then fact is populated as null.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- If source package name is not available then fact is populated as null.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Gather info about all ESXi Host in given Cluster

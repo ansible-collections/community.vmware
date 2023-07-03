@@ -3,12 +3,11 @@
 community.vmware.vmware_cfg_backup module -- Backup / Restore / Reset ESXi host configuration
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_cfg_backup`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_cfg_backup`.
 
 
 .. contents::
@@ -313,16 +312,15 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Works only for ESXi hosts
-   - For configuration load or reset, the host will be switched automatically to maintenance mode.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Works only for ESXi hosts
+- For configuration load or reset, the host will be switched automatically to maintenance mode.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Save the ESXi configuration locally by authenticating directly against the ESXi host

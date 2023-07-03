@@ -3,12 +3,11 @@
 community.vmware.vcenter_license module -- Manage VMware vCenter license keys
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vcenter_license`.
+To use it in a playbook, specify: :code:`community.vmware.vcenter_license`.
 
 
 .. contents::
@@ -346,18 +345,17 @@ Parameters
 Notes
 -----
 
-.. note::
-   - This module will also auto-assign the current vCenter to the license key if the product matches the license key, and vCenter us currently assigned an evaluation license only.
-   - The evaluation license (00000-00000-00000-00000-00000) is not listed when unused.
-   - If \ :literal:`esxi\_hostname`\  is specified, then will assign the \ :literal:`license`\  key to the ESXi host.
-   - If \ :literal:`esxi\_hostname`\  is not specified, then will just register the \ :literal:`license`\  key to vCenter inventory without assigning it to an ESXi host.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- This module will also auto-assign the current vCenter to the license key if the product matches the license key, and vCenter us currently assigned an evaluation license only.
+- The evaluation license (00000-00000-00000-00000-00000) is not listed when unused.
+- If \ :literal:`esxi\_hostname`\  is specified, then will assign the \ :literal:`license`\  key to the ESXi host.
+- If \ :literal:`esxi\_hostname`\  is not specified, then will just register the \ :literal:`license`\  key to vCenter inventory without assigning it to an ESXi host.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Add a new vCenter license

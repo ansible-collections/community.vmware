@@ -3,14 +3,13 @@
 community.vmware.vmware_host_inventory inventory -- VMware ESXi hostsystem inventory source
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This inventory plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This inventory plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this inventory plugin,
-    see `Requirements <ansible_collections.community.vmware.vmware_host_inventory_inventory_requirements_>`_ for details.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+You need further requirements to be able to use this inventory plugin,
+see `Requirements <ansible_collections.community.vmware.vmware_host_inventory_inventory_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_host_inventory`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_host_inventory`.
 
 
 .. contents::
@@ -1072,7 +1071,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     # Sample configuration file for VMware Host dynamic inventory

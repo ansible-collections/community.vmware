@@ -3,12 +3,11 @@
 community.vmware.vmware_local_role_manager module -- Manage local roles on an ESXi host or vCenter
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_local_role_manager`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_local_role_manager`.
 
 
 .. contents::
@@ -348,15 +347,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Be sure that the user used for login, has the appropriate rights to create / delete / edit roles
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Be sure that the user used for login, has the appropriate rights to create / delete / edit roles
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Add local role to ESXi

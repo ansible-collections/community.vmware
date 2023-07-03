@@ -3,12 +3,11 @@
 community.vmware.vmware_cluster_drs_recommendations module -- Apply DRS Recommendations
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_cluster_drs_recommendations`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_cluster_drs_recommendations`.
 
 New in community.vmware 3.7.0
 
@@ -264,14 +263,13 @@ Parameters
 Notes
 -----
 
-.. note::
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Apply DRS Recommendations for Cluster

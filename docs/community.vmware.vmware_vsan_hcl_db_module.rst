@@ -3,14 +3,13 @@
 community.vmware.vmware_vsan_hcl_db module -- Manages the vSAN Hardware Compatibility List (HCL) database
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this module,
-    see `Requirements <ansible_collections.community.vmware.vmware_vsan_hcl_db_module_requirements_>`_ for details.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+You need further requirements to be able to use this module,
+see `Requirements <ansible_collections.community.vmware.vmware_vsan_hcl_db_module_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_vsan_hcl_db`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vsan_hcl_db`.
 
 New in community.vmware 3.5.0
 
@@ -253,14 +252,13 @@ Parameters
 Notes
 -----
 
-.. note::
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Fetch HCL db file

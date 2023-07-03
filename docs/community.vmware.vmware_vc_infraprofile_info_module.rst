@@ -3,14 +3,13 @@
 community.vmware.vmware_vc_infraprofile_info module -- List and Export VMware vCenter infra profile configs.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this module,
-    see `Requirements <ansible_collections.community.vmware.vmware_vc_infraprofile_info_module_requirements_>`_ for details.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+You need further requirements to be able to use this module,
+see `Requirements <ansible_collections.community.vmware.vmware_vc_infraprofile_info_module_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_vc_infraprofile_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vc_infraprofile_info`.
 
 
 .. contents::
@@ -375,7 +374,7 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Get information about VC infraprofile

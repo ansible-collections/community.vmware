@@ -3,12 +3,11 @@
 community.vmware.vmware_vm_config_option module -- Return supported guest ID list and VM recommended config option for specific guest OS
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_vm_config_option`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vm_config_option`.
 
 
 .. contents::
@@ -409,15 +408,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Known issue on vSphere 7.0 (https://github.com/vmware/pyvmomi/issues/915)
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Get supported guest ID list on given ESXi host for with default hardware version

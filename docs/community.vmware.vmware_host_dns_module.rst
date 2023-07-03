@@ -3,12 +3,11 @@
 community.vmware.vmware_host_dns module -- Manage DNS configuration of an ESXi host system
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_host_dns`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_host_dns`.
 
 
 .. contents::
@@ -425,15 +424,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - This module is a replacement for the module \ :literal:`vmware\_dns\_config`\ 
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- This module is a replacement for the module \ :literal:`vmware\_dns\_config`\ 
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Configure DNS for an ESXi host

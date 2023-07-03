@@ -3,12 +3,11 @@
 community.vmware.vmware_local_role_info module -- Gather info about local roles on an ESXi host or vCenter
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_local_role_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_local_role_info`.
 
 
 .. contents::
@@ -222,16 +221,15 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Be sure that the user used for login, has the appropriate rights to view roles
-   - The module returns a list of dict in version 2.8 and above.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Be sure that the user used for login, has the appropriate rights to view roles
+- The module returns a list of dict in version 2.8 and above.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Gather info about local role from an ESXi (or vCenter)

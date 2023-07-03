@@ -3,12 +3,11 @@
 community.vmware.vmware_recommended_datastore module -- Returns the recommended datastore from a SDRS-enabled datastore cluster
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_recommended_datastore`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_recommended_datastore`.
 
 
 .. contents::
@@ -260,15 +259,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Supports Check mode.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Supports Check mode.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Get recommended datastore from a Storage DRS-enabled datastore cluster

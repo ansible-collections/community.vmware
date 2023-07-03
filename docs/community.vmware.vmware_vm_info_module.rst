@@ -3,12 +3,11 @@
 community.vmware.vmware_vm_info module -- Return basic info pertaining to a VMware machine guest
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_vm_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vm_info`.
 
 
 .. contents::
@@ -613,16 +612,15 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Fact about \ :literal:`moid`\  added in VMware collection 1.4.0.
-   - Fact about \ :literal:`datastore\_url`\  is added in VMware collection 1.18.0.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Fact about \ :literal:`moid`\  added in VMware collection 1.4.0.
+- Fact about \ :literal:`datastore\_url`\  is added in VMware collection 1.18.0.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Gather all registered virtual machines

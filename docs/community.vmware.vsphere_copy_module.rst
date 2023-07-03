@@ -3,12 +3,11 @@
 community.vmware.vsphere_copy module -- Copy a file to a VMware datastore
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vsphere_copy`.
+To use it in a playbook, specify: :code:`community.vmware.vsphere_copy`.
 
 
 .. contents::
@@ -325,15 +324,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using \ :literal:`transport: local`\  or using \ :literal:`delegate\_to`\ .
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer. It can be the normal remote target or you can change it either by using \ :literal:`transport: local`\  or using \ :literal:`delegate\_to`\ .
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Copy file to datastore using delegate_to

@@ -3,12 +3,11 @@
 community.vmware.vmware_host_datastore module -- Manage a datastore on ESXi host
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_host_datastore`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_host_datastore`.
 
 
 .. contents::
@@ -460,15 +459,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Kerberos authentication with NFS v4.1 isn't implemented
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Kerberos authentication with NFS v4.1 isn't implemented
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Mount VMFS datastores to ESXi

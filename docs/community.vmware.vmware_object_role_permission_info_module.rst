@@ -3,12 +3,11 @@
 community.vmware.vmware_object_role_permission_info module -- Gather information about object's permissions
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_object_role_permission_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_object_role_permission_info`.
 
 
 .. contents::
@@ -323,16 +322,15 @@ Parameters
 Notes
 -----
 
-.. note::
-   - The ESXi or vCenter login user must have the appropriate rights to administer permissions.
-   - Supports check mode.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- The ESXi or vCenter login user must have the appropriate rights to administer permissions.
+- Supports check mode.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Gather role information about Datastore

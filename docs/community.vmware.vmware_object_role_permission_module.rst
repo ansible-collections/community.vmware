@@ -3,12 +3,11 @@
 community.vmware.vmware_object_role_permission module -- Manage local roles on an ESXi host or vCenter
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_object_role_permission`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_object_role_permission`.
 
 
 .. contents::
@@ -395,16 +394,15 @@ Parameters
 Notes
 -----
 
-.. note::
-   - The login user must have the appropriate rights to administer permissions.
-   - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- The login user must have the appropriate rights to administer permissions.
+- Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Assign user to VM folder

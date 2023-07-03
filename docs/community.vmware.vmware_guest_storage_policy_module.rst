@@ -3,12 +3,11 @@
 community.vmware.vmware_guest_storage_policy module -- Set VM Home and disk(s) storage policy profiles.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_storage_policy`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_guest_storage_policy`.
 
 
 .. contents::
@@ -438,14 +437,13 @@ Parameters
 Notes
 -----
 
-.. note::
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Enforce storepol1 policy for disk 0 and 1 on SCSI controller 0 using UUID

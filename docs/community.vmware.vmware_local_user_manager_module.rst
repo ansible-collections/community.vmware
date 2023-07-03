@@ -3,12 +3,11 @@
 community.vmware.vmware_local_user_manager module -- Manage local users on an ESXi host
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_local_user_manager`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_local_user_manager`.
 
 
 .. contents::
@@ -304,15 +303,14 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit users
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Be sure that the ESXi user used for login, has the appropriate rights to create / delete / edit users
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Add local user to ESXi

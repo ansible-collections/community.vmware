@@ -3,12 +3,11 @@
 community.vmware.vmware_guest module -- Manages virtual machines in vCenter
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.. note::
-    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
-    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-    To use it in a playbook, specify: :code:`community.vmware.vmware_guest`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_guest`.
 
 
 .. contents::
@@ -3156,27 +3155,26 @@ Parameters
 Notes
 -----
 
-.. note::
-   - Please make sure that the user used for \ `community.vmware.vmware\_guest <vmware_guest_module.rst>`__\  has the correct level of privileges.
-   - For example, following is the list of minimum privileges required by users to create virtual machines.
-   -    DataStore \> Allocate Space
-   -    Virtual Machine \> Configuration \> Add New Disk
-   -    Virtual Machine \> Configuration \> Add or Remove Device
-   -    Virtual Machine \> Inventory \> Create New
-   -    Network \> Assign Network
-   -    Resource \> Assign Virtual Machine to Resource Pool
-   - Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations.
-   - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
-   - Uses SysPrep for Windows VM (depends on 'guest\_id' parameter match 'win') with PyVmomi.
-   - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the \ :literal:`state=present`\  must be used to apply the changes.
-   - For additional information please visit Ansible VMware community wiki - \ https://github.com/ansible/community/wiki/VMware\ .
-   - All modules requires API write access and hence is not supported on a free ESXi license.
+- Please make sure that the user used for \ `community.vmware.vmware\_guest <vmware_guest_module.rst>`__\  has the correct level of privileges.
+- For example, following is the list of minimum privileges required by users to create virtual machines.
+-    DataStore \> Allocate Space
+-    Virtual Machine \> Configuration \> Add New Disk
+-    Virtual Machine \> Configuration \> Add or Remove Device
+-    Virtual Machine \> Inventory \> Create New
+-    Network \> Assign Network
+-    Resource \> Assign Virtual Machine to Resource Pool
+- Module may require additional privileges as well, which may be required for gathering facts - e.g. ESXi configurations.
+- Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
+- Uses SysPrep for Windows VM (depends on 'guest\_id' parameter match 'win') with PyVmomi.
+- In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add support is enabled and the \ :literal:`state=present`\  must be used to apply the changes.
+- For additional information please visit Ansible VMware community wiki - \ https://github.com/ansible/community/wiki/VMware\ .
+- All modules requires API write access and hence is not supported on a free ESXi license.
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     
     - name: Create a virtual machine on given ESXi hostname
