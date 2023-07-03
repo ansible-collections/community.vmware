@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_host_passthrough_module:
 
 
-****************************************
-community.vmware.vmware_host_passthrough
-****************************************
+community.vmware.vmware_host_passthrough module -- Manage PCI device passthrough settings on host
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Manage PCI device passthrough settings on host**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_host_passthrough`.
 
 
 .. contents::
@@ -16,7 +18,12 @@ community.vmware.vmware_host_passthrough
 
 Synopsis
 --------
+
 - This module can be managed PCI device passthrough settings on host.
+
+
+
+
 
 
 
@@ -24,248 +31,325 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the cluster from which all host systems will be used.</div>
-                        <div>This parameter is required if <code>esxi_hostname</code> is not specified.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: cluster_name</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>devices</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>List of PCI device name or id.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>device</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of PCI device to enable passthrough.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: name, device_name</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the host system to work with.</div>
-                        <div>This parameter is required if <code>cluster_name</code> is not specified.</div>
-                        <div>User can specify specific host from the cluster.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <em>state=present</em>, passthrough of PCI device will be enabled.</div>
-                        <div>If <em>state=absent</em>, passthrough of PCI device will be disabled.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cluster:
+      .. _parameter-cluster_name:
+
+      **cluster**
+
+      aliases: cluster_name
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the cluster from which all host systems will be used.
+
+      This parameter is required if \ :literal:`esxi\_hostname`\  is not specified.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-devices:
+
+      **devices**
+
+      :literal:`list` / :literal:`elements=dictionary` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      List of PCI device name or id.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-devices/device:
+      .. _parameter-devices/device_name:
+      .. _parameter-devices/name:
+
+      **device**
+
+      aliases: name, device_name
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of PCI device to enable passthrough.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-esxi_hostname:
+
+      **esxi_hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the host system to work with.
+
+      This parameter is required if \ :literal:`cluster\_name`\  is not specified.
+
+      User can specify specific host from the cluster.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-state:
+
+      **state**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If \ :emphasis:`state=present`\ , passthrough of PCI device will be enabled.
+
+      If \ :emphasis:`state=absent`\ , passthrough of PCI device will be disabled.
+
+
+      Choices:
+
+      - :literal:`"present"` ← (default)
+      - :literal:`"absent"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 Notes
 -----
 
 .. note::
-   - Supports ``check_mode``.
+   - Supports \ :literal:`check\_mode`\ .
    - All modules requires API write access and hence is not supported on a free ESXi license.
-
 
 
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Enable PCI device passthrough against the whole ESXi in a cluster
       community.vmware.vmware_host_passthrough:
         hostname: "{{ vcenter_hostname }}"
@@ -313,64 +397,54 @@ Examples
 
 
 
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>passthrough_configs</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                       / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>changed</td>
-                <td>
-                            <div>list of that PCI devices have been enabled passthrough for each host system.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[
-        {
-            &quot;esxi-01.example.com&quot;: [
-                {
-                    &quot;device_id&quot;: &quot;0000:03:00.0&quot;,
-                    &quot;device_name&quot;: &quot;Dual Band Wireless AC 3165&quot;,
-                    &quot;passthruEnabled&quot;: true
-                }
-            ]
-        },
-        {
-            &quot;esxi-02.example.com&quot;: [
-                {
-                    &quot;device_id&quot;: &quot;0000:03:00.0&quot;,
-                    &quot;device_name&quot;: &quot;Dual Band Wireless AC 3165&quot;,
-                    &quot;passthruEnabled&quot;: true
-                }
-            ]
-        }
-    ]</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-passthrough_configs:
+
+      **passthrough_configs**
+
+      :literal:`list` / :literal:`elements=dictionary`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      list of that PCI devices have been enabled passthrough for each host system.
 
 
-Status
-------
+      Returned: changed
+
+      Sample: :literal:`"[\\n    {\\n        \\"esxi-01.example.com\\": [\\n            {\\n                \\"device\_id\\": \\"0000:03:00.0\\",\\n                \\"device\_name\\": \\"Dual Band Wireless AC 3165\\",\\n                \\"passthruEnabled\\": true\\n            }\\n        ]\\n    },\\n    {\\n        \\"esxi-02.example.com\\": [\\n            {\\n                \\"device\_id\\": \\"0000:03:00.0\\",\\n                \\"device\_name\\": \\"Dual Band Wireless AC 3165\\",\\n                \\"passthruEnabled\\": true\\n            }\\n        ]\\n    }\\n]"`
+
+
 
 
 Authors
 ~~~~~~~
 
 - sky-joker (@sky-joker)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

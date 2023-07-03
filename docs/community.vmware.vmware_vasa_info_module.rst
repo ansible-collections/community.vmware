@@ -1,18 +1,16 @@
 
 
-community.vmware.vsan_health_silent_checks module -- Silence vSAN health checks
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+community.vmware.vmware_vasa_info module -- Gather information about vSphere VASA providers.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. note::
     This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
     To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this module,
-    see `Requirements <ansible_collections.community.vmware.vsan_health_silent_checks_module_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vsan_health_silent_checks`.
+    To use it in a playbook, specify: :code:`community.vmware.vmware_vasa_info`.
 
-New in community.vmware 3.6.0
+New in community.vmware 3.8.0
 
 .. contents::
    :local:
@@ -22,18 +20,9 @@ New in community.vmware 3.6.0
 Synopsis
 --------
 
-- Take a list of vSAN health checks and silence them
-- Re-enable alerts for previously silenced health checks
+- Returns basic information on the vSphere VASA providers registered in the vcenter.
 
 
-
-.. _ansible_collections.community.vmware.vsan_health_silent_checks_module_requirements:
-
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 
 
@@ -49,44 +38,6 @@ Parameters
 
   * - Parameter
     - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-checks:
-
-      **checks**
-
-      :literal:`list` / :literal:`elements=string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The checks to silence.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-cluster_name:
-
-      **cluster_name**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the vSAN cluster.
-
-
 
   * - .. raw:: html
 
@@ -213,35 +164,6 @@ Parameters
 
         <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
 
-      .. _parameter-state:
-
-      **state**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The state of the health checks.
-
-      If set to \ :literal:`present`\ , all given health checks will be silenced.
-
-      If set to \ :literal:`absent`\ , all given health checks will be removed from the list of silent checks.
-
-
-      Choices:
-
-      - :literal:`"present"` ← (default)
-      - :literal:`"absent"`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
       .. _parameter-admin:
       .. _parameter-user:
       .. _parameter-username:
@@ -311,29 +233,49 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Disable the vSAN Support Insight health check
-      community.vmware.vsan_health_silent_checks:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        checks: vsanenablesupportinsight
-        cluster_name: 'vSAN01'
+    - name: Get VASA providers info
+      community.vmware.vmware_vasa_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
       delegate_to: localhost
-
-    - name: Re-enable health check alerts for release catalog and HCL DB
-      community.vmware.vsan_health_silent_checks:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        checks:
-          - releasecataloguptodate
-          - autohclupdate
-        state: absent
-        cluster_name: 'vSAN01'
-      delegate_to: localhost
+      register: providers
 
 
 
+
+
+Return Values
+-------------
+The following are the fields unique to this module:
+
+.. list-table::
+  :widths: auto
+  :header-rows: 1
+
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-vasa_providers:
+
+      **vasa_providers**
+
+      :literal:`list` / :literal:`elements=string`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      list of dictionary of VASA info
+
+
+      Returned: success
+
+      Sample: :literal:`[{"certificate\_status": "valid", "description": "IOFILTER VASA Provider on host host01.domain.local", "name": "IOFILTER Provider host01.domain.local", "related\_storage\_array": [{"active": "True", "array\_id": "IOFILTERS:616d4715-7de2-7be2-997a-10f920c5fdbe", "manageable": "True", "priority": "1"}], "status": "online", "uid": "02e10bc5-dd77-4ce4-9100-5aee44e7abaa", "url": "https://host01.domain.local:9080/version.xml", "version": "1.0"}]`
 
 
 
@@ -341,7 +283,7 @@ Examples
 Authors
 ~~~~~~~
 
-- Philipp Fruck (@p-fruck)
+- Eugenio Grosso (@genegr) 
 
 
 

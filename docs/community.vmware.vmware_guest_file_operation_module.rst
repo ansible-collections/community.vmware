@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_guest_file_operation_module:
 
 
-********************************************
-community.vmware.vmware_guest_file_operation
-********************************************
+community.vmware.vmware_guest_file_operation module -- Files operation in a VMware guest operating system without network
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Files operation in a VMware guest operating system without network**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_file_operation`.
 
 
 .. contents::
@@ -16,7 +18,12 @@ community.vmware.vmware_guest_file_operation
 
 Synopsis
 --------
+
 - Module to copy a file to a VM, fetch a file from a VM and create or delete a directory in the guest OS.
+
+
+
+
 
 
 
@@ -24,540 +31,689 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The cluster hosting the virtual machine.</div>
-                        <div>If set, it will help to speed up virtual machine search.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>copy</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Copy file to vm without requiring network.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>dest</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>File destination, path must be exist.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>overwrite</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Overwrite or not.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>src</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>File source absolute or relative.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The datacenter hosting the virtual machine.</div>
-                        <div>If set, it will help to speed up virtual machine search.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>directory</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Create or delete a directory.</div>
-                        <div>Can be used to create temp directory inside guest using mktemp operation.</div>
-                        <div>mktemp sets variable <code>dir</code> in the result with the name of the new directory.</div>
-                        <div>mktemp operation option is added in version 2.8.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>operation</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>create</li>
-                                    <li>delete</li>
-                                    <li>mktemp</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Operation to perform.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Directory path.</div>
-                        <div>Required for <code>create</code> or <code>remove</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>prefix</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Temporary directory prefix.</div>
-                        <div>Required for <code>mktemp</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>recurse</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Not required.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>suffix</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Temporary directory suffix.</div>
-                        <div>Required for <code>mktemp</code>.</div>
-                </td>
-            </tr>
+  * - .. raw:: html
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>fetch</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Get file from virtual machine without requiring network.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>dest</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>File destination on localhost, path must be exist.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>src</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The file on the remote system to fetch.</div>
-                        <div>This <em>must</em> be a file, not a directory.</div>
-                </td>
-            </tr>
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>folder</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Destination folder, absolute path to find an existing guest or create the new guest.</div>
-                        <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</div>
-                        <div>Used only if <code>vm_id_type</code> is <code>inventory_path</code>.</div>
-                        <div>Examples:</div>
-                        <div>folder: /ha-datacenter/vm</div>
-                        <div>folder: ha-datacenter/vm</div>
-                        <div>folder: /datacenter1/vm</div>
-                        <div>folder: datacenter1/vm</div>
-                        <div>folder: /datacenter1/vm/folder1</div>
-                        <div>folder: datacenter1/vm/folder1</div>
-                        <div>folder: /folder1/datacenter1/vm</div>
-                        <div>folder: folder1/datacenter1/vm</div>
-                        <div>folder: /folder1/datacenter1/vm/folder2</div>
-                        <div>folder: vm/folder2</div>
-                        <div>folder: folder2</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.1.0</div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">100</div>
-                </td>
-                <td>
-                        <div>Timeout seconds for fetching or copying a file.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vm_id</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the virtual machine to work with.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vm_id_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>uuid</li>
-                                    <li>instance_uuid</li>
-                                    <li>dns_name</li>
-                                    <li>inventory_path</li>
-                                    <li><div style="color: blue"><b>vm_name</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The VMware identification method by which the virtual machine will be identified.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vm_password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password used to login-in to the virtual machine.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vm_username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The user to login in to the virtual machine.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+      .. _parameter-cluster:
+
+      **cluster**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The cluster hosting the virtual machine.
+
+      If set, it will help to speed up virtual machine search.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-copy:
+
+      **copy**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Copy file to vm without requiring network.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-copy/dest:
+
+      **dest**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      File destination, path must be exist.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-copy/overwrite:
+
+      **overwrite**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Overwrite or not.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-copy/src:
+
+      **src**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      File source absolute or relative.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-datacenter:
+
+      **datacenter**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The datacenter hosting the virtual machine.
+
+      If set, it will help to speed up virtual machine search.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory:
+
+      **directory**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Create or delete a directory.
+
+      Can be used to create temp directory inside guest using mktemp operation.
+
+      mktemp sets variable \ :literal:`dir`\  in the result with the name of the new directory.
+
+      mktemp operation option is added in version 2.8.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory/operation:
+
+      **operation**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Operation to perform.
+
+
+      Choices:
+
+      - :literal:`"create"`
+      - :literal:`"delete"`
+      - :literal:`"mktemp"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory/path:
+
+      **path**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Directory path.
+
+      Required for \ :literal:`create`\  or \ :literal:`remove`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory/prefix:
+
+      **prefix**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Temporary directory prefix.
+
+      Required for \ :literal:`mktemp`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory/recurse:
+
+      **recurse**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Not required.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-directory/suffix:
+
+      **suffix**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Temporary directory suffix.
+
+      Required for \ :literal:`mktemp`\ .
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-fetch:
+
+      **fetch**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Get file from virtual machine without requiring network.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-fetch/dest:
+
+      **dest**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      File destination on localhost, path must be exist.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-fetch/src:
+
+      **src**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The file on the remote system to fetch.
+
+      This \ :emphasis:`must`\  be a file, not a directory.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-folder:
+
+      **folder**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Destination folder, absolute path to find an existing guest or create the new guest.
+
+      The folder should include the datacenter. ESX's datacenter is ha-datacenter
+
+      Used only if \ :literal:`vm\_id\_type`\  is \ :literal:`inventory\_path`\ .
+
+      Examples:
+
+         folder: /ha-datacenter/vm
+
+         folder: ha-datacenter/vm
+
+         folder: /datacenter1/vm
+
+         folder: datacenter1/vm
+
+         folder: /datacenter1/vm/folder1
+
+         folder: datacenter1/vm/folder1
+
+         folder: /folder1/datacenter1/vm
+
+         folder: folder1/datacenter1/vm
+
+         folder: /folder1/datacenter1/vm/folder2
+
+         folder: vm/folder2
+
+         folder: folder2
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-timeout:
+
+      **timeout**
+
+      :literal:`integer`
+
+      added in community.vmware 3.1.0
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Timeout seconds for fetching or copying a file.
+
+
+      Default: :literal:`100`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vm_id:
+
+      **vm_id**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the virtual machine to work with.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vm_id_type:
+
+      **vm_id_type**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The VMware identification method by which the virtual machine will be identified.
+
+
+      Choices:
+
+      - :literal:`"uuid"`
+      - :literal:`"instance\_uuid"`
+      - :literal:`"dns\_name"`
+      - :literal:`"inventory\_path"`
+      - :literal:`"vm\_name"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vm_password:
+
+      **vm_password**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password used to login-in to the virtual machine.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vm_username:
+
+      **vm_username**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The user to login in to the virtual machine.
+
+
+
 
 
 Notes
 -----
 
 .. note::
-   - Only the first match against vm_id is used, even if there are multiple matches
+   - Only the first match against vm\_id is used, even if there are multiple matches
    - All modules requires API write access and hence is not supported on a free ESXi license.
-
 
 
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Create directory inside a vm
       community.vmware.vmware_guest_file_operation:
         hostname: "{{ vcenter_hostname }}"
@@ -621,11 +777,20 @@ Examples
 
 
 
-Status
-------
+
 
 
 Authors
 ~~~~~~~
 
 - Stéphane Travassac (@stravassac)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

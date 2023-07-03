@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_dvswitch_uplink_pg_module:
 
 
-******************************************
-community.vmware.vmware_dvswitch_uplink_pg
-******************************************
+community.vmware.vmware_dvswitch_uplink_pg module -- Manage uplink portproup configuration of a Distributed Switch
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Manage uplink portproup configuration of a Distributed Switch**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_dvswitch_uplink_pg`.
 
 
 .. contents::
@@ -16,7 +18,12 @@ community.vmware.vmware_dvswitch_uplink_pg
 
 Synopsis
 --------
+
 - This module can be used to configure the uplink portgroup of a Distributed Switch.
+
+
+
+
 
 
 
@@ -24,443 +31,582 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>advanced</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{"block_override": true, "netflow_override": false, "port_config_reset_at_disconnect": true, "traffic_filter_override": false, "vendor_config_override": false, "vlan_override": false}</div>
-                </td>
-                <td>
-                        <div>Dictionary which configures the advanced policy settings for the uplink portgroup.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: port_policy</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>block_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the block policy can be changed per port.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>netflow_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the NetFlow policy can be changed per port.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port_config_reset_at_disconnect</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the configuration of a port is reset automatically after disconnect.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>traffic_filter_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the traffic filter can be changed per port.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vendor_config_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the vendor config can be changed per port.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vlan_override</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if the vlan can be changed per port.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>block_all_ports</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if all ports are blocked on the uplink portgroup.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The description of the uplink portgroup.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lacp</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{"mode": "passive", "status": "disabled"}</div>
-                </td>
-                <td>
-                        <div>Dictionary which configures the LACP settings for the uplink portgroup.</div>
-                        <div>The options are only used if the LACP support mode is set to &#x27;basic&#x27;.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mode</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>active</li>
-                                    <li><div style="color: blue"><b>passive</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The negotiating state of the uplinks/ports.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>status</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>enabled</li>
-                                    <li><div style="color: blue"><b>disabled</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if LACP is enabled.</div>
-                </td>
-            </tr>
+  * - .. raw:: html
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the uplink portgroup.</div>
-                        <div>The current name will be used if not specified.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>netflow_enabled</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates if NetFlow is enabled on the uplink portgroup.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the Distributed Switch.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: dvswitch</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vlan_trunk_range</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">["0-4094"]</div>
-                </td>
-                <td>
-                        <div>The VLAN trunk range that should be configured with the uplink portgroup.</div>
-                        <div>This can be a combination of multiple ranges and numbers, example: [ 2-3967, 4049-4092 ].</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced:
+      .. _parameter-port_policy:
+
+      **advanced**
+
+      aliases: port_policy
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures the advanced policy settings for the uplink portgroup.
+
+
+      Default: :literal:`{"block\_override": true, "netflow\_override": false, "port\_config\_reset\_at\_disconnect": true, "traffic\_filter\_override": false, "vendor\_config\_override": false, "vlan\_override": false}`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/block_override:
+      .. _parameter-port_policy/block_override:
+
+      **block_override**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the block policy can be changed per port.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/netflow_override:
+      .. _parameter-port_policy/netflow_override:
+
+      **netflow_override**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the NetFlow policy can be changed per port.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/port_config_reset_at_disconnect:
+      .. _parameter-port_policy/port_config_reset_at_disconnect:
+
+      **port_config_reset_at_disconnect**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the configuration of a port is reset automatically after disconnect.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/traffic_filter_override:
+      .. _parameter-port_policy/traffic_filter_override:
+
+      **traffic_filter_override**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the traffic filter can be changed per port.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/vendor_config_override:
+      .. _parameter-port_policy/vendor_config_override:
+
+      **vendor_config_override**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the vendor config can be changed per port.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-advanced/vlan_override:
+      .. _parameter-port_policy/vlan_override:
+
+      **vlan_override**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if the vlan can be changed per port.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-block_all_ports:
+
+      **block_all_ports**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if all ports are blocked on the uplink portgroup.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-description:
+
+      **description**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The description of the uplink portgroup.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-lacp:
+
+      **lacp**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures the LACP settings for the uplink portgroup.
+
+      The options are only used if the LACP support mode is set to 'basic'.
+
+
+      Default: :literal:`{"mode": "passive", "status": "disabled"}`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-lacp/mode:
+
+      **mode**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The negotiating state of the uplinks/ports.
+
+
+      Choices:
+
+      - :literal:`"active"`
+      - :literal:`"passive"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-lacp/status:
+
+      **status**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if LACP is enabled.
+
+
+      Choices:
+
+      - :literal:`"enabled"`
+      - :literal:`"disabled"` ← (default)
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-name:
+
+      **name**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the uplink portgroup.
+
+      The current name will be used if not specified.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-netflow_enabled:
+
+      **netflow_enabled**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates if NetFlow is enabled on the uplink portgroup.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-dvswitch:
+      .. _parameter-switch:
+
+      **switch**
+
+      aliases: dvswitch
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the Distributed Switch.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vlan_trunk_range:
+
+      **vlan_trunk_range**
+
+      :literal:`list` / :literal:`elements=string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The VLAN trunk range that should be configured with the uplink portgroup.
+
+      This can be a combination of multiple ranges and numbers, example: [ 2-3967, 4049-4092 ].
+
+
+      Default: :literal:`["0-4094"]`
+
+
 
 
 Notes
@@ -470,12 +616,12 @@ Notes
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
-
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Configure Uplink portgroup
       community.vmware.vmware_dvswitch_uplink_pg:
         hostname: '{{ inventory_hostname }}'
@@ -509,44 +655,54 @@ Examples
 
 
 
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>information about performed operation</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;adv_block_ports&#x27;: True, &#x27;adv_netflow&#x27;: False, &#x27;adv_reset_at_disconnect&#x27;: True, &#x27;adv_traffic_filtering&#x27;: False, &#x27;adv_vendor_conf&#x27;: False, &#x27;adv_vlan&#x27;: False, &#x27;block_all_ports&#x27;: False, &#x27;changed&#x27;: False, &#x27;description&#x27;: None, &#x27;dvswitch&#x27;: &#x27;dvSwitch&#x27;, &#x27;lacp_status&#x27;: &#x27;disabled&#x27;, &#x27;lacp_status_previous&#x27;: &#x27;enabled&#x27;, &#x27;name&#x27;: &#x27;dvSwitch-DVUplinks&#x27;, &#x27;netflow_enabled&#x27;: False, &#x27;result&#x27;: &#x27;Uplink portgroup already configured properly&#x27;, &#x27;vlan_trunk_range&#x27;: [&#x27;2-3967&#x27;, &#x27;4049-4092&#x27;]}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-result:
+
+      **result**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      information about performed operation
 
 
-Status
-------
+      Returned: always
+
+      Sample: :literal:`"{'adv\_block\_ports': True, 'adv\_netflow': False, 'adv\_reset\_at\_disconnect': True, 'adv\_traffic\_filtering': False, 'adv\_vendor\_conf': False, 'adv\_vlan': False, 'block\_all\_ports': False, 'changed': False, 'description': None, 'dvswitch': 'dvSwitch', 'lacp\_status': 'disabled', 'lacp\_status\_previous': 'enabled', 'name': 'dvSwitch-DVUplinks', 'netflow\_enabled': False, 'result': 'Uplink portgroup already configured properly', 'vlan\_trunk\_range': ['2-3967', '4049-4092']}"`
+
+
 
 
 Authors
 ~~~~~~~
 
 - Christian Kotte (@ckotte)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

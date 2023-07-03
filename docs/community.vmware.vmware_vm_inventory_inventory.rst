@@ -1,12 +1,16 @@
-.. _community.vmware.vmware_vm_inventory_inventory:
 
 
-************************************
-community.vmware.vmware_vm_inventory
-************************************
+community.vmware.vmware_vm_inventory inventory -- VMware Guest inventory source
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**VMware Guest inventory source**
+.. note::
+    This inventory plugin is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+    You need further requirements to be able to use this inventory plugin,
+    see `Requirements <ansible_collections.community.vmware.vmware_vm_inventory_inventory_requirements_>`_ for details.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_vm_inventory`.
 
 
 .. contents::
@@ -16,722 +20,1060 @@ community.vmware.vmware_vm_inventory
 
 Synopsis
 --------
+
 - Get virtual machines as inventory hosts from VMware environment.
-- Uses any file which ends with vmware.yml, vmware.yaml, vmware_vm_inventory.yml, or vmware_vm_inventory.yaml as a YAML configuration file.
+- Uses any file which ends with vmware.yml, vmware.yaml, vmware\_vm\_inventory.yml, or vmware\_vm\_inventory.yaml as a YAML configuration file.
 
 
+
+.. _ansible_collections.community.vmware.vmware_vm_inventory_inventory_requirements:
 
 Requirements
 ------------
-The below requirements are needed on the local Ansible controller node that executes this inventory.
+The below requirements are needed on the local controller node that executes this inventory.
 
-- requests >= 2.3
+- requests \>= 2.3
 - vSphere Automation SDK - For tag feature
+
+
+
+
 
 
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                <th>Configuration</th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cache</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[inventory]<br>cache = no</p>
-                            </div>
-                                <div>env:ANSIBLE_INVENTORY_CACHE</div>
-                    </td>
-                <td>
-                        <div>Toggle to enable/disable the caching of the inventory&#x27;s source data, requires a cache plugin setup to work.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cache_connection</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[defaults]<br>fact_caching_connection = VALUE</p>
-                                    <p>[inventory]<br>cache_connection = VALUE</p>
-                            </div>
-                                <div>env:ANSIBLE_CACHE_PLUGIN_CONNECTION</div>
-                                <div>env:ANSIBLE_INVENTORY_CACHE_CONNECTION</div>
-                    </td>
-                <td>
-                        <div>Cache connection data or path, read cache plugin documentation for specifics.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cache_plugin</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"memory"</div>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[defaults]<br>fact_caching = memory</p>
-                                    <p>[inventory]<br>cache_plugin = memory</p>
-                            </div>
-                                <div>env:ANSIBLE_CACHE_PLUGIN</div>
-                                <div>env:ANSIBLE_INVENTORY_CACHE_PLUGIN</div>
-                    </td>
-                <td>
-                        <div>Cache plugin to use for the inventory&#x27;s source data.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cache_prefix</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"ansible_inventory_"</div>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[default]<br>fact_caching_prefix = ansible_inventory_</p>
-                                    <p>[defaults]<br>fact_caching_prefix = ansible_inventory_</p>
-                                    <p>[inventory]<br>cache_prefix = ansible_inventory_</p>
-                            </div>
-                                <div>env:ANSIBLE_CACHE_PLUGIN_PREFIX</div>
-                                <div>env:ANSIBLE_INVENTORY_CACHE_PLUGIN_PREFIX</div>
-                    </td>
-                <td>
-                        <div>Prefix to use for cache plugin files/tables</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cache_timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">3600</div>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[defaults]<br>fact_caching_timeout = 3600</p>
-                                    <p>[inventory]<br>cache_timeout = 3600</p>
-                            </div>
-                                <div>env:ANSIBLE_CACHE_PLUGIN_TIMEOUT</div>
-                                <div>env:ANSIBLE_INVENTORY_CACHE_TIMEOUT</div>
-                    </td>
-                <td>
-                        <div>Cache duration in seconds</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>compose</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{}</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Create vars from jinja2 expressions.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>filters</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>This option allows client-side filtering hosts with jinja templating.</div>
-                        <div>When server-side filtering is introduced, it should be preferred over this.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>groups</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{}</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Add hosts to group based on Jinja2 conditionals.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:VMWARE_HOST</div>
-                                <div>env:VMWARE_SERVER</div>
-                    </td>
-                <td>
-                        <div>Name of vCenter or ESXi server.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostnames</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">["config.name + \"_\" + config.uuid"]</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>A list of templates in order of precedence to compose inventory_hostname.</div>
-                        <div>Ignores template if resulted in an empty string or None value.</div>
-                        <div>You can use property specified in <em>properties</em> as variables in the template.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>keyed_groups</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[{"key": "config.guestId", "separator": ""}, {"key": "summary.runtime.powerState", "separator": ""}]</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Add hosts to group based on the values of a variable.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>default_value</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.12</div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>The default value when the host variable&#x27;s value is an empty string.</div>
-                        <div>This option is mutually exclusive with <code>trailing_separator</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>key</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>The key from input dictionary used to generate groups</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>parent_group</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>parent group for keyed group</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>prefix</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>A keyed group name will start with this prefix</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>separator</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"_"</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>separator used to build the keyed group name</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>trailing_separator</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.12</div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Set this option to <em>False</em> to omit the <code>separator</code> after the host variable when the value is an empty string.</div>
-                        <div>This option is mutually exclusive with <code>default_value</code>.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>leading_separator</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Use in conjunction with keyed_groups.</div>
-                        <div>By default, a keyed group that does not have a prefix or a separator provided will have a name that starts with an underscore.</div>
-                        <div>This is because the default prefix is &quot;&quot; and the default separator is &quot;_&quot;.</div>
-                        <div>Set this option to False to omit the leading underscore (or other separator) if no prefix is given.</div>
-                        <div>If the group name is derived from a mapping the separator is still used to concatenate the items.</div>
-                        <div>To not use a separator in the group name at all, set the separator for the keyed group to an empty string instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:VMWARE_PASSWORD</div>
-                    </td>
-                <td>
-                        <div>Password of vSphere user.</div>
-                        <div>Accepts vault encrypted variable.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                    <td>
-                                <div>env:VMWARE_PORT</div>
-                    </td>
-                <td>
-                        <div>Port number used to connect to vCenter or ESXi Server.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>properties</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">["name", "config.cpuHotAddEnabled", "config.cpuHotRemoveEnabled", "config.instanceUuid", "config.hardware.numCPU", "config.template", "config.name", "config.uuid", "guest.hostName", "guest.ipAddress", "guest.guestId", "guest.guestState", "runtime.maxMemoryUsage", "customValue", "summary.runtime.powerState", "config.guestId"]</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Specify the list of VMware schema properties associated with the VM.</div>
-                        <div>These properties will be populated in hostvars of the given VM.</div>
-                        <div>Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.</div>
-                        <div><code>config.name</code>, <code>config.uuid</code> are required properties if <code>hostnames</code> is set to default.</div>
-                        <div><code>config.guestId</code>, <code>summary.runtime.powerState</code> are required if <code>keyed_groups</code> is set to default.</div>
-                        <div>Please make sure that all the properties that are used in other parameters are included in this options.</div>
-                        <div>In addition to VM properties, the following are special values</div>
-                        <div>Use <code>customValue</code> to populate virtual machine&#x27;s custom attributes. <code>customValue</code> is only supported by vCenter and not by ESXi.</div>
-                        <div>Use <code>all</code> to populate all the properties of the virtual machine. The value <code>all</code> is time consuming operation, do not use unless required absolutely.</div>
-                        <div>Please refer more VMware guest attributes which can be used as properties <a href='https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html'>https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html</a></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:VMWARE_PROXY_HOST</div>
-                    </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>This feature depends on a version of pyvmomi&gt;=v6.7.1.2018.12.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:VMWARE_PROXY_PORT</div>
-                    </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>resources</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>A list of resources to limit search scope.</div>
-                        <div>Each resource item is represented by exactly one <code>&#x27;vim_type_snake_case</code>:<code>list of resource names</code> pair and optional nested <em>resources</em></div>
-                        <div>Key name is based on snake case of a vim type name; e.g <code>host_system</code> correspond to <code>vim.HostSystem</code></div>
-                        <div>See  <a href='https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html'>VIM Types</a></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>strict</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>If <code>yes</code> make invalid entries a fatal error, otherwise skip and continue.</div>
-                        <div>Since it is possible to use facts in the expressions they might not always be available and we ignore those errors by default.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>use_extra_vars</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.11</div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                            <div> ini entries:
-                                    <p>[inventory_plugins]<br>use_extra_vars = no</p>
-                            </div>
-                                <div>env:ANSIBLE_INVENTORY_USE_EXTRA_VARS</div>
-                    </td>
-                <td>
-                        <div>Merge extra vars into the available variables for composition (highest precedence).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                    <td>
-                                <div>env:VMWARE_USER</div>
-                                <div>env:VMWARE_USERNAME</div>
-                    </td>
-                <td>
-                        <div>Name of vSphere user.</div>
-                        <div>Accepts vault encrypted variable.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                    <td>
-                                <div>env:VMWARE_VALIDATE_CERTS</div>
-                    </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>false</code> when certificates are not trusted.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>with_nested_properties</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>This option transform flatten properties name to nested dictionary.</div>
-                        <div>From 1.10.0 and onwards, default value is set to <code>true</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>with_path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Include virtual machines path.</div>
-                        <div>Set this option to a string value to replace root name from <em>&#x27;Datacenters&#x27;</em>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>with_sanitized_property_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>This option allows property name sanitization to create safe property names for use in Ansible.</div>
-                        <div>Also, transforms property name to snake case.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>with_tags</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                    <td>
-                    </td>
-                <td>
-                        <div>Include tags and associated virtual machines.</div>
-                        <div>Requires &#x27;vSphere Automation SDK&#x27; library to be installed on the given controller machine.</div>
-                        <div>Please refer following URLs for installation steps</div>
-                        <div><a href='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'>https://code.vmware.com/web/sdk/7.0/vsphere-automation-python</a></div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cache:
+
+      **cache**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Toggle to enable/disable the caching of the inventory's source data, requires a cache plugin setup to work.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+      Configuration:
+
+      - INI entry:
+
+        .. code-block::
+
+          [inventory]
+          cache = false
+
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_CACHE`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cache_connection:
+
+      **cache_connection**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Cache connection data or path, read cache plugin documentation for specifics.
+
+
+      Configuration:
+
+      - INI entries:
+
+        .. code-block::
+
+          [defaults]
+          fact_caching_connection = VALUE
+
+
+
+        .. code-block::
+
+          [inventory]
+          cache_connection = VALUE
+
+
+      - Environment variable: :literal:`ANSIBLE\_CACHE\_PLUGIN\_CONNECTION`
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_CACHE\_CONNECTION`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cache_plugin:
+
+      **cache_plugin**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Cache plugin to use for the inventory's source data.
+
+
+      Default: :literal:`"memory"`
+
+      Configuration:
+
+      - INI entries:
+
+        .. code-block::
+
+          [defaults]
+          fact_caching = memory
+
+
+
+        .. code-block::
+
+          [inventory]
+          cache_plugin = memory
+
+
+      - Environment variable: :literal:`ANSIBLE\_CACHE\_PLUGIN`
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_CACHE\_PLUGIN`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cache_prefix:
+
+      **cache_prefix**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Prefix to use for cache plugin files/tables
+
+
+      Default: :literal:`"ansible\_inventory\_"`
+
+      Configuration:
+
+      - INI entries:
+
+        .. code-block::
+
+          [defaults]
+          fact_caching_prefix = ansible_inventory_
+
+
+
+        .. code-block::
+
+          [inventory]
+          cache_prefix = ansible_inventory_
+
+
+      - Environment variable: :literal:`ANSIBLE\_CACHE\_PLUGIN\_PREFIX`
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_CACHE\_PLUGIN\_PREFIX`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cache_timeout:
+
+      **cache_timeout**
+
+      :literal:`integer`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Cache duration in seconds
+
+
+      Default: :literal:`3600`
+
+      Configuration:
+
+      - INI entries:
+
+        .. code-block::
+
+          [defaults]
+          fact_caching_timeout = 3600
+
+
+
+        .. code-block::
+
+          [inventory]
+          cache_timeout = 3600
+
+
+      - Environment variable: :literal:`ANSIBLE\_CACHE\_PLUGIN\_TIMEOUT`
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_CACHE\_TIMEOUT`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-compose:
+
+      **compose**
+
+      :literal:`dictionary`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Create vars from jinja2 expressions.
+
+
+      Default: :literal:`{}`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-filters:
+
+      **filters**
+
+      :literal:`list` / :literal:`elements=string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This option allows client-side filtering hosts with jinja templating.
+
+      When server-side filtering is introduced, it should be preferred over this.
+
+
+      Default: :literal:`[]`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-groups:
+
+      **groups**
+
+      :literal:`dictionary`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Add hosts to group based on Jinja2 conditionals.
+
+
+      Default: :literal:`{}`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string` / :strong:`required`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of vCenter or ESXi server.
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_HOST`
+
+      - Environment variable: :literal:`VMWARE\_SERVER`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostnames:
+
+      **hostnames**
+
+      :literal:`list` / :literal:`elements=string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      A list of templates in order of precedence to compose inventory\_hostname.
+
+      Ignores template if resulted in an empty string or None value.
+
+      You can use property specified in \ :emphasis:`properties`\  as variables in the template.
+
+
+      Default: :literal:`["config.name + \\"\_\\" + config.uuid"]`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups:
+
+      **keyed_groups**
+
+      :literal:`list` / :literal:`elements=dictionary`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Add hosts to group based on the values of a variable.
+
+
+      Default: :literal:`[{"key": "config.guestId", "separator": ""}, {"key": "summary.runtime.powerState", "separator": ""}]`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/default_value:
+
+      **default_value**
+
+      :literal:`string`
+
+      added in ansible-core 2.12
+
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The default value when the host variable's value is an empty string.
+
+      This option is mutually exclusive with \ :literal:`keyed\_groups[].trailing\_separator` (`link <parameter-keyed_groups/trailing_separator_>`_)\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/key:
+
+      **key**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The key from input dictionary used to generate groups
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/parent_group:
+
+      **parent_group**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      parent group for keyed group
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/prefix:
+
+      **prefix**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      A keyed group name will start with this prefix
+
+
+      Default: :literal:`""`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/separator:
+
+      **separator**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      separator used to build the keyed group name
+
+
+      Default: :literal:`"\_"`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-keyed_groups/trailing_separator:
+
+      **trailing_separator**
+
+      :literal:`boolean`
+
+      added in ansible-core 2.12
+
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Set this option to \ :literal:`false`\  to omit the \ :literal:`keyed\_groups[].separator` (`link <parameter-keyed_groups/separator_>`_)\  after the host variable when the value is an empty string.
+
+      This option is mutually exclusive with \ :literal:`keyed\_groups[].default\_value` (`link <parameter-keyed_groups/default_value_>`_)\ .
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-leading_separator:
+
+      **leading_separator**
+
+      :literal:`boolean`
+
+      added in ansible-core 2.11
+
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Use in conjunction with keyed\_groups.
+
+      By default, a keyed group that does not have a prefix or a separator provided will have a name that starts with an underscore.
+
+      This is because the default prefix is "" and the default separator is "\_".
+
+      Set this option to False to omit the leading underscore (or other separator) if no prefix is given.
+
+      If the group name is derived from a mapping the separator is still used to concatenate the items.
+
+      To not use a separator in the group name at all, set the separator for the keyed group to an empty string instead.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-password:
+
+      **password**
+
+      :literal:`string` / :strong:`required`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Password of vSphere user.
+
+      Accepts vault encrypted variable.
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_PASSWORD`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port number used to connect to vCenter or ESXi Server.
+
+
+      Default: :literal:`443`
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_PORT`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-properties:
+
+      **properties**
+
+      :literal:`list` / :literal:`elements=string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Specify the list of VMware schema properties associated with the VM.
+
+      These properties will be populated in hostvars of the given VM.
+
+      Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
+
+      \ :literal:`config.name`\ , \ :literal:`config.uuid`\  are required properties if \ :literal:`hostnames`\  is set to default.
+
+      \ :literal:`config.guestId`\ , \ :literal:`summary.runtime.powerState`\  are required if \ :literal:`keyed\_groups`\  is set to default.
+
+      Please make sure that all the properties that are used in other parameters are included in this options.
+
+      In addition to VM properties, the following are special values
+
+      Use \ :literal:`customValue`\  to populate virtual machine's custom attributes. \ :literal:`customValue`\  is only supported by vCenter and not by ESXi.
+
+      Use \ :literal:`all`\  to populate all the properties of the virtual machine. The value \ :literal:`all`\  is time consuming operation, do not use unless required absolutely.
+
+      Please refer more VMware guest attributes which can be used as properties \ https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html\ 
+
+
+      Default: :literal:`["name", "config.cpuHotAddEnabled", "config.cpuHotRemoveEnabled", "config.instanceUuid", "config.hardware.numCPU", "config.template", "config.name", "config.uuid", "guest.hostName", "guest.ipAddress", "guest.guestId", "guest.guestState", "runtime.maxMemoryUsage", "customValue", "summary.runtime.powerState", "config.guestId"]`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      This feature depends on a version of pyvmomi\>=v6.7.1.2018.12.
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_PROXY\_HOST`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_PROXY\_PORT`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-resources:
+
+      **resources**
+
+      :literal:`list` / :literal:`elements=dictionary`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      A list of resources to limit search scope.
+
+      Each resource item is represented by exactly one \ :literal:`'vim\_type\_snake\_case`\ :\ :literal:`list of resource names`\  pair and optional nested \ :emphasis:`resources`\ 
+
+      Key name is based on snake case of a vim type name; e.g \ :literal:`host\_system`\  correspond to \ :literal:`vim.HostSystem`\ 
+
+      See  \ `VIM Types <https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html>`__\ 
+
+
+      Default: :literal:`[]`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-strict:
+
+      **strict**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If \ :literal:`true`\  make invalid entries a fatal error, otherwise skip and continue.
+
+      Since it is possible to use facts in the expressions they might not always be available and we ignore those errors by default.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-use_extra_vars:
+
+      **use_extra_vars**
+
+      :literal:`boolean`
+
+      added in ansible-core 2.11
+
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Merge extra vars into the available variables for composition (highest precedence).
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+      Configuration:
+
+      - INI entry:
+
+        .. code-block::
+
+          [inventory_plugins]
+          use_extra_vars = false
+
+
+      - Environment variable: :literal:`ANSIBLE\_INVENTORY\_USE\_EXTRA\_VARS`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-username:
+
+      **username**
+
+      :literal:`string` / :strong:`required`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of vSphere user.
+
+      Accepts vault encrypted variable.
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_USER`
+
+      - Environment variable: :literal:`VMWARE\_USERNAME`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid.
+
+      Set to \ :literal:`false`\  when certificates are not trusted.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+      Configuration:
+
+      - Environment variable: :literal:`VMWARE\_VALIDATE\_CERTS`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-with_nested_properties:
+
+      **with_nested_properties**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This option transform flatten properties name to nested dictionary.
+
+      From 1.10.0 and onwards, default value is set to \ :literal:`true`\ .
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-with_path:
+
+      **with_path**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Include virtual machines path.
+
+      Set this option to a string value to replace root name from \ :emphasis:`'Datacenters'`\ .
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-with_sanitized_property_name:
+
+      **with_sanitized_property_name**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This option allows property name sanitization to create safe property names for use in Ansible.
+
+      Also, transforms property name to snake case.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-with_tags:
+
+      **with_tags**
+
+      :literal:`boolean`
+
+
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Include tags and associated virtual machines.
+
+      Requires 'vSphere Automation SDK' library to be installed on the given controller machine.
+
+      Please refer following URLs for installation steps
+
+      \ https://code.vmware.com/web/sdk/7.0/vsphere-automation-python\ 
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
 
 
 
@@ -739,8 +1081,9 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     # Sample configuration file for VMware Guest dynamic inventory
         plugin: community.vmware.vmware_vm_inventory
         strict: false
@@ -960,8 +1303,7 @@ Examples
 
 
 
-Status
-------
+
 
 
 Authors
@@ -972,3 +1314,11 @@ Authors
 
 .. hint::
     Configuration entries for each entry type have a low to high priority order. For example, a variable that is lower in the list will override a variable that is higher up.
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

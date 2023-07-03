@@ -1,12 +1,16 @@
-.. _community.vmware.vmware_content_library_manager_module:
 
 
-***********************************************
-community.vmware.vmware_content_library_manager
-***********************************************
+community.vmware.vmware_content_library_manager module -- Create, update and delete VMware content library
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Create, update and delete VMware content library**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+    You need further requirements to be able to use this module,
+    see `Requirements <ansible_collections.community.vmware.vmware_content_library_manager_module_requirements_>`_ for details.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_content_library_manager`.
 
 
 .. contents::
@@ -16,11 +20,14 @@ community.vmware.vmware_content_library_manager
 
 Synopsis
 --------
+
 - Module to manage VMware content Library
 - Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
 
 
+
+.. _ansible_collections.community.vmware.vmware_content_library_manager_module_requirements:
 
 Requirements
 ------------
@@ -29,316 +36,431 @@ The below requirements are needed on the host that executes this module.
 - vSphere Automation SDK
 
 
+
+
+
+
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datastore_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the datastore on which backing content library is created.</div>
-                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                        <div>Currently only datastore backing creation is supported.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: datastore</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>library_description</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The content library description.</div>
-                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                        <div>Process of updating content library only allows description change.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>library_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of VMware content library to manage.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>library_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>local</b>&nbsp;&larr;</div></li>
-                                    <li>subscribed</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The content library type.</div>
-                        <div>This is required only if <em>state</em> is set to <code>present</code>.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>protocol</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>http</li>
-                                    <li><div style="color: blue"><b>https</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The connection to protocol.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ssl_thumbprint</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
-                </td>
-                <td>
-                        <div>The SHA1 SSL thumbprint of the subscribed content library to subscribe to.</div>
-                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code> and the library is https.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                        <div>The information can be extracted using openssl using the following example: <code>echo | openssl s_client -connect test-library.com:443 |&amp; openssl x509 -fingerprint -noout</code></div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The state of content library.</div>
-                        <div>If set to <code>present</code> and library does not exists, then content library is created.</div>
-                        <div>If set to <code>present</code> and library exists, then content library is updated.</div>
-                        <div>If set to <code>absent</code> and library exists, then content library is deleted.</div>
-                        <div>If set to <code>absent</code> and library does not exists, no action is taken.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>subscription_url</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">""</div>
-                </td>
-                <td>
-                        <div>The url of the content library to subscribe to.</div>
-                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code>.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>update_on_demand</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to download all content on demand.</div>
-                        <div>If set to <code>true</code>, all content will be downloaded on demand.</div>
-                        <div>If set to <code>false</code> content will be downloaded ahead of time.</div>
-                        <div>This is required only if <em>library_type</em> is set to <code>subscribed</code>.</div>
-                        <div>This parameter is ignored, when <em>state</em> is set to <code>absent</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-datastore:
+      .. _parameter-datastore_name:
+
+      **datastore_name**
+
+      aliases: datastore
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the datastore on which backing content library is created.
+
+      This is required only if \ :emphasis:`state`\  is set to \ :literal:`present`\ .
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+      Currently only datastore backing creation is supported.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-library_description:
+
+      **library_description**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The content library description.
+
+      This is required only if \ :emphasis:`state`\  is set to \ :literal:`present`\ .
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+      Process of updating content library only allows description change.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-library_name:
+
+      **library_name**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of VMware content library to manage.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-library_type:
+
+      **library_type**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The content library type.
+
+      This is required only if \ :emphasis:`state`\  is set to \ :literal:`present`\ .
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+
+      Choices:
+
+      - :literal:`"local"` ← (default)
+      - :literal:`"subscribed"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-protocol:
+
+      **protocol**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The connection to protocol.
+
+
+      Choices:
+
+      - :literal:`"http"`
+      - :literal:`"https"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ssl_thumbprint:
+
+      **ssl_thumbprint**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
+
+      This is required only if \ :emphasis:`library\_type`\  is set to \ :literal:`subscribed`\  and the library is https.
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+      The information can be extracted using openssl using the following example: \ :literal:`echo | openssl s\_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout`\ 
+
+
+      Default: :literal:`""`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-state:
+
+      **state**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The state of content library.
+
+      If set to \ :literal:`present`\  and library does not exists, then content library is created.
+
+      If set to \ :literal:`present`\  and library exists, then content library is updated.
+
+      If set to \ :literal:`absent`\  and library exists, then content library is deleted.
+
+      If set to \ :literal:`absent`\  and library does not exists, no action is taken.
+
+
+      Choices:
+
+      - :literal:`"present"` ← (default)
+      - :literal:`"absent"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-subscription_url:
+
+      **subscription_url**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The url of the content library to subscribe to.
+
+      This is required only if \ :emphasis:`library\_type`\  is set to \ :literal:`subscribed`\ .
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+
+      Default: :literal:`""`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-update_on_demand:
+
+      **update_on_demand**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Whether to download all content on demand.
+
+      If set to \ :literal:`true`\ , all content will be downloaded on demand.
+
+      If set to \ :literal:`false`\  content will be downloaded ahead of time.
+
+      This is required only if \ :emphasis:`library\_type`\  is set to \ :literal:`subscribed`\ .
+
+      This parameter is ignored, when \ :emphasis:`state`\  is set to \ :literal:`absent`\ .
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid.
+
+      Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 
@@ -346,8 +468,9 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Create Local Content Library
       community.vmware.vmware_content_library_manager:
         hostname: '{{ vcenter_hostname }}'
@@ -396,44 +519,54 @@ Examples
 
 
 
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>content_library_info</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>on success</td>
-                <td>
-                            <div>library creation success and library_id</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;library_id&#x27;: &#x27;d0b92fa9-7039-4f29-8e9c-0debfcb22b72&#x27;, &#x27;library_description&#x27;: &#x27;Test description&#x27;, &#x27;library_type&#x27;: &#x27;LOCAL&#x27;, &#x27;msg&#x27;: &quot;Content Library &#x27;demo-local-lib-4&#x27; created.&quot;}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-content_library_info:
+
+      **content_library_info**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      library creation success and library\_id
 
 
-Status
-------
+      Returned: on success
+
+      Sample: :literal:`{"library\_description": "Test description", "library\_id": "d0b92fa9-7039-4f29-8e9c-0debfcb22b72", "library\_type": "LOCAL", "msg": "Content Library 'demo-local-lib-4' created."}`
+
+
 
 
 Authors
 ~~~~~~~
 
 - Pavan Bidkar (@pgbidkar)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

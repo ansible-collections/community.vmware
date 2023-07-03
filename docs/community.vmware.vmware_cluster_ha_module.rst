@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_cluster_ha_module:
 
 
-**********************************
-community.vmware.vmware_cluster_ha
-**********************************
+community.vmware.vmware_cluster_ha module -- Manage High Availability (HA) on VMware vSphere clusters
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Manage High Availability (HA) on VMware vSphere clusters**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_cluster_ha`.
 
 
 .. contents::
@@ -16,8 +18,13 @@ community.vmware.vmware_cluster_ha
 
 Synopsis
 --------
+
 - Manages HA configuration on VMware vSphere clusters.
 - All values and VMware object names are case sensitive.
+
+
+
+
 
 
 
@@ -25,615 +32,812 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>advanced_settings</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{}</div>
-                </td>
-                <td>
-                        <div>A dictionary of advanced HA settings.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>apd_delay</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9.0</div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">180</div>
-                </td>
-                <td>
-                        <div>The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).</div>
-                        <div>Only set if <code>apd_response</code> is <code>restartConservative</code> or <code>restartAggressive</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>apd_reaction</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.9.0</div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>reset</b>&nbsp;&larr;</div></li>
-                                    <li>none</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>VM response recovery reaction for storage failures categorized as All Paths Down (APD).</div>
-                        <div>Only set if <code>apd_response</code> is <code>restartConservative</code> or <code>restartAggressive</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>apd_response</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>disabled</li>
-                                    <li><div style="color: blue"><b>warning</b>&nbsp;&larr;</div></li>
-                                    <li>restartConservative</li>
-                                    <li>restartAggressive</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>VM storage protection setting for storage failures categorized as All Paths Down (APD).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the cluster to be managed.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the datacenter.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter_name</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to enable HA.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>failover_host_admission_control</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure dedicated failover hosts.</div>
-                        <div><code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> and <code>failover_host_admission_control</code> are mutually exclusive.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>failover_hosts</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>List of dedicated failover hosts.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_host_monitoring</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>enabled</b>&nbsp;&larr;</div></li>
-                                    <li>disabled</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether HA restarts virtual machines after a host fails.</div>
-                        <div>If set to <code>enabled</code>, HA restarts virtual machines after a host fails.</div>
-                        <div>If set to <code>disabled</code>, HA does not restart virtual machines after a host fails.</div>
-                        <div>If <code>enable</code> is set to <code>false</code>, then this value is ignored.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_restart_priority</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>disabled</li>
-                                    <li>high</li>
-                                    <li>low</li>
-                                    <li><div style="color: blue"><b>medium</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Priority HA gives to a virtual machine if sufficient capacity is not available to power on all failed virtual machines.</div>
-                        <div>Valid only if <em>ha_vm_monitoring</em> is set to either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                        <div>If set to <code>disabled</code>, then HA is disabled for this virtual machine.</div>
-                        <div>If set to <code>high</code>, then virtual machine with this priority have a higher chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
-                        <div>If set to <code>medium</code>, then virtual machine with this priority have an intermediate chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
-                        <div>If set to <code>low</code>, then virtual machine with this priority have a lower chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_vm_failure_interval</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">30</div>
-                </td>
-                <td>
-                        <div>The number of seconds after which virtual machine is declared as failed if no heartbeat has been received.</div>
-                        <div>This setting is only valid if <code>ha_vm_monitoring</code> is set to, either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                        <div>Unit is seconds.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_vm_max_failure_window</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">-1</div>
-                </td>
-                <td>
-                        <div>The number of seconds for the window during which up to <code>ha_vm_max_failures</code> resets can occur before automated responses stop.</div>
-                        <div>Valid only when <em>ha_vm_monitoring</em> is set to either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                        <div>Unit is seconds.</div>
-                        <div>Default specifies no failure window.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_vm_max_failures</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">3</div>
-                </td>
-                <td>
-                        <div>Maximum number of failures and automated resets allowed during the time that <code>ha_vm_max_failure_window</code> specifies.</div>
-                        <div>Valid only when <em>ha_vm_monitoring</em> is set to either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_vm_min_up_time</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">120</div>
-                </td>
-                <td>
-                        <div>The number of seconds for the virtual machine&#x27;s heartbeats to stabilize after the virtual machine has been powered on.</div>
-                        <div>Valid only when <em>ha_vm_monitoring</em> is set to either <code>vmAndAppMonitoring</code> or <code>vmMonitoringOnly</code>.</div>
-                        <div>Unit is seconds.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ha_vm_monitoring</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>vmAndAppMonitoring</li>
-                                    <li>vmMonitoringOnly</li>
-                                    <li><div style="color: blue"><b>vmMonitoringDisabled</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>State of virtual machine health monitoring service.</div>
-                        <div>If set to <code>vmAndAppMonitoring</code>, HA response to both virtual machine and application heartbeat failure.</div>
-                        <div>If set to <code>vmMonitoringDisabled</code>, virtual machine health monitoring is disabled.</div>
-                        <div>If set to <code>vmMonitoringOnly</code>, HA response to virtual machine heartbeat failure.</div>
-                        <div>If <code>enable</code> is set to <code>false</code>, then this value is ignored.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>host_isolation_response</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>none</b>&nbsp;&larr;</div></li>
-                                    <li>powerOff</li>
-                                    <li>shutdown</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates whether or VMs should be powered off if a host determines that it is isolated from the rest of the compute resource.</div>
-                        <div>If set to <code>none</code>, do not power off VMs in the event of a host network isolation.</div>
-                        <div>If set to <code>powerOff</code>, power off VMs in the event of a host network isolation.</div>
-                        <div>If set to <code>shutdown</code>, shut down VMs guest operating system in the event of a host network isolation.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>pdl_response</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>disabled</li>
-                                    <li><div style="color: blue"><b>warning</b>&nbsp;&larr;</div></li>
-                                    <li>restartAggressive</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>reservation_based_admission_control</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure reservation based admission control policy.</div>
-                        <div><code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> and <code>failover_host_admission_control</code> are mutually exclusive.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>auto_compute_percentages</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>By default, <code>failover_level</code> is used to calculate <code>cpu_failover_resources_percent</code> and <code>memory_failover_resources_percent</code>. If a user wants to override the percentage values, he has to set this field to false.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cpu_failover_resources_percent</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">50</div>
-                </td>
-                <td>
-                        <div>Percentage of CPU resources in the cluster to reserve for failover. Ignored if <code>auto_compute_percentages</code> is not set to false.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>failover_level</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Number of host failures that should be tolerated.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>memory_failover_resources_percent</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">50</div>
-                </td>
-                <td>
-                        <div>Percentage of memory resources in the cluster to reserve for failover. Ignored if <code>auto_compute_percentages</code> is not set to false.</div>
-                </td>
-            </tr>
+  * - .. raw:: html
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>slot_based_admission_control</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slot based admission control policy.</div>
-                        <div><code>slot_based_admission_control</code>, <code>reservation_based_admission_control</code> and <code>failover_host_admission_control</code> are mutually exclusive.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>failover_level</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Number of host failures that should be tolerated.</div>
-                </td>
-            </tr>
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+      .. _parameter-advanced_settings:
+
+      **advanced_settings**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      A dictionary of advanced HA settings.
+
+
+      Default: :literal:`{}`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-apd_delay:
+
+      **apd_delay**
+
+      :literal:`integer`
+
+      added in community.vmware 2.9.0
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).
+
+      Only set if \ :literal:`apd\_response`\  is \ :literal:`restartConservative`\  or \ :literal:`restartAggressive`\ .
+
+
+      Default: :literal:`180`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-apd_reaction:
+
+      **apd_reaction**
+
+      :literal:`string`
+
+      added in community.vmware 2.9.0
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      VM response recovery reaction for storage failures categorized as All Paths Down (APD).
+
+      Only set if \ :literal:`apd\_response`\  is \ :literal:`restartConservative`\  or \ :literal:`restartAggressive`\ .
+
+
+      Choices:
+
+      - :literal:`"reset"` ← (default)
+      - :literal:`"none"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-apd_response:
+
+      **apd_response**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      VM storage protection setting for storage failures categorized as All Paths Down (APD).
+
+
+      Choices:
+
+      - :literal:`"disabled"`
+      - :literal:`"warning"` ← (default)
+      - :literal:`"restartConservative"`
+      - :literal:`"restartAggressive"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-cluster_name:
+
+      **cluster_name**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the cluster to be managed.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-datacenter:
+      .. _parameter-datacenter_name:
+
+      **datacenter**
+
+      aliases: datacenter_name
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the datacenter.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-enable:
+
+      **enable**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Whether to enable HA.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-failover_host_admission_control:
+
+      **failover_host_admission_control**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Configure dedicated failover hosts.
+
+      \ :literal:`slot\_based\_admission\_control`\ , \ :literal:`reservation\_based\_admission\_control`\  and \ :literal:`failover\_host\_admission\_control`\  are mutually exclusive.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-failover_host_admission_control/failover_hosts:
+
+      **failover_hosts**
+
+      :literal:`list` / :literal:`elements=string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      List of dedicated failover hosts.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_host_monitoring:
+
+      **ha_host_monitoring**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Whether HA restarts virtual machines after a host fails.
+
+      If set to \ :literal:`enabled`\ , HA restarts virtual machines after a host fails.
+
+      If set to \ :literal:`disabled`\ , HA does not restart virtual machines after a host fails.
+
+      If \ :literal:`enable`\  is set to \ :literal:`false`\ , then this value is ignored.
+
+
+      Choices:
+
+      - :literal:`"enabled"` ← (default)
+      - :literal:`"disabled"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_restart_priority:
+
+      **ha_restart_priority**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Priority HA gives to a virtual machine if sufficient capacity is not available to power on all failed virtual machines.
+
+      Valid only if \ :emphasis:`ha\_vm\_monitoring`\  is set to either \ :literal:`vmAndAppMonitoring`\  or \ :literal:`vmMonitoringOnly`\ .
+
+      If set to \ :literal:`disabled`\ , then HA is disabled for this virtual machine.
+
+      If set to \ :literal:`high`\ , then virtual machine with this priority have a higher chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.
+
+      If set to \ :literal:`medium`\ , then virtual machine with this priority have an intermediate chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.
+
+      If set to \ :literal:`low`\ , then virtual machine with this priority have a lower chance of powering on after a failure, when there is insufficient capacity on hosts to meet all virtual machine needs.
+
+
+      Choices:
+
+      - :literal:`"disabled"`
+      - :literal:`"high"`
+      - :literal:`"low"`
+      - :literal:`"medium"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_vm_failure_interval:
+
+      **ha_vm_failure_interval**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The number of seconds after which virtual machine is declared as failed if no heartbeat has been received.
+
+      This setting is only valid if \ :literal:`ha\_vm\_monitoring`\  is set to, either \ :literal:`vmAndAppMonitoring`\  or \ :literal:`vmMonitoringOnly`\ .
+
+      Unit is seconds.
+
+
+      Default: :literal:`30`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_vm_max_failure_window:
+
+      **ha_vm_max_failure_window**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The number of seconds for the window during which up to \ :literal:`ha\_vm\_max\_failures`\  resets can occur before automated responses stop.
+
+      Valid only when \ :emphasis:`ha\_vm\_monitoring`\  is set to either \ :literal:`vmAndAppMonitoring`\  or \ :literal:`vmMonitoringOnly`\ .
+
+      Unit is seconds.
+
+      Default specifies no failure window.
+
+
+      Default: :literal:`-1`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_vm_max_failures:
+
+      **ha_vm_max_failures**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Maximum number of failures and automated resets allowed during the time that \ :literal:`ha\_vm\_max\_failure\_window`\  specifies.
+
+      Valid only when \ :emphasis:`ha\_vm\_monitoring`\  is set to either \ :literal:`vmAndAppMonitoring`\  or \ :literal:`vmMonitoringOnly`\ .
+
+
+      Default: :literal:`3`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_vm_min_up_time:
+
+      **ha_vm_min_up_time**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The number of seconds for the virtual machine's heartbeats to stabilize after the virtual machine has been powered on.
+
+      Valid only when \ :emphasis:`ha\_vm\_monitoring`\  is set to either \ :literal:`vmAndAppMonitoring`\  or \ :literal:`vmMonitoringOnly`\ .
+
+      Unit is seconds.
+
+
+      Default: :literal:`120`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-ha_vm_monitoring:
+
+      **ha_vm_monitoring**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      State of virtual machine health monitoring service.
+
+      If set to \ :literal:`vmAndAppMonitoring`\ , HA response to both virtual machine and application heartbeat failure.
+
+      If set to \ :literal:`vmMonitoringDisabled`\ , virtual machine health monitoring is disabled.
+
+      If set to \ :literal:`vmMonitoringOnly`\ , HA response to virtual machine heartbeat failure.
+
+      If \ :literal:`enable`\  is set to \ :literal:`false`\ , then this value is ignored.
+
+
+      Choices:
+
+      - :literal:`"vmAndAppMonitoring"`
+      - :literal:`"vmMonitoringOnly"`
+      - :literal:`"vmMonitoringDisabled"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-host_isolation_response:
+
+      **host_isolation_response**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates whether or VMs should be powered off if a host determines that it is isolated from the rest of the compute resource.
+
+      If set to \ :literal:`none`\ , do not power off VMs in the event of a host network isolation.
+
+      If set to \ :literal:`powerOff`\ , power off VMs in the event of a host network isolation.
+
+      If set to \ :literal:`shutdown`\ , shut down VMs guest operating system in the event of a host network isolation.
+
+
+      Choices:
+
+      - :literal:`"none"` ← (default)
+      - :literal:`"powerOff"`
+      - :literal:`"shutdown"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pdl_response:
+
+      **pdl_response**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).
+
+
+      Choices:
+
+      - :literal:`"disabled"`
+      - :literal:`"warning"` ← (default)
+      - :literal:`"restartAggressive"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-reservation_based_admission_control:
+
+      **reservation_based_admission_control**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Configure reservation based admission control policy.
+
+      \ :literal:`slot\_based\_admission\_control`\ , \ :literal:`reservation\_based\_admission\_control`\  and \ :literal:`failover\_host\_admission\_control`\  are mutually exclusive.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-reservation_based_admission_control/auto_compute_percentages:
+
+      **auto_compute_percentages**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      By default, \ :literal:`failover\_level`\  is used to calculate \ :literal:`cpu\_failover\_resources\_percent`\  and \ :literal:`memory\_failover\_resources\_percent`\ . If a user wants to override the percentage values, he has to set this field to false.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-reservation_based_admission_control/cpu_failover_resources_percent:
+
+      **cpu_failover_resources_percent**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Percentage of CPU resources in the cluster to reserve for failover. Ignored if \ :literal:`auto\_compute\_percentages`\  is not set to false.
+
+
+      Default: :literal:`50`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-reservation_based_admission_control/failover_level:
+
+      **failover_level**
+
+      :literal:`integer` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Number of host failures that should be tolerated.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-reservation_based_admission_control/memory_failover_resources_percent:
+
+      **memory_failover_resources_percent**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Percentage of memory resources in the cluster to reserve for failover. Ignored if \ :literal:`auto\_compute\_percentages`\  is not set to false.
+
+
+      Default: :literal:`50`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-slot_based_admission_control:
+
+      **slot_based_admission_control**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Configure slot based admission control policy.
+
+      \ :literal:`slot\_based\_admission\_control`\ , \ :literal:`reservation\_based\_admission\_control`\  and \ :literal:`failover\_host\_admission\_control`\  are mutually exclusive.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-slot_based_admission_control/failover_level:
+
+      **failover_level**
+
+      :literal:`integer` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Number of host failures that should be tolerated.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 Notes
@@ -643,12 +847,12 @@ Notes
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
-
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Enable HA without admission control
       community.vmware.vmware_cluster_ha:
         hostname: '{{ vcenter_hostname }}'
@@ -688,8 +892,7 @@ Examples
 
 
 
-Status
-------
+
 
 
 Authors
@@ -697,3 +900,13 @@ Authors
 
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

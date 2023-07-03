@@ -1,12 +1,16 @@
-.. _community.vmware.vmware_tag_manager_module:
 
 
-***********************************
-community.vmware.vmware_tag_manager
-***********************************
+community.vmware.vmware_tag_manager module -- Manage association of VMware tags with VMware objects
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Manage association of VMware tags with VMware objects**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+    You need further requirements to be able to use this module,
+    see `Requirements <ansible_collections.community.vmware.vmware_tag_manager_module_requirements_>`_ for details.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_tag_manager`.
 
 
 .. contents::
@@ -16,11 +20,14 @@ community.vmware.vmware_tag_manager
 
 Synopsis
 --------
+
 - This module can be used to assign / remove VMware tags from the given VMware objects.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
 - All variables and VMware object names are case sensitive.
 
 
+
+.. _ansible_collections.community.vmware.vmware_tag_manager_module_requirements:
 
 Requirements
 ------------
@@ -29,264 +36,346 @@ The below requirements are needed on the host that executes this module.
 - vSphere Automation SDK
 
 
+
+
+
+
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>moid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Managed object ID for the given object.</div>
-                        <div>Required if <code>object_name</code> is not set.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the object to work with.</div>
-                        <div>For DistributedVirtualPortgroups the format should be &quot;switch_name:portgroup_name&quot;</div>
-                        <div>Required if <code>moid</code> is not set.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>object_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>VirtualMachine</li>
-                                    <li>Datacenter</li>
-                                    <li>ClusterComputeResource</li>
-                                    <li>HostSystem</li>
-                                    <li>DistributedVirtualSwitch</li>
-                                    <li>DistributedVirtualPortgroup</li>
-                                    <li>Datastore</li>
-                                    <li>DatastoreCluster</li>
-                                    <li>ResourcePool</li>
-                                    <li>Folder</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Type of object to work with.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>protocol</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>http</li>
-                                    <li><div style="color: blue"><b>https</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The connection to protocol.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>present</li>
-                                    <li>absent</li>
-                                    <li><div style="color: blue"><b>add</b>&nbsp;&larr;</div></li>
-                                    <li>remove</li>
-                                    <li>set</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>state</code> is set to <code>add</code> or <code>present</code> will add the tags to the existing tag list of the given object.</div>
-                        <div>If <code>state</code> is set to <code>remove</code> or <code>absent</code> will remove the tags from the existing tag list of the given object.</div>
-                        <div>If <code>state</code> is set to <code>set</code> will replace the tags of the given objects with the user defined list of tags.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>tag_names</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=raw</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>List of tag(s) to be managed.</div>
-                        <div>User can also specify category name by specifying colon separated value. For example, &quot;category_name:tag_name&quot;.</div>
-                        <div>User can also specify tag and category as dict, when tag or category contains colon. See example for more information. Added in version 2.10.</div>
-                        <div>User can skip category name if you have unique tag names.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-moid:
+
+      **moid**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Managed object ID for the given object.
+
+      Required if \ :literal:`object\_name`\  is not set.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-object_name:
+
+      **object_name**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the object to work with.
+
+      For DistributedVirtualPortgroups the format should be "switch\_name:portgroup\_name"
+
+      Required if \ :literal:`moid`\  is not set.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-object_type:
+
+      **object_type**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Type of object to work with.
+
+
+      Choices:
+
+      - :literal:`"VirtualMachine"`
+      - :literal:`"Datacenter"`
+      - :literal:`"ClusterComputeResource"`
+      - :literal:`"HostSystem"`
+      - :literal:`"DistributedVirtualSwitch"`
+      - :literal:`"DistributedVirtualPortgroup"`
+      - :literal:`"Datastore"`
+      - :literal:`"DatastoreCluster"`
+      - :literal:`"ResourcePool"`
+      - :literal:`"Folder"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-protocol:
+
+      **protocol**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The connection to protocol.
+
+
+      Choices:
+
+      - :literal:`"http"`
+      - :literal:`"https"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-state:
+
+      **state**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If \ :literal:`state`\  is set to \ :literal:`add`\  or \ :literal:`present`\  will add the tags to the existing tag list of the given object.
+
+      If \ :literal:`state`\  is set to \ :literal:`remove`\  or \ :literal:`absent`\  will remove the tags from the existing tag list of the given object.
+
+      If \ :literal:`state`\  is set to \ :literal:`set`\  will replace the tags of the given objects with the user defined list of tags.
+
+
+      Choices:
+
+      - :literal:`"present"`
+      - :literal:`"absent"`
+      - :literal:`"add"` ← (default)
+      - :literal:`"remove"`
+      - :literal:`"set"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-tag_names:
+
+      **tag_names**
+
+      :literal:`list` / :literal:`elements=any` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      List of tag(s) to be managed.
+
+      User can also specify category name by specifying colon separated value. For example, "category\_name:tag\_name".
+
+      User can also specify tag and category as dict, when tag or category contains colon. See example for more information. Added in version 2.10.
+
+      User can skip category name if you have unique tag names.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid.
+
+      Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 
@@ -294,8 +383,9 @@ Parameters
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Add tags to a virtual machine
       community.vmware.vmware_tag_manager:
         hostname: '{{ vcenter_hostname }}'
@@ -386,41 +476,42 @@ Examples
 
 
 
+
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>tag_status</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>on success</td>
-                <td>
-                            <div>metadata about tags related to object configuration</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;attached_tags&#x27;: [&#x27;urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security&#x27;], &#x27;current_tags&#x27;: [&#x27;urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup&#x27;, &#x27;urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security&#x27;], &#x27;detached_tags&#x27;: [], &#x27;previous_tags&#x27;: [&#x27;urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup&#x27;]}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-tag_status:
+
+      **tag_status**
+
+      :literal:`list` / :literal:`elements=string`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      metadata about tags related to object configuration
 
 
-Status
-------
+      Returned: on success
+
+      Sample: :literal:`{"attached\_tags": ["urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security"], "current\_tags": ["urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup", "urn:vmomi:InventoryServiceCategory:76f69e84-f6b9-4e64-954c-fac545d2c0ba:GLOBAL:security"], "detached\_tags": [], "previous\_tags": ["urn:vmomi:InventoryServiceCategory:927f5ff8-62e6-4364-bc94-23e3bfd7dee7:GLOBAL:backup"]}`
+
+
 
 
 Authors
@@ -428,3 +519,13 @@ Authors
 
 - Abhijeet Kasurde (@Akasurde)
 - Frederic Van Reet (@GBrawl)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

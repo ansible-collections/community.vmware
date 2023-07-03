@@ -1,18 +1,16 @@
 
 
-community.vmware.vsan_health_silent_checks module -- Silence vSAN health checks
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+community.vmware.vmware_vasa module -- Manage VMware Virtual Volumes storage provider
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. note::
     This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
     To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-    You need further requirements to be able to use this module,
-    see `Requirements <ansible_collections.community.vmware.vsan_health_silent_checks_module_requirements_>`_ for details.
 
-    To use it in a playbook, specify: :code:`community.vmware.vsan_health_silent_checks`.
+    To use it in a playbook, specify: :code:`community.vmware.vmware_vasa`.
 
-New in community.vmware 3.6.0
+New in community.vmware 3.8.0
 
 .. contents::
    :local:
@@ -22,18 +20,9 @@ New in community.vmware 3.6.0
 Synopsis
 --------
 
-- Take a list of vSAN health checks and silence them
-- Re-enable alerts for previously silenced health checks
+- This module can be used to register and unregister a VASA provider
 
 
-
-.. _ansible_collections.community.vmware.vsan_health_silent_checks_module_requirements:
-
-Requirements
-------------
-The below requirements are needed on the host that executes this module.
-
-- vSAN Management SDK, which needs to be downloaded from VMware and installed manually.
 
 
 
@@ -49,44 +38,6 @@ Parameters
 
   * - Parameter
     - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-checks:
-
-      **checks**
-
-      :literal:`list` / :literal:`elements=string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The checks to silence.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-cluster_name:
-
-      **cluster_name**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the vSAN cluster.
-
-
 
   * - .. raw:: html
 
@@ -224,17 +175,13 @@ Parameters
         </div></div>
 
     - 
-      The state of the health checks.
-
-      If set to \ :literal:`present`\ , all given health checks will be silenced.
-
-      If set to \ :literal:`absent`\ , all given health checks will be removed from the list of silent checks.
+      Create \ :literal:`present`\  or remove \ :literal:`absent`\  a VASA provider.
 
 
       Choices:
 
-      - :literal:`"present"` ← (default)
       - :literal:`"absent"`
+      - :literal:`"present"` ← (default)
 
 
 
@@ -296,6 +243,109 @@ Parameters
 
 
 
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vasa_certificate:
+
+      **vasa_certificate**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The SSL certificate of the VASA provider.
+
+      This parameter is required if \ :emphasis:`state=present`\ 
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vasa_name:
+
+      **vasa_name**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the VASA provider to be managed.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vasa_password:
+
+      **vasa_password**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the user account to connect to the VASA provider.
+
+      This parameter is required if \ :emphasis:`state=present`\ 
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vasa_url:
+
+      **vasa_url**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The url  of the VASA provider to be managed.
+
+      This parameter is required if \ :emphasis:`state=present`\ 
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-vasa_username:
+
+      **vasa_username**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The user account to connect to the VASA provider.
+
+      This parameter is required if \ :emphasis:`state=present`\ 
+
+
+
 
 
 Notes
@@ -304,6 +354,12 @@ Notes
 .. note::
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
+See Also
+--------
+
+* \ `community.vmware.vmware\_vasa\_info <vmware_vasa_info_module.rst>`__\ 
+
+  Gather information about vSphere VASA providers.
 
 Examples
 --------
@@ -311,25 +367,26 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Disable the vSAN Support Insight health check
-      community.vmware.vsan_health_silent_checks:
+    - name: Create Cluster
+      community.vmware.vmware_cluster:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        checks: vsanenablesupportinsight
-        cluster_name: 'vSAN01'
+        vasa_name: "{{ vasa_name }}"
+        vasa_url: "{{ vasa_url }}"
+        vasa_username: "{{ vasa_username }}"
+        vasa_password: "{{ vasa_password }}"
+        vasa_certificate: "{{ vasa_certificate }}"
+        state: present
       delegate_to: localhost
 
-    - name: Re-enable health check alerts for release catalog and HCL DB
-      community.vmware.vsan_health_silent_checks:
+    - name: Unregister VASA provider
+      community.vmware.vmware_vasa:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        checks:
-          - releasecataloguptodate
-          - autohclupdate
+        vasa_name: "{{ vasa_name }}"
         state: absent
-        cluster_name: 'vSAN01'
       delegate_to: localhost
 
 
@@ -341,7 +398,7 @@ Examples
 Authors
 ~~~~~~~
 
-- Philipp Fruck (@p-fruck)
+- Eugenio Grosso (@genegr) 
 
 
 

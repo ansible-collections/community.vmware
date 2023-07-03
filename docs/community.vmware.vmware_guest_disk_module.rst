@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_guest_disk_module:
 
 
-**********************************
-community.vmware.vmware_guest_disk
-**********************************
+community.vmware.vmware_guest_disk module -- Manage disks related to virtual machine in given vCenter infrastructure
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Manage disks related to virtual machine in given vCenter infrastructure**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_guest_disk`.
 
 
 .. contents::
@@ -16,6 +18,7 @@ community.vmware.vmware_guest_disk
 
 Synopsis
 --------
+
 - This module can be used to add, remove and update disks belonging to given virtual machine.
 - All parameters and VMware object names are case sensitive.
 - This module is destructive in nature, please read documentation carefully before proceeding.
@@ -24,880 +27,1122 @@ Synopsis
 
 
 
+
+
+
+
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="4">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The datacenter name to which virtual machine belongs to.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>disk</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">[]</div>
-                </td>
-                <td>
-                        <div>A list of disks to add or remove.</div>
-                        <div>The virtual disk related information is provided using this list.</div>
-                        <div>All values and parameters are case sensitive.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>autoselect_datastore</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select the less used datastore. Specify only if <code>datastore</code> is not specified.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>bus_sharing</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>noSharing</b>&nbsp;&larr;</div></li>
-                                    <li>physicalSharing</li>
-                                    <li>virtualSharing</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Only functions with Paravirtual SCSI Controller.</div>
-                        <div>Allows for the sharing of the scsi bus between two virtual machines.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_disk</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>This value allows for the sharing of an RDM between two machines.</div>
-                        <div>The primary machine holding the RDM uses the default <code>false</code>.</div>
-                        <div>The secondary machine holding the RDM uses <code>true</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>compatibility_mode</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>physicalMode</li>
-                                    <li>virtualMode</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Compatibility mode for raw devices. Required when disk type <code>type</code> is set to <code>rdm</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>controller_number</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>0</li>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>This parameter is used with <code>controller_type</code> for specifying controller bus number.</div>
-                        <div>For <code>ide</code> controller type, valid value is 0 or 1.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>controller_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>buslogic</li>
-                                    <li>lsilogic</li>
-                                    <li>lsilogicsas</li>
-                                    <li>paravirtual</li>
-                                    <li>sata</li>
-                                    <li>nvme</li>
-                                    <li>ide</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>This parameter is added for managing disks attaching other types of controllers, e.g., SATA or NVMe.</div>
-                        <div>If either <code>controller_type</code> or <code>scsi_type</code> is not specified, then use <code>paravirtual</code> type.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datastore</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of datastore or datastore cluster to be used for the disk.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>destroy</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If <code>state</code> is <code>absent</code>, make sure the disk file is deleted from the datastore. Added in version 2.10.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>disk_mode</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>persistent</li>
-                                    <li>independent_persistent</li>
-                                    <li>independent_nonpersistent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Type of disk mode. If not specified then use <code>persistent</code> mode for new disk.</div>
-                        <div>If set to &#x27;persistent&#x27; mode, changes are immediately and permanently written to the virtual disk.</div>
-                        <div>If set to &#x27;independent_persistent&#x27; mode, same as persistent, but not affected by snapshots.</div>
-                        <div>If set to &#x27;independent_nonpersistent&#x27; mode, changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>filename</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Existing disk image to be used. Filename must already exist on the datastore.</div>
-                        <div>Specify filename string in <code>[datastore_name] path/to/file.vmdk</code> format. Added in version 2.10.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>iolimit</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Section specifies the shares and limit for storage I/O resource.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>limit</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Section specifies values for limit where the utilization of a virtual machine will not exceed, even if there are available resources.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>shares</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Specifies different types of shares user can add for the given disk.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>level</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>low</li>
-                                    <li>normal</li>
-                                    <li>high</li>
-                                    <li>custom</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Specifies different level for the shares section.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>level_value</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Custom value when <code>level</code> is set as <code>custom</code>.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-datacenter:
+
+      **datacenter**
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The datacenter name to which virtual machine belongs to.
 
 
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>rdm_path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Path of LUN for Raw Device Mapping required for disk type <code>rdm</code>.</div>
-                        <div>Only valid if <code>type</code> is set to <code>rdm</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>scsi_controller</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>0</li>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>SCSI controller number. Only 4 SCSI controllers are allowed per VM.</div>
-                        <div>Care should be taken while specifying &#x27;scsi_controller&#x27; is 0 and &#x27;unit_number&#x27; as 0 as this disk may contain OS.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>scsi_type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>buslogic</li>
-                                    <li>lsilogic</li>
-                                    <li>lsilogicsas</li>
-                                    <li>paravirtual</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.</div>
-                        <div>This value is ignored, if SCSI Controller is already present or <code>state</code> is <code>absent</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>shares</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Section for iolimit section tells about what are all different types of shares user can add for disk.</div>
-                        <div>Not applicable when disk <code>type</code> is set to <code>vpmemdisk</code>.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>level</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>low</li>
-                                    <li>normal</li>
-                                    <li>high</li>
-                                    <li>custom</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Tells about different level for the shares section.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>level_value</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Custom value when <code>level</code> is set as <code>custom</code>.</div>
-                </td>
-            </tr>
 
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>sharing</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The sharing mode of the virtual disk.</div>
-                        <div>Setting sharing means that multiple virtual machines can write to the virtual disk.</div>
-                        <div>Sharing can only be set if <code>type</code> is set to <code>eagerzeroedthick</code> or <code>rdm</code>.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>size</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk storage size.</div>
-                        <div>If size specified then unit must be specified. There is no space allowed in between size number and unit.</div>
-                        <div>Only first occurrence in disk element will be considered, even if there are multiple size* parameters available.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>size_gb</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk storage size in gb.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>size_kb</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk storage size in kb.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>size_mb</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk storage size in mb.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>size_tb</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk storage size in tb.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>State of disk.</div>
-                        <div>If set to &#x27;absent&#x27;, disk will be removed permanently from virtual machine configuration and from VMware storage.</div>
-                        <div>If set to &#x27;present&#x27;, disk will be added if not present at given Controller and Unit Number.</div>
-                        <div>or disk exists with different size, disk size is increased, reducing disk size is not allowed.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>thin</li>
-                                    <li>eagerzeroedthick</li>
-                                    <li>thick</li>
-                                    <li>rdm</li>
-                                    <li>vpmemdisk</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The type of disk, if not specified then use <code>thick</code> type for new disk, no eagerzero.</div>
-                        <div>The disk type <code>rdm</code> is added in version 1.13.0.</div>
-                        <div>The disk type <code>vpmemdisk</code> is added in version 2.7.0.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>unit_number</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Disk Unit Number.</div>
-                        <div>Valid value range from 0 to 15, except 7 for SCSI Controller.</div>
-                        <div>Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher.</div>
-                        <div>Valid value range from 0 to 29 for SATA controller.</div>
-                        <div>Valid value range from 0 to 14 for NVME controller.</div>
-                        <div>Valid value range from 0 to 1 for IDE controller.</div>
-                </td>
-            </tr>
+  * - .. raw:: html
 
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>folder</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Destination folder, absolute or relative path to find an existing guest.</div>
-                        <div>This is a required parameter, only if multiple VMs are found with same name.</div>
-                        <div>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</div>
-                        <div>Examples:</div>
-                        <div>folder: /ha-datacenter/vm</div>
-                        <div>folder: ha-datacenter/vm</div>
-                        <div>folder: /datacenter1/vm</div>
-                        <div>folder: datacenter1/vm</div>
-                        <div>folder: /datacenter1/vm/folder1</div>
-                        <div>folder: datacenter1/vm/folder1</div>
-                        <div>folder: /folder1/datacenter1/vm</div>
-                        <div>folder: folder1/datacenter1/vm</div>
-                        <div>folder: /folder1/datacenter1/vm/folder2</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>moid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</div>
-                        <div>This is required if <code>name</code> or <code>uuid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Name of the virtual machine.</div>
-                        <div>This is a required parameter, if parameter <code>uuid</code> or <code>moid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>use_instance_uuid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Whether to use the VMware instance UUID rather than the BIOS UUID.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uuid</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>UUID of the instance to gather facts if known, this is VMware&#x27;s unique identifier.</div>
-                        <div>This is a required parameter, if parameter <code>name</code> or <code>moid</code> is not supplied.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk:
+
+      **disk**
+
+      :literal:`list` / :literal:`elements=dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      A list of disks to add or remove.
+
+      The virtual disk related information is provided using this list.
+
+      All values and parameters are case sensitive.
+
+
+      Default: :literal:`[]`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/autoselect_datastore:
+
+      **autoselect_datastore**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Select the less used datastore. Specify only if \ :literal:`datastore`\  is not specified.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/bus_sharing:
+
+      **bus_sharing**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Only functions with Paravirtual SCSI Controller.
+
+      Allows for the sharing of the scsi bus between two virtual machines.
+
+
+      Choices:
+
+      - :literal:`"noSharing"` ← (default)
+      - :literal:`"physicalSharing"`
+      - :literal:`"virtualSharing"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/cluster_disk:
+
+      **cluster_disk**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This value allows for the sharing of an RDM between two machines.
+
+      The primary machine holding the RDM uses the default \ :literal:`false`\ .
+
+      The secondary machine holding the RDM uses \ :literal:`true`\ .
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/compatibility_mode:
+
+      **compatibility_mode**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Compatibility mode for raw devices. Required when disk type \ :literal:`type`\  is set to \ :literal:`rdm`\ .
+
+
+      Choices:
+
+      - :literal:`"physicalMode"`
+      - :literal:`"virtualMode"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/controller_number:
+
+      **controller_number**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This parameter is used with \ :literal:`controller\_type`\  for specifying controller bus number.
+
+      For \ :literal:`ide`\  controller type, valid value is 0 or 1.
+
+
+      Choices:
+
+      - :literal:`0`
+      - :literal:`1`
+      - :literal:`2`
+      - :literal:`3`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/controller_type:
+
+      **controller_type**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      This parameter is added for managing disks attaching other types of controllers, e.g., SATA or NVMe.
+
+      If either \ :literal:`controller\_type`\  or \ :literal:`scsi\_type`\  is not specified, then use \ :literal:`paravirtual`\  type.
+
+
+      Choices:
+
+      - :literal:`"buslogic"`
+      - :literal:`"lsilogic"`
+      - :literal:`"lsilogicsas"`
+      - :literal:`"paravirtual"`
+      - :literal:`"sata"`
+      - :literal:`"nvme"`
+      - :literal:`"ide"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/datastore:
+
+      **datastore**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of datastore or datastore cluster to be used for the disk.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/destroy:
+
+      **destroy**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If \ :literal:`state`\  is \ :literal:`absent`\ , make sure the disk file is deleted from the datastore. Added in version 2.10.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/disk_mode:
+
+      **disk_mode**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Type of disk mode. If not specified then use \ :literal:`persistent`\  mode for new disk.
+
+      If set to 'persistent' mode, changes are immediately and permanently written to the virtual disk.
+
+      If set to 'independent\_persistent' mode, same as persistent, but not affected by snapshots.
+
+      If set to 'independent\_nonpersistent' mode, changes to virtual disk are made to a redo log and discarded at power off, but not affected by snapshots.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+      Choices:
+
+      - :literal:`"persistent"`
+      - :literal:`"independent\_persistent"`
+      - :literal:`"independent\_nonpersistent"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/filename:
+
+      **filename**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Existing disk image to be used. Filename must already exist on the datastore.
+
+      Specify filename string in \ :literal:`[datastore\_name] path/to/file.vmdk`\  format. Added in version 2.10.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/iolimit:
+
+      **iolimit**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Section specifies the shares and limit for storage I/O resource.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/iolimit/limit:
+
+      **limit**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Section specifies values for limit where the utilization of a virtual machine will not exceed, even if there are available resources.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/iolimit/shares:
+
+      **shares**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Specifies different types of shares user can add for the given disk.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/iolimit/shares/level:
+
+      **level**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Specifies different level for the shares section.
+
+
+      Choices:
+
+      - :literal:`"low"`
+      - :literal:`"normal"`
+      - :literal:`"high"`
+      - :literal:`"custom"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/iolimit/shares/level_value:
+
+      **level_value**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Custom value when \ :literal:`level`\  is set as \ :literal:`custom`\ .
+
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/rdm_path:
+
+      **rdm_path**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Path of LUN for Raw Device Mapping required for disk type \ :literal:`rdm`\ .
+
+      Only valid if \ :literal:`type`\  is set to \ :literal:`rdm`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/scsi_controller:
+
+      **scsi_controller**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      SCSI controller number. Only 4 SCSI controllers are allowed per VM.
+
+      Care should be taken while specifying 'scsi\_controller' is 0 and 'unit\_number' as 0 as this disk may contain OS.
+
+
+      Choices:
+
+      - :literal:`0`
+      - :literal:`1`
+      - :literal:`2`
+      - :literal:`3`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/scsi_type:
+
+      **scsi_type**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.
+
+      This value is ignored, if SCSI Controller is already present or \ :literal:`state`\  is \ :literal:`absent`\ .
+
+
+      Choices:
+
+      - :literal:`"buslogic"`
+      - :literal:`"lsilogic"`
+      - :literal:`"lsilogicsas"`
+      - :literal:`"paravirtual"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/shares:
+
+      **shares**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Section for iolimit section tells about what are all different types of shares user can add for disk.
+
+      Not applicable when disk \ :literal:`type`\  is set to \ :literal:`vpmemdisk`\ .
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/shares/level:
+
+      **level**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Tells about different level for the shares section.
+
+
+      Choices:
+
+      - :literal:`"low"`
+      - :literal:`"normal"`
+      - :literal:`"high"`
+      - :literal:`"custom"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/shares/level_value:
+
+      **level_value**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Custom value when \ :literal:`level`\  is set as \ :literal:`custom`\ .
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/sharing:
+
+      **sharing**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The sharing mode of the virtual disk.
+
+      Setting sharing means that multiple virtual machines can write to the virtual disk.
+
+      Sharing can only be set if \ :literal:`type`\  is set to \ :literal:`eagerzeroedthick`\  or \ :literal:`rdm`\ .
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/size:
+
+      **size**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk storage size.
+
+      If size specified then unit must be specified. There is no space allowed in between size number and unit.
+
+      Only first occurrence in disk element will be considered, even if there are multiple size\* parameters available.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/size_gb:
+
+      **size_gb**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk storage size in gb.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/size_kb:
+
+      **size_kb**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk storage size in kb.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/size_mb:
+
+      **size_mb**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk storage size in mb.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/size_tb:
+
+      **size_tb**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk storage size in tb.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/state:
+
+      **state**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      State of disk.
+
+      If set to 'absent', disk will be removed permanently from virtual machine configuration and from VMware storage.
+
+      If set to 'present', disk will be added if not present at given Controller and Unit Number.
+
+      or disk exists with different size, disk size is increased, reducing disk size is not allowed.
+
+
+      Choices:
+
+      - :literal:`"present"` ← (default)
+      - :literal:`"absent"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/type:
+
+      **type**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The type of disk, if not specified then use \ :literal:`thick`\  type for new disk, no eagerzero.
+
+      The disk type \ :literal:`rdm`\  is added in version 1.13.0.
+
+      The disk type \ :literal:`vpmemdisk`\  is added in version 2.7.0.
+
+
+      Choices:
+
+      - :literal:`"thin"`
+      - :literal:`"eagerzeroedthick"`
+      - :literal:`"thick"`
+      - :literal:`"rdm"`
+      - :literal:`"vpmemdisk"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-disk/unit_number:
+
+      **unit_number**
+
+      :literal:`integer` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Disk Unit Number.
+
+      Valid value range from 0 to 15, except 7 for SCSI Controller.
+
+      Valid value range from 0 to 64, except 7 for Paravirtual SCSI Controller on Virtual Hardware version 14 or higher.
+
+      Valid value range from 0 to 29 for SATA controller.
+
+      Valid value range from 0 to 14 for NVME controller.
+
+      Valid value range from 0 to 1 for IDE controller.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-folder:
+
+      **folder**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Destination folder, absolute or relative path to find an existing guest.
+
+      This is a required parameter, only if multiple VMs are found with same name.
+
+      The folder should include the datacenter. ESX's datacenter is ha-datacenter
+
+      Examples:
+
+         folder: /ha-datacenter/vm
+
+         folder: ha-datacenter/vm
+
+         folder: /datacenter1/vm
+
+         folder: datacenter1/vm
+
+         folder: /datacenter1/vm/folder1
+
+         folder: datacenter1/vm/folder1
+
+         folder: /folder1/datacenter1/vm
+
+         folder: folder1/datacenter1/vm
+
+         folder: /folder1/datacenter1/vm/folder2
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-moid:
+
+      **moid**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
+
+      This is required if \ :literal:`name`\  or \ :literal:`uuid`\  is not supplied.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-name:
+
+      **name**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Name of the virtual machine.
+
+      This is a required parameter, if parameter \ :literal:`uuid`\  or \ :literal:`moid`\  is not supplied.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-use_instance_uuid:
+
+      **use_instance_uuid**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Whether to use the VMware instance UUID rather than the BIOS UUID.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-uuid:
+
+      **uuid**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      UUID of the instance to gather facts if known, this is VMware's unique identifier.
+
+      This is a required parameter, if parameter \ :literal:`name`\  or \ :literal:`moid`\  is not supplied.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 Notes
@@ -907,12 +1152,12 @@ Notes
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
-
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Add disks to virtual machine using UUID
       community.vmware.vmware_guest_disk:
         hostname: "{{ vcenter_hostname }}"
@@ -1150,61 +1395,76 @@ Examples
 
 
 
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>disk_changes</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>result of each task, key is the 0-based index with the same sequence in which the tasks were defined</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;0&#x27;: &#x27;Disk deleted.&#x27;, &#x27;1&#x27;: &#x27;Disk created.&#x27;}</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>disk_data</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>metadata about the virtual machine&#x27;s disks after managing them</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;0&#x27;: {&#x27;backing_datastore&#x27;: &#x27;datastore2&#x27;, &#x27;backing_disk_mode&#x27;: &#x27;persistent&#x27;, &#x27;backing_eagerlyscrub&#x27;: False, &#x27;backing_filename&#x27;: &#x27;[datastore2] VM_225/VM_225.vmdk&#x27;, &#x27;backing_thinprovisioned&#x27;: False, &#x27;backing_writethrough&#x27;: False, &#x27;backing_uuid&#x27;: &#x27;421e4592-c069-924d-ce20-7e7533fab926&#x27;, &#x27;capacity_in_bytes&#x27;: 10485760, &#x27;capacity_in_kb&#x27;: 10240, &#x27;controller_key&#x27;: 1000, &#x27;key&#x27;: 2000, &#x27;label&#x27;: &#x27;Hard disk 1&#x27;, &#x27;summary&#x27;: &#x27;10,240 KB&#x27;, &#x27;unit_number&#x27;: 0}}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-disk_changes:
+
+      **disk_changes**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      result of each task, key is the 0-based index with the same sequence in which the tasks were defined
 
 
-Status
-------
+      Returned: always
+
+      Sample: :literal:`{"0": "Disk deleted.", "1": "Disk created."}`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-disk_data:
+
+      **disk_data**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      metadata about the virtual machine's disks after managing them
+
+
+      Returned: always
+
+      Sample: :literal:`{"0": {"backing\_datastore": "datastore2", "backing\_disk\_mode": "persistent", "backing\_eagerlyscrub": false, "backing\_filename": "[datastore2] VM\_225/VM\_225.vmdk", "backing\_thinprovisioned": false, "backing\_uuid": "421e4592-c069-924d-ce20-7e7533fab926", "backing\_writethrough": false, "capacity\_in\_bytes": 10485760, "capacity\_in\_kb": 10240, "controller\_key": 1000, "key": 2000, "label": "Hard disk 1", "summary": "10,240 KB", "unit\_number": 0}}`
+
+
 
 
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
+- Abhijeet Kasurde (@Akasurde) 
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+

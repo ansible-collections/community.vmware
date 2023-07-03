@@ -1,12 +1,14 @@
-.. _community.vmware.vmware_dvswitch_module:
 
 
-********************************
-community.vmware.vmware_dvswitch
-********************************
+community.vmware.vmware_dvswitch module -- Create or remove a Distributed Switch
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-**Create or remove a Distributed Switch**
+.. note::
+    This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
+    To install it, use: :code:`ansible-galaxy collection install community.vmware`.
+
+    To use it in a playbook, specify: :code:`community.vmware.vmware_dvswitch`.
 
 
 .. contents::
@@ -16,7 +18,12 @@ community.vmware.vmware_dvswitch
 
 Synopsis
 --------
+
 - This module can be used to create, remove a Distributed Switch.
+
+
+
+
 
 
 
@@ -24,742 +31,984 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-            <th width="100%">Comments</th>
-        </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>contact</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Dictionary which configures administrator contact name and description for the Distributed Switch.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Description or other details.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Administrator name.</div>
-                </td>
-            </tr>
+  * - Parameter
+    - Comments
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>datacenter_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the datacenter that will contain the Distributed Switch.</div>
-                        <div>This parameter is optional, if <code>folder</code> is provided.</div>
-                        <div>Mutually exclusive with <code>folder</code> parameter.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: datacenter</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Description of the Distributed Switch.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>discovery_operation</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>both</li>
-                                    <li>advertise</li>
-                                    <li><div style="color: blue"><b>listen</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select the discovery operation.</div>
-                        <div>Required parameter for <code>state</code> both <code>present</code> and <code>absent</code>, before Ansible 2.6 version.</div>
-                        <div>Required only if <code>state</code> is set to <code>present</code>, for Ansible 2.6 and onwards.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>discovery_proto</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>cdp</b>&nbsp;&larr;</div></li>
-                                    <li>lldp</li>
-                                    <li>disabled</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Link discovery protocol between Cisco and Link Layer discovery.</div>
-                        <div>Required parameter for <code>state</code> both <code>present</code> and <code>absent</code>, before Ansible 2.6 version.</div>
-                        <div>Required only if <code>state</code> is set to <code>present</code>, for Ansible 2.6 and onwards.</div>
-                        <div><code>cdp</code>: Use Cisco Discovery Protocol (CDP).</div>
-                        <div><code>lldp</code>: Use Link Layer Discovery Protocol (LLDP).</div>
-                        <div><code>disabled</code>: Do not use a discovery protocol.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: discovery_protocol</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>folder</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Destination folder, absolute path to place dvswitch in.</div>
-                        <div>The folder should include the datacenter.</div>
-                        <div>This parameter is case sensitive.</div>
-                        <div>This parameter is optional, if <code>datacenter</code> is provided.</div>
-                        <div>Examples:</div>
-                        <div>folder: /datacenter1/network</div>
-                        <div>folder: datacenter1/network</div>
-                        <div>folder: /datacenter1/network/folder1</div>
-                        <div>folder: datacenter1/network/folder1</div>
-                        <div>folder: /folder1/datacenter1/network</div>
-                        <div>folder: folder1/datacenter1/network</div>
-                        <div>folder: /folder1/datacenter1/network/folder2</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>health_check</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{"teaming_failover": false, "teaming_failover_interval": 0, "vlan_mtu": false, "vlan_mtu_interval": 0}</div>
-                </td>
-                <td>
-                        <div>Dictionary which configures Health Check for the Distributed Switch.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>teaming_failover</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Teaming and failover health check.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>teaming_failover_interval</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>Teaming and failover health check interval (minutes).</div>
-                        <div>The default value is 1 in the vSphere Client if the Teaming and failover health check is enabled.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vlan_mtu</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>VLAN and MTU health check.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vlan_mtu_interval</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>VLAN and MTU health check interval (minutes).</div>
-                        <div>The default value is 1 in the vSphere Client if the VLAN and MTU health check is enabled.</div>
-                </td>
-            </tr>
+  * - .. raw:: html
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mtu</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">1500</div>
-                </td>
-                <td>
-                        <div>The switch maximum transmission unit.</div>
-                        <div>Required parameter for <code>state</code> both <code>present</code> and <code>absent</code>, before Ansible 2.6 version.</div>
-                        <div>Required only if <code>state</code> is set to <code>present</code>, for Ansible 2.6 and onwards.</div>
-                        <div>Accepts value between 1280 to 9000 (both inclusive).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>multicast_filtering_mode</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>basic</b>&nbsp;&larr;</div></li>
-                                    <li>snooping</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>The multicast filtering mode.</div>
-                        <div><code>basic</code> mode: multicast traffic for virtual machines is forwarded according to the destination MAC address of the multicast group.</div>
-                        <div><code>snooping</code> mode: the Distributed Switch provides IGMP and MLD snooping according to RFC 4541.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>net_flow</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.7.0</div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">{"active_flow_timeout": 60, "collector_port": 0, "idle_flow_timeout": 15, "internal_flows_only": false, "observation_domain_id": 0, "sampling_rate": 4096}</div>
-                </td>
-                <td>
-                        <div>Dictionary which configures the Net Flow for the Distributed Switch.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>active_flow_timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">60</div>
-                </td>
-                <td>
-                        <div>The time, in seconds, to wait before sending information after the flow is initiated.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>collector_ip</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The IP Address (IPv4 or IPv6) of the NetFlow collector.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>collector_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>The Port of the NetFlow collector.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>idle_flow_timeout</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">15</div>
-                </td>
-                <td>
-                        <div>The time, in seconds, to wait before sending information after the flow is initiated.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>internal_flows_only</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If True, data on network activity between vms on the same host will be collected only.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>observation_domain_id</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">0</div>
-                </td>
-                <td>
-                        <div>Identifies the information related to the switch.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>sampling_rate</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">4096</div>
-                </td>
-                <td>
-                        <div>The portion of data that the switch collects.</div>
-                        <div>The sampling rate represents the number of packets that NetFlow drops after every collected packet.</div>
-                        <div>If the rate is 0, NetFlow samples every packet, that is, collect one packet and drop none.</div>
-                        <div>If the rate is 1, NetFlow samples a packet and drops the next one, and so on.</div>
-                </td>
-            </tr>
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>network_policy</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Dictionary which configures the different default security values for portgroups.</div>
-                        <div>If set, these options are inherited by the portgroups of the DVS.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>forged_transmits</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates whether forged transmits are allowed.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mac_changes</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates whether mac changes are allowed.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>promiscuous</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Indicates whether promiscuous mode is allowed.</div>
-                </td>
-            </tr>
+      .. _parameter-contact:
 
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">443</div>
-                </td>
-                <td>
-                        <div>The port number of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>The format is a hostname or a IP.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
-                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>proxy_port</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                    <li>absent</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>If set to <code>present</code> and the Distributed Switch does not exist, the Distributed Switch will be created.</div>
-                        <div>If set to <code>absent</code> and the Distributed Switch exists, the Distributed Switch will be deleted.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                         / <span style="color: red">required</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The name of the distribute vSwitch to create or remove.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: switch, dvswitch</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>switch_version</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The version of the Distributed Switch to create.</div>
-                        <div>The version must match the version of the ESXi hosts you want to connect.</div>
-                        <div>The version of the vCenter server is used if not specified.</div>
-                        <div>Required only if <code>state</code> is set to <code>present</code>.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: version</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uplink_prefix</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <b>Default:</b><br/><div style="color: blue">"Uplink "</div>
-                </td>
-                <td>
-                        <div>The prefix used for the naming of the uplinks.</div>
-                        <div>Only valid if the Distributed Switch will be created. Not used if the Distributed Switch is already present.</div>
-                        <div>Uplinks are created as Uplink 1, Uplink 2, etc. pp. by default.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>uplink_quantity</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Quantity of uplink per ESXi host added to the Distributed Switch.</div>
-                        <div>The uplink quantity can be increased or decreased, but a decrease will only be successfull if the uplink isn&#x27;t used by a portgroup.</div>
-                        <div>Required parameter for <code>state</code> both <code>present</code> and <code>absent</code>, before Ansible 2.6 version.</div>
-                        <div>Required only if <code>state</code> is set to <code>present</code>, for Ansible 2.6 and onwards.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The username of the vSphere vCenter or ESXi server.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
-                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
-                        <div>Environment variable support added in Ansible 2.6.</div>
-                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
-                </td>
-            </tr>
-    </table>
-    <br/>
+      **contact**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures administrator contact name and description for the Distributed Switch.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-contact/description:
+
+      **description**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Description or other details.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-contact/name:
+
+      **name**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Administrator name.
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-datacenter:
+      .. _parameter-datacenter_name:
+
+      **datacenter_name**
+
+      aliases: datacenter
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the datacenter that will contain the Distributed Switch.
+
+      This parameter is optional, if \ :literal:`folder`\  is provided.
+
+      Mutually exclusive with \ :literal:`folder`\  parameter.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-description:
+
+      **description**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Description of the Distributed Switch.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-discovery_operation:
+
+      **discovery_operation**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Select the discovery operation.
+
+      Required parameter for \ :literal:`state`\  both \ :literal:`present`\  and \ :literal:`absent`\ , before Ansible 2.6 version.
+
+      Required only if \ :literal:`state`\  is set to \ :literal:`present`\ , for Ansible 2.6 and onwards.
+
+
+      Choices:
+
+      - :literal:`"both"`
+      - :literal:`"advertise"`
+      - :literal:`"listen"` ← (default)
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-discovery_proto:
+      .. _parameter-discovery_protocol:
+
+      **discovery_proto**
+
+      aliases: discovery_protocol
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Link discovery protocol between Cisco and Link Layer discovery.
+
+      Required parameter for \ :literal:`state`\  both \ :literal:`present`\  and \ :literal:`absent`\ , before Ansible 2.6 version.
+
+      Required only if \ :literal:`state`\  is set to \ :literal:`present`\ , for Ansible 2.6 and onwards.
+
+      \ :literal:`cdp`\ : Use Cisco Discovery Protocol (CDP).
+
+      \ :literal:`lldp`\ : Use Link Layer Discovery Protocol (LLDP).
+
+      \ :literal:`disabled`\ : Do not use a discovery protocol.
+
+
+      Choices:
+
+      - :literal:`"cdp"` ← (default)
+      - :literal:`"lldp"`
+      - :literal:`"disabled"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-folder:
+
+      **folder**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Destination folder, absolute path to place dvswitch in.
+
+      The folder should include the datacenter.
+
+      This parameter is case sensitive.
+
+      This parameter is optional, if \ :literal:`datacenter`\  is provided.
+
+      Examples:
+
+         folder: /datacenter1/network
+
+         folder: datacenter1/network
+
+         folder: /datacenter1/network/folder1
+
+         folder: datacenter1/network/folder1
+
+         folder: /folder1/datacenter1/network
+
+         folder: folder1/datacenter1/network
+
+         folder: /folder1/datacenter1/network/folder2
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-health_check:
+
+      **health_check**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures Health Check for the Distributed Switch.
+
+
+      Default: :literal:`{"teaming\_failover": false, "teaming\_failover\_interval": 0, "vlan\_mtu": false, "vlan\_mtu\_interval": 0}`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-health_check/teaming_failover:
+
+      **teaming_failover**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Teaming and failover health check.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-health_check/teaming_failover_interval:
+
+      **teaming_failover_interval**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Teaming and failover health check interval (minutes).
+
+      The default value is 1 in the vSphere Client if the Teaming and failover health check is enabled.
+
+
+      Default: :literal:`0`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-health_check/vlan_mtu:
+
+      **vlan_mtu**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      VLAN and MTU health check.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-health_check/vlan_mtu_interval:
+
+      **vlan_mtu_interval**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      VLAN and MTU health check interval (minutes).
+
+      The default value is 1 in the vSphere Client if the VLAN and MTU health check is enabled.
+
+
+      Default: :literal:`0`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-hostname:
+
+      **hostname**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The hostname or IP address of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-mtu:
+
+      **mtu**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The switch maximum transmission unit.
+
+      Required parameter for \ :literal:`state`\  both \ :literal:`present`\  and \ :literal:`absent`\ , before Ansible 2.6 version.
+
+      Required only if \ :literal:`state`\  is set to \ :literal:`present`\ , for Ansible 2.6 and onwards.
+
+      Accepts value between 1280 to 9000 (both inclusive).
+
+
+      Default: :literal:`1500`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-multicast_filtering_mode:
+
+      **multicast_filtering_mode**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The multicast filtering mode.
+
+      \ :literal:`basic`\  mode: multicast traffic for virtual machines is forwarded according to the destination MAC address of the multicast group.
+
+      \ :literal:`snooping`\  mode: the Distributed Switch provides IGMP and MLD snooping according to RFC 4541.
+
+
+      Choices:
+
+      - :literal:`"basic"` ← (default)
+      - :literal:`"snooping"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow:
+
+      **net_flow**
+
+      :literal:`dictionary`
+
+      added in community.vmware 2.7.0
+
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures the Net Flow for the Distributed Switch.
+
+
+      Default: :literal:`{"active\_flow\_timeout": 60, "collector\_port": 0, "idle\_flow\_timeout": 15, "internal\_flows\_only": false, "observation\_domain\_id": 0, "sampling\_rate": 4096}`
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/active_flow_timeout:
+
+      **active_flow_timeout**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The time, in seconds, to wait before sending information after the flow is initiated.
+
+
+      Default: :literal:`60`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/collector_ip:
+
+      **collector_ip**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The IP Address (IPv4 or IPv6) of the NetFlow collector.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/collector_port:
+
+      **collector_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The Port of the NetFlow collector.
+
+
+      Default: :literal:`0`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/idle_flow_timeout:
+
+      **idle_flow_timeout**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The time, in seconds, to wait before sending information after the flow is initiated.
+
+
+      Default: :literal:`15`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/internal_flows_only:
+
+      **internal_flows_only**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If True, data on network activity between vms on the same host will be collected only.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/observation_domain_id:
+
+      **observation_domain_id**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Identifies the information related to the switch.
+
+
+      Default: :literal:`0`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-net_flow/sampling_rate:
+
+      **sampling_rate**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The portion of data that the switch collects.
+
+      The sampling rate represents the number of packets that NetFlow drops after every collected packet.
+
+      If the rate is 0, NetFlow samples every packet, that is, collect one packet and drop none.
+
+      If the rate is 1, NetFlow samples a packet and drops the next one, and so on.
+
+
+      Default: :literal:`4096`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-network_policy:
+
+      **network_policy**
+
+      :literal:`dictionary`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Dictionary which configures the different default security values for portgroups.
+
+      If set, these options are inherited by the portgroups of the DVS.
+
+
+    
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-network_policy/forged_transmits:
+
+      **forged_transmits**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates whether forged transmits are allowed.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-network_policy/mac_changes:
+
+      **mac_changes**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates whether mac changes are allowed.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-network_policy/promiscuous:
+
+      **promiscuous**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Indicates whether promiscuous mode is allowed.
+
+
+      Choices:
+
+      - :literal:`false` ← (default)
+      - :literal:`true`
+
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-pass:
+      .. _parameter-password:
+      .. _parameter-pwd:
+
+      **password**
+
+      aliases: pass, pwd
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The password of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-port:
+
+      **port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The port number of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+      Default: :literal:`443`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_host:
+
+      **proxy_host**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Address of a proxy that will receive all HTTPS requests and relay them.
+
+      The format is a hostname or a IP.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
+
+      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-proxy_port:
+
+      **proxy_port**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-state:
+
+      **state**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      If set to \ :literal:`present`\  and the Distributed Switch does not exist, the Distributed Switch will be created.
+
+      If set to \ :literal:`absent`\  and the Distributed Switch exists, the Distributed Switch will be deleted.
+
+
+      Choices:
+
+      - :literal:`"present"` ← (default)
+      - :literal:`"absent"`
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-dvswitch:
+      .. _parameter-switch:
+      .. _parameter-switch_name:
+
+      **switch_name**
+
+      aliases: switch, dvswitch
+
+      :literal:`string` / :strong:`required`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The name of the distribute vSwitch to create or remove.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-switch_version:
+      .. _parameter-version:
+
+      **switch_version**
+
+      aliases: version
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The version of the Distributed Switch to create.
+
+      The version must match the version of the ESXi hosts you want to connect.
+
+      The version of the vCenter server is used if not specified.
+
+      Required only if \ :literal:`state`\  is set to \ :literal:`present`\ .
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-uplink_prefix:
+
+      **uplink_prefix**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The prefix used for the naming of the uplinks.
+
+      Only valid if the Distributed Switch will be created. Not used if the Distributed Switch is already present.
+
+      Uplinks are created as Uplink 1, Uplink 2, etc. pp. by default.
+
+
+      Default: :literal:`"Uplink "`
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-uplink_quantity:
+
+      **uplink_quantity**
+
+      :literal:`integer`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Quantity of uplink per ESXi host added to the Distributed Switch.
+
+      The uplink quantity can be increased or decreased, but a decrease will only be successfull if the uplink isn't used by a portgroup.
+
+      Required parameter for \ :literal:`state`\  both \ :literal:`present`\  and \ :literal:`absent`\ , before Ansible 2.6 version.
+
+      Required only if \ :literal:`state`\  is set to \ :literal:`present`\ , for Ansible 2.6 and onwards.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-admin:
+      .. _parameter-user:
+      .. _parameter-username:
+
+      **username**
+
+      aliases: admin, user
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      The username of the vSphere vCenter or ESXi server.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _parameter-validate_certs:
+
+      **validate_certs**
+
+      :literal:`boolean`
+
+      .. raw:: html
+
+        </div></div>
+
+    - 
+      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
+
+      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
+
+      Environment variable support added in Ansible 2.6.
+
+      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
+
+
+      Choices:
+
+      - :literal:`false`
+      - :literal:`true` ← (default)
+
+
+
 
 
 Notes
@@ -769,12 +1018,12 @@ Notes
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
-
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
+    
     - name: Create dvSwitch
       community.vmware.vmware_dvswitch:
         hostname: '{{ vcenter_hostname }}'
@@ -832,41 +1081,41 @@ Examples
 
 
 
+
+
 Return Values
 -------------
-Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+The following are the fields unique to this module:
 
-.. raw:: html
+.. list-table::
+  :widths: auto
+  :header-rows: 1
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>information about performed operation</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: False, &#x27;contact&#x27;: None, &#x27;contact_details&#x27;: None, &#x27;description&#x27;: None, &#x27;discovery_operation&#x27;: &#x27;both&#x27;, &#x27;discovery_protocol&#x27;: &#x27;cdp&#x27;, &#x27;dvswitch&#x27;: &#x27;test&#x27;, &#x27;health_check_teaming&#x27;: False, &#x27;health_check_teaming_interval&#x27;: 0, &#x27;health_check_vlan&#x27;: False, &#x27;health_check_vlan_interval&#x27;: 0, &#x27;net_flow_collector_ip&#x27;: &#x27;192.168.10.50&#x27;, &#x27;net_flow_collector_port&#x27;: 50034, &#x27;net_flow_observation_domain_id&#x27;: 0, &#x27;net_flow_active_flow_timeout&#x27;: 60, &#x27;net_flow_idle_flow_timeout&#x27;: 15, &#x27;net_flow_sampling_rate&#x27;: 4096, &#x27;net_flow_internal_flows_only&#x27;: False, &#x27;mtu&#x27;: 9000, &#x27;multicast_filtering_mode&#x27;: &#x27;basic&#x27;, &#x27;result&#x27;: &#x27;DVS already configured properly&#x27;, &#x27;uplink_quantity&#x27;: 2, &#x27;uplinks&#x27;: [&#x27;Uplink_1&#x27;, &#x27;Uplink_2&#x27;], &#x27;version&#x27;: &#x27;6.6.0&#x27;}</div>
-                </td>
-            </tr>
-    </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
+
+      .. _return-result:
+
+      **result**
+
+      :literal:`string`
+
+      .. raw:: html
+
+        </div></div>
+    - 
+      information about performed operation
 
 
-Status
-------
+      Returned: always
+
+      Sample: :literal:`"{'changed': False, 'contact': None, 'contact\_details': None, 'description': None, 'discovery\_operation': 'both', 'discovery\_protocol': 'cdp', 'dvswitch': 'test', 'health\_check\_teaming': False, 'health\_check\_teaming\_interval': 0, 'health\_check\_vlan': False, 'health\_check\_vlan\_interval': 0, 'mtu': 9000, 'multicast\_filtering\_mode': 'basic', 'net\_flow\_active\_flow\_timeout': 60, 'net\_flow\_collector\_ip': '192.168.10.50', 'net\_flow\_collector\_port': 50034, 'net\_flow\_idle\_flow\_timeout': 15, 'net\_flow\_internal\_flows\_only': False, 'net\_flow\_observation\_domain\_id': 0, 'net\_flow\_sampling\_rate': 4096, 'result': 'DVS already configured properly', 'uplink\_quantity': 2, 'uplinks': ['Uplink\_1', 'Uplink\_2'], 'version': '6.6.0'}"`
+
+
 
 
 Authors
@@ -875,3 +1124,13 @@ Authors
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
+
+
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
+* `Homepage <https://github.com/ansible-collections/community.vmware>`__
+* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
+
