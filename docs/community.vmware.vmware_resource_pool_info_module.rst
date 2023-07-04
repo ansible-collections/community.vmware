@@ -30,190 +30,137 @@ Synopsis
 Parameters
 ----------
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-hostname:
-
-      **hostname**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The hostname or IP address of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-pass:
-      .. _parameter-password:
-      .. _parameter-pwd:
-
-      **password**
-
-      aliases: pass, pwd
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The password of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-port:
-
-      **port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The port number of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-      Default: :literal:`443`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_host:
-
-      **proxy_host**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Address of a proxy that will receive all HTTPS requests and relay them.
-
-      The format is a hostname or a IP.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
-
-      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_port:
-
-      **proxy_port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-admin:
-      .. _parameter-user:
-      .. _parameter-username:
-
-      **username**
-
-      aliases: admin, user
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The username of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-validate_certs:
-
-      **validate_certs**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
+.. raw:: html
+
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Parameter</p></th>
+    <th><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
+      <p style="display: inline;"><strong>hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
+      <p style="display: inline;"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The password of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-port"></div>
+      <p style="display: inline;"><strong>port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The port number of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
+      <p style="display: inline;"><strong>proxy_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
+      <p>The format is a hostname or a IP.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
+      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
+      <p style="display: inline;"><strong>proxy_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
+      <div class="ansibleOptionAnchor" id="parameter-user"></div>
+      <p style="display: inline;"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The username of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <p style="display: inline;"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 
@@ -246,33 +193,34 @@ Return Values
 -------------
 The following are the fields unique to this module:
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
+.. raw:: html
 
-  * - Key
-    - Description
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _return-resource_pool_info:
-
-      **resource_pool_info**
-
-      :literal:`list` / :literal:`elements=string`
-
-      .. raw:: html
-
-        </div></div>
-    - 
-      metadata about resource pool configuration
-
-
-      Returned: on success
-
-      Sample: :literal:`[{"cpu\_allocation\_expandable\_reservation": false, "cpu\_allocation\_limit": 4121, "cpu\_allocation\_overhead\_limit": null, "cpu\_allocation\_reservation": 4121, "cpu\_allocation\_shares": 9000, "cpu\_allocation\_shares\_level": "custom", "mem\_allocation\_expandable\_reservation": false, "mem\_allocation\_limit": 961, "mem\_allocation\_overhead\_limit": null, "mem\_allocation\_reservation": 961, "mem\_allocation\_shares": 9000, "mem\_allocation\_shares\_level": "custom", "name": "Resources", "overall\_status": "green", "owner": "DC0\_H0", "runtime\_cpu\_max\_usage": 4121, "runtime\_cpu\_overall\_usage": 0, "runtime\_cpu\_reservation\_used": 0, "runtime\_cpu\_reservation\_used\_vm": 0, "runtime\_cpu\_unreserved\_for\_pool": 4121, "runtime\_cpu\_unreserved\_for\_vm": 4121, "runtime\_memory\_max\_usage": 1007681536, "runtime\_memory\_overall\_usage": 0, "runtime\_memory\_reservation\_used": 0, "runtime\_memory\_reservation\_used\_vm": 0, "runtime\_memory\_unreserved\_for\_pool": 1007681536, "runtime\_memory\_unreserved\_for\_vm": 1007681536}]`
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Key</p></th>
+    <th><p>Description</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="return-resource_pool_info"></div>
+      <p style="display: inline;"><strong>resource_pool_info</strong></p>
+      <a class="ansibleOptionLink" href="#return-resource_pool_info" title="Permalink to this return value"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">list</span>
+        / <span style="color: purple;">elements=string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>metadata about resource pool configuration</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> on success</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>[{&#34;cpu_allocation_expandable_reservation&#34;: false, &#34;cpu_allocation_limit&#34;: 4121, &#34;cpu_allocation_overhead_limit&#34;: null, &#34;cpu_allocation_reservation&#34;: 4121, &#34;cpu_allocation_shares&#34;: 9000, &#34;cpu_allocation_shares_level&#34;: &#34;custom&#34;, &#34;mem_allocation_expandable_reservation&#34;: false, &#34;mem_allocation_limit&#34;: 961, &#34;mem_allocation_overhead_limit&#34;: null, &#34;mem_allocation_reservation&#34;: 961, &#34;mem_allocation_shares&#34;: 9000, &#34;mem_allocation_shares_level&#34;: &#34;custom&#34;, &#34;name&#34;: &#34;Resources&#34;, &#34;overall_status&#34;: &#34;green&#34;, &#34;owner&#34;: &#34;DC0_H0&#34;, &#34;runtime_cpu_max_usage&#34;: 4121, &#34;runtime_cpu_overall_usage&#34;: 0, &#34;runtime_cpu_reservation_used&#34;: 0, &#34;runtime_cpu_reservation_used_vm&#34;: 0, &#34;runtime_cpu_unreserved_for_pool&#34;: 4121, &#34;runtime_cpu_unreserved_for_vm&#34;: 4121, &#34;runtime_memory_max_usage&#34;: 1007681536, &#34;runtime_memory_overall_usage&#34;: 0, &#34;runtime_memory_reservation_used&#34;: 0, &#34;runtime_memory_reservation_used_vm&#34;: 0, &#34;runtime_memory_unreserved_for_pool&#34;: 1007681536, &#34;runtime_memory_unreserved_for_vm&#34;: 1007681536}]</code></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 

@@ -30,313 +30,223 @@ Synopsis
 Parameters
 ----------
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-dest:
-
-      **dest**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      file destination on localhost, path must be exist.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-esxi_hostname:
-
-      **esxi_hostname**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the host system to fetch the logbundle.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-hostname:
-
-      **hostname**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The hostname or IP address of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-manifests:
-
-      **manifests**
-
-      :literal:`list` / :literal:`elements=string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Logs to include in the logbundle file.
-
-      Refer to the id key of the \ `community.vmware.vmware\_host\_logbundle\_info <vmware_host_logbundle_info_module.rst>`__\  module for values that can be specified in the manifest.
-
-
-      Default: :literal:`["System:Base", "System:CoreDumps", "System:EsxImage", "System:IOFilter", "System:LoadESX", "System:Modules", "System:RDMA", "System:ResourceGroups", "System:TPM", "System:VFlash", "System:VMTools", "System:VmiofPlugins", "System:ntp", "System:uwstats", "Fcd:Catalog", "VirtualMachines:CoreDumps", "VirtualMachines:VirtualMachineStats", "VirtualMachines:base", "VirtualMachines:base", "VirtualMachines:diskinfo", "VirtualMachines:logs", "Storage:FCoE", "Storage:Multipathing", "Storage:NAS", "Storage:VSAN", "Storage:VSANHealth", "Storage:VSANIscsiTarget", "Storage:VSANPerfStats", "Storage:VSANPerfSvc", "Storage:VSANTraces", "Storage:VVOL", "Storage:base", "Storage:iodm", "Storage:iscsi", "FeatureStateSwitch:FeatureStateSwitch", "Userworld:HostAgent", "Userworld:ProcessInformation", "Configuration:System", "Logs:System", "hostProfiles:SystemImageCacheHostProfile", "hostProfiles:hostProfiles", "FileSystem:VMFSDiskDump", "FileSystem:base", "ActiveDirectory:base", "CIM:base", "Hardware:base", "Hardware:usb", "Installer:base", "Network:base", "Network:dvs", "Network:lacp", "Network:nscd", "Network:tcpip", "IntegrityChecks:md5sums"]`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-pass:
-      .. _parameter-password:
-      .. _parameter-pwd:
-
-      **password**
-
-      aliases: pass, pwd
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The password of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-performance_data:
-
-      **performance_data**
-
-      :literal:`dictionary`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Gather performance data for ESXi.
-
-
-    
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-performance_data/duration:
-
-      **duration**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Duration for which performance data is gathered.
-
-
-      Default: :literal:`300`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-performance_data/interval:
-
-      **interval**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Interval for which performance data is gathered.
-
-
-      Default: :literal:`5`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-port:
-
-      **port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The port number of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-      Default: :literal:`443`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_host:
-
-      **proxy_host**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Address of a proxy that will receive all HTTPS requests and relay them.
-
-      The format is a hostname or a IP.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
-
-      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_port:
-
-      **proxy_port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-admin:
-      .. _parameter-user:
-      .. _parameter-username:
-
-      **username**
-
-      aliases: admin, user
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The username of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-validate_certs:
-
-      **validate_certs**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
+.. raw:: html
+
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Parameter</p></th>
+    <th><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-dest"></div>
+      <p style="display: inline;"><strong>dest</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-dest" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>file destination on localhost, path must be exist.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
+      <p style="display: inline;"><strong>esxi_hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Name of the host system to fetch the logbundle.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
+      <p style="display: inline;"><strong>hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-manifests"></div>
+      <p style="display: inline;"><strong>manifests</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-manifests" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">list</span>
+        / <span style="color: purple;">elements=string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Logs to include in the logbundle file.</p>
+      <p>Refer to the id key of the <a href='../../community/vmware/vmware_host_logbundle_info_module.html' class='module'>community.vmware.vmware_host_logbundle_info</a> module for values that can be specified in the manifest.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">[&#34;System:Base&#34;, &#34;System:CoreDumps&#34;, &#34;System:EsxImage&#34;, &#34;System:IOFilter&#34;, &#34;System:LoadESX&#34;, &#34;System:Modules&#34;, &#34;System:RDMA&#34;, &#34;System:ResourceGroups&#34;, &#34;System:TPM&#34;, &#34;System:VFlash&#34;, &#34;System:VMTools&#34;, &#34;System:VmiofPlugins&#34;, &#34;System:ntp&#34;, &#34;System:uwstats&#34;, &#34;Fcd:Catalog&#34;, &#34;VirtualMachines:CoreDumps&#34;, &#34;VirtualMachines:VirtualMachineStats&#34;, &#34;VirtualMachines:base&#34;, &#34;VirtualMachines:base&#34;, &#34;VirtualMachines:diskinfo&#34;, &#34;VirtualMachines:logs&#34;, &#34;Storage:FCoE&#34;, &#34;Storage:Multipathing&#34;, &#34;Storage:NAS&#34;, &#34;Storage:VSAN&#34;, &#34;Storage:VSANHealth&#34;, &#34;Storage:VSANIscsiTarget&#34;, &#34;Storage:VSANPerfStats&#34;, &#34;Storage:VSANPerfSvc&#34;, &#34;Storage:VSANTraces&#34;, &#34;Storage:VVOL&#34;, &#34;Storage:base&#34;, &#34;Storage:iodm&#34;, &#34;Storage:iscsi&#34;, &#34;FeatureStateSwitch:FeatureStateSwitch&#34;, &#34;Userworld:HostAgent&#34;, &#34;Userworld:ProcessInformation&#34;, &#34;Configuration:System&#34;, &#34;Logs:System&#34;, &#34;hostProfiles:SystemImageCacheHostProfile&#34;, &#34;hostProfiles:hostProfiles&#34;, &#34;FileSystem:VMFSDiskDump&#34;, &#34;FileSystem:base&#34;, &#34;ActiveDirectory:base&#34;, &#34;CIM:base&#34;, &#34;Hardware:base&#34;, &#34;Hardware:usb&#34;, &#34;Installer:base&#34;, &#34;Network:base&#34;, &#34;Network:dvs&#34;, &#34;Network:lacp&#34;, &#34;Network:nscd&#34;, &#34;Network:tcpip&#34;, &#34;IntegrityChecks:md5sums&#34;]</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
+      <p style="display: inline;"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The password of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-performance_data"></div>
+      <p style="display: inline;"><strong>performance_data</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-performance_data" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">dictionary</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Gather performance data for ESXi.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-performance_data/duration"></div>
+      <p style="display: inline;"><strong>duration</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-performance_data/duration" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Duration for which performance data is gathered.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">300</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="margin-left: 2em; border-right: 1px solid #000000;"></div><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-performance_data/interval"></div>
+      <p style="display: inline;"><strong>interval</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-performance_data/interval" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Interval for which performance data is gathered.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">5</code></p>
+    </td>
+  </tr>
+
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-port"></div>
+      <p style="display: inline;"><strong>port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The port number of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
+      <p style="display: inline;"><strong>proxy_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
+      <p>The format is a hostname or a IP.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
+      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
+      <p style="display: inline;"><strong>proxy_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
+      <div class="ansibleOptionAnchor" id="parameter-user"></div>
+      <p style="display: inline;"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The username of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <p style="display: inline;"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 
@@ -380,33 +290,33 @@ Return Values
 -------------
 The following are the fields unique to this module:
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
+.. raw:: html
 
-  * - Key
-    - Description
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _return-dest:
-
-      **dest**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-    - 
-      saved path of a logbundle file for ESXi
-
-
-      Returned: on success
-
-      Sample: :literal:`"{'changed': True, 'dest': './esxi-log.tgz', 'failed': False, 'gid': 0, 'group': 'root', 'mode': '0644', 'owner': 'root', 'size': 25783140, 'state': 'file', 'uid': 0}"`
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Key</p></th>
+    <th><p>Description</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="return-dest"></div>
+      <p style="display: inline;"><strong>dest</strong></p>
+      <a class="ansibleOptionLink" href="#return-dest" title="Permalink to this return value"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>saved path of a logbundle file for ESXi</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> on success</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>&#34;{&#39;changed&#39;: True, &#39;dest&#39;: &#39;./esxi-log.tgz&#39;, &#39;failed&#39;: False, &#39;gid&#39;: 0, &#39;group&#39;: &#39;root&#39;, &#39;mode&#39;: &#39;0644&#39;, &#39;owner&#39;: &#39;root&#39;, &#39;size&#39;: 25783140, &#39;state&#39;: &#39;file&#39;, &#39;uid&#39;: 0}&#34;</code></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 

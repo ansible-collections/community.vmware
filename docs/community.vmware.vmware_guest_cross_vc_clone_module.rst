@@ -30,572 +30,406 @@ Synopsis
 Parameters
 ----------
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_datastore:
-
-      **destination_datastore**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The name of the destination datastore or the datastore cluster.
-
-      If datastore cluster name is specified, we will find the Storage DRS recommended datastore in that cluster.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_host:
-
-      **destination_host**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The name of the destination host.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_resource_pool:
-
-      **destination_resource_pool**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Destination resource pool.
-
-      If not provided, the destination host's parent's resource pool will be used.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vcenter:
-
-      **destination_vcenter**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The hostname or IP address of the destination VCenter.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vcenter_password:
-
-      **destination_vcenter_password**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The password of the destination VCenter.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vcenter_port:
-
-      **destination_vcenter_port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The port to establish connection in the destination VCenter.
-
-
-      Default: :literal:`443`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vcenter_username:
-
-      **destination_vcenter_username**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The username of the destination VCenter.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vcenter_validate_certs:
-
-      **destination_vcenter_validate_certs**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Parameter to indicate if certification validation needs to be done on destination VCenter.
-
-
-      Choices:
-
-      - :literal:`false` ← (default)
-      - :literal:`true`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vm_folder:
-
-      **destination_vm_folder**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Destination folder, absolute path to deploy the cloned vm.
-
-      This parameter is case sensitive.
-
-      Examples:
-
-         folder: vm
-
-         folder: ha-datacenter/vm
-
-         folder: /datacenter1/vm
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-destination_vm_name:
-
-      **destination_vm_name**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The name of the cloned VM.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-hostname:
-
-      **hostname**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The hostname or IP address of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-is_template:
-
-      **is_template**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Specifies whether or not the new virtual machine should be marked as a template.
-
-
-      Choices:
-
-      - :literal:`false` ← (default)
-      - :literal:`true`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-moid:
-
-      **moid**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Managed Object ID of the vm/template instance to manage if known, this is a unique identifier only within a single vCenter instance.
-
-      This is required if \ :literal:`name`\  or \ :literal:`uuid`\  is not supplied.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-name:
-
-      **name**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the virtual machine or template.
-
-      This is a required parameter, if parameter \ :literal:`uuid`\  or \ :literal:`moid`\  is not supplied.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-pass:
-      .. _parameter-password:
-      .. _parameter-pwd:
-
-      **password**
-
-      aliases: pass, pwd
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The password of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-port:
-
-      **port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The port number of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-      Default: :literal:`443`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_host:
-
-      **proxy_host**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Address of a proxy that will receive all HTTPS requests and relay them.
-
-      The format is a hostname or a IP.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
-
-      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_port:
-
-      **proxy_port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-state:
-
-      **state**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The state of Virtual Machine deployed.
-
-      If set to \ :literal:`present`\  and VM does not exists, then VM is created.
-
-      If set to \ :literal:`present`\  and VM exists, no action is taken.
-
-      If set to \ :literal:`poweredon`\  and VM does not exists, then VM is created with powered on state.
-
-      If set to \ :literal:`poweredon`\  and VM exists, no action is taken.
-
-
-      Choices:
-
-      - :literal:`"present"` ← (default)
-      - :literal:`"poweredon"`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-timeout:
-
-      **timeout**
-
-      :literal:`integer`
-
-      added in community.vmware 3.5.0
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The timeout in seconds. When the timeout is reached, the module will fail.
-
-
-      Default: :literal:`3600`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-use_instance_uuid:
-
-      **use_instance_uuid**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Whether to use the VMware instance UUID rather than the BIOS UUID.
-
-
-      Choices:
-
-      - :literal:`false` ← (default)
-      - :literal:`true`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-admin:
-      .. _parameter-user:
-      .. _parameter-username:
-
-      **username**
-
-      aliases: admin, user
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The username of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-uuid:
-
-      **uuid**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      UUID of the vm/template instance to clone from, this is VMware's unique identifier.
-
-      This is a required parameter, if parameter \ :literal:`name`\  or \ :literal:`moid`\  is not supplied.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-validate_certs:
-
-      **validate_certs**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
+.. raw:: html
+
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Parameter</p></th>
+    <th><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_datastore"></div>
+      <p style="display: inline;"><strong>destination_datastore</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_datastore" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The name of the destination datastore or the datastore cluster.</p>
+      <p>If datastore cluster name is specified, we will find the Storage DRS recommended datastore in that cluster.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_host"></div>
+      <p style="display: inline;"><strong>destination_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The name of the destination host.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_resource_pool"></div>
+      <p style="display: inline;"><strong>destination_resource_pool</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_resource_pool" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Destination resource pool.</p>
+      <p>If not provided, the destination host&#x27;s parent&#x27;s resource pool will be used.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vcenter"></div>
+      <p style="display: inline;"><strong>destination_vcenter</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vcenter" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The hostname or IP address of the destination VCenter.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vcenter_password"></div>
+      <p style="display: inline;"><strong>destination_vcenter_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vcenter_password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The password of the destination VCenter.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vcenter_port"></div>
+      <p style="display: inline;"><strong>destination_vcenter_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vcenter_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The port to establish connection in the destination VCenter.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vcenter_username"></div>
+      <p style="display: inline;"><strong>destination_vcenter_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vcenter_username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The username of the destination VCenter.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vcenter_validate_certs"></div>
+      <p style="display: inline;"><strong>destination_vcenter_validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vcenter_validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Parameter to indicate if certification validation needs to be done on destination VCenter.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code style="color: blue; font-weight: 700;">false</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code>true</code></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vm_folder"></div>
+      <p style="display: inline;"><strong>destination_vm_folder</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vm_folder" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Destination folder, absolute path to deploy the cloned vm.</p>
+      <p>This parameter is case sensitive.</p>
+      <p>Examples:</p>
+      <p>   folder: vm</p>
+      <p>   folder: ha-datacenter/vm</p>
+      <p>   folder: /datacenter1/vm</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-destination_vm_name"></div>
+      <p style="display: inline;"><strong>destination_vm_name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-destination_vm_name" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The name of the cloned VM.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
+      <p style="display: inline;"><strong>hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-is_template"></div>
+      <p style="display: inline;"><strong>is_template</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-is_template" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Specifies whether or not the new virtual machine should be marked as a template.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code style="color: blue; font-weight: 700;">false</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code>true</code></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-moid"></div>
+      <p style="display: inline;"><strong>moid</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Managed Object ID of the vm/template instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
+      <p>This is required if <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>uuid</code> is not supplied.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-name"></div>
+      <p style="display: inline;"><strong>name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Name of the virtual machine or template.</p>
+      <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>uuid</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
+      <p style="display: inline;"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The password of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-port"></div>
+      <p style="display: inline;"><strong>port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The port number of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
+      <p style="display: inline;"><strong>proxy_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
+      <p>The format is a hostname or a IP.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
+      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
+      <p style="display: inline;"><strong>proxy_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-state"></div>
+      <p style="display: inline;"><strong>state</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The state of Virtual Machine deployed.</p>
+      <p>If set to <code class='docutils literal notranslate'>present</code> and VM does not exists, then VM is created.</p>
+      <p>If set to <code class='docutils literal notranslate'>present</code> and VM exists, no action is taken.</p>
+      <p>If set to <code class='docutils literal notranslate'>poweredon</code> and VM does not exists, then VM is created with powered on state.</p>
+      <p>If set to <code class='docutils literal notranslate'>poweredon</code> and VM exists, no action is taken.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code style="color: blue; font-weight: 700;">&#34;present&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code>&#34;poweredon&#34;</code></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
+      <p style="display: inline;"><strong>timeout</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+      <p><span style="font-style: italic; font-size: small; color: darkgreen;">added in community.vmware 3.5.0</span></p>
+    </div></td>
+    <td>
+      <p>The timeout in seconds. When the timeout is reached, the module will fail.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">3600</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
+      <p style="display: inline;"><strong>use_instance_uuid</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Whether to use the VMware instance UUID rather than the BIOS UUID.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code style="color: blue; font-weight: 700;">false</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code>true</code></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
+      <div class="ansibleOptionAnchor" id="parameter-user"></div>
+      <p style="display: inline;"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The username of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
+      <p style="display: inline;"><strong>uuid</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>UUID of the vm/template instance to clone from, this is VMware&#x27;s unique identifier.</p>
+      <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <p style="display: inline;"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 
@@ -670,33 +504,33 @@ Return Values
 -------------
 The following are the fields unique to this module:
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
+.. raw:: html
 
-  * - Key
-    - Description
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _return-vm_info:
-
-      **vm_info**
-
-      :literal:`dictionary`
-
-      .. raw:: html
-
-        </div></div>
-    - 
-      metadata about the virtual machine
-
-
-      Returned: always
-
-      Sample: :literal:`{"datastore": "", "host": "", "power\_on": "", "vcenter": "", "vm\_folder": "", "vm\_name": ""}`
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Key</p></th>
+    <th><p>Description</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="return-vm_info"></div>
+      <p style="display: inline;"><strong>vm_info</strong></p>
+      <a class="ansibleOptionLink" href="#return-vm_info" title="Permalink to this return value"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">dictionary</span>
+      </p>
+    </div></td>
+    <td>
+      <p>metadata about the virtual machine</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> always</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>{&#34;datastore&#34;: &#34;&#34;, &#34;host&#34;: &#34;&#34;, &#34;power_on&#34;: &#34;&#34;, &#34;vcenter&#34;: &#34;&#34;, &#34;vm_folder&#34;: &#34;&#34;, &#34;vm_name&#34;: &#34;&#34;}</code></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 

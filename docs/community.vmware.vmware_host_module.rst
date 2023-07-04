@@ -31,531 +31,370 @@ Synopsis
 Parameters
 ----------
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-add_connected:
-
-      **add_connected**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      If set to \ :literal:`true`\ , then the host should be connected as soon as it is added.
-
-      This parameter is ignored if state is set to a value other than \ :literal:`present`\ .
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-cluster:
-      .. _parameter-cluster_name:
-
-      **cluster_name**
-
-      aliases: cluster
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the cluster to add the host.
-
-      If \ :literal:`folder`\  is not set, then this parameter is required.
-
-      Aliases added in version 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-datacenter:
-      .. _parameter-datacenter_name:
-
-      **datacenter_name**
-
-      aliases: datacenter
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the datacenter to add the host.
-
-      Aliases added in version 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-esxi_hostname:
-
-      **esxi_hostname**
-
-      :literal:`string` / :strong:`required`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      ESXi hostname to manage.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-esxi_password:
-
-      **esxi_password**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      ESXi password.
-
-      Required for adding a host.
-
-      Optional for reconnect.
-
-      Unused for removing.
-
-      No longer a required parameter from version 2.5.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-esxi_ssl_thumbprint:
-      .. _parameter-ssl_thumbprint:
-
-      **esxi_ssl_thumbprint**
-
-      aliases: ssl_thumbprint
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Specifying the hostsystem certificate's thumbprint.
-
-      Use following command to get hostsystem certificate's thumbprint - 
-
-      # openssl x509 -in /etc/vmware/ssl/rui.crt -fingerprint -sha1 -noout
-
-      Only used if \ :literal:`fetch\_thumbprint`\  isn't set to \ :literal:`true`\ .
-
-
-      Default: :literal:`""`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-esxi_username:
-
-      **esxi_username**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      ESXi username.
-
-      Required for adding a host.
-
-      Optional for reconnect. If both \ :literal:`esxi\_username`\  and \ :literal:`esxi\_password`\  are used
-
-      Unused for removing.
-
-      No longer a required parameter from version 2.5.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-fetch_ssl_thumbprint:
-
-      **fetch_ssl_thumbprint**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Fetch the thumbprint of the host's SSL certificate.
-
-      This basically disables the host certificate verification (check if it was signed by a recognized CA).
-
-      Disable this option if you want to allow only hosts with valid certificates to be added to vCenter.
-
-      If this option is set to \ :literal:`false`\  and the certificate can't be verified, an add or reconnect will fail.
-
-      Unused when \ :literal:`esxi\_ssl\_thumbprint`\  is set.
-
-      Optional for reconnect, but only used if \ :literal:`esxi\_username`\  and \ :literal:`esxi\_password`\  are used.
-
-      Unused for removing.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-folder:
-      .. _parameter-folder_name:
-
-      **folder**
-
-      aliases: folder_name
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Name of the folder under which host to add.
-
-      If \ :literal:`cluster\_name`\  is not set, then this parameter is required.
-
-      For example, if there is a datacenter 'dc1' under folder called 'Site1' then, this value will be '/Site1/dc1/host'.
-
-      Here 'host' is an invisible folder under VMware Web Client.
-
-      Another example, if there is a nested folder structure like '/myhosts/india/pune' under datacenter 'dc2', then \ :literal:`folder`\  value will be '/dc2/host/myhosts/india/pune'.
-
-      Other Examples: '/Site2/dc2/Asia-Cluster/host' or '/dc3/Asia-Cluster/host'
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-force_connection:
-
-      **force_connection**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Force the connection if the host is already being managed by another vCenter server.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-hostname:
-
-      **hostname**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The hostname or IP address of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_HOST`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-pass:
-      .. _parameter-password:
-      .. _parameter-pwd:
-
-      **password**
-
-      aliases: pass, pwd
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The password of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PASSWORD`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-port:
-
-      **port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The port number of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PORT`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-      Default: :literal:`443`
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_host:
-
-      **proxy_host**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Address of a proxy that will receive all HTTPS requests and relay them.
-
-      The format is a hostname or a IP.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_HOST`\  will be used instead.
-
-      This feature depends on a version of pyvmomi greater than v6.7.1.2018.12
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-proxy_port:
-
-      **proxy_port**
-
-      :literal:`integer`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Port of the HTTP proxy that will receive all HTTPS requests and relay them.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_PROXY\_PORT`\  will be used instead.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-reconnect_disconnected:
-
-      **reconnect_disconnected**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Reconnect disconnected hosts.
-
-      This is only used if \ :literal:`state`\  is set to \ :literal:`present`\  and if the host already exists.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-state:
-
-      **state**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      If set to \ :literal:`present`\ , add the host if host is absent.
-
-      If set to \ :literal:`present`\ , update the location of the host if host already exists.
-
-      If set to \ :literal:`absent`\ , remove the host if host is present.
-
-      If set to \ :literal:`absent`\ , do nothing if host already does not exists.
-
-      If set to \ :literal:`add\_or\_reconnect`\ , add the host if it's absent else reconnect it and update the location.
-
-      If set to \ :literal:`reconnect`\ , then reconnect the host if it's present and update the location.
-
-      If set to \ :literal:`disconnected`\ , disconnect the host if the host already exists.
-
-
-      Choices:
-
-      - :literal:`"present"` ← (default)
-      - :literal:`"absent"`
-      - :literal:`"add\_or\_reconnect"`
-      - :literal:`"reconnect"`
-      - :literal:`"disconnected"`
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-admin:
-      .. _parameter-user:
-      .. _parameter-username:
-
-      **username**
-
-      aliases: admin, user
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      The username of the vSphere vCenter or ESXi server.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_USER`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-validate_certs:
-
-      **validate_certs**
-
-      :literal:`boolean`
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Allows connection when SSL certificates are not valid. Set to \ :literal:`false`\  when certificates are not trusted.
-
-      If the value is not specified in the task, the value of environment variable \ :literal:`VMWARE\_VALIDATE\_CERTS`\  will be used instead.
-
-      Environment variable support added in Ansible 2.6.
-
-      If set to \ :literal:`true`\ , please make sure Python \>= 2.7.9 is installed on the given machine.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
+.. raw:: html
+
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Parameter</p></th>
+    <th><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-add_connected"></div>
+      <p style="display: inline;"><strong>add_connected</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-add_connected" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>If set to <code class='docutils literal notranslate'>true</code>, then the host should be connected as soon as it is added.</p>
+      <p>This parameter is ignored if state is set to a value other than <code class='docutils literal notranslate'>present</code>.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
+      <div class="ansibleOptionAnchor" id="parameter-cluster"></div>
+      <p style="display: inline;"><strong>cluster_name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: cluster</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Name of the cluster to add the host.</p>
+      <p>If <code class='docutils literal notranslate'>folder</code> is not set, then this parameter is required.</p>
+      <p>Aliases added in version 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-datacenter_name"></div>
+      <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
+      <p style="display: inline;"><strong>datacenter_name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-datacenter_name" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: datacenter</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Name of the datacenter to add the host.</p>
+      <p>Aliases added in version 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
+      <p style="display: inline;"><strong>esxi_hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </div></td>
+    <td>
+      <p>ESXi hostname to manage.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-esxi_password"></div>
+      <p style="display: inline;"><strong>esxi_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-esxi_password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>ESXi password.</p>
+      <p>Required for adding a host.</p>
+      <p>Optional for reconnect.</p>
+      <p>Unused for removing.</p>
+      <p>No longer a required parameter from version 2.5.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-esxi_ssl_thumbprint"></div>
+      <div class="ansibleOptionAnchor" id="parameter-ssl_thumbprint"></div>
+      <p style="display: inline;"><strong>esxi_ssl_thumbprint</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-esxi_ssl_thumbprint" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: ssl_thumbprint</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Specifying the hostsystem certificate&#x27;s thumbprint.</p>
+      <p>Use following command to get hostsystem certificate&#x27;s thumbprint - </p>
+      <p># openssl x509 -in /etc/vmware/ssl/rui.crt -fingerprint -sha1 -noout</p>
+      <p>Only used if <code class='docutils literal notranslate'>fetch_thumbprint</code> isn&#x27;t set to <code class='docutils literal notranslate'>true</code>.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">&#34;&#34;</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-esxi_username"></div>
+      <p style="display: inline;"><strong>esxi_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-esxi_username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>ESXi username.</p>
+      <p>Required for adding a host.</p>
+      <p>Optional for reconnect. If both <code class='docutils literal notranslate'>esxi_username</code> and <code class='docutils literal notranslate'>esxi_password</code> are used</p>
+      <p>Unused for removing.</p>
+      <p>No longer a required parameter from version 2.5.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-fetch_ssl_thumbprint"></div>
+      <p style="display: inline;"><strong>fetch_ssl_thumbprint</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-fetch_ssl_thumbprint" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Fetch the thumbprint of the host&#x27;s SSL certificate.</p>
+      <p>This basically disables the host certificate verification (check if it was signed by a recognized CA).</p>
+      <p>Disable this option if you want to allow only hosts with valid certificates to be added to vCenter.</p>
+      <p>If this option is set to <code class='docutils literal notranslate'>false</code> and the certificate can&#x27;t be verified, an add or reconnect will fail.</p>
+      <p>Unused when <code class='docutils literal notranslate'>esxi_ssl_thumbprint</code> is set.</p>
+      <p>Optional for reconnect, but only used if <code class='docutils literal notranslate'>esxi_username</code> and <code class='docutils literal notranslate'>esxi_password</code> are used.</p>
+      <p>Unused for removing.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-folder"></div>
+      <div class="ansibleOptionAnchor" id="parameter-folder_name"></div>
+      <p style="display: inline;"><strong>folder</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: folder_name</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Name of the folder under which host to add.</p>
+      <p>If <code class='docutils literal notranslate'>cluster_name</code> is not set, then this parameter is required.</p>
+      <p>For example, if there is a datacenter &#x27;dc1&#x27; under folder called &#x27;Site1&#x27; then, this value will be &#x27;/Site1/dc1/host&#x27;.</p>
+      <p>Here &#x27;host&#x27; is an invisible folder under VMware Web Client.</p>
+      <p>Another example, if there is a nested folder structure like &#x27;/myhosts/india/pune&#x27; under datacenter &#x27;dc2&#x27;, then <code class='docutils literal notranslate'>folder</code> value will be &#x27;/dc2/host/myhosts/india/pune&#x27;.</p>
+      <p>Other Examples: &#x27;/Site2/dc2/Asia-Cluster/host&#x27; or &#x27;/dc3/Asia-Cluster/host&#x27;</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-force_connection"></div>
+      <p style="display: inline;"><strong>force_connection</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-force_connection" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Force the connection if the host is already being managed by another vCenter server.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
+      <p style="display: inline;"><strong>hostname</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
+      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
+      <p style="display: inline;"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The password of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-port"></div>
+      <p style="display: inline;"><strong>port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The port number of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
+      <p style="display: inline;"><strong>proxy_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
+      <p>The format is a hostname or a IP.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
+      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
+      <p style="display: inline;"><strong>proxy_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-reconnect_disconnected"></div>
+      <p style="display: inline;"><strong>reconnect_disconnected</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-reconnect_disconnected" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Reconnect disconnected hosts.</p>
+      <p>This is only used if <code class='docutils literal notranslate'>state</code> is set to <code class='docutils literal notranslate'>present</code> and if the host already exists.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-state"></div>
+      <p style="display: inline;"><strong>state</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>If set to <code class='docutils literal notranslate'>present</code>, add the host if host is absent.</p>
+      <p>If set to <code class='docutils literal notranslate'>present</code>, update the location of the host if host already exists.</p>
+      <p>If set to <code class='docutils literal notranslate'>absent</code>, remove the host if host is present.</p>
+      <p>If set to <code class='docutils literal notranslate'>absent</code>, do nothing if host already does not exists.</p>
+      <p>If set to <code class='docutils literal notranslate'>add_or_reconnect</code>, add the host if it&#x27;s absent else reconnect it and update the location.</p>
+      <p>If set to <code class='docutils literal notranslate'>reconnect</code>, then reconnect the host if it&#x27;s present and update the location.</p>
+      <p>If set to <code class='docutils literal notranslate'>disconnected</code>, disconnect the host if the host already exists.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code style="color: blue; font-weight: 700;">&#34;present&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code>&#34;absent&#34;</code></p></li>
+        <li><p><code>&#34;add_or_reconnect&#34;</code></p></li>
+        <li><p><code>&#34;reconnect&#34;</code></p></li>
+        <li><p><code>&#34;disconnected&#34;</code></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
+      <div class="ansibleOptionAnchor" id="parameter-user"></div>
+      <p style="display: inline;"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>The username of the vSphere vCenter or ESXi server.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <p style="display: inline;"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+    </div></td>
+    <td>
+      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
+      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
+      <p>Environment variable support added in Ansible 2.6.</p>
+      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 
@@ -645,33 +484,33 @@ Return Values
 -------------
 The following are the fields unique to this module:
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
+.. raw:: html
 
-  * - Key
-    - Description
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _return-result:
-
-      **result**
-
-      :literal:`string`
-
-      .. raw:: html
-
-        </div></div>
-    - 
-      metadata about the new host system added
-
-
-      Returned: on successful addition
-
-      Sample: :literal:`"Host already connected to vCenter 'vcenter01' in cluster 'cluster01'"`
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Key</p></th>
+    <th><p>Description</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="return-result"></div>
+      <p style="display: inline;"><strong>result</strong></p>
+      <a class="ansibleOptionLink" href="#return-result" title="Permalink to this return value"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </div></td>
+    <td>
+      <p>metadata about the new host system added</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> on successful addition</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>&#34;Host already connected to vCenter &#39;vcenter01&#39; in cluster &#39;cluster01&#39;&#34;</code></p>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 

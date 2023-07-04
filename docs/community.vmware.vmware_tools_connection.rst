@@ -42,415 +42,365 @@ The below requirements are needed on the local controller node that executes thi
 Parameters
 ----------
 
-.. list-table::
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-exec_command_sleep_interval:
-
-      **exec_command_sleep_interval**
-
-      :literal:`float`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Time in seconds to sleep between execution of command.
-
-
-      Default: :literal:`0.5`
-
-      Configuration:
-
-      - Variable: ansible\_vmware\_tools\_exec\_command\_sleep\_interval
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-executable:
-
-      **executable**
-
-      :literal:`string`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      shell to use for execution inside container
-
-
-      Default: :literal:`"/bin/sh"`
-
-      Configuration:
-
-      - INI entry:
-
-        .. code-block::
-
-          [defaults]
-          executable = /bin/sh
-
-
-      - Environment variable: :literal:`ANSIBLE\_EXECUTABLE`
-
-      - Variable: ansible\_executable
-
-      - Variable: ansible\_vmware\_tools\_executable
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-file_chunk_size:
-
-      **file_chunk_size**
-
-      :literal:`integer`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      File chunk size.
-
-      (Applicable when writing a file to disk, example: using the \ :literal:`fetch`\  module.)
-
-
-      Default: :literal:`128`
-
-      Configuration:
-
-      - Variable: ansible\_vmware\_tools\_file\_chunk\_size
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-validate_certs:
-
-      **validate_certs**
-
-      :literal:`boolean`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Verify SSL for the connection.
-
-      Note: This will validate certs for both \ :literal:`vmware\_host`\  and the ESXi host running the VM.
-
-
-      Choices:
-
-      - :literal:`false`
-      - :literal:`true` ← (default)
-
-
-      Configuration:
-
-      - Environment variable: :literal:`VMWARE\_VALIDATE\_CERTS`
-
-      - Variable: ansible\_vmware\_validate\_certs
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vm_password:
-
-      **vm_password**
-
-      :literal:`string` / :strong:`required`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Password for the user in guest operating system.
-
-
-      Configuration:
-
-      - Variable: ansible\_password
-
-      - Variable: ansible\_vmware\_tools\_password
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vm_path:
-
-      **vm_path**
-
-      :literal:`string`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Mutually exclusive with vm\_uuid
-
-      VM path absolute to the connection.
-
-      vCenter Example: \ :literal:`Datacenter/vm/Discovered virtual machine/testVM`\ .
-
-      ESXi Host Example: \ :literal:`ha-datacenter/vm/testVM`\ .
-
-      Must include VM name, appended to 'folder' as would be passed to \ `community.vmware.vmware\_guest <vmware_guest_module.rst>`__\ .
-
-      Needs to include \ :emphasis:`vm`\  between the Datacenter and the rest of the VM path.
-
-      Datacenter default value for ESXi server is \ :literal:`ha-datacenter`\ .
-
-      Folder \ :emphasis:`vm`\  is not visible in the vSphere Web Client but necessary for VMware API to work.
-
-
-      Configuration:
-
-      - Variable: ansible\_vmware\_guest\_path
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vm_user:
-
-      **vm_user**
-
-      :literal:`string` / :strong:`required`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      VM username.
-
-      \ :literal:`ansible\_vmware\_tools\_user`\  is used for connecting to the VM.
-
-      \ :literal:`ansible\_user`\  is used by Ansible on the VM.
-
-
-      Configuration:
-
-      - Variable: ansible\_user
-
-      - Variable: ansible\_vmware\_tools\_user
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vm_uuid:
-
-      **vm_uuid**
-
-      :literal:`string`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Mutually exclusive with vm\_path
-
-      VM UUID to the connection.
-
-      UUID of the virtual machine from property config.uuid of vmware\_vm\_inventory plugin
-
-
-      Configuration:
-
-      - Variable: ansible\_vmware\_guest\_uuid
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vmware_host:
-
-      **vmware_host**
-
-      :literal:`string` / :strong:`required`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      FQDN or IP Address for the connection (vCenter or ESXi Host).
-
-
-      Configuration:
-
-      - Environment variable: :literal:`VI\_SERVER`
-
-      - Environment variable: :literal:`VMWARE\_HOST`
-
-      - Variable: ansible\_host
-
-      - Variable: ansible\_vmware\_host
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vmware_password:
-
-      **vmware_password**
-
-      :literal:`string` / :strong:`required`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Password for the connection.
-
-
-      Configuration:
-
-      - Environment variable: :literal:`VI\_PASSWORD`
-
-      - Environment variable: :literal:`VMWARE\_PASSWORD`
-
-      - Variable: ansible\_vmware\_password
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vmware_port:
-
-      **vmware_port**
-
-      :literal:`string`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Port for the connection.
-
-
-      Default: :literal:`443`
-
-      Configuration:
-
-      - Environment variable: :literal:`VI\_PORTNUMBER`
-
-      - Environment variable: :literal:`VMWARE\_PORT`
-
-      - Variable: ansible\_port
-
-      - Variable: ansible\_vmware\_port
-
-
-
-  * - .. raw:: html
-
-        <div style="display: flex;"><div style="flex: 1 0 auto; white-space: nowrap; margin-left: 0.25em;">
-
-      .. _parameter-vmware_user:
-
-      **vmware_user**
-
-      :literal:`string` / :strong:`required`
-
-
-
-
-      .. raw:: html
-
-        </div></div>
-
-    - 
-      Username for the connection.
-
-      Requires the following permissions on the VM: - VirtualMachine.GuestOperations.Execute - VirtualMachine.GuestOperations.Modify - VirtualMachine.GuestOperations.Query
-
-
-      Configuration:
-
-      - Environment variable: :literal:`VI\_USERNAME`
-
-      - Environment variable: :literal:`VMWARE\_USER`
-
-      - Variable: ansible\_vmware\_user
-
+.. raw:: html
+
+  <table style="width: 100%; height: 1px;">
+  <thead>
+  <tr>
+    <th><p>Parameter</p></th>
+    <th><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-exec_command_sleep_interval"></div>
+      <p style="display: inline;"><strong>exec_command_sleep_interval</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-exec_command_sleep_interval" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">float</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Time in seconds to sleep between execution of command.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">0.5</code></p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_vmware_tools_exec_command_sleep_interval</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-executable"></div>
+      <p style="display: inline;"><strong>executable</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>shell to use for execution inside container</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">&#34;/bin/sh&#34;</code></p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>INI entry</p>
+        <pre>[defaults]
+  executable = /bin/sh</pre>
+
+      </li>
+      <li>
+        <p>Environment variable: <code>ANSIBLE_EXECUTABLE</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_executable</p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_tools_executable</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-file_chunk_size"></div>
+      <p style="display: inline;"><strong>file_chunk_size</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-file_chunk_size" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">integer</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>File chunk size.</p>
+      <p>(Applicable when writing a file to disk, example: using the <code class='docutils literal notranslate'>fetch</code> module.)</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">128</code></p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_vmware_tools_file_chunk_size</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <p style="display: inline;"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">boolean</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Verify SSL for the connection.</p>
+      <p>Note: This will validate certs for both <code class='docutils literal notranslate'>vmware_host</code> and the ESXi host running the VM.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <ul>
+        <li><p><code>false</code></p></li>
+        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Environment variable: <code>VMWARE_VALIDATE_CERTS</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_validate_certs</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vm_password"></div>
+      <p style="display: inline;"><strong>vm_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vm_password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Password for the user in guest operating system.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_password</p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_tools_password</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vm_path"></div>
+      <p style="display: inline;"><strong>vm_path</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vm_path" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Mutually exclusive with vm_uuid</p>
+      <p>VM path absolute to the connection.</p>
+      <p>vCenter Example: <code class='docutils literal notranslate'>Datacenter/vm/Discovered virtual machine/testVM</code>.</p>
+      <p>ESXi Host Example: <code class='docutils literal notranslate'>ha-datacenter/vm/testVM</code>.</p>
+      <p>Must include VM name, appended to &#x27;folder&#x27; as would be passed to <a href='../../community/vmware/vmware_guest_module.html' class='module'>community.vmware.vmware_guest</a>.</p>
+      <p>Needs to include <em>vm</em> between the Datacenter and the rest of the VM path.</p>
+      <p>Datacenter default value for ESXi server is <code class='docutils literal notranslate'>ha-datacenter</code>.</p>
+      <p>Folder <em>vm</em> is not visible in the vSphere Web Client but necessary for VMware API to work.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_vmware_guest_path</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vm_user"></div>
+      <p style="display: inline;"><strong>vm_user</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vm_user" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>VM username.</p>
+      <p><code class='docutils literal notranslate'>ansible_vmware_tools_user</code> is used for connecting to the VM.</p>
+      <p><code class='docutils literal notranslate'>ansible_user</code> is used by Ansible on the VM.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_user</p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_tools_user</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vm_uuid"></div>
+      <p style="display: inline;"><strong>vm_uuid</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vm_uuid" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Mutually exclusive with vm_path</p>
+      <p>VM UUID to the connection.</p>
+      <p>UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Variable: ansible_vmware_guest_uuid</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vmware_host"></div>
+      <p style="display: inline;"><strong>vmware_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vmware_host" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>FQDN or IP Address for the connection (vCenter or ESXi Host).</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Environment variable: <code>VI_SERVER</code></p>
+
+      </li>
+      <li>
+        <p>Environment variable: <code>VMWARE_HOST</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_host</p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_host</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vmware_password"></div>
+      <p style="display: inline;"><strong>vmware_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vmware_password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Password for the connection.</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Environment variable: <code>VI_PASSWORD</code></p>
+
+      </li>
+      <li>
+        <p>Environment variable: <code>VMWARE_PASSWORD</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_password</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vmware_port"></div>
+      <p style="display: inline;"><strong>vmware_port</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vmware_port" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Port for the connection.</p>
+      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Environment variable: <code>VI_PORTNUMBER</code></p>
+
+      </li>
+      <li>
+        <p>Environment variable: <code>VMWARE_PORT</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_port</p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_port</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  <tr style="height: 100%;">
+    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+      <div class="ansibleOptionAnchor" id="parameter-vmware_user"></div>
+      <p style="display: inline;"><strong>vmware_user</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vmware_user" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+
+    </div></td>
+    <td>
+      <p>Username for the connection.</p>
+      <p>Requires the following permissions on the VM: - VirtualMachine.GuestOperations.Execute - VirtualMachine.GuestOperations.Modify - VirtualMachine.GuestOperations.Query</p>
+      <p style="margin-top: 8px;"><span style="font-weight: 700;">Configuration:</span></p>
+      <ul>
+      <li>
+        <p>Environment variable: <code>VI_USERNAME</code></p>
+
+      </li>
+      <li>
+        <p>Environment variable: <code>VMWARE_USER</code></p>
+
+      </li>
+      <li>
+        <p>Variable: ansible_vmware_user</p>
+
+      </li>
+      </ul>
+    </td>
+  </tr>
+  </tbody>
+  </table>
 
 
 
