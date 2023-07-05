@@ -49,7 +49,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -58,12 +58,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the datacenter, where VM to be deployed.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
       <p style="display: inline;"><strong>datastore</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datastore" title="Permalink to this option"></a>
@@ -72,13 +72,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of the datastore or the datastore cluster.</p>
       <p>If datastore cluster name is specified, module will find the Storage DRS recommended datastore in that cluster.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder"></div>
       <p style="display: inline;"><strong>folder</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
@@ -86,7 +86,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Destination folder, absolute path to deploy the cloned vm.</p>
       <p>This parameter is case sensitive.</p>
       <p>Examples:</p>
@@ -95,7 +95,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars"></div>
       <p style="display: inline;"><strong>guestinfo_vars</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars" title="Permalink to this option"></a>
@@ -104,7 +104,7 @@ Parameters
         / <span style="color: purple;">elements=dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Provides GuestOS Customization functionality in instant cloned VM.</p>
       <p>A list of key value pairs that will be passed to the destination VM.</p>
       <p>These pairs should be used to provide user-defined customization to differentiate the destination VM from the source VM.</p>
@@ -112,7 +112,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/dns"></div>
       <p style="display: inline;"><strong>dns</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/dns" title="Permalink to this option"></a>
@@ -120,13 +120,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dns is used to set the dns in Instant Cloned Guest Operating System..</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/domain"></div>
       <p style="display: inline;"><strong>domain</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/domain" title="Permalink to this option"></a>
@@ -134,13 +134,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>domain is used to set A fully qualified domain name (FQDN) or complete domain name for Instant Cloned Guest operating System.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/gateway"></div>
       <p style="display: inline;"><strong>gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/gateway" title="Permalink to this option"></a>
@@ -148,13 +148,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>netmask is used to set the netmask in Instant Cloned Guest Operating System.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/hostname" title="Permalink to this option"></a>
@@ -162,13 +162,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>hostname is used to obtain the DNS(Domain Name System) name and set the Guest system&#x27;s hostname.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/ipaddress"></div>
       <p style="display: inline;"><strong>ipaddress</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/ipaddress" title="Permalink to this option"></a>
@@ -176,13 +176,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>ipaddress is used to set the ipaddress in Instant Cloned Guest Operating System.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-guestinfo_vars/netmask"></div>
       <p style="display: inline;"><strong>netmask</strong></p>
       <a class="ansibleOptionLink" href="#parameter-guestinfo_vars/netmask" title="Permalink to this option"></a>
@@ -190,13 +190,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>netmask is used to set the netmask in Instant Cloned Guest Operating System.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-host"></div>
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>host</strong></p>
@@ -207,14 +207,14 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the ESX Host in datacenter in which to place cloned VM.</p>
       <p>The host has to be a member of the cluster that contains the resource pool.</p>
       <p>Required with <em>resource_pool</em> to find resource pool details. This will be used as additional information when there are resource pools with same name.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -222,14 +222,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-moid"></div>
       <p style="display: inline;"><strong>moid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
@@ -237,13 +237,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Managed Object ID of the vm instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
       <p>This is required if <code class='docutils literal notranslate'>parent_vm</code> or <code class='docutils literal notranslate'>uuid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name"></div>
       <div class="ansibleOptionAnchor" id="parameter-vm_name"></div>
       <p style="display: inline;"><strong>name</strong></p>
@@ -254,12 +254,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the Cloned virtual machine.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-parent_vm"></div>
       <p style="display: inline;"><strong>parent_vm</strong></p>
       <a class="ansibleOptionLink" href="#parameter-parent_vm" title="Permalink to this option"></a>
@@ -267,13 +267,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the parent virtual machine.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>uuid</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -284,14 +284,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -299,7 +299,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -307,7 +307,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -315,7 +315,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -323,7 +323,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -331,13 +331,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resource_pool"></div>
       <p style="display: inline;"><strong>resource_pool</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resource_pool" title="Permalink to this option"></a>
@@ -345,7 +345,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the resource pool in datacenter in which to place deployed VM.</p>
       <p>Required if <em>cluster</em> is not specified.</p>
       <p>For default or non-unique resource pool names, specify <em>host</em> and <em>cluster</em>.</p>
@@ -353,7 +353,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
       <p style="display: inline;"><strong>use_instance_uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
@@ -361,7 +361,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether to use the VMware instance UUID rather than the BIOS UUID.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -372,7 +372,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -383,14 +383,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
       <p style="display: inline;"><strong>uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
@@ -398,13 +398,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>UUID of the vm instance to clone from, this is VMware&#x27;s unique identifier.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>parent_vm</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -412,7 +412,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -426,7 +426,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_password"></div>
       <p style="display: inline;"><strong>vm_password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_password" title="Permalink to this option"></a>
@@ -434,13 +434,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password used to login-in to the virtual machine.</p>
       <p>Only required when using guest customization feature.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_username"></div>
       <p style="display: inline;"><strong>vm_username</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_username" title="Permalink to this option"></a>
@@ -448,13 +448,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The user to login-in to the virtual machine.</p>
       <p>Only required when using guest customization feature.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-wait_vm_tools"></div>
       <p style="display: inline;"><strong>wait_vm_tools</strong></p>
       <a class="ansibleOptionLink" href="#parameter-wait_vm_tools" title="Permalink to this option"></a>
@@ -462,7 +462,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether waiting until vm tools start after rebooting an instant clone vm.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -473,7 +473,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-wait_vm_tools_timeout"></div>
       <p style="display: inline;"><strong>wait_vm_tools_timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-wait_vm_tools_timeout" title="Permalink to this option"></a>
@@ -481,7 +481,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Define a timeout (in seconds) for <em>the wait_vm_tools</em> parameter.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">300</code></p>
     </td>
@@ -623,7 +623,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-vm_info"></div>
       <p style="display: inline;"><strong>vm_info</strong></p>
       <a class="ansibleOptionLink" href="#return-vm_info" title="Permalink to this return value"></a>
@@ -631,7 +631,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>metadata about the virtual machine</p>
       <p>added instance_uuid from version 1.12.0</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>

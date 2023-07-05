@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-dest"></div>
       <p style="display: inline;"><strong>dest</strong></p>
       <a class="ansibleOptionLink" href="#parameter-dest" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">path</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The destination where the ESXi configuration bundle will be saved. The <em>dest</em> can be a folder or a file.</p>
       <p>If <em>dest</em> is a folder, the backup file will be saved in the folder with the default filename generated from the ESXi server.</p>
       <p>If <em>dest</em> is a file, the backup file will be saved with that filename. The file extension will always be .tgz.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -64,12 +64,12 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of ESXi server. This is required only if authentication against a vCenter is done.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -77,14 +77,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -95,14 +95,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -110,7 +110,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -118,7 +118,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -126,7 +126,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -134,7 +134,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -142,13 +142,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-src"></div>
       <p style="display: inline;"><strong>src</strong></p>
       <a class="ansibleOptionLink" href="#parameter-src" title="Permalink to this option"></a>
@@ -156,12 +156,12 @@ Parameters
         <span style="color: purple;">path</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The file containing the ESXi configuration that will be restored.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -170,7 +170,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If <code class='docutils literal notranslate'>saved</code>, the .tgz backup bundle will be saved in <em>dest</em>.</p>
       <p>If <code class='docutils literal notranslate'>absent</code>, the host configuration will be reset to default values.</p>
       <p>If <code class='docutils literal notranslate'>loaded</code>, the backup file in <em>src</em> will be loaded to the ESXi host rewriting the hosts settings.</p>
@@ -184,7 +184,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -195,14 +195,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -210,7 +210,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -281,7 +281,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-dest_file"></div>
       <p style="display: inline;"><strong>dest_file</strong></p>
       <a class="ansibleOptionLink" href="#return-dest_file" title="Permalink to this return value"></a>
@@ -289,7 +289,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The full path of where the file holding the ESXi configurations was stored</p>
       <p style="margin-top: 8px;"><b>Returned:</b> changed</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>&#34;/tmp/configBundle-esxi.host.domain.tgz&#34;</code></p>

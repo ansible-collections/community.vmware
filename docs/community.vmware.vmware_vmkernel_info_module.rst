@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
       <p style="display: inline;"><strong>cluster_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the cluster.</p>
       <p>VMKernel information about each ESXi server will be returned for the given cluster.</p>
       <p>If <code class='docutils literal notranslate'>esxi_hostname</code> is not given, this parameter is required.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -64,14 +64,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>ESXi hostname.</p>
       <p>VMKernel information about this ESXi server will be returned.</p>
       <p>If <code class='docutils literal notranslate'>cluster_name</code> is not given, this parameter is required.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -79,14 +79,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -97,14 +97,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -112,7 +112,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -120,7 +120,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -128,7 +128,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -136,7 +136,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -144,13 +144,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -161,14 +161,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -176,7 +176,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -244,7 +244,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-host_vmk_info"></div>
       <p style="display: inline;"><strong>host_vmk_info</strong></p>
       <a class="ansibleOptionLink" href="#return-host_vmk_info" title="Permalink to this return value"></a>
@@ -252,7 +252,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>metadata about VMKernel present on given host system</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;10.76.33.208&#34;: [{&#34;device&#34;: &#34;vmk0&#34;, &#34;dhcp&#34;: true, &#34;enable_ft&#34;: false, &#34;enable_management&#34;: true, &#34;enable_vmotion&#34;: false, &#34;enable_vsan&#34;: false, &#34;ipv4_address&#34;: &#34;10.76.33.28&#34;, &#34;ipv4_subnet_mask&#34;: &#34;255.255.255.0&#34;, &#34;key&#34;: &#34;key-vim.host.VirtualNic-vmk0&#34;, &#34;mac&#34;: &#34;52:54:00:12:50:ce&#34;, &#34;mtu&#34;: 1500, &#34;portgroup&#34;: &#34;Management Network&#34;, &#34;stack&#34;: &#34;defaultTcpipStack&#34;}]}</code></p>

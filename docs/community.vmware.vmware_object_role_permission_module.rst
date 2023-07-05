@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-group"></div>
       <p style="display: inline;"><strong>group</strong></p>
       <a class="ansibleOptionLink" href="#parameter-group" title="Permalink to this option"></a>
@@ -49,13 +49,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The group to be assigned permission.</p>
       <p>Required if <code class='docutils literal notranslate'>principal</code> is not specified.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -63,14 +63,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-object_name"></div>
       <p style="display: inline;"><strong>object_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-object_name" title="Permalink to this option"></a>
@@ -79,12 +79,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The object name to assigned permission.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-object_type"></div>
       <p style="display: inline;"><strong>object_type</strong></p>
       <a class="ansibleOptionLink" href="#parameter-object_type" title="Permalink to this option"></a>
@@ -92,7 +92,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The object type being targeted.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -113,7 +113,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -124,14 +124,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -139,7 +139,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -147,7 +147,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-principal"></div>
       <p style="display: inline;"><strong>principal</strong></p>
       <a class="ansibleOptionLink" href="#parameter-principal" title="Permalink to this option"></a>
@@ -155,14 +155,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The user to be assigned permission.</p>
       <p>Required if <code class='docutils literal notranslate'>group</code> is not specified.</p>
       <p>If specifying domain user, required separator of domain uses backslash.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -170,7 +170,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -178,7 +178,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -186,13 +186,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-recursive"></div>
       <p style="display: inline;"><strong>recursive</strong></p>
       <a class="ansibleOptionLink" href="#parameter-recursive" title="Permalink to this option"></a>
@@ -200,7 +200,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Should the permissions be recursively applied.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -211,7 +211,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-role"></div>
       <p style="display: inline;"><strong>role</strong></p>
       <a class="ansibleOptionLink" href="#parameter-role" title="Permalink to this option"></a>
@@ -220,13 +220,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The role to be assigned permission.</p>
       <p>User can also specify role name presented in Web UI. Supported added in 1.5.0.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -234,7 +234,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicate desired state of the object&#x27;s permission.</p>
       <p>When <code class='docutils literal notranslate'>state=present</code>, the permission will be added if it doesn&#x27;t already exist.</p>
       <p>When <code class='docutils literal notranslate'>state=absent</code>, the permission is removed if it exists.</p>
@@ -247,7 +247,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -258,14 +258,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -273,7 +273,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -381,7 +381,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-changed"></div>
       <p style="display: inline;"><strong>changed</strong></p>
       <a class="ansibleOptionLink" href="#return-changed" title="Permalink to this return value"></a>
@@ -389,7 +389,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>whether or not a change was made to the object&#x27;s role</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
     </td>

@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default"></div>
       <p style="display: inline;"><strong>default</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default" title="Permalink to this option"></a>
@@ -49,13 +49,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP/IP stacks configuration of the <em>default</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/alternate_dns"></div>
       <p style="display: inline;"><strong>alternate_dns</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/alternate_dns" title="Permalink to this option"></a>
@@ -63,13 +63,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The IP address of the alternate dns server.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/congestion_algorithm"></div>
       <p style="display: inline;"><strong>congestion_algorithm</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/congestion_algorithm" title="Permalink to this option"></a>
@@ -77,7 +77,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP congest control algorithm.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -89,7 +89,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/domain"></div>
       <p style="display: inline;"><strong>domain</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/domain" title="Permalink to this option"></a>
@@ -98,13 +98,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The domain name portion of the DNS name.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/gateway"></div>
       <p style="display: inline;"><strong>gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/gateway" title="Permalink to this option"></a>
@@ -112,13 +112,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv4 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/hostname" title="Permalink to this option"></a>
@@ -127,13 +127,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The host name of the ESXi host.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/ipv6_gateway"></div>
       <p style="display: inline;"><strong>ipv6_gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/ipv6_gateway" title="Permalink to this option"></a>
@@ -141,13 +141,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv6 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/max_num_connections"></div>
       <p style="display: inline;"><strong>max_num_connections</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/max_num_connections" title="Permalink to this option"></a>
@@ -155,14 +155,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The maximum number of socket connection that are requested.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">11000</code></p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/preferred_dns"></div>
       <p style="display: inline;"><strong>preferred_dns</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/preferred_dns" title="Permalink to this option"></a>
@@ -170,13 +170,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The IP address of the preferred dns server.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-default/search_domains"></div>
       <p style="display: inline;"><strong>search_domains</strong></p>
       <a class="ansibleOptionLink" href="#parameter-default/search_domains" title="Permalink to this option"></a>
@@ -185,14 +185,14 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The domain in which to search for hosts, placed in order of preference.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -201,12 +201,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the ESXi host.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -214,14 +214,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -232,14 +232,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -247,7 +247,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -255,7 +255,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-provisioning"></div>
       <p style="display: inline;"><strong>provisioning</strong></p>
       <a class="ansibleOptionLink" href="#parameter-provisioning" title="Permalink to this option"></a>
@@ -263,13 +263,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP/IP stacks configuration of the <em>provisioning</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-provisioning/congestion_algorithm"></div>
       <p style="display: inline;"><strong>congestion_algorithm</strong></p>
       <a class="ansibleOptionLink" href="#parameter-provisioning/congestion_algorithm" title="Permalink to this option"></a>
@@ -277,7 +277,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP congest control algorithm.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -289,7 +289,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-provisioning/gateway"></div>
       <p style="display: inline;"><strong>gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-provisioning/gateway" title="Permalink to this option"></a>
@@ -297,13 +297,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv4 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-provisioning/ipv6_gateway"></div>
       <p style="display: inline;"><strong>ipv6_gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-provisioning/ipv6_gateway" title="Permalink to this option"></a>
@@ -311,13 +311,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv6 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-provisioning/max_num_connections"></div>
       <p style="display: inline;"><strong>max_num_connections</strong></p>
       <a class="ansibleOptionLink" href="#parameter-provisioning/max_num_connections" title="Permalink to this option"></a>
@@ -325,14 +325,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The maximum number of socket connection that are requested.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">11000</code></p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -340,7 +340,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -348,7 +348,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -356,13 +356,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -373,14 +373,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -388,7 +388,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -402,7 +402,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmotion"></div>
       <p style="display: inline;"><strong>vmotion</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmotion" title="Permalink to this option"></a>
@@ -410,13 +410,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP/IP stacks configuration of the <em>vmotion</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmotion/congestion_algorithm"></div>
       <p style="display: inline;"><strong>congestion_algorithm</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmotion/congestion_algorithm" title="Permalink to this option"></a>
@@ -424,7 +424,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP congest control algorithm.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -436,7 +436,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmotion/gateway"></div>
       <p style="display: inline;"><strong>gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmotion/gateway" title="Permalink to this option"></a>
@@ -444,13 +444,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv4 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmotion/ipv6_gateway"></div>
       <p style="display: inline;"><strong>ipv6_gateway</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmotion/ipv6_gateway" title="Permalink to this option"></a>
@@ -458,13 +458,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv6 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmotion/max_num_connections"></div>
       <p style="display: inline;"><strong>max_num_connections</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmotion/max_num_connections" title="Permalink to this option"></a>
@@ -472,14 +472,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The maximum number of socket connection that are requested.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">11000</code></p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vxlan"></div>
       <div class="ansibleOptionAnchor" id="parameter-nsx_overlay"></div>
       <p style="display: inline;"><strong>vxlan</strong></p>
@@ -489,13 +489,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP/IP stacks configuration of the <em>vxlan</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vxlan/congestion_algorithm"></div>
       <div class="ansibleOptionAnchor" id="parameter-nsx_overlay/congestion_algorithm"></div>
       <p style="display: inline;"><strong>congestion_algorithm</strong></p>
@@ -504,7 +504,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The TCP congest control algorithm.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -516,7 +516,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vxlan/gateway"></div>
       <div class="ansibleOptionAnchor" id="parameter-nsx_overlay/gateway"></div>
       <p style="display: inline;"><strong>gateway</strong></p>
@@ -525,13 +525,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv4 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vxlan/ipv6_gateway"></div>
       <div class="ansibleOptionAnchor" id="parameter-nsx_overlay/ipv6_gateway"></div>
       <p style="display: inline;"><strong>ipv6_gateway</strong></p>
@@ -540,13 +540,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ipv6 gateway address.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vxlan/max_num_connections"></div>
       <div class="ansibleOptionAnchor" id="parameter-nsx_overlay/max_num_connections"></div>
       <p style="display: inline;"><strong>max_num_connections</strong></p>
@@ -555,7 +555,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The maximum number of socket connection that are requested.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">11000</code></p>
     </td>
@@ -662,7 +662,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-default"></div>
       <p style="display: inline;"><strong>default</strong></p>
       <a class="ansibleOptionLink" href="#return-default" title="Permalink to this return value"></a>
@@ -670,14 +670,14 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict of the TCP/IP stack configuration of the default.</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>&#34;{\n    \&#34;alternate_dns\&#34;: \&#34;192.168.20.1\&#34;,\n    \&#34;congestion_algorithm\&#34;: \&#34;cubic\&#34;,\n    \&#34;domain\&#34;: \&#34;example.com\&#34;,\n    \&#34;gateway\&#34;: \&#34;192.168.10.1\&#34;,\n    \&#34;ipv6_gateway\&#34;, null,\n    \&#34;hostname\&#34;: \&#34;esxi-test03\&#34;,\n    \&#34;max_num_connections\&#34;: 12000,\n    \&#34;preferred_dns\&#34;: \&#34;192.168.10.1\&#34;,\n    \&#34;search_domains\&#34;: [\n        \&#34;hoge.com\&#34;,\n        \&#34;fuga.com\&#34;\n    ]\n}&#34;</code></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-provisioning"></div>
       <p style="display: inline;"><strong>provisioning</strong></p>
       <a class="ansibleOptionLink" href="#return-provisioning" title="Permalink to this return value"></a>
@@ -685,14 +685,14 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict of the TCP/IP stack configuration of the provisioning.</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;congestion_algorithm&#34;: &#34;newreno&#34;, &#34;gateway&#34;: &#34;10.10.10.254&#34;, &#34;ipv6_gateway&#34;: null, &#34;max_num_connections&#34;: 12000}</code></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-vmotion"></div>
       <p style="display: inline;"><strong>vmotion</strong></p>
       <a class="ansibleOptionLink" href="#return-vmotion" title="Permalink to this return value"></a>
@@ -700,14 +700,14 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict of the TCP/IP stack configuration of the vmotion.</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;congestion_algorithm&#34;: &#34;newreno&#34;, &#34;gateway&#34;: null, &#34;ipv6_gateway&#34;: null, &#34;max_num_connections&#34;: 11000}</code></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-vxlan"></div>
       <p style="display: inline;"><strong>vxlan</strong></p>
       <a class="ansibleOptionLink" href="#return-vxlan" title="Permalink to this return value"></a>
@@ -715,7 +715,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict of the TCP/IP stack configuration of the vxlan.</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;congestion_algorithm&#34;: &#34;newreno&#34;, &#34;gateway&#34;: null, &#34;ipv6_gateway&#34;: null, &#34;max_num_connections&#34;: 11000}</code></p>

@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -67,14 +67,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -82,7 +82,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -90,7 +90,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -98,7 +98,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -106,7 +106,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -114,13 +114,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources"></div>
       <p style="display: inline;"><strong>resources</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources" title="Permalink to this option"></a>
@@ -129,14 +129,14 @@ Parameters
         / <span style="color: purple;">elements=dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List of dicts containing.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources/limit"></div>
       <p style="display: inline;"><strong>limit</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources/limit" title="Permalink to this option"></a>
@@ -144,14 +144,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The maximum allowed usage for a traffic class belonging to this resource pool per host physical NIC.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">-1</code></p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources/name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources/name" title="Permalink to this option"></a>
@@ -160,7 +160,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Resource name.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -181,7 +181,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources/reservation"></div>
       <p style="display: inline;"><strong>reservation</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources/reservation" title="Permalink to this option"></a>
@@ -189,7 +189,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Ignored if NIOC version is set to version2</p>
       <p>Amount of bandwidth resource that is guaranteed available to the host infrastructure traffic class.</p>
       <p>If the utilization is less than the reservation, the extra bandwidth is used for other host infrastructure traffic class types.</p>
@@ -202,7 +202,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources/shares"></div>
       <p style="display: inline;"><strong>shares</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources/shares" title="Permalink to this option"></a>
@@ -210,14 +210,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The number of shares allocated.</p>
       <p>Ignored unless <code class='docutils literal notranslate'>shares_level</code> is "custom".</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-resources/shares_level"></div>
       <p style="display: inline;"><strong>shares_level</strong></p>
       <a class="ansibleOptionLink" href="#parameter-resources/shares_level" title="Permalink to this option"></a>
@@ -225,7 +225,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The allocation level</p>
       <p>The level is a simplified view of shares.</p>
       <p>Levels map to a pre-determined set of numeric values for shares.</p>
@@ -241,7 +241,7 @@ Parameters
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -249,7 +249,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Enable or disable NIOC on the distributed switch.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -260,7 +260,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-switch"></div>
       <div class="ansibleOptionAnchor" id="parameter-dvswitch"></div>
       <p style="display: inline;"><strong>switch</strong></p>
@@ -271,12 +271,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of the distributed switch.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -287,14 +287,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -302,7 +302,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -316,7 +316,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-version"></div>
       <p style="display: inline;"><strong>version</strong></p>
       <a class="ansibleOptionLink" href="#parameter-version" title="Permalink to this option"></a>
@@ -324,7 +324,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Network IO control version.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -400,7 +400,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-dvswitch_nioc_status"></div>
       <p style="display: inline;"><strong>dvswitch_nioc_status</strong></p>
       <a class="ansibleOptionLink" href="#return-dvswitch_nioc_status" title="Permalink to this return value"></a>
@@ -408,13 +408,13 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>result of the changes</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-resources_changed"></div>
       <p style="display: inline;"><strong>resources_changed</strong></p>
       <a class="ansibleOptionLink" href="#return-resources_changed" title="Permalink to this return value"></a>
@@ -423,7 +423,7 @@ The following are the fields unique to this module:
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>list of resources which were changed</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>[&#34;vmotion&#34;, &#34;vsan&#34;]</code></p>

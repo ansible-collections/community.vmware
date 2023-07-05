@@ -53,7 +53,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-exec_command_sleep_interval"></div>
       <p style="display: inline;"><strong>exec_command_sleep_interval</strong></p>
       <a class="ansibleOptionLink" href="#parameter-exec_command_sleep_interval" title="Permalink to this option"></a>
@@ -62,7 +62,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Time in seconds to sleep between execution of command.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">0.5</code></p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
@@ -75,7 +75,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-executable"></div>
       <p style="display: inline;"><strong>executable</strong></p>
       <a class="ansibleOptionLink" href="#parameter-executable" title="Permalink to this option"></a>
@@ -84,7 +84,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>shell to use for execution inside container</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;/bin/sh&#34;</code></p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
@@ -111,7 +111,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-file_chunk_size"></div>
       <p style="display: inline;"><strong>file_chunk_size</strong></p>
       <a class="ansibleOptionLink" href="#parameter-file_chunk_size" title="Permalink to this option"></a>
@@ -120,7 +120,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>File chunk size.</p>
       <p>(Applicable when writing a file to disk, example: using the <code class='docutils literal notranslate'>fetch</code> module.)</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">128</code></p>
@@ -134,7 +134,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -143,7 +143,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Verify SSL for the connection.</p>
       <p>Note: This will validate certs for both <code class='docutils literal notranslate'>vmware_host</code> and the ESXi host running the VM.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -166,7 +166,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_password"></div>
       <p style="display: inline;"><strong>vm_password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_password" title="Permalink to this option"></a>
@@ -176,7 +176,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Password for the user in guest operating system.</p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
       <ul>
@@ -192,7 +192,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_path"></div>
       <p style="display: inline;"><strong>vm_path</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_path" title="Permalink to this option"></a>
@@ -201,7 +201,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Mutually exclusive with vm_uuid</p>
       <p>VM path absolute to the connection.</p>
       <p>vCenter Example: <code class='docutils literal notranslate'>Datacenter/vm/Discovered virtual machine/testVM</code>.</p>
@@ -220,7 +220,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_user"></div>
       <p style="display: inline;"><strong>vm_user</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_user" title="Permalink to this option"></a>
@@ -230,7 +230,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>VM username.</p>
       <p><code class='docutils literal notranslate'>ansible_vmware_tools_user</code> is used for connecting to the VM.</p>
       <p><code class='docutils literal notranslate'>ansible_user</code> is used by Ansible on the VM.</p>
@@ -248,7 +248,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_uuid"></div>
       <p style="display: inline;"><strong>vm_uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_uuid" title="Permalink to this option"></a>
@@ -257,7 +257,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Mutually exclusive with vm_path</p>
       <p>VM UUID to the connection.</p>
       <p>UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin</p>
@@ -271,7 +271,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmware_host"></div>
       <p style="display: inline;"><strong>vmware_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmware_host" title="Permalink to this option"></a>
@@ -281,7 +281,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>FQDN or IP Address for the connection (vCenter or ESXi Host).</p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
       <ul>
@@ -305,7 +305,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmware_password"></div>
       <p style="display: inline;"><strong>vmware_password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmware_password" title="Permalink to this option"></a>
@@ -315,7 +315,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Password for the connection.</p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
       <ul>
@@ -335,7 +335,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmware_port"></div>
       <p style="display: inline;"><strong>vmware_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmware_port" title="Permalink to this option"></a>
@@ -344,7 +344,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Port for the connection.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>
@@ -369,7 +369,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vmware_user"></div>
       <p style="display: inline;"><strong>vmware_user</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vmware_user" title="Permalink to this option"></a>
@@ -379,7 +379,7 @@ Parameters
       </p>
 
     </td>
-    <td>
+    <td valign="top">
       <p>Username for the connection.</p>
       <p>Requires the following permissions on the VM: - VirtualMachine.GuestOperations.Execute - VirtualMachine.GuestOperations.Modify - VirtualMachine.GuestOperations.Query</p>
       <p style="margin-top: 8px;"><b>Configuration:</b></p>

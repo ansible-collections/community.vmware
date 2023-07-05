@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-cluster"></div>
       <p style="display: inline;"><strong>cluster</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster" title="Permalink to this option"></a>
@@ -49,13 +49,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The cluster hosting the virtual machine.</p>
       <p>If set, it will help to speed up virtual machine search.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-copy"></div>
       <p style="display: inline;"><strong>copy</strong></p>
       <a class="ansibleOptionLink" href="#parameter-copy" title="Permalink to this option"></a>
@@ -63,13 +63,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Copy file to vm without requiring network.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-copy/dest"></div>
       <p style="display: inline;"><strong>dest</strong></p>
       <a class="ansibleOptionLink" href="#parameter-copy/dest" title="Permalink to this option"></a>
@@ -78,13 +78,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>File destination, path must be exist.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-copy/overwrite"></div>
       <p style="display: inline;"><strong>overwrite</strong></p>
       <a class="ansibleOptionLink" href="#parameter-copy/overwrite" title="Permalink to this option"></a>
@@ -92,7 +92,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Overwrite or not.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -104,7 +104,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-copy/src"></div>
       <p style="display: inline;"><strong>src</strong></p>
       <a class="ansibleOptionLink" href="#parameter-copy/src" title="Permalink to this option"></a>
@@ -113,13 +113,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>File source absolute or relative.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -127,13 +127,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The datacenter hosting the virtual machine.</p>
       <p>If set, it will help to speed up virtual machine search.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory"></div>
       <p style="display: inline;"><strong>directory</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory" title="Permalink to this option"></a>
@@ -141,7 +141,7 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Create or delete a directory.</p>
       <p>Can be used to create temp directory inside guest using mktemp operation.</p>
       <p>mktemp sets variable <code class='docutils literal notranslate'>dir</code> in the result with the name of the new directory.</p>
@@ -150,7 +150,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory/operation"></div>
       <p style="display: inline;"><strong>operation</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory/operation" title="Permalink to this option"></a>
@@ -159,7 +159,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Operation to perform.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -172,7 +172,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory/path"></div>
       <p style="display: inline;"><strong>path</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory/path" title="Permalink to this option"></a>
@@ -180,14 +180,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Directory path.</p>
       <p>Required for <code class='docutils literal notranslate'>create</code> or <code class='docutils literal notranslate'>remove</code>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory/prefix"></div>
       <p style="display: inline;"><strong>prefix</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory/prefix" title="Permalink to this option"></a>
@@ -195,14 +195,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Temporary directory prefix.</p>
       <p>Required for <code class='docutils literal notranslate'>mktemp</code>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory/recurse"></div>
       <p style="display: inline;"><strong>recurse</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory/recurse" title="Permalink to this option"></a>
@@ -210,7 +210,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Not required.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -222,7 +222,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-directory/suffix"></div>
       <p style="display: inline;"><strong>suffix</strong></p>
       <a class="ansibleOptionLink" href="#parameter-directory/suffix" title="Permalink to this option"></a>
@@ -230,14 +230,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Temporary directory suffix.</p>
       <p>Required for <code class='docutils literal notranslate'>mktemp</code>.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-fetch"></div>
       <p style="display: inline;"><strong>fetch</strong></p>
       <a class="ansibleOptionLink" href="#parameter-fetch" title="Permalink to this option"></a>
@@ -245,13 +245,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Get file from virtual machine without requiring network.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-fetch/dest"></div>
       <p style="display: inline;"><strong>dest</strong></p>
       <a class="ansibleOptionLink" href="#parameter-fetch/dest" title="Permalink to this option"></a>
@@ -260,13 +260,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>File destination on localhost, path must be exist.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-fetch/src"></div>
       <p style="display: inline;"><strong>src</strong></p>
       <a class="ansibleOptionLink" href="#parameter-fetch/src" title="Permalink to this option"></a>
@@ -275,14 +275,14 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The file on the remote system to fetch.</p>
       <p>This <em>must</em> be a file, not a directory.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder"></div>
       <p style="display: inline;"><strong>folder</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
@@ -290,7 +290,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Destination folder, absolute path to find an existing guest or create the new guest.</p>
       <p>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</p>
       <p>Used only if <code class='docutils literal notranslate'>vm_id_type</code> is <code class='docutils literal notranslate'>inventory_path</code>.</p>
@@ -309,7 +309,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -317,14 +317,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -335,14 +335,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -350,7 +350,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -358,7 +358,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -366,7 +366,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -374,7 +374,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -382,13 +382,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
       <p style="display: inline;"><strong>timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
@@ -397,13 +397,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 3.1.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Timeout seconds for fetching or copying a file.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">100</code></p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -414,14 +414,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -429,7 +429,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -443,7 +443,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_id"></div>
       <p style="display: inline;"><strong>vm_id</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_id" title="Permalink to this option"></a>
@@ -452,12 +452,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the virtual machine to work with.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_id_type"></div>
       <p style="display: inline;"><strong>vm_id_type</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_id_type" title="Permalink to this option"></a>
@@ -465,7 +465,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The VMware identification method by which the virtual machine will be identified.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -479,7 +479,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_password"></div>
       <p style="display: inline;"><strong>vm_password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_password" title="Permalink to this option"></a>
@@ -488,12 +488,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password used to login-in to the virtual machine.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_username"></div>
       <p style="display: inline;"><strong>vm_username</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vm_username" title="Permalink to this option"></a>
@@ -502,7 +502,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The user to login in to the virtual machine.</p>
     </td>
   </tr>

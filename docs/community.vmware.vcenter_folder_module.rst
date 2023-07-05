@@ -42,7 +42,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <div class="ansibleOptionAnchor" id="parameter-datacenter_name"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
@@ -53,12 +53,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the datacenter.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder_name"></div>
       <p style="display: inline;"><strong>folder_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder_name" title="Permalink to this option"></a>
@@ -67,14 +67,14 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of folder to be managed.</p>
       <p>This is case sensitive parameter.</p>
       <p>Folder name should be under 80 characters. This is a VMware restriction.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder_type"></div>
       <p style="display: inline;"><strong>folder_type</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder_type" title="Permalink to this option"></a>
@@ -82,7 +82,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>This is type of folder.</p>
       <p>If set to <code class='docutils literal notranslate'>vm</code>, then &#x27;VM and Template Folder&#x27; is created under datacenter.</p>
       <p>If set to <code class='docutils literal notranslate'>host</code>, then &#x27;Host and Cluster Folder&#x27; is created under datacenter.</p>
@@ -101,7 +101,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -109,14 +109,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-parent_folder"></div>
       <p style="display: inline;"><strong>parent_folder</strong></p>
       <a class="ansibleOptionLink" href="#parameter-parent_folder" title="Permalink to this option"></a>
@@ -124,7 +124,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the parent folder under which new folder needs to be created.</p>
       <p>This is case sensitive parameter.</p>
       <p>If user wants to create a folder under &#x27;/DC0/vm/vm_folder&#x27;, this value will be &#x27;vm_folder&#x27;.</p>
@@ -132,7 +132,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -143,14 +143,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -158,7 +158,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -166,7 +166,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -174,7 +174,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -182,7 +182,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -190,13 +190,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -204,7 +204,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>State of folder.</p>
       <p>If set to <code class='docutils literal notranslate'>present</code> without parent folder parameter, then folder with <code class='docutils literal notranslate'>folder_type</code> is created.</p>
       <p>If set to <code class='docutils literal notranslate'>present</code> with parent folder parameter,  then folder in created under parent folder. <code class='docutils literal notranslate'>folder_type</code> is ignored.</p>
@@ -218,7 +218,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -229,14 +229,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -244,7 +244,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -342,7 +342,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="return-result"></div>
       <p style="display: inline;"><strong>result</strong></p>
       <a class="ansibleOptionLink" href="#return-result" title="Permalink to this return value"></a>
@@ -350,14 +350,14 @@ The following are the fields unique to this module:
         <span style="color: purple;">complex</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The detail about the new folder</p>
       <p style="margin-top: 8px;"><b>Returned:</b> On success</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-result/msg"></div>
       <p style="display: inline;"><strong>msg</strong></p>
       <a class="ansibleOptionLink" href="#return-result/msg" title="Permalink to this return value"></a>
@@ -365,14 +365,14 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>string stating about result</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-result/path"></div>
       <p style="display: inline;"><strong>path</strong></p>
       <a class="ansibleOptionLink" href="#return-result/path" title="Permalink to this return value"></a>
@@ -380,7 +380,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>the full path of the new folder</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
     </td>

@@ -42,7 +42,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-description"></div>
       <p style="display: inline;"><strong>description</strong></p>
       <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
@@ -50,13 +50,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Description of the storage policy to create or update.</p>
       <p>This parameter is ignored when <code class='docutils literal notranslate'>state=absent</code>.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -64,14 +64,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
@@ -80,12 +80,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the storage policy to create, update, or delete.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -96,14 +96,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -111,7 +111,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -119,7 +119,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -127,7 +127,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -135,7 +135,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -143,13 +143,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -157,7 +157,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>State of storage policy.</p>
       <p>If set to <code class='docutils literal notranslate'>present</code>, the storage policy is created.</p>
       <p>If set to <code class='docutils literal notranslate'>absent</code>, the storage policy is deleted.</p>
@@ -170,7 +170,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-tag_affinity"></div>
       <p style="display: inline;"><strong>tag_affinity</strong></p>
       <a class="ansibleOptionLink" href="#parameter-tag_affinity" title="Permalink to this option"></a>
@@ -178,7 +178,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If set to <code class='docutils literal notranslate'>true</code>, the storage policy enforces that virtual machines require the existence of a tag for datastore placement.</p>
       <p>If set to <code class='docutils literal notranslate'>false</code>, the storage policy enforces that virtual machines require the absence of a tag for datastore placement.</p>
       <p>This parameter is ignored when <code class='docutils literal notranslate'>state=absent</code>.</p>
@@ -191,7 +191,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-tag_category"></div>
       <p style="display: inline;"><strong>tag_category</strong></p>
       <a class="ansibleOptionLink" href="#parameter-tag_category" title="Permalink to this option"></a>
@@ -199,14 +199,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the pre-existing tag category to assign to the storage policy.</p>
       <p>This parameter is ignored when <code class='docutils literal notranslate'>state=absent</code>.</p>
       <p>This parameter is required when <code class='docutils literal notranslate'>state=present</code>.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-tag_name"></div>
       <p style="display: inline;"><strong>tag_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-tag_name" title="Permalink to this option"></a>
@@ -214,14 +214,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the pre-existing tag to assign to the storage policy.</p>
       <p>This parameter is ignored when <code class='docutils literal notranslate'>state=absent</code>.</p>
       <p>This parameter is required when <code class='docutils literal notranslate'>state=present</code>.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -232,14 +232,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -247,7 +247,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -319,7 +319,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-vmware_vm_storage_policy"></div>
       <p style="display: inline;"><strong>vmware_vm_storage_policy</strong></p>
       <a class="ansibleOptionLink" href="#return-vmware_vm_storage_policy" title="Permalink to this return value"></a>
@@ -327,7 +327,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dictionary of information for the storage policy</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;vmware_vm_storage_policy&#34;: {&#34;description&#34;: &#34;Storage policy for gold-tier storage&#34;, &#34;id&#34;: &#34;aa6d5a82-1c88-45da-85d3-3d74b91a5bad&#34;, &#34;name&#34;: &#34;gold&#34;}}</code></p>

@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-answer"></div>
       <p style="display: inline;"><strong>answer</strong></p>
       <a class="ansibleOptionLink" href="#parameter-answer" title="Permalink to this option"></a>
@@ -50,7 +50,7 @@ Parameters
         / <span style="color: purple;">elements=dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>A list of questions to answer, should one or more arise while waiting for the task to complete.</p>
       <p>Some common uses are to allow a cdrom to be changed even if locked, or to answer the question as to whether a VM was copied or moved.</p>
       <p>The <em>answer</em> can be used if <em>state</em> is <code class='docutils literal notranslate'>powered-on</code>.</p>
@@ -58,7 +58,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-answer/question"></div>
       <p style="display: inline;"><strong>question</strong></p>
       <a class="ansibleOptionLink" href="#parameter-answer/question" title="Permalink to this option"></a>
@@ -67,13 +67,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The message id, for example <code class='docutils literal notranslate'>msg.uuid.altered</code>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-answer/response"></div>
       <p style="display: inline;"><strong>response</strong></p>
       <a class="ansibleOptionLink" href="#parameter-answer/response" title="Permalink to this option"></a>
@@ -82,13 +82,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The choice key, for example <code class='docutils literal notranslate'>button.uuid.copiedTheVM</code>.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -96,14 +96,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The <em>datacenter</em> where the VM you&#x27;d like to operate the power.</p>
       <p>This parameter is case sensitive.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;ha-datacenter&#34;</code></p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder"></div>
       <p style="display: inline;"><strong>folder</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
@@ -111,7 +111,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Destination folder, absolute or relative path to find an existing guest.</p>
       <p>The folder should include the datacenter. ESX&#x27;s datacenter is ha-datacenter</p>
       <p>Examples:</p>
@@ -127,7 +127,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-force"></div>
       <p style="display: inline;"><strong>force</strong></p>
       <a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a>
@@ -135,7 +135,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Ignore warnings and complete the actions.</p>
       <p>This parameter is useful while forcing virtual machine state.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -147,7 +147,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -155,14 +155,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-moid"></div>
       <p style="display: inline;"><strong>moid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
@@ -170,13 +170,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
       <p>This is required if <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>uuid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
@@ -184,13 +184,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the virtual machine to work with.</p>
       <p>Virtual machine names in vCenter are not necessarily unique, which may be problematic, see <code class='docutils literal notranslate'>name_match</code>.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name_match"></div>
       <p style="display: inline;"><strong>name_match</strong></p>
       <a class="ansibleOptionLink" href="#parameter-name_match" title="Permalink to this option"></a>
@@ -198,7 +198,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If multiple virtual machines matching the name, use the first or last found.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -209,7 +209,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -220,14 +220,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -235,7 +235,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -243,7 +243,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -251,7 +251,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -259,7 +259,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -267,13 +267,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-schedule_task_description"></div>
       <p style="display: inline;"><strong>schedule_task_description</strong></p>
       <a class="ansibleOptionLink" href="#parameter-schedule_task_description" title="Permalink to this option"></a>
@@ -281,13 +281,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Description of schedule task.</p>
       <p>Valid only if <code class='docutils literal notranslate'>scheduled_at</code> is specified.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-schedule_task_enabled"></div>
       <p style="display: inline;"><strong>schedule_task_enabled</strong></p>
       <a class="ansibleOptionLink" href="#parameter-schedule_task_enabled" title="Permalink to this option"></a>
@@ -295,7 +295,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Flag to indicate whether the scheduled task is enabled or disabled.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -306,7 +306,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-schedule_task_name"></div>
       <p style="display: inline;"><strong>schedule_task_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-schedule_task_name" title="Permalink to this option"></a>
@@ -314,13 +314,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of schedule task.</p>
       <p>Valid only if <code class='docutils literal notranslate'>scheduled_at</code> is specified.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-scheduled_at"></div>
       <p style="display: inline;"><strong>scheduled_at</strong></p>
       <a class="ansibleOptionLink" href="#parameter-scheduled_at" title="Permalink to this option"></a>
@@ -328,14 +328,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Date and time in string format at which specified task needs to be performed.</p>
       <p>The required format for date and time - &#x27;dd/mm/yyyy hh:mm&#x27;.</p>
       <p>Scheduling task requires vCenter server. A standalone ESXi server does not support this option.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -343,7 +343,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Set the state of the virtual machine.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -359,7 +359,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state_change_timeout"></div>
       <p style="display: inline;"><strong>state_change_timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state_change_timeout" title="Permalink to this option"></a>
@@ -367,7 +367,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If the <code class='docutils literal notranslate'>state</code> is set to <code class='docutils literal notranslate'>shutdown-guest</code>, by default the module will return immediately after sending the shutdown signal.</p>
       <p>If this argument is set to a positive integer, the module will instead wait for the VM to reach the poweredoff state.</p>
       <p>The value sets a timeout in seconds for the module to wait for the state change.</p>
@@ -375,7 +375,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
       <p style="display: inline;"><strong>use_instance_uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
@@ -383,7 +383,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether to use the VMware instance UUID rather than the BIOS UUID.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -394,7 +394,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -405,14 +405,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
       <p style="display: inline;"><strong>uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
@@ -420,13 +420,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>UUID of the instance to manage if known, this is VMware&#x27;s unique identifier.</p>
       <p>This is required if <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -434,7 +434,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>

@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-link_aggregation_groups"></div>
       <p style="display: inline;"><strong>link_aggregation_groups</strong></p>
       <a class="ansibleOptionLink" href="#parameter-link_aggregation_groups" title="Permalink to this option"></a>
@@ -65,14 +65,14 @@ Parameters
         / <span style="color: purple;">elements=dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Can only be used if <code class='docutils literal notranslate'>lacp_support</code> is set to <code class='docutils literal notranslate'>enhanced</code>.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-link_aggregation_groups/load_balancing_mode"></div>
       <p style="display: inline;"><strong>load_balancing_mode</strong></p>
       <a class="ansibleOptionLink" href="#parameter-link_aggregation_groups/load_balancing_mode" title="Permalink to this option"></a>
@@ -80,7 +80,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Load balancing algorithm.</p>
       <p>Valid values are as follows</p>
       <p>- srcTcpUdpPort: Source TCP/UDP port number.</p>
@@ -109,7 +109,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-link_aggregation_groups/mode"></div>
       <p style="display: inline;"><strong>mode</strong></p>
       <a class="ansibleOptionLink" href="#parameter-link_aggregation_groups/mode" title="Permalink to this option"></a>
@@ -117,7 +117,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The negotiating state of the uplinks/ports.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -129,7 +129,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-link_aggregation_groups/name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-link_aggregation_groups/name" title="Permalink to this option"></a>
@@ -137,13 +137,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the LAG.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-link_aggregation_groups/uplink_number"></div>
       <p style="display: inline;"><strong>uplink_number</strong></p>
       <a class="ansibleOptionLink" href="#parameter-link_aggregation_groups/uplink_number" title="Permalink to this option"></a>
@@ -151,14 +151,14 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Number of uplinks.</p>
       <p>Can 1 to 30.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -169,14 +169,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -184,7 +184,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -192,7 +192,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -200,7 +200,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -208,7 +208,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -216,13 +216,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-support_mode"></div>
       <p style="display: inline;"><strong>support_mode</strong></p>
       <a class="ansibleOptionLink" href="#parameter-support_mode" title="Permalink to this option"></a>
@@ -230,7 +230,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The LACP support mode.</p>
       <p><code class='docutils literal notranslate'>basic</code>: One Link Aggregation Control Protocol group in the switch (singleLag).</p>
       <p><code class='docutils literal notranslate'>enhanced</code>: Multiple Link Aggregation Control Protocol groups in the switch (multipleLag).</p>
@@ -243,7 +243,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-switch"></div>
       <div class="ansibleOptionAnchor" id="parameter-dvswitch"></div>
       <p style="display: inline;"><strong>switch</strong></p>
@@ -254,12 +254,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of the Distributed Switch to manage.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -270,14 +270,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -285,7 +285,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -371,7 +371,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-result"></div>
       <p style="display: inline;"><strong>result</strong></p>
       <a class="ansibleOptionLink" href="#return-result" title="Permalink to this return value"></a>
@@ -379,7 +379,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>information about performed operation</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>&#34;{&#39;changed&#39;: True, &#39;dvswitch&#39;: &#39;dvSwitch&#39;, &#39;link_aggregation_groups&#39;: [{&#39;load_balancing_mode&#39;: &#39;srcDestIpTcpUdpPortVlan&#39;, &#39;mode&#39;: &#39;active&#39;, &#39;name&#39;: &#39;lag1&#39;, &#39;uplink_number&#39;: 2}, {&#39;load_balancing_mode&#39;: &#39;srcDestIp&#39;, &#39;mode&#39;: &#39;active&#39;, &#39;name&#39;: &#39;lag2&#39;, &#39;uplink_number&#39;: 2}], &#39;link_aggregation_groups_previous&#39;: [], &#39;result&#39;: &#39;lacp lags changed&#39;, &#39;support_mode&#39;: &#39;enhanced&#39;}&#34;</code></p>

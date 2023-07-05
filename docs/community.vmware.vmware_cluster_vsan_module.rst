@@ -52,7 +52,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options"></div>
       <p style="display: inline;"><strong>advanced_options</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options" title="Permalink to this option"></a>
@@ -60,13 +60,13 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Advanced VSAN Options.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options/automatic_rebalance"></div>
       <p style="display: inline;"><strong>automatic_rebalance</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options/automatic_rebalance" title="Permalink to this option"></a>
@@ -74,7 +74,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If enabled, vSAN automatically rebalances (moves the data among disks) when a capacity disk fullness hits proactive rebalance threshold.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -86,7 +86,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options/disable_site_read_locality"></div>
       <p style="display: inline;"><strong>disable_site_read_locality</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options/disable_site_read_locality" title="Permalink to this option"></a>
@@ -94,7 +94,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>For vSAN stretched clusters, reads to vSAN objects occur on the site the VM resides on.</p>
       <p>Setting to <code class='docutils literal notranslate'>true</code> will force reads across all mirrors.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -107,7 +107,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options/large_cluster_support"></div>
       <p style="display: inline;"><strong>large_cluster_support</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options/large_cluster_support" title="Permalink to this option"></a>
@@ -115,7 +115,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allow &gt; 32 VSAN hosts per cluster; if this is changed on an existing vSAN cluster, all hosts are required to reboot to apply this change.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -127,7 +127,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options/object_repair_timer"></div>
       <p style="display: inline;"><strong>object_repair_timer</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options/object_repair_timer" title="Permalink to this option"></a>
@@ -135,13 +135,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Delay time in minutes for VSAN to wait for the absent component to come back before starting to repair it.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-advanced_options/thin_swap"></div>
       <p style="display: inline;"><strong>thin_swap</strong></p>
       <a class="ansibleOptionLink" href="#parameter-advanced_options/thin_swap" title="Permalink to this option"></a>
@@ -149,7 +149,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>When <code class='docutils literal notranslate'>enabled</code>, swap objects would not reserve 100% space of their size on vSAN datastore.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -161,7 +161,7 @@ Parameters
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
       <p style="display: inline;"><strong>cluster_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
@@ -170,12 +170,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of the cluster to be managed.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <div class="ansibleOptionAnchor" id="parameter-datacenter_name"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
@@ -186,12 +186,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of the datacenter.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-enable"></div>
       <p style="display: inline;"><strong>enable</strong></p>
       <a class="ansibleOptionLink" href="#parameter-enable" title="Permalink to this option"></a>
@@ -199,7 +199,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether to enable vSAN.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -210,7 +210,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -218,14 +218,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -236,14 +236,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -251,7 +251,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -259,7 +259,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -267,7 +267,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -275,7 +275,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -283,13 +283,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -300,14 +300,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -315,7 +315,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -329,7 +329,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vsan_auto_claim_storage"></div>
       <p style="display: inline;"><strong>vsan_auto_claim_storage</strong></p>
       <a class="ansibleOptionLink" href="#parameter-vsan_auto_claim_storage" title="Permalink to this option"></a>
@@ -337,7 +337,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether the VSAN service is configured to automatically claim local storage on VSAN-enabled hosts in the cluster.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>

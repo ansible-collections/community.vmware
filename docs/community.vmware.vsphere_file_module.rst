@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -50,12 +50,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The datacenter on the vCenter server that holds the datastore.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
       <p style="display: inline;"><strong>datastore</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datastore" title="Permalink to this option"></a>
@@ -64,12 +64,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The datastore on the vCenter server to push files to.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-host"></div>
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>host</strong></p>
@@ -80,12 +80,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The vCenter server on which the datastore is available.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <p style="display: inline;"><strong>password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
@@ -94,12 +94,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password to authenticate on the vCenter server.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-path"></div>
       <div class="ansibleOptionAnchor" id="parameter-dest"></div>
       <p style="display: inline;"><strong>path</strong></p>
@@ -110,12 +110,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The file or directory on the datastore on the vCenter server.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -123,7 +123,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The state of or the action on the provided path.</p>
       <p>If <code class='docutils literal notranslate'>absent</code>, the file will be removed.</p>
       <p>If <code class='docutils literal notranslate'>directory</code>, the directory will be created.</p>
@@ -140,7 +140,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
       <p style="display: inline;"><strong>timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
@@ -148,13 +148,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The timeout in seconds for the upload to the datastore.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">10</code></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <p style="display: inline;"><strong>username</strong></p>
       <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
@@ -163,12 +163,12 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The user name to authenticate on the vCenter server.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -176,7 +176,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If <code class='docutils literal notranslate'>false</code>, SSL certificates will not be validated. This should only be set to <code class='docutils literal notranslate'>false</code> when no other option exists.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>

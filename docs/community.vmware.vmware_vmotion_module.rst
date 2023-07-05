@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_cluster"></div>
       <p style="display: inline;"><strong>destination_cluster</strong></p>
       <a class="ansibleOptionLink" href="#parameter-destination_cluster" title="Permalink to this option"></a>
@@ -50,13 +50,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.5.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination cluster the virtual machine should be running on.</p>
       <p>Only works if drs is enabled for this cluster.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_datacenter"></div>
       <p style="display: inline;"><strong>destination_datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-destination_datacenter" title="Permalink to this option"></a>
@@ -64,13 +64,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination datacenter the datastore is located on.</p>
       <p>Optional, required only when datastores are shared across datacenters.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_datastore"></div>
       <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
       <p style="display: inline;"><strong>destination_datastore</strong></p>
@@ -80,12 +80,12 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination datastore the virtual machine&#x27;s vmdk should be moved on.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_datastore_cluster"></div>
       <p style="display: inline;"><strong>destination_datastore_cluster</strong></p>
       <a class="ansibleOptionLink" href="#parameter-destination_datastore_cluster" title="Permalink to this option"></a>
@@ -94,13 +94,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.5.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination datastore cluster (storage pod) the virtual machine&#x27;s vmdk should be moved on.</p>
       <p>Only works if drs is enabled for the cluster the vm is running / should run.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_host"></div>
       <div class="ansibleOptionAnchor" id="parameter-destination"></div>
       <p style="display: inline;"><strong>destination_host</strong></p>
@@ -110,13 +110,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination host the virtual machine should be running on.</p>
       <p>Version 2.6 onwards, this parameter is not a required parameter, unlike the previous versions.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-destination_resourcepool"></div>
       <div class="ansibleOptionAnchor" id="parameter-resource_pool"></div>
       <p style="display: inline;"><strong>destination_resourcepool</strong></p>
@@ -126,14 +126,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the destination resource pool where the virtual machine should be running.</p>
       <p>Resource pool is required if vmotion is done between hosts which are part of different clusters or datacenters.</p>
       <p>if not passed, resource_pool object will be retrived from host_obj parent.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -141,14 +141,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-moid"></div>
       <p style="display: inline;"><strong>moid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
@@ -156,13 +156,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
       <p>This is required if <code class='docutils literal notranslate'>vm_name</code> or <code class='docutils literal notranslate'>vm_uuid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -173,14 +173,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -188,7 +188,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -196,7 +196,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -204,7 +204,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -212,7 +212,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -220,13 +220,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
       <p style="display: inline;"><strong>timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
@@ -235,13 +235,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 3.4.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>The timeout in seconds. When the timeout is reached, the module will fail.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">3600</code></p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
       <p style="display: inline;"><strong>use_instance_uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
@@ -249,7 +249,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether to use the VMware instance UUID rather than the BIOS UUID.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -260,7 +260,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -271,14 +271,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -286,7 +286,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -300,7 +300,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_name"></div>
       <div class="ansibleOptionAnchor" id="parameter-vm"></div>
       <p style="display: inline;"><strong>vm_name</strong></p>
@@ -310,14 +310,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the VM to perform a vMotion on.</p>
       <p>This is required parameter, if <code class='docutils literal notranslate'>vm_uuid</code> is not set.</p>
       <p>Version 2.6 onwards, this parameter is not a required parameter, unlike the previous versions.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-vm_uuid"></div>
       <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
       <p style="display: inline;"><strong>vm_uuid</strong></p>
@@ -327,7 +327,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>UUID of the virtual machine to perform a vMotion operation on.</p>
       <p>This is a required parameter, if <code class='docutils literal notranslate'>vm_name</code> or <code class='docutils literal notranslate'>moid</code> is not set.</p>
     </td>
@@ -426,7 +426,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-datastore"></div>
       <p style="display: inline;"><strong>datastore</strong></p>
       <a class="ansibleOptionLink" href="#return-datastore" title="Permalink to this return value"></a>
@@ -434,7 +434,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List the datastore the virtual machine is on.</p>
       <p>Only returned if there is asked for a Storage vMotion (Datastore or Datastore Cluster).</p>
       <p style="margin-top: 8px;"><b>Returned:</b> changed or success</p>
@@ -442,7 +442,7 @@ The following are the fields unique to this module:
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-running_host"></div>
       <p style="display: inline;"><strong>running_host</strong></p>
       <a class="ansibleOptionLink" href="#return-running_host" title="Permalink to this return value"></a>
@@ -450,7 +450,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List the host the virtual machine is registered to.</p>
       <p>Only returned if there is asked for a vMotion (Cluster or Host).</p>
       <p style="margin-top: 8px;"><b>Returned:</b> changed or success</p>

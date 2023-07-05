@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
       <p style="display: inline;"><strong>cluster_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the cluster.</p>
       <p>Firewall settings are applied to every ESXi host system in given cluster.</p>
       <p>If <code class='docutils literal notranslate'>esxi_hostname</code> is not given, this parameter is required.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -64,14 +64,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>ESXi hostname.</p>
       <p>Firewall settings are applied to this ESXi host system.</p>
       <p>If <code class='docutils literal notranslate'>cluster_name</code> is not given, this parameter is required.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -79,14 +79,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -97,14 +97,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -112,7 +112,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -120,7 +120,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -128,7 +128,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -136,7 +136,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -144,13 +144,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules"></div>
       <p style="display: inline;"><strong>rules</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules" title="Permalink to this option"></a>
@@ -159,7 +159,7 @@ Parameters
         / <span style="color: purple;">elements=dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>A list of Rule set which needs to be managed.</p>
       <p>Each member of list is rule set name and state to be set the rule.</p>
       <p>Both rule name and rule state are required parameters.</p>
@@ -170,7 +170,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/allowed_hosts"></div>
       <p style="display: inline;"><strong>allowed_hosts</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/allowed_hosts" title="Permalink to this option"></a>
@@ -178,14 +178,14 @@ Parameters
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Define the allowed hosts for this rule set.</p>
     </td>
   </tr>
   <tr>
     <td></td>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/allowed_hosts/all_ip"></div>
       <p style="display: inline;"><strong>all_ip</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/allowed_hosts/all_ip" title="Permalink to this option"></a>
@@ -194,7 +194,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether all hosts should be allowed or not.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -207,7 +207,7 @@ Parameters
   <tr>
     <td></td>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/allowed_hosts/ip_address"></div>
       <p style="display: inline;"><strong>ip_address</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/allowed_hosts/ip_address" title="Permalink to this option"></a>
@@ -216,7 +216,7 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List of allowed IP addresses.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
@@ -224,7 +224,7 @@ Parameters
   <tr>
     <td></td>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/allowed_hosts/ip_network"></div>
       <p style="display: inline;"><strong>ip_network</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/allowed_hosts/ip_network" title="Permalink to this option"></a>
@@ -233,7 +233,7 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List of allowed IP networks.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
@@ -241,7 +241,7 @@ Parameters
 
   <tr>
     <td></td>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/enabled"></div>
       <p style="display: inline;"><strong>enabled</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/enabled" title="Permalink to this option"></a>
@@ -250,7 +250,7 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether the rule set is enabled or not.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -262,7 +262,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-rules/name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-rules/name" title="Permalink to this option"></a>
@@ -271,13 +271,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Rule set name.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -288,14 +288,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="3">
+    <td colspan="3" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -303,7 +303,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -424,7 +424,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-rule_set_state"></div>
       <p style="display: inline;"><strong>rule_set_state</strong></p>
       <a class="ansibleOptionLink" href="#return-rule_set_state" title="Permalink to this return value"></a>
@@ -432,7 +432,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict with hostname as key and dict with firewall rule set facts as value</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;rule_set_state&#34;: {&#34;localhost.localdomain&#34;: {&#34;CIMHttpServer&#34;: {&#34;allowed_hosts&#34;: {&#34;current_allowed_all&#34;: true, &#34;current_allowed_ip&#34;: [], &#34;current_allowed_networks&#34;: [], &#34;desired_allowed_all&#34;: true, &#34;desired_allowed_ip&#34;: [], &#34;desired_allowed_networks&#34;: [], &#34;previous_allowed_all&#34;: true, &#34;previous_allowed_ip&#34;: [], &#34;previous_allowed_networks&#34;: []}, &#34;current_state&#34;: false, &#34;desired_state&#34;: false, &#34;previous_state&#34;: true}, &#34;remoteSerialPort&#34;: {&#34;allowed_hosts&#34;: {&#34;current_allowed_all&#34;: false, &#34;current_allowed_ip&#34;: [&#34;192.168.100.11&#34;], &#34;current_allowed_networks&#34;: [&#34;192.168.200.0/24&#34;], &#34;desired_allowed_all&#34;: false, &#34;desired_allowed_ip&#34;: [&#34;192.168.100.11&#34;], &#34;desired_allowed_networks&#34;: [&#34;192.168.200.0/24&#34;], &#34;previous_allowed_all&#34;: true, &#34;previous_allowed_ip&#34;: [], &#34;previous_allowed_networks&#34;: []}, &#34;current_state&#34;: true, &#34;desired_state&#34;: true, &#34;previous_state&#34;: true}}}}</code></p>

@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -49,14 +49,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -67,14 +67,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -82,7 +82,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -90,7 +90,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-properties"></div>
       <p style="display: inline;"><strong>properties</strong></p>
       <a class="ansibleOptionLink" href="#parameter-properties" title="Permalink to this option"></a>
@@ -99,7 +99,7 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Specify the properties to retrieve.</p>
       <p>Example:</p>
       <p>   properties: [</p>
@@ -109,7 +109,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -117,7 +117,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -125,7 +125,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -133,13 +133,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-schema"></div>
       <p style="display: inline;"><strong>schema</strong></p>
       <a class="ansibleOptionLink" href="#parameter-schema" title="Permalink to this option"></a>
@@ -147,7 +147,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Specify the output schema desired.</p>
       <p>The &#x27;summary&#x27; output schema is the legacy output from the module.</p>
       <p>The &#x27;vsphere&#x27; output schema is the vSphere API class definition which requires pyvmomi&gt;6.7.1.</p>
@@ -160,7 +160,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -171,14 +171,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -186,7 +186,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -253,7 +253,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-vcenter_config_info"></div>
       <p style="display: inline;"><strong>vcenter_config_info</strong></p>
       <a class="ansibleOptionLink" href="#return-vcenter_config_info" title="Permalink to this return value"></a>
@@ -261,7 +261,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>dict of vCenter settings</p>
       <p style="margin-top: 8px;"><b>Returned:</b> success</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;db_event_cleanup_previous&#34;: true, &#34;db_event_retention_previous&#34;: 30, &#34;db_max_connections_previous&#34;: 50, &#34;db_task_cleanup_previous&#34;: true, &#34;db_task_retention_previous&#34;: 30, &#34;directory_query_limit_previous&#34;: true, &#34;directory_query_limit_size_previous&#34;: 5000, &#34;directory_timeout_previous&#34;: 60, &#34;directory_validation_period_previous&#34;: 1440, &#34;directory_validation_previous&#34;: true, &#34;logging_options_previous&#34;: &#34;info&#34;, &#34;mail_sender_previous&#34;: &#34;&#34;, &#34;mail_server_previous&#34;: &#34;&#34;, &#34;runtime_managed_address_previous&#34;: &#34;&#34;, &#34;runtime_server_name_previous&#34;: &#34;vcenter.local&#34;, &#34;runtime_unique_id_previous&#34;: 48, &#34;snmp_1_community_previous&#34;: &#34;public&#34;, &#34;snmp_1_enabled_previous&#34;: true, &#34;snmp_1_url_previous&#34;: &#34;localhost&#34;, &#34;snmp_2_community_previous&#34;: &#34;&#34;, &#34;snmp_2_enabled_previous&#34;: false, &#34;snmp_2_url_previous&#34;: &#34;&#34;, &#34;snmp_3_community_previous&#34;: &#34;&#34;, &#34;snmp_3_enabled_previous&#34;: false, &#34;snmp_3_url_previous&#34;: &#34;&#34;, &#34;snmp_4_community_previous&#34;: &#34;&#34;, &#34;snmp_4_enabled_previous&#34;: false, &#34;snmp_4_url_previous&#34;: &#34;&#34;, &#34;snmp_receiver_1_port_previous&#34;: 162, &#34;snmp_receiver_2_port_previous&#34;: 162, &#34;snmp_receiver_3_port_previous&#34;: 162, &#34;snmp_receiver_4_port_previous&#34;: 162, &#34;timeout_long_operations_previous&#34;: 120, &#34;timeout_normal_operations_previous&#34;: 30}</code></p>

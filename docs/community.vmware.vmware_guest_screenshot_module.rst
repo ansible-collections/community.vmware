@@ -42,7 +42,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-cluster"></div>
       <p style="display: inline;"><strong>cluster</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster" title="Permalink to this option"></a>
@@ -50,14 +50,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The name of cluster where the virtual machine is running.</p>
       <p>This is a required parameter, if <code class='docutils literal notranslate'>esxi_hostname</code> is not set.</p>
       <p><code class='docutils literal notranslate'>esxi_hostname</code> and <code class='docutils literal notranslate'>cluster</code> are mutually exclusive parameters.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -65,12 +65,12 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The datacenter name to which virtual machine belongs to.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -78,14 +78,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The ESXi hostname where the virtual machine is running.</p>
       <p>This is a required parameter, if <code class='docutils literal notranslate'>cluster</code> is not set.</p>
       <p><code class='docutils literal notranslate'>esxi_hostname</code> and <code class='docutils literal notranslate'>cluster</code> are mutually exclusive parameters.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-folder"></div>
       <p style="display: inline;"><strong>folder</strong></p>
       <a class="ansibleOptionLink" href="#parameter-folder" title="Permalink to this option"></a>
@@ -93,7 +93,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Destination folder, absolute or relative path to find an existing guest.</p>
       <p>This is a required parameter, only if multiple VMs are found with same name.</p>
       <p>The folder should include the datacenter. ESXi server&#x27;s datacenter is ha-datacenter.</p>
@@ -110,7 +110,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -118,14 +118,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-local_path"></div>
       <p style="display: inline;"><strong>local_path</strong></p>
       <a class="ansibleOptionLink" href="#parameter-local_path" title="Permalink to this option"></a>
@@ -133,13 +133,13 @@ Parameters
         <span style="color: purple;">path</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>If <code class='docutils literal notranslate'>local_path</code> is not set, the created screenshot file will be kept in the directory of the virtual machine on ESXi host. If <code class='docutils literal notranslate'>local_path</code> is set to a valid path on local machine, then the screenshot file will be downloaded from ESXi host to the local directory.</p>
       <p>If not download screenshot file to local machine, you can open it through the returned file URL in screenshot facts manually.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-moid"></div>
       <p style="display: inline;"><strong>moid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
@@ -147,13 +147,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
       <p>This is required if <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>uuid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
@@ -161,13 +161,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the virtual machine.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>uuid</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -178,14 +178,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -193,7 +193,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -201,7 +201,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -209,7 +209,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -217,7 +217,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -225,13 +225,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -242,14 +242,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
       <p style="display: inline;"><strong>uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
@@ -257,13 +257,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>UUID of the instance to gather facts if known, this is VMware&#x27;s unique identifier.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -271,7 +271,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -345,7 +345,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-screenshot_info"></div>
       <p style="display: inline;"><strong>screenshot_info</strong></p>
       <a class="ansibleOptionLink" href="#return-screenshot_info" title="Permalink to this return value"></a>
@@ -353,7 +353,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>display the facts of captured virtual machine screenshot file</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;download_file_size&#34;: 2367, &#34;download_local_path&#34;: &#34;/tmp/&#34;, &#34;result&#34;: &#34;success&#34;, &#34;screenshot_file&#34;: &#34;[datastore0] test_vm/test_vm-1.png&#34;, &#34;screenshot_file_url&#34;: &#34;https://test_vcenter/folder/test_vm/test_vm-1.png?dcPath=test-dc&amp;dsName=datastore0&#34;, &#34;task_complete_time&#34;: &#34;2019-05-25T10:35:04.412622Z&#34;, &#34;task_start_time&#34;: &#34;2019-05-25T10:35:04.215016Z&#34;, &#34;virtual_machine&#34;: &#34;test_vm&#34;}</code></p>

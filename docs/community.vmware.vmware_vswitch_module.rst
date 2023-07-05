@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <div class="ansibleOptionAnchor" id="parameter-host"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
@@ -51,12 +51,12 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Manage the vSwitch using this ESXi host system.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -64,14 +64,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-mtu"></div>
       <p style="display: inline;"><strong>mtu</strong></p>
       <a class="ansibleOptionLink" href="#parameter-mtu" title="Permalink to this option"></a>
@@ -79,13 +79,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>MTU to configure on vSwitch.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">1500</code></p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-nics"></div>
       <div class="ansibleOptionAnchor" id="parameter-nic_name"></div>
       <p style="display: inline;"><strong>nics</strong></p>
@@ -96,14 +96,14 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>A list of vmnic names or vmnic name to attach to vSwitch.</p>
       <p>Alias <code class='docutils literal notranslate'>nics</code> is added in version 2.4.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-number_of_ports"></div>
       <p style="display: inline;"><strong>number_of_ports</strong></p>
       <a class="ansibleOptionLink" href="#parameter-number_of_ports" title="Permalink to this option"></a>
@@ -111,13 +111,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Number of port to configure on vSwitch.</p>
       <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">128</code></p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -128,14 +128,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -143,7 +143,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -151,7 +151,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -159,7 +159,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -167,7 +167,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -175,13 +175,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-security"></div>
       <div class="ansibleOptionAnchor" id="parameter-security_policy"></div>
       <div class="ansibleOptionAnchor" id="parameter-network_policy"></div>
@@ -193,14 +193,14 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.4.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Network policy specifies layer 2 security settings for a portgroup such as promiscuous mode, where guest adapter listens to all the packets, MAC address changes and forged transmits.</p>
       <p>Dict which configures the different security values for portgroup.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-security/forged_transmits"></div>
       <div class="ansibleOptionAnchor" id="parameter-security_policy/forged_transmits"></div>
       <div class="ansibleOptionAnchor" id="parameter-network_policy/forged_transmits"></div>
@@ -210,7 +210,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicates whether forged transmits are allowed.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -222,7 +222,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-security/mac_changes"></div>
       <div class="ansibleOptionAnchor" id="parameter-security_policy/mac_changes"></div>
       <div class="ansibleOptionAnchor" id="parameter-network_policy/mac_changes"></div>
@@ -232,7 +232,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicates whether mac changes are allowed.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -244,7 +244,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-security/promiscuous_mode"></div>
       <div class="ansibleOptionAnchor" id="parameter-security_policy/promiscuous_mode"></div>
       <div class="ansibleOptionAnchor" id="parameter-network_policy/promiscuous_mode"></div>
@@ -254,7 +254,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicates whether promiscuous mode is allowed.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -266,7 +266,7 @@ Parameters
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
@@ -274,7 +274,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Add or remove the switch.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -285,7 +285,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-switch"></div>
       <div class="ansibleOptionAnchor" id="parameter-switch_name"></div>
       <p style="display: inline;"><strong>switch</strong></p>
@@ -296,13 +296,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>vSwitch name to add.</p>
       <p>Alias <code class='docutils literal notranslate'>switch</code> is added in version 2.4.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy"></div>
       <p style="display: inline;"><strong>teaming</strong></p>
@@ -313,13 +313,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.4.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Dictionary which configures the different teaming values for portgroup.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/active_adapters"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/active_adapters"></div>
       <p style="display: inline;"><strong>active_adapters</strong></p>
@@ -329,14 +329,14 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List of active adapters used for load balancing.</p>
       <p>All vmnics are used as active adapters if <code class='docutils literal notranslate'>active_adapters</code> and <code class='docutils literal notranslate'>standby_adapters</code> are not defined.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/failback"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/failback"></div>
       <p style="display: inline;"><strong>failback</strong></p>
@@ -345,7 +345,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicate whether or not to use a failback when restoring links.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -357,7 +357,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/load_balancing"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/load_balancing"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming/load_balance_policy"></div>
@@ -369,7 +369,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Network adapter teaming policy.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -383,7 +383,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/network_failure_detection"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/network_failure_detection"></div>
       <p style="display: inline;"><strong>network_failure_detection</strong></p>
@@ -392,7 +392,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Network failure detection.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -404,7 +404,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/notify_switches"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/notify_switches"></div>
       <p style="display: inline;"><strong>notify_switches</strong></p>
@@ -413,7 +413,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Indicate whether or not to notify the physical switch if a link fails.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -425,7 +425,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-teaming/standby_adapters"></div>
       <div class="ansibleOptionAnchor" id="parameter-teaming_policy/standby_adapters"></div>
       <p style="display: inline;"><strong>standby_adapters</strong></p>
@@ -435,14 +435,14 @@ Parameters
         / <span style="color: purple;">elements=string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>List of standby adapters used for failover.</p>
       <p>All vmnics are used as active adapters if <code class='docutils literal notranslate'>active_adapters</code> and <code class='docutils literal notranslate'>standby_adapters</code> are not defined.</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-traffic_shaping"></div>
       <p style="display: inline;"><strong>traffic_shaping</strong></p>
       <a class="ansibleOptionLink" href="#parameter-traffic_shaping" title="Permalink to this option"></a>
@@ -451,13 +451,13 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.4.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Dictionary which configures traffic shaping for the switch.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-traffic_shaping/average_bandwidth"></div>
       <p style="display: inline;"><strong>average_bandwidth</strong></p>
       <a class="ansibleOptionLink" href="#parameter-traffic_shaping/average_bandwidth" title="Permalink to this option"></a>
@@ -465,13 +465,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Average bandwidth (kbit/s).</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-traffic_shaping/burst_size"></div>
       <p style="display: inline;"><strong>burst_size</strong></p>
       <a class="ansibleOptionLink" href="#parameter-traffic_shaping/burst_size" title="Permalink to this option"></a>
@@ -479,13 +479,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Burst size (KB).</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-traffic_shaping/enabled"></div>
       <p style="display: inline;"><strong>enabled</strong></p>
       <a class="ansibleOptionLink" href="#parameter-traffic_shaping/enabled" title="Permalink to this option"></a>
@@ -493,7 +493,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Status of Traffic Shaping Policy.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -505,7 +505,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-traffic_shaping/peak_bandwidth"></div>
       <p style="display: inline;"><strong>peak_bandwidth</strong></p>
       <a class="ansibleOptionLink" href="#parameter-traffic_shaping/peak_bandwidth" title="Permalink to this option"></a>
@@ -513,13 +513,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Peak bandwidth (kbit/s).</p>
     </td>
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -530,14 +530,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -545,7 +545,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -694,7 +694,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-result"></div>
       <p style="display: inline;"><strong>result</strong></p>
       <a class="ansibleOptionLink" href="#return-result" title="Permalink to this return value"></a>
@@ -702,7 +702,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>information about performed operation</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>&#34;vSwitch &#39;vSwitch_1002&#39; is created successfully&#34;</code></p>

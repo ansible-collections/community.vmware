@@ -41,7 +41,7 @@ Parameters
   </thead>
   <tbody>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings"></div>
       <p style="display: inline;"><strong>backings</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings" title="Permalink to this option"></a>
@@ -51,14 +51,14 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>A list of backings for serial ports.</p>
       <p><code class='docutils literal notranslate'>backing_type</code> (str): is required to add or reconfigure or remove an existing serial port.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/backing_type"></div>
       <div class="ansibleOptionAnchor" id="parameter-backings/type"></div>
       <p style="display: inline;"><strong>backing_type</strong></p>
@@ -69,13 +69,13 @@ Parameters
         / <span style="color: red;">required</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Backing type is required for the serial ports to be added or reconfigured or removed.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/device_name"></div>
       <p style="display: inline;"><strong>device_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/device_name" title="Permalink to this option"></a>
@@ -83,14 +83,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Serial device absolutely path.</p>
       <p>Required when <em>backing_type=device</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/direction"></div>
       <p style="display: inline;"><strong>direction</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/direction" title="Permalink to this option"></a>
@@ -98,7 +98,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The direction of the connection.</p>
       <p>Required when <em>backing_type=network</em>.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -111,7 +111,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/endpoint"></div>
       <p style="display: inline;"><strong>endpoint</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/endpoint" title="Permalink to this option"></a>
@@ -119,7 +119,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>When you use serial port pipe backing to connect a virtual machine to another process, you must define the endpoints.</p>
       <p>Required when <em>backing_type=pipe</em>.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -132,7 +132,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/file_path"></div>
       <p style="display: inline;"><strong>file_path</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/file_path" title="Permalink to this option"></a>
@@ -140,14 +140,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>File path for the host file used in this backing. Fully qualified path is required, like &lt;datastore_name&gt;/&lt;file_name&gt;.</p>
       <p>Required when <em>backing_type=file</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/no_rx_loss"></div>
       <p style="display: inline;"><strong>no_rx_loss</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/no_rx_loss" title="Permalink to this option"></a>
@@ -155,7 +155,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Enables optimized data transfer over the pipe.</p>
       <p>Required when <em>backing_type=pipe</em>.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
@@ -168,7 +168,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/pipe_name"></div>
       <p style="display: inline;"><strong>pipe_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/pipe_name" title="Permalink to this option"></a>
@@ -176,14 +176,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Pipe name for the host pipe.</p>
       <p>Required when <em>backing_type=pipe</em>.</p>
     </td>
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/proxy_uri"></div>
       <p style="display: inline;"><strong>proxy_uri</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/proxy_uri" title="Permalink to this option"></a>
@@ -192,7 +192,7 @@ Parameters
       </p>
       <p><i style="font-size: small; color: darkgreen;">added in community.vmware 3.7.0</i></p>
     </td>
-    <td>
+    <td valign="top">
       <p>Identifies a vSPC proxy service that provides network access to the <em>service_uri</em>.</p>
       <p>If you specify a proxy URI, the virtual machine initiates a connection with the proxy service and forwards the serviceURI and direction to the proxy.</p>
       <p>The <code class='docutils literal notranslate'>Use Virtual Serial Port Concentrator</code> option is automatically enabled when <em>proxy_uri</em> is set.</p>
@@ -200,7 +200,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/service_uri"></div>
       <p style="display: inline;"><strong>service_uri</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/service_uri" title="Permalink to this option"></a>
@@ -208,7 +208,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Identifies the local host or a system on the network, depending on the value of <em>direction</em>.</p>
       <p>If you use the virtual machine as a server, the URI identifies the host on which the virtual machine runs.</p>
       <p>In this case, the host name part of the URI should be empty, or it should specify the address of the local host.</p>
@@ -218,7 +218,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/state" title="Permalink to this option"></a>
@@ -226,7 +226,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p><code class='docutils literal notranslate'>state</code> is required to identify whether we are adding, modifying or removing the serial port.</p>
       <p>If <code class='docutils literal notranslate'>state</code> is set to <code class='docutils literal notranslate'>present</code>, a serial port will be added or modified.</p>
       <p>If <code class='docutils literal notranslate'>state</code> is set to <code class='docutils literal notranslate'>absent</code>, an existing serial port will be removed.</p>
@@ -241,7 +241,7 @@ Parameters
   </tr>
   <tr>
     <td></td>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-backings/yield_on_poll"></div>
       <p style="display: inline;"><strong>yield_on_poll</strong></p>
       <a class="ansibleOptionLink" href="#parameter-backings/yield_on_poll" title="Permalink to this option"></a>
@@ -249,7 +249,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Enables CPU yield behavior.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -261,7 +261,7 @@ Parameters
   </tr>
 
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
@@ -269,14 +269,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-moid"></div>
       <p style="display: inline;"><strong>moid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-moid" title="Permalink to this option"></a>
@@ -284,13 +284,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.</p>
       <p>This is required if <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>uuid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-name"></div>
       <p style="display: inline;"><strong>name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
@@ -298,13 +298,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Name of the virtual machine.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>uuid</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -315,14 +315,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
@@ -330,7 +330,7 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -338,7 +338,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
@@ -346,7 +346,7 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
@@ -354,7 +354,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
@@ -362,13 +362,13 @@ Parameters
         <span style="color: purple;">integer</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-use_instance_uuid"></div>
       <p style="display: inline;"><strong>use_instance_uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-use_instance_uuid" title="Permalink to this option"></a>
@@ -376,7 +376,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Whether to use the VMware instance UUID rather than the BIOS UUID.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
@@ -387,7 +387,7 @@ Parameters
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -398,14 +398,14 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-uuid"></div>
       <p style="display: inline;"><strong>uuid</strong></p>
       <a class="ansibleOptionLink" href="#parameter-uuid" title="Permalink to this option"></a>
@@ -413,13 +413,13 @@ Parameters
         <span style="color: purple;">string</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>UUID of the instance to manage the serial ports, this is VMware&#x27;s unique identifier.</p>
       <p>This is a required parameter, if parameter <code class='docutils literal notranslate'>name</code> or <code class='docutils literal notranslate'>moid</code> is not supplied.</p>
     </td>
   </tr>
   <tr>
-    <td colspan="2">
+    <td colspan="2" valign="top">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
@@ -427,7 +427,7 @@ Parameters
         <span style="color: purple;">boolean</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
@@ -539,7 +539,7 @@ The following are the fields unique to this module:
   </thead>
   <tbody>
   <tr>
-    <td>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="return-serial_port_data"></div>
       <p style="display: inline;"><strong>serial_port_data</strong></p>
       <a class="ansibleOptionLink" href="#return-serial_port_data" title="Permalink to this return value"></a>
@@ -547,7 +547,7 @@ The following are the fields unique to this module:
         <span style="color: purple;">dictionary</span>
       </p>
     </td>
-    <td>
+    <td valign="top">
       <p>metadata about the virtual machine&#x27;s serial ports after managing them</p>
       <p style="margin-top: 8px;"><b>Returned:</b> always</p>
       <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>[{&#34;backing_type&#34;: &#34;network&#34;, &#34;direction&#34;: &#34;client&#34;, &#34;service_uri&#34;: &#34;tcp://6000&#34;}, {&#34;backing_type&#34;: &#34;pipe&#34;, &#34;direction&#34;: &#34;server&#34;, &#34;pipe_name&#34;: &#34;serial pipe&#34;}]</code></p>
