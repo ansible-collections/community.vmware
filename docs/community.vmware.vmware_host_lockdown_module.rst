@@ -35,31 +35,31 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Parameter</p></th>
     <th><p>Comments</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
       <p style="display: inline;"><strong>cluster_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Name of cluster.</p>
       <p>All host systems from given cluster used to manage lockdown.</p>
       <p>Required parameter, if <code class='docutils literal notranslate'>esxi_hostname</code> is not set.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
       <p style="display: inline;"><strong>esxi_hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
@@ -67,30 +67,30 @@ Parameters
         <span style="color: purple;">list</span>
         / <span style="color: purple;">elements=string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>List of ESXi hostname to manage lockdown.</p>
       <p>Required parameter, if <code class='docutils literal notranslate'>cluster_name</code> is not set.</p>
       <p>See examples for specifications.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -100,38 +100,38 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
@@ -139,29 +139,29 @@ Parameters
       <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>State of hosts system</p>
       <p>If set to <code class='docutils literal notranslate'>disabled</code>, all host systems will be removed from lockdown mode.</p>
@@ -170,10 +170,10 @@ Parameters
       <p>If host system is already in lockdown mode and set to <code class='docutils literal notranslate'>normal</code>, no action will be taken.</p>
       <p>If set to <code class='docutils literal notranslate'>strict</code>, all host systems will be set in strict lockdown mode.</p>
       <p>If host system is already in strict lockdown mode and set to <code class='docutils literal notranslate'>strict</code>, no action will be taken.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>&#34;disabled&#34;</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">&#34;normal&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>&#34;normal&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
         <li><p><code>&#34;strict&#34;</code></p></li>
         <li><p><code>&#34;present&#34;</code></p></li>
         <li><p><code>&#34;absent&#34;</code></p></li>
@@ -181,8 +181,8 @@ Parameters
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -192,31 +192,31 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">boolean</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
       <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
       </ul>
 
     </td>
@@ -298,27 +298,27 @@ The following are the fields unique to this module:
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Key</p></th>
     <th><p>Description</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="return-results"></div>
       <p style="display: inline;"><strong>results</strong></p>
       <a class="ansibleOptionLink" href="#return-results" title="Permalink to this return value"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">dictionary</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>metadata about state of Host system lock down</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>{&#34;host_lockdown_state&#34;: {&#34;DC0_C0&#34;: {&#34;current_state&#34;: &#34;normal&#34;, &#34;desired_state&#34;: &#34;normal&#34;, &#34;previous_state&#34;: &#34;disabled&#34;}}}</code></p>
+      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;host_lockdown_state&#34;: {&#34;DC0_C0&#34;: {&#34;current_state&#34;: &#34;normal&#34;, &#34;desired_state&#34;: &#34;normal&#34;, &#34;previous_state&#34;: &#34;disabled&#34;}}}</code></p>
     </td>
   </tr>
   </tbody>

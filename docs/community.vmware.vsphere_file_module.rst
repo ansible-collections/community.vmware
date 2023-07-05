@@ -32,16 +32,16 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Parameter</p></th>
     <th><p>Comments</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-datacenter"></div>
       <p style="display: inline;"><strong>datacenter</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datacenter" title="Permalink to this option"></a>
@@ -49,13 +49,13 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The datacenter on the vCenter server that holds the datastore.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
       <p style="display: inline;"><strong>datastore</strong></p>
       <a class="ansibleOptionLink" href="#parameter-datastore" title="Permalink to this option"></a>
@@ -63,13 +63,13 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The datastore on the vCenter server to push files to.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-host"></div>
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>host</strong></p>
@@ -79,13 +79,13 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The vCenter server on which the datastore is available.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <p style="display: inline;"><strong>password</strong></p>
       <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
@@ -93,13 +93,13 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The password to authenticate on the vCenter server.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-path"></div>
       <div class="ansibleOptionAnchor" id="parameter-dest"></div>
       <p style="display: inline;"><strong>path</strong></p>
@@ -109,52 +109,52 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The file or directory on the datastore on the vCenter server.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The state of or the action on the provided path.</p>
       <p>If <code class='docutils literal notranslate'>absent</code>, the file will be removed.</p>
       <p>If <code class='docutils literal notranslate'>directory</code>, the directory will be created.</p>
       <p>If <code class='docutils literal notranslate'>file</code>, more information of the (existing) file will be returned.</p>
       <p>If <code class='docutils literal notranslate'>touch</code>, an empty file will be created if the path does not exist.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>&#34;absent&#34;</code></p></li>
         <li><p><code>&#34;directory&#34;</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">&#34;file&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>&#34;file&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
         <li><p><code>&#34;touch&#34;</code></p></li>
       </ul>
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-timeout"></div>
       <p style="display: inline;"><strong>timeout</strong></p>
       <a class="ansibleOptionLink" href="#parameter-timeout" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The timeout in seconds for the upload to the datastore.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">10</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">10</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <p style="display: inline;"><strong>username</strong></p>
       <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
@@ -162,26 +162,26 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The user name to authenticate on the vCenter server.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">boolean</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>If <code class='docutils literal notranslate'>false</code>, SSL certificates will not be validated. This should only be set to <code class='docutils literal notranslate'>false</code> when no other option exists.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
       </ul>
 
     </td>

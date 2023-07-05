@@ -32,31 +32,31 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Parameter</p></th>
     <th><p>Comments</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -66,31 +66,31 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The password of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The port number of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-primary_pvlans"></div>
       <p style="display: inline;"><strong>primary_pvlans</strong></p>
       <a class="ansibleOptionLink" href="#parameter-primary_pvlans" title="Permalink to this option"></a>
@@ -98,7 +98,7 @@ Parameters
         <span style="color: purple;">list</span>
         / <span style="color: purple;">elements=dictionary</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>A list of VLAN IDs that should be configured as Primary PVLANs.</p>
       <p>If <code class='docutils literal notranslate'>primary_pvlans</code> isn&#x27;t specified, all PVLANs will be deleted if present.</p>
@@ -106,18 +106,18 @@ Parameters
       <p>The secondary promiscuous PVLAN will be created automatically.</p>
       <p>If <code class='docutils literal notranslate'>secondary_pvlans</code> isn&#x27;t specified, the primary PVLANs and each secondary promiscuous PVLAN will be created.</p>
       <p>Please see examples for more information.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">[]</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
@@ -125,22 +125,22 @@ Parameters
       <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-secondary_pvlans"></div>
       <p style="display: inline;"><strong>secondary_pvlans</strong></p>
       <a class="ansibleOptionLink" href="#parameter-secondary_pvlans" title="Permalink to this option"></a>
@@ -148,7 +148,7 @@ Parameters
         <span style="color: purple;">list</span>
         / <span style="color: purple;">elements=dictionary</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>A list of VLAN IDs that should be configured as Secondary PVLANs.</p>
       <p><code class='docutils literal notranslate'>primary_pvlans</code> need to be specified to create any Secondary PVLAN.</p>
@@ -156,11 +156,11 @@ Parameters
       <p>Each member of the list requires primary_pvlan_id (int), secondary_pvlan_id (int), and pvlan_type (str) to be set.</p>
       <p>The type of the secondary PVLAN can be isolated or community. The secondary promiscuous PVLAN will be created automatically.</p>
       <p>Please see examples for more information.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">[]</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-switch"></div>
       <div class="ansibleOptionAnchor" id="parameter-dvswitch"></div>
       <p style="display: inline;"><strong>switch</strong></p>
@@ -170,13 +170,13 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The name of the Distributed Switch.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -186,31 +186,31 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The username of the vSphere vCenter or ESXi server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">boolean</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
       <p>Environment variable support added in Ansible 2.6.</p>
       <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
       </ul>
 
     </td>
@@ -284,27 +284,27 @@ The following are the fields unique to this module:
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Key</p></th>
     <th><p>Description</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="return-result"></div>
       <p style="display: inline;"><strong>result</strong></p>
       <a class="ansibleOptionLink" href="#return-result" title="Permalink to this return value"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>information about performed operation</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>&#34;{&#39;changed&#39;: True, &#39;dvswitch&#39;: &#39;dvSwitch&#39;, &#39;private_vlans&#39;: [{&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;promiscuous&#39;, &#39;secondary_pvlan_id&#39;: 1}, {&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;isolated&#39;, &#39;secondary_pvlan_id&#39;: 2}, {&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;community&#39;, &#39;secondary_pvlan_id&#39;: 3}], &#39;private_vlans_previous&#39;: [], &#39;result&#39;: &#39;All private VLANs added&#39;}&#34;</code></p>
+      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>&#34;{&#39;changed&#39;: True, &#39;dvswitch&#39;: &#39;dvSwitch&#39;, &#39;private_vlans&#39;: [{&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;promiscuous&#39;, &#39;secondary_pvlan_id&#39;: 1}, {&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;isolated&#39;, &#39;secondary_pvlan_id&#39;: 2}, {&#39;primary_pvlan_id&#39;: 1, &#39;pvlan_type&#39;: &#39;community&#39;, &#39;secondary_pvlan_id&#39;: 3}], &#39;private_vlans_previous&#39;: [], &#39;result&#39;: &#39;All private VLANs added&#39;}&#34;</code></p>
     </td>
   </tr>
   </tbody>

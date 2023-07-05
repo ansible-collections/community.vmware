@@ -44,16 +44,16 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Parameter</p></th>
     <th><p>Comments</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-datastore_name"></div>
       <div class="ansibleOptionAnchor" id="parameter-datastore"></div>
       <p style="display: inline;"><strong>datastore_name</strong></p>
@@ -62,7 +62,7 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Name of the datastore on which backing content library is created.</p>
       <p>This is required only if <em>state</em> is set to <code class='docutils literal notranslate'>present</code>.</p>
@@ -70,29 +70,29 @@ Parameters
       <p>Currently only datastore backing creation is supported.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
       <p style="display: inline;"><strong>hostname</strong></p>
       <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The hostname or IP address of the vSphere vCenter server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-library_description"></div>
       <p style="display: inline;"><strong>library_description</strong></p>
       <a class="ansibleOptionLink" href="#parameter-library_description" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The content library description.</p>
       <p>This is required only if <em>state</em> is set to <code class='docutils literal notranslate'>present</code>.</p>
@@ -100,8 +100,8 @@ Parameters
       <p>Process of updating content library only allows description change.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-library_name"></div>
       <p style="display: inline;"><strong>library_name</strong></p>
       <a class="ansibleOptionLink" href="#parameter-library_name" title="Permalink to this option"></a>
@@ -109,34 +109,34 @@ Parameters
         <span style="color: purple;">string</span>
         / <span style="color: red;">required</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The name of VMware content library to manage.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-library_type"></div>
       <p style="display: inline;"><strong>library_type</strong></p>
       <a class="ansibleOptionLink" href="#parameter-library_type" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The content library type.</p>
       <p>This is required only if <em>state</em> is set to <code class='docutils literal notranslate'>present</code>.</p>
       <p>This parameter is ignored, when <em>state</em> is set to <code class='docutils literal notranslate'>absent</code>.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
-        <li><p><code style="color: blue; font-weight: 700;">&#34;local&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>&#34;local&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
         <li><p><code>&#34;subscribed&#34;</code></p></li>
       </ul>
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <div class="ansibleOptionAnchor" id="parameter-pass"></div>
       <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
@@ -146,156 +146,156 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The password of the vSphere vCenter server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-port"></div>
       <p style="display: inline;"><strong>port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The port number of the vSphere vCenter.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">443</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-protocol"></div>
       <p style="display: inline;"><strong>protocol</strong></p>
       <a class="ansibleOptionLink" href="#parameter-protocol" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The connection to protocol.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>&#34;http&#34;</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">&#34;https&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>&#34;https&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
       </ul>
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
       <p style="display: inline;"><strong>proxy_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
       <p>The format is a hostname or a IP.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
       <p style="display: inline;"><strong>proxy_port</strong></p>
       <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">integer</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-ssl_thumbprint"></div>
       <p style="display: inline;"><strong>ssl_thumbprint</strong></p>
       <a class="ansibleOptionLink" href="#parameter-ssl_thumbprint" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The SHA1 SSL thumbprint of the subscribed content library to subscribe to.</p>
       <p>This is required only if <em>library_type</em> is set to <code class='docutils literal notranslate'>subscribed</code> and the library is https.</p>
       <p>This parameter is ignored, when <em>state</em> is set to <code class='docutils literal notranslate'>absent</code>.</p>
       <p>The information can be extracted using openssl using the following example: <code class='docutils literal notranslate'>echo | openssl s_client -connect test-library.com:443 |&amp; openssl x509 -fingerprint -noout</code></p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">&#34;&#34;</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p style="display: inline;"><strong>state</strong></p>
       <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The state of content library.</p>
       <p>If set to <code class='docutils literal notranslate'>present</code> and library does not exists, then content library is created.</p>
       <p>If set to <code class='docutils literal notranslate'>present</code> and library exists, then content library is updated.</p>
       <p>If set to <code class='docutils literal notranslate'>absent</code> and library exists, then content library is deleted.</p>
       <p>If set to <code class='docutils literal notranslate'>absent</code> and library does not exists, no action is taken.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
-        <li><p><code style="color: blue; font-weight: 700;">&#34;present&#34;</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>&#34;present&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
         <li><p><code>&#34;absent&#34;</code></p></li>
       </ul>
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-subscription_url"></div>
       <p style="display: inline;"><strong>subscription_url</strong></p>
       <a class="ansibleOptionLink" href="#parameter-subscription_url" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The url of the content library to subscribe to.</p>
       <p>This is required only if <em>library_type</em> is set to <code class='docutils literal notranslate'>subscribed</code>.</p>
       <p>This parameter is ignored, when <em>state</em> is set to <code class='docutils literal notranslate'>absent</code>.</p>
-      <p style="margin-top: 8px;"><span style="color: blue; font-weight: 700;">Default:</span> <code style="color: blue;">&#34;&#34;</code></p>
+      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-update_on_demand"></div>
       <p style="display: inline;"><strong>update_on_demand</strong></p>
       <a class="ansibleOptionLink" href="#parameter-update_on_demand" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">boolean</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Whether to download all content on demand.</p>
       <p>If set to <code class='docutils literal notranslate'>true</code>, all content will be downloaded on demand.</p>
       <p>If set to <code class='docutils literal notranslate'>false</code> content will be downloaded ahead of time.</p>
       <p>This is required only if <em>library_type</em> is set to <code class='docutils literal notranslate'>subscribed</code>.</p>
       <p>This parameter is ignored, when <em>state</em> is set to <code class='docutils literal notranslate'>absent</code>.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
-        <li><p><code style="color: blue; font-weight: 700;">false</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
         <li><p><code>true</code></p></li>
       </ul>
 
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -305,29 +305,29 @@ Parameters
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">string</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>The username of the vSphere vCenter server.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
     </td>
   </tr>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <p style="display: inline;"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">boolean</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>Allows connection when SSL certificates are not valid.</p>
       <p>Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
       <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Choices:</span></p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue; font-weight: 700;">true</code> <span style="color: blue;">← (default)</span></p></li>
+        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
       </ul>
 
     </td>
@@ -402,27 +402,27 @@ The following are the fields unique to this module:
 
 .. raw:: html
 
-  <table style="width: 100%; height: 1px;">
+  <table style="width: 100%;">
   <thead>
-  <tr>
+    <tr>
     <th><p>Key</p></th>
     <th><p>Description</p></th>
   </tr>
   </thead>
   <tbody>
-  <tr style="height: 100%;">
-    <td style="height: inherit; display: flex; flex-direction: row;"><div style="padding: 8px 16px; border-top: 1px solid #000000; height: inherit; flex: 1 0 auto; white-space: nowrap; max-width: 100%;">
+  <tr>
+    <td>
       <div class="ansibleOptionAnchor" id="return-content_library_info"></div>
       <p style="display: inline;"><strong>content_library_info</strong></p>
       <a class="ansibleOptionLink" href="#return-content_library_info" title="Permalink to this return value"></a>
       <p style="font-size: small; margin-bottom: 0;">
         <span style="color: purple;">dictionary</span>
       </p>
-    </div></td>
+    </td>
     <td>
       <p>library creation success and library_id</p>
-      <p style="margin-top: 8px;"><span style="font-weight: 700;">Returned:</span> on success</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><span style="color: black; font-weight: 700;">Sample:</span> <code>{&#34;library_description&#34;: &#34;Test description&#34;, &#34;library_id&#34;: &#34;d0b92fa9-7039-4f29-8e9c-0debfcb22b72&#34;, &#34;library_type&#34;: &#34;LOCAL&#34;, &#34;msg&#34;: &#34;Content Library &#39;demo-local-lib-4&#39; created.&#34;}</code></p>
+      <p style="margin-top: 8px;"><b>Returned:</b> on success</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;library_description&#34;: &#34;Test description&#34;, &#34;library_id&#34;: &#34;d0b92fa9-7039-4f29-8e9c-0debfcb22b72&#34;, &#34;library_type&#34;: &#34;LOCAL&#34;, &#34;msg&#34;: &#34;Content Library &#39;demo-local-lib-4&#39; created.&#34;}</code></p>
     </td>
   </tr>
   </tbody>
