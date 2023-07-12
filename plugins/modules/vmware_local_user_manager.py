@@ -40,6 +40,7 @@ options:
         description:
             - Defined if user grants shell access.
         required: false
+        default: true
         type: bool                
     state:
         description:
@@ -175,7 +176,7 @@ def main():
     argument_spec.update(dict(local_user_name=dict(required=True, type='str'),
                               local_user_password=dict(type='str', no_log=True),
                               local_user_description=dict(type='str'),
-                              local_user_shell_access=dict(type='bool'),
+                              local_user_shell_access=dict(type='bool', default=True),
                               state=dict(default='present', choices=['present', 'absent'], type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec,
