@@ -41,7 +41,7 @@ options:
             - Defined if user grants shell access.
         required: false
         default: true
-        type: bool                
+        type: bool
     state:
         description:
             - Indicate desired state of the user. If the user already exists when C(state=present), the user info is updated
