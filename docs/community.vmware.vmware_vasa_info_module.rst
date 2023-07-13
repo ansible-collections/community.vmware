@@ -1,14 +1,15 @@
 
 
-community.vmware.vmware_host_feature_info module -- Gathers info about an ESXi host's feature capability information
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+community.vmware.vmware_vasa_info module -- Gather information about vSphere VASA providers.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
 To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-To use it in a playbook, specify: :code:`community.vmware.vmware_host_feature_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vasa_info`.
 
+New in community.vmware 3.8.0
 
 .. contents::
    :local:
@@ -18,7 +19,7 @@ To use it in a playbook, specify: :code:`community.vmware.vmware_host_feature_in
 Synopsis
 --------
 
-- This module can be used to gather information about an ESXi host's feature capability information when ESXi hostname or Cluster name is given.
+- Returns basic information on the vSphere VASA providers registered in the vcenter.
 
 
 
@@ -40,34 +41,6 @@ Parameters
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
-      <p style="display: inline;"><strong>cluster_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Name of the cluster from all host systems to be used for information gathering.</p>
-      <p>If <code class='docutils literal notranslate'>esxi_hostname</code> is not given, this parameter is required.</p>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
-      <p style="display: inline;"><strong>esxi_hostname</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>ESXi hostname to gather information from.</p>
-      <p>If <code class='docutils literal notranslate'>cluster_name</code> is not given, this parameter is required.</p>
-    </td>
-  </tr>
   <tr>
     <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
@@ -205,31 +178,13 @@ Examples
 .. code-block:: yaml
 
     
-    - name: Gather feature capability info about all ESXi Hosts in given Cluster
-      community.vmware.vmware_host_feature_info:
+    - name: Get VASA providers info
+      community.vmware.vmware_vasa_info:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
       delegate_to: localhost
-      register: all_cluster_hosts_info
-
-    - name: Check if ESXi is vulnerable for Speculative Store Bypass Disable (SSBD) vulnerability
-      community.vmware.vmware_host_feature_info:
-        hostname: "{{ vcenter_hostname }}"
-        username: "{{ vcenter_username }}"
-        password: "{{ vcenter_password }}"
-        esxi_hostname: "{{ esxi_hostname }}"
-      register: features_set
-    - set_fact:
-        ssbd : "{{ item.value }}"
-      loop: "{{ features_set.host_feature_info[esxi_hostname] |json_query(name) }}"
-      vars:
-        name: "[?key=='cpuid.SSBD']"
-    - assert:
-        that:
-          - ssbd|int == 1
-      when: ssbd is defined
+      register: providers
 
 
 
@@ -251,17 +206,18 @@ The following are the fields unique to this module:
   <tbody>
   <tr>
     <td valign="top">
-      <div class="ansibleOptionAnchor" id="return-hosts_feature_info"></div>
-      <p style="display: inline;"><strong>hosts_feature_info</strong></p>
-      <a class="ansibleOptionLink" href="#return-hosts_feature_info" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-vasa_providers"></div>
+      <p style="display: inline;"><strong>vasa_providers</strong></p>
+      <a class="ansibleOptionLink" href="#return-vasa_providers" title="Permalink to this return value"></a>
       <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
+        <span style="color: purple;">list</span>
+        / <span style="color: purple;">elements=string</span>
       </p>
     </td>
     <td valign="top">
-      <p>metadata about host&#x27;s feature capability information</p>
-      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;10.76.33.226&#34;: [{&#34;feature_name&#34;: &#34;cpuid.3DNOW&#34;, &#34;key&#34;: &#34;cpuid.3DNOW&#34;, &#34;value&#34;: &#34;0&#34;}, {&#34;feature_name&#34;: &#34;cpuid.3DNOWPLUS&#34;, &#34;key&#34;: &#34;cpuid.3DNOWPLUS&#34;, &#34;value&#34;: &#34;0&#34;}]}</code></p>
+      <p>list of dictionary of VASA info</p>
+      <p style="margin-top: 8px;"><b>Returned:</b> success</p>
+      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>[{&#34;certificate_status&#34;: &#34;valid&#34;, &#34;description&#34;: &#34;IOFILTER VASA Provider on host host01.domain.local&#34;, &#34;name&#34;: &#34;IOFILTER Provider host01.domain.local&#34;, &#34;related_storage_array&#34;: [{&#34;active&#34;: &#34;True&#34;, &#34;array_id&#34;: &#34;IOFILTERS:616d4715-7de2-7be2-997a-10f920c5fdbe&#34;, &#34;manageable&#34;: &#34;True&#34;, &#34;priority&#34;: &#34;1&#34;}], &#34;status&#34;: &#34;online&#34;, &#34;uid&#34;: &#34;02e10bc5-dd77-4ce4-9100-5aee44e7abaa&#34;, &#34;url&#34;: &#34;https://host01.domain.local:9080/version.xml&#34;, &#34;version&#34;: &#34;1.0&#34;}]</code></p>
     </td>
   </tr>
   </tbody>
@@ -273,7 +229,7 @@ The following are the fields unique to this module:
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Eugenio Grosso (@genegr) 
 
 
 

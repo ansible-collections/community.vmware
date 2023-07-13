@@ -1,14 +1,15 @@
 
 
-community.vmware.vmware_host_feature_info module -- Gathers info about an ESXi host's feature capability information
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+community.vmware.vmware_vasa module -- Manage VMware Virtual Volumes storage provider
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
 
 To install it, use: :code:`ansible-galaxy collection install community.vmware`.
 
-To use it in a playbook, specify: :code:`community.vmware.vmware_host_feature_info`.
+To use it in a playbook, specify: :code:`community.vmware.vmware_vasa`.
 
+New in community.vmware 3.8.0
 
 .. contents::
    :local:
@@ -18,7 +19,7 @@ To use it in a playbook, specify: :code:`community.vmware.vmware_host_feature_in
 Synopsis
 --------
 
-- This module can be used to gather information about an ESXi host's feature capability information when ESXi hostname or Cluster name is given.
+- This module can be used to register and unregister a VASA provider
 
 
 
@@ -40,34 +41,6 @@ Parameters
   </tr>
   </thead>
   <tbody>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-cluster_name"></div>
-      <p style="display: inline;"><strong>cluster_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-cluster_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Name of the cluster from all host systems to be used for information gathering.</p>
-      <p>If <code class='docutils literal notranslate'>esxi_hostname</code> is not given, this parameter is required.</p>
-    </td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-esxi_hostname"></div>
-      <p style="display: inline;"><strong>esxi_hostname</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-esxi_hostname" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>ESXi hostname to gather information from.</p>
-      <p>If <code class='docutils literal notranslate'>cluster_name</code> is not given, this parameter is required.</p>
-    </td>
-  </tr>
   <tr>
     <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
@@ -149,6 +122,25 @@ Parameters
   </tr>
   <tr>
     <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-state"></div>
+      <p style="display: inline;"><strong>state</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>Create <code class='docutils literal notranslate'>present</code> or remove <code class='docutils literal notranslate'>absent</code> a VASA provider.</p>
+      <p style="margin-top: 8px;"><b">Choices:</b></p>
+      <ul>
+        <li><p><code>&#34;absent&#34;</code></p></li>
+        <li><p><code style="color: blue;"><b>&#34;present&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
+      </ul>
+
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <div class="ansibleOptionAnchor" id="parameter-admin"></div>
       <div class="ansibleOptionAnchor" id="parameter-user"></div>
@@ -187,6 +179,77 @@ Parameters
 
     </td>
   </tr>
+  <tr>
+    <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-vasa_certificate"></div>
+      <p style="display: inline;"><strong>vasa_certificate</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vasa_certificate" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>The SSL certificate of the VASA provider.</p>
+      <p>This parameter is required if <em>state=present</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-vasa_name"></div>
+      <p style="display: inline;"><strong>vasa_name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vasa_name" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>The name of the VASA provider to be managed.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-vasa_password"></div>
+      <p style="display: inline;"><strong>vasa_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vasa_password" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>The password of the user account to connect to the VASA provider.</p>
+      <p>This parameter is required if <em>state=present</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-vasa_url"></div>
+      <p style="display: inline;"><strong>vasa_url</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vasa_url" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+        / <span style="color: red;">required</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>The url  of the VASA provider to be managed.</p>
+      <p>This parameter is required if <em>state=present</em></p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <div class="ansibleOptionAnchor" id="parameter-vasa_username"></div>
+      <p style="display: inline;"><strong>vasa_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-vasa_username" title="Permalink to this option"></a>
+      <p style="font-size: small; margin-bottom: 0;">
+        <span style="color: purple;">string</span>
+      </p>
+    </td>
+    <td valign="top">
+      <p>The user account to connect to the VASA provider.</p>
+      <p>This parameter is required if <em>state=present</em></p>
+    </td>
+  </tr>
   </tbody>
   </table>
 
@@ -198,6 +261,12 @@ Notes
 
 - All modules requires API write access and hence is not supported on a free ESXi license.
 
+See Also
+--------
+
+* \ `community.vmware.vmware\_vasa\_info <vmware_vasa_info_module.rst>`__\ 
+
+  Gather information about vSphere VASA providers.
 
 Examples
 --------
@@ -205,67 +274,30 @@ Examples
 .. code-block:: yaml
 
     
-    - name: Gather feature capability info about all ESXi Hosts in given Cluster
-      community.vmware.vmware_host_feature_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        cluster_name: '{{ cluster_name }}'
-      delegate_to: localhost
-      register: all_cluster_hosts_info
-
-    - name: Check if ESXi is vulnerable for Speculative Store Bypass Disable (SSBD) vulnerability
-      community.vmware.vmware_host_feature_info:
+    - name: Create Cluster
+      community.vmware.vmware_cluster:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
-        esxi_hostname: "{{ esxi_hostname }}"
-      register: features_set
-    - set_fact:
-        ssbd : "{{ item.value }}"
-      loop: "{{ features_set.host_feature_info[esxi_hostname] |json_query(name) }}"
-      vars:
-        name: "[?key=='cpuid.SSBD']"
-    - assert:
-        that:
-          - ssbd|int == 1
-      when: ssbd is defined
+        vasa_name: "{{ vasa_name }}"
+        vasa_url: "{{ vasa_url }}"
+        vasa_username: "{{ vasa_username }}"
+        vasa_password: "{{ vasa_password }}"
+        vasa_certificate: "{{ vasa_certificate }}"
+        state: present
+      delegate_to: localhost
+
+    - name: Unregister VASA provider
+      community.vmware.vmware_vasa:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        vasa_name: "{{ vasa_name }}"
+        state: absent
+      delegate_to: localhost
 
 
 
-
-
-Return Values
--------------
-The following are the fields unique to this module:
-
-.. raw:: html
-
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th><p>Key</p></th>
-    <th><p>Description</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="return-hosts_feature_info"></div>
-      <p style="display: inline;"><strong>hosts_feature_info</strong></p>
-      <a class="ansibleOptionLink" href="#return-hosts_feature_info" title="Permalink to this return value"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>metadata about host&#x27;s feature capability information</p>
-      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;10.76.33.226&#34;: [{&#34;feature_name&#34;: &#34;cpuid.3DNOW&#34;, &#34;key&#34;: &#34;cpuid.3DNOW&#34;, &#34;value&#34;: &#34;0&#34;}, {&#34;feature_name&#34;: &#34;cpuid.3DNOWPLUS&#34;, &#34;key&#34;: &#34;cpuid.3DNOWPLUS&#34;, &#34;value&#34;: &#34;0&#34;}]}</code></p>
-    </td>
-  </tr>
-  </tbody>
-  </table>
 
 
 
@@ -273,7 +305,7 @@ The following are the fields unique to this module:
 Authors
 ~~~~~~~
 
-- Abhijeet Kasurde (@Akasurde)
+- Eugenio Grosso (@genegr) 
 
 
 
