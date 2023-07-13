@@ -170,6 +170,12 @@ Parameters
       <ul>
       <li>
         <p>INI entries</p>
+        <pre>[default]
+  fact_caching_prefix = ansible_inventory_</pre>
+  <p>Removed in: version 2.16 of ansible.builtin</p>
+  <p>Why: Fixes typing error in INI section name</p>
+  <p>Alternative: Use the &#x27;defaults&#x27; section instead</p>
+
         <pre>[defaults]
   fact_caching_prefix = ansible_inventory_</pre>
 
@@ -344,7 +350,7 @@ Parameters
     </td>
     <td valign="top">
       <p>The default value when the host variable&#x27;s value is an empty string.</p>
-      <p>This option is mutually exclusive with <code class="ansible-option literal notranslate"><strong><a class="reference internal" href="#parameter-keyed_groups/trailing_separator"><span class="std std-ref"><span class="pre">keyed_groups[].trailing_separator</span></span></a></strong></code>.</p>
+      <p>This option is mutually exclusive with <code class='docutils literal notranslate'>trailing_separator</code>.</p>
     </td>
   </tr>
   <tr>
@@ -422,8 +428,8 @@ Parameters
 
     </td>
     <td valign="top">
-      <p>Set this option to <code class="ansible-value literal notranslate">False</code> to omit the <code class="ansible-option literal notranslate"><strong><a class="reference internal" href="#parameter-keyed_groups/separator"><span class="std std-ref"><span class="pre">keyed_groups[].separator</span></span></a></strong></code> after the host variable when the value is an empty string.</p>
-      <p>This option is mutually exclusive with <code class="ansible-option literal notranslate"><strong><a class="reference internal" href="#parameter-keyed_groups/default_value"><span class="std std-ref"><span class="pre">keyed_groups[].default_value</span></span></a></strong></code>.</p>
+      <p>Set this option to <em>False</em> to omit the <code class='docutils literal notranslate'>separator</code> after the host variable when the value is an empty string.</p>
+      <p>This option is mutually exclusive with <code class='docutils literal notranslate'>default_value</code>.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
         <li><p><code>false</code></p></li>
@@ -600,7 +606,7 @@ Parameters
 
     </td>
     <td valign="top">
-      <p>If <code class="ansible-value literal notranslate">yes</code> make invalid entries a fatal error, otherwise skip and continue.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code> make invalid entries a fatal error, otherwise skip and continue.</p>
       <p>Since it is possible to use facts in the expressions they might not always be available and we ignore those errors by default.</p>
       <p style="margin-top: 8px;"><b">Choices:</b></p>
       <ul>
