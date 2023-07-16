@@ -1,13 +1,12 @@
+.. _community.vmware.vcenter_standard_key_provider_module:
 
 
-community.vmware.vcenter_standard_key_provider module -- Add, reconfigure or remove Standard Key Provider on vCenter server
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+**********************************************
+community.vmware.vcenter_standard_key_provider
+**********************************************
 
-This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+**Add, reconfigure or remove Standard Key Provider on vCenter server**
 
-To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-
-To use it in a playbook, specify: :code:`community.vmware.vcenter_standard_key_provider`.
 
 
 .. contents::
@@ -17,12 +16,7 @@ To use it in a playbook, specify: :code:`community.vmware.vcenter_standard_key_p
 
 Synopsis
 --------
-
-- This module is used for adding, reconfiguring or removing Standard Key Provider on vCenter server. Refer to VMware docs for more information: \ `Standard Key Provider <https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.security.doc/GUID-6DB1E745-9624-43EA-847C-DD2F767CB94B.html>`__\ 
-
-
-
-
+- This module is used for adding, reconfiguring or removing Standard Key Provider on vCenter server. Refer to VMware docs for more information: `Standard Key Provider <https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.security.doc/GUID-6DB1E745-9624-43EA-847C-DD2F767CB94B.html>`_
 
 
 
@@ -33,405 +27,439 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th colspan="2"><p>Parameter</p></th>
-    <th><p>Comments</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
-      <p style="display: inline;"><strong>hostname</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_info"></div>
-      <p style="display: inline;"><strong>kms_info</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_info" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">list</span>
-        / <span style="color: purple;">elements=dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The information of an external key server (KMS).</p>
-      <p><code class='docutils literal notranslate'>kms_name</code>, <code class='docutils literal notranslate'>kms_ip</code> are required when adding a Standard Key Provider.</p>
-      <p>If <code class='docutils literal notranslate'>kms_port</code> is not specified, the default port 5696 will be used.</p>
-      <p><code class='docutils literal notranslate'>kms_ip</code>, <code class='docutils literal notranslate'>kms_port</code> can be reconfigured for an existing KMS with name <code class='docutils literal notranslate'>kms_name</code>.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">[]</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_info/kms_ip"></div>
-      <p style="display: inline;"><strong>kms_ip</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_info/kms_ip" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>IP address of the external KMS.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_info/kms_name"></div>
-      <p style="display: inline;"><strong>kms_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_info/kms_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Name of the KMS to be configured.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_info/kms_port"></div>
-      <p style="display: inline;"><strong>kms_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_info/kms_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Port of the external KMS.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_info/remove_kms"></div>
-      <p style="display: inline;"><strong>remove_kms</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_info/remove_kms" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Remove the configured KMS with name <code class='docutils literal notranslate'>kms_name</code> from the KMIP cluster.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
+    <table  border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="2">Parameter</th>
+            <th>Choices/<font color="blue">Defaults</font></th>
+            <th width="100%">Comments</th>
+        </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_info</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">[]</div>
+                </td>
+                <td>
+                        <div>The information of an external key server (KMS).</div>
+                        <div><code>kms_name</code>, <code>kms_ip</code> are required when adding a Standard Key Provider.</div>
+                        <div>If <code>kms_port</code> is not specified, the default port 5696 will be used.</div>
+                        <div><code>kms_ip</code>, <code>kms_port</code> can be reconfigured for an existing KMS with name <code>kms_name</code>.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_ip</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>IP address of the external KMS.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the KMS to be configured.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Port of the external KMS.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>remove_kms</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Remove the configured KMS with name <code>kms_name</code> from the KMIP cluster.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Password to authenticate to the KMS.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>kms_username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Username to authenticate to the KMS.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>make_kms_trust_vc</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>After adding the Standard Key Provider to the vCenter Server, you can establish a trusted connection, the exact process depends on the certificates that the key provider accepts, and on your company policy.</div>
+                        <div>Three methods implemented here, (1) upload client certificate and private key through <code>upload_client_cert</code> and <code>upload_client_key</code> parameters, (2) generate, update, download vCenter self signed certificate through <code>download_self_signed_cert</code> parameter, (3) download generated Certificate Signing Request(CSR) through <code>download_client_csr</code> parameter, send it to KMS then upload the KMS signed CSR through <code>upload_kms_signed_client_csr</code> parameter.</div>
+                        <div>This is not set to be mandatory, if not set, please go to vCenter to setup trust connection with KMS manually.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>download_client_csr</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The absolute path on local machine for keeping vCenter generated CSR.</div>
+                        <div>Then upload the KMS signed CSR using <code>upload_kms_signed_client_csr</code> to vCenter.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>download_self_signed_cert</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The absolute path on local machine for keeping vCenter generated self signed client cert.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>upload_client_cert</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The absolute file path of client certificate.</div>
+                        <div>Request a certificate and private key from the KMS vendor. The files are X509 files in PEM format.</div>
+                        <div>The certificate might be already trusted by the KMS server.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>upload_client_key</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The absolute file path of client private key to be uploaded together with <code>upload_client_cert</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>upload_kms_signed_client_csr</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The absolute file path of KMS signed CSR downloaded from <code>download_client_csr</code>.</div>
+                </td>
+            </tr>
 
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_password"></div>
-      <p style="display: inline;"><strong>kms_password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_password" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Password to authenticate to the KMS.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-kms_username"></div>
-      <p style="display: inline;"><strong>kms_username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-kms_username" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Username to authenticate to the KMS.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc"></div>
-      <p style="display: inline;"><strong>make_kms_trust_vc</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>After adding the Standard Key Provider to the vCenter Server, you can establish a trusted connection, the exact process depends on the certificates that the key provider accepts, and on your company policy.</p>
-      <p>Three methods implemented here, (1) upload client certificate and private key through <code class='docutils literal notranslate'>upload_client_cert</code> and <code class='docutils literal notranslate'>upload_client_key</code> parameters, (2) generate, update, download vCenter self signed certificate through <code class='docutils literal notranslate'>download_self_signed_cert</code> parameter, (3) download generated Certificate Signing Request(CSR) through <code class='docutils literal notranslate'>download_client_csr</code> parameter, send it to KMS then upload the KMS signed CSR through <code class='docutils literal notranslate'>upload_kms_signed_client_csr</code> parameter.</p>
-      <p>This is not set to be mandatory, if not set, please go to vCenter to setup trust connection with KMS manually.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc/download_client_csr"></div>
-      <p style="display: inline;"><strong>download_client_csr</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc/download_client_csr" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">path</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The absolute path on local machine for keeping vCenter generated CSR.</p>
-      <p>Then upload the KMS signed CSR using <code class='docutils literal notranslate'>upload_kms_signed_client_csr</code> to vCenter.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc/download_self_signed_cert"></div>
-      <p style="display: inline;"><strong>download_self_signed_cert</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc/download_self_signed_cert" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">path</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The absolute path on local machine for keeping vCenter generated self signed client cert.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc/upload_client_cert"></div>
-      <p style="display: inline;"><strong>upload_client_cert</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc/upload_client_cert" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">path</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The absolute file path of client certificate.</p>
-      <p>Request a certificate and private key from the KMS vendor. The files are X509 files in PEM format.</p>
-      <p>The certificate might be already trusted by the KMS server.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc/upload_client_key"></div>
-      <p style="display: inline;"><strong>upload_client_key</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc/upload_client_key" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">path</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The absolute file path of client private key to be uploaded together with <code class='docutils literal notranslate'>upload_client_cert</code>.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-make_kms_trust_vc/upload_kms_signed_client_csr"></div>
-      <p style="display: inline;"><strong>upload_kms_signed_client_csr</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-make_kms_trust_vc/upload_kms_signed_client_csr" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">path</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The absolute file path of KMS signed CSR downloaded from <code class='docutils literal notranslate'>download_client_csr</code>.</p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mark_default"></div>
-      <p style="display: inline;"><strong>mark_default</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mark_default" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Set specified Key Provider with name <code class='docutils literal notranslate'>name</code> as the default Key Provider.</p>
-      <p>If new added Key Provider is the only key provider in vCenter, then will mark it as default after adding.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-name"></div>
-      <p style="display: inline;"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Name of the Key Provider to be added, reconfigured or removed from vCenter.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-password"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
-      <p style="display: inline;"><strong>password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The password of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port"></div>
-      <p style="display: inline;"><strong>port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The port number of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
-      <p style="display: inline;"><strong>proxy_host</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
-      <p>The format is a hostname or a IP.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
-      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
-      <p style="display: inline;"><strong>proxy_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Port of the proxy server.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_server"></div>
-      <p style="display: inline;"><strong>proxy_server</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_server" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Address of the proxy server to connect to KMS.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-state"></div>
-      <p style="display: inline;"><strong>state</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>If set to <code class='docutils literal notranslate'>absent</code>, the named Key Provider will be removed from vCenter.</p>
-      <p>If set to <code class='docutils literal notranslate'>present</code>, the named existing Key Provider will be reconfigured or new Key Provider will be added.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>&#34;present&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>&#34;absent&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-username"></div>
-      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
-      <div class="ansibleOptionAnchor" id="parameter-user"></div>
-      <p style="display: inline;"><strong>username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The username of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-      <p style="display: inline;"><strong>validate_certs</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mark_default</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Set specified Key Provider with name <code>name</code> as the default Key Provider.</div>
+                        <div>If new added Key Provider is the only key provider in vCenter, then will mark it as default after adding.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of the Key Provider to be added, reconfigured or removed from vCenter.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The password of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">443</div>
+                </td>
+                <td>
+                        <div>The port number of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>The format is a hostname or a IP.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
+                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Port of the proxy server.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_server</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Address of the proxy server to connect to KMS.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>If set to <code>absent</code>, the named Key Provider will be removed from vCenter.</div>
+                        <div>If set to <code>present</code>, the named existing Key Provider will be reconfigured or new Key Provider will be added.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The username of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>validate_certs</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                </td>
+            </tr>
+    </table>
+    <br/>
 
 
 Notes
 -----
 
-- All modules requires API write access and hence is not supported on a free ESXi license.
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
+
 
 
 Examples
@@ -439,7 +467,6 @@ Examples
 
 .. code-block:: yaml
 
-    
     - name: Add a new Standard Key Provider with client certificate and private key
       community.vmware.vcenter_standard_key_provider:
         hostname: "{{ vcenter_hostname }}"
@@ -479,55 +506,44 @@ Examples
 
 
 
-
-
 Return Values
 -------------
-The following are the fields unique to this module:
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
 
 .. raw:: html
 
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th><p>Key</p></th>
-    <th><p>Description</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="return-key_provider_clusters"></div>
-      <p style="display: inline;"><strong>key_provider_clusters</strong></p>
-      <a class="ansibleOptionLink" href="#return-key_provider_clusters" title="Permalink to this return value"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">list</span>
-        / <span style="color: purple;">elements=string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>the Key Provider cluster info</p>
-      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>[{&#34;has_backup&#34;: null, &#34;key_id&#34;: null, &#34;key_provide_id&#34;: &#34;test_standard&#34;, &#34;management_type&#34;: null, &#34;servers&#34;: [{&#34;address&#34;: &#34;192.168.1.10&#34;, &#34;name&#34;: &#34;test_kms&#34;, &#34;port&#34;: 5696, &#34;protocol&#34;: &#34;&#34;, &#34;proxy&#34;: &#34;&#34;, &#34;proxy_port&#34;: null, &#34;user_name&#34;: &#34;&#34;}], &#34;tpm_required&#34;: null, &#34;use_as_default&#34;: true}]</code></p>
-    </td>
-  </tr>
-  </tbody>
-  </table>
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>key_provider_clusters</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>the Key Provider cluster info</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;has_backup&#x27;: None, &#x27;key_id&#x27;: None, &#x27;key_provide_id&#x27;: &#x27;test_standard&#x27;, &#x27;management_type&#x27;: None, &#x27;servers&#x27;: [{&#x27;address&#x27;: &#x27;192.168.1.10&#x27;, &#x27;name&#x27;: &#x27;test_kms&#x27;, &#x27;port&#x27;: 5696, &#x27;protocol&#x27;: &#x27;&#x27;, &#x27;proxy&#x27;: &#x27;&#x27;, &#x27;proxy_port&#x27;: None, &#x27;user_name&#x27;: &#x27;&#x27;}], &#x27;tpm_required&#x27;: None, &#x27;use_as_default&#x27;: True}]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
+Status
+------
 
 
 Authors
 ~~~~~~~
 
-- Diane Wang (@Tomorrow9) 
-
-
-
-Collection links
-~~~~~~~~~~~~~~~~
-
-* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
-* `Homepage <https://github.com/ansible-collections/community.vmware>`__
-* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
-
+- Diane Wang (@Tomorrow9) <dianew@vmware.com>

@@ -1,13 +1,12 @@
+.. _community.vmware.vmware_dvs_portgroup_module:
 
 
-community.vmware.vmware_dvs_portgroup module -- Create or remove a Distributed vSwitch portgroup.
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*************************************
+community.vmware.vmware_dvs_portgroup
+*************************************
 
-This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+**Create or remove a Distributed vSwitch portgroup.**
 
-To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-
-To use it in a playbook, specify: :code:`community.vmware.vmware_dvs_portgroup`.
 
 
 .. contents::
@@ -17,12 +16,7 @@ To use it in a playbook, specify: :code:`community.vmware.vmware_dvs_portgroup`.
 
 Synopsis
 --------
-
 - Create or remove a Distributed vSwitch portgroup.
-
-
-
-
 
 
 
@@ -32,1082 +26,1125 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th colspan="2"><p>Parameter</p></th>
-    <th><p>Comments</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
-      <p style="display: inline;"><strong>hostname</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping"></div>
-      <p style="display: inline;"><strong>in_traffic_shaping</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-      <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.3.0</i></p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures the ingress traffic shaping settings for the portgroup.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping/average_bandwidth"></div>
-      <p style="display: inline;"><strong>average_bandwidth</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping/average_bandwidth" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping/burst_size"></div>
-      <p style="display: inline;"><strong>burst_size</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping/burst_size" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping/enabled"></div>
-      <p style="display: inline;"><strong>enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping/enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether ingress traffic shaping is activated or not.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
+    <table  border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="2">Parameter</th>
+            <th>Choices/<font color="blue">Defaults</font></th>
+            <th width="100%">Comments</th>
+        </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>in_traffic_shaping</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Dictionary which configures the ingress traffic shaping settings for the portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>average_bandwidth</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>burst_size</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether ingress traffic shaping is activated or not.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>peak_bandwidth</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of bytes to allow in a burst.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping/inherited"></div>
-      <p style="display: inline;"><strong>inherited</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping/inherited" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Inherit the settings from the switch or not.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac_learning</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Dictionary which configures MAC learning for portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>allow_unicast_flooding</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The flag to allow flooding of unlearned MAC for ingress traffic.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The flag to indicate if source MAC address learning is allowed.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>limit</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of MAC addresses that can be learned.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>limit_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>allow</li>
+                                    <li>drop</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The default switching policy after MAC limit is exceeded.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-in_traffic_shaping/peak_bandwidth"></div>
-      <p style="display: inline;"><strong>peak_bandwidth</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-in_traffic_shaping/peak_bandwidth" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The maximum number of bytes to allow in a burst.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>net_flow</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>true</li>
+                                    <li>on</li>
+                                    <li>yes</li>
+                                    <li>false</li>
+                                    <li>off</li>
+                                    <li>no</li>
+                                    <li>inherited</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicate whether or not the virtual machine IP traffic that flows through a vds gets analyzed by sending reports to a NetFlow collector.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>network_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Dictionary which configures the different security values for portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>forged_transmits</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether forged transmits are allowed. Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac_changes</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether mac changes are allowed. Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>promiscuous</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether promiscuous mode is allowed. Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
 
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mac_learning"></div>
-      <p style="display: inline;"><strong>mac_learning</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mac_learning" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures MAC learning for portgroup.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mac_learning/allow_unicast_flooding"></div>
-      <p style="display: inline;"><strong>allow_unicast_flooding</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mac_learning/allow_unicast_flooding" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The flag to allow flooding of unlearned MAC for ingress traffic.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>num_ports</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The number of ports the portgroup should contain.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>out_traffic_shaping</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 2.3.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Dictionary which configures the egress traffic shaping settings for the portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>average_bandwidth</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>burst_size</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether egress traffic shaping is activated or not.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inherited</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Inherit the settings from the switch or not.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>peak_bandwidth</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The maximum number of bytes to allow in a burst.</div>
+                        <div>Ignored if <code>inherited</code> is true.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mac_learning/enabled"></div>
-      <p style="display: inline;"><strong>enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mac_learning/enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The flag to indicate if source MAC address learning is allowed.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The password of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">443</div>
+                </td>
+                <td>
+                        <div>The port number of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_allocation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>elastic</li>
+                                    <li>fixed</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Elastic port groups automatically increase or decrease the number of ports as needed.</div>
+                        <div>Only valid if <em>port_binding</em> is set to <code>static</code>.</div>
+                        <div>Will be <code>elastic</code> if not specified and <em>port_binding</em> is set to <code>static</code>.</div>
+                        <div>Will be <code>fixed</code> if not specified and <em>port_binding</em> is set to <code>ephemeral</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_binding</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>static</li>
+                                    <li>ephemeral</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The type of port binding determines when ports in a port group are assigned to virtual machines.</div>
+                        <div>See VMware KB 1022312 <a href='https://kb.vmware.com/s/article/1022312'>https://kb.vmware.com/s/article/1022312</a> for more details.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"block_override": true, "ipfix_override": false, "live_port_move": false, "mac_management_override": false, "network_rp_override": false, "port_config_reset_at_disconnect": true, "shaping_override": false, "traffic_filter_override": false, "uplink_teaming_override": false, "vendor_config_override": false, "vlan_override": false}</div>
+                </td>
+                <td>
+                        <div>Dictionary which configures the advanced policy settings for the portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>block_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the block policy can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ipfix_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the ipfix policy can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>live_port_move</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if a live port can be moved in or out of the portgroup.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mac_management_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the security policy can be changed per port.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: security_override</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>network_rp_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the network resource pool can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port_config_reset_at_disconnect</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the configuration of a port is reset automatically after disconnect.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>shaping_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the shaping policy can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>traffic_filter_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the traffic filter can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>uplink_teaming_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the uplink teaming policy can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vendor_config_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the vendor config can be changed per port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vlan_override</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates if the vlan can be changed per port.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mac_learning/limit"></div>
-      <p style="display: inline;"><strong>limit</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mac_learning/limit" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The maximum number of MAC addresses that can be learned.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mac_learning/limit_policy"></div>
-      <p style="display: inline;"><strong>limit_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mac_learning/limit_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The default switching policy after MAC limit is exceeded.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;allow&#34;</code></p></li>
-        <li><p><code>&#34;drop&#34;</code></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>portgroup_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the portgroup that is to be created or deleted.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>The format is a hostname or a IP.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
+                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>state</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>present</li>
+                                    <li>absent</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Determines if the portgroup should be present or not.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>switch_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The name of the distributed vSwitch the port group should be created on.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>teaming_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"load_balance_policy": "loadbalance_srcid", "notify_switches": true, "rolling_order": false}</div>
+                </td>
+                <td>
+                        <div>Dictionary which configures the different teaming values for portgroup.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>active_uplinks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of active uplinks used for load balancing.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>inbound_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicate whether or not the teaming policy is applied to inbound frames as well.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>load_balance_policy</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>loadbalance_ip</li>
+                                    <li>loadbalance_srcmac</li>
+                                    <li><div style="color: blue"><b>loadbalance_srcid</b>&nbsp;&larr;</div></li>
+                                    <li>loadbalance_loadbased</li>
+                                    <li>failover_explicit</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Network adapter teaming policy.</div>
+                        <div><code>loadbalance_loadbased</code> is available from version 2.6 and onwards.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>notify_switches</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicate whether or not to notify the physical switch if a link fails.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>rolling_order</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicate whether or not to use a rolling policy when restoring links.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>standby_uplinks</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of standby uplinks used for failover.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-net_flow"></div>
-      <p style="display: inline;"><strong>net_flow</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-net_flow" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-      <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.3.0</i></p>
-    </td>
-    <td valign="top">
-      <p>Indicate whether or not the virtual machine IP traffic that flows through a vds gets analyzed by sending reports to a NetFlow collector.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;true&#34;</code></p></li>
-        <li><p><code>&#34;on&#34;</code></p></li>
-        <li><p><code>&#34;yes&#34;</code></p></li>
-        <li><p><code>&#34;false&#34;</code></p></li>
-        <li><p><code>&#34;off&#34;</code></p></li>
-        <li><p><code>&#34;no&#34;</code></p></li>
-        <li><p><code>&#34;inherited&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-network_policy"></div>
-      <p style="display: inline;"><strong>network_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-network_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures the different security values for portgroup.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-network_policy/forged_transmits"></div>
-      <p style="display: inline;"><strong>forged_transmits</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-network_policy/forged_transmits" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether forged transmits are allowed. Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-network_policy/inherited"></div>
-      <p style="display: inline;"><strong>inherited</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-network_policy/inherited" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Inherit the settings from the switch or not.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-network_policy/mac_changes"></div>
-      <p style="display: inline;"><strong>mac_changes</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-network_policy/mac_changes" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether mac changes are allowed. Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-network_policy/promiscuous"></div>
-      <p style="display: inline;"><strong>promiscuous</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-network_policy/promiscuous" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether promiscuous mode is allowed. Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-num_ports"></div>
-      <p style="display: inline;"><strong>num_ports</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-num_ports" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The number of ports the portgroup should contain.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping"></div>
-      <p style="display: inline;"><strong>out_traffic_shaping</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-      <p><i style="font-size: small; color: darkgreen;">added in community.vmware 2.3.0</i></p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures the egress traffic shaping settings for the portgroup.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping/average_bandwidth"></div>
-      <p style="display: inline;"><strong>average_bandwidth</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping/average_bandwidth" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping/burst_size"></div>
-      <p style="display: inline;"><strong>burst_size</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping/burst_size" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping/enabled"></div>
-      <p style="display: inline;"><strong>enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping/enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether egress traffic shaping is activated or not.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping/inherited"></div>
-      <p style="display: inline;"><strong>inherited</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping/inherited" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Inherit the settings from the switch or not.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-out_traffic_shaping/peak_bandwidth"></div>
-      <p style="display: inline;"><strong>peak_bandwidth</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-out_traffic_shaping/peak_bandwidth" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The maximum number of bytes to allow in a burst.</p>
-      <p>Ignored if <code class='docutils literal notranslate'>inherited</code> is true.</p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-password"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
-      <p style="display: inline;"><strong>password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The password of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port"></div>
-      <p style="display: inline;"><strong>port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The port number of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_allocation"></div>
-      <p style="display: inline;"><strong>port_allocation</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_allocation" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Elastic port groups automatically increase or decrease the number of ports as needed.</p>
-      <p>Only valid if <em>port_binding</em> is set to <code class='docutils literal notranslate'>static</code>.</p>
-      <p>Will be <code class='docutils literal notranslate'>elastic</code> if not specified and <em>port_binding</em> is set to <code class='docutils literal notranslate'>static</code>.</p>
-      <p>Will be <code class='docutils literal notranslate'>fixed</code> if not specified and <em>port_binding</em> is set to <code class='docutils literal notranslate'>ephemeral</code>.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;elastic&#34;</code></p></li>
-        <li><p><code>&#34;fixed&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_binding"></div>
-      <p style="display: inline;"><strong>port_binding</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_binding" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The type of port binding determines when ports in a port group are assigned to virtual machines.</p>
-      <p>See VMware KB 1022312 <a href='https://kb.vmware.com/s/article/1022312'>https://kb.vmware.com/s/article/1022312</a> for more details.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;static&#34;</code></p></li>
-        <li><p><code>&#34;ephemeral&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy"></div>
-      <p style="display: inline;"><strong>port_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures the advanced policy settings for the portgroup.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;block_override&#34;: true, &#34;ipfix_override&#34;: false, &#34;live_port_move&#34;: false, &#34;mac_management_override&#34;: false, &#34;network_rp_override&#34;: false, &#34;port_config_reset_at_disconnect&#34;: true, &#34;shaping_override&#34;: false, &#34;traffic_filter_override&#34;: false, &#34;uplink_teaming_override&#34;: false, &#34;vendor_config_override&#34;: false, &#34;vlan_override&#34;: false}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/block_override"></div>
-      <p style="display: inline;"><strong>block_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/block_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the block policy can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/ipfix_override"></div>
-      <p style="display: inline;"><strong>ipfix_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/ipfix_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the ipfix policy can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/live_port_move"></div>
-      <p style="display: inline;"><strong>live_port_move</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/live_port_move" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if a live port can be moved in or out of the portgroup.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/mac_management_override"></div>
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/security_override"></div>
-      <p style="display: inline;"><strong>mac_management_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/mac_management_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: security_override</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the security policy can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/network_rp_override"></div>
-      <p style="display: inline;"><strong>network_rp_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/network_rp_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the network resource pool can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/port_config_reset_at_disconnect"></div>
-      <p style="display: inline;"><strong>port_config_reset_at_disconnect</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/port_config_reset_at_disconnect" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the configuration of a port is reset automatically after disconnect.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/shaping_override"></div>
-      <p style="display: inline;"><strong>shaping_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/shaping_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the shaping policy can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/traffic_filter_override"></div>
-      <p style="display: inline;"><strong>traffic_filter_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/traffic_filter_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the traffic filter can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/uplink_teaming_override"></div>
-      <p style="display: inline;"><strong>uplink_teaming_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/uplink_teaming_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the uplink teaming policy can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/vendor_config_override"></div>
-      <p style="display: inline;"><strong>vendor_config_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/vendor_config_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the vendor config can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port_policy/vlan_override"></div>
-      <p style="display: inline;"><strong>vlan_override</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port_policy/vlan_override" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates if the vlan can be changed per port.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-portgroup_name"></div>
-      <p style="display: inline;"><strong>portgroup_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-portgroup_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The name of the portgroup that is to be created or deleted.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
-      <p style="display: inline;"><strong>proxy_host</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
-      <p>The format is a hostname or a IP.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
-      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
-      <p style="display: inline;"><strong>proxy_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-state"></div>
-      <p style="display: inline;"><strong>state</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Determines if the portgroup should be present or not.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;present&#34;</code></p></li>
-        <li><p><code>&#34;absent&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-switch_name"></div>
-      <p style="display: inline;"><strong>switch_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-switch_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The name of the distributed vSwitch the port group should be created on.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy"></div>
-      <p style="display: inline;"><strong>teaming_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Dictionary which configures the different teaming values for portgroup.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;load_balance_policy&#34;: &#34;loadbalance_srcid&#34;, &#34;notify_switches&#34;: true, &#34;rolling_order&#34;: false}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/active_uplinks"></div>
-      <p style="display: inline;"><strong>active_uplinks</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/active_uplinks" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">list</span>
-        / <span style="color: purple;">elements=string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>List of active uplinks used for load balancing.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/inbound_policy"></div>
-      <p style="display: inline;"><strong>inbound_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/inbound_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicate whether or not the teaming policy is applied to inbound frames as well.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/load_balance_policy"></div>
-      <p style="display: inline;"><strong>load_balance_policy</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/load_balance_policy" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Network adapter teaming policy.</p>
-      <p><code class='docutils literal notranslate'>loadbalance_loadbased</code> is available from version 2.6 and onwards.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;loadbalance_ip&#34;</code></p></li>
-        <li><p><code>&#34;loadbalance_srcmac&#34;</code></p></li>
-        <li><p><code style="color: blue;"><b>&#34;loadbalance_srcid&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>&#34;loadbalance_loadbased&#34;</code></p></li>
-        <li><p><code>&#34;failover_explicit&#34;</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/notify_switches"></div>
-      <p style="display: inline;"><strong>notify_switches</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/notify_switches" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicate whether or not to notify the physical switch if a link fails.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/rolling_order"></div>
-      <p style="display: inline;"><strong>rolling_order</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/rolling_order" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicate whether or not to use a rolling policy when restoring links.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-teaming_policy/standby_uplinks"></div>
-      <p style="display: inline;"><strong>standby_uplinks</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-teaming_policy/standby_uplinks" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">list</span>
-        / <span style="color: purple;">elements=string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>List of standby uplinks used for failover.</p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-username"></div>
-      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
-      <div class="ansibleOptionAnchor" id="parameter-user"></div>
-      <p style="display: inline;"><strong>username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The username of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-      <p style="display: inline;"><strong>validate_certs</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-vlan_id"></div>
-      <p style="display: inline;"><strong>vlan_id</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-vlan_id" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-        / <span style="color: red;">required</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The VLAN ID that should be configured with the portgroup, use 0 for no VLAN.</p>
-      <p>If <code class='docutils literal notranslate'>vlan_trunk</code> is configured to be <em>true</em>, this can be a combination of multiple ranges and numbers, example: 1-200, 205, 400-4094.</p>
-      <p>The valid <code class='docutils literal notranslate'>vlan_id</code> range is from 0 to 4094. Overlapping ranges are allowed.</p>
-      <p>If <code class='docutils literal notranslate'>vlan_private</code> is configured to be <em>true</em>, the corresponding private VLAN should already be configured in the distributed vSwitch.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-vlan_private"></div>
-      <p style="display: inline;"><strong>vlan_private</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-vlan_private" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether this is for a private VLAN or not.</p>
-      <p>Mutually exclusive with <code class='docutils literal notranslate'>vlan_trunk</code> parameter.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-vlan_trunk"></div>
-      <p style="display: inline;"><strong>vlan_trunk</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-vlan_trunk" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Indicates whether this is a VLAN trunk or not.</p>
-      <p>Mutually exclusive with <code class='docutils literal notranslate'>vlan_private</code> parameter.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The username of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>validate_certs</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vlan_id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The VLAN ID that should be configured with the portgroup, use 0 for no VLAN.</div>
+                        <div>If <code>vlan_trunk</code> is configured to be <em>true</em>, this can be a combination of multiple ranges and numbers, example: 1-200, 205, 400-4094.</div>
+                        <div>The valid <code>vlan_id</code> range is from 0 to 4094. Overlapping ranges are allowed.</div>
+                        <div>If <code>vlan_private</code> is configured to be <em>true</em>, the corresponding private VLAN should already be configured in the distributed vSwitch.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vlan_private</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether this is for a private VLAN or not.</div>
+                        <div>Mutually exclusive with <code>vlan_trunk</code> parameter.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vlan_trunk</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Indicates whether this is a VLAN trunk or not.</div>
+                        <div>Mutually exclusive with <code>vlan_private</code> parameter.</div>
+                </td>
+            </tr>
+    </table>
+    <br/>
 
 
 Notes
 -----
 
-- All modules requires API write access and hence is not supported on a free ESXi license.
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
+
 
 
 Examples
@@ -1115,7 +1152,6 @@ Examples
 
 .. code-block:: yaml
 
-    
     - name: Create vlan portgroup
       community.vmware.vmware_dvs_portgroup:
         hostname: '{{ vcenter_hostname }}'
@@ -1203,21 +1239,12 @@ Examples
 
 
 
-
+Status
+------
 
 
 Authors
 ~~~~~~~
 
 - Joseph Callen (@jcpowermac)
-- Philippe Dellaert (@pdellaert) 
-
-
-
-Collection links
-~~~~~~~~~~~~~~~~
-
-* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
-* `Homepage <https://github.com/ansible-collections/community.vmware>`__
-* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
-
+- Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
