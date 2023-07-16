@@ -1,13 +1,12 @@
+.. _community.vmware.vmware_vcenter_settings_module:
 
 
-community.vmware.vmware_vcenter_settings module -- Configures general settings on a vCenter server
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+****************************************
+community.vmware.vmware_vcenter_settings
+****************************************
 
-This module is part of the `community.vmware collection <https://galaxy.ansible.com/community/vmware>`_.
+**Configures general settings on a vCenter server**
 
-To install it, use: :code:`ansible-galaxy collection install community.vmware`.
-
-To use it in a playbook, specify: :code:`community.vmware.vmware_vcenter_settings`.
 
 
 .. contents::
@@ -17,13 +16,8 @@ To use it in a playbook, specify: :code:`community.vmware.vmware_vcenter_setting
 
 Synopsis
 --------
-
 - This module can be used to configure the vCenter server general settings (except the statistics).
-- The statistics can be configured with the module \ :literal:`vmware\_vcenter\_statistics`\ .
-
-
-
-
+- The statistics can be configured with the module ``vmware_vcenter_statistics``.
 
 
 
@@ -33,799 +27,869 @@ Parameters
 
 .. raw:: html
 
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th colspan="2"><p>Parameter</p></th>
-    <th><p>Comments</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-advanced_settings"></div>
-      <p style="display: inline;"><strong>advanced_settings</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-advanced_settings" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>A dictionary of advanced settings.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database"></div>
-      <p style="display: inline;"><strong>database</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The database settings for vCenter server.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;event_cleanup&#34;: true, &#34;event_retention&#34;: 30, &#34;max_connections&#34;: 50, &#34;task_cleanup&#34;: true, &#34;task_retention&#34;: 30}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database/event_cleanup"></div>
-      <p style="display: inline;"><strong>event_cleanup</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database/event_cleanup" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Event cleanup.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
+    <table  border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="2">Parameter</th>
+            <th>Choices/<font color="blue">Defaults</font></th>
+            <th width="100%">Comments</th>
+        </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>advanced_settings</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{}</div>
+                </td>
+                <td>
+                        <div>A dictionary of advanced settings.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>database</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"event_cleanup": true, "event_retention": 30, "max_connections": 50, "task_cleanup": true, "task_retention": 30}</div>
+                </td>
+                <td>
+                        <div>The database settings for vCenter server.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>event_cleanup</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Event cleanup.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>event_retention</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">30</div>
+                </td>
+                <td>
+                        <div>Event retention in days.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>max_connections</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">50</div>
+                </td>
+                <td>
+                        <div>Maximum connections.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>task_cleanup</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Task cleanup.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>task_retention</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">30</div>
+                </td>
+                <td>
+                        <div>Task retention in days.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database/event_retention"></div>
-      <p style="display: inline;"><strong>event_retention</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database/event_retention" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Event retention in days.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">30</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database/max_connections"></div>
-      <p style="display: inline;"><strong>max_connections</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database/max_connections" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Maximum connections.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">50</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database/task_cleanup"></div>
-      <p style="display: inline;"><strong>task_cleanup</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database/task_cleanup" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Task cleanup.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The hostname or IP address of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_HOST</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>logging_options</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>none</li>
+                                    <li>error</li>
+                                    <li>warning</li>
+                                    <li><div style="color: blue"><b>info</b>&nbsp;&larr;</div></li>
+                                    <li>verbose</li>
+                                    <li>trivia</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The level of detail that vCenter server usesfor log files.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mail</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"sender": "", "server": ""}</div>
+                </td>
+                <td>
+                        <div>The settings vCenter server uses to send email alerts.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>sender</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Mail sender address.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>server</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Mail server.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-database/task_retention"></div>
-      <p style="display: inline;"><strong>task_retention</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-database/task_retention" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Task retention in days.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">30</code></p>
-    </td>
-  </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The password of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PASSWORD</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: pass, pwd</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">443</div>
+                </td>
+                <td>
+                        <div>The port number of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PORT</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>The format is a hostname or a IP.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_HOST</code> will be used instead.</div>
+                        <div>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>proxy_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_PROXY_PORT</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>runtime_settings</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The unique runtime settings for vCenter server.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>managed_address</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>vCenter server managed address.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>unique_id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>vCenter server unique ID.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vcenter_server_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>vCenter server name. Default is FQDN.</div>
+                </td>
+            </tr>
 
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-hostname"></div>
-      <p style="display: inline;"><strong>hostname</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-hostname" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The hostname or IP address of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_HOST</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-logging_options"></div>
-      <p style="display: inline;"><strong>logging_options</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-logging_options" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The level of detail that vCenter server usesfor log files.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>&#34;none&#34;</code></p></li>
-        <li><p><code>&#34;error&#34;</code></p></li>
-        <li><p><code>&#34;warning&#34;</code></p></li>
-        <li><p><code style="color: blue;"><b>&#34;info&#34;</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>&#34;verbose&#34;</code></p></li>
-        <li><p><code>&#34;trivia&#34;</code></p></li>
-      </ul>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receivers</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"snmp_receiver_1_community": "public", "snmp_receiver_1_enabled": true, "snmp_receiver_1_port": 162, "snmp_receiver_1_url": "localhost", "snmp_receiver_2_community": "", "snmp_receiver_2_enabled": false, "snmp_receiver_2_port": 162, "snmp_receiver_2_url": "", "snmp_receiver_3_community": "", "snmp_receiver_3_enabled": false, "snmp_receiver_3_port": 162, "snmp_receiver_3_url": "", "snmp_receiver_4_community": "", "snmp_receiver_4_enabled": false, "snmp_receiver_4_port": 162, "snmp_receiver_4_url": ""}</div>
+                </td>
+                <td>
+                        <div>SNMP trap destinations for vCenter server alerts.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_1_community</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"public"</div>
+                </td>
+                <td>
+                        <div>Community string.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_1_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable receiver.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_1_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">162</div>
+                </td>
+                <td>
+                        <div>Receiver port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_1_url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"localhost"</div>
+                </td>
+                <td>
+                        <div>Primary Receiver ULR.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_2_community</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Community string.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_2_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable receiver.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_2_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">162</div>
+                </td>
+                <td>
+                        <div>Receiver port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_2_url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Receiver 2 ULR.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_3_community</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Community string.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_3_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable receiver.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_3_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">162</div>
+                </td>
+                <td>
+                        <div>Receiver port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_3_url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Receiver 3 ULR.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_4_community</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Community string.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_4_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable receiver.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_4_port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">162</div>
+                </td>
+                <td>
+                        <div>Receiver port.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snmp_receiver_4_url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">""</div>
+                </td>
+                <td>
+                        <div>Receiver 4 ULR.</div>
+                </td>
+            </tr>
 
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mail"></div>
-      <p style="display: inline;"><strong>mail</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mail" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The settings vCenter server uses to send email alerts.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;sender&#34;: &#34;&#34;, &#34;server&#34;: &#34;&#34;}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mail/sender"></div>
-      <p style="display: inline;"><strong>sender</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mail/sender" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Mail sender address.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-mail/server"></div>
-      <p style="display: inline;"><strong>server</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-mail/server" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Mail server.</p>
-    </td>
-  </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout_settings</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"long_operations": 120, "normal_operations": 30}</div>
+                </td>
+                <td>
+                        <div>The vCenter server connection timeout for normal and long operations.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>long_operations</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">120</div>
+                </td>
+                <td>
+                        <div>Long operation timeout.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>normal_operations</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">30</div>
+                </td>
+                <td>
+                        <div>Normal operation timeout.</div>
+                </td>
+            </tr>
 
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-password"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pass"></div>
-      <div class="ansibleOptionAnchor" id="parameter-pwd"></div>
-      <p style="display: inline;"><strong>password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: pass, pwd</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The password of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PASSWORD</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-port"></div>
-      <p style="display: inline;"><strong>port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The port number of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PORT</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">443</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_host"></div>
-      <p style="display: inline;"><strong>proxy_host</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_host" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Address of a proxy that will receive all HTTPS requests and relay them.</p>
-      <p>The format is a hostname or a IP.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_HOST</code> will be used instead.</p>
-      <p>This feature depends on a version of pyvmomi greater than v6.7.1.2018.12</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-proxy_port"></div>
-      <p style="display: inline;"><strong>proxy_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-proxy_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Port of the HTTP proxy that will receive all HTTPS requests and relay them.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_PROXY_PORT</code> will be used instead.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-runtime_settings"></div>
-      <p style="display: inline;"><strong>runtime_settings</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-runtime_settings" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The unique runtime settings for vCenter server.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-runtime_settings/managed_address"></div>
-      <p style="display: inline;"><strong>managed_address</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-runtime_settings/managed_address" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>vCenter server managed address.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-runtime_settings/unique_id"></div>
-      <p style="display: inline;"><strong>unique_id</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-runtime_settings/unique_id" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>vCenter server unique ID.</p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-runtime_settings/vcenter_server_name"></div>
-      <p style="display: inline;"><strong>vcenter_server_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-runtime_settings/vcenter_server_name" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>vCenter server name. Default is FQDN.</p>
-    </td>
-  </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>user_directory</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">{"query_limit": true, "query_limit_size": 5000, "timeout": 60, "validation": true, "validation_period": 1440}</div>
+                </td>
+                <td>
+                        <div>The user directory settings for the vCenter server installation.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>query_limit</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Query limit.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>query_limit_size</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">5000</div>
+                </td>
+                <td>
+                        <div>Query limit size.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">60</div>
+                </td>
+                <td>
+                        <div>User directory timeout.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>validation</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Mail Validation.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>validation_period</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">1440</div>
+                </td>
+                <td>
+                        <div>Validation period.</div>
+                </td>
+            </tr>
 
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers"></div>
-      <p style="display: inline;"><strong>snmp_receivers</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>SNMP trap destinations for vCenter server alerts.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;snmp_receiver_1_community&#34;: &#34;public&#34;, &#34;snmp_receiver_1_enabled&#34;: true, &#34;snmp_receiver_1_port&#34;: 162, &#34;snmp_receiver_1_url&#34;: &#34;localhost&#34;, &#34;snmp_receiver_2_community&#34;: &#34;&#34;, &#34;snmp_receiver_2_enabled&#34;: false, &#34;snmp_receiver_2_port&#34;: 162, &#34;snmp_receiver_2_url&#34;: &#34;&#34;, &#34;snmp_receiver_3_community&#34;: &#34;&#34;, &#34;snmp_receiver_3_enabled&#34;: false, &#34;snmp_receiver_3_port&#34;: 162, &#34;snmp_receiver_3_url&#34;: &#34;&#34;, &#34;snmp_receiver_4_community&#34;: &#34;&#34;, &#34;snmp_receiver_4_enabled&#34;: false, &#34;snmp_receiver_4_port&#34;: 162, &#34;snmp_receiver_4_url&#34;: &#34;&#34;}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_1_community"></div>
-      <p style="display: inline;"><strong>snmp_receiver_1_community</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_1_community" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Community string.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;public&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_1_enabled"></div>
-      <p style="display: inline;"><strong>snmp_receiver_1_enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_1_enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Enable receiver.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_1_port"></div>
-      <p style="display: inline;"><strong>snmp_receiver_1_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_1_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver port.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">162</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_1_url"></div>
-      <p style="display: inline;"><strong>snmp_receiver_1_url</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_1_url" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Primary Receiver ULR.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;localhost&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_2_community"></div>
-      <p style="display: inline;"><strong>snmp_receiver_2_community</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_2_community" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Community string.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_2_enabled"></div>
-      <p style="display: inline;"><strong>snmp_receiver_2_enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_2_enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Enable receiver.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_2_port"></div>
-      <p style="display: inline;"><strong>snmp_receiver_2_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_2_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver port.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">162</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_2_url"></div>
-      <p style="display: inline;"><strong>snmp_receiver_2_url</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_2_url" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver 2 ULR.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_3_community"></div>
-      <p style="display: inline;"><strong>snmp_receiver_3_community</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_3_community" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Community string.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_3_enabled"></div>
-      <p style="display: inline;"><strong>snmp_receiver_3_enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_3_enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Enable receiver.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_3_port"></div>
-      <p style="display: inline;"><strong>snmp_receiver_3_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_3_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver port.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">162</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_3_url"></div>
-      <p style="display: inline;"><strong>snmp_receiver_3_url</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_3_url" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver 3 ULR.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_4_community"></div>
-      <p style="display: inline;"><strong>snmp_receiver_4_community</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_4_community" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Community string.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_4_enabled"></div>
-      <p style="display: inline;"><strong>snmp_receiver_4_enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_4_enabled" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Enable receiver.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code style="color: blue;"><b>false</b></code> <span style="color: blue;">← (default)</span></p></li>
-        <li><p><code>true</code></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_4_port"></div>
-      <p style="display: inline;"><strong>snmp_receiver_4_port</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_4_port" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver port.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">162</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-snmp_receivers/snmp_receiver_4_url"></div>
-      <p style="display: inline;"><strong>snmp_receiver_4_url</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-snmp_receivers/snmp_receiver_4_url" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Receiver 4 ULR.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">&#34;&#34;</code></p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-timeout_settings"></div>
-      <p style="display: inline;"><strong>timeout_settings</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-timeout_settings" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The vCenter server connection timeout for normal and long operations.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;long_operations&#34;: 120, &#34;normal_operations&#34;: 30}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-timeout_settings/long_operations"></div>
-      <p style="display: inline;"><strong>long_operations</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-timeout_settings/long_operations" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Long operation timeout.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">120</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-timeout_settings/normal_operations"></div>
-      <p style="display: inline;"><strong>normal_operations</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-timeout_settings/normal_operations" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Normal operation timeout.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">30</code></p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory"></div>
-      <p style="display: inline;"><strong>user_directory</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The user directory settings for the vCenter server installation.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">{&#34;query_limit&#34;: true, &#34;query_limit_size&#34;: 5000, &#34;timeout&#34;: 60, &#34;validation&#34;: true, &#34;validation_period&#34;: 1440}</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory/query_limit"></div>
-      <p style="display: inline;"><strong>query_limit</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory/query_limit" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Query limit.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory/query_limit_size"></div>
-      <p style="display: inline;"><strong>query_limit_size</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory/query_limit_size" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Query limit size.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">5000</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory/timeout"></div>
-      <p style="display: inline;"><strong>timeout</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory/timeout" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>User directory timeout.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">60</code></p>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory/validation"></div>
-      <p style="display: inline;"><strong>validation</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory/validation" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Mail Validation.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-user_directory/validation_period"></div>
-      <p style="display: inline;"><strong>validation_period</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-user_directory/validation_period" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">integer</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Validation period.</p>
-      <p style="margin-top: 8px;"><b style="color: blue;">Default:</b> <code style="color: blue;">1440</code></p>
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-username"></div>
-      <div class="ansibleOptionAnchor" id="parameter-admin"></div>
-      <div class="ansibleOptionAnchor" id="parameter-user"></div>
-      <p style="display: inline;"><strong>username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;"><span style="color: darkgreen; white-space: normal;">aliases: admin, user</span></p>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">string</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>The username of the vSphere vCenter or ESXi server.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_USER</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" valign="top">
-      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-      <p style="display: inline;"><strong>validate_certs</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">boolean</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>Allows connection when SSL certificates are not valid. Set to <code class='docutils literal notranslate'>false</code> when certificates are not trusted.</p>
-      <p>If the value is not specified in the task, the value of environment variable <code class='docutils literal notranslate'>VMWARE_VALIDATE_CERTS</code> will be used instead.</p>
-      <p>Environment variable support added in Ansible 2.6.</p>
-      <p>If set to <code class='docutils literal notranslate'>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</p>
-      <p style="margin-top: 8px;"><b">Choices:</b></p>
-      <ul>
-        <li><p><code>false</code></p></li>
-        <li><p><code style="color: blue;"><b>true</b></code> <span style="color: blue;">← (default)</span></p></li>
-      </ul>
-
-    </td>
-  </tr>
-  </tbody>
-  </table>
-
-
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The username of the vSphere vCenter or ESXi server.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_USER</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: admin, user</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>validate_certs</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows connection when SSL certificates are not valid. Set to <code>false</code> when certificates are not trusted.</div>
+                        <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
+                        <div>Environment variable support added in Ansible 2.6.</div>
+                        <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                </td>
+            </tr>
+    </table>
+    <br/>
 
 
 Notes
 -----
 
-- All modules requires API write access and hence is not supported on a free ESXi license.
+.. note::
+   - All modules requires API write access and hence is not supported on a free ESXi license.
+
 
 
 Examples
@@ -833,7 +897,6 @@ Examples
 
 .. code-block:: yaml
 
-    
     - name: Configure vCenter general settings
       community.vmware.vmware_vcenter_settings:
         hostname: '{{ vcenter_hostname }}'
@@ -880,55 +943,45 @@ Examples
 
 
 
-
-
 Return Values
 -------------
-The following are the fields unique to this module:
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
 
 .. raw:: html
 
-  <table style="width: 100%;">
-  <thead>
-    <tr>
-    <th><p>Key</p></th>
-    <th><p>Description</p></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td valign="top">
-      <div class="ansibleOptionAnchor" id="return-results"></div>
-      <p style="display: inline;"><strong>results</strong></p>
-      <a class="ansibleOptionLink" href="#return-results" title="Permalink to this return value"></a>
-      <p style="font-size: small; margin-bottom: 0;">
-        <span style="color: purple;">dictionary</span>
-      </p>
-    </td>
-    <td valign="top">
-      <p>metadata about vCenter settings</p>
-      <p>supported diff mode from version 1.8.0</p>
-      <p style="margin-top: 8px;"><b>Returned:</b> always</p>
-      <p style="margin-top: 8px; color: blue; word-wrap: break-word; word-break: break-all;"><b style="color: black;">Sample:</b> <code>{&#34;changed&#34;: false, &#34;db_event_cleanup&#34;: true, &#34;db_event_retention&#34;: 30, &#34;db_max_connections&#34;: 50, &#34;db_task_cleanup&#34;: true, &#34;db_task_retention&#34;: 30, &#34;diff&#34;: {&#34;after&#34;: {&#34;db_event_cleanup&#34;: true, &#34;db_event_retention&#34;: 30, &#34;db_max_connections&#34;: 50, &#34;db_task_cleanup&#34;: true, &#34;db_task_retention&#34;: 30, &#34;directory_query_limit&#34;: true, &#34;directory_query_limit_size&#34;: 5000, &#34;directory_timeout&#34;: 60, &#34;directory_validation&#34;: true, &#34;directory_validation_period&#34;: 1440, &#34;logging_options&#34;: &#34;info&#34;, &#34;mail_sender&#34;: &#34;vcenter@vcenter01.example.com&#34;, &#34;mail_server&#34;: &#34;mail.example.com&#34;, &#34;runtime_managed_address&#34;: &#34;192.168.1.10&#34;, &#34;runtime_server_name&#34;: &#34;vcenter01.example.com&#34;, &#34;runtime_unique_id&#34;: 1, &#34;snmp_receiver_1_community&#34;: &#34;public&#34;, &#34;snmp_receiver_1_enabled&#34;: true, &#34;snmp_receiver_1_port&#34;: 162, &#34;snmp_receiver_1_url&#34;: &#34;localhost&#34;, &#34;snmp_receiver_2_community&#34;: &#34;&#34;, &#34;snmp_receiver_2_enabled&#34;: false, &#34;snmp_receiver_2_port&#34;: 162, &#34;snmp_receiver_2_url&#34;: &#34;&#34;, &#34;snmp_receiver_3_community&#34;: &#34;&#34;, &#34;snmp_receiver_3_enabled&#34;: false, &#34;snmp_receiver_3_port&#34;: 162, &#34;snmp_receiver_3_url&#34;: &#34;&#34;, &#34;snmp_receiver_4_community&#34;: &#34;&#34;, &#34;snmp_receiver_4_enabled&#34;: false, &#34;snmp_receiver_4_port&#34;: 162, &#34;snmp_receiver_4_url&#34;: &#34;&#34;, &#34;timeout_long_operations&#34;: 120, &#34;timeout_normal_operations&#34;: 30}, &#34;before&#34;: {&#34;db_event_cleanup&#34;: true, &#34;db_event_retention&#34;: 30, &#34;db_max_connections&#34;: 50, &#34;db_task_cleanup&#34;: true, &#34;db_task_retention&#34;: 30, &#34;directory_query_limit&#34;: true, &#34;directory_query_limit_size&#34;: 5000, &#34;directory_timeout&#34;: 60, &#34;directory_validation&#34;: true, &#34;directory_validation_period&#34;: 1440, &#34;logging_options&#34;: &#34;info&#34;, &#34;mail_sender&#34;: &#34;vcenter@vcenter01.example.com&#34;, &#34;mail_server&#34;: &#34;mail.example.com&#34;, &#34;runtime_managed_address&#34;: &#34;192.168.1.10&#34;, &#34;runtime_server_name&#34;: &#34;vcenter01.example.com&#34;, &#34;runtime_unique_id&#34;: 1, &#34;snmp_receiver_1_community&#34;: &#34;public&#34;, &#34;snmp_receiver_1_enabled&#34;: true, &#34;snmp_receiver_1_port&#34;: 162, &#34;snmp_receiver_1_url&#34;: &#34;localhost&#34;, &#34;snmp_receiver_2_community&#34;: &#34;&#34;, &#34;snmp_receiver_2_enabled&#34;: false, &#34;snmp_receiver_2_port&#34;: 162, &#34;snmp_receiver_2_url&#34;: &#34;&#34;, &#34;snmp_receiver_3_community&#34;: &#34;&#34;, &#34;snmp_receiver_3_enabled&#34;: false, &#34;snmp_receiver_3_port&#34;: 162, &#34;snmp_receiver_3_url&#34;: &#34;&#34;, &#34;snmp_receiver_4_community&#34;: &#34;&#34;, &#34;snmp_receiver_4_enabled&#34;: false, &#34;snmp_receiver_4_port&#34;: 162, &#34;snmp_receiver_4_url&#34;: &#34;&#34;, &#34;timeout_long_operations&#34;: 120, &#34;timeout_normal_operations&#34;: 30}}, &#34;directory_query_limit&#34;: true, &#34;directory_query_limit_size&#34;: 5000, &#34;directory_timeout&#34;: 60, &#34;directory_validation&#34;: true, &#34;directory_validation_period&#34;: 1440, &#34;logging_options&#34;: &#34;info&#34;, &#34;mail_sender&#34;: &#34;vcenter@vcenter01.example.com&#34;, &#34;mail_server&#34;: &#34;mail.example.com&#34;, &#34;msg&#34;: &#34;vCenter settings already configured properly&#34;, &#34;runtime_managed_address&#34;: &#34;192.168.1.10&#34;, &#34;runtime_server_name&#34;: &#34;vcenter01.example.com&#34;, &#34;runtime_unique_id&#34;: 1, &#34;timeout_long_operations&#34;: 120, &#34;timeout_normal_operations&#34;: 30}</code></p>
-    </td>
-  </tr>
-  </tbody>
-  </table>
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>results</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>metadata about vCenter settings</div>
+                            <div>supported diff mode from version 1.8.0</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: False, &#x27;db_event_cleanup&#x27;: True, &#x27;db_event_retention&#x27;: 30, &#x27;db_max_connections&#x27;: 50, &#x27;db_task_cleanup&#x27;: True, &#x27;db_task_retention&#x27;: 30, &#x27;directory_query_limit&#x27;: True, &#x27;directory_query_limit_size&#x27;: 5000, &#x27;directory_timeout&#x27;: 60, &#x27;directory_validation&#x27;: True, &#x27;directory_validation_period&#x27;: 1440, &#x27;logging_options&#x27;: &#x27;info&#x27;, &#x27;mail_sender&#x27;: &#x27;vcenter@vcenter01.example.com&#x27;, &#x27;mail_server&#x27;: &#x27;mail.example.com&#x27;, &#x27;msg&#x27;: &#x27;vCenter settings already configured properly&#x27;, &#x27;runtime_managed_address&#x27;: &#x27;192.168.1.10&#x27;, &#x27;runtime_server_name&#x27;: &#x27;vcenter01.example.com&#x27;, &#x27;runtime_unique_id&#x27;: 1, &#x27;timeout_long_operations&#x27;: 120, &#x27;timeout_normal_operations&#x27;: 30, &#x27;diff&#x27;: {&#x27;after&#x27;: {&#x27;db_event_cleanup&#x27;: True, &#x27;db_event_retention&#x27;: 30, &#x27;db_max_connections&#x27;: 50, &#x27;db_task_cleanup&#x27;: True, &#x27;db_task_retention&#x27;: 30, &#x27;directory_query_limit&#x27;: True, &#x27;directory_query_limit_size&#x27;: 5000, &#x27;directory_timeout&#x27;: 60, &#x27;directory_validation&#x27;: True, &#x27;directory_validation_period&#x27;: 1440, &#x27;logging_options&#x27;: &#x27;info&#x27;, &#x27;mail_sender&#x27;: &#x27;vcenter@vcenter01.example.com&#x27;, &#x27;mail_server&#x27;: &#x27;mail.example.com&#x27;, &#x27;runtime_managed_address&#x27;: &#x27;192.168.1.10&#x27;, &#x27;runtime_server_name&#x27;: &#x27;vcenter01.example.com&#x27;, &#x27;runtime_unique_id&#x27;: 1, &#x27;snmp_receiver_1_community&#x27;: &#x27;public&#x27;, &#x27;snmp_receiver_1_enabled&#x27;: True, &#x27;snmp_receiver_1_port&#x27;: 162, &#x27;snmp_receiver_1_url&#x27;: &#x27;localhost&#x27;, &#x27;snmp_receiver_2_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_2_enabled&#x27;: False, &#x27;snmp_receiver_2_port&#x27;: 162, &#x27;snmp_receiver_2_url&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_3_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_3_enabled&#x27;: False, &#x27;snmp_receiver_3_port&#x27;: 162, &#x27;snmp_receiver_3_url&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_4_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_4_enabled&#x27;: False, &#x27;snmp_receiver_4_port&#x27;: 162, &#x27;snmp_receiver_4_url&#x27;: &#x27;&#x27;, &#x27;timeout_long_operations&#x27;: 120, &#x27;timeout_normal_operations&#x27;: 30}, &#x27;before&#x27;: {&#x27;db_event_cleanup&#x27;: True, &#x27;db_event_retention&#x27;: 30, &#x27;db_max_connections&#x27;: 50, &#x27;db_task_cleanup&#x27;: True, &#x27;db_task_retention&#x27;: 30, &#x27;directory_query_limit&#x27;: True, &#x27;directory_query_limit_size&#x27;: 5000, &#x27;directory_timeout&#x27;: 60, &#x27;directory_validation&#x27;: True, &#x27;directory_validation_period&#x27;: 1440, &#x27;logging_options&#x27;: &#x27;info&#x27;, &#x27;mail_sender&#x27;: &#x27;vcenter@vcenter01.example.com&#x27;, &#x27;mail_server&#x27;: &#x27;mail.example.com&#x27;, &#x27;runtime_managed_address&#x27;: &#x27;192.168.1.10&#x27;, &#x27;runtime_server_name&#x27;: &#x27;vcenter01.example.com&#x27;, &#x27;runtime_unique_id&#x27;: 1, &#x27;snmp_receiver_1_community&#x27;: &#x27;public&#x27;, &#x27;snmp_receiver_1_enabled&#x27;: True, &#x27;snmp_receiver_1_port&#x27;: 162, &#x27;snmp_receiver_1_url&#x27;: &#x27;localhost&#x27;, &#x27;snmp_receiver_2_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_2_enabled&#x27;: False, &#x27;snmp_receiver_2_port&#x27;: 162, &#x27;snmp_receiver_2_url&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_3_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_3_enabled&#x27;: False, &#x27;snmp_receiver_3_port&#x27;: 162, &#x27;snmp_receiver_3_url&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_4_community&#x27;: &#x27;&#x27;, &#x27;snmp_receiver_4_enabled&#x27;: False, &#x27;snmp_receiver_4_port&#x27;: 162, &#x27;snmp_receiver_4_url&#x27;: &#x27;&#x27;, &#x27;timeout_long_operations&#x27;: 120, &#x27;timeout_normal_operations&#x27;: 30}}}</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
+Status
+------
 
 
 Authors
 ~~~~~~~
 
 - Christian Kotte (@ckotte)
-
-
-
-Collection links
-~~~~~~~~~~~~~~~~
-
-* `Issue Tracker <https://github.com/ansible-collections/community.vmware/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc>`__
-* `Homepage <https://github.com/ansible-collections/community.vmware>`__
-* `Repository (Sources) <https://github.com/ansible-collections/community.vmware.git>`__
-

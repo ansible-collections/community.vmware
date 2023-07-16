@@ -6,7 +6,7 @@
   ansible.builtin.pip:
     name: antsibull-docs
 
-- name: Refresh module documentation and README.md
+- name: Refresh module documentation and README.md with collection_prep
   ansible.builtin.shell: tox -e add_docs
 
 - name: Update documentation with antsibull-docs
