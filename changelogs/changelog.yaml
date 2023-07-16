@@ -1589,3 +1589,30 @@ releases:
       name: vmware_vsan_release_catalog
       namespace: ''
     release_date: '2023-06-09'
+  3.8.0:
+    changes:
+      bugfixes:
+      - vmware_deploy_ovf - Fix an issue with networks that are available on more
+        than one cluster (https://github.com/ansible-collections/community.vmware/issues/1590).
+      - vmware_guest_disk - Fix idempotency for `absent` disks (https://github.com/ansible-collections/community.vmware/issues/1765).
+      major_changes:
+      - vmware_vasa - added a new module to register/unregister a VASA provider
+      - vmware_vasa_info - added a new module to gather the information about existing
+        VASA provider(s)
+      minor_changes:
+      - autoselect_datastore - add support to also look at NFS mounted filesystems
+        (previously was just VMFS)
+    fragments:
+    - 1590_vmware_deploy_ovf.yaml
+    - 1751-autoselect_datastore-also-use-NFS-mounts.yml
+    - 1765_vmware_guest_disk.yaml
+    - 1774_vmware_vasa.yaml
+    - 1774_vmware_vasa_info.yaml
+    modules:
+    - description: Manage VMware Virtual Volumes storage provider
+      name: vmware_vasa
+      namespace: ''
+    - description: Gather information about vSphere VASA providers.
+      name: vmware_vasa_info
+      namespace: ''
+    release_date: '2023-07-16'
