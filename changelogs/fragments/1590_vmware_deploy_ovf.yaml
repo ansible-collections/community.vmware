@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - Fix an issue with networks that are available on more than one cluster (https://github.com/ansible-collections/community.vmware/issues/1590).

@@ -1,2 +1,0 @@
-minor_changes:
-  - autoselect_datastore - add support to also look at NFS mounted filesystems (previously was just VMFS)
