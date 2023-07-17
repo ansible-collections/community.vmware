@@ -1,13 +1,14 @@
-.. _community.vmware.vmware_host_scanhba_module:
+.. _community.vmware.vmware_vasa_info_module:
 
 
-************************************
-community.vmware.vmware_host_scanhba
-************************************
+*********************************
+community.vmware.vmware_vasa_info
+*********************************
 
-**Rescan host HBA's and optionally refresh the storage system**
+**Gather information about vSphere VASA providers.**
 
 
+Version added: 3.8.0
 
 .. contents::
    :local:
@@ -16,11 +17,7 @@ community.vmware.vmware_host_scanhba
 
 Synopsis
 --------
-- This module can force a rescan of the hosts HBA subsystem which is needed when wanting to mount a new datastore.
-- You could use this before using :ref:`community.vmware.vmware_host_datastore <community.vmware.vmware_host_datastore_module>` to mount a new datastore to ensure your device/volume is ready.
-- You can also optionally force a Refresh of the Storage System in vCenter/ESXi Web Client.
-- All parameters and VMware object names are case sensitive.
-- You can supply an esxi_hostname or a cluster_name
+- Returns basic information on the vSphere VASA providers registered in the vcenter.
 
 
 
@@ -36,36 +33,6 @@ Parameters
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>cluster_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Cluster name to Rescan the storage subsystem on (this will run the rescan task on each host in the cluster).</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>esxi_hostname</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>ESXi hostname to Rescan the storage subsystem on.</div>
-                </td>
-            </tr>
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -156,63 +123,6 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>refresh_storage</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Refresh the storage system in vCenter/ESXi Web Client for each host found</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>rescan_hba</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Rescan all host bus adapters for new storage devices. Rescanning all adapters can be slow.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>rescan_vmfs</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Rescan all known storage devices for new VMFS volumes.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -267,41 +177,13 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Rescan HBA's for a given ESXi host and refresh storage system objects
-      community.vmware.vmware_host_scanhba:
-          hostname: '{{ vcenter_hostname }}'
-          username: '{{ vcenter_username }}'
-          password: '{{ vcenter_password }}'
-          esxi_hostname: '{{ inventory_hostname }}'
-          refresh_storage: true
+    - name: Get VASA providers info
+      community.vmware.vmware_vasa_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
       delegate_to: localhost
-
-    - name: Rescan HBA's for a given cluster - all found hosts will be scanned
-      community.vmware.vmware_host_scanhba:
-          hostname: '{{ vcenter_hostname }}'
-          username: '{{ vcenter_username }}'
-          password: '{{ vcenter_password }}'
-          esxi_hostname: '{{ inventory_hostname }}'
-          refresh_storage: true
-      delegate_to: localhost
-
-    - name: Rescan for new VMFS Volumes in a given cluster, but do not scan for new Devices - all found hosts will be scanned
-      community.vmware.vmware_host_scanhba:
-          hostname: '{{ vcenter_hostname }}'
-          username: '{{ vcenter_username }}'
-          password: '{{ vcenter_password }}'
-          esxi_hostname: '{{ inventory_hostname }}'
-          rescan_vmfs: true
-          rescan_hba: false
-      delegate_to: localhost
-
-    - name: Rescan HBA's for a given ESXi host and don't refresh storage system objects
-      community.vmware.vmware_host_scanhba:
-          hostname: '{{ vcenter_hostname }}'
-          username: '{{ vcenter_username }}'
-          password: '{{ vcenter_password }}'
-          esxi_hostname: '{{ inventory_hostname }}'
-      delegate_to: localhost
+      register: providers
 
 
 
@@ -320,18 +202,18 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>result</b>
+                    <b>vasa_providers</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
+                      <span style="color: purple">list</span>
                     </div>
                 </td>
-                <td>always</td>
+                <td>success</td>
                 <td>
-                            <div>return confirmation of requested host and updated / refreshed storage system</div>
+                            <div>list of dictionary of VASA info</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01.example.com&#x27;: {&#x27;rescaned_hba&#x27;: &#x27;true&#x27;, &#x27;refreshed_storage&#x27;: &#x27;true&#x27;, &#x27;rescaned_vmfs&#x27;: &#x27;true&#x27;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;certificate_status&#x27;: &#x27;valid&#x27;, &#x27;description&#x27;: &#x27;IOFILTER VASA Provider on host host01.domain.local&#x27;, &#x27;name&#x27;: &#x27;IOFILTER Provider host01.domain.local&#x27;, &#x27;related_storage_array&#x27;: [{&#x27;active&#x27;: &#x27;True&#x27;, &#x27;array_id&#x27;: &#x27;IOFILTERS:616d4715-7de2-7be2-997a-10f920c5fdbe&#x27;, &#x27;manageable&#x27;: &#x27;True&#x27;, &#x27;priority&#x27;: &#x27;1&#x27;}], &#x27;status&#x27;: &#x27;online&#x27;, &#x27;uid&#x27;: &#x27;02e10bc5-dd77-4ce4-9100-5aee44e7abaa&#x27;, &#x27;url&#x27;: &#x27;https://host01.domain.local:9080/version.xml&#x27;, &#x27;version&#x27;: &#x27;1.0&#x27;}]</div>
                 </td>
             </tr>
     </table>
@@ -345,4 +227,4 @@ Status
 Authors
 ~~~~~~~
 
-- Michael Eaton (@michaeldeaton)
+- Eugenio Grosso (@genegr) <eugenio.grosso@purestorage.com>
