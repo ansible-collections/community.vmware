@@ -248,7 +248,7 @@ options:
     description:
     - Manage virtual machine encryption settings
     - All parameters case sensitive.
-    version_added: '3.8.0'
+    version_added: '3.9.0'
     suboptions:
         encrypted_vmotion:
             type: str
