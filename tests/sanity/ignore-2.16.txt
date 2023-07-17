@@ -1,0 +1,2 @@
+plugins/modules/vmware_deploy_ovf.py use-argspec-type-path!skip
+plugins/modules/vmware_host_acceptance.py validate-modules:parameter-state-invalid-choice
