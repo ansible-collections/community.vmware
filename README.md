@@ -111,6 +111,7 @@ Name | Description
 [community.vmware.vmware_datastore_cluster_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_cluster_manager_module.rst)|Manage VMware vSphere datastore cluster's members
 [community.vmware.vmware_datastore_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_info_module.rst)|Gather info about datastores available in given vCenter
 [community.vmware.vmware_datastore_maintenancemode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_datastore_maintenancemode_module.rst)|Place a datastore into maintenance mode
+[community.vmware.vmware_deploy_ova_url](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_deploy_ova_url_module.rst)|Deploys a VMware virtual machine from an OVA file placed on HTTP server
 [community.vmware.vmware_deploy_ovf](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_deploy_ovf_module.rst)|Deploys a VMware virtual machine from an OVF or OVA file
 [community.vmware.vmware_drs_group](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_module.rst)|Creates vm/host group in a given cluster.
 [community.vmware.vmware_drs_group_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_drs_group_info_module.rst)|Gathers info about DRS VM/Host groups on the given cluster
