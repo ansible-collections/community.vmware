@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_guest_disk - Fix idempotency for `absent` disks (https://github.com/ansible-collections/community.vmware/issues/1765).
