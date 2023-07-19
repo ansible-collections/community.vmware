@@ -2739,13 +2739,13 @@ class PyVmomiHelper(PyVmomi):
 
                     for host in cluster.host:
                         for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
-                            if mi.volume.type == "VMFS":
+                            if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
                                 datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
                 elif self.params['esxi_hostname']:
                     host = self.find_hostsystem_by_name(self.params['esxi_hostname'])
 
                     for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
-                        if mi.volume.type == "VMFS":
+                        if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
                             datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
                 else:
                     datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
