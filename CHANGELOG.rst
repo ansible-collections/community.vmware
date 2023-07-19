@@ -5,6 +5,32 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.8.0
+======
+
+Major Changes
+-------------
+
+- vmware_vasa - added a new module to register/unregister a VASA provider
+- vmware_vasa_info - added a new module to gather the information about existing VASA provider(s)
+
+Minor Changes
+-------------
+
+- autoselect_datastore - add support to also look at NFS mounted filesystems (previously was just VMFS)
+
+Bugfixes
+--------
+
+- vmware_deploy_ovf - Fix an issue with networks that are available on more than one cluster (https://github.com/ansible-collections/community.vmware/issues/1590).
+- vmware_guest_disk - Fix idempotency for `absent` disks (https://github.com/ansible-collections/community.vmware/issues/1765).
+
+New Modules
+-----------
+
+- vmware_vasa - Manage VMware Virtual Volumes storage provider
+- vmware_vasa_info - Gather information about vSphere VASA providers.
+
 v3.7.0
 ======
 
