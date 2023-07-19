@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2017, Matt Martz <matt@sivel.net>
+# based on code vmware_deploy_ovf from Matt Martz <matt@sivel.net>
+# Copyright: (c) 2023, Alexander Nikitin <alexander@ihumster.ru>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,12 +11,15 @@ __metaclass__ = type
 
 
 DOCUMENTATION = r'''
-author: 'Matt Martz (@sivel)'
-short_description: 'Deploys a VMware virtual machine from an OVF or OVA file'
+author: 
+    - Alexander Nikitin (@ihumster)
+    - Matt Martz <matt@sivel.net>
+short_description: 'Deploys a VMware virtual machine from an OVF or OVA file, placed on file system or HTTP server'
 description:
-- 'This module can be used to deploy a VMware VM from an OVF or OVA file'
+    - 'This module can be used to deploy a VMware VM from an OVF or OVA file, placed on file system or HTTP server'
 module: vmware_deploy_ovf
-notes: []
+notes:
+    - 'For use https as source need enable in firewall incoming 443 port'
 options:
     allow_duplicates:
         default: "True"
@@ -105,9 +109,17 @@ options:
     ovf:
         description:
         - 'Path to OVF or OVA file to deploy.'
+        - This is a required parameter, if C(ovf) is not set and C(url) parameter must be set.
+        - C(ovf) and C(url) are mutually exclusive parameters.
         aliases:
             - ova
         type: path
+    url:
+        description:
+        - 'URL for OVA file to deploy.'
+        - This is a required parameter, if C(url) is not set and C(ovf) parameter must be set.
+        - C(url) and C(ovf) are mutually exclusive parameters.
+        type: str
     power_on:
         default: true
         description:
@@ -170,6 +182,14 @@ EXAMPLES = r'''
     datastore: test-datastore
     ovf: /path/to/ubuntu-16.04-amd64.ovf
   delegate_to: localhost
+
+- community.vmware.vmware_deploy_ovf:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    url: https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-amd64.ova
+    wait_for_ip_address: true
+  delegate_to: localhost
 '''
 
 
@@ -181,8 +201,11 @@ instance:
     sample: None
 '''
 
+import hashlib
 import io
 import os
+import re
+import ssl
 import sys
 import tarfile
 import time
@@ -195,6 +218,7 @@ from threading import Thread
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
+from six.moves.urllib.request import Request, urlopen
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_all_networks_by_name,
@@ -217,8 +241,92 @@ def path_exists(value):
         value = str(value)
     value = os.path.expanduser(os.path.expandvars(value))
     if not os.path.exists(value):
-        raise ValueError('%s is not a valid path' % value)
+        raise ValueError(f"'{value}' is not a valid path")
     return value
+
+
+class WebHandle(object):
+    def __init__(self, url):
+        self.url = url
+        self.thumbprint = None
+        self.ssl_context = None
+
+        self.parsed_url = self._parse_url(url)
+
+        self.https = self.parsed_url.group('scheme') == 'https://'
+
+        if self.https:
+            self.ssl_context = ssl._create_default_https_context()
+            self.ssl_context.check_hostname = False
+            self.ssl_context.verify_mode = ssl.CERT_NONE
+
+            self.thumbprint = self._get_thumbprint(
+                self.parsed_url.group('hostname'))
+            r = urlopen(url=url, context=self.ssl_context)
+        else:
+            r = urlopen(url)
+        if r.code != 200:
+            raise FileNotFoundError(url)
+        self.headers = self._headers_to_dict(r)
+        if 'accept-ranges' not in self.headers:
+            raise Exception("Site does not accept ranges")
+        self.st_size = int(self.headers['content-length'])
+        self.offset = 0
+
+    def _parse_url(self, url):
+        exp = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
+        return re.match(exp, url)
+
+    def _get_thumbprint(self, hostname):
+        pem = ssl.get_server_certificate((hostname, 443))
+        sha1 = hashlib.sha1(
+            ssl.PEM_cert_to_DER_cert(pem)).hexdigest().upper()
+        colon_notion = ':'.join(sha1[i:i + 2] for i in range(0, len(sha1), 2))
+
+        return None if sha1 is None else colon_notion
+
+    def _headers_to_dict(self, r):
+        result = {}
+        if hasattr(r, 'getheaders'):
+            for n, v in r.getheaders():
+                result[n.lower()] = v.strip()
+        else:
+            for line in r.info().headers:
+                if line.find(':') != -1:
+                    n, v = line.split(': ', 1)
+                    result[n.lower()] = v.strip()
+        return result
+
+    def tell(self):
+        return self.offset
+
+    def seek(self, offset, whence=0):
+        if whence == 0:
+            self.offset = offset
+        elif whence == 1:
+            self.offset += offset
+        elif whence == 2:
+            self.offset = self.st_size - offset
+        return self.offset
+
+    def seekable(self):
+        return True
+
+    def read(self, amount):
+        start = self.offset
+        end = self.offset + amount - 1
+        req = Request(self.url,
+                      headers={'Range': 'bytes=%d-%d' % (start, end)})
+        r = urlopen(req) if not self.ssl_context else urlopen(
+            req, context=self.ssl_context)
+        self.offset += amount
+        result = r.read(amount)
+        r.close()
+        return result
+
+    # A slightly more accurate percentage
+    def progress(self):
+        return int(100.0 * self.offset / self.st_size)
 
 
 class ProgressReader(io.FileIO):
@@ -342,26 +450,27 @@ class VMwareDeployOvf(PyVmomi):
         # Get datacenter firstly
         self.datacenter = self.find_datacenter_by_name(self.params['datacenter'])
         if self.datacenter is None:
-            self.module.fail_json(msg="Datacenter '%(datacenter)s' could not be located" % self.params)
+            self.module.fail_json(msg=f"Datacenter '{self.params['datacenter']}' could not be located")
 
         # Get cluster in datacenter if cluster configured
         if self.params['cluster']:
             cluster = self.find_cluster_by_name(self.params['cluster'], datacenter_name=self.datacenter)
             if cluster is None:
-                self.module.fail_json(msg="Unable to find cluster '%(cluster)s'" % self.params)
+                self.module.fail_json(msg=f"Unable to find cluster '{self.params['cluster']}'")
             self.resource_pool = self.find_resource_pool_by_cluster(self.params['resource_pool'], cluster=cluster)
         # Or get ESXi host in datacenter if ESXi host configured
         elif self.params['esxi_hostname']:
             host = self.find_hostsystem_by_name(self.params['esxi_hostname'], datacenter=self.datacenter)
             if host is None:
-                self.module.fail_json(msg="Unable to find host '%(esxi_hostname)s' in datacenter '%(datacenter)s'" % self.params)
+                self.module.fail_json(msg=f"Unable to find host '{self.params['esxi_hostname']}' in datacenter"
+                                      " '{self.params['datacenter']}'")
             self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'], folder=host.parent)
         else:
             # For more than one datacenter env, specify 'folder' to datacenter hostFolder
             self.resource_pool = self.find_resource_pool_by_name(self.params['resource_pool'], folder=self.datacenter.hostFolder)
 
         if not self.resource_pool:
-            self.module.fail_json(msg="Resource pool '%(resource_pool)s' could not be located" % self.params)
+            self.module.fail_json(msg=f"Resource pool '{self.params['resource_pool']}' could not be located")
 
         self.datastore = None
         datastore_cluster_obj = self.find_datastore_cluster_by_name(self.params['datastore'], datacenter=self.datacenter)
@@ -381,14 +490,14 @@ class VMwareDeployOvf(PyVmomi):
             self.datastore = self.find_datastore_by_name(self.params['datastore'], datacenter_name=self.datacenter)
 
         if self.datastore is None:
-            self.module.fail_json(msg="Datastore '%(datastore)s' could not be located on specified ESXi host or"
-                                      " datacenter" % self.params)
+            self.module.fail_json(msg=f"Datastore '{self.params['datastore']}' could not be located on specified ESXi host or"
+                                  " datacenter")
 
         for key, value in self.params['networks'].items():
             # If we have the same network name defined in multiple clusters, check all networks to get the right one
             networks = find_all_networks_by_name(self.content, value, datacenter_name=self.datacenter)
             if not networks:
-                self.module.fail_json(msg='%(networks)s could not be located' % self.params)
+                self.module.fail_json(msg=f"'{self.params[networks]}' could not be located")
             # Search for the network key of the same network name, that resides in a cluster parameter
             for network in networks:
                 if self.params['cluster']:
@@ -406,29 +515,43 @@ class VMwareDeployOvf(PyVmomi):
         return self.datastore, self.datacenter, self.resource_pool, self.network_mappings
 
     def get_ovf_descriptor(self):
-        # Check whether ovf/ova file exists
-        try:
-            path_exists(self.params['ovf'])
-        except ValueError as e:
-            self.module.fail_json(msg="%s" % e)
+        if self.params['url'] is None:
+            # Check whether ovf/ova file exists
+            try:
+                path_exists(self.params['ovf'])
+            except ValueError as e:
+                self.module.fail_json(msg="%s" % e)
 
-        if tarfile.is_tarfile(self.params['ovf']):
-            self.tar = tarfile.open(self.params['ovf'])
-            ovf = None
-            for candidate in self.tar.getmembers():
-                dummy, ext = os.path.splitext(candidate.name)
-                if ext.lower() == '.ovf':
-                    ovf = candidate
-                    break
-            if not ovf:
-                self.module.fail_json(msg='Could not locate OVF file in %(ovf)s' % self.params)
+            if tarfile.is_tarfile(self.params['ovf']):
+                self.tar = tarfile.open(self.params['ovf'])
+                ovf = None
+                for candidate in self.tar.getmembers():
+                    dummy, ext = os.path.splitext(candidate.name)
+                    if ext.lower() == '.ovf':
+                        ovf = candidate
+                        break
+                if not ovf:
+                    self.module.fail_json(msg='Could not locate OVF file in %(ovf)s' % self.params)
 
-            self.ovf_descriptor = to_native(self.tar.extractfile(ovf).read())
+                self.ovf_descriptor = to_native(self.tar.extractfile(ovf).read())
+            else:
+                with open(self.params['ovf']) as f:
+                    self.ovf_descriptor = f.read()
+
+            return self.ovf_descriptor
         else:
-            with open(self.params['ovf']) as f:
-                self.ovf_descriptor = f.read()
+            self.handle = WebHandle(self.params['url'])
+            self.tar = tarfile.open(fileobj=self.handle)
+            ovffilename = list(
+                filter(lambda x: x.endswith('.ovf'), self.tar.getnames()))[0]
+            ovffile = self.tar.extractfile(ovffilename)
+            self.ovf_descriptor = ovffile.read().decode()
 
-        return self.ovf_descriptor
+            if self.ovf_descriptor:
+                return self.ovf_descriptor
+            else:
+                self.module.fail_json(
+                    msg='Could not locate OVF file in %(url)s' % self.params)
 
     def get_lease(self):
         datastore, datacenter, resource_pool, network_mappings = self.get_objects()
@@ -453,7 +576,7 @@ class VMwareDeployOvf(PyVmomi):
         if self.params['folder']:
             folder = self.content.searchIndex.FindByInventoryPath(self.params['folder'])
             if not folder:
-                self.module.fail_json(msg="Unable to find the specified folder %(folder)s" % self.params)
+                self.module.fail_json(msg=f"Unable to find the specified folder {self.params['folder']}")
         else:
             folder = datacenter.vmFolder
 
@@ -475,11 +598,11 @@ class VMwareDeployOvf(PyVmomi):
             )
         if errors:
             self.module.fail_json(
-                msg='Failure validating OVF import spec: %s' % '. '.join(errors)
+                msg=f"Failure validating OVF import spec: {'. '.join(errors)}"
             )
 
         for warning in getattr(self.import_spec, 'warning', []):
-            self.module.warn('Problem validating OVF import spec: %s' % to_native(warning.msg))
+            self.module.warn(f"Problem validating OVF import spec: {to_native(warning.msg)}")
 
         name = self.params.get('name')
         if not self.params['allow_duplicates']:
@@ -498,7 +621,7 @@ class VMwareDeployOvf(PyVmomi):
             )
         except vmodl.fault.SystemError as e:
             self.module.fail_json(
-                msg='Failed to start import: %s' % to_native(e.msg)
+                msg=f"Failed to start import: {to_native(err.msg)}"
             )
 
         while self.lease.state != vim.HttpNfcLease.State.ready:
@@ -530,80 +653,96 @@ class VMwareDeployOvf(PyVmomi):
 
     def upload(self):
         if self.params['ovf'] is None:
-            self.module.fail_json(msg="OVF path is required for upload operation.")
+            # Upload from url
+            lease, import_spec = self.get_lease()
 
-        ovf_dir = os.path.dirname(self.params['ovf'])
-
-        lease, import_spec = self.get_lease()
-
-        uploaders = []
-
-        for file_item in import_spec.fileItem:
-            device_upload_url = None
-            for device_url in lease.info.deviceUrl:
-                if file_item.deviceId == device_url.importKey:
-                    device_upload_url = self._normalize_url(device_url.url)
-                    break
-
-            if not device_upload_url:
-                lease.HttpNfcLeaseAbort(
-                    vmodl.fault.SystemError(reason='Failed to find deviceUrl for file %s' % file_item.path)
+            ssl_thumbprint = self.handle.thumbprint if self.handle.thumbprint else None
+            source_files = []
+            for file_item in import_spec.fileItem:
+                source_file = vim.HttpNfcLease.SourceFile(
+                    url=self.handle.url,
+                    targetDeviceId=file_item.deviceId,
+                    create=file_item.create,
+                    size=file_item.size,
+                    sslThumbprint=ssl_thumbprint,
+                    memberName=file_item.path
                 )
-                self.module.fail_json(
-                    msg='Failed to find deviceUrl for file %s' % file_item.path
-                )
+                source_files.append(source_file)
 
-            vmdk_tarinfo = None
-            if self.tar:
-                vmdk = self.tar
-                try:
-                    vmdk_tarinfo = self.tar.getmember(file_item.path)
-                except KeyError:
+            wait_for_task(lease.HttpNfcLeasePullFromUrls_Task(source_files))
+        else:
+            ovf_dir = os.path.dirname(self.params['ovf'])
+
+            lease, import_spec = self.get_lease()
+
+            uploaders = []
+
+            for file_item in import_spec.fileItem:
+                device_upload_url = None
+                for device_url in lease.info.deviceUrl:
+                    if file_item.deviceId == device_url.importKey:
+                        device_upload_url = self._normalize_url(device_url.url)
+                        break
+
+                if not device_upload_url:
                     lease.HttpNfcLeaseAbort(
-                        vmodl.fault.SystemError(reason='Failed to find VMDK file %s in OVA' % file_item.path)
+                        vmodl.fault.SystemError(reason=f"Failed to find deviceUrl for file '{file_item.path}'")
                     )
                     self.module.fail_json(
-                        msg='Failed to find VMDK file %s in OVA' % file_item.path
+                        msg=f"Failed to find deviceUrl for file '{file_item.path}'"
                     )
-            else:
-                vmdk = os.path.join(ovf_dir, file_item.path)
-                try:
-                    path_exists(vmdk)
-                except ValueError:
+
+                vmdk_tarinfo = None
+                if self.tar:
+                    vmdk = self.tar
+                    try:
+                        vmdk_tarinfo = self.tar.getmember(file_item.path)
+                    except KeyError:
+                        lease.HttpNfcLeaseAbort(
+                            vmodl.fault.SystemError(reason=f"Failed to find VMDK file '{file_item.path}' in OVA")
+                        )
+                        self.module.fail_json(
+                            msg=f"Failed to find VMDK file '{file_item.path}' in OVA"
+                        )
+                else:
+                    vmdk = os.path.join(ovf_dir, file_item.path)
+                    try:
+                        path_exists(vmdk)
+                    except ValueError:
+                        lease.HttpNfcLeaseAbort(
+                            vmodl.fault.SystemError(reason=f"Failed to find VMDK file at '{vmdk}'")
+                        )
+                        self.module.fail_json(
+                            msg=f"Failed to find VMDK file at '{vmdk}'"
+                        )
+
+                uploaders.append(
+                    VMDKUploader(
+                        vmdk,
+                        device_upload_url,
+                        self.params['validate_certs'],
+                        tarinfo=vmdk_tarinfo,
+                        create=file_item.create
+                    )
+                )
+
+            total_size = sum(u.size for u in uploaders)
+            total_bytes_read = [0] * len(uploaders)
+            for i, uploader in enumerate(uploaders):
+                uploader.start()
+                while uploader.is_alive():
+                    time.sleep(0.1)
+                    total_bytes_read[i] = uploader.bytes_read
+                    lease.HttpNfcLeaseProgress(int(100.0 * sum(total_bytes_read) / total_size))
+
+                if uploader.e:
                     lease.HttpNfcLeaseAbort(
-                        vmodl.fault.SystemError(reason='Failed to find VMDK file at %s' % vmdk)
+                        vmodl.fault.SystemError(reason='%s' % to_native(uploader.e[1]))
                     )
                     self.module.fail_json(
-                        msg='Failed to find VMDK file at %s' % vmdk
+                        msg='%s' % to_native(uploader.e[1]),
+                        exception=''.join(traceback.format_tb(uploader.e[2]))
                     )
-
-            uploaders.append(
-                VMDKUploader(
-                    vmdk,
-                    device_upload_url,
-                    self.params['validate_certs'],
-                    tarinfo=vmdk_tarinfo,
-                    create=file_item.create
-                )
-            )
-
-        total_size = sum(u.size for u in uploaders)
-        total_bytes_read = [0] * len(uploaders)
-        for i, uploader in enumerate(uploaders):
-            uploader.start()
-            while uploader.is_alive():
-                time.sleep(0.1)
-                total_bytes_read[i] = uploader.bytes_read
-                lease.HttpNfcLeaseProgress(int(100.0 * sum(total_bytes_read) / total_size))
-
-            if uploader.e:
-                lease.HttpNfcLeaseAbort(
-                    vmodl.fault.SystemError(reason='%s' % to_native(uploader.e[1]))
-                )
-                self.module.fail_json(
-                    msg='%s' % to_native(uploader.e[1]),
-                    exception=''.join(traceback.format_tb(uploader.e[2]))
-                )
 
     def complete(self):
         self.lease.HttpNfcLeaseComplete()
@@ -698,6 +837,9 @@ def main():
             'type': 'path',
             'aliases': ['ova'],
         },
+        'url': {
+            'type': 'str',
+        },
         'disk_provisioning': {
             'choices': [
                 'flat',
@@ -740,8 +882,12 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
+        required_one_of=[
+            ['ovf', 'url'],
+        ],
         mutually_exclusive=[
             ['cluster', 'esxi_hostname'],
+            ['ovf', 'url'],
         ],
     )
 

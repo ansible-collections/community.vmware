@@ -5,7 +5,7 @@
 community.vmware.vmware_deploy_ovf
 **********************************
 
-**Deploys a VMware virtual machine from an OVF or OVA file**
+**Deploys a VMware virtual machine from an OVF or OVA file, placed on file system or HTTP server**
 
 
 
@@ -16,7 +16,7 @@ community.vmware.vmware_deploy_ovf
 
 Synopsis
 --------
-- This module can be used to deploy a VMware VM from an OVF or OVA file
+- This module can be used to deploy a VMware VM from an OVF or OVA file, placed on file system or HTTP server
 
 
 
@@ -288,6 +288,8 @@ Parameters
                 </td>
                 <td>
                         <div>Path to OVF or OVA file to deploy.</div>
+                        <div>This is a required parameter, if <code>ovf</code> is not set and <code>url</code> parameter must be set.</div>
+                        <div><code>ovf</code> and <code>url</code> are mutually exclusive parameters.</div>
                         <div style="font-size: small; color: darkgreen"><br/>aliases: ova</div>
                 </td>
             </tr>
@@ -414,6 +416,23 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>url</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>URL for OVA file to deploy.</div>
+                        <div>This is a required parameter, if <code>url</code> is not set and <code>ovf</code> parameter must be set.</div>
+                        <div><code>url</code> and <code>ovf</code> are mutually exclusive parameters.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>username</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -498,6 +517,7 @@ Notes
 -----
 
 .. note::
+   - For use https as source need enable in firewall incoming 443 port
    - All modules requires API write access and hence is not supported on a free ESXi license.
 
 
@@ -537,6 +557,14 @@ Examples
         esxi_hostname: test-server
         datastore: test-datastore
         ovf: /path/to/ubuntu-16.04-amd64.ovf
+      delegate_to: localhost
+
+    - community.vmware.vmware_deploy_ovf:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        url: https://cloud-images.ubuntu.com/releases/xenial/release/ubuntu-16.04-server-cloudimg-amd64.ova
+        wait_for_ip_address: true
       delegate_to: localhost
 
 
@@ -581,4 +609,5 @@ Status
 Authors
 ~~~~~~~
 
-- Matt Martz (@sivel)
+- Alexander Nikitin (@ihumster)
+- Matt Martz <matt@sivel.net>
