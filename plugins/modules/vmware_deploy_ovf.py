@@ -11,7 +11,7 @@ __metaclass__ = type
 
 
 DOCUMENTATION = r'''
-author: 
+author:
     - Alexander Nikitin (@ihumster)
     - Matt Martz <matt@sivel.net>
 short_description: 'Deploys a VMware virtual machine from an OVF or OVA file, placed on file system or HTTP server'
@@ -434,6 +434,7 @@ class VMwareDeployOvf(PyVmomi):
         self.module = module
         self.params = module.params
 
+        self.handle = None
         self.datastore = None
         self.datacenter = None
         self.resource_pool = None
@@ -535,7 +536,7 @@ class VMwareDeployOvf(PyVmomi):
 
                 self.ovf_descriptor = to_native(self.tar.extractfile(ovf).read())
             else:
-                with open(self.params['ovf']) as f:
+                with open(self.params['ovf'], encoding="utf-8") as f:
                     self.ovf_descriptor = f.read()
 
             return self.ovf_descriptor
