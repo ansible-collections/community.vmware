@@ -145,6 +145,8 @@ action_groups:
   - vmware_tag_info
   - vmware_tag_manager
   - vmware_target_canonical_info
+  - vmware_vasa
+  - vmware_vasa_info
   - vmware_vcenter_settings
   - vmware_vcenter_settings_info
   - vmware_vcenter_statistics
