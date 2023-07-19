@@ -619,7 +619,7 @@ class VMwareDeployOvf(PyVmomi):
                 self.import_spec.importSpec,
                 folder
             )
-        except vmodl.fault.SystemError as e:
+        except vmodl.fault.SystemError as err:
             self.module.fail_json(
                 msg=f"Failed to start import: {to_native(err.msg)}"
             )
