@@ -110,6 +110,11 @@ options:
         - Tags related to virtual machine are shown if set to C(true).
       default: false
       type: bool
+    show_notes:
+      description:
+        -Tags virtual machine's notes is shown if set to C(true).
+      default: false
+      type: bool
     show_allocated:
       version_added: '2.5.0'
       description:
@@ -458,6 +463,9 @@ class VmwareVmInfo(PyVmomi):
                 if self.module.params.get('show_tag'):
                     vm_tags = self.get_tag_info(vm)
 
+                if self.modle.params.get('show_notes'):
+                    note = vm.summary.config.annotation
+
                 allocated = {}
                 if self.module.params.get('show_allocated'):
                     storage_allocated = 0
@@ -499,6 +507,7 @@ class VmwareVmInfo(PyVmomi):
                     "resource_pool": resource_pool,
                     "attributes": vm_attributes,
                     "tags": vm_tags,
+                    "note": note,
                     "folder": vm_folder,
                     "moid": vm._moId,
                     "datastore_url": datastore_url,
@@ -535,6 +544,7 @@ def main():
         show_net=dict(type='bool', default=True),
         show_resource_pool=dict(type='bool', default=True),
         show_tag=dict(type='bool', default=False),
+        show_notes=dict(type='bool', default=False),
         show_allocated=dict(type='bool', default=False),
         folder=dict(type='str'),
         cluster=dict(type='str', aliases=['cluster_name']),
