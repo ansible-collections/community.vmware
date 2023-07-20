@@ -454,7 +454,7 @@ class VmwareVmInfo(PyVmomi):
                 if self.module.params.get('show_tag'):
                     vm_tags = self.get_tag_info(vm)
 
-                if self.modle.params.get('show_notes'):
+                if self.module.params.get('show_notes'):
                     note = vm.summary.config.annotation
 
                 allocated = {}
