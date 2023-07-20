@@ -430,6 +430,7 @@ class VmwareVmInfo(PyVmomi):
 
                 esxi_hostname = None
                 esxi_parent = None
+                note = None
 
                 if self.module.params.get('show_esxi_hostname') or self.module.params.get('show_cluster'):
                     if summary.runtime.host:
