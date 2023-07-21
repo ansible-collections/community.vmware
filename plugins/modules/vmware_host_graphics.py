@@ -43,7 +43,7 @@ options:
     type: str
   restart_xorg:
     description:
-    - Restart X.Org Server after change any parameter ((C)graphic_type or (C)assigment_policy)
+    - Restart X.Org Server after change any parameter ( C(graphic_type) or C(assigment_policy) )
     default: True
     type: bool
 extends_documentation_fragment:

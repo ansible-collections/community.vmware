@@ -207,7 +207,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Restart X.Org Server after change any parameter ((C)graphic_type or (C)assigment_policy)</div>
+                        <div>Restart X.Org Server after change any parameter ( <code>graphic_type</code> or <code>assigment_policy</code> )</div>
                 </td>
             </tr>
             <tr>
