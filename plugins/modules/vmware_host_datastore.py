@@ -33,7 +33,7 @@ options:
     type: str
   datastore_type:
     description:
-    - Type of the datastore to configure (nfs/nfs41/vmfs).
+    - Type of the datastore to configure (nfs/nfs41/vmfs/vvol).
     choices: [ 'nfs', 'nfs41', 'vmfs', 'vvol' ]
     type: str
   nfs_server:
