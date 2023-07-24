@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_guest - added new parameter 'register_in_inventory' for registering in the inventory a VM that already exists on a given datastore.
+  - vmware_guset - added new parameter 'vmx_file_path' to specify the virtuale machine vmx file name to register in inventory.
