@@ -22,7 +22,7 @@ author:
 - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
-- Eugenio Grosso <egrosso@purestorage.com>
+- Eugenio Grosso (@egrosso) <egrosso@purestorage.com>
 notes:
     - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
     - For example, following is the list of minimum privileges required by users to create virtual machines.
