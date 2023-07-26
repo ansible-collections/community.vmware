@@ -242,6 +242,22 @@ options:
         iommu:
             type: bool
             description: Flag to specify if I/O MMU is enabled for this virtual machine.
+  encryption:
+    type: dict
+    default: {}
+    description:
+    - Manage virtual machine encryption settings
+    - All parameters case sensitive.
+    version_added: '3.9.0'
+    suboptions:
+        encrypted_vmotion:
+            type: str
+            description: Controlls encryption for live migrations with vmotion
+            choices: ['disabled', 'opportunistic', 'required']
+        encrypted_ft:
+            type: str
+            description: Controlls encryption for fault tolerance replication
+            choices: ['disabled', 'opportunistic', 'required']
   guest_id:
     type: str
     description:
@@ -1709,6 +1725,26 @@ class PyVmomiHelper(PyVmomi):
                     self.configspec.flags = vim.vm.FlagInfo()
                 self.configspec.flags.vbsEnabled = virt_based_security
 
+    def configure_encryption_params(self, vm_obj):
+
+        encrypted_vmotion = self.params['encryption']['encrypted_vmotion']
+        if encrypted_vmotion is not None:
+            if vm_obj is None or encrypted_vmotion != vm_obj.config.migrateEncryption:
+                self.change_detected = True
+                self.configspec.migrateEncryption = encrypted_vmotion
+
+        encrypted_ft = self.params['encryption']['encrypted_ft']
+        if encrypted_ft is not None:
+            if encrypted_ft == "disabled":
+                encrypted_ft_cfg = "ftEncryptionDisabled"
+            elif encrypted_ft == "opportunistic":
+                encrypted_ft_cfg = "ftEncryptionOpportunistic"
+            elif encrypted_ft == "required":
+                encrypted_ft_cfg = "ftEncryptionRequired"
+            if vm_obj is None or encrypted_ft_cfg != vm_obj.config.ftEncryptionMode:
+                self.change_detected = True
+                self.configspec.ftEncryptionMode = encrypted_ft_cfg
+
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
         if vm is None or type is None:
@@ -2981,6 +3017,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_guestid(vm_obj=vm_obj, vm_creation=True)
         self.configure_cpu_and_memory(vm_obj=vm_obj, vm_creation=True)
         self.configure_hardware_params(vm_obj=vm_obj)
+        self.configure_encryption_params(vm_obj=vm_obj)
         self.configure_resource_alloc_info(vm_obj=vm_obj)
         self.configure_vapp_properties(vm_obj=vm_obj)
         self.configure_disks(vm_obj=vm_obj)
@@ -3165,6 +3202,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_guestid(vm_obj=self.current_vm_obj)
         self.configure_cpu_and_memory(vm_obj=self.current_vm_obj)
         self.configure_hardware_params(vm_obj=self.current_vm_obj)
+        self.configure_encryption_params(vm_obj=self.current_vm_obj)
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
@@ -3448,6 +3486,13 @@ def main():
                 version=dict(type='str'),
                 virt_based_security=dict(type='bool'),
                 iommu=dict(type='bool')
+            )),
+        encryption=dict(
+            type='dict',
+            default={},
+            options=dict(
+                encrypted_vmotion=dict(type='str', choices=['disabled', 'opportunistic', 'required']),
+                encrypted_ft=dict(type='str', choices=['disabled', 'opportunistic', 'required'])
             )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),
