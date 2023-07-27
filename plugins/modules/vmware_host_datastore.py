@@ -59,6 +59,7 @@ options:
     - Unused if datastore type is not set to C(vmfs) and state is not set to C(present).
     default: false
     type: bool
+    version_added: '3.9.0'
   vmfs_device_name:
     description:
     - Name of the device to be used as VMFS datastore.
@@ -74,6 +75,7 @@ options:
     - hostname or ipaddress of the VASA provider to use for vVols provisioning
     type: str
     required: false
+    version_added: '3.9.0'
   esxi_hostname:
     description:
     - ESXi hostname to manage the datastore.
