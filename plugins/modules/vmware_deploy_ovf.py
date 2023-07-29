@@ -210,7 +210,7 @@ try:
     from pyVmomi import vmodl
 except ImportError:
     pass
-
+import epdb
 
 def path_exists(value):
     if not isinstance(value, string_types):
@@ -392,12 +392,11 @@ class VMwareDeployOvf(PyVmomi):
             # Search for the network key of the same network name, that resides in a cluster parameter
             for network in networks:
                 if self.params['cluster']:
-                    for cnet in cluster.network:
-                        if network.key in cnet.key:
-                            network_mapping = vim.OvfManager.NetworkMapping()
-                            network_mapping.name = key
-                            network_mapping.network = network
-                            self.network_mappings.append(network_mapping)
+                    if network in cluster.network:
+                        network_mapping = vim.OvfManager.NetworkMapping()
+                        network_mapping.name = key
+                        network_mapping.network = network
+                        self.network_mappings.append(network_mapping)
                 else:
                     network_mapping = vim.OvfManager.NetworkMapping()
                     network_mapping.name = key
