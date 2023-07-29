@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_vm_info -  Add `instance_uuid` to the result (https://github.com/ansible-collections/community.vmware/issues/1805)
