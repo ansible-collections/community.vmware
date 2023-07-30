@@ -210,7 +210,6 @@ try:
     from pyVmomi import vmodl
 except ImportError:
     pass
-import epdb
 
 def path_exists(value):
     if not isinstance(value, string_types):
