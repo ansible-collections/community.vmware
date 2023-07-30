@@ -211,6 +211,7 @@ try:
 except ImportError:
     pass
 
+
 def path_exists(value):
     if not isinstance(value, string_types):
         value = str(value)
