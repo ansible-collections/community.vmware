@@ -218,7 +218,7 @@ from threading import Thread
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
-from six.moves.urllib.request import Request, urlopen
+from ansible.module_utils.six.moves.urllib.request import Request, urlopen
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_all_networks_by_name,
@@ -274,8 +274,9 @@ class WebHandle(object):
         self.offset = 0
 
     def _parse_url(self, url):
-        exp = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
-        return re.match(exp, url)
+        exp1 = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))"
+        exp2 = r"(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
+        return re.match(exp1+exp2, url)
 
     def _get_thumbprint(self, hostname):
         pem = ssl.get_server_certificate((hostname, 443))
@@ -502,12 +503,11 @@ class VMwareDeployOvf(PyVmomi):
             # Search for the network key of the same network name, that resides in a cluster parameter
             for network in networks:
                 if self.params['cluster']:
-                    for cnet in cluster.network:
-                        if network.key in cnet.key:
-                            network_mapping = vim.OvfManager.NetworkMapping()
-                            network_mapping.name = key
-                            network_mapping.network = network
-                            self.network_mappings.append(network_mapping)
+                    if network in cluster.network:
+                        network_mapping = vim.OvfManager.NetworkMapping()
+                        network_mapping.name = key
+                        network_mapping.network = network
+                        self.network_mappings.append(network_mapping)
                 else:
                     network_mapping = vim.OvfManager.NetworkMapping()
                     network_mapping.name = key
