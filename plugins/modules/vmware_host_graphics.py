@@ -77,7 +77,7 @@ results:
       },
       "esxi02": {
           "changed": true,
-          "msg": "New host graphics settings changed to: hostDefaultGraphicsType = 'shared', sharedPassthruAssignmentPolicy = 'performance'. X.Org was restarted"
+          "msg": "New host graphics settings changed to: hostDefaultGraphicsType = 'shared', sharedPassthruAssignmentPolicy = 'performance'.X.Org was restarted"
       }
   }
 '''
@@ -128,7 +128,10 @@ class VMwareHostGraphicSettings(PyVmomi):
                     if self.module.check_mode:
                         not_world = '' if self.restart_xorg else 'not '
                         self.results[host.name]['changed'] = False
-                        self.results[host.name]['msg'] = f"New host graphics settings would be changed to: hostDefaultGraphicsType = '{current_config.hostDefaultGraphicsType}', sharedPassthruAssignmentPolicy = '{current_config.sharedPassthruAssignmentPolicy}'. X.Org would {not_world}be restrted."
+                        self.results[host.name]['msg'] = f"New host graphics settings would be changed to: hostDefaultGraphicsType = \
+                                                            '{current_config.hostDefaultGraphicsType}', sharedPassthruAssignmentPolicy = \
+                                                            '{current_config.sharedPassthruAssignmentPolicy}'. \
+                                                            X.Org would {not_world}be restrted."
                     else:
                         try:
                             hgm.UpdateGraphicsConfig(current_config)
@@ -137,7 +140,10 @@ class VMwareHostGraphicSettings(PyVmomi):
                             xorg_status = 'was restarted' if self.restart_xorg else 'was not been restarted.'
                             self.results['changed'] = True
                             self.results[host.name]['changed'] = True
-                            self.results[host.name]['msg'] = f"New host graphics settings changed to: hostDefaultGraphicsType = '{current_config.hostDefaultGraphicsType}', sharedPassthruAssignmentPolicy = '{current_config.sharedPassthruAssignmentPolicy}'. X.Org {xorg_status}"
+                            self.results[host.name]['msg'] = f"New host graphics settings changed to: hostDefaultGraphicsType = \
+                                                                '{current_config.hostDefaultGraphicsType}', sharedPassthruAssignmentPolicy = \
+                                                                '{current_config.sharedPassthruAssignmentPolicy}'. \
+                                                                X.Org {xorg_status}"
                         except vim.fault.HostConfigFault as config_fault:
                             self.module.fail_json(
                                 msg=f"Failed ro configure host graphics settings for host {host.name} due to : {to_native(config_fault.msg)}"
