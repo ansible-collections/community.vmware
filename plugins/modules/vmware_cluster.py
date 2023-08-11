@@ -33,6 +33,13 @@ options:
       type: str
       required: true
       aliases: [ datacenter_name ]
+    folder:
+      description:
+      - The name of the folder to create the cluster in
+      type: str
+      required: false
+      aliases: [ folder_name ]
+
     state:
       description:
       - Create C(present) or remove C(absent) a VMware vSphere cluster.
@@ -92,8 +99,10 @@ class VMwareCluster(PyVmomi):
         self.cluster_name = module.params['cluster_name']
         self.datacenter_name = module.params['datacenter']
         self.desired_state = module.params['state']
+        self.folder_name = module.params['folder']
         self.datacenter = None
         self.cluster = None
+        self.folder = None
 
     def process_state(self):
         """
@@ -114,34 +123,72 @@ class VMwareCluster(PyVmomi):
         # the appropriate method from the dictionary
         cluster_states[self.desired_state][current_state]()
 
+    def search_folder(self, folder_name):
+        """
+            Search folder in vCenter
+            Returns: folder object
+        """
+        search_index = self.content.searchIndex
+        folder_obj = search_index.FindByInventoryPath(folder_name)
+        if not (folder_obj and isinstance(folder_obj, vim.Folder)):
+            self.module.fail_json(msg="Folder '%s' not found" % folder_name)
+        return folder_obj
+
     def state_create_cluster(self):
         """
         Create cluster with given configuration
         """
-        try:
-            cluster_config_spec = vim.cluster.ConfigSpecEx()
-            if not self.module.check_mode:
-                self.datacenter.hostFolder.CreateClusterEx(self.cluster_name, cluster_config_spec)
-            self.module.exit_json(changed=True)
-        except vmodl.fault.InvalidArgument as invalid_args:
-            self.module.fail_json(msg="Cluster configuration specification"
-                                      " parameter is invalid : %s" % to_native(invalid_args.msg))
-        except vim.fault.InvalidName as invalid_name:
-            self.module.fail_json(msg="'%s' is an invalid name for a"
-                                      " cluster : %s" % (self.cluster_name,
-                                                         to_native(invalid_name.msg)))
-        except vmodl.fault.NotSupported as not_supported:
-            # This should never happen
-            self.module.fail_json(msg="Trying to create a cluster on an incorrect"
-                                      " folder object : %s" % to_native(not_supported.msg))
-        except vmodl.RuntimeFault as runtime_fault:
-            self.module.fail_json(msg=to_native(runtime_fault.msg))
-        except vmodl.MethodFault as method_fault:
-            # This should never happen either
-            self.module.fail_json(msg=to_native(method_fault.msg))
-        except Exception as generic_exc:
-            self.module.fail_json(msg="Failed to create cluster"
-                                      " due to generic exception %s" % to_native(generic_exc))
+        if self.folder_name:
+            self.folder = self.search_folder(self.folder_name)
+            try:
+                cluster_config_spec = vim.cluster.ConfigSpecEx()
+                if not self.module.check_mode:
+                    self.folder.CreateClusterEx(self.cluster_name, cluster_config_spec)
+                self.module.exit_json(changed=True)
+            except vmodl.fault.InvalidArgument as invalid_args:
+                self.module.fail_json(msg="Cluster configuration specification"
+                                          " parameter is invalid : %s" % to_native(invalid_args.msg))
+            except vim.fault.InvalidName as invalid_name:
+                self.module.fail_json(msg="'%s' is an invalid name for a"
+                                          " cluster : %s" % (self.cluster_name,
+                                                             to_native(invalid_name.msg)))
+            except vmodl.fault.NotSupported as not_supported:
+                # This should never happen
+                self.module.fail_json(msg="Trying to create a cluster on an incorrect"
+                                          " folder object : %s" % to_native(not_supported.msg))
+            except vmodl.RuntimeFault as runtime_fault:
+                self.module.fail_json(msg=to_native(runtime_fault.msg))
+            except vmodl.MethodFault as method_fault:
+                # This should never happen either
+                self.module.fail_json(msg=to_native(method_fault.msg))
+            except Exception as generic_exc:
+                self.module.fail_json(msg="Failed to create cluster"
+                                          " due to generic exception %s" % to_native(generic_exc))
+        else:
+            try:
+                cluster_config_spec = vim.cluster.ConfigSpecEx()
+                if not self.module.check_mode:
+                    self.datacenter.hostFolder.CreateClusterEx(self.cluster_name, cluster_config_spec)
+                self.module.exit_json(changed=True)
+            except vmodl.fault.InvalidArgument as invalid_args:
+                self.module.fail_json(msg="Cluster configuration specification"
+                                          " parameter is invalid : %s" % to_native(invalid_args.msg))
+            except vim.fault.InvalidName as invalid_name:
+                self.module.fail_json(msg="'%s' is an invalid name for a"
+                                          " cluster : %s" % (self.cluster_name,
+                                                             to_native(invalid_name.msg)))
+            except vmodl.fault.NotSupported as not_supported:
+                # This should never happen
+                self.module.fail_json(msg="Trying to create a cluster on an incorrect"
+                                          " folder object : %s" % to_native(not_supported.msg))
+            except vmodl.RuntimeFault as runtime_fault:
+                self.module.fail_json(msg=to_native(runtime_fault.msg))
+            except vmodl.MethodFault as method_fault:
+                # This should never happen either
+                self.module.fail_json(msg=to_native(method_fault.msg))
+            except Exception as generic_exc:
+                self.module.fail_json(msg="Failed to create cluster"
+                                          " due to generic exception %s" % to_native(generic_exc))
 
     def state_destroy_cluster(self):
         """
@@ -200,6 +247,7 @@ def main():
     argument_spec.update(dict(
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),
+        folder=dict(type='str', required=False, aliases=['folder_name']),
         state=dict(type='str',
                    default='present',
                    choices=['absent', 'present']),
