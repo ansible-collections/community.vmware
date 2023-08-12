@@ -120,6 +120,7 @@ options:
         - This is a required parameter, if C(url) is not set and C(ovf) parameter must be set.
         - C(url) and C(ovf) are mutually exclusive parameters.
         type: str
+        version_added: '3.9.0'
     power_on:
         default: true
         description:
