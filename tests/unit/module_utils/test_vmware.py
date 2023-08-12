@@ -10,9 +10,10 @@ import ssl
 import sys
 import pytest
 
+from unittest import mock
+
 pyvmomi = pytest.importorskip('pyVmomi')
 
-from ansible_collections.community.vmware.tests.unit.compat import mock
 from ansible_collections.community.vmware.plugins.module_utils.vmware import option_diff
 
 import ansible_collections.community.vmware.plugins.module_utils.vmware as vmware_module_utils
