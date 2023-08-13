@@ -13,7 +13,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 author:
     - Alexander Nikitin (@ihumster)
-    - Matt Martz <matt@sivel.net>
+    - Matt Martz (@sivel)
 short_description: 'Deploys a VMware virtual machine from an OVF or OVA file, placed on file system or HTTP server'
 description:
     - 'This module can be used to deploy a VMware VM from an OVF or OVA file, placed on file system or HTTP server'
