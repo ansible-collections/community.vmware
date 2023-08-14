@@ -5,6 +5,17 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.9.0
+======
+
+Minor Changes
+-------------
+
+- vmware_guest - add support for configuring vMotion and FT encryption (https://github.com/ansible-collections/community.vmware/issues/1069)
+- vmware_host_datastore - added new datastore type 'vvol' for enabling creation/deletion of vVols datastores
+- vmware_host_datastore - added new parameter resignature for supporting resignaturing an existing VMFS datastore on an imported/cloned LUN.
+- vmware_vm_info -  Add `instance_uuid` to the result (https://github.com/ansible-collections/community.vmware/issues/1805)
+
 v3.8.0
 ======
 

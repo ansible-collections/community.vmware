@@ -1616,3 +1616,17 @@ releases:
       name: vmware_vasa_info
       namespace: ''
     release_date: '2023-07-16'
+  3.9.0:
+    changes:
+      minor_changes:
+      - vmware_guest - add support for configuring vMotion and FT encryption (https://github.com/ansible-collections/community.vmware/issues/1069)
+      - vmware_host_datastore - added new datastore type 'vvol' for enabling creation/deletion
+        of vVols datastores
+      - vmware_host_datastore - added new parameter resignature for supporting resignaturing
+        an existing VMFS datastore on an imported/cloned LUN.
+      - vmware_vm_info -  Add `instance_uuid` to the result (https://github.com/ansible-collections/community.vmware/issues/1805)
+    fragments:
+    - 1069_vmware_guest.yml
+    - 1777-vmware_host_datastore-resignature_vvols.yaml
+    - 1805_vmware_vm_info.yml
+    release_date: '2023-08-14'

@@ -5,7 +5,7 @@
 community.vmware.vmware_dvswitch_uplink_pg
 ******************************************
 
-**Manage uplink portproup configuration of a Distributed Switch**
+**Manage uplink portgroup configuration of a Distributed Switch**
 
 
 
