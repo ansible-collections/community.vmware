@@ -86,10 +86,11 @@ Parameters
                                     <li>nfs</li>
                                     <li>nfs41</li>
                                     <li>vmfs</li>
+                                    <li>vvol</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Type of the datastore to configure (nfs/nfs41/vmfs).</div>
+                        <div>Type of the datastore to configure (nfs/nfs41/vmfs/vvol).</div>
                 </td>
             </tr>
             <tr>
@@ -251,6 +252,27 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>resignature</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.9.0</div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Allows forcing resignature of unresolved VMFS datastore that already exists on the specified disk device.</div>
+                        <div>Unused if datastore type is not set to <code>vmfs</code> and state is not set to <code>present</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>state</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -306,6 +328,22 @@ Parameters
                         <div>If the value is not specified in the task, the value of environment variable <code>VMWARE_VALIDATE_CERTS</code> will be used instead.</div>
                         <div>Environment variable support added in Ansible 2.6.</div>
                         <div>If set to <code>true</code>, please make sure Python &gt;= 2.7.9 is installed on the given machine.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>vasa_provider</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.9.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>hostname or ipaddress of the VASA provider to use for vVols provisioning</div>
                 </td>
             </tr>
             <tr>
@@ -405,6 +443,31 @@ Examples
           - { 'name': 'NasDS_vol03', 'server': 'nas01,nas02', 'path': '/mnt/vol01', 'type': 'nfs41'}
           - { 'name': 'NasDS_vol04', 'server': 'nas01,nas02', 'path': '/mnt/vol02', 'type': 'nfs41'}
 
+    - name: Mount vVols datastore to ESXi
+      community.vmware.vmware_host_datastore:
+          hostname: '{{ vcenter_hostname }}'
+          username: '{{ vcenter_username }}'
+          password: '{{ vcenter_password }}'
+          datastore_name: myvvolds
+          datastore_type: vvol
+          vasa_provider: pure-X90a
+          esxi_hostname: esxi-1
+          state: absent
+      delegate_to: localhost
+
+    - name: Mount unresolved VMFS datastores to ESXi
+      community.vmware.vmware_host_datastore:
+          hostname: '{{ vcenter_hostname }}'
+          username: '{{ vcenter_username }}'
+          password: '{{ vcenter_password }}'
+          datastore_name: mydatastore01
+          vmfs_device_name: 'naa.XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+          vmfs_version: 6
+          esxi_hostname:  esxi01
+          resignature: true
+          state: present
+      delegate_to: localhost
+
     - name: Remove/Umount Datastores from a ESXi
       community.vmware.vmware_host_datastore:
           hostname: '{{ esxi_hostname }}'
@@ -426,3 +489,4 @@ Authors
 
 - Ludovic Rivallain (@lrivallain) <ludovic.rivallain@gmail.com>
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>
+- Eugenio Grosso (@genegr) <eugenio.grosso@purestorage.com>

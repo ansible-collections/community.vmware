@@ -125,7 +125,7 @@ Name | Description
 [community.vmware.vmware_dvswitch_lacp](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvswitch_lacp_module.rst)|Manage LACP configuration on a Distributed Switch
 [community.vmware.vmware_dvswitch_nioc](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvswitch_nioc_module.rst)|Manage distributed switch Network IO Control
 [community.vmware.vmware_dvswitch_pvlans](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvswitch_pvlans_module.rst)|Manage Private VLAN configuration of a Distributed Switch
-[community.vmware.vmware_dvswitch_uplink_pg](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvswitch_uplink_pg_module.rst)|Manage uplink portproup configuration of a Distributed Switch
+[community.vmware.vmware_dvswitch_uplink_pg](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_dvswitch_uplink_pg_module.rst)|Manage uplink portgroup configuration of a Distributed Switch
 [community.vmware.vmware_evc_mode](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_evc_mode_module.rst)|Enable/Disable EVC mode on vCenter
 [community.vmware.vmware_export_ovf](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_export_ovf_module.rst)|Exports a VMware virtual machine to an OVF file, device files and a manifest file
 [community.vmware.vmware_first_class_disk](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_first_class_disk_module.rst)|Manage VMware vSphere First Class Disks
