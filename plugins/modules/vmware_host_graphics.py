@@ -11,7 +11,7 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_host_graphics
-version_added: '3.9.0'
+version_added: '3.10.0'
 short_description: Manage Host Graphic Settings
 description:
 - This module can be used to manage Host Graphic Settings
