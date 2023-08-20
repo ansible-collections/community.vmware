@@ -172,6 +172,9 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
+        required_one_of=[
+            ['cluster_name', 'esxi_hostname'],
+        ],
     )
 
     if not HAS_PYVMOMI:
