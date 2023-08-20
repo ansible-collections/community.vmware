@@ -98,12 +98,12 @@ class VMwareHostGraphicSettings(PyVmomi):
     """ Main class for configuring Host Graphics Settings """
     def __init__(self, module):
         super(VMwareHostGraphicSettings, self).__init__(module)
-        self.graphic_type = self.params.get('graphic_type', 'shared')
-        self.assigment_policy = self.params.get('assigment_policy', 'performance')
-        self.restart_xorg = self.params.get('restart_xorg', True)
+        self.graphic_type = self.params['graphic_type']
+        self.assigment_policy = self.params['assigment_policy']
+        self.restart_xorg = self.params['restart_xorg']
         self.results = {"changed": False}
-        esxi_hostname = self.params.get('esxi_hostname', None)
-        cluster_name = self.params.get('cluster_name', None)
+        esxi_hostname = self.params['esxi_hostname']
+        cluster_name = self.params['cluster_name']
         self.hosts = self.get_all_host_objs(cluster_name=cluster_name, esxi_host_name=esxi_hostname)
         if self.hosts is None:
             self.module.fail_json(msg="Failed to find host system.")
@@ -164,11 +164,11 @@ def main():
     """ Main module method"""
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        cluster_name=dict(type='str', required=False),
-        esxi_hostname=dict(type='list', required=False, elements='str'),
-        graphic_type=dict(type='str', default='shared', choices=['shared', 'sharedDirect'], required=False),
-        assigment_policy=dict(type='str', default='performance', choices=['consolidation', 'performance'], required=False),
-        restart_xorg=dict(type='bool', required=False, default=False),
+        cluster_name=dict(type='str'),
+        esxi_hostname=dict(type='list', elements='str'),
+        graphic_type=dict(type='str', default='shared', choices=['shared', 'sharedDirect']),
+        assigment_policy=dict(type='str', default='performance', choices=['consolidation', 'performance']),
+        restart_xorg=dict(type='bool', default=False),
     )
 
     module = AnsibleModule(
