@@ -45,7 +45,7 @@ options:
   restart_xorg:
     description:
     - Restart X.Org Server after change any parameter ( C(graphic_type) or C(assigment_policy) )
-    default: True
+    default: False
     type: bool
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -95,6 +95,7 @@ from ansible.module_utils._text import to_native
 
 
 class VMwareHostGraphicSettings(PyVmomi):
+    """ Main class for configuring Host Graphics Settings """
     def __init__(self, module):
         super(VMwareHostGraphicSettings, self).__init__(module)
         self.graphic_type = self.params.get('graphic_type', 'shared')
@@ -129,16 +130,16 @@ class VMwareHostGraphicSettings(PyVmomi):
                     if self.module.check_mode:
                         not_world = '' if self.restart_xorg else 'not '
                         self.results[host.name]['changed'] = False
-                        self.results[host.name]['msg'] = f"New host graphics settings would be changed to: hostDefaultGraphicsType = \
+                        self.results[host.name]['msg'] = f"New host graphics settings will be changed to: hostDefaultGraphicsType = \
                                                             '{current_config.hostDefaultGraphicsType}', sharedPassthruAssignmentPolicy = \
                                                             '{current_config.sharedPassthruAssignmentPolicy}'. \
-                                                            X.Org would {not_world}be restrted."
+                                                            X.Org will {not_world}be restarted."
                     else:
                         try:
                             hgm.UpdateGraphicsConfig(current_config)
                             if self.restart_xorg:
                                 hsm.RestartService('xorg')
-                            xorg_status = 'was restarted' if self.restart_xorg else 'was not been restarted.'
+                            xorg_status = 'was restarted' if self.restart_xorg else 'was not restarted.'
                             self.results['changed'] = True
                             self.results[host.name]['changed'] = True
                             self.results[host.name]['msg'] = f"New host graphics settings changed to: hostDefaultGraphicsType = \
@@ -147,11 +148,11 @@ class VMwareHostGraphicSettings(PyVmomi):
                                                                 X.Org {xorg_status}"
                         except vim.fault.HostConfigFault as config_fault:
                             self.module.fail_json(
-                                msg=f"Failed ro configure host graphics settings for host {host.name} due to : {to_native(config_fault.msg)}"
+                                msg=f"Failed to configure host graphics settings for host {host.name} due to : {to_native(config_fault.msg)}"
                             )
                 else:
                     self.results[host.name]['changed'] = False
-                    self.results[host.name]['msg'] = 'All Host Graphics Settings already configured'
+                    self.results[host.name]['msg'] = 'All Host Graphics Settings have already been configured'
             else:
                 self.results[host.name]['changed'] = False
                 self.results[host.name]['msg'] = f"Host {host.name} is disconnected and cannot be changed"
@@ -160,13 +161,14 @@ class VMwareHostGraphicSettings(PyVmomi):
 
 
 def main():
+    """ Main module method"""
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='list', required=False, elements='str'),
         graphic_type=dict(type='str', default='shared', choices=['shared', 'sharedDirect'], required=False),
         assigment_policy=dict(type='str', default='performance', choices=['consolidation', 'performance'], required=False),
-        restart_xorg=dict(type='bool', required=False, default=True),
+        restart_xorg=dict(type='bool', required=False, default=False),
     )
 
     module = AnsibleModule(
