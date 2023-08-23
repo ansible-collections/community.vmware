@@ -177,6 +177,7 @@ Name | Description
 [community.vmware.vmware_host_feature_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_feature_info_module.rst)|Gathers info about an ESXi host's feature capability information
 [community.vmware.vmware_host_firewall_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_firewall_info_module.rst)|Gathers info about an ESXi host's firewall configuration information
 [community.vmware.vmware_host_firewall_manager](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_firewall_manager_module.rst)|Manage firewall configurations about an ESXi host
+[community.vmware.vmware_host_graphics](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_graphics_module.rst)|Manage Host Graphic Settings
 [community.vmware.vmware_host_hyperthreading](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_hyperthreading_module.rst)|Enables/Disables Hyperthreading optimization for an ESXi host system
 [community.vmware.vmware_host_ipv6](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_ipv6_module.rst)|Enables/Disables IPv6 support for an ESXi host system
 [community.vmware.vmware_host_iscsi](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_host_iscsi_module.rst)|Manage the iSCSI configuration of ESXi host
