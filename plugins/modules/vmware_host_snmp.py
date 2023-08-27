@@ -556,7 +556,7 @@ def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
-        esxi_hostname=dict(type='list', elemets='str', required=False),
+        esxi_hostname=dict(type='list', elements='str', required=False),
         state=dict(type='str', default='disabled', choices=['enabled', 'disabled', 'reset']),
         snmp_port=dict(type='int', default=161),
         community=dict(type='list', default=[], elements='str'),
