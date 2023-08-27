@@ -35,6 +35,24 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>cluster_name</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of cluster.</div>
+                        <div>All host system from given cluster used to manage SNMP agent.</div>
+                        <div>Required parameter, if <code>esxi_hostname</code> is not set.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>community</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -47,6 +65,24 @@ Parameters
                 </td>
                 <td>
                         <div>List of SNMP community strings.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>esxi_hostname</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>List of ESXi hostname to manage SNMP agent.</div>
+                        <div>Required parameter, if <code>cluster_name</code> is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -356,7 +392,7 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Enable and configure SNMP community
+    - name: Enable and configure SNMP community on standalone ESXi host
       community.vmware.vmware_host_snmp:
         hostname: '{{ esxi_hostname }}'
         username: '{{ esxi_username }}'
@@ -365,11 +401,12 @@ Examples
         state: enabled
       delegate_to: localhost
 
-    - name: Configure SNMP traps and filters
+    - name: Configure SNMP traps and filters on cluster
       community.vmware.vmware_host_snmp:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        cluster_name: '{{ cluster_name }}'
         community: [ test ]
         trap_targets:
           - hostname: 192.168.1.100
@@ -384,17 +421,18 @@ Examples
         state: enabled
       delegate_to: localhost
 
-    - name: Enable and configure SNMP system contact and location
+    - name: Enable and configure SNMP system contact and location on simple ESXi host in vCenter
       community.vmware.vmware_host_snmp:
-        hostname: '{{ esxi_hostname }}'
-        username: '{{ esxi_username }}'
-        password: '{{ esxi_password }}'
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        esxi_hostname: '{{ esxi_hostname }}'
         sys_contact: "admin@testemail.com"
         sys_location: "Austin, USA"
         state: enabled
       delegate_to: localhost
 
-    - name: Disable SNMP
+    - name: Disable SNMP on standalone ESXi host
       community.vmware.vmware_host_snmp:
         hostname: '{{ esxi_hostname }}'
         username: '{{ esxi_username }}'
@@ -430,7 +468,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>metadata about host system&#x27;s SNMP configuration</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;esxi01&#x27;: {&#x27;changed&#x27;: False, &#x27;community&#x27;: [&#x27;test&#x27;], &#x27;hw_source&#x27;: &#x27;indications&#x27;, &#x27;msg&#x27;: &#x27;SNMP already configured properly&#x27;, &#x27;port&#x27;: 161, &#x27;state&#x27;: &#x27;enabled&#x27;, &#x27;trap_targets&#x27;: []}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;esx01.example.local&#x27;: {&#x27;changed&#x27;: True, &#x27;community&#x27;: [&#x27;test&#x27;], &#x27;community_previous&#x27;: [], &#x27;hw_source&#x27;: &#x27;indications&#x27;, &#x27;log_level&#x27;: &#x27;info&#x27;, &#x27;log_level_previous&#x27;: &#x27;warning&#x27;, &#x27;msg&#x27;: &#x27;SNMP state, community list, log level, sys contact, and sys location changed&#x27;, &#x27;port&#x27;: 161, &#x27;state&#x27;: &#x27;enabled&#x27;, &#x27;state_previous&#x27;: &#x27;disabled&#x27;, &#x27;sys_contact_previous&#x27;: &#x27;&#x27;, &#x27;sys_location_previous&#x27;: &#x27;&#x27;, &#x27;trap_filter&#x27;: None, &#x27;trap_targets&#x27;: []}, &#x27;failed&#x27;: False}</div>
                 </td>
             </tr>
     </table>
@@ -445,3 +483,4 @@ Authors
 ~~~~~~~
 
 - Christian Kotte (@ckotte)
+- Alexander Nikitin (@ihumster)
