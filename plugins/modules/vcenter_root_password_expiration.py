@@ -93,15 +93,16 @@ class VcRootPasswordExpiration():
     def __init__(self, module: AnsibleModule) -> None:
         self.module = module
         self._state = True if self.module.params['state'] == 'present' else False
+
     def configure_root_account_password_policy(self):
         session = requests.session()
         session.verify = False
         requests.packages.urllib3.disable_warnings()
         _vcsa_access_endpoint = f"{self.module.params['hostname']}:5480"
         client = create_vsphere_client(server=_vcsa_access_endpoint,
-                                    username=self.module.params['username'],
-                                    password=self.module.params['password'],
-                                    session=session)
+                                       username=self.module.params['username'],
+                                       password=self.module.params['password'],
+                                       session=session)
         default_config = client.appliance.LocalAccounts.UpdateConfig()
 
         current_vcenter_info = client.appliance.LocalAccounts.get('root').to_dict()
@@ -121,7 +122,7 @@ class VcRootPasswordExpiration():
             _password_expiration_config = {
                 "max_days_between_password_change": -1
             }
-        
+
         _changes_dict = dict()
         for k, v in _password_expiration_config.items():
             try:
@@ -143,31 +144,32 @@ class VcRootPasswordExpiration():
             if not self.module.check_mode:
                 _change_result_key = 'values_changed'
                 client.appliance.LocalAccounts.update('root', default_config)
-            self.module.exit_json(changed=True, result={_change_result_key:_changes_dict})
+            self.module.exit_json(changed=True, result={_change_result_key: _changes_dict})
         self.module.exit_json(changed=False, result="No configuration changes needed")
+
 
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
         dict(
             state=dict(default='present',
-                        choices=['present', 'absent'],
-                        type='str')
-            ),
-            email=dict(required=False, type='str'),
-            max_days_between_password_change=dict(reqired=False, type='int'),
-            min_days_between_password_change=dict(reqired=False, type='int'),
-            warn_days_before_password_expiration=dict(reqired=False, type='int'),
-        )
+                       choices=['present', 'absent'],
+                       type='str')
+        ),
+        email=dict(required=False, type='str'),
+        max_days_between_password_change=dict(reqired=False, type='int'),
+        min_days_between_password_change=dict(reqired=False, type='int'),
+        warn_days_before_password_expiration=dict(reqired=False, type='int'),
+    )
 
     module = AnsibleModule(argument_spec=argument_spec,
-                            required_if=[
+                           required_if=[
                                 ('state', 'present', ('email', 'max_days_between_password_change', 'min_days_between_password_change', 'warn_days_before_password_expiration')),
-                            ],
+                           ],
                            supports_check_mode=True)
 
     vc_root_password_policy_manager = VcRootPasswordExpiration(module)
     vc_root_password_policy_manager.configure_root_account_password_policy()
-    
+
 if __name__ == '__main__':
     main()
