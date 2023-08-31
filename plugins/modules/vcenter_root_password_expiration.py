@@ -85,11 +85,13 @@ EXAMPLES = r'''
 
 import requests
 
-from vmware.vapi.vsphere.client import create_vsphere_client
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
-from ansible.module_utils.basic import AnsibleModule
 
-class VcRootPasswordExpiration():
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+
+
+class VcRootPasswordExpiration(VmwareRestClient):
     def __init__(self, module: AnsibleModule) -> None:
         self.module = module
         self._state = True if self.module.params['state'] == 'present' else False
@@ -98,14 +100,9 @@ class VcRootPasswordExpiration():
         session = requests.session()
         session.verify = False
         requests.packages.urllib3.disable_warnings()
-        _vcsa_access_endpoint = f"{self.module.params['hostname']}:5480"
-        client = create_vsphere_client(server=_vcsa_access_endpoint,
-                                       username=self.module.params['username'],
-                                       password=self.module.params['password'],
-                                       session=session)
-        default_config = client.appliance.LocalAccounts.UpdateConfig()
+        default_config = self.api_client.appliance.LocalAccounts.UpdateConfig()
 
-        current_vcenter_info = client.appliance.LocalAccounts.get('root').to_dict()
+        current_vcenter_info = self.api_client.appliance.LocalAccounts.get('root').to_dict()
 
         if self._state and self.module.params['min_days_between_password_change'] > self.module.params['max_days_between_password_change']:
             self.module.fail_json("min_days_between_password_change cannot be higher than max_days_between_password_change")
@@ -143,7 +140,7 @@ class VcRootPasswordExpiration():
         if _changes_dict:
             if not self.module.check_mode:
                 _change_result_key = 'values_changed'
-                client.appliance.LocalAccounts.update('root', default_config)
+                self.api_client.appliance.LocalAccounts.update('root', default_config)
             self.module.exit_json(changed=True, result={_change_result_key: _changes_dict})
         self.module.exit_json(changed=False, result="No configuration changes needed")
 
@@ -164,12 +161,13 @@ def main():
 
     module = AnsibleModule(argument_spec=argument_spec,
                            required_if=[
-                                ('state', 'present', ('email', 'max_days_between_password_change', 'min_days_between_password_change', 'warn_days_before_password_expiration')),
+                               ('state', 'present', ('email', 'max_days_between_password_change', 'min_days_between_password_change', 'warn_days_before_password_expiration')),
                            ],
                            supports_check_mode=True)
 
     vc_root_password_policy_manager = VcRootPasswordExpiration(module)
     vc_root_password_policy_manager.configure_root_account_password_policy()
+
 
 if __name__ == '__main__':
     main()
