@@ -83,8 +83,6 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-import requests
-
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 
 from ansible.module_utils.basic import AnsibleModule
@@ -97,9 +95,6 @@ class VcRootPasswordExpiration(VmwareRestClient):
         self._state = True if self.module.params['state'] == 'present' else False
 
     def configure_root_account_password_policy(self):
-        session = requests.session()
-        session.verify = False
-        requests.packages.urllib3.disable_warnings()
         default_config = self.api_client.appliance.LocalAccounts.UpdateConfig()
 
         current_vcenter_info = self.api_client.appliance.LocalAccounts.get('root').to_dict()
@@ -135,7 +130,6 @@ class VcRootPasswordExpiration(VmwareRestClient):
                 '''
                 _changes_dict[k] = v
             setattr(default_config, k, v)
-        session.close()
         _change_result_key = 'values_would_be_changed'
         if _changes_dict:
             if not self.module.check_mode:
