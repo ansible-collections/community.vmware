@@ -155,7 +155,11 @@ def main():
 
     module = AnsibleModule(argument_spec=argument_spec,
                            required_if=[
-                               ('state', 'present', ('email', 'max_days_between_password_change', 'min_days_between_password_change', 'warn_days_before_password_expiration')),
+                               (
+                                   'state',
+                                   'present',
+                                   ('email', 'max_days_between_password_change', 'min_days_between_password_change', 'warn_days_before_password_expiration')
+                               ),
                            ],
                            supports_check_mode=True)
 
