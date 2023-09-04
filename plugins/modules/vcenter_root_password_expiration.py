@@ -9,6 +9,7 @@
 DOCUMENTATION = r'''
 ---
 module: vcenter_root_password_expiration
+version_added: '3.10.0'
 short_description: root password expiration of vCSA
 description: Manages password expiration configuration for root user of vCSA appliance
 author:
