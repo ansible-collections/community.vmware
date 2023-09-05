@@ -64,7 +64,7 @@ options:
 
 EXAMPLES = r'''
 - name: Configures expiring root password
-  sap.hec.vcenter_root_password_expiration:
+  vcenter_root_password_expiration:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_localos_username }}'
     password: '{{ vcenter_password }}'
@@ -76,7 +76,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 
 - name: Configures non-expiring root password
-  sap.hec.vcenter_root_password_expiration:
+  vcenter_root_password_expiration:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_localos_username }}'
     password: '{{ vcenter_localos_password }}'
