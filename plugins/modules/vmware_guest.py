@@ -252,11 +252,11 @@ options:
     suboptions:
         encrypted_vmotion:
             type: str
-            description: Controlls encryption for live migrations with vmotion
+            description: Controls encryption for live migrations with vmotion
             choices: ['disabled', 'opportunistic', 'required']
         encrypted_ft:
             type: str
-            description: Controlls encryption for fault tolerance replication
+            description: Controls encryption for fault tolerance replication
             choices: ['disabled', 'opportunistic', 'required']
   guest_id:
     type: str
@@ -3202,7 +3202,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_guestid(vm_obj=self.current_vm_obj)
         self.configure_cpu_and_memory(vm_obj=self.current_vm_obj)
         self.configure_hardware_params(vm_obj=self.current_vm_obj)
-        self.configure_encryption_params(vm_obj=self.current_vm_obj)
+        self.configure__params(vm_obj=self.current_vm_obj)
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
