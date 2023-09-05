@@ -14,25 +14,7 @@ short_description: root password expiration of vCSA
 description: Manages password expiration configuration for root user of vCSA appliance
 author:
     - Valentin Yonev (@valentinJonev)
-requirements:
-    - "python >= 3.8"
-    - vSphere Automation SDK
 options:
-    hostname:
-        description:
-        - The vCenter hostname.
-        required: True
-        type: str
-    username:
-        description:
-        - vCenter username
-        required: True
-        type: str
-    password:
-        description:
-        - Password for specified vCenter user
-        required: True
-        type: str
     state:
         description:
         - present - represents that password expiration must be configured
@@ -60,6 +42,8 @@ options:
         - Days before password expires and password expiration e-mail should be sent
         type: int
         required: false
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = r'''
@@ -149,9 +133,9 @@ def main():
                        type='str')
         ),
         email=dict(required=False, type='str'),
-        max_days_between_password_change=dict(reqired=False, type='int'),
-        min_days_between_password_change=dict(reqired=False, type='int'),
-        warn_days_before_password_expiration=dict(reqired=False, type='int'),
+        max_days_between_password_change=dict(type='int', no_log=True),
+        min_days_between_password_change=dict(type='int', no_log=True),
+        warn_days_before_password_expiration=dict(type='int', no_log=True),
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
