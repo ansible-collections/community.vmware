@@ -252,11 +252,11 @@ options:
     suboptions:
         encrypted_vmotion:
             type: str
-            description: Controlls encryption for live migrations with vmotion
+            description: Controls encryption for live migrations with vmotion
             choices: ['disabled', 'opportunistic', 'required']
         encrypted_ft:
             type: str
-            description: Controlls encryption for fault tolerance replication
+            description: Controls encryption for fault tolerance replication
             choices: ['disabled', 'opportunistic', 'required']
   guest_id:
     type: str
