@@ -673,13 +673,12 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             password = self.templar.template(variable=password, disable_lookups=False)
         elif isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
-        
-        
+
         if self.templar.is_template(username):
             username = self.templar.template(variable=username, disable_lookups=False)
         elif isinstance(username, AnsibleVaultEncryptedUnicode):
             username = username.data
-        
+
         self.pyv = BaseVMwareInventory(
             hostname=self.get_option('hostname'),
             username=username,
