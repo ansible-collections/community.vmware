@@ -439,6 +439,7 @@ Parameters
                 <td>
                         <div>Password of vSphere user.</div>
                         <div>Accepts vault encrypted variable.</div>
+                        <div>Accepts Jinja to template the value</div>
                 </td>
             </tr>
             <tr>
@@ -615,6 +616,7 @@ Parameters
                 <td>
                         <div>Name of vSphere user.</div>
                         <div>Accepts vault encrypted variable.</div>
+                        <div>Accepts Jinja to template the value</div>
                 </td>
             </tr>
             <tr>
@@ -747,6 +749,15 @@ Examples
         hostname: 10.65.223.31
         username: administrator@vsphere.local
         password: Esxi@123$%
+        validate_certs: false
+        with_tags: true
+
+    # Sample configuration file for VMware Guest dynamic inventory using Jinja to template the username and password.
+        plugin: community.vmware.vmware_vm_inventory
+        strict: false
+        hostname: 10.65.223.31
+        username: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).username }}'
+        password: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).password }}'
         validate_certs: false
         with_tags: true
 
