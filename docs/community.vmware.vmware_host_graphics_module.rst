@@ -8,6 +8,7 @@ community.vmware.vmware_host_graphics
 **Manage Host Graphic Settings**
 
 
+Version added: 3.10.0
 
 .. contents::
    :local:
@@ -202,8 +203,8 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
                         </ul>
                 </td>
                 <td>
@@ -305,7 +306,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>data about host system graphics settings.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;esxi01&#x27;: {&#x27;changed&#x27;: False, &#x27;msg&#x27;: &#x27;All Host Graphics Settings already configured&#x27;}, &#x27;esxi02&#x27;: {&#x27;changed&#x27;: True, &#x27;msg&#x27;: &quot;New host graphics settings changed to: hostDefaultGraphicsType = &#x27;shared&#x27;, sharedPassthruAssignmentPolicy = &#x27;performance&#x27;. X.Org was restarted&quot;}}</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">{&#x27;changed&#x27;: True, &#x27;esxi01&#x27;: {&#x27;changed&#x27;: False, &#x27;msg&#x27;: &#x27;All Host Graphics Settings already configured&#x27;}, &#x27;esxi02&#x27;: {&#x27;changed&#x27;: True, &#x27;msg&#x27;: &quot;New host graphics settings changed to: hostDefaultGraphicsType = &#x27;shared&#x27;, sharedPassthruAssignmentPolicy = &#x27;performance&#x27;.X.Org was restarted&quot;}}</div>
                 </td>
             </tr>
     </table>
