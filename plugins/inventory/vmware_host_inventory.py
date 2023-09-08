@@ -32,6 +32,7 @@ DOCUMENTATION = r"""
             description:
             - Name of vSphere user.
             - Accepts vault encrypted variable.
+            - Accepts Jinja to template the value
             required: true
             env:
               - name: VMWARE_USER
@@ -40,6 +41,7 @@ DOCUMENTATION = r"""
             description:
             - Password of vSphere user.
             - Accepts vault encrypted variable.
+            - Accepts Jinja to template the value
             required: true
             env:
               - name: VMWARE_PASSWORD
@@ -155,6 +157,15 @@ EXAMPLES = r"""
     validate_certs: false
     with_tags: true
 
+# Sample configuration file for VMware Guest dynamic inventory using Jinja to template the username and password.
+    plugin: community.vmware.vmware_host_inventory
+    strict: false
+    hostname: 10.65.223.31
+    username: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).username }}'
+    password: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).password }}'
+    validate_certs: false
+    with_tags: true
+
 # Using compose
     plugin: community.vmware.vmware_host_inventory
     hostname: 10.65.223.31
@@ -236,11 +247,15 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         username = self.get_option("username")
         password = self.get_option("password")
 
-        if isinstance(username, AnsibleVaultEncryptedUnicode):
-            username = username.data
-
-        if isinstance(password, AnsibleVaultEncryptedUnicode):
+        if self.templar.is_template(password):
+            password = self.templar.template(variable=password, disable_lookups=False)
+        elif isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
+
+        if self.templar.is_template(username):
+            username = self.templar.template(variable=username, disable_lookups=False)
+        elif isinstance(username, AnsibleVaultEncryptedUnicode):
+            username = username.data
 
         self.pyv = BaseVMwareInventory(
             hostname=self.get_option("hostname"),
