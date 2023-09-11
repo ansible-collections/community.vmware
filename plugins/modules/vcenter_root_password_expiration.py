@@ -133,9 +133,9 @@ def main():
                        type='str')
         ),
         email=dict(required=False, type='str'),
-        max_days_between_password_change=dict(type='int', no_log=True),
-        min_days_between_password_change=dict(type='int', no_log=True),
-        warn_days_before_password_expiration=dict(type='int', no_log=True),
+        max_days_between_password_change=dict(type='int', no_log=False),
+        min_days_between_password_change=dict(type='int', no_log=False),
+        warn_days_before_password_expiration=dict(type='int', no_log=False),
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
