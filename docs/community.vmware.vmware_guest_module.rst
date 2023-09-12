@@ -1014,7 +1014,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Controlls encryption for fault tolerance replication</div>
+                        <div>Controls encryption for fault tolerance replication</div>
                 </td>
             </tr>
             <tr>
@@ -1035,7 +1035,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Controlls encryption for live migrations with vmotion</div>
+                        <div>Controls encryption for live migrations with vmotion</div>
                 </td>
             </tr>
 
