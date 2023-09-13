@@ -8,6 +8,7 @@ action_groups:
   - vcenter_extension_info
   - vcenter_folder
   - vcenter_license
+  - vcenter_root_password_expiration
   - vcenter_standard_key_provider
   - vmware_about_info
   - vmware_category
@@ -100,6 +101,7 @@ action_groups:
   - vmware_host_feature_info
   - vmware_host_firewall_info
   - vmware_host_firewall_manager
+  - vmware_host_graphics
   - vmware_host_hyperthreading
   - vmware_host_ipv6
   - vmware_host_iscsi
