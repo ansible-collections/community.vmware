@@ -228,7 +228,7 @@ EXAMPLES = r'''
       datacenter: "{{ datacenter_name }}"
       folder: "/{{ datacenter_name }}/vm/"
       name: "{{ guest_name }}"
-      snapshot_name: 10
+      snapshot_id: 10
       state: absent
     delegate_to: localhost
 
