@@ -84,8 +84,14 @@ options:
    snapshot_name:
      description:
      - Sets the snapshot name to manage.
-     - This param is required only if state is not C(remove_all)
+     - This param or C(snapshot_id) is required only if state is not C(remove_all)
      type: str
+   snapshot_id:
+     description:
+     - Sets the snapshot id to manage.
+     - This param is available when state is C(absent).
+     type: int
+     version_added: 3.10.0
    description:
      description:
      - Define an arbitrary description to attach to snapshot.
@@ -214,6 +220,18 @@ EXAMPLES = r'''
       snapshot_name: snap1
     delegate_to: localhost
 
+  - name: Remove a snapshot with a snapshot id
+    community.vmware.vmware_guest_snapshot:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      folder: "/{{ datacenter_name }}/vm/"
+      name: "{{ guest_name }}"
+      snapshot_name: 10
+      state: absent
+    delegate_to: localhost
+
   - name: Rename a snapshot
     community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
@@ -293,6 +311,16 @@ class PyVmomiHelper(PyVmomi):
                 snap_obj = snap_obj + self.get_snapshots_by_name_recursively(snapshot.childSnapshotList, snapname)
         return snap_obj
 
+    def get_snapshots_by_id_recursively(self, snapshots, snapid):
+        snap_obj = []
+        for snapshot in snapshots:
+            if snapshot.id == snapid:
+                snap_obj.append(snapshot)
+            else:
+                snap_obj = snap_obj + self.get_snapshots_by_id_recursively(snapshot.childSnapshotList, snapid)
+
+        return snap_obj
+
     def snapshot_vm(self, vm):
         memory_dump = False
         quiesce = False
@@ -357,8 +385,13 @@ class PyVmomiHelper(PyVmomi):
             self.module.exit_json(msg="virtual machine - %s doesn't have any"
                                       " snapshots to remove." % vm_name)
 
-        snap_obj = self.get_snapshots_by_name_recursively(vm.snapshot.rootSnapshotList,
-                                                          self.module.params["snapshot_name"])
+        if self.module.params["snapshot_name"]:
+            snap_obj = self.get_snapshots_by_name_recursively(vm.snapshot.rootSnapshotList,
+                                                              self.module.params["snapshot_name"])
+        elif self.module.params["snapshot_id"]:
+            snap_obj = self.get_snapshots_by_id_recursively(vm.snapshot.rootSnapshotList,
+                                                            self.module.params["snapshot_id"])
+
         task = None
         if len(snap_obj) == 1:
             snap_obj = snap_obj[0].snapshot
@@ -414,6 +447,7 @@ def main():
         folder=dict(type='str'),
         datacenter=dict(required=True, type='str'),
         snapshot_name=dict(type='str'),
+        snapshot_id=dict(type='int'),
         description=dict(type='str', default=''),
         quiesce=dict(type='bool', default=False),
         memory_dump=dict(type='bool', default=False),
@@ -429,6 +463,9 @@ def main():
         required_one_of=[
             ['name', 'uuid', 'moid']
         ],
+        mutually_exclusive=[
+            ['snapshot_name', 'snapshot_id']
+        ]
     )
 
     if module.params['folder']:
@@ -444,7 +481,7 @@ def main():
         vm_id = (module.params.get('uuid') or module.params.get('name') or module.params.get('moid'))
         module.fail_json(msg="Unable to manage snapshots for non-existing VM %s" % vm_id)
 
-    if not module.params['snapshot_name'] and module.params['state'] != 'remove_all':
+    if not (module.params['snapshot_name'] or module.params['snapshot_id']) and module.params['state'] != 'remove_all':
         module.fail_json(msg="snapshot_name param is required when state is '%(state)s'" % module.params)
 
     result = pyv.apply_snapshot_op(vm)
