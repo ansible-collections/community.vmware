@@ -16,7 +16,7 @@ short_description: Download from CL
 description: Downloads contents from a Content Library
 author:
 - Christian Neugum (@digifuchsi)
-- Valentin Yonev (valentinJonev)
+- Valentin Yonev (@valentinJonev)
 requirements:
 - vSphere Automation SDK
 options:
