@@ -69,13 +69,14 @@ try:
     from com.vmware.content.library.item_client import DownloadSessionModel
     from com.vmware.content.library.item.downloadsession_client import File as DownloadSessionFile
     HAS_VAUTOMATION_PYTHON_SDK = True
+
+    import requests
 except ImportError:
     pass
 
 import uuid
 import time
 import os
-import requests
 
 
 class VmwareContentLibItemDownload(VmwareRestClient):
