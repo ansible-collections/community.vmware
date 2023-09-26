@@ -2,21 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, division, print_function
-from com.vmware.content_client import SubscribedLibrary
-from vmware.vapi.exception import CoreException
-from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
-from com.vmware.content.library_client import Item
-from ansible.module_utils.basic import AnsibleModule
-from vmware.vapi.stdlib.client.factories import StubConfigurationFactory
-from vmware.vapi.security.user_password import create_user_password_security_context
-from vmware.vapi.security.session import create_session_security_context
-from vmware.vapi.lib.connect import get_requests_connector
-from com.vmware.cis_client import Session
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import requests
-__metaclass__ = type
-
 
 DOCUMENTATION = r'''
 ---
@@ -45,7 +30,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Get all items present in Subscribed Content Library
-  community.vmware.vmware_content_library_info:
+  community.vmware.vmware_content_library_items:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -64,6 +49,21 @@ library_items:
         "SVM-CloudVisor-Installer-6.7.0-10737425.x86_64"
     ]
 '''
+
+from com.vmware.content_client import SubscribedLibrary
+from vmware.vapi.exception import CoreException
+from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from com.vmware.content.library_client import Item
+from ansible.module_utils.basic import AnsibleModule
+from vmware.vapi.stdlib.client.factories import StubConfigurationFactory
+from vmware.vapi.security.user_password import create_user_password_security_context
+from vmware.vapi.security.session import create_session_security_context
+from vmware.vapi.lib.connect import get_requests_connector
+from com.vmware.cis_client import Session
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+import requests
+__metaclass__ = type
 
 
 class Connection:
