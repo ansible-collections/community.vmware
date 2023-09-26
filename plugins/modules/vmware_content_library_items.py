@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Copyright: (c) 2022, VMWare Inc.
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 from __future__ import absolute_import, division, print_function
 
 DOCUMENTATION = r'''
@@ -54,10 +58,6 @@ from vmware.vapi.exception import CoreException
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 from ansible.module_utils.basic import AnsibleModule
-from vmware.vapi.stdlib.client.factories import StubConfigurationFactory
-from vmware.vapi.security.user_password import create_user_password_security_context
-from vmware.vapi.security.session import create_session_security_context
-from vmware.vapi.lib.connect import get_requests_connector
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 HAS_VAUTOMATION_PYTHON_SDK = False
@@ -65,6 +65,12 @@ try:
     from com.vmware.content_client import SubscribedLibrary
     from com.vmware.content.library_client import Item
     from com.vmware.cis_client import Session
+
+    from vmware.vapi.stdlib.client.factories import StubConfigurationFactory
+    from vmware.vapi.security.user_password import create_user_password_security_context
+    from vmware.vapi.security.session import create_session_security_context
+    from vmware.vapi.lib.connect import get_requests_connector
+    
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
