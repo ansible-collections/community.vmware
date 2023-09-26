@@ -54,7 +54,6 @@ library_items:
     ]
 '''
 
-from vmware.vapi.exception import CoreException
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 from ansible.module_utils.basic import AnsibleModule
@@ -70,6 +69,7 @@ try:
     from vmware.vapi.security.user_password import create_user_password_security_context
     from vmware.vapi.security.session import create_session_security_context
     from vmware.vapi.lib.connect import get_requests_connector
+    from vmware.vapi.exception import CoreException
 
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
