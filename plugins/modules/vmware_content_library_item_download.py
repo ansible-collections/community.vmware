@@ -15,8 +15,8 @@ module: vmware_content_library_item_download
 short_description: Download from CL
 description: Downloads contents from a Content Library
 author:
-- Christian Neugum
-- Valentin Yonev
+- Christian Neugum (@digifuchsi)
+- Valentin Yonev (valentinJonev)
 requirements:
 - vSphere Automation SDK
 options:
@@ -63,8 +63,15 @@ downloaded_files:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-from com.vmware.content.library.item_client import DownloadSessionModel
-from com.vmware.content.library.item.downloadsession_client import File as DownloadSessionFile
+
+HAS_VAUTOMATION_PYTHON_SDK = False
+try:
+    from com.vmware.content.library.item_client import DownloadSessionModel
+    from com.vmware.content.library.item.downloadsession_client import File as DownloadSessionFile
+    HAS_VAUTOMATION_PYTHON_SDK = True
+except ImportError:
+    pass
+
 import uuid
 import time
 import os
