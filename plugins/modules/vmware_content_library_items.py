@@ -70,7 +70,7 @@ try:
     from vmware.vapi.security.user_password import create_user_password_security_context
     from vmware.vapi.security.session import create_session_security_context
     from vmware.vapi.lib.connect import get_requests_connector
-    
+
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
     pass
