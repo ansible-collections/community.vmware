@@ -275,10 +275,12 @@ class WebHandle(object):
         self.offset = 0
 
     def _parse_url(self, url):
-        exp1 = r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))"
-        exp2 = r"(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)"
-        exp3 = r"(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
-        return re.match(exp1 + exp2 + exp3, url)
+        HTTP_SCHEMA_PATTERN = (
+            r"(?P<url>(?:(?P<scheme>[a-zA-Z]+:\/\/)?(?P<hostname>(?:[-a-zA-Z0-9@%_\+~#=]{1,256}\.){1,256}(?:[-a-zA-Z0-9@%_\+~#=]{1,256})))"
+            r"(?::(?P<port>[[:digit:]]+))?(?P<path>(?:\/[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~%]*)*)"
+            r"(?P<query>(?:(?:\#|\?)[-a-zA-Z0-9!$&'()*+,\\\/:;=@\[\]._~]*)*))"
+        )
+        return re.match(HTTP_SCHEMA_PATTERN, url)
 
     def _get_thumbprint(self, hostname):
         pem = ssl.get_server_certificate((hostname, 443))
@@ -501,7 +503,7 @@ class VMwareDeployOvf(PyVmomi):
             # If we have the same network name defined in multiple clusters, check all networks to get the right one
             networks = find_all_networks_by_name(self.content, value, datacenter_name=self.datacenter)
             if not networks:
-                self.module.fail_json(msg=f"'{self.params[networks]}' could not be located")
+                self.module.fail_json(msg=f"Network '{value}' could not be located")
             # Search for the network key of the same network name, that resides in a cluster parameter
             for network in networks:
                 if self.params['cluster']:
