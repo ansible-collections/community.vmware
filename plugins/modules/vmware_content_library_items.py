@@ -58,18 +58,15 @@ library_items:
 
 import traceback
 
-from ansible.errors import AnsibleError
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.basic import missing_required_lib
 
-REQUESTS_IMP_ERR = None
 try:
     import requests
     HAS_REQUESTS = True
 except ImportError:
-    REQUESTS_IMP_ERR = traceback.format_exc()
     HAS_REQUESTS = False
 
 try:
@@ -100,85 +97,67 @@ except ImportError:
     VAUTOMATION_PYTHON_SDK_IMP_ERR = traceback.format_exc()
     pass
 
+if HAS_VAUTOMATION_PYTHON_SDK and HAS_REQUESTS:
+    class Connection:
+        def create_unverified_session(self, session, suppress_warning=True):
+            """
+            Create a unverified session to disable the server certificate verification.
+            This is not recommended in production code.
+            """
+            session.verify = False
+            if suppress_warning:
+                # Suppress unverified https request warnings
+                if HAS_URLLIB3:
+                    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            return session
 
-class Connection:
-    def create_unverified_session(self, session, suppress_warning=True):
-        """
-        Create a unverified session to disable the server certificate verification.
-        This is not recommended in production code.
-        """
-        session.verify = False
-        if suppress_warning:
-            # Suppress unverified https request warnings
-            if HAS_URLLIB3:
-                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        return session
+        def connect(self, host, user, pwd,
+                    suppress_warning=True):
+            """
+            Create an authenticated stub configuration object that can be used to issue
+            requests against vCenter.
+            Returns a stub_config that stores the session identifier that can be used
+            to issue authenticated requests against vCenter.
+            """
+            host_url = self.get_jsonrpc_endpoint_url(host)
 
-    def connect(self, host, user, pwd,
-                suppress_warning=True):
-        """
-        Create an authenticated stub configuration object that can be used to issue
-        requests against vCenter.
-        Returns a stub_config that stores the session identifier that can be used
-        to issue authenticated requests against vCenter.
-        """
-        host_url = self.get_jsonrpc_endpoint_url(host)
+            session = requests.Session()
+            session = self.create_unverified_session(session, suppress_warning)
 
-        if not HAS_REQUESTS:
-            raise AnsibleError("%s : %s" % (missing_required_lib('requests'), REQUESTS_IMP_ERR))
+            connector = get_requests_connector(session=session, url=host_url)
 
-        session = requests.Session()
-        session = self.create_unverified_session(session, suppress_warning)
+            stub_config = StubConfigurationFactory.new_std_configuration(connector)
 
-        if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+            return self.login(stub_config, user, pwd)
 
-        connector = get_requests_connector(session=session, url=host_url)
+        def login(self, stub_config, user, pwd):
+            """
+            Create an authenticated session with vCenter.
+            Returns a stub_config that stores the session identifier that can be used
+            to issue authenticated requests against vCenter.
+            """
+            # Pass user credentials (user/password) in the security context to
+            # authenticate.
+            user_password_security_context = create_user_password_security_context(user,
+                                                                                   pwd)
+            stub_config.connector.set_security_context(
+                user_password_security_context)
 
-        if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+            # Create the stub for the session service and login by creating a session.
+            session_svc = Session(stub_config)
+            session_id = session_svc.create()
 
-        stub_config = StubConfigurationFactory.new_std_configuration(connector)
+            # Successful authentication.  Store the session identifier in the security
+            # context of the stub and use that for all subsequent remote requests
+            session_security_context = create_session_security_context(session_id)
+            stub_config.connector.set_security_context(session_security_context)
 
-        return self.login(stub_config, user, pwd)
+            return stub_config
 
-    def login(self, stub_config, user, pwd):
-        """
-        Create an authenticated session with vCenter.
-        Returns a stub_config that stores the session identifier that can be used
-        to issue authenticated requests against vCenter.
-        """
-        # Pass user credentials (user/password) in the security context to
-        # authenticate.
-        if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
-
-        user_password_security_context = create_user_password_security_context(user,
-                                                                               pwd)
-        stub_config.connector.set_security_context(
-            user_password_security_context)
-
-        # Create the stub for the session service and login by creating a session.
-        if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
-
-        session_svc = Session(stub_config)
-        session_id = session_svc.create()
-
-        # Successful authentication.  Store the session identifier in the security
-        # context of the stub and use that for all subsequent remote requests
-        if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
-
-        session_security_context = create_session_security_context(session_id)
-        stub_config.connector.set_security_context(session_security_context)
-
-        return stub_config
-
-    def get_jsonrpc_endpoint_url(self, host):
-        # The URL for the stub requests are made against the /api HTTP endpoint
-        # of the vCenter system.
-        return "https://{0}/api".format(host)
+        def get_jsonrpc_endpoint_url(self, host):
+            # The URL for the stub requests are made against the /api HTTP endpoint
+            # of the vCenter system.
+            return "https://{0}/api".format(host)
 
 
 class VmwareContentLibInfo():
@@ -205,7 +184,9 @@ class VmwareContentLibInfo():
 
     def get_content_library_items(self):
         if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+            self.module.fail_json(
+                msg=missing_required_lib('com.vmware'),
+                exception=VAUTOMATION_PYTHON_SDK_IMP_ERR)
 
         _library_item_service = Item(self.connection)
         try:
@@ -225,7 +206,9 @@ class VmwareContentLibInfo():
 
     def _get_content_library_id(self):
         if not HAS_VAUTOMATION_PYTHON_SDK:
-            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+            self.module.fail_json(
+                msg=missing_required_lib('com.vmware'),
+                exception=VAUTOMATION_PYTHON_SDK_IMP_ERR)
 
         subscribed_library_service = SubscribedLibrary(self.connection)
         items = subscribed_library_service.list()
