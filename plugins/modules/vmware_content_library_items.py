@@ -58,6 +58,12 @@ library_items:
 
 import traceback
 
+from ansible.errors import AnsibleError
+from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.basic import missing_required_lib
+
 REQUESTS_IMP_ERR = None
 try:
     import requests
@@ -76,12 +82,6 @@ except ImportError:
     except ImportError:
         HAS_URLLIB3 = False
 
-from ansible.errors import AnsibleError
-from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.basic import missing_required_lib
-
 VAUTOMATION_PYTHON_SDK_IMP_ERR = None
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
@@ -99,8 +99,6 @@ try:
 except ImportError:
     VAUTOMATION_PYTHON_SDK_IMP_ERR = traceback.format_exc()
     pass
-
-__metaclass__ = type
 
 
 class Connection:
