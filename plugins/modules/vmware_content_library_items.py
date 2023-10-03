@@ -178,7 +178,7 @@ class Connection:
     def get_jsonrpc_endpoint_url(self, host):
         # The URL for the stub requests are made against the /api HTTP endpoint
         # of the vCenter system.
-        return "https://{}/api".format(host)
+        return "https://{0}/api".format(host)
 
 
 class VmwareContentLibInfo():
@@ -218,7 +218,7 @@ class VmwareContentLibInfo():
         _library_items_names = []
 
         for item in _library_all_items:
-            _library_items_names.append("{}".format(
+            _library_items_names.append("{0}".format(
                 _library_item_service.get(item).name))
         self.module.exit_json(
             changed=False, library_items=_library_items_names)
@@ -234,7 +234,7 @@ class VmwareContentLibInfo():
             if _current_cl.name == self._cl_name:
                 return _current_cl.id
         self.module.fail_json(msg=to_native(
-            "Could not find Content Library with name {}".format(self._cl_name)))
+            "Could not find Content Library with name {0}".format(self._cl_name)))
 
 
 def main():
