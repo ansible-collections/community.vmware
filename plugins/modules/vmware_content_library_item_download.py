@@ -61,9 +61,12 @@ downloaded_files:
     }
 '''
 
-from ansible.module_utils.basic import AnsibleModule
+import traceback
+
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
+VAUTOMATION_PYTHON_SDK_IMP_ERR = None
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.content.library.item_client import DownloadSessionModel
@@ -72,6 +75,7 @@ try:
 
     import requests
 except ImportError:
+    VAUTOMATION_PYTHON_SDK_IMP_ERR = traceback.format_exc()
     pass
 
 import uuid
@@ -91,6 +95,11 @@ class VmwareContentLibItemDownload(VmwareRestClient):
         """
         downloaded_files_map = {}
         try:
+            if not HAS_VAUTOMATION_PYTHON_SDK:
+                self.module.fail_json(
+                    msg=missing_required_lib('com.vmware'),
+                    exception=VAUTOMATION_PYTHON_SDK_IMP_ERR)
+
             download_session_id = self.content_service.content.library.item.DownloadSession.create(
                 create_spec=DownloadSessionModel(library_item_id=self.get_item_id()),
                 client_token=str(uuid.uuid4()))
@@ -140,13 +149,16 @@ class VmwareContentLibItemDownload(VmwareRestClient):
         return content_lib_item_ids[0]
 
     def wait_for_prepare(self, session_id, file_name,
-                         status_list=(DownloadSessionFile.PrepareStatus.PREPARED,),
+                         status_list,
                          timeout=30, sleep_interval=1):
         """
         Waits for a file to reach a status in the status list (default: prepared)
         This method will either timeout or return the result of
         downloadSessionFile.get(session_id, file_name)
         """
+        if HAS_VAUTOMATION_PYTHON_SDK:
+            status_list = (DownloadSessionFile.PrepareStatus.PREPARED,)
+
         start_time = time.time()
         while (time.time() - start_time) < timeout:
             file_info = self.content_service.content.library.item.downloadsession.File.get(session_id, file_name)
