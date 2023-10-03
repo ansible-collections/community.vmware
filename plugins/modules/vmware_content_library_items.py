@@ -54,11 +54,33 @@ library_items:
     ]
 '''
 
+import traceback
+
+REQUESTS_IMP_ERR = None
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    REQUESTS_IMP_ERR = traceback.format_exc()
+    HAS_REQUESTS = False
+
+try:
+    from requests.packages import urllib3
+    HAS_URLLIB3 = True
+except ImportError:
+    try:
+        import urllib3
+        HAS_URLLIB3 = True
+    except ImportError:
+        HAS_URLLIB3 = False
+
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 from ansible.module_utils.basic import AnsibleModule
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from ansible.errors import AnsibleError
+from ansible.module_utils.basic import missing_required_lib
 
+VAUTOMATION_PYTHON_SDK_IMP_ERR = None
 HAS_VAUTOMATION_PYTHON_SDK = False
 try:
     from com.vmware.content_client import SubscribedLibrary
@@ -73,9 +95,9 @@ try:
 
     HAS_VAUTOMATION_PYTHON_SDK = True
 except ImportError:
+    VAUTOMATION_PYTHON_SDK_IMP_ERR = traceback.format_exc()
     pass
 
-import requests
 __metaclass__ = type
 
 
@@ -88,7 +110,8 @@ class Connection:
         session.verify = False
         if suppress_warning:
             # Suppress unverified https request warnings
-            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+            if HAS_URLLIB3:
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         return session
 
     def connect(self, host, user, pwd,
@@ -101,9 +124,20 @@ class Connection:
         """
         host_url = self.get_jsonrpc_endpoint_url(host)
 
+        if not HAS_REQUESTS:
+            raise AnsibleError("%s : %s" % (missing_required_lib('requests'), REQUESTS_IMP_ERR))
+        
         session = requests.Session()
         session = self.create_unverified_session(session, suppress_warning)
+        
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         connector = get_requests_connector(session=session, url=host_url)
+
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         stub_config = StubConfigurationFactory.new_std_configuration(connector)
 
         return self.login(stub_config, user, pwd)
@@ -116,17 +150,26 @@ class Connection:
         """
         # Pass user credentials (user/password) in the security context to
         # authenticate.
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         user_password_security_context = create_user_password_security_context(user,
                                                                                pwd)
         stub_config.connector.set_security_context(
             user_password_security_context)
 
         # Create the stub for the session service and login by creating a session.
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         session_svc = Session(stub_config)
         session_id = session_svc.create()
 
         # Successful authentication.  Store the session identifier in the security
         # context of the stub and use that for all subsequent remote requests
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         session_security_context = create_session_security_context(session_id)
         stub_config.connector.set_security_context(session_security_context)
 
@@ -161,6 +204,9 @@ class VmwareContentLibInfo():
                 "Failed to authenticate! Please validate vCenter username, password and endpoint"))
 
     def get_content_library_items(self):
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         _library_item_service = Item(self.connection)
         try:
             _library_all_items = _library_item_service.list(
@@ -178,6 +224,9 @@ class VmwareContentLibInfo():
             changed=False, library_items=_library_items_names)
 
     def _get_content_library_id(self):
+        if not HAS_VAUTOMATION_PYTHON_SDK:
+            raise AnsibleError("%s : %s" % (missing_required_lib('com.vmware'), VAUTOMATION_PYTHON_SDK_IMP_ERR))
+        
         subscribed_library_service = SubscribedLibrary(self.connection)
         items = subscribed_library_service.list()
         for item in items:
