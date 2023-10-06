@@ -325,6 +325,23 @@ Parameters
             <tr>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>snapshot_id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                    <div style="font-style: italic; font-size: small; color: darkgreen">added in 3.10.0</div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Sets the snapshot id to manage.</div>
+                        <div>This param is available when state is <code>absent</code>.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>snapshot_name</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -335,7 +352,7 @@ Parameters
                 </td>
                 <td>
                         <div>Sets the snapshot name to manage.</div>
-                        <div>This param is required only if state is not <code>remove_all</code></div>
+                        <div>This param or <code>snapshot_id</code> is required only if state is not <code>remove_all</code></div>
                 </td>
             </tr>
             <tr>
@@ -543,6 +560,18 @@ Examples
           state: absent
           remove_children: true
           snapshot_name: snap1
+        delegate_to: localhost
+
+      - name: Remove a snapshot with a snapshot id
+        community.vmware.vmware_guest_snapshot:
+          hostname: "{{ vcenter_hostname }}"
+          username: "{{ vcenter_username }}"
+          password: "{{ vcenter_password }}"
+          datacenter: "{{ datacenter_name }}"
+          folder: "/{{ datacenter_name }}/vm/"
+          name: "{{ guest_name }}"
+          snapshot_id: 10
+          state: absent
         delegate_to: localhost
 
       - name: Rename a snapshot
