@@ -20,6 +20,7 @@ on:
     branches:
       - main
       - stable-2.x
+      - stable-3.x
   pull_request:
   # Run CI once per day (at 07:12 UTC)
   # This ensures that even if there haven't been commits that we are still
@@ -61,8 +62,8 @@ jobs:
           # - stable-2.10 # Only if your collection supports ansible-base 2.10
           # - stable-2.11 # Only if your collection supports ansible-core 2.11
           # - stable-2.12
-          - stable-2.13
-          - stable-2.14
+          # - stable-2.13
+          # - stable-2.14
           - stable-2.15
           # - devel
           - milestone
@@ -123,8 +124,8 @@ jobs:
           # - stable-2.10 # Only if your collection supports ansible-base 2.10
           # - stable-2.11 # Only if your collection supports ansible-core 2.11
           # - stable-2.12
-          - stable-2.13
-          - stable-2.14
+          # - stable-2.13
+          # - stable-2.14
           - stable-2.15
           # - devel
           - milestone
