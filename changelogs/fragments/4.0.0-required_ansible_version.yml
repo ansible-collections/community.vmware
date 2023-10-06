@@ -1,0 +1,2 @@
+breaking_changes:
+  - Removed support for ansible-core version < 2.15.0.
