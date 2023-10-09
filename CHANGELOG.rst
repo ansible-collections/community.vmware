@@ -5,6 +5,27 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.10.0
+=======
+
+Minor Changes
+-------------
+
+- add moid property in the return value for the module(https://github.com/ansible-collections/community.vmware/pull/1855).
+- add new snapshot_id option to the vmware_guest_snapshot module(https://github.com/ansible-collections/community.vmware/pull/1847).
+
+Bugfixes
+--------
+
+- fix problem when module try apply non global or non VM type custom attribute to VM object (https://github.com/ansible-collections/community.vmware/issues/1772)
+- vmware_deploy_ovf: fix error in finding networks part of code https://github.com/ansible-collections/community.vmware/issues/1853
+
+New Modules
+-----------
+
+- vcenter_root_password_expiration - root password expiration of vCSA
+- vmware_host_graphics - Manage Host Graphic Settings
+
 v3.9.0
 ======
 

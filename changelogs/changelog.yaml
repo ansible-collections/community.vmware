@@ -1412,6 +1412,28 @@ releases:
       name: vmware_host_lockdown_exceptions
       namespace: ''
     release_date: '2022-10-31'
+  3.10.0:
+    changes:
+      bugfixes:
+      - fix problem when module try apply non global or non VM type custom attribute
+        to VM object (https://github.com/ansible-collections/community.vmware/issues/1772)
+      - 'vmware_deploy_ovf: fix error in finding networks part of code https://github.com/ansible-collections/community.vmware/issues/1853'
+      minor_changes:
+      - add moid property in the return value for the module(https://github.com/ansible-collections/community.vmware/pull/1855).
+      - add new snapshot_id option to the vmware_guest_snapshot module(https://github.com/ansible-collections/community.vmware/pull/1847).
+    fragments:
+    - 1847_vmware_guest_snapshot.yml
+    - 1853.yml
+    - 1855_ vmware_dsv_portgroup_info.yml
+    - issue_1772.yml
+    modules:
+    - description: root password expiration of vCSA
+      name: vcenter_root_password_expiration
+      namespace: ''
+    - description: Manage Host Graphic Settings
+      name: vmware_host_graphics
+      namespace: ''
+    release_date: '2023-10-09'
   3.2.0:
     changes:
       bugfixes:

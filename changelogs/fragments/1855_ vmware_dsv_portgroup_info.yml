@@ -1,2 +1,0 @@
-minor_changes:
-  - add moid property in the return value for the module(https://github.com/ansible-collections/community.vmware/pull/1855).
