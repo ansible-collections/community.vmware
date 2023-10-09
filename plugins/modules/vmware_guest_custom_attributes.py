@@ -247,7 +247,11 @@ class VmAttributeManager(PyVmomi):
         """
         # Gather the available existing custom attributes based on user_fields
         existing_custom_attributes = []
-        for k, n in [(x.key, x.name) for x in self.custom_field_mgr for v in user_fields if x.name == v['name']]:
+        for k, n in [(x.key, x.name) for x in self.custom_field_mgr
+                     # vmware_guest_custome_attributes must work with self moref type of custom attributes or with global custom attributes
+                     if x.managedObjectType == vim.VirtualMachine or x.managedObjectType is None
+                     for v in user_fields
+                     if x.name == v['name']]:
             existing_custom_attributes.append({
                 "key": k,
                 "name": n
