@@ -86,6 +86,7 @@ Name | Description
 [community.vmware.vcenter_extension_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_extension_info_module.rst)|Gather info vCenter extensions
 [community.vmware.vcenter_folder](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_folder_module.rst)|Manage folders on given datacenter
 [community.vmware.vcenter_license](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_license_module.rst)|Manage VMware vCenter license keys
+[community.vmware.vcenter_root_password_expiration](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_root_password_expiration_module.rst)|root password expiration of vCSA
 [community.vmware.vcenter_standard_key_provider](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vcenter_standard_key_provider_module.rst)|Add, reconfigure or remove Standard Key Provider on vCenter server
 [community.vmware.vmware_about_info](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_about_info_module.rst)|Provides information about VMware server to which user is connecting to
 [community.vmware.vmware_category](https://github.com/ansible-collections/community.vmware/blob/main/docs/community.vmware.vmware_category_module.rst)|Manage VMware categories
