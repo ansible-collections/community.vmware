@@ -254,7 +254,7 @@ virtual_machines:
         "vm_network": {
             "00:50:56:87:a5:9a": {
               "ipv4": [
-                "10.76.33.228"
+                "10.76.33.228/24"
               ],
               "ipv6": []
             }
@@ -357,11 +357,11 @@ class VmwareVmInfo(PyVmomi):
                         net_dict[device.macAddress] = dict()
                         net_dict[device.macAddress]['ipv4'] = []
                         net_dict[device.macAddress]['ipv6'] = []
-                        for ip_addr in device.ipAddress:
-                            if "::" in ip_addr:
-                                net_dict[device.macAddress]['ipv6'].append(ip_addr)
+                        for ip_addr in device.ipConfig.ipAddress:
+                            if "::" in ip_addr.ipAddress:
+                                net_dict[device.macAddress]['ipv6'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
                             else:
-                                net_dict[device.macAddress]['ipv4'].append(ip_addr)
+                                net_dict[device.macAddress]['ipv4'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
 
             esxi_hostname = None
             esxi_parent = None
