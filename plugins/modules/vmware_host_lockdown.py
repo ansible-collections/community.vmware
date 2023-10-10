@@ -44,7 +44,7 @@ options:
     - If set to C(strict), all host systems will be set in strict lockdown mode.
     - If host system is already in strict lockdown mode and set to C(strict), no action will be taken.
     default: normal
-    choices: [ disabled, normal, strict, present, absent ]
+    choices: [ disabled, normal, strict ]
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -148,13 +148,6 @@ class VmwareLockdownManager(PyVmomi):
         change_list = []
         desired_state = self.params.get('state')
 
-        if desired_state == 'present':
-            self.module.warn("'present' will be removed in a future version. Please use 'normal' instead.")
-            desired_state = 'normal'
-        elif desired_state == 'absent':
-            self.module.warn("'absent' will be removed in a future version. Please use 'disabled' instead.")
-            desired_state = 'disabled'
-
         for host in self.hosts:
             current_state_api = host.configManager.hostAccessManager.lockdownMode
             current_state = current_state_api[8:].lower()
@@ -193,7 +186,7 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='list', required=False, elements='str'),
-        state=dict(type='str', default='normal', choices=['disabled', 'normal', 'strict', 'present', 'absent'], required=False),
+        state=dict(type='str', default='normal', choices=['disabled', 'normal', 'strict'], required=False),
     )
 
     module = AnsibleModule(
