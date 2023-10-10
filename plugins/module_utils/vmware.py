@@ -21,7 +21,7 @@ import time
 import traceback
 import datetime
 from collections import OrderedDict
-from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
+from ansible.module_utils.compat.version import StrictVersion
 from random import randint
 
 
