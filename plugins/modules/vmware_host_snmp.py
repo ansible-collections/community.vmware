@@ -28,14 +28,14 @@ options:
     - All host system from given cluster used to manage SNMP agent.
     - Required parameter, if C(esxi_hostname) is not set.
     type: str
-    version_added: '3.10.0'
+    version_added: '3.11.0'
   esxi_hostname:
     description:
     - List of ESXi hostname to manage SNMP agent.
     - Required parameter, if C(cluster_name) is not set.
     type: list
     elements: str
-    version_added: '3.10.0'
+    version_added: '3.11.0'
   state:
     description:
         - Enable, disable, or reset the SNMP agent.
