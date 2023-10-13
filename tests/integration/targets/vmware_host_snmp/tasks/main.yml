@@ -7,7 +7,6 @@
   vars:
     setup_attach_host: true
 
-# SNMP works only with standalone ESXi server
 - name: Enable and configure SNMP community in check mode
   vmware_host_snmp:
     hostname: '{{ esxi1 }}'
@@ -60,6 +59,136 @@
     hostname: '{{ esxi1 }}'
     username: '{{ esxi_user }}'
     password: '{{ esxi_password }}'
+    state: disabled
+    validate_certs: false
+  register: snmp_disabled
+- debug: var=snmp_disabled
+- assert:
+    that:
+      - snmp_disabled is defined
+      - snmp_disabled.changed
+
+- name: Enable and configure SNMP community via vCenter in check mode
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi2 }}'
+    community: [ test ]
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled_check_mode
+  check_mode: true
+- debug: var=snmp_enabled_check_mode
+- assert:
+    that:
+      - snmp_enabled_check_mode is defined
+      - snmp_enabled_check_mode.changed
+
+- name: Enable and configure SNMP community via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi2 }}'
+    community: [ test ]
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled
+- debug: var=snmp_enabled
+- assert:
+    that:
+      - snmp_enabled is defined
+      - snmp_enabled.changed
+
+- name: Enable and configure SNMP system contact and location via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi2 }}'
+    sys_contact: "admin@testemail.com"
+    sys_location: "Austin, USA"
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled_sys_options
+- debug: var=snmp_enabled_sys_options
+- assert:
+    that:
+      - snmp_enabled_sys_options is defined
+      - snmp_enabled_sys_options.changed
+
+- name: Disable SNMP via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi2 }}'
+    state: disabled
+    validate_certs: false
+  register: snmp_disabled
+- debug: var=snmp_disabled
+- assert:
+    that:
+      - snmp_disabled is defined
+      - snmp_disabled.changed
+
+- name: Enable and configure SNMP community in a cluster via vCenter in check mode
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: "{{ ccr1 }}"
+    community: [ test2 ]
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled_check_mode
+  check_mode: true
+- debug: var=snmp_enabled_check_mode
+- assert:
+    that:
+      - snmp_enabled_check_mode is defined
+      - snmp_enabled_check_mode.changed
+
+- name: Enable and configure SNMP community in a cluster via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: "{{ ccr1 }}"
+    community: [ test2 ]
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled
+- debug: var=snmp_enabled
+- assert:
+    that:
+      - snmp_enabled is defined
+      - snmp_enabled.changed
+
+- name: Enable and configure SNMP system contact and location in a cluster via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: "{{ ccr1 }}"
+    sys_contact: "admin2@testemail.com"
+    sys_location: "Austin, USA"
+    state: enabled
+    validate_certs: false
+  register: snmp_enabled_sys_options
+- debug: var=snmp_enabled_sys_options
+- assert:
+    that:
+      - snmp_enabled_sys_options is defined
+      - snmp_enabled_sys_options.changed
+
+- name: Disable SNMP in a cluster via vCenter
+  vmware_host_snmp:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    cluster_name: "{{ ccr1 }}"
     state: disabled
     validate_certs: false
   register: snmp_disabled
