@@ -17,11 +17,12 @@ description: >
    This module can be used to create new virtual machines from templates or other virtual machines,
    manage power state of virtual machine such as power on, power off, suspend, shutdown, reboot, restart etc.,
    modify various virtual machine components like network, disk, customization etc.,
-   rename a virtual machine and remove a virtual machine with associated components.
+   rename a virtual machine, register, unregister and remove a virtual machine with associated components.
 author:
 - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 - Philippe Dellaert (@pdellaert) <philippe@dellaert.org>
 - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
+- Eugenio Grosso (@egrosso) <egrosso@purestorage.com>
 notes:
     - Please make sure that the user used for M(community.vmware.vmware_guest) has the correct level of privileges.
     - For example, following is the list of minimum privileges required by users to create virtual machines.
@@ -797,6 +798,17 @@ options:
     - Specify convert disk type while cloning template or virtual machine.
     choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
     type: str
+  register_in_inventory:
+    description:
+    - Specify whether virtual machine should be registered in the inventory.
+    type: bool
+    default: false
+  vmx_file_path:
+    description:
+    - Specify the path of the vmx file to register in the inventory an existing
+      virtual machine on the given C(datastore).
+      Only used when C(register_in_inventory) is set to true.
+    type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -967,6 +979,23 @@ EXAMPLES = r'''
     name: vm_name
     delete_from_inventory: true
     state: absent
+  delegate_to: localhost
+
+- name: Register a virtual machine in the inventory on given ESXi cluster
+  community.vmware.vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter }}"
+    cluster: "{{ cluster }}"
+    folder: "{{ vm_folder }}"
+    name: vm_name
+    state: poweredon
+    wait_for_ip_address: yes
+    register_in_inventory: yes
+    datastore: "{{ datastore }}"
+    # Note: the path must not have any leading / char
+    vmx_file_path: "{{ vmx_file }}"
   delegate_to: localhost
 
 - name: Manipulate vApp properties
@@ -3184,6 +3213,101 @@ class PyVmomiHelper(PyVmomi):
             vm_facts = self.gather_facts(vm)
             return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
 
+    def register_vm(self):
+        datastore_name = self.params.get('datastore', None)
+        if datastore_name is None:
+            self.module.fail_json(msg="Datastore is required parameter while registering a virtual machine")
+        vmx_file_path = self.params.get('vmx_file_path', None)
+        if vmx_file_path is None:
+            self.module.fail_json(msg="vmx file path is required parameter while registering a virtual machine")
+        vmx_file_path = "[" + datastore_name + "] " + vmx_file_path
+        self.folder = self.params.get('folder', None)
+        if self.folder is None:
+            self.module.fail_json(msg="Folder is required parameter while registering a virtual machine")
+
+        # Prepend / if it was missing from the folder path, also strip trailing slashes
+        if not self.folder.startswith('/'):
+            self.folder = '/%(folder)s' % self.params
+        self.folder = self.folder.rstrip('/')
+
+        datacenter = self.cache.find_obj(self.content, [vim.Datacenter], self.params['datacenter'])
+        if datacenter is None:
+            self.module.fail_json(msg='No datacenter named %(datacenter)s was found' % self.params)
+
+        dcpath = compile_folder_path_for_object(datacenter)
+
+        # Nested folder does not have trailing /
+        if not dcpath.endswith('/'):
+            dcpath += '/'
+
+        # Check for full path first in case it was already supplied
+        if self.folder.startswith(
+            dcpath + self.params["datacenter"] + "/vm"
+        ) or self.folder.startswith(dcpath + "/" + self.params["datacenter"] + "/vm"):
+            fullpath = self.folder
+        elif self.folder.startswith("/vm/") or self.folder == "/vm":
+            fullpath = "%s%s%s" % (dcpath, self.params["datacenter"], self.folder)
+        elif self.folder.startswith("/"):
+            fullpath = "%s%s/vm%s" % (dcpath, self.params["datacenter"], self.folder)
+        else:
+            fullpath = "%s%s/vm/%s" % (dcpath, self.params["datacenter"], self.folder)
+
+        f_obj = self.content.searchIndex.FindByInventoryPath(fullpath)
+
+        # abort if no strategy was successful
+        if f_obj is None:
+            # Add some debugging values in failure.
+            details = {
+                'datacenter': datacenter.name,
+                'datacenter_path': dcpath,
+                'folder': self.folder,
+                'full_search_path': fullpath,
+            }
+            self.module.fail_json(msg='No folder %s matched in the search path : %s' % (self.folder, fullpath),
+                                  details=details)
+
+        destfolder = f_obj
+
+        # always get a resource_pool
+        resource_pool = self.get_resource_pool()
+
+        esx_host = None
+        # Only select specific host when ESXi hostname is provided
+        if self.params['esxi_hostname']:
+            esx_host = self.select_host()
+
+        try:
+            task = destfolder.RegisterVM_Task(path=vmx_file_path,
+                                              asTemplate=self.params['is_template'],
+                                              pool=resource_pool,
+                                              host=esx_host)
+        except vmodl.fault.InvalidRequest as e:
+            self.module.fail_json(msg="Failed to register virtual machine due to invalid configuration "
+                                      "parameter %s" % to_native(e.msg))
+        except vim.fault.RestrictedVersion as e:
+            self.module.fail_json(msg="Failed to register virtual machine due to "
+                                      "product versioning restrictions: %s" % to_native(e.msg))
+        self.change_detected = True
+        self.wait_for_task(task)
+        if task.info.state == 'error':
+            configspec_json = serialize_spec(self.configspec)
+            kwargs = {
+                'changed': self.change_applied,
+                'failed': True,
+                'msg': task.info.error.msg,
+                'configspec': configspec_json,
+                'clone_method': 'RegisterVM_Task'
+            }
+            return kwargs
+        vm = task.info.result
+        if self.params['wait_for_ip_address'] or self.params['state'] in ['poweredon', 'powered-on', 'restarted']:
+            set_vm_power_state(self.content, vm, 'poweredon', force=False)
+
+            if self.params['wait_for_ip_address']:
+                wait_for_vm_ip(self.content, vm, self.params['wait_for_ip_address_timeout'])
+        vm_facts = self.gather_facts(vm)
+        return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
+
     def get_snapshots_by_name_recursively(self, snapshots, snapname):
         snap_obj = []
         for snapshot in snapshots:
@@ -3536,6 +3660,8 @@ def main():
         datastore=dict(type='str'),
         convert=dict(type='str', choices=['thin', 'thick', 'eagerzeroedthick']),
         delete_from_inventory=dict(type='bool', default=False),
+        register_in_inventory=dict(type='bool', default=False),
+        vmx_file_path=dict(type='str'),
     )
 
     module = AnsibleModule(argument_spec=argument_spec,
@@ -3545,6 +3671,11 @@ def main():
                            ],
                            required_one_of=[
                                ['name', 'uuid'],
+                           ],
+                           required_if=[
+                               ['register_in_inventory', True, ['datastore',
+                                                                'vmx_file_path',
+                                                                'folder']],
                            ],
                            )
     result = {'failed': False, 'changed': False}
@@ -3632,7 +3763,10 @@ def main():
                     desired_operation='deploy_vm',
                 )
                 module.exit_json(**result)
-            result = pyv.deploy_vm()
+            if module.params['register_in_inventory']:
+                result = pyv.register_vm()
+            else:
+                result = pyv.deploy_vm()
             if result['failed']:
                 module.fail_json(msg='Failed to create a virtual machine : %s' % result['msg'])
 
