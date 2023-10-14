@@ -256,7 +256,7 @@ Parameters
                 <td>
                         <div>A list of templates in order of precedence to compose inventory_hostname.</div>
                         <div>Ignores template if resulted in an empty string or None value.</div>
-                        <div>You can use property specified in <em>properties</em> as variables in the template.</div>
+                        <div>You can use property specified in O(properties) as variables in the template.</div>
                 </td>
             </tr>
             <tr>
@@ -480,12 +480,12 @@ Parameters
                         <div>Specify the list of VMware schema properties associated with the VM.</div>
                         <div>These properties will be populated in hostvars of the given VM.</div>
                         <div>Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.</div>
-                        <div><code>config.name</code>, <code>config.uuid</code> are required properties if <code>hostnames</code> is set to default.</div>
-                        <div><code>config.guestId</code>, <code>summary.runtime.powerState</code> are required if <code>keyed_groups</code> is set to default.</div>
+                        <div>V(config.name), V(config.uuid) are required properties if O(hostnames) is set to default.</div>
+                        <div>V(config.guestId), V(summary.runtime.powerState) are required if O(keyed_groups) is set to default.</div>
                         <div>Please make sure that all the properties that are used in other parameters are included in this options.</div>
                         <div>In addition to VM properties, the following are special values</div>
-                        <div>Use <code>customValue</code> to populate virtual machine&#x27;s custom attributes. <code>customValue</code> is only supported by vCenter and not by ESXi.</div>
-                        <div>Use <code>all</code> to populate all the properties of the virtual machine. The value <code>all</code> is time consuming operation, do not use unless required absolutely.</div>
+                        <div>Use V(customValue) to populate virtual machine&#x27;s custom attributes. V(customValue) is only supported by vCenter and not by ESXi.</div>
+                        <div>Use V(all) to populate all the properties of the virtual machine. The value V(all) is time consuming operation, do not use unless required absolutely.</div>
                         <div>Please refer more VMware guest attributes which can be used as properties <a href='https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html'>https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html</a></div>
                 </td>
             </tr>
@@ -506,7 +506,6 @@ Parameters
                 <td>
                         <div>Address of a proxy that will receive all HTTPS requests and relay them.</div>
                         <div>The format is a hostname or a IP.</div>
-                        <div>This feature depends on a version of pyvmomi&gt;=v6.7.1.2018.12.</div>
                 </td>
             </tr>
             <tr>
@@ -545,7 +544,7 @@ Parameters
                 <td>
                         <div>A list of resources to limit search scope.</div>
                         <div>Each resource item is represented by exactly one <code>&#x27;vim_type_snake_case</code>:<code>list of resource names</code> pair and optional nested <em>resources</em></div>
-                        <div>Key name is based on snake case of a vim type name; e.g <code>host_system</code> correspond to <code>vim.HostSystem</code></div>
+                        <div>Key name is based on snake case of a vim type name; e.g V(host_system) correspond to <code>vim.HostSystem</code></div>
                         <div>See  <a href='https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html'>VIM Types</a></div>
                 </td>
             </tr>
@@ -639,7 +638,7 @@ Parameters
                     </td>
                 <td>
                         <div>Allows connection when SSL certificates are not valid.</div>
-                        <div>Set to <code>false</code> when certificates are not trusted.</div>
+                        <div>Set to V(false) when certificates are not trusted.</div>
                 </td>
             </tr>
             <tr>
@@ -661,7 +660,6 @@ Parameters
                     </td>
                 <td>
                         <div>This option transform flatten properties name to nested dictionary.</div>
-                        <div>From 1.10.0 and onwards, default value is set to <code>true</code>.</div>
                 </td>
             </tr>
             <tr>

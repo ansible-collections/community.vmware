@@ -18,7 +18,7 @@ Synopsis
 --------
 - Use VMware tools to run tasks in, or put/fetch files to guest operating systems running in VMware infrastructure.
 - In case of Windows VMs, set ``ansible_shell_type`` to ``powershell``.
-- Does not work with 'become'.
+- Does not work with ``become``.
 
 
 
@@ -101,7 +101,7 @@ Parameters
                     </td>
                 <td>
                         <div>File chunk size.</div>
-                        <div>(Applicable when writing a file to disk, example: using the <code>fetch</code> module.)</div>
+                        <div>(Applicable when writing a file to disk, example: using the <span class='module'>ansible.builtin.fetch</span> module.)</div>
                 </td>
             </tr>
             <tr>
@@ -125,7 +125,7 @@ Parameters
                     </td>
                 <td>
                         <div>Verify SSL for the connection.</div>
-                        <div>Note: This will validate certs for both <code>vmware_host</code> and the ESXi host running the VM.</div>
+                        <div>Note: This will validate certs for both O(vmware_host) and the ESXi host running the VM.</div>
                 </td>
             </tr>
             <tr>
@@ -163,10 +163,10 @@ Parameters
                                 <div>var: ansible_vmware_guest_path</div>
                     </td>
                 <td>
-                        <div>Mutually exclusive with vm_uuid</div>
+                        <div>Mutually exclusive with O(vm_uuid)</div>
                         <div>VM path absolute to the connection.</div>
-                        <div>vCenter Example: <code>Datacenter/vm/Discovered virtual machine/testVM</code>.</div>
-                        <div>ESXi Host Example: <code>ha-datacenter/vm/testVM</code>.</div>
+                        <div>vCenter Example: V(Datacenter/vm/Discovered virtual machine/testVM).</div>
+                        <div>ESXi Host Example: V(ha-datacenter/vm/testVM).</div>
                         <div>Must include VM name, appended to &#x27;folder&#x27; as would be passed to <span class='module'>community.vmware.vmware_guest</span>.</div>
                         <div>Needs to include <em>vm</em> between the Datacenter and the rest of the VM path.</div>
                         <div>Datacenter default value for ESXi server is <code>ha-datacenter</code>.</div>
@@ -210,9 +210,9 @@ Parameters
                                 <div>var: ansible_vmware_guest_uuid</div>
                     </td>
                 <td>
-                        <div>Mutually exclusive with vm_path</div>
+                        <div>Mutually exclusive with O(vm_path)</div>
                         <div>VM UUID to the connection.</div>
-                        <div>UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin</div>
+                        <div>UUID of the virtual machine from property config.uuid of P(community.vmware.vmware_vm_inventory#lookup) plugin</div>
                 </td>
             </tr>
             <tr>
