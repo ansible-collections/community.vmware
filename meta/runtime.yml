@@ -87,6 +87,7 @@ action_groups:
   - vmware_guest_video
   - vmware_host
   - vmware_host_acceptance
+  - vmware_host_acceptance_info
   - vmware_host_active_directory
   - vmware_host_auto_start
   - vmware_host_capability_info
