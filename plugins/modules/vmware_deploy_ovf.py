@@ -74,7 +74,7 @@ options:
         description:
         - Enable source properties that are marked as ovf:userConfigurable=false
         default: false
-        version_added: '3.9.0'
+        version_added: '3.11.0'
     fail_on_spec_warnings:
         description:
         - Cause the module to treat OVF Import Spec warnings as errors.
