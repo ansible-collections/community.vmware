@@ -19,6 +19,8 @@
       scsi: paravirtual
       version: 11
     cdrom:
+    - controller_number: 0
+      unit_number: 0
       type: iso
       iso_path: "[{{ ro_datastore }}] fedora.iso"
     networks:
