@@ -388,20 +388,18 @@ options:
   cdrom:
     description:
     - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
-    - Providing CD-ROM configuration as dict is deprecated and will be removed VMware collection 4.0.0.
-      Please use a list instead.
-    - 'Parameters C(controller_type), C(controller_number), C(unit_number), C(state) are added for a list of CD-ROMs
-      configuration support.'
     - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
-    type: raw
+    type: list
     default: []
+    elements: dict
     suboptions:
         type:
             type: str
             description:
-            - The type of CD-ROM, valid options are C(none), C(client) or C(iso).
+            - The type of CD-ROM.
             - With C(none) the CD-ROM will be disconnected but present.
             - The default value is C(client).
+            choices: [ 'none', 'client', 'iso' ]
         iso_path:
             type: str
             description:
@@ -410,9 +408,9 @@ options:
         controller_type:
             type: str
             description:
-            - Valid options are C(ide) and C(sata).
             - Default value is C(ide).
             - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
+            choices: [ 'ide', 'sata' ]
         controller_number:
             type: int
             description:
@@ -427,9 +425,9 @@ options:
         state:
             type: str
             description:
-            - Valid value is C(present) or C(absent).
             - Default is C(present).
             - If set to C(absent), then the specified CD-ROM will be removed.
+            choices: [ 'present', 'absent' ]
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
@@ -3409,7 +3407,19 @@ def main():
                 size_mb=dict(type='int', default=1024),
             )
         ),
-        cdrom=dict(type='raw', default=[]),
+        cdrom=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                type=dict(type='str', choices=['none', 'client', 'iso']),
+                iso_path=dict(type='str'),
+                controller_type=dict(type='str', choices=['ide', 'sata']),
+                controller_number=dict(type='int'),
+                unit_number=dict(type='int'),
+                state=dict(type='str', choices=['present', 'absent']),
+            )
+        ),
         hardware=dict(
             type='dict',
             default={},
