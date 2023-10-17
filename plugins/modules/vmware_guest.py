@@ -387,7 +387,7 @@ options:
                size. When add a new device, please do not set C(label).'
   cdrom:
     description:
-    - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
+    - A list of CD-ROM configurations for the virtual machine.
     - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
     type: list
     default: []
@@ -398,8 +398,8 @@ options:
             description:
             - The type of CD-ROM.
             - With C(none) the CD-ROM will be disconnected but present.
-            - The default value is C(client).
             choices: [ 'none', 'client', 'iso' ]
+            default: client
         iso_path:
             type: str
             description:
@@ -408,9 +408,9 @@ options:
         controller_type:
             type: str
             description:
-            - Default value is C(ide).
             - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
             choices: [ 'ide', 'sata' ]
+            default: ide
         controller_number:
             type: int
             description:
@@ -425,9 +425,9 @@ options:
         state:
             type: str
             description:
-            - Default is C(present).
             - If set to C(absent), then the specified CD-ROM will be removed.
             choices: [ 'present', 'absent' ]
+            default: present
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
@@ -1439,36 +1439,21 @@ class PyVmomiHelper(PyVmomi):
         expected_cdrom_spec = self.params.get('cdrom')
         if expected_cdrom_spec:
             for cdrom_spec in expected_cdrom_spec:
-                # set CDROM controller type is 'ide' by default
-                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type', 'ide').lower()
-                if cdrom_spec['controller_type'] not in ['ide', 'sata']:
-                    self.module.fail_json(msg="Invalid cdrom.controller_type: %s, valid value is 'ide' or 'sata'."
-                                              % cdrom_spec['controller_type'])
-
-                # set CDROM state is 'present' by default
-                cdrom_spec['state'] = cdrom_spec.get('state', 'present').lower()
-                if cdrom_spec['state'] not in ['present', 'absent']:
-                    self.module.fail_json(msg="Invalid cdrom.state: %s, valid value is 'present', 'absent'."
-                                              % cdrom_spec['state'])
+                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type')
+                cdrom_spec['state'] = cdrom_spec.get('state')
 
                 if cdrom_spec['state'] == 'present':
                     # set CDROM type is 'client' by default
-                    cdrom_spec['type'] = cdrom_spec.get('type', 'client').lower()
-                    if cdrom_spec['type'] not in ['none', 'client', 'iso']:
-                        self.module.fail_json(msg="Invalid cdrom.type: %s, valid value is 'none', 'client' or 'iso'."
-                                                  % cdrom_spec.get('type'))
+                    cdrom_spec['type'] = cdrom_spec.get('type')
                     if cdrom_spec['type'] == 'iso' and not cdrom_spec.get('iso_path'):
                         self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
 
                 if 'controller_number' not in cdrom_spec or 'unit_number' not in cdrom_spec:
                     self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' are required"
                                               " parameters when configure CDROM list.")
-                try:
-                    cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
-                    cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
-                except ValueError:
-                    self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' attributes should be "
-                                              "integer values.")
+
+                cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
+                cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
 
                 if cdrom_spec['controller_type'] == 'ide' and (cdrom_ctl_num not in [0, 1] or cdrom_ctl_unit_num not in [0, 1]):
                     self.module.fail_json(msg="Invalid cdrom.controller_number: %s or cdrom.unit_number: %s, valid"
@@ -3412,12 +3397,12 @@ def main():
             default=[],
             elements='dict',
             options=dict(
-                type=dict(type='str', choices=['none', 'client', 'iso']),
+                type=dict(type='str', choices=['none', 'client', 'iso'], default='client'),
                 iso_path=dict(type='str'),
-                controller_type=dict(type='str', choices=['ide', 'sata']),
+                controller_type=dict(type='str', choices=['ide', 'sata'], default='ide'),
                 controller_number=dict(type='int'),
                 unit_number=dict(type='int'),
-                state=dict(type='str', choices=['present', 'absent']),
+                state=dict(type='str', choices=['present', 'absent'], default='present'),
             )
         ),
         hardware=dict(
