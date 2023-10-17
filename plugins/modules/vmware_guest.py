@@ -1510,55 +1510,7 @@ class PyVmomiHelper(PyVmomi):
                 # Changing CD-ROM settings on a template is not supported
                 return
 
-            if isinstance(self.params.get('cdrom'), dict):
-                self.configure_cdrom_dict(vm_obj)
-            elif isinstance(self.params.get('cdrom'), list):
-                self.configure_cdrom_list(vm_obj)
-
-    def configure_cdrom_dict(self, vm_obj):
-        self.module.deprecate(
-            msg="Specifying CD-ROM configuration as dict is deprecated, Please use list to specify CD-ROM configuration.",
-            version="4.0.0",
-            collection_name="community.vmware"
-        )
-        if self.params["cdrom"].get('type') not in ['none', 'client', 'iso']:
-            self.module.fail_json(msg="cdrom.type is mandatory. Options are 'none', 'client', and 'iso'.")
-        if self.params["cdrom"]['type'] == 'iso' and not self.params["cdrom"].get('iso_path'):
-            self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
-
-        cdrom_spec = None
-        cdrom_devices = self.get_vm_cdrom_devices(vm=vm_obj)
-        iso_path = self.params["cdrom"].get("iso_path")
-        if len(cdrom_devices) == 0:
-            # Creating new CD-ROM
-            ide_devices = self.get_vm_ide_devices(vm=vm_obj)
-            if len(ide_devices) == 0:
-                # Creating new IDE device
-                ide_ctl = self.device_helper.create_ide_controller()
-                ide_device = ide_ctl.device
-                self.change_detected = True
-                self.configspec.deviceChange.append(ide_ctl)
-            else:
-                ide_device = ide_devices[0]
-                if len(ide_device.device) > 3:
-                    self.module.fail_json(msg="hardware.cdrom specified for a VM or template which already has 4"
-                                              " IDE devices of which none are a cdrom")
-
-            cdrom_spec = self.device_helper.create_cdrom(ctl_device=ide_device, cdrom_type=self.params["cdrom"]["type"],
-                                                         iso_path=iso_path)
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-                cdrom_spec.device.connectable.connected = (self.params["cdrom"]["type"] != "none")
-
-        elif not self.device_helper.is_equal_cdrom(vm_obj=vm_obj, cdrom_device=cdrom_devices[0],
-                                                   cdrom_type=self.params["cdrom"]["type"], iso_path=iso_path):
-            self.device_helper.update_cdrom_config(vm_obj, self.params["cdrom"], cdrom_devices[0], iso_path=iso_path)
-            cdrom_spec = vim.vm.device.VirtualDeviceSpec()
-            cdrom_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-            cdrom_spec.device = cdrom_devices[0]
-
-        if cdrom_spec:
-            self.change_detected = True
-            self.configspec.deviceChange.append(cdrom_spec)
+            self.configure_cdrom_list(vm_obj)
 
     def configure_cdrom_list(self, vm_obj):
         configured_cdroms = self.sanitize_cdrom_params()
