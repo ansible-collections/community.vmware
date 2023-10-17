@@ -70,6 +70,12 @@ options:
         description:
         - Disk provisioning type.
         type: str
+    enable_hidden_properties:
+        description:
+        - Enable source properties that are marked as ovf:userConfigurable=false
+        default: false
+        version_added: '3.11.0'
+        type: bool
     fail_on_spec_warnings:
         description:
         - Cause the module to treat OVF Import Spec warnings as errors.
@@ -596,6 +602,10 @@ class VMwareDeployOvf(PyVmomi):
             spec_params
         )
 
+        if self.params['enable_hidden_properties']:
+            for prop in self.import_spec.importSpec.configSpec.vAppConfig.property:
+                prop.info.userConfigurable = True
+
         errors = [to_native(e.msg) for e in getattr(self.import_spec, 'error', [])]
         if self.params['fail_on_spec_warnings']:
             errors.extend(
@@ -859,6 +869,10 @@ def main():
                 'monolithicFlat'
             ],
             'default': 'thin',
+        },
+        'enable_hidden_properties': {
+            'default': False,
+            'type': 'bool',
         },
         'power_on': {
             'type': 'bool',
