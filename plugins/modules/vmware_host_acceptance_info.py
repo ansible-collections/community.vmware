@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
+# Copyright: (c) 2023, Mario Lenz <m@riolenz.de>
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,23 +13,24 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_host_acceptance_info
-short_description: Manage the host acceptance level of an ESXi host
+short_description: Gather host acceptance level of ESXi hosts
 description:
-- This module can be used to manage the host acceptance level of an ESXi host.
+- This module can be used to gather the host acceptance level of ESXi hosts.
 - The host acceptance level controls the acceptance level of each VIB on a ESXi host.
 author:
 - Abhijeet Kasurde (@Akasurde)
+- Mario Lenz (@mariolenz)
 options:
   cluster_name:
     description:
     - Name of the cluster.
-    - Acceptance level of all ESXi host system in the given cluster will be managed.
+    - Acceptance level of all ESXi host system in the given cluster will be gathered.
     - If C(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
-    - Acceptance level of this ESXi host system will be managed.
+    - Acceptance level of this ESXi host system will be gathered.
     - If C(cluster_name) is not given, this parameter is required.
     type: str
 extends_documentation_fragment:
