@@ -77,7 +77,7 @@ options:
             shares:
                 description:
                 - The number of shares allocated.
-                - Ignored unless C(shares_level) is "custom".
+                - Ignored unless O(resources.shares_level=custom).
                 type: int
         required: false
         type: list
