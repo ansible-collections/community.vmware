@@ -387,21 +387,19 @@ options:
                size. When add a new device, please do not set C(label).'
   cdrom:
     description:
-    - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
-    - Providing CD-ROM configuration as dict is deprecated and will be removed VMware collection 4.0.0.
-      Please use a list instead.
-    - 'Parameters C(controller_type), C(controller_number), C(unit_number), C(state) are added for a list of CD-ROMs
-      configuration support.'
+    - A list of CD-ROM configurations for the virtual machine.
     - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
-    type: raw
+    type: list
     default: []
+    elements: dict
     suboptions:
         type:
             type: str
             description:
-            - The type of CD-ROM, valid options are C(none), C(client) or C(iso).
+            - The type of CD-ROM.
             - With C(none) the CD-ROM will be disconnected but present.
-            - The default value is C(client).
+            choices: [ 'none', 'client', 'iso' ]
+            default: client
         iso_path:
             type: str
             description:
@@ -410,9 +408,9 @@ options:
         controller_type:
             type: str
             description:
-            - Valid options are C(ide) and C(sata).
-            - Default value is C(ide).
             - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
+            choices: [ 'ide', 'sata' ]
+            default: ide
         controller_number:
             type: int
             description:
@@ -427,9 +425,9 @@ options:
         state:
             type: str
             description:
-            - Valid value is C(present) or C(absent).
-            - Default is C(present).
             - If set to C(absent), then the specified CD-ROM will be removed.
+            choices: [ 'present', 'absent' ]
+            default: present
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
@@ -1441,36 +1439,21 @@ class PyVmomiHelper(PyVmomi):
         expected_cdrom_spec = self.params.get('cdrom')
         if expected_cdrom_spec:
             for cdrom_spec in expected_cdrom_spec:
-                # set CDROM controller type is 'ide' by default
-                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type', 'ide').lower()
-                if cdrom_spec['controller_type'] not in ['ide', 'sata']:
-                    self.module.fail_json(msg="Invalid cdrom.controller_type: %s, valid value is 'ide' or 'sata'."
-                                              % cdrom_spec['controller_type'])
-
-                # set CDROM state is 'present' by default
-                cdrom_spec['state'] = cdrom_spec.get('state', 'present').lower()
-                if cdrom_spec['state'] not in ['present', 'absent']:
-                    self.module.fail_json(msg="Invalid cdrom.state: %s, valid value is 'present', 'absent'."
-                                              % cdrom_spec['state'])
+                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type')
+                cdrom_spec['state'] = cdrom_spec.get('state')
 
                 if cdrom_spec['state'] == 'present':
                     # set CDROM type is 'client' by default
-                    cdrom_spec['type'] = cdrom_spec.get('type', 'client').lower()
-                    if cdrom_spec['type'] not in ['none', 'client', 'iso']:
-                        self.module.fail_json(msg="Invalid cdrom.type: %s, valid value is 'none', 'client' or 'iso'."
-                                                  % cdrom_spec.get('type'))
+                    cdrom_spec['type'] = cdrom_spec.get('type')
                     if cdrom_spec['type'] == 'iso' and not cdrom_spec.get('iso_path'):
                         self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
 
                 if 'controller_number' not in cdrom_spec or 'unit_number' not in cdrom_spec:
                     self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' are required"
                                               " parameters when configure CDROM list.")
-                try:
-                    cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
-                    cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
-                except ValueError:
-                    self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' attributes should be "
-                                              "integer values.")
+
+                cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
+                cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
 
                 if cdrom_spec['controller_type'] == 'ide' and (cdrom_ctl_num not in [0, 1] or cdrom_ctl_unit_num not in [0, 1]):
                     self.module.fail_json(msg="Invalid cdrom.controller_number: %s or cdrom.unit_number: %s, valid"
@@ -1510,55 +1493,7 @@ class PyVmomiHelper(PyVmomi):
                 # Changing CD-ROM settings on a template is not supported
                 return
 
-            if isinstance(self.params.get('cdrom'), dict):
-                self.configure_cdrom_dict(vm_obj)
-            elif isinstance(self.params.get('cdrom'), list):
-                self.configure_cdrom_list(vm_obj)
-
-    def configure_cdrom_dict(self, vm_obj):
-        self.module.deprecate(
-            msg="Specifying CD-ROM configuration as dict is deprecated, Please use list to specify CD-ROM configuration.",
-            version="4.0.0",
-            collection_name="community.vmware"
-        )
-        if self.params["cdrom"].get('type') not in ['none', 'client', 'iso']:
-            self.module.fail_json(msg="cdrom.type is mandatory. Options are 'none', 'client', and 'iso'.")
-        if self.params["cdrom"]['type'] == 'iso' and not self.params["cdrom"].get('iso_path'):
-            self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
-
-        cdrom_spec = None
-        cdrom_devices = self.get_vm_cdrom_devices(vm=vm_obj)
-        iso_path = self.params["cdrom"].get("iso_path")
-        if len(cdrom_devices) == 0:
-            # Creating new CD-ROM
-            ide_devices = self.get_vm_ide_devices(vm=vm_obj)
-            if len(ide_devices) == 0:
-                # Creating new IDE device
-                ide_ctl = self.device_helper.create_ide_controller()
-                ide_device = ide_ctl.device
-                self.change_detected = True
-                self.configspec.deviceChange.append(ide_ctl)
-            else:
-                ide_device = ide_devices[0]
-                if len(ide_device.device) > 3:
-                    self.module.fail_json(msg="hardware.cdrom specified for a VM or template which already has 4"
-                                              " IDE devices of which none are a cdrom")
-
-            cdrom_spec = self.device_helper.create_cdrom(ctl_device=ide_device, cdrom_type=self.params["cdrom"]["type"],
-                                                         iso_path=iso_path)
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-                cdrom_spec.device.connectable.connected = (self.params["cdrom"]["type"] != "none")
-
-        elif not self.device_helper.is_equal_cdrom(vm_obj=vm_obj, cdrom_device=cdrom_devices[0],
-                                                   cdrom_type=self.params["cdrom"]["type"], iso_path=iso_path):
-            self.device_helper.update_cdrom_config(vm_obj, self.params["cdrom"], cdrom_devices[0], iso_path=iso_path)
-            cdrom_spec = vim.vm.device.VirtualDeviceSpec()
-            cdrom_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-            cdrom_spec.device = cdrom_devices[0]
-
-        if cdrom_spec:
-            self.change_detected = True
-            self.configspec.deviceChange.append(cdrom_spec)
+            self.configure_cdrom_list(vm_obj)
 
     def configure_cdrom_list(self, vm_obj):
         configured_cdroms = self.sanitize_cdrom_params()
@@ -3457,7 +3392,19 @@ def main():
                 size_mb=dict(type='int', default=1024),
             )
         ),
-        cdrom=dict(type='raw', default=[]),
+        cdrom=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                type=dict(type='str', choices=['none', 'client', 'iso'], default='client'),
+                iso_path=dict(type='str'),
+                controller_type=dict(type='str', choices=['ide', 'sata'], default='ide'),
+                controller_number=dict(type='int'),
+                unit_number=dict(type='int'),
+                state=dict(type='str', choices=['present', 'absent'], default='present'),
+            )
+        ),
         hardware=dict(
             type='dict',
             default={},
