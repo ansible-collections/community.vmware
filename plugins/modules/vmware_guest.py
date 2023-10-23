@@ -403,7 +403,7 @@ options:
             type: int
             description:
             - For O(cdrom.controller_type=ide), valid value is 0 or 1.
-            - For O(satacdrom.controller_type=), valid value is 0 to 3.
+            - For O(cdrom.controller_type=sata), valid value is 0 to 3.
         unit_number:
             type: int
             description:
@@ -505,7 +505,7 @@ options:
   advanced_settings:
     description:
     - Define a list of advanced settings to be added to the VMX config.
-    - An advanced settings object takes two fields: C(key) and C(value).
+    - An advanced settings object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
@@ -518,7 +518,7 @@ options:
   customvalues:
     description:
     - Define a list of custom values to set on virtual machine.
-    - A custom value object takes two fields: C(key) and C(value).
+    - A custom value object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list

@@ -36,7 +36,7 @@ options:
         choices: ['basic', 'enhanced']
     link_aggregation_groups:
         description:
-            - Can only be used if O(lacp_support=enhanced).
+            - Can only be used if O(support_mode=enhanced).
         suboptions:
             name:
                 type: str
