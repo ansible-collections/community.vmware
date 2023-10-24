@@ -36,17 +36,17 @@ options:
   parent_vm:
     description:
       - Name of the parent virtual machine.
-      - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
     type: str
   uuid:
     description:
       - UUID of the vm instance to clone from, this is VMware's unique identifier.
-      - This is a required parameter, if parameter C(parent_vm) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(parent_vm) or O(moid) is not supplied.
     type: str
   moid:
     description:
       - Managed Object ID of the vm instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(parent_vm) or C(uuid) is not supplied.
+      - This is required if O(parent_vm) or O(uuid) is not supplied.
     type: str
   use_instance_uuid:
     description:
@@ -57,7 +57,7 @@ options:
     description:
       - Name of the ESX Host in datacenter in which to place cloned VM.
       - The host has to be a member of the cluster that contains the resource pool.
-      - Required with I(resource_pool) to find resource pool details. This will be used as additional information when there are resource pools with same name.
+      - Required with O(resource_pool) to find resource pool details. This will be used as additional information when there are resource pools with same name.
     type: str
     aliases: ['esxi_hostname']
     required: true
@@ -83,8 +83,6 @@ options:
   resource_pool:
     description:
       - Name of the resource pool in datacenter in which to place deployed VM.
-      - Required if I(cluster) is not specified.
-      - For default or non-unique resource pool names, specify I(host) and I(cluster).
       - C(Resources) is the default name of resource pool.
     type: str
     required: false
@@ -139,7 +137,7 @@ options:
     default: true
   wait_vm_tools_timeout:
     description:
-      - Define a timeout (in seconds) for I(the wait_vm_tools) parameter.
+      - Define a timeout (in seconds) for the O(wait_vm_tools) parameter.
     type: int
     default: 300
 extends_documentation_fragment:
