@@ -39,36 +39,36 @@ options:
   nfs_server:
     description:
     - NFS host serving nfs datastore.
-    - Required if datastore type is set to C(nfs)/C(nfs41) and state is set to C(present), else unused.
-    - Two or more servers can be defined if datastore type is set to C(nfs41)
+    - Required if O(datastore_type=nfs) / O(datastore_type=nfs41) and O(state=present), else unused.
+    - Two or more servers can be defined if O(datastore_type=nfs41)
     type: str
   nfs_path:
     description:
     - Resource path on NFS host.
-    - Required if datastore type is set to C(nfs)/C(nfs41) and state is set to C(present), else unused.
+    - Required if O(datastore_type=nfs) / O(datastore_type=nfs41) and O(state=present), else unused.
     type: str
   nfs_ro:
     description:
     - ReadOnly or ReadWrite mount.
-    - Unused if datastore type is not set to C(nfs)/C(nfs41) and state is not set to C(present).
+    - Unused if datastore type is not set to O(datastore_type=nfs) / O(datastore_type=nfs41) and not O(state=present).
     default: false
     type: bool
   resignature:
     description:
     - Allows forcing resignature of unresolved VMFS datastore that already exists on the specified disk device.
-    - Unused if datastore type is not set to C(vmfs) and state is not set to C(present).
+    - Unused if not O(datastore_type=vmfs) and not O(state=present).
     default: false
     type: bool
     version_added: '3.9.0'
   vmfs_device_name:
     description:
     - Name of the device to be used as VMFS datastore.
-    - Required for VMFS datastore type and state is set to C(present), else unused.
+    - Required for VMFS datastore type and O(state=present), else unused.
     type: str
   vmfs_version:
     description:
     - VMFS version to use for datastore creation.
-    - Unused if datastore type is not set to C(vmfs) and state is not set to C(present).
+    - Unused if not O(datastore_type=vmfs) and not O(state=present).
     type: int
   vasa_provider:
     description:
@@ -86,7 +86,7 @@ options:
     description:
     - Expand a datastore capacity to full if it has free capacity.
     - This parameter can't be extend using another datastore.
-    - A use case example in I(auto_expand), it can be used to expand a datastore capacity after increasing LUN volume.
+    - Can be used to expand a datastore capacity after increasing LUN volume.
     type: bool
     default: true
   state:

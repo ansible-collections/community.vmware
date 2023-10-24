@@ -22,13 +22,13 @@ options:
     description:
     - Name of the cluster.
     - Settings are applied to every ESXi host in given cluster.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Settings are applied to this ESXi host.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   options:
     description:

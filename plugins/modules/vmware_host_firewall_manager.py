@@ -23,13 +23,13 @@ options:
     description:
     - Name of the cluster.
     - Firewall settings are applied to every ESXi host system in given cluster.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Firewall settings are applied to this ESXi host system.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   rules:
     description:

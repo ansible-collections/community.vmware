@@ -17,7 +17,7 @@ description:
 - This module can be used to manage administrator permission for the local administrative account for the host when ESXi hostname is given.
 - All parameters and VMware objects values are case sensitive.
 - This module is destructive as administrator permission are managed using APIs used, please read options carefully and proceed.
-- Please specify C(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
+- Please specify O(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 author:
 - Abhijeet Kasurde (@Akasurde)
 options:
@@ -25,24 +25,24 @@ options:
     description:
     - Name of cluster.
     - All host systems from given cluster used to manage lockdown.
-    - Required parameter, if C(esxi_hostname) is not set.
+    - Required parameter, if O(esxi_hostname) is not set.
     type: str
   esxi_hostname:
     description:
     - List of ESXi hostname to manage lockdown.
-    - Required parameter, if C(cluster_name) is not set.
+    - Required parameter, if O(cluster_name) is not set.
     - See examples for specifications.
     type: list
     elements: str
   state:
     description:
     - State of hosts system
-    - If set to C(disabled), all host systems will be removed from lockdown mode.
-    - If host system is already out of lockdown mode and set to C(disabled), no action will be taken.
-    - If set to C(normal), all host systems will be set in lockdown mode.
-    - If host system is already in lockdown mode and set to C(normal), no action will be taken.
-    - If set to C(strict), all host systems will be set in strict lockdown mode.
-    - If host system is already in strict lockdown mode and set to C(strict), no action will be taken.
+    - If set to V(disabled), all host systems will be removed from lockdown mode.
+    - If host system is already out of lockdown mode and set to V(disabled), no action will be taken.
+    - If set to V(normal), all host systems will be set in lockdown mode.
+    - If host system is already in lockdown mode and set to V(normal), no action will be taken.
+    - If set to V(strict), all host systems will be set in strict lockdown mode.
+    - If host system is already in strict lockdown mode and set to V(strict), no action will be taken.
     default: normal
     choices: [ disabled, normal, strict ]
     type: str
