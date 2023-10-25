@@ -23,20 +23,20 @@ options:
     description:
     - Name of the cluster.
     - Acceptance level of all ESXi host system in the given cluster will be managed.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Acceptance level of this ESXi host system will be managed.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   state:
     description:
-    - If set to C(partner), then accept only partner and VMware signed and certified VIBs.
-    - If set to C(vmware_certified), then accept only VIBs that are signed and certified by VMware.
-    - If set to C(vmware_accepted), then accept VIBs that have been accepted by VMware.
-    - If set to C(community), then accept all VIBs, even those that are not signed.
+    - If set to V(partner), then accept only partner and VMware signed and certified VIBs.
+    - If set to V(vmware_certified), then accept only VIBs that are signed and certified by VMware.
+    - If set to V(vmware_accepted), then accept VIBs that have been accepted by VMware.
+    - If set to V(community), then accept all VIBs, even those that are not signed.
     choices: [ community, partner, vmware_accepted, vmware_certified ]
     required: true
     type: str

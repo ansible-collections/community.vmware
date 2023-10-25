@@ -26,15 +26,15 @@ options:
    state:
      description:
      - The action to take.
-     - If set to C(present), then custom attribute is added or updated.
-     - If set to C(absent), then custom attribute is removed.
+     - If set to V(present), then custom attribute is added or updated.
+     - If set to V(absent), then custom attribute is removed.
      default: 'present'
      choices: ['present', 'absent']
      type: str
    attributes:
      description:
      - A list of name and value of custom attributes that needs to be manage.
-     - Value of custom attribute is not required and will be ignored, if C(state) is set to C(absent).
+     - Value of custom attribute is not required and will be ignored, if O(state=absent).
      suboptions:
         name:
           description:

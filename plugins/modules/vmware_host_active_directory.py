@@ -44,12 +44,12 @@ options:
   esxi_hostname:
     description:
     - Name of the host system to work with.
-    - This parameter is required if C(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
-    - This parameter is required if C(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
