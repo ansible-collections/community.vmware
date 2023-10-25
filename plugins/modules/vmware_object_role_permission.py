@@ -32,13 +32,13 @@ options:
   principal:
     description:
     - The user to be assigned permission.
-    - Required if C(group) is not specified.
+    - Required if O(group) is not specified.
     - If specifying domain user, required separator of domain uses backslash.
     type: str
   group:
     description:
     - The group to be assigned permission.
-    - Required if C(principal) is not specified.
+    - Required if O(principal) is not specified.
     type: str
   object_name:
     description:
@@ -62,8 +62,8 @@ options:
   state:
     description:
     - Indicate desired state of the object's permission.
-    - When C(state=present), the permission will be added if it doesn't already exist.
-    - When C(state=absent), the permission is removed if it exists.
+    - When V(present), the permission will be added if it doesn't already exist.
+    - When V(absent), the permission is removed if it exists.
     choices: ['present', 'absent']
     default: present
     type: str

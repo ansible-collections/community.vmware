@@ -22,13 +22,13 @@ options:
     description:
     - Name of the cluster.
     - Package information about each ESXi server will be returned for given cluster.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Package information about this ESXi server will be returned.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

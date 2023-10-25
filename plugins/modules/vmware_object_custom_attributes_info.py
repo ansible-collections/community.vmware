@@ -43,7 +43,7 @@ options:
   moid:
     description:
       - Managed Object ID of the instance to get if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(object_name) is not supplied.
+      - This is required if O(object_name) is not supplied.
     type: str
 extends_documentation_fragment:
   - community.vmware.vmware.documentation

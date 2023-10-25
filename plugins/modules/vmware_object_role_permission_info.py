@@ -33,7 +33,7 @@ options:
   object_name:
     description:
     - The object name to assigned permission.
-    - Mutually exclusive with I(moid).
+    - Mutually exclusive with O(moid).
     type: str
   object_type:
     description:
@@ -47,7 +47,7 @@ options:
   moid:
     description:
     - Managed object ID for the given object.
-    - Mutually exclusive with I(object_name).
+    - Mutually exclusive with O(object_name).
     aliases: ['object_moid']
     type: 'str'
 extends_documentation_fragment:

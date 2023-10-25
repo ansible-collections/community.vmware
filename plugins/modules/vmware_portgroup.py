@@ -87,13 +87,13 @@ options:
                 type: list
                 description:
                 - List of active adapters used for load balancing.
-                - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+                - All vmnics are used as active adapters if O(teaming.active_adapters) and O(teaming.standby_adapters) are not defined.
                 elements: str
             standby_adapters:
                 type: list
                 description:
                 - List of standby adapters used for failover.
-                - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+                - All vmnics are used as active adapters if O(teaming.active_adapters) and O(teaming.standby_adapters) are not defined.
                 elements: str
         required: false
         aliases: [ 'teaming_policy' ]
@@ -120,13 +120,13 @@ options:
         description:
             - Name of cluster name for host membership.
             - Portgroup will be created on all hosts of the given cluster.
-            - This option is required if C(hosts) is not specified.
+            - This option is required if O(hosts) is not specified.
         aliases: [ 'cluster' ]
         type: str
     hosts:
         description:
             - List of name of host or hosts on which portgroup needs to be added.
-            - This option is required if C(cluster_name) is not specified.
+            - This option is required if O(cluster_name) is not specified.
         aliases: [ esxi_hostname ]
         type: list
         elements: str

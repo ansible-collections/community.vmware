@@ -24,29 +24,29 @@ options:
     description:
     - Name of the cluster.
     - Service settings are applied to every ESXi host system/s in given cluster.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Service settings are applied to this ESXi host system.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   state:
     description:
     - Desired state of service.
-    - "State value 'start' and 'present' has same effect."
-    - "State value 'stop' and 'absent' has same effect."
-    - State value C(unchanged) is added in version 1.14.0 to allow defining startup policy without defining or changing service state.
+    - V(start) and V(present) has same effect.
+    - V(stop) and V(absent) has same effect.
+    - V(unchanged) allows defining O(service_policy) without defining or changing service state.
     choices: [ absent, present, restart, start, stop, unchanged ]
     type: str
     default: 'start'
   service_policy:
     description:
     - Set of valid service policy strings.
-    - If set C(on), then service should be started when the host starts up.
-    - If set C(automatic), then service should run if and only if it has open firewall ports.
-    - If set C(off), then Service should not be started when the host starts up.
+    - If set V(on), then service should be started when the host starts up.
+    - If set V(automatic), then service should run if and only if it has open firewall ports.
+    - If set V(off), then Service should not be started when the host starts up.
     choices: [ 'automatic', 'off', 'on' ]
     type: str
   service_name:

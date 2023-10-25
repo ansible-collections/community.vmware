@@ -38,7 +38,7 @@ options:
         type: str
     state:
         description:
-            - Indicate desired state of the user. If the user already exists when C(state=present), the user info is updated
+            - Indicate desired state of the user. If the user already exists when V(present), the user info is updated
         choices: ['present', 'absent']
         default: present
         type: str

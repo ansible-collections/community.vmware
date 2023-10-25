@@ -37,21 +37,21 @@ options:
   state:
     description:
     - Indicate desired state of the role.
-    - If the role already exists when C(state=present), the role info is updated.
+    - If the role already exists when V(present), the role info is updated.
     choices: ['present', 'absent']
     default: present
     type: str
   force_remove:
     description:
-    - If set to C(false) then prevents the role from being removed if any permissions are using it.
+    - If set to V(false) then prevents the role from being removed if any permissions are using it.
     default: false
     type: bool
   action:
     description:
     - This parameter is only valid while updating an existing role with privileges.
-    - C(add) will add the privileges to the existing privilege list.
-    - C(remove) will remove the privileges from the existing privilege list.
-    - C(set) will replace the privileges of the existing privileges with user defined list of privileges.
+    - V(add) will add the privileges to the existing privilege list.
+    - V(remove) will remove the privileges from the existing privilege list.
+    - V(set) will replace the privileges of the existing privileges with user defined list of privileges.
     default: set
     choices: [ add, remove, set ]
     type: str
