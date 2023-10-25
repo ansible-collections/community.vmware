@@ -18,13 +18,11 @@ description:
 author:
 - Christian Kotte (@ckotte)
 - Mario Lenz (@mariolenz)
-notes:
-- This module is a replacement for the module C(vmware_dns_config)
 options:
   type:
     description:
-    - Type of DNS assignment. Either C(dhcp) or C(static).
-    - A VMkernel adapter needs to be set to DHCP if C(type) is set to C(dhcp).
+    - Type of DNS assignment. Either V(dhcp) or V(static).
+    - A VMkernel adapter needs to be set to DHCP if set to V(dhcp).
     type: str
     choices: [ 'dhcp', 'static' ]
     required: true
@@ -32,7 +30,7 @@ options:
     description:
     - The VMkernel network adapter to obtain DNS settings from.
     - Needs to get its IP through DHCP, a static network configuration combined with a dynamic DNS configuration doesn't work.
-    - The parameter is only required in case of C(type) is set to C(dhcp).
+    - The parameter is only required in case of O(type=dhcp).
     type: str
   host_name:
     description:
@@ -63,13 +61,13 @@ options:
   esxi_hostname:
     description:
     - Name of the host system to work with.
-    - This parameter is required if C(cluster_name) is not specified and you connect to a vCenter.
+    - This parameter is required if O(cluster_name) is not specified and you connect to a vCenter.
     - Cannot be used when you connect directly to an ESXi host.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
-    - This parameter is required if C(esxi_hostname) is not specified and you connect to a vCenter.
+    - This parameter is required if O(esxi_hostname) is not specified and you connect to a vCenter.
     - Cannot be used when you connect directly to an ESXi host.
     type: str
 extends_documentation_fragment:

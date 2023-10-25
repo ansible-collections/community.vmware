@@ -76,8 +76,8 @@ options:
   state:
     description:
     - Specify the state the virtual machine should be in.
-    - if set to C(present), register VM in inventory.
-    - if set to C(absent), unregister VM from inventory.
+    - if set to V(present), register VM in inventory.
+    - if set to V(absent), unregister VM from inventory.
     default: present
     choices: [ present, absent ]
     type: str

@@ -36,7 +36,7 @@ options:
   show_uplink:
     description:
     - Show or hide uplink portgroups.
-    - Only relevant when C(vlanid) is supplied.
+    - Only relevant when O(vlanid) is supplied.
     type: bool
     default: false
 extends_documentation_fragment:

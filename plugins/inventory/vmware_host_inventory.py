@@ -54,7 +54,7 @@ DOCUMENTATION = r"""
         validate_certs:
             description:
             - Allows connection when SSL certificates are not valid.
-            - Set to C(false) when certificates are not trusted.
+            - Set to V(false) when certificates are not trusted.
             default: true
             type: bool
             env:
@@ -71,7 +71,7 @@ DOCUMENTATION = r"""
             description:
             - A list of templates in order of precedence to compose inventory_hostname.
             - Ignores template if resulted in an empty string or None value.
-            - You can use property specified in I(properties) as variables in the template.
+            - You can use property specified in O(properties) as variables in the template.
             type: list
             elements: string
             default: ['name']
@@ -80,12 +80,12 @@ DOCUMENTATION = r"""
             - Specify the list of VMware schema properties associated with the ESXi hostsystem.
             - These properties will be populated in hostvars of the given ESXi hostsystem.
             - Each value in the list can be a path to a specific property in hostsystem object or a path to a collection of hostsystem objects.
-            - C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
+            - V(summary.runtime.powerState) are required if O(keyed_groups) is set to default.
             - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to ESXi hostsystem's properties, the following are special values
-            - Use C(customValue) to populate ESXi hostsystem's custom attributes. C(customValue) is only supported by vCenter and not by ESXi.
-            - Use C(all) to populate all the properties of the virtual machine.
-              The value C(all) is time consuming operation, do not use unless required absolutely.
+            - Use V(customValue) to populate ESXi hostsystem's custom attributes. V(customValue) is only supported by vCenter and not by ESXi.
+            - Use V(all) to populate all the properties of the virtual machine.
+              The value V(all) is time consuming operation, do not use unless required absolutely.
             type: list
             elements: string
             default: [ 'name', 'customValue', 'summary.runtime.powerState' ]
@@ -112,7 +112,7 @@ DOCUMENTATION = r"""
             description:
             - A list of resources to limit search scope.
             - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
-            - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
+            - Key name is based on snake case of a vim type name; e.g V(host_system) correspond to C(vim.HostSystem)
             required: false
             type: list
             elements: dict
@@ -133,7 +133,6 @@ DOCUMENTATION = r"""
           description:
           - Address of a proxy that will receive all HTTPS requests and relay them.
           - The format is a hostname or a IP.
-          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
           type: str
           required: false
           env:

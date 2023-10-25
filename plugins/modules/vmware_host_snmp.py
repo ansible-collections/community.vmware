@@ -26,13 +26,13 @@ options:
     description:
     - Name of cluster.
     - All host system from given cluster used to manage SNMP agent.
-    - Required parameter, if C(esxi_hostname) is not set.
+    - Required parameter, if O(esxi_hostname) is not set.
     type: str
     version_added: '3.11.0'
   esxi_hostname:
     description:
     - List of ESXi hostname to manage SNMP agent.
-    - Required parameter, if C(cluster_name) is not set.
+    - Required parameter, if O(cluster_name) is not set.
     type: list
     elements: str
     version_added: '3.11.0'
@@ -64,7 +64,7 @@ options:
     description:
         - A list of trap oids for traps not to be sent by agent,
           e.g. [ 1.3.6.1.4.1.6876.4.1.1.0, 1.3.6.1.4.1.6876.4.1.1.1 ]
-        - Use value C(reset) to clear settings.
+        - Use value V(reset) to clear settings.
     type: list
     elements: str
   send_trap:
@@ -75,7 +75,7 @@ options:
   hw_source:
     description:
         - Source hardware events from IPMI sensors or CIM Indications.
-        - The embedded SNMP agent receives hardware events either from IPMI sensors C(sensors) or CIM indications C(indications).
+        - The embedded SNMP agent receives hardware events either from IPMI sensors V(sensors) or CIM indications V(indications).
     type: str
     choices: [ indications, sensors ]
     default: indications

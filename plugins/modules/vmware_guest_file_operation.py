@@ -34,7 +34,7 @@ options:
         description:
             - Destination folder, absolute path to find an existing guest or create the new guest.
             - The folder should include the datacenter. ESX's datacenter is ha-datacenter
-            - Used only if C(vm_id_type) is C(inventory_path).
+            - Used only if O(vm_id_type=inventory_path).
             - 'Examples:'
             - '   folder: /ha-datacenter/vm'
             - '   folder: ha-datacenter/vm'
@@ -79,7 +79,6 @@ options:
             - Create or delete a directory.
             - Can be used to create temp directory inside guest using mktemp operation.
             - mktemp sets variable C(dir) in the result with the name of the new directory.
-            - mktemp operation option is added in version 2.8.
         suboptions:
             operation:
                 description:
@@ -91,17 +90,17 @@ options:
                 type: str
                 description:
                 - Directory path.
-                - Required for C(create) or C(remove).
+                - Required for O(directory.operation=create) or O(directory.operation=remove).
             prefix:
                 description:
                 - Temporary directory prefix.
-                - Required for C(mktemp).
+                - Required for O(directory.operation=mktemp).
                 type: str
             suffix:
                 type: str
                 description:
                 - Temporary directory suffix.
-                - Required for C(mktemp).
+                - Required for O(directory.operation=mktemp).
             recurse:
                 type: bool
                 description:

@@ -27,32 +27,30 @@ options:
   datacenter_name:
     description:
     - Name of the datacenter to add the host.
-    - Aliases added in version 2.6.
     required: true
     aliases: ['datacenter']
     type: str
   cluster_name:
     description:
     - Name of the cluster to add the host.
-    - If C(folder) is not set, then this parameter is required.
-    - Aliases added in version 2.6.
+    - If O(folder) is not set, then this parameter is required.
     aliases: ['cluster']
     type: str
   folder:
     description:
     - Name of the folder under which host to add.
-    - If C(cluster_name) is not set, then this parameter is required.
+    - If O(cluster_name) is not set, then this parameter is required.
     - "For example, if there is a datacenter 'dc1' under folder called 'Site1' then, this value will be '/Site1/dc1/host'."
     - "Here 'host' is an invisible folder under VMware Web Client."
     - "Another example, if there is a nested folder structure like '/myhosts/india/pune' under
-       datacenter 'dc2', then C(folder) value will be '/dc2/host/myhosts/india/pune'."
+       datacenter 'dc2', then O(folder) value will be '/dc2/host/myhosts/india/pune'."
     - "Other Examples: '/Site2/dc2/Asia-Cluster/host' or '/dc3/Asia-Cluster/host'"
     aliases: ['folder_name']
     type: str
   add_connected:
     description:
-    - If set to C(true), then the host should be connected as soon as it is added.
-    - This parameter is ignored if state is set to a value other than C(present).
+    - If set to V(true), then the host should be connected as soon as it is added.
+    - This parameter is ignored if not O(state=present).
     default: true
     type: bool
   esxi_hostname:
@@ -64,7 +62,7 @@ options:
     description:
     - ESXi username.
     - Required for adding a host.
-    - Optional for reconnect. If both C(esxi_username) and C(esxi_password) are used
+    - Optional for reconnect. If both O(esxi_username) and O(esxi_password) are used
     - Unused for removing.
     - No longer a required parameter from version 2.5.
     type: str
@@ -78,13 +76,13 @@ options:
     type: str
   state:
     description:
-    - If set to C(present), add the host if host is absent.
-    - If set to C(present), update the location of the host if host already exists.
-    - If set to C(absent), remove the host if host is present.
-    - If set to C(absent), do nothing if host already does not exists.
-    - If set to C(add_or_reconnect), add the host if it's absent else reconnect it and update the location.
-    - If set to C(reconnect), then reconnect the host if it's present and update the location.
-    - If set to C(disconnected), disconnect the host if the host already exists.
+    - If set to V(present), add the host if host is absent.
+    - If set to V(present), update the location of the host if host already exists.
+    - If set to V(absent), remove the host if host is present.
+    - If set to V(absent), do nothing if host already does not exists.
+    - If set to V(add_or_reconnect), add the host if it's absent else reconnect it and update the location.
+    - If set to V(reconnect), then reconnect the host if it's present and update the location.
+    - If set to V(disconnected), disconnect the host if the host already exists.
     default: present
     choices: ['present', 'absent', 'add_or_reconnect', 'reconnect', 'disconnected']
     type: str
@@ -93,7 +91,6 @@ options:
     - "Specifying the hostsystem certificate's thumbprint."
     - "Use following command to get hostsystem certificate's thumbprint - "
     - "# openssl x509 -in /etc/vmware/ssl/rui.crt -fingerprint -sha1 -noout"
-    - Only used if C(fetch_thumbprint) isn't set to C(true).
     default: ''
     type: str
     aliases: ['ssl_thumbprint']
@@ -102,9 +99,9 @@ options:
     - Fetch the thumbprint of the host's SSL certificate.
     - This basically disables the host certificate verification (check if it was signed by a recognized CA).
     - Disable this option if you want to allow only hosts with valid certificates to be added to vCenter.
-    - If this option is set to C(false) and the certificate can't be verified, an add or reconnect will fail.
-    - Unused when C(esxi_ssl_thumbprint) is set.
-    - Optional for reconnect, but only used if C(esxi_username) and C(esxi_password) are used.
+    - If this option is set to V(false) and the certificate can't be verified, an add or reconnect will fail.
+    - Unused when O(esxi_ssl_thumbprint) is set.
+    - Optional for reconnect, but only used if O(esxi_username) and O(esxi_password) are used.
     - Unused for removing.
     type: bool
     default: true
@@ -116,7 +113,7 @@ options:
   reconnect_disconnected:
     description:
     - Reconnect disconnected hosts.
-    - This is only used if C(state) is set to C(present) and if the host already exists.
+    - This is only used if O(state=present) and if the host already exists.
     type: bool
     default: true
 extends_documentation_fragment:

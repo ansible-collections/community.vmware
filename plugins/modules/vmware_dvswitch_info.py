@@ -34,7 +34,7 @@ options:
     switch_name:
       description:
         - Name of a dvswitch to look for.
-        - If C(switch_name) not specified gather all dvswitch information.
+        - If O(switch_name) not specified gather all dvswitch information.
       aliases: ['switch', 'dvswitch']
       required: false
       type: str
@@ -59,7 +59,7 @@ options:
         - '      "config.maxMtu",'
         - '      "overallStatus"'
         - '   ]'
-        - Only valid when C(schema) is C(vsphere).
+        - Only valid when O(schema=vsphere).
       type: list
       elements: str
       required: false

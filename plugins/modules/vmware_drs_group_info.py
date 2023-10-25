@@ -25,7 +25,8 @@ options:
     description:
       - "Cluster to search for VM/Host groups."
       - "If set, information of DRS groups belonging this cluster will be returned."
-      - "Not needed if C(datacenter) is set."
+      - "Needed if O(datacenter) is not set."
+      - "O(cluster_name) and O(datacenter) are mutually exclusive parameters."
     required: false
     type: str
   datacenter:
@@ -33,6 +34,8 @@ options:
       - datacenter_name
     description:
       - "Datacenter to search for DRS VM/Host groups."
+      - "Needed if O(cluster_name) is not set."
+      - "O(cluster_name) and O(datacenter) are mutually exclusive parameters."
     required: false
     type: str
 short_description: "Gathers info about DRS VM/Host groups on the given cluster"

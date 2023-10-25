@@ -17,8 +17,6 @@ description:
 - The module can be used to gather a hierarchical view of the folders that exist within a datacenter
 author:
 - David Hewitt (@davidmhewitt)
-notes:
-- C(flat_folder_info) added in VMware collection 1.4.0.
 options:
   datacenter:
     description:

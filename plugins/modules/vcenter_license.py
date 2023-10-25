@@ -31,7 +31,7 @@ options:
     type: str
   state:
     description:
-    -  Whether to add (C(present)) or remove (C(absent)) the license key.
+    -  Whether to add (V(present)) or remove (V(absent)) the license key.
     choices: [absent, present]
     default: present
     type: str
@@ -54,9 +54,9 @@ notes:
   an evaluation license only.
 - The evaluation license (00000-00000-00000-00000-00000) is not listed
   when unused.
-- If C(esxi_hostname) is specified, then will assign the C(license) key to
+- If O(esxi_hostname) is specified, then will assign the O(license) key to
   the ESXi host.
-- If C(esxi_hostname) is not specified, then will just register the C(license) key to
+- If O(esxi_hostname) is not specified, then will just register the O(license) key to
   vCenter inventory without assigning it to an ESXi host.
 extends_documentation_fragment:
 - community.vmware.vmware.vcenter_documentation

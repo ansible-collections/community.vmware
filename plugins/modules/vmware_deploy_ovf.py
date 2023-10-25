@@ -34,15 +34,15 @@ options:
     cluster:
         description:
         - Cluster to deploy to.
-        - This is a required parameter, if C(esxi_hostname) is not set and C(hostname) is set to the vCenter server.
-        - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+        - This is a required parameter, if O(esxi_hostname) is not set and O(hostname) is set to the vCenter server.
+        - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
         - This parameter is case sensitive.
         type: str
     esxi_hostname:
         description:
         - The ESXi hostname where the virtual machine will run.
-        - This is a required parameter, if C(cluster) is not set and C(hostname) is set to the vCenter server.
-        - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+        - This is a required parameter, if O(cluster) is not set and O(hostname) is set to the vCenter server.
+        - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
         - This parameter is case sensitive.
         type: str
     datastore:
@@ -72,7 +72,7 @@ options:
         type: str
     enable_hidden_properties:
         description:
-        - Enable source properties that are marked as ovf:userConfigurable=false
+        - Enable source properties that are marked as C(ovf:userConfigurable=false).
         default: false
         version_added: '3.11.0'
         type: bool
@@ -115,16 +115,16 @@ options:
     ovf:
         description:
         - 'Path to OVF or OVA file to deploy.'
-        - This is a required parameter, if C(ovf) is not set and C(url) parameter must be set.
-        - C(ovf) and C(url) are mutually exclusive parameters.
+        - Required if O(url) is not set.
+        - O(ovf) and O(url) are mutually exclusive parameters.
         aliases:
             - ova
         type: path
     url:
         description:
         - 'URL for OVA file to deploy.'
-        - This is a required parameter, if C(url) is not set and C(ovf) parameter must be set.
-        - C(url) and C(ovf) are mutually exclusive parameters.
+        - Required if O(ovf) is not set.
+        - O(url) and O(ovf) are mutually exclusive parameters.
         type: str
         version_added: '3.9.0'
     power_on:

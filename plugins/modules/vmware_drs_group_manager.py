@@ -44,14 +44,16 @@ options:
   hosts:
     description:
       - A List of hosts to add / remove in the group.
-      - Required only if I(vms) is not set.
+      - Required if O(vms) is not set.
+      - O(hosts) and O(vms) are mutually exclusive parameters.
     required: false
     type: list
     elements: str
   vms:
     description:
       - A List of vms to add / remove in the group.
-      - Required only if I(hosts) is not set.
+      - Required if O(hosts) is not set.
+      - O(hosts) and O(vms) are mutually exclusive parameters.
     required: false
     type: list
     elements: str
@@ -59,8 +61,8 @@ options:
     choices: [ present, absent ]
     default: present
     description:
-      - If set to C(present), VMs/hosts will be added to the given DRS group.
-      - If set to C(absent), VMs/hosts will be removed from the given DRS group.
+      - If set to V(present), VMs/hosts will be added to the given DRS group.
+      - If set to V(absent), VMs/hosts will be removed from the given DRS group.
     type: str
 '''
 

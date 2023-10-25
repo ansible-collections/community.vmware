@@ -49,13 +49,13 @@ options:
             - 'dvPortMirror'
         description:
             - Select the mirroring type.
-            - In C(encapsulatedRemoteMirrorSource) session, Distributed Ports can be used as source entities,
+            - In V(encapsulatedRemoteMirrorSource) session, Distributed Ports can be used as source entities,
               and IP address can be used as destination entities.
-            - In C(remoteMirrorDest) session, VLAN IDs can be used as source entities, and
+            - In V(remoteMirrorDest) session, VLAN IDs can be used as source entities, and
               Distributed Ports can be used as destination entities.
-            - In C(remoteMirrorSource) session, Distributed Ports can be used as source
+            - In V(remoteMirrorSource) session, Distributed Ports can be used as source
               entities, and uplink ports name can be used as destination entities.
-            - In C(dvPortMirror) session, Distributed Ports can be used as both source and
+            - In V(dvPortMirror) session, Distributed Ports can be used as both source and
               destination entities.
         required: false
         type: str
@@ -95,7 +95,7 @@ options:
         description:
             - Whether to strip the original VLAN tag.
             - If false, the original VLAN tag will be preserved on the mirrored traffic.
-            - If C(encapsulationVlanId) has been set and this property is false, the frames will be double tagged
+            - If O(encapsulation_vlan_id) has been set and this property is V(false), the frames will be double tagged
               with the original VLAN ID as the inner tag.
         type: bool
         required: false

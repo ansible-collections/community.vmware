@@ -16,7 +16,7 @@ module: vmware_host_ntp
 short_description: Manage NTP server configuration of an ESXi host
 description:
 - This module can be used to configure, add or remove NTP servers from an ESXi host.
-- If C(state) is not given, the NTP servers will be configured in the exact sequence.
+- If O(state) is not given, the NTP servers will be configured in the exact sequence.
 - User can specify an ESXi hostname or Cluster name. In case of cluster name, all ESXi hosts are updated.
 author:
 - Abhijeet Kasurde (@Akasurde)
@@ -25,12 +25,12 @@ options:
   esxi_hostname:
     description:
     - Name of the host system to work with.
-    - This parameter is required if C(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
-    - This parameter is required if C(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
   ntp_servers:
     description:
@@ -41,9 +41,9 @@ options:
     elements: str
   state:
     description:
-    - "present: Add NTP server(s), if specified server(s) are absent else do nothing."
-    - "absent: Remove NTP server(s), if specified server(s) are present else do nothing."
-    - Specified NTP server(s) will be configured if C(state) isn't specified.
+    - "V(present): Add NTP server(s), if specified server(s) are absent else do nothing."
+    - "V(absent): Remove NTP server(s), if specified server(s) are present else do nothing."
+    - Specified NTP server(s) will be configured if O(state) isn't specified.
     choices: [ present, absent ]
     type: str
   verbose:

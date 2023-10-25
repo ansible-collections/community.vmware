@@ -24,7 +24,7 @@ options:
   iscsi_config:
     description:
     - The iSCSI configs.
-    - This parameter is required if I(state=present) or I(state=absent).
+    - This parameter is required if O(state=present) or O(state=absent).
     type: dict
     suboptions:
       iscsi_name:
@@ -252,11 +252,11 @@ options:
                 type: str
   state:
     description:
-    - If set to C(present), add the iSCSI target or the bind ports if they are not existing.
-    - If set to C(present), update the iSCSI settings if they already exist and occur change.
-    - If set to C(absent), remove the iSCSI target or the bind ports if they are existing.
-    - If set to (enabled), enable the iSCSI of ESXi if the iSCSI is disabled.
-    - If set to (disabled), disable the iSCSI of ESXi if the iSCSI is enabled.
+    - If set to V(present), add the iSCSI target or the bind ports if they are not existing.
+    - If set to V(present), update the iSCSI settings if they already exist and occur change.
+    - If set to V(absent), remove the iSCSI target or the bind ports if they are existing.
+    - If set to V(enabled), enable the iSCSI of ESXi if the iSCSI is disabled.
+    - If set to V(disabled), disable the iSCSI of ESXi if the iSCSI is enabled.
     type: str
     default: present
     choices:

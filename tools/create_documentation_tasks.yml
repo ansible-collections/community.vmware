@@ -10,4 +10,4 @@
   ansible.builtin.shell: tox -e add_docs
 
 - name: Update documentation with antsibull-docs
-  ansible.builtin.shell: "{{ playbook_dir }}/antsibull-docs-wrapper.sh"
+  ansible.builtin.shell: "{{ playbook_dir }}/antsibull-docs-wrapper.sh {{ playbook_dir }}/.."

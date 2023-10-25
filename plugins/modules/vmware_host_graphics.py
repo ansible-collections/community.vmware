@@ -22,12 +22,12 @@ options:
     description:
     - Name of cluster.
     - All host system from given cluster used to manage Host Graphic Settings.
-    - Required parameter, if C(esxi_hostname) is not set.
+    - Required parameter, if O(esxi_hostname) is not set.
     type: str
   esxi_hostname:
     description:
     - List of ESXi hostname to manage Host Graphic Settings.
-    - Required parameter, if C(cluster_name) is not set.
+    - Required parameter, if O(cluster_name) is not set.
     type: list
     elements: str
   graphic_type:
@@ -44,7 +44,7 @@ options:
     type: str
   restart_xorg:
     description:
-    - Restart X.Org Server after change any parameter ( C(graphic_type) or C(assigment_policy) )
+    - Restart X.Org Server after change any parameter ( O(graphic_type) or O(assigment_policy) )
     default: False
     type: bool
 extends_documentation_fragment:

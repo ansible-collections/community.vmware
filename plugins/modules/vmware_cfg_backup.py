@@ -29,9 +29,9 @@ options:
         type: str
     dest:
         description:
-            - The destination where the ESXi configuration bundle will be saved. The I(dest) can be a folder or a file.
-            - If I(dest) is a folder, the backup file will be saved in the folder with the default filename generated from the ESXi server.
-            - If I(dest) is a file, the backup file will be saved with that filename. The file extension will always be .tgz.
+            - The destination where the ESXi configuration bundle will be saved. Can be a folder or a file.
+            - If a folder, the backup file will be saved in the folder with the default filename generated from the ESXi server.
+            - If a file, the backup file will be saved with that filename. The file extension will always be .tgz.
         type: path
     src:
         description:
@@ -39,9 +39,9 @@ options:
         type: path
     state:
         description:
-            - If C(saved), the .tgz backup bundle will be saved in I(dest).
-            - If C(absent), the host configuration will be reset to default values.
-            - If C(loaded), the backup file in I(src) will be loaded to the ESXi host rewriting the hosts settings.
+            - If V(saved), the .tgz backup bundle will be saved in O(dest).
+            - If V(absent), the host configuration will be reset to default values.
+            - If V(loaded), the backup file in O(src) will be loaded to the ESXi host rewriting the hosts settings.
         choices: [saved, absent, loaded]
         type: str
         required: true

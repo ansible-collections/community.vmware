@@ -16,10 +16,8 @@ module: vmware_host_vmnic_info
 short_description: Gathers info about vmnics available on the given ESXi host
 description:
 - This module can be used to gather information about vmnics available on the given ESXi host.
-- If C(cluster_name) is provided, then vmnic information about all hosts from given cluster will be returned.
-- If C(esxi_hostname) is provided, then vmnic information about given host system will be returned.
-- Additional details about vswitch and dvswitch with respective vmnic is also provided which is added in 2.7 version.
-- Additional details about lldp added in 1.11.0
+- If O(cluster_name) is provided, then vmnic information about all hosts from given cluster will be returned.
+- If O(esxi_hostname) is provided, then vmnic information about given host system will be returned.
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
@@ -43,13 +41,13 @@ options:
     description:
     - Name of the host system to work with.
     - Vmnic information about this ESXi server will be returned.
-    - This parameter is required if C(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
     - Vmnic information about each ESXi server will be returned for the given cluster.
-    - This parameter is required if C(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -81,9 +79,6 @@ hosts_vmnics_info:
     description:
     - dict with hostname as key and dict with vmnics information as value.
     - for C(num_vmnics), only NICs starting with vmnic are counted. NICs like vusb* are not counted.
-    - details about vswitch and dvswitch was added in version 2.7.
-    - details about vmnics was added in version 2.8.
-    - details about lldp was added in version 1.11.0
     returned: hosts_vmnics_info
     type: dict
     sample:

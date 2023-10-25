@@ -27,27 +27,27 @@ options:
   vasa_url:
     description:
     - The url  of the VASA provider to be managed.
-    - This parameter is required if I(state=present)
+    - This parameter is required if O(state=present)
     type: str
     required: True
   vasa_username:
     description:
     - The user account to connect to the VASA provider.
-    - This parameter is required if I(state=present)
+    - This parameter is required if O(state=present)
     type: str
   vasa_password:
     description:
     - The password of the user account to connect to the VASA provider.
-    - This parameter is required if I(state=present)
+    - This parameter is required if O(state=present)
     type: str
   vasa_certificate:
     description:
     - The SSL certificate of the VASA provider.
-    - This parameter is required if I(state=present)
+    - This parameter is required if O(state=present)
     type: str
   state:
     description:
-    - Create C(present) or remove C(absent) a VASA provider.
+    - Create (V(present)) or remove (V(absent)) a VASA provider.
     choices: [ absent, present ]
     default: present
     type: str

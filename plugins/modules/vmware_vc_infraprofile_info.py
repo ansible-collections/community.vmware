@@ -42,13 +42,13 @@ options:
     config_path:
       description:
       - Config file path which contains infra profile config JSON data, supports both relative and absolute path.
-      - This parameter is required only when C(import),C(validate) APIs are being used.
+      - This parameter is required only when V(import),V(validate) APIs are being used.
       type: str
       required: false
     profiles:
       description:
       - A list of profile names to be exported, imported, and validated.
-      - This parameter is not required while running for List API, not for C(export),C(import) and C(validate).
+      - This parameter is not required while running for List API, not for V(export),V(import) and V(validate).
       type: str
       required: false
     description:
