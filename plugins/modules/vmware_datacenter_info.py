@@ -28,8 +28,8 @@ options:
     schema:
       description:
       - Specify the output schema desired.
-      - The 'summary' output schema is the legacy output from the module.
-      - The 'vsphere' output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
+      - The V(summary) output schema is the legacy output from the module.
+      - The V(vsphere) output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
       choices: ['summary', 'vsphere']
       default: 'summary'
       type: str
@@ -42,12 +42,12 @@ options:
       - '   properties: ['
       - '      "overallStatus"'
       - '   ]'
-      - Only valid when C(schema) is C(vsphere).
+      - Only valid when O(schema=vsphere).
       type: list
       elements: str
     show_tag:
       description:
-      - Tags related to Datacenter are shown if set to C(true).
+      - Tags related to Datacenter are shown if set to V(true).
       default: false
       type: bool
 extends_documentation_fragment:

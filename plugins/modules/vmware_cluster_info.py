@@ -24,26 +24,26 @@ options:
    datacenter:
      description:
      - Datacenter to search for cluster/s.
-     - This parameter is required, if C(cluster_name) is not supplied.
+     - This parameter is required, if O(cluster_name) is not supplied.
      required: false
      type: str
    cluster_name:
      description:
      - Name of the cluster.
      - If set, information of this cluster will be returned.
-     - This parameter is required, if C(datacenter) is not supplied.
+     - This parameter is required, if O(datacenter) is not supplied.
      required: false
      type: str
    show_tag:
     description:
-    - Tags related to cluster are shown if set to C(true).
+    - Tags related to cluster are shown if set to V(true).
     default: false
     type: bool
    schema:
      description:
        - Specify the output schema desired.
-       - The 'summary' output schema is the legacy output from the module.
-       - The 'vsphere' output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
+       - The V(summary) output schema is the legacy output from the module.
+       - The V(vsphere) output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
      choices: ['summary', 'vsphere']
      default: 'summary'
      type: str
@@ -56,7 +56,7 @@ options:
        - '      "configuration.dasConfig.enabled",'
        - '      "summary.totalCpu"'
        - '   ]'
-       - Only valid when C(schema) is C(vsphere).
+       - Only valid when O(schema=vsphere).
      type: list
      elements: str
 extends_documentation_fragment:

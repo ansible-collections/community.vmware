@@ -30,36 +30,36 @@ options:
     type: str
   name:
     description:
-    - Required for C(state=present). The name of the extension you are installing.
+    - Required for O(state=present). The name of the extension you are installing.
     type: str
   company:
     description:
-    - Required for C(state=present). The name of the company that makes the extension.
+    - Required for O(state=present). The name of the company that makes the extension.
     type: str
   description:
     description:
-    - Required for C(state=present). A short description of the extension.
+    - Required for O(state=present). A short description of the extension.
     type: str
   email:
     description:
-    - Required for C(state=present). Administrator email to use for extension.
+    - Required for O(state=present). Administrator email to use for extension.
     type: str
   url:
     description:
-    - Required for C(state=present). Link to server hosting extension zip file to install.
+    - Required for O(state=present). Link to server hosting extension zip file to install.
     type: str
   ssl_thumbprint:
     description:
-    - Required for C(state=present). SSL thumbprint of the extension hosting server.
+    - Required for O(state=present). SSL thumbprint of the extension hosting server.
     type: str
   server_type:
     description:
-    - Required for C(state=present). Type of server being used to install the extension (SOAP, REST, HTTP, etc.).
+    - Required for O(state=present). Type of server being used to install the extension (SOAP, REST, HTTP, etc.).
     default: vsphere-client-serenity
     type: str
   client_type:
     description:
-    - Required for C(state=present). Type of client the extension is (win32, .net, linux, etc.).
+    - Required for O(state=present). Type of client the extension is (win32, .net, linux, etc.).
     default: vsphere-client-serenity
     type: str
   visible:
