@@ -1,0 +1,2 @@
+minor_changes:
+  - Using semantic markup in documentation (https://github.com/ansible-collections/community.vmware/issues/1771).
