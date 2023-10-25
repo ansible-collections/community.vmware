@@ -29,14 +29,14 @@ options:
     support_mode:
         description:
             - The LACP support mode.
-            - 'C(basic): One Link Aggregation Control Protocol group in the switch (singleLag).'
-            - 'C(enhanced): Multiple Link Aggregation Control Protocol groups in the switch (multipleLag).'
+            - 'V(basic): One Link Aggregation Control Protocol group in the switch (singleLag).'
+            - 'V(enhanced): Multiple Link Aggregation Control Protocol groups in the switch (multipleLag).'
         type: str
         default: 'basic'
         choices: ['basic', 'enhanced']
     link_aggregation_groups:
         description:
-            - Can only be used if C(lacp_support) is set to C(enhanced).
+            - Can only be used if O(support_mode=enhanced).
         suboptions:
             name:
                 type: str

@@ -22,16 +22,16 @@ options:
    attribute_key:
      description:
      - Name of the custom attribute definition.
-     - This is required parameter, if C(state) is set to C(present) or C(absent).
+     - This is required parameter, if O(state=present) or O(state=absent).
      required: false
      type: str
    state:
      description:
      - Manage definition of custom attributes.
-     - If set to C(present) and definition not present, then custom attribute definition is created.
-     - If set to C(present) and definition is present, then no action taken.
-     - If set to C(absent) and definition is present, then custom attribute definition is removed.
-     - If set to C(absent) and definition is absent, then no action taken.
+     - If set to V(present) and definition not present, then custom attribute definition is created.
+     - If set to V(present) and definition is present, then no action taken.
+     - If set to V(absent) and definition is present, then custom attribute definition is removed.
+     - If set to V(absent) and definition is absent, then no action taken.
      default: 'present'
      choices: ['present', 'absent']
      type: str

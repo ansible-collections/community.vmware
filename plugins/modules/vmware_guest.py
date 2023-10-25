@@ -35,36 +35,35 @@ notes:
     - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
     - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
     - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add
-      support is enabled and the C(state=present) must be used to apply the changes.
+      support is enabled and the O(state=present) must be used to apply the changes.
     - "For additional information please visit Ansible VMware community wiki - U(https://github.com/ansible/community/wiki/VMware)."
 options:
   state:
     description:
     - Specify the state the virtual machine should be in.
-    - If C(state) is set to C(present) and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.
-    - If C(state) is set to C(absent) and virtual machine exists, then the specified virtual machine is removed with it's associated components.
-    - If C(state) is set to one of the following C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
-      C(present), C(restarted), C(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.
-    - If C(state) is set to C(poweredon) or C(powered-on) and virtual machine exists with powerstate other than powered on,
+    - If V(present) and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.
+    - If V(absent) and virtual machine exists, then the specified virtual machine is removed with it's associated components.
+    - If set to one of V(poweredon), V(powered-on), V(poweredoff), V(powered-off),
+      V(present), V(restarted), V(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.
+    - If set to V(poweredon) or V(powered-on) and virtual machine exists with powerstate other than powered on,
       then the specified virtual machine is powered on.
-    - If C(state) is set to C(poweredoff) or C(powered-off) and virtual machine exists with powerstate other than powered off,
+    - If set to V(poweredoff) or V(powered-off) and virtual machine exists with powerstate other than powered off,
       then the specified virtual machine is powered off.
-    - If C(state) is set to C(restarted) and virtual machine exists, then the virtual machine is restarted.
-    - If C(state) is set to C(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.
-    - If C(state) is set to C(shutdownguest) or C(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.
-    - If C(state) is set to C(rebootguest) or C(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.
-    - Powerstate C(powered-on) and C(powered-off) is added in version 2.10.
+    - If set to V(restarted) and virtual machine exists, then the virtual machine is restarted.
+    - If set to V(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.
+    - If set to V(shutdownguest) or V(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.
+    - If set to V(rebootguest) or V(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.
     default: present
     type: str
     choices: [ absent, poweredon, powered-on, poweredoff, powered-off, present, rebootguest, reboot-guest, restarted, suspended, shutdownguest, shutdown-guest]
   name:
     description:
     - Name of the virtual machine to work with.
-    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see C(name_match).
-    - If multiple virtual machines with same name exists, then C(folder) is required parameter to
+    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see O(name_match).
+    - If multiple virtual machines with same name exists, then O(folder) is required parameter to
       identify uniqueness of the virtual machine.
-    - This parameter is required, if C(state) is set to C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
-      C(present), C(restarted), C(suspended) and virtual machine does not exists.
+    - This parameter is required, if O(state=poweredon), O(state=powered-on), O(state=poweredoff), O(state=powered-off),
+      O(state=present), O(state=restarted), O(state=suspended) and virtual machine does not exists.
     - This parameter is case sensitive.
     type: str
   name_match:
@@ -76,7 +75,7 @@ options:
   uuid:
     description:
     - UUID of the virtual machine to manage if known, this is VMware's unique identifier.
-    - This is required if C(name) is not supplied.
+    - This is required if O(name) is not supplied.
     - If virtual machine does not exists, then this parameter is ignored.
     - Please note that a supplied UUID will be ignored on virtual machine creation, as VMware creates the UUID internally.
     type: str
@@ -110,7 +109,7 @@ options:
     - "The folder should include the datacenter. ESXi's datacenter is ha-datacenter."
     - This parameter is case sensitive.
     - 'If multiple machines are found with same name, this parameter is used to identify'
-    - 'uniqueness of the virtual machine. Added in Ansible 2.5.'
+    - 'uniqueness of the virtual machine.'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
@@ -145,8 +144,8 @@ options:
             type: int
             description:
             - Number of CPUs.
-            - C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).
-            - For example, to create a VM with 2 sockets of 4 cores, specify C(num_cpus) as 8 and C(num_cpu_cores_per_socket) as 4.
+            - Must be a multiple of O(hardware.num_cpu_cores_per_socket).
+            - For example, to create a VM with 2 sockets of 4 cores, specify O(hardware.num_cpus) as 8 and O(hardware.num_cpu_cores_per_socket) as 4.
         num_cpu_cores_per_socket:
             type: int
             description: Number of Cores Per Socket.
@@ -155,7 +154,6 @@ options:
             choices: [ 'low', 'normal', 'high', 'custom' ]
             description:
             - The allocation level of CPU resources for the virtual machine.
-            - Valid Values are C(low), C(normal), C(high) and C(custom).
             version_added: '3.2.0'
         cpu_shares:
             type: int
@@ -170,8 +168,8 @@ options:
         scsi:
             type: str
             description:
-            - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
-            - C(paravirtual) is default.
+            - Valid values are V(buslogic), V(lsilogic), V(lsilogicsas) and V(paravirtual).
+            - V(paravirtual) is default.
             choices: [ 'buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual' ]
         secure_boot:
             type: bool
@@ -179,7 +177,7 @@ options:
         memory_reservation_lock:
             type: bool
             description:
-            - If set C(true), memory resource reservation for the virtual machine.
+            - If set V(true), memory resource reservation for the virtual machine.
         max_connections:
             type: int
             description:
@@ -197,7 +195,6 @@ options:
             type: str
             description:
             - The allocation level of memory resources for the virtual machine.
-            - Valid Values are C(low), C(normal), C(high) and C(custom).
             choices: [ 'low', 'normal', 'high', 'custom' ]
             version_added: '3.2.0'
         mem_shares:
@@ -219,8 +216,7 @@ options:
             description:
             - The Virtual machine hardware versions.
             - Default is 10 (ESXi 5.5 and onwards).
-            - If set to C(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
-            - C(latest) is added in Ansible 2.10.
+            - If set to V(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - Please check VMware documentation for correct virtual machine hardware version.
             - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
         boot_firmware:
@@ -263,9 +259,6 @@ options:
     description:
     - Set the guest ID.
     - This parameter is case sensitive.
-    - C(rhel7_64Guest) for virtual machine with RHEL7 64 bit.
-    - C(centos64Guest) for virtual machine with CentOS 64 bit.
-    - C(ubuntu64Guest) for virtual machine with Ubuntu 64 bit.
     - This field is required when creating a virtual machine, not required when creating from the template.
     - >
          Valid values are referenced here:
@@ -276,8 +269,8 @@ options:
     - This parameter is case sensitive.
     - Shrinking disks is not supported.
     - Removing existing disks of the virtual machine is not supported.
-    - 'Attributes C(controller_type), C(controller_number), C(unit_number) are used to configure multiple types of disk
-      controllers and disks for creating or reconfiguring virtual machine. Added in Ansible 2.10.'
+    - 'Attributes O(disk.controller_type), O(disk.controller_number), O(disk.unit_number) are used to configure multiple types of disk
+      controllers and disks for creating or reconfiguring virtual machine.'
     type: list
     default: []
     elements: dict
@@ -302,8 +295,6 @@ options:
         type:
             description:
             - Type of disk.
-            - If C(thin) specified, disk type is set to thin disk.
-            - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
             - If not specified, disk type is inherited from the source VM or template when cloned and thick disk, no eagerzero otherwise.
             type: str
             choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
@@ -311,37 +302,35 @@ options:
             type: str
             description:
             - The name of datastore which will be used for the disk.
-            - If C(autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
+            - If O(disk.autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
         filename:
             type: str
             description:
             - Existing disk image to be used.
             - Filename must already exist on the datastore.
-            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in Ansible 2.8.
+            - Specify filename string in C([datastore_name] path/to/file.vmdk) format.
         autoselect_datastore:
             type: bool
             description:
             - Select the less used datastore.
-            - C(disk.datastore) and C(disk.autoselect_datastore) will not be used if C(datastore) is specified outside this C(disk) configuration.
+            - O(disk.datastore) and O(disk.autoselect_datastore) will not be used if O(datastore) is specified outside this O(disk) configuration.
         disk_mode:
             type: str
             choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
             description:
             - Type of disk mode.
-            - Added in Ansible 2.6.
-            - If C(persistent) specified, changes are immediately and permanently written to the virtual disk. This is default.
-            - If C(independent_persistent) specified, same as persistent, but not affected by snapshots.
-            - If C(independent_nonpersistent) specified, changes to virtual disk are made to a redo log and discarded at power off,
+            - If V(persistent) specified, changes are immediately and permanently written to the virtual disk. This is default.
+            - If V(independent_persistent) specified, same as persistent, but not affected by snapshots.
+            - If V(independent_nonpersistent) specified, changes to virtual disk are made to a redo log and discarded at power off,
               but not affected by snapshots.
         controller_type:
             type: str
             choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme']
             description:
             - Type of disk controller.
-            - C(nvme) controller type support starts on ESXi 6.5 with VM hardware version C(version) 13.
               Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.
-            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA CDROMs.
-            - If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when C(cdrom) also set to C(sata) type.
+            - When set to V(sata), please make sure O(disk.unit_number) is correct and not used by SATA CDROMs.
+            - If set to V(sata) type, please make sure O(disk.controller_number) and O(disk.unit_number) are set correctly when O(cdrom=sata).
         controller_number:
             type: int
             choices: [0, 1, 2, 3]
@@ -355,9 +344,9 @@ options:
             - Valid value range from 0 to 15 for SCSI controller, except 7.
             - Valid value range from 0 to 14 for NVME controller.
             - Valid value range from 0 to 29 for SATA controller.
-            - C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
+            - O(disk.controller_type), O(disk.controller_number) and O(disk.unit_number) are required when creating or reconfiguring VMs
               with multiple types of disk controllers and disks.
-            - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
+            - When creating new VM, the first configured disk in the O(disk) list will be "Hard Disk 1".
   nvdimm:
     description:
     - Add or remove a virtual NVDIMM device to the virtual machine.
@@ -372,8 +361,7 @@ options:
         state:
              type: str
              description:
-             - Valid value is C(present) or C(absent).
-             - If set to C(absent), then the NVDIMM device with specified C(label) will be removed.
+             - If set to V(absent), then the NVDIMM device with specified O(nvdimm.label) will be removed.
              choices: ['present', 'absent']
         size_mb:
             type: int
@@ -383,12 +371,12 @@ options:
              type: str
              description:
              - The label of the virtual NVDIMM device to be removed or configured, e.g., "NVDIMM 1".
-             - 'This parameter is required when C(state) is set to C(absent), or C(present) to reconfigure NVDIMM device
-               size. When add a new device, please do not set C(label).'
+             - 'This parameter is required when O(nvdimm.state=absent), or O(nvdimm.state=present) to reconfigure NVDIMM device
+               size. When add a new device, please do not set.'
   cdrom:
     description:
     - A list of CD-ROM configurations for the virtual machine.
-    - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
+    - For V(ide) controller, hot-add or hot-remove CD-ROM is not supported.
     type: list
     default: []
     elements: dict
@@ -397,35 +385,35 @@ options:
             type: str
             description:
             - The type of CD-ROM.
-            - With C(none) the CD-ROM will be disconnected but present.
+            - With V(none) the CD-ROM will be disconnected but present.
             choices: [ 'none', 'client', 'iso' ]
             default: client
         iso_path:
             type: str
             description:
             - The datastore path to the ISO file to use, in the form of C([datastore1] path/to/file.iso).
-            - Required if type is set C(iso).
+            - Required if type is set V(iso).
         controller_type:
             type: str
             description:
-            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
+            - When set to V(sata), please make sure O(cdrom.unit_number) is correct and not used by SATA disks.
             choices: [ 'ide', 'sata' ]
             default: ide
         controller_number:
             type: int
             description:
-            - For C(ide) controller, valid value is 0 or 1.
-            - For C(sata) controller, valid value is 0 to 3.
+            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom.controller_type=sata), valid value is 0 to 3.
         unit_number:
             type: int
             description:
-            - For CD-ROM device attach to C(ide) controller, valid value is 0 or 1.
-            - For CD-ROM device attach to C(sata) controller, valid value is 0 to 29.
-            - C(controller_number) and C(unit_number) are mandatory attributes.
+            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom.controller_type=sata), valid value is 0 to 29.
+            - O(cdrom.controller_number) and O(cdrom.unit_number) are mandatory attributes.
         state:
             type: str
             description:
-            - If set to C(absent), then the specified CD-ROM will be removed.
+            - If set to V(absent), then the specified CD-ROM will be removed.
             choices: [ 'present', 'absent' ]
             default: present
   resource_pool:
@@ -458,12 +446,12 @@ options:
     - Wait until vCenter detects all guest customizations as successfully completed.
     - When enabled, the VM will automatically be powered on.
     - "If vCenter does not detect guest customization start or succeed, failed events after time
-      C(wait_for_customization_timeout) parameter specified, warning message will be printed and task result is fail."
+      O(wait_for_customization_timeout) parameter specified, warning message will be printed and task result is fail."
     default: false
     type: bool
   state_change_timeout:
     description:
-    - If the C(state) is set to C(shutdownguest), by default the module will return immediately after sending the shutdown signal.
+    - If the O(state=shutdownguest), by default the module will return immediately after sending the shutdown signal.
     - If this argument is set to a positive integer, the module will instead wait for the virtual machine to reach the poweredoff state.
     - The value sets a timeout in seconds for the module to wait for the state change.
     default: 0
@@ -472,12 +460,12 @@ options:
     description:
     - Name of the existing snapshot to use to create a clone of a virtual machine.
     - This parameter is case sensitive.
-    - While creating linked clone using C(linked_clone) parameter, this parameter is required.
+    - While creating linked clone using O(linked_clone) parameter, this parameter is required.
     type: str
   linked_clone:
     description:
     - Whether to create a linked clone from the snapshot specified.
-    - If specified, then C(snapshot_src) is required parameter.
+    - If specified, then O(snapshot_src) is required parameter.
     default: false
     type: bool
   force:
@@ -486,7 +474,7 @@ options:
     - This parameter is useful while removing virtual machine which is powered on state.
     - 'This module reflects the VMware vCenter API and UI workflow, as such, in some cases the `force` flag will
        be mandatory to perform the action to ensure you are certain the action has to be taken, no matter what the consequence.
-       This is specifically the case for removing a powered on the virtual machine when C(state) is set to C(absent).'
+       This is specifically the case for removing a powered on the virtual machine when O(state=absent).'
     default: false
     type: bool
   delete_from_inventory:
@@ -503,21 +491,21 @@ options:
   cluster:
     description:
     - The cluster name where the virtual machine will run.
-    - This is a required parameter, if C(esxi_hostname) is not set.
-    - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+    - This is a required parameter, if O(esxi_hostname) is not set.
+    - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     - This parameter is case sensitive.
     type: str
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
-    - This is a required parameter, if C(cluster) is not set.
-    - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+    - This is a required parameter, if O(cluster) is not set.
+    - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     - This parameter is case sensitive.
     type: str
   advanced_settings:
     description:
     - Define a list of advanced settings to be added to the VMX config.
-    - An advanced settings object takes two fields C(key) and C(value).
+    - An advanced settings object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
@@ -530,7 +518,7 @@ options:
   customvalues:
     description:
     - Define a list of custom values to set on virtual machine.
-    - A custom value object takes two fields C(key) and C(value).
+    - A custom value object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
@@ -552,7 +540,7 @@ options:
             description:
             - Name of the portgroup or distributed virtual portgroup for this interface.
             - Required per entry.
-            - When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.
+            - When specifying distributed virtual portgroup make sure given O(esxi_hostname) or O(cluster) is associated with it.
         vlan:
             type: int
             description:
@@ -636,7 +624,7 @@ options:
         existing_vm:
             type: bool
             description:
-            - If set to C(true), do OS customization on the specified virtual machine directly.
+            - If set to V(true), do OS customization on the specified virtual machine directly.
             - Common for Linux and Windows customization.
         dns_servers:
             type: list
@@ -660,7 +648,7 @@ options:
             type: str
             description:
             - Computer hostname.
-            - Default is shortened C(name) parameter.
+            - Default is shortened O(name) parameter.
             - Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.
             - Common for Linux and Windows customization.
         timezone:
@@ -693,19 +681,19 @@ options:
             description:
             - Number of autologon after reboot.
             - Specific to Windows customization.
-            - Ignored if C(autologon) is unset or set to C(false).
+            - Ignored if O(customization.autologon) is unset or set to O(customization.autologon=false).
             - If unset, 1 will be used.
         domainadmin:
             type: str
             description:
             - User used to join in AD domain.
-            - Required if C(joindomain) specified.
+            - Required if O(customization.joindomain) specified.
             - Specific to Windows customization.
         domainadminpassword:
             type: str
             description:
             - Password used to join in AD domain.
-            - Required if C(joindomain) specified.
+            - Required if O(customization.joindomain) specified.
             - Specific to Windows customization.
         fullname:
             type: str
@@ -717,13 +705,13 @@ options:
             type: str
             description:
             - AD domain to join.
-            - Not compatible with C(joinworkgroup).
+            - Not compatible with O(customization.joinworkgroup).
             - Specific to Windows customization.
         joinworkgroup:
             type: str
             description:
             - Workgroup to join.
-            - Not compatible with C(joindomain).
+            - Not compatible with O(customization.joindomain).
             - Specific to Windows customization.
             - If unset, "WORKGROUP" will be used as a fall-back.
         orgname:
@@ -780,12 +768,12 @@ options:
     description:
     - Unique name identifying the requested customization specification.
     - This parameter is case sensitive.
-    - If set, then overrides C(customization) parameter values.
+    - If set, then overrides O(customization) parameter values.
     type: str
   datastore:
     description:
     - Specify datastore or datastore cluster to provision virtual machine.
-    - This parameter takes precedence over C(disk.datastore) parameter.
+    - This parameter takes precedence over O(disk.datastore) parameter.
     - This parameter can be used to override datastore or datastore cluster setting
       of the virtual machine when deployed from the template.
     - Please see example for more usage.

@@ -23,17 +23,17 @@ options:
    name:
      description:
      - Name of the virtual machine.
-     - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-     - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -70,8 +70,8 @@ options:
      suboptions:
        controller_number:
          description:
-         - Disk controller bus number. When C(state) is set to C(absent), this parameter is required.
-         - When C(type) set to C(usb2) or C(usb3), this parameter is not required.
+         - Disk controller bus number. When O(controllers.state=absent), this parameter is required.
+         - When O(controllers.type=usb2) or O(controllers.type=usb3), this parameter is not required.
          type: int
          choices:
            - 0
@@ -81,7 +81,7 @@ options:
        type:
          description:
          - Type of disk or USB controller.
-         - From vSphere 6.5 and virtual machine with hardware version 13, C(nvme) controller starts to be supported.
+         - From vSphere 6.5 and virtual machine with hardware version 13, V(nvme) controller starts to be supported.
          required: true
          type: str
          choices:
@@ -96,9 +96,9 @@ options:
        state:
          description:
          - Add new controller or remove specified existing controller.
-         - If C(state) is set to C(absent), the specified controller will be removed from virtual machine when there is no disk or device attaching to it.
+         - If set to V(absent), the specified controller will be removed from virtual machine when there is no disk or device attaching to it.
          - If specified controller is removed or not exist, no action will be taken only warning message.
-         - If C(state) is set to C(present), new controller with specified type will be added.
+         - If set to V(present), new controller with specified type will be added.
          - If the number of controller with specified controller type reaches it's maximum, no action will be taken only warning message.
          required: true
          type: str
@@ -117,7 +117,7 @@ options:
    gather_disk_controller_facts:
      description:
      - Whether to collect existing disk and USB controllers facts only.
-     - When this parameter is set to C(true), C(controllers) parameter will be ignored.
+     - When this parameter is set to V(true), O(controllers) parameter will be ignored.
      type: bool
      default: false
    sleep_time:
