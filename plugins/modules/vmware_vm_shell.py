@@ -92,13 +92,13 @@ options:
       type: str
     wait_for_process:
       description:
-      - If set to C(true), module will wait for process to complete in the given virtual machine.
+      - If set to V(true), module will wait for process to complete in the given virtual machine.
       default: false
       type: bool
     timeout:
       description:
       - Timeout in seconds.
-      - If set to positive integers, then C(wait_for_process) will honor this parameter and will exit after this timeout.
+      - If set to positive integers, then O(wait_for_process=true) will honor this parameter and will exit after this timeout.
       default: 3600
       type: int
 extends_documentation_fragment:
