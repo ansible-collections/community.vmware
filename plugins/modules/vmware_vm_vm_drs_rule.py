@@ -26,7 +26,7 @@ options:
   vms:
     description:
     - List of virtual machines name for which DRS rule needs to be applied.
-    - Required if C(state) is set to C(present).
+    - Required if O(state=present).
     type: list
     elements: str
   drs_rule_name:
@@ -36,28 +36,28 @@ options:
     type: str
   enabled:
     description:
-    - If set to C(true), the DRS rule will be enabled.
-    - Effective only if C(state) is set to C(present).
+    - If set to V(true), the DRS rule will be enabled.
+    - Effective only if O(state=present).
     default: false
     type: bool
   mandatory:
     description:
-    - If set to C(true), the DRS rule will be mandatory.
-    - Effective only if C(state) is set to C(present).
+    - If set to V(true), the DRS rule will be mandatory.
+    - Effective only if O(state=present).
     default: false
     type: bool
   affinity_rule:
     description:
-    - If set to C(true), the DRS rule will be an Affinity rule.
-    - If set to C(false), the DRS rule will be an Anti-Affinity rule.
-    - Effective only if C(state) is set to C(present).
+    - If set to V(true), the DRS rule will be an Affinity rule.
+    - If set to V(false), the DRS rule will be an Anti-Affinity rule.
+    - Effective only if O(state=present).
     default: true
     type: bool
   state:
     description:
-    - If set to C(present), then the DRS rule is created if not present.
-    - If set to C(present), then the DRS rule is already present, it updates to the given configurations.
-    - If set to C(absent), then the DRS rule is deleted if present.
+    - If set to V(present), then the DRS rule is created if not present.
+    - If set to V(present), then the DRS rule is already present, it updates to the given configurations.
+    - If set to V(absent), then the DRS rule is deleted if present.
     required: false
     default: present
     choices: [ present, absent ]

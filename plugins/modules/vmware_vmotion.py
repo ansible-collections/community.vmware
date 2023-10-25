@@ -25,20 +25,19 @@ options:
     vm_name:
       description:
       - Name of the VM to perform a vMotion on.
-      - This is required parameter, if C(vm_uuid) is not set.
-      - Version 2.6 onwards, this parameter is not a required parameter, unlike the previous versions.
+      - This is required parameter, if O(vm_uuid) is not set.
       aliases: ['vm']
       type: str
     vm_uuid:
       description:
       - UUID of the virtual machine to perform a vMotion operation on.
-      - This is a required parameter, if C(vm_name) or C(moid) is not set.
+      - This is a required parameter, if O(vm_name) or O(moid) is not set.
       aliases: ['uuid']
       type: str
     moid:
       description:
       - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(vm_name) or C(vm_uuid) is not supplied.
+      - This is required if O(vm_name) or O(vm_uuid) is not supplied.
       type: str
     use_instance_uuid:
       description:

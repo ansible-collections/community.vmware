@@ -22,22 +22,19 @@ author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Fedor Vompe (@sumkincpp)
-notes:
-- Fact about C(moid) added in VMware collection 1.4.0.
-- Fact about C(datastore_url) is added in VMware collection 1.18.0.
 options:
     vm_type:
       description:
-      - If set to C(vm), then information are gathered for virtual machines only.
-      - If set to C(template), then information are gathered for virtual machine templates only.
-      - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
+      - If set to V(vm), then information are gathered for virtual machines only.
+      - If set to V(template), then information are gathered for virtual machine templates only.
+      - If set to V(all), then information are gathered for all virtual machines and virtual machine templates.
       required: false
       default: 'all'
       choices: [ all, vm, template ]
       type: str
     show_attribute:
       description:
-      - Attributes related to VM guest shown in information only when this is set C(true).
+      - Attributes related to VM guest shown in information only when this is set V(true).
       default: false
       type: bool
     folder:
@@ -56,25 +53,25 @@ options:
       type: str
     show_cluster:
       description:
-        - Tags virtual machine's cluster is shown if set to C(true).
+        - Tags virtual machine's cluster is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datacenter:
       description:
-        - Tags virtual machine's datacenter is shown if set to C(true).
+        - Tags virtual machine's datacenter is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datastore:
       description:
-        - Tags virtual machine's datastore is shown if set to C(true).
+        - Tags virtual machine's datastore is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_esxi_hostname:
       description:
-        - Tags virtual machine's ESXi host is shown if set to C(true).
+        - Tags virtual machine's ESXi host is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
@@ -86,25 +83,25 @@ options:
       type: bool
     show_mac_address:
       description:
-        - Tags virtual machine's mac address is shown if set to C(true).
+        - Tags virtual machine's mac address is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_net:
       description:
-        - Tags virtual machine's network is shown if set to C(true).
+        - Tags virtual machine's network is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_resource_pool:
       description:
-        - Tags virtual machine's resource pool is shown if set to C(true).
+        - Tags virtual machine's resource pool is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_tag:
       description:
-        - Tags related to virtual machine are shown if set to C(true).
+        - Tags related to virtual machine are shown if set to V(true).
       default: false
       type: bool
     show_allocated:
