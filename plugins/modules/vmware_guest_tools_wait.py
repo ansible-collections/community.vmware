@@ -21,7 +21,7 @@ options:
    name:
      description:
      - Name of the VM for which to wait until the tools become available.
-     - This is required if C(uuid) or C(moid) is not supplied.
+     - This is required if O(uuid) or O(moid) is not supplied.
      type: str
    name_match:
      description:
@@ -32,7 +32,7 @@ options:
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required only, if multiple VMs with same C(name) is found.
+     - This is required only, if multiple VMs with same O(name) is found.
      - The folder should include the datacenter. ESX's datacenter is C(ha-datacenter).
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -48,12 +48,12 @@ options:
    uuid:
      description:
      - UUID of the VM  for which to wait until the tools become available, if known. This is VMware's unique identifier.
-     - This is required, if C(name) or C(moid) is not supplied.
+     - This is required, if O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    use_instance_uuid:
      description:

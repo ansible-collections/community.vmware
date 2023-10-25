@@ -23,25 +23,25 @@ options:
    name:
      description:
      - Name of the virtual machine to work with.
-     - This is required parameter, if C(uuid) or C(moid) is not supplied.
+     - This is required parameter, if O(uuid) or O(moid) is not supplied.
      type: str
    state:
      description:
      - The action to take.
-     - If set to C(present), then custom attribute is added or updated.
-     - If set to C(absent), then custom attribute value is removed.
+     - If set to V(present), then custom attribute is added or updated.
+     - If set to V(absent), then custom attribute value is removed.
      default: 'present'
      choices: ['present', 'absent']
      type: str
    uuid:
      description:
      - UUID of the virtual machine to manage if known. This is VMware's unique identifier.
-     - This is required parameter, if C(name) or C(moid) is not supplied.
+     - This is required parameter, if O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    use_instance_uuid:
      description:
@@ -51,7 +51,7 @@ options:
    folder:
      description:
      - Absolute path to find an existing guest.
-     - This is required parameter, if C(name) is supplied and multiple virtual machines with same name are found.
+     - This is required parameter, if O(name) is supplied and multiple virtual machines with same name are found.
      type: str
    datacenter:
      description:
@@ -60,7 +60,7 @@ options:
    attributes:
      description:
      - A list of name and value of custom attributes that needs to be manage.
-     - Value of custom attribute is not required and will be ignored, if C(state) is set to C(absent).
+     - Value of custom attribute is not required and will be ignored, if O(state=absent).
      suboptions:
         name:
           description:

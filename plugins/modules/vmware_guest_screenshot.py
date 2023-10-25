@@ -23,17 +23,17 @@ options:
    name:
      description:
      - Name of the virtual machine.
-     - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-     - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -54,14 +54,14 @@ options:
    cluster:
      description:
      - The name of cluster where the virtual machine is running.
-     - This is a required parameter, if C(esxi_hostname) is not set.
-     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+     - This is a required parameter, if O(esxi_hostname) is not set.
+     - O(esxi_hostname) and O(cluster) are mutually exclusive.
      type: str
    esxi_hostname:
      description:
      - The ESXi hostname where the virtual machine is running.
-     - This is a required parameter, if C(cluster) is not set.
-     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+     - This is a required parameter, if O(cluster) is not set.
+     - O(esxi_hostname) and O(cluster) are mutually exclusive.
      type: str
    datacenter:
      description:
@@ -69,8 +69,8 @@ options:
      type: str
    local_path:
      description:
-     - 'If C(local_path) is not set, the created screenshot file will be kept in the directory of the virtual machine
-       on ESXi host. If C(local_path) is set to a valid path on local machine, then the screenshot file will be
+     - 'If not set, the created screenshot file will be kept in the directory of the virtual machine
+       on ESXi host. If set to a valid path on local machine, then the screenshot file will be
        downloaded from ESXi host to the local directory.'
      - 'If not download screenshot file to local machine, you can open it through the returned file URL in screenshot
        facts manually.'

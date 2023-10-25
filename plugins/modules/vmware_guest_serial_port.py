@@ -19,17 +19,17 @@ options:
   name:
     description:
       - Name of the virtual machine.
-      - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
     type: str
   uuid:
     description:
       - UUID of the instance to manage the serial ports, this is VMware's unique identifier.
-      - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
     type: str
   moid:
     description:
       - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(name) or C(uuid) is not supplied.
+      - This is required if O(name) or O(uuid) is not supplied.
     type: str
   use_instance_uuid:
     description:
@@ -41,7 +41,7 @@ options:
     elements: dict
     description:
       - A list of backings for serial ports.
-      - 'C(backing_type) (str): is required to add or reconfigure or remove an existing serial port.'
+      - 'O(backings.backing_type) is required to add or reconfigure or remove an existing serial port.'
     required: true
     suboptions:
       backing_type:
@@ -53,11 +53,11 @@ options:
           - type
       state:
         description:
-          - C(state) is required to identify whether we are adding, modifying or removing the serial port.
-          - If C(state) is set to C(present), a serial port will be added or modified.
-          - If C(state) is set to C(absent), an existing serial port will be removed.
-          - If an existing serial port to modify or remove, C(backing_type) and either of C(service_uri) or C(pipe_name)
-            or C(device_name) or C(file_path) are required.
+          - O(backings.state) is required to identify whether we are adding, modifying or removing the serial port.
+          - If V(present), a serial port will be added or modified.
+          - If V(absent), an existing serial port will be removed.
+          - If an existing serial port to modify or remove, O(backings.backing_type) and either of O(backings.service_uri) or O(backings.pipe_name)
+            or O(backings.device_name) or O(backings.file_path) are required.
         choices:
           - present
           - absent
@@ -71,12 +71,12 @@ options:
       pipe_name:
         description:
           - Pipe name for the host pipe.
-          - Required when I(backing_type=pipe).
+          - Required when O(backings.backing_type=pipe).
         type: str
       endpoint:
         description:
           - When you use serial port pipe backing to connect a virtual machine to another process, you must define the endpoints.
-          - Required when I(backing_type=pipe).
+          - Required when O(backings.backing_type=pipe).
         type: str
         choices:
           - client
@@ -85,29 +85,29 @@ options:
       no_rx_loss:
         description:
           - Enables optimized data transfer over the pipe.
-          - Required when I(backing_type=pipe).
+          - Required when O(backings.backing_type=pipe).
         type: bool
         default: false
       service_uri:
         description:
-          - Identifies the local host or a system on the network, depending on the value of I(direction).
+          - Identifies the local host or a system on the network, depending on the value of O(backings.direction).
           - If you use the virtual machine as a server, the URI identifies the host on which the virtual machine runs.
           - In this case, the host name part of the URI should be empty, or it should specify the address of the local host.
           - If you use the virtual machine as a client, the URI identifies the remote system on the network.
-          - Required when I(backing_type=network).
+          - Required when O(backings.backing_type=pipe).
         type: str
       proxy_uri:
         description:
-          - Identifies a vSPC proxy service that provides network access to the I(service_uri).
+          - Identifies a vSPC proxy service that provides network access to the O(backings.service_uri).
           - If you specify a proxy URI, the virtual machine initiates a connection with the proxy service
             and forwards the serviceURI and direction to the proxy.
-          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when I(proxy_uri) is set.
+          - The C(Use Virtual Serial Port Concentrator) option is automatically enabled when O(backings.proxy_uri) is set.
         type: str
         version_added: '3.7.0'
       direction:
         description:
           - The direction of the connection.
-          - Required when I(backing_type=network).
+          - Required when O(backings.backing_type=network).
         type: str
         choices:
           - client
@@ -116,12 +116,12 @@ options:
       device_name:
         description:
           - Serial device absolutely path.
-          - Required when I(backing_type=device).
+          - Required when O(backings.backing_type=device).
         type: str
       file_path:
         description:
           - File path for the host file used in this backing. Fully qualified path is required, like <datastore_name>/<file_name>.
-          - Required when I(backing_type=file).
+          - Required when O(backings.backing_type=file).
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -22,7 +22,7 @@ options:
    name:
      description:
      - Name of the VM to work with
-     - This is required if C(uuid) or C(moid) is not supplied.
+     - This is required if O(uuid) or O(moid) is not supplied.
      type: str
    name_match:
      description:
@@ -33,7 +33,7 @@ options:
    uuid:
      description:
      - UUID of the instance to manage if known, this is VMware's unique identifier.
-     - This is required if C(name) or C(moid) is not supplied.
+     - This is required if O(name) or O(moid) is not supplied.
      type: str
    use_instance_uuid:
      description:
@@ -43,12 +43,12 @@ options:
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required if name is supplied.
+     - This is required if O(name) is supplied.
      - The folder should include the datacenter. ESX's datacenter is ha-datacenter
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -69,24 +69,24 @@ options:
    tags:
      description:
      - Whether to show tags or not.
-     - If set C(true), shows tags information. Returns a list of tag names.
-     - If set C(false), hides tags information.
+     - If set V(true), shows tags information. Returns a list of tag names.
+     - If set V(false), hides tags information.
      - vSphere Automation SDK is required.
      default: false
      type: bool
    tag_details:
      description:
-     - If set C(true), detail information about 'tags' returned.
-     - Without this flag, the 'tags' returns a list of tag names.
-     - With this flag, the 'tags' returns a list of dict about tag information with additional details like category name, category id, and tag id.
+     - If set V(true), detail information about tags returned.
+     - Without this flag, O(tags=true) returns a list of tag names.
+     - With this flag, O(tags=true) returns a list of dict about tag information with additional details like category name, category id, and tag id.
      - This parameter is added to maintain backward compatability.
      default: false
      type: bool
    schema:
      description:
      - Specify the output schema desired.
-     - The 'summary' output schema is the legacy output from the module
-     - The 'vsphere' output schema is the vSphere API class definition
+     - The V(summary) output schema is the legacy output from the module
+     - The V(vsphere) output schema is the vSphere API class definition
        which requires pyvmomi>6.7.1
      choices: ['summary', 'vsphere']
      default: 'summary'
@@ -103,7 +103,7 @@ options:
      - '      "guest.disk",'
      - '      "overallStatus"'
      - '   ]'
-     - Only valid when C(schema) is C(vsphere).
+     - Only valid when O(schema=vsphere).
      type: list
      elements: str
      required: false

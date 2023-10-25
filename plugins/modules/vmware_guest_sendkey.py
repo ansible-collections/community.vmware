@@ -23,17 +23,17 @@ options:
    name:
      description:
      - Name of the virtual machine.
-     - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-     - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -54,14 +54,14 @@ options:
    cluster:
      description:
      - The name of cluster where the virtual machine is running.
-     - This is a required parameter, if C(esxi_hostname) is not set.
-     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+     - This is a required parameter, if O(esxi_hostname) is not set.
+     - O(esxi_hostname) and O(cluster) are mutually exclusive.
      type: str
    esxi_hostname:
      description:
      - The ESXi hostname where the virtual machine is running.
-     - This is a required parameter, if C(cluster) is not set.
-     - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
+     - This is a required parameter, if O(cluster) is not set.
+     - O(esxi_hostname) and O(cluster) are mutually exclusive.
      type: str
    datacenter:
      description:
@@ -71,14 +71,14 @@ options:
      description:
      - The string will be sent to the virtual machine.
      - This string can contain valid special character, alphabet and digit on the keyboard.
+     - If both O(keys_send) and O(string_send) are specified, keys in O(keys_send) list will be sent in front of the O(string_send).
      type: str
    keys_send:
      description:
      - The list of the keys will be sent to the virtual machine.
      - 'Valid values are C(ENTER), C(ESC), C(BACKSPACE), C(TAB), C(SPACE), C(CAPSLOCK), C(HOME), C(DELETE), C(END), C(CTRL_ALT_DEL),
         C(CTRL_C), C(CTRL_X) and C(F1) to C(F12), C(RIGHTARROW), C(LEFTARROW), C(DOWNARROW), C(UPARROW).'
-     - If both C(keys_send) and C(string_send) are specified, keys in C(keys_send) list will be sent in front of the C(string_send).
-     - Values C(HOME) and C(END) are added in version 1.17.0.
+     - If both O(keys_send) and O(string_send) are specified, keys in O(keys_send) list will be sent in front of the O(string_send).
      type: list
      default: []
      elements: str

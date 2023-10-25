@@ -20,7 +20,7 @@ author:
 options:
   datacenter:
     description:
-      - The I(datacenter) where the VM you'd like to operate the power.
+      - The datacenter where the VM you'd like to operate the power.
       - This parameter is case sensitive.
     default: ha-datacenter
     type: str
@@ -33,7 +33,7 @@ options:
   name:
     description:
     - Name of the virtual machine to work with.
-    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see C(name_match).
+    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see O(name_match).
     type: str
   name_match:
     description:
@@ -44,12 +44,12 @@ options:
   uuid:
     description:
     - UUID of the instance to manage if known, this is VMware's unique identifier.
-    - This is required if C(name) or C(moid) is not supplied.
+    - This is required if O(name) or O(moid) is not supplied.
     type: str
   moid:
     description:
     - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-    - This is required if C(name) or C(uuid) is not supplied.
+    - This is required if O(name) or O(uuid) is not supplied.
     type: str
   use_instance_uuid:
     description:
@@ -80,13 +80,13 @@ options:
   schedule_task_name:
     description:
     - Name of schedule task.
-    - Valid only if C(scheduled_at) is specified.
+    - Valid only if O(scheduled_at) is specified.
     type: str
     required: false
   schedule_task_description:
     description:
     - Description of schedule task.
-    - Valid only if C(scheduled_at) is specified.
+    - Valid only if O(scheduled_at) is specified.
     type: str
     required: false
   schedule_task_enabled:
@@ -103,7 +103,7 @@ options:
     type: bool
   state_change_timeout:
     description:
-    - If the C(state) is set to C(shutdown-guest), by default the module will return immediately after sending the shutdown signal.
+    - If the O(state=shutdown-guest), by default the module will return immediately after sending the shutdown signal.
     - If this argument is set to a positive integer, the module will instead wait for the VM to reach the poweredoff state.
     - The value sets a timeout in seconds for the module to wait for the state change.
     default: 0
@@ -112,7 +112,7 @@ options:
     description:
     - A list of questions to answer, should one or more arise while waiting for the task to complete.
     - Some common uses are to allow a cdrom to be changed even if locked, or to answer the question as to whether a VM was copied or moved.
-    - The I(answer) can be used if I(state) is C(powered-on).
+    - Can be used if O(state=powered-on).
     suboptions:
       question:
         description:
