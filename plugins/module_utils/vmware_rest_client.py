@@ -539,36 +539,3 @@ class VmwareRestClient(object):
                 category_id = category_obj.id
 
         return self.get_tag_by_category_id(tag_name=tag_name, category_id=category_id)
-
-    def get_tag_by_category(self, tag_name=None, category_name=None, category_id=None):
-        """
-        Return tag object by name and category name specified
-        Args:
-            tag_name: Name of tag
-            category_name: Name of category (mutually exclusive with 'category_id')
-            category_id: Id of category, if known in advance (mutually exclusive with 'category_name')
-        Returns: Tag object if found else None
-        """
-        message = "The method 'get_tag_by_category' is deprecated and scheduled for removal. "\
-                  "Please update your code and use 'get_tag_by_category_id' or 'get_tag_by_category_name' instead"
-        self.module.deprecate(message, version='4.0.0', collection_name='community.vmware')
-
-        if not tag_name:
-            return None
-
-        if category_id or category_name:
-            if not category_id:
-                category_obj = self.get_category_by_name(category_name=category_name)
-
-                if not category_obj:
-                    return None
-
-                category_id = category_obj.id
-
-            for tag_object in self.api_client.tagging.Tag.list_tags_for_category(category_id):
-                tag_obj = self.api_client.tagging.Tag.get(tag_object)
-
-                if tag_obj.name == tag_name:
-                    return tag_obj
-        else:
-            return self.search_svc_object_by_name(service=self.api_client.tagging.Tag, svc_obj_name=tag_name)

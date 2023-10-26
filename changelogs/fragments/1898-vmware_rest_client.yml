@@ -1,0 +1,2 @@
+breaking_changes:
+  - vmware_rest_client - Remove deprecated method `get_tag_by_category()` (https://github.com/ansible-collections/community.vmware/issues/1898).
