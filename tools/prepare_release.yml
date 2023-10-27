@@ -29,11 +29,6 @@
         - name: Refresh the changelog
           ansible.builtin.shell: 'tox -e antsibull-changelog -- release --verbose --version {{ version }}'
 
-        - name: Clean up the changelog fragments
-          ansible.builtin.file:
-            path: "{{ playbook_dir }}/../changelogs/fragments"
-            state: absent
-
     - name: Add everything
       ansible.builtin.shell: git add --all
 
