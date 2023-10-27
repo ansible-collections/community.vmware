@@ -14,7 +14,7 @@ The collection includes the VMware modules and plugins supported by Ansible VMwa
 
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.13.0**.
+This collection has been tested against following Ansible versions: **>=2.15.0**.
 
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
@@ -37,7 +37,7 @@ collections:
 
 ### Required Python libraries
 
-VMware community collection depends on Python 3.8+ and on following third party libraries:
+VMware community collection depends on Python 3.9+ and on following third party libraries:
 
 * [`Pyvmomi`](https://github.com/vmware/pyvmomi)
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
