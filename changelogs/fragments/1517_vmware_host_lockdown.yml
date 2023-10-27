@@ -1,2 +1,2 @@
-breaking_changes:
-  - vmware_host_lockdown - Remove deprecated states `absent` and `present` (https://github.com/ansible-collections/community.vmware/issues/1517).
+removed_features:
+  - vmware_host_lockdown - removed deprecated states `absent` and `present` (https://github.com/ansible-collections/community.vmware/issues/1517).

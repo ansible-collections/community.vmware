@@ -1,2 +1,2 @@
-major_changes:
+removed_features:
   - Removed module util `version` (https://github.com/ansible-collections/community.vmware/issues/1639).
