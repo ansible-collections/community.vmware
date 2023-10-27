@@ -254,7 +254,6 @@ RETURN = r'''
 vm_info:
     description:
       - metadata about the virtual machine
-      - added instance_uuid from version 1.12.0
     returned: always
     type: dict
     sample: {

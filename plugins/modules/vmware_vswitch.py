@@ -62,7 +62,6 @@ options:
       portgroup such as promiscuous mode, where guest adapter listens
       to all the packets, MAC address changes and forged transmits.
     - Dict which configures the different security values for portgroup.
-    version_added: '2.4.0'
     suboptions:
       promiscuous_mode:
         type: bool
@@ -79,7 +78,6 @@ options:
   teaming:
     description:
       - Dictionary which configures the different teaming values for portgroup.
-    version_added: '2.4.0'
     suboptions:
       load_balancing:
         type: str
@@ -115,7 +113,6 @@ options:
   traffic_shaping:
     description:
       - Dictionary which configures traffic shaping for the switch.
-    version_added: '2.4.0'
     suboptions:
       enabled:
         type: bool

@@ -51,13 +51,11 @@ options:
       aliases: ['destination']
       type: str
     destination_cluster:
-      version_added: '2.5.0'
       description:
       - Name of the destination cluster the virtual machine should be running on.
       - Only works if drs is enabled for this cluster.
       type: str
     destination_datastore_cluster:
-      version_added: '2.5.0'
       description:
       - Name of the destination datastore cluster (storage pod) the virtual machine's vmdk should be moved on.
       - Only works if drs is enabled for the cluster the vm is running / should run.

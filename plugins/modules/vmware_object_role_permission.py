@@ -26,7 +26,7 @@ options:
   role:
     description:
     - The role to be assigned permission.
-    - User can also specify role name presented in Web UI. Supported added in 1.5.0.
+    - User can also specify role name presented in Web UI.
     required: true
     type: str
   principal:

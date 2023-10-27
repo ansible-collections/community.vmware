@@ -50,7 +50,6 @@ options:
         required: true
         type: str
     migrate_vlan_id:
-        version_added: '2.4.0'
         description:
             - VLAN to use for the VMK interface when migrating from VDS to VSS
             - Will be ignored when migrating from VSS to VDS

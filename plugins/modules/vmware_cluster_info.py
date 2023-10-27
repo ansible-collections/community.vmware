@@ -112,7 +112,6 @@ RETURN = r'''
 clusters:
     description:
       - metadata about the available clusters
-      - datacenter added in the return values from version 1.6.0
     returned: always
     type: dict
     sample: {
