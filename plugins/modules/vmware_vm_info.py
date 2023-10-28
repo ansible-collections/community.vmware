@@ -17,7 +17,6 @@ module: vmware_vm_info
 short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
-- Cluster name as fact is added in version 2.7.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -105,7 +104,6 @@ options:
       default: false
       type: bool
     show_allocated:
-      version_added: '2.5.0'
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: false

@@ -259,7 +259,6 @@ options:
         - 'off'
         - 'no'
         - 'inherited'
-        version_added: '2.3.0'
     in_traffic_shaping:
         description:
             - Dictionary which configures the ingress traffic shaping settings for the portgroup.
@@ -290,7 +289,6 @@ options:
                 - Ignored if O(in_traffic_shaping.inherited=true).
         required: false
         type: dict
-        version_added: '2.3.0'
     out_traffic_shaping:
         description:
             - Dictionary which configures the egress traffic shaping settings for the portgroup.
@@ -322,7 +320,6 @@ options:
                 - Ignored if O(out_traffic_shaping.inherited=true).
         required: false
         type: dict
-        version_added: '2.3.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

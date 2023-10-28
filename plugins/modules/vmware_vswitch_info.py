@@ -22,7 +22,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 options:
   policies:
-    version_added: '2.4.0'
     description:
     - Gather information about Security, Traffic Shaping, as well as Teaming and failover.
     - The property C(ts) stands for Traffic Shaping and C(lb) for Load Balancing.

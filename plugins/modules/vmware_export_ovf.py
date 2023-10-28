@@ -74,7 +74,6 @@ options:
     default: false
     description:
     - All extra configuration options are exported for a virtual machine.
-    version_added: '2.0.0'
   download_timeout:
     description:
     - The user defined timeout in second of exporting file.

@@ -91,7 +91,6 @@ options:
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: '2.5.0'
 """
 
 EXAMPLES = r"""

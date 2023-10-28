@@ -29,7 +29,7 @@ options:
       - List of tag(s) to be managed.
       - User can also specify category name by specifying colon separated value. For example, "category_name:tag_name".
       - User can also specify tag and category as dict, when tag or category contains colon.
-        See example for more information. Added in version 2.10.
+        See example for more information.
       - User can skip category name if you have unique tag names.
       required: true
       type: list
