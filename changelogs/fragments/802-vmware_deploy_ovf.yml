@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_deploy_ovf - New parameter enable_hidden_properties to force OVF properties marked as `ovf:userConfigurable=false` to become user configurable
-    (https://github.com/ansible-collections/community.vmware/issues/802).

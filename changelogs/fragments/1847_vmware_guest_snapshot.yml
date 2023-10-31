@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_snapshot - add new snapshot_id option (https://github.com/ansible-collections/community.vmware/pull/1847).
