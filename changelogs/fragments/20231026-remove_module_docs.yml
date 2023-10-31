@@ -1,2 +1,0 @@
-minor_changes:
-  - Removed module / plugin documentation RST files from the repository (https://github.com/ansible-collections/community.vmware/pull/1897).

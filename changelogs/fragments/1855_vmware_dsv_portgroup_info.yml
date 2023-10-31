@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_dvs_portgroup_info - add moid property in the return value for the module (https://github.com/ansible-collections/community.vmware/issues/1849).

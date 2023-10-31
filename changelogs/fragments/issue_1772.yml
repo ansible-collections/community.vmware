@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_guest_custom_attributes - fix problem when module try apply non global or non VM type custom attribute to
-    VM object (https://github.com/ansible-collections/community.vmware/issues/1772).

@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_host_snmp module now can configure SNMP agent on set of hosts (list in esxi_hostname parameter or as cluster in cluster_name parameter). The ability to configure the host directly remains
-    (https://github.com/ansible-collections/community.vmware/issues/1799).

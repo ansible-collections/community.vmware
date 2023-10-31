@@ -1,4 +1,0 @@
-breaking_changes:
-  - vmware_host_acceptance - removed `acceptance_level` and used its options in `state`. This also means there will be no state `list` anymore.
-    In order to get information about the current acceptance level, use the new module `vmware_host_acceptance_info`
-    (https://github.com/ansible-collections/community.vmware/issues/1872).

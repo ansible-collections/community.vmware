@@ -1,2 +1,0 @@
-removed_features:
-  - vmware_guest - removed specifying CDROM configuration as a dict, instead use a list (https://github.com/ansible-collections/community.vmware/issues/1472).

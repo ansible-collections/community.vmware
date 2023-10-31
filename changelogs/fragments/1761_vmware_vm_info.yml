@@ -1,3 +1,0 @@
-breaking_changes:
-  - vmware_vm_info - added prefix length to IP addresses in vm_network, so they now show up as for example 10.76.33.228/24 instead of just 10.76.33.228
-    (https://github.com/ansible-collections/community.vmware/issues/1761).
