@@ -5,6 +5,14 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.11.1
+=======
+
+Bugfixes
+--------
+
+- The 3.11.0 release went wrong, so here is 3.11.1. No changes since 3.11.0, just hoping to get it correctly published on Galaxy.
+
 v3.11.0
 =======
 
