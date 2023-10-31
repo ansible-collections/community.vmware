@@ -36,17 +36,21 @@ options:
     vmnics:
         description:
         - The ESXi hosts vmnics to use with the Distributed vSwitch.
+        - If unset, the current non-LAG uplinks will be kept.
+        - To remove all non-LAG uplinks, use the empty list V([]).
         required: false
         type: list
-        default: []
         elements: str
     lag_uplinks:
         required: false
         type: list
-        default: []
         elements: dict
         description:
         - The ESXi hosts vmnics to use with specific LAGs.
+        - If unset, the current LAG uplinks will be kept.
+        - If set, LAG uplinks will be set to I(exactly) this list. So you always have to define the complete LAG uplink configuration;
+          if you don't, you might loose LAG uplinks.
+        - To remove all LAG uplinks, use the empty list V([]).
         suboptions:
             lag:
                 description:
@@ -156,7 +160,6 @@ from ansible.module_utils._text import to_native
 class VMwareDvsHost(PyVmomi):
     def __init__(self, module):
         super(VMwareDvsHost, self).__init__(module)
-        self.uplink_portgroup = None
         self.host = None
         self.dv_switch = None
         self.desired_state = {}
@@ -174,13 +177,16 @@ class VMwareDvsHost(PyVmomi):
             self.module.fail_json(msg="A distributed virtual switch %s "
                                       "does not exist" % self.switch_name)
 
+        self.uplink_portgroup = self.find_dvs_uplink_pg()
+
         self.lags = {}
         for lag in self.dv_switch.config.lacpGroupConfig:
             self.lags[lag.name] = lag
 
-        for lag_uplink in self.lag_uplinks:
-            if lag_uplink['lag'] not in self.lags:
-                self.module.fail_json(msg="LAG %s not found" % lag_uplink['lag'])
+        if self.lag_uplinks is not None:
+            for lag_uplink in self.lag_uplinks:
+                if lag_uplink['lag'] not in self.lags:
+                    self.module.fail_json(msg="LAG %s not found" % lag_uplink['lag'])
 
     def process_state(self):
         dvs_host_states = {
@@ -284,6 +290,10 @@ class VMwareDvsHost(PyVmomi):
         lag_uplinks = []
         switch_uplink_ports = {'non_lag': []}
 
+        for dvs_host_member in self.dv_switch.config.host:
+            if dvs_host_member.config.host.name == self.esxi_hostname:
+                break
+
         portCriteria = vim.dvs.PortCriteria()
         portCriteria.host = [self.host]
         portCriteria.portgroupKey = self.uplink_portgroup.key
@@ -302,16 +312,30 @@ class VMwareDvsHost(PyVmomi):
             if port.key in self.uplink_portgroup.portKeys and port.key not in lag_uplinks:
                 switch_uplink_ports['non_lag'].append(port.key)
 
-        count = 0
-        for vmnic in self.vmnics:
-            self.desired_state[vmnic] = switch_uplink_ports['non_lag'][count]
-            count += 1
-
-        for lag in self.lag_uplinks:
+        # If defined, use vmnics as non-LAG uplinks
+        if self.vmnics is not None:
             count = 0
-            for vmnic in lag['vmnics']:
-                self.desired_state[vmnic] = switch_uplink_ports[lag['lag']][count]
+            for vmnic in self.vmnics:
+                self.desired_state[vmnic] = switch_uplink_ports['non_lag'][count]
                 count += 1
+        # Otherwise keep current non-LAG uplinks
+        else:
+            for pnicSpec in dvs_host_member.config.backing.pnicSpec:
+                if pnicSpec.uplinkPortKey not in lag_uplinks:
+                    self.desired_state[pnicSpec.pnicDevice] = pnicSpec.uplinkPortKey
+
+        # If defined, use lag_uplinks as LAG uplinks
+        if self.lag_uplinks is not None:
+            for lag in self.lag_uplinks:
+                count = 0
+                for vmnic in lag['vmnics']:
+                    self.desired_state[vmnic] = switch_uplink_ports[lag['lag']][count]
+                    count += 1
+        # Otherwise keep current LAG uplinks
+        else:
+            for pnicSpec in dvs_host_member.config.backing.pnicSpec:
+                if pnicSpec.uplinkPortKey in lag_uplinks:
+                    self.desired_state[pnicSpec.pnicDevice] = pnicSpec.uplinkPortKey
 
     def check_uplinks(self):
         pnic_device = []
@@ -336,8 +360,6 @@ class VMwareDvsHost(PyVmomi):
         return True
 
     def check_dvs_host_state(self):
-        self.uplink_portgroup = self.find_dvs_uplink_pg()
-
         if self.uplink_portgroup is None:
             self.module.fail_json(msg="An uplink portgroup does not exist on"
                                       " the distributed virtual switch %s" % self.switch_name)
@@ -368,7 +390,7 @@ def main():
         dict(
             esxi_hostname=dict(required=True, type='str'),
             switch_name=dict(required=True, type='str'),
-            vmnics=dict(required=False, type='list', default=[], elements='str'),
+            vmnics=dict(required=False, type='list', elements='str'),
             state=dict(default='present', choices=['present', 'absent'], type='str'),
             vendor_specific_config=dict(
                 type='list',
@@ -381,7 +403,6 @@ def main():
             ),
             lag_uplinks=dict(
                 type='list',
-                default=[],
                 required=False,
                 elements='dict',
                 options=dict(

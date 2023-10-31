@@ -1,0 +1,2 @@
+breaking_changes:
+  - vmware_dvs_host - removed defaults for `vmnics` and `lag_uplinks` (https://github.com/ansible-collections/community.vmware/issues/1516).
