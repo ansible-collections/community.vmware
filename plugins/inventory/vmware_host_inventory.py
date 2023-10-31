@@ -294,7 +294,13 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         """
         for host, host_properties in cache_data.items():
             self._populate_host_properties(host_properties, host)
-
+            
+    def get_datacenter_from_host(self, obj):
+        if type(obj).__name__ == 'vim.Datacenter':
+            return obj.name
+        else:
+            return self.get_datacenter_from_host(obj.parent)
+            
     def _populate_from_source(self):
         """
         Populate inventory data from direct source
@@ -399,7 +405,16 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 properties["path"] = "/".join(path)
 
             host_properties = to_nested_dict(properties)
-
+            
+            # Set cluster as a property and add the info
+            if type(host_obj.obj.parent).__name__ == 'vim.ClusterComputeResource':
+                cluster = host_obj.obj.parent.name
+                properties["cluster"] = cluster
+            
+            # get datacenter object and then set as property
+            datacenter = str(self.get_datacenter_from_host(host_obj.obj))
+            properties["datacenter"] = datacenter
+        
             # Check if we can add host as per filters
             host_filters = self.get_option("filters")
             if not self._can_add_host(host_filters, host_properties, strict=strict):
