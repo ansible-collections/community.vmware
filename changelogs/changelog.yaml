@@ -1446,6 +1446,14 @@ releases:
     - 1799_configure_snmp_on_esxii_hosts_via_vcenter.yaml
     - 802-vmware_deploy_ovf.yml
     release_date: '2023-10-31'
+  3.11.1:
+    changes:
+      bugfixes:
+      - The 3.11.0 release went wrong, so here is 3.11.1. No changes since 3.11.0,
+        just hoping to get it correctly published on Galaxy.
+    fragments:
+    - 20231031-fix_3.11-release.yml
+    release_date: '2023-10-31'
   3.2.0:
     changes:
       bugfixes:
