@@ -1434,6 +1434,18 @@ releases:
       name: vmware_host_graphics
       namespace: ''
     release_date: '2023-10-09'
+  3.11.0:
+    changes:
+      minor_changes:
+      - community.vmware.vmware_host_snmp module now can configure SNMP agent on set
+        of hosts (list in esxi_hostname parameter or as cluster in cluster_name parameter).
+        The ability to configure the host directly remains
+      - vmware_deploy_ovf - New parameter enable_hidden_properties to force OVF properties
+        marked as ovf:userConfigurable=false to become user configurable (https://github.com/ansible-collections/community.vmware/issues/802).
+    fragments:
+    - 1799_configure_snmp_on_esxii_hosts_via_vcenter.yaml
+    - 802-vmware_deploy_ovf.yml
+    release_date: '2023-10-31'
   3.2.0:
     changes:
       bugfixes:
