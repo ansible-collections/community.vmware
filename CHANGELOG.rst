@@ -5,6 +5,15 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.11.0
+=======
+
+Minor Changes
+-------------
+
+- community.vmware.vmware_host_snmp module now can configure SNMP agent on set of hosts (list in esxi_hostname parameter or as cluster in cluster_name parameter). The ability to configure the host directly remains
+- vmware_deploy_ovf - New parameter enable_hidden_properties to force OVF properties marked as ovf:userConfigurable=false to become user configurable (https://github.com/ansible-collections/community.vmware/issues/802).
+
 v3.10.0
 =======
 
