@@ -65,6 +65,7 @@ jobs:
           # - stable-2.13
           # - stable-2.14
           - stable-2.15
+          - stable-2.16
           # - devel
           - milestone
     # Ansible-test on various stable branches does not yet work well with cgroups v2.
@@ -95,7 +96,7 @@ jobs:
           # OPTIONAL If set to true, will test only against changed files,
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection
-          pull-request-change-detection: true
+          pull-request-change-detection: false
 
 ###
 # Unit tests (OPTIONAL)
@@ -127,6 +128,7 @@ jobs:
           # - stable-2.13
           # - stable-2.14
           - stable-2.15
+          - stable-2.16
           # - devel
           - milestone
 
@@ -148,7 +150,7 @@ jobs:
           # OPTIONAL If set to true, will test only against changed files,
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection
-          pull-request-change-detection: true
+          pull-request-change-detection: false
 
   check:  # This job does nothing and is only used for the branch protection
           # or multi-stage CI jobs, like making sure that all tests pass before
