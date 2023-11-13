@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vm_info - Fix an AttributeError when gathering network information (https://github.com/ansible-collections/community.vmware/pull/1919).
