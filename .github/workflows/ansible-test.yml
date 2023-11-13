@@ -97,6 +97,8 @@ jobs:
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection
           pull-request-change-detection: false
+          # Disable Codecov
+          coverage: never
 
 ###
 # Unit tests (OPTIONAL)
@@ -151,6 +153,8 @@ jobs:
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection
           pull-request-change-detection: false
+          # Disable Codecov
+          coverage: never
 
   check:  # This job does nothing and is only used for the branch protection
           # or multi-stage CI jobs, like making sure that all tests pass before
