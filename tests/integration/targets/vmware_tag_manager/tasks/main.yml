@@ -28,6 +28,6 @@
   - name: Set category one id
     set_fact: cat_one_id={{ category_one_create['category_results']['category_id'] }}
 
-  - include: tag_manager_dict.yml
+  - include_tasks: tag_manager_dict.yml
   always:
-  - include: cleanup.yml
+  - include_tasks: cleanup.yml
