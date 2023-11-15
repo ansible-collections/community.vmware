@@ -352,11 +352,12 @@ class VmwareVmInfo(PyVmomi):
                         net_dict[device.macAddress] = dict()
                         net_dict[device.macAddress]['ipv4'] = []
                         net_dict[device.macAddress]['ipv6'] = []
-                        for ip_addr in device.ipConfig.ipAddress:
-                            if "::" in ip_addr.ipAddress:
-                                net_dict[device.macAddress]['ipv6'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
-                            else:
-                                net_dict[device.macAddress]['ipv4'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
+                        if device.ipConfig is not None:
+                            for ip_addr in device.ipConfig.ipAddress:
+                                if "::" in ip_addr.ipAddress:
+                                    net_dict[device.macAddress]['ipv6'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
+                                else:
+                                    net_dict[device.macAddress]['ipv4'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
 
             esxi_hostname = None
             esxi_parent = None
