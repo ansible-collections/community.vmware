@@ -50,8 +50,8 @@
       with_items: ['test_vm1', 'test_vm2']
 
     - include_tasks: reset_auto_start_config.yml
-    - include: vcenter_auto_start_ops.yml
+    - include_tasks: vcenter_auto_start_ops.yml
     - include_tasks: reset_auto_start_config.yml
-    - include: esxi_auto_start_ops.yml
+    - include_tasks: esxi_auto_start_ops.yml
   always:
     - include_tasks: reset_auto_start_config.yml
