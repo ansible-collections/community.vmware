@@ -50,3 +50,11 @@ releases:
     - 802-vmware_deploy_ovf.yml
     - issue_1772.yml
     release_date: '2023-10-31'
+  4.0.1:
+    changes:
+      bugfixes:
+      - vmware_vm_info - Fix an AttributeError when gathering network information
+        (https://github.com/ansible-collections/community.vmware/pull/1919).
+    fragments:
+    - 1919-vmware_vm_info.yml
+    release_date: '2023-11-28'
