@@ -4,6 +4,15 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+This changelog describes changes after version 3.9.0.
+
+v4.0.1
+======
+
+Bugfixes
+--------
+
+- vmware_vm_info - Fix an AttributeError when gathering network information (https://github.com/ansible-collections/community.vmware/pull/1919).
 
 v4.0.0
 ======
