@@ -1892,10 +1892,6 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="'ipv6' is required if 'netmaskv6' is"
                                               " specified under VM network list.")
 
-                if 'ipv6' in network and 'ip' not in network and network.get('type') != 'static':
-                    self.module.fail_json(msg="'ip' is required if 'ipv6' is specified under"
-                                              " vm network list.")
-
             if 'device_type' in network and network['device_type'] not in self.device_helper.nic_device_type.keys():
                 self.module.fail_json(msg="Device type specified '%s' is not valid. Please specify correct device type"
                                           " from ['%s']." % (network['device_type'],
