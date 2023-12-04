@@ -35,4 +35,4 @@
 - name: Check if we get correct associable datatype for {{ category_name }}
   assert:
     that:
-      - "'{{ expected_result }}' in {{ category_datatype }}"
+      - "expected_result in category_datatype"

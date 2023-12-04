@@ -31,7 +31,7 @@
 
 - assert:
     that:
-      - "{{ item }} is defined"
+      - "item is defined"
   with_items:
   - folder_info_0001['folder_info']
   - folder_info_0001['flat_folder_info']
