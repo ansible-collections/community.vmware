@@ -50,8 +50,8 @@
   assert:
     that:
       - "add_disk_controller.changed == true"
-      - "{{ add_disk_controller.disk_controller_data.scsi | length | int }} == {{ scsi_num | int + 1 }}"
-      - "{{ add_disk_controller.disk_controller_data.sata | length | int }} == {{ sata_num | int + 1 }}"
+      - "add_disk_controller.disk_controller_data.scsi | length | int == scsi_num | int + 1"
+      - "add_disk_controller.disk_controller_data.sata | length | int == sata_num | int + 1"
 
 - name: delete specified disk controllers
   vmware_guest_controller:
@@ -76,5 +76,5 @@
   assert:
     that:
       - "del_disk_controller.changed == true"
-      - "{{ del_disk_controller.disk_controller_data.sata | length | int }} == {{ sata_num | int }}"
-      - "{{ del_disk_controller.disk_controller_data.scsi | length | int }} == {{ scsi_num | int }}"
+      - "del_disk_controller.disk_controller_data.sata | length | int == sata_num | int"
+      - "del_disk_controller.disk_controller_data.scsi | length | int == scsi_num | int"

@@ -407,7 +407,7 @@
   assert:
     that:
         - not dvs_pg_result_0013.changed
-        - "'vlan_id range 1-4096 specified is incorrect. The valid vlan_id range is from 0 to 4094.' == '{{ dvs_pg_result_0013.msg }}'"
+        - "'vlan_id range 1-4096 specified is incorrect. The valid vlan_id range is from 0 to 4094.' == dvs_pg_result_0013.msg"
 
 - name: Change VLAN on basic VLAN portgroup
   community.vmware.vmware_dvs_portgroup:
@@ -508,7 +508,7 @@
   assert:
     that:
         - not dvs_pg_result_0018.changed
-        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == '{{ dvs_pg_result_0018.msg }}'"
+        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == dvs_pg_result_0018.msg"
 
 - name: Run tests and clean up
   block:
