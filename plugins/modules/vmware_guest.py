@@ -593,6 +593,7 @@ options:
             - Optional per entry.
             - Used for OS customization.
         typev6:
+            version_added: '4.1.0'
             type: str
             description:
             - Type of IP assignment.
@@ -601,18 +602,22 @@ options:
             - Optional per entry.
             - Used for OS customization.
         ipv6:
+            version_added: '4.1.0'
             type: str
+
             description:
             - Static IP address. Implies C(type=static).
             - Optional per entry.
             - Used for OS customization.
         netmaskv6:
+            version_added: '4.1.0'
             type: str
             description:
             - Static netmask required for C(ip).
             - Optional per entry.
             - Used for OS customization.
         gatewayv6:
+            version_added: '4.1.0'
             type: str
             description:
             - Static gateway.
