@@ -604,7 +604,6 @@ options:
         ipv6:
             version_added: '4.1.0'
             type: str
-
             description:
             - Static IP address. Implies C(type=static).
             - Optional per entry.
