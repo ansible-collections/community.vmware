@@ -592,6 +592,36 @@ options:
             - Static gateway.
             - Optional per entry.
             - Used for OS customization.
+        typev6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Type of IP assignment.
+            - Valid values are one of C(dhcp), C(static).
+            - C(dhcp) is default.
+            - Optional per entry.
+            - Used for OS customization.
+        ipv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static IP address. Implies C(type=static).
+            - Optional per entry.
+            - Used for OS customization.
+        netmaskv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static netmask required for C(ip).
+            - Optional per entry.
+            - Used for OS customization.
+        gatewayv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static gateway.
+            - Optional per entry.
+            - Used for OS customization.
         dns_servers:
             type: str
             description:
@@ -1842,6 +1872,30 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="'ip' is required if 'netmask' is"
                                               " specified under VM network list.")
 
+            if 'typev6' in network:
+                if network['typev6'] not in ['dhcp', 'static']:
+                    self.module.fail_json(msg="Network type '%(typev6)s' for IPv6 is not a valid parameter."
+                                              " Valid parameters are ['dhcp', 'static']." % network)
+                    if network['typev6'] != 'static' and ('ipv6' in network or 'netmaskv6' in network):
+                        self.module.fail_json(msg='Static IPv6 information provided for network "%(name)s",'
+                                                  ' but "typev6" is set to "%(typev6)s".' % network)
+            else:
+                # Type is optional parameter, if user provided IP or Subnet assume
+                # network type as 'static'
+                if 'ipv6' in network or 'netmaskv6' in network:
+                    network['typev6'] = 'static'
+                else:
+                    # User wants network type as 'dhcp'
+                    network['typev6'] = 'dhcp'
+
+            if network.get('typev6') == 'static':
+                if 'ipv6' in network and 'netmaskv6' not in network:
+                    self.module.fail_json(msg="'netmaskv6' is required if 'ipv6' is"
+                                              " specified under VM network list.")
+                if 'ipv6' not in network and 'netmaskv6' in network:
+                    self.module.fail_json(msg="'ipv6' is required if 'netmaskv6' is"
+                                              " specified under VM network list.")
+
             if 'device_type' in network and network['device_type'] not in self.device_helper.nic_device_type.keys():
                 self.module.fail_json(msg="Device type specified '%s' is not valid. Please specify correct device type"
                                           " from ['%s']." % (network['device_type'],
@@ -2198,8 +2252,20 @@ class PyVmomiHelper(PyVmomi):
             elif 'type' in network and network['type'] == 'dhcp':
                 guest_map.adapter.ip = vim.vm.customization.DhcpIpGenerator()
 
+            if "ipv6" in network and 'netmaskv6' in network:
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.FixedIpV6()]
+                guest_map.adapter.ipV6Spec.ip[0].ipAddress = str(network['ipv6'])
+                guest_map.adapter.ipV6Spec.ip[0].subnetMask = int(network['netmaskv6'])
+            elif 'typev6' in network and network['typev6'] == 'dhcp':
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.DhcpIpV6Generator()]
+
             if 'gateway' in network:
                 guest_map.adapter.gateway = network['gateway']
+
+            if "gatewayv6" in network:
+                guest_map.adapter.ipV6Spec.gateway = network['gatewayv6']
 
             # On Windows, DNS domain and DNS servers can be set by network interface
             # https://pubs.vmware.com/vi3/sdk/ReferenceGuide/vim.vm.customization.IPSettings.html
