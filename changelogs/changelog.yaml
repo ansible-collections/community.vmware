@@ -26,6 +26,7 @@ releases:
       - vmware_host_snmp module now can configure SNMP agent on set of hosts (list
         in esxi_hostname parameter or as cluster in cluster_name parameter). The ability
         to configure the host directly remains (https://github.com/ansible-collections/community.vmware/issues/1799).
+      - vmware_guest - Add IPv6 support for VM network interfaces (https://github.com/ansible-collections/community.vmware/pull/1937)
       removed_features:
       - Removed module util `version` (https://github.com/ansible-collections/community.vmware/issues/1639).
       - vmware_guest - removed specifying CDROM configuration as a dict, instead use
