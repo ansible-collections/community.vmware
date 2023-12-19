@@ -75,7 +75,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_clien
 
 
 class VcRootPasswordExpiration(VmwareRestClient):
-    def __init__(self, module: AnsibleModule) -> None:
+    def __init__(self, module: AnsibleModule):
+        super(VcRootPasswordExpiration, self).__init__(module)
         self.module = module
         self._state = True if self.module.params['state'] == 'present' else False
 
