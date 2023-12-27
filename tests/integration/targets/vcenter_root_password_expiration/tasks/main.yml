@@ -11,6 +11,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     state: present
+    email: "vCenter-Admin@community.vmware.example"
     max_days_between_password_change: 93
     min_days_between_password_change: 7
     warn_days_before_password_expiration: 22
