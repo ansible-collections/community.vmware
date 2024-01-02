@@ -55,8 +55,6 @@ releases:
       bugfixes:
       - vmware_vm_info - Fix an AttributeError when gathering network information
         (https://github.com/ansible-collections/community.vmware/pull/1919).
-      minor_changes:
-      - vmware_guest - Add IPv6 support for VM network interfaces (https://github.com/ansible-collections/community.vmware/pull/1937)
     fragments:
     - 1919-vmware_vm_info.yml
     release_date: '2023-11-28'
