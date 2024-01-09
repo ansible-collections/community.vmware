@@ -249,7 +249,7 @@ class PyVmomiHelper(PyVmomi):
             ('LEFTARROW', '0x50', [('', [])]),
             ('DOWNARROW', '0x51', [('', [])]),
             ('UPARROW', '0x52', [('', [])]),
-            ('WINDOWS', '0x65', [('', [])]),
+            ('WINDOWS', '0xe3', [('', [])]),
         ]
 
     @staticmethod
