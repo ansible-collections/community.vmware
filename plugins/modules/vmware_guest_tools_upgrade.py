@@ -70,6 +70,12 @@ options:
         default: false
         type: bool
         required: false
+   installer_options:
+        version_added: '4.1.0'
+        description:
+            - Command line options passed to the installer to modify the installation procedure for tools.
+        type: str
+        required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -151,8 +157,12 @@ class PyVmomiHelper(PyVmomi):
         elif vm.guest.toolsStatus == "toolsOld":
             try:
                 force = self.module.params.get('force_upgrade')
+                installer_options = self.module.params.get('installer_options')
                 if force or vm.guest.guestFamily in ["linuxGuest", "windowsGuest"]:
-                    task = vm.UpgradeTools()
+                    if installer_options is not None:
+                        task = vm.UpgradeTools(installer_options)
+                    else:
+                        task = vm.UpgradeTools()
                     changed, err_msg = wait_for_task(task)
                     result.update(changed=changed, msg=to_native(err_msg))
                 else:
@@ -182,6 +192,7 @@ def main():
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
         force_upgrade=dict(type='bool', default=False),
+        installer_options=dict(type='str'),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,
