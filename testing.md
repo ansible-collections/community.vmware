@@ -40,4 +40,4 @@ $ VMWARE_TEST_PLATFORM=static ansible-test integration --diff --no-temp-workdir 
 
 ## More Information
 
-* [Developer guide for testing](https://docs.ansible.com/ansible/latest/dev_guide/platforms/vmware_guidelines.html#testing-with-your-own-infrastructure)
+* [Developer guide for testing](https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/dev_guide.html#testing-with-your-own-infrastructure)
