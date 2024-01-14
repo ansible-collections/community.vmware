@@ -44,6 +44,16 @@ except ImportError:
     VSPHERE_IMP_ERR = traceback.format_exc()
     HAS_VSPHERE = False
 
+try:
+    from requests.packages import urllib3
+    HAS_URLLIB3 = True
+except ImportError:
+    try:
+        import urllib3
+        HAS_URLLIB3 = True
+    except ImportError:
+        HAS_URLLIB3 = False
+
 from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils._text import to_native
 
@@ -131,13 +141,17 @@ class VmwareRestClient(object):
         username = self.params.get('username')
         password = self.params.get('password')
         hostname = self.params.get('hostname')
+        validate_certs = self.params.get('validate_certs')
         port = self.params.get('port')
         session = requests.Session()
-        session.verify = self.params.get('validate_certs')
+        session.verify = validate_certs
         protocol = self.params.get('protocol')
         proxy_host = self.params.get('proxy_host')
         proxy_port = self.params.get('proxy_port')
 
+        if validate_certs is False:
+            if HAS_URLLIB3:
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         if all([protocol, proxy_host, proxy_port]):
             proxies = {protocol: "{0}://{1}:{2}".format(protocol, proxy_host, proxy_port)}
             session.proxies.update(proxies)
