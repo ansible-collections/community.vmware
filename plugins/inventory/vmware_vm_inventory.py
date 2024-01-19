@@ -761,7 +761,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         strict = self.get_option('strict')
 
         vm_properties = self.get_option('properties')
-        vm_subproperties = {e['property']:e['subelements'] for e in self.get_option('subproperties')}
+        vm_subproperties = {e['property']: e['subelements'] for e in self.get_option('subproperties')}
         vm_properties.extend(vm_subproperties.keys())
 
         if not isinstance(vm_properties, list):
@@ -803,14 +803,14 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
                 if vm_obj_property.name in vm_subproperties:
                     for subproperty in vm_subproperties[vm_obj_property.name]:
                         subproperty_parts = subproperty.split('.')
-                        
+
                         value = vm_obj_property.val
                         for subproperty_part in subproperty_parts:
                             value = value.__getattribute__(subproperty_part)
-                        
+
                         subproperty_parsed = parse_vim_property(value)
-                        properties[vm_obj_property.name+"."+subproperty] = subproperty_parsed
-                else:   
+                        properties[vm_obj_property.name + "." + subproperty] = subproperty_parsed
+                else:
                     properties[vm_obj_property.name] = vm_obj_property.val
 
             if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) in ('orphaned', 'inaccessible', 'disconnected'):
