@@ -97,6 +97,24 @@ DOCUMENTATION = r'''
                        'guest.guestId', 'guest.guestState', 'runtime.maxMemoryUsage',
                        'customValue', 'summary.runtime.powerState', 'config.guestId',
                        ]
+        subproperties:
+            description:
+            - List of subproperties from an normal property.
+            - These subproperties will also populated to the hostvars of the given VM.
+            type: list
+            elements: dict
+            default: []
+            suboptions:
+                property:
+                    description:
+                        - Name of the Property
+                    type: str
+                    required: true
+                subelements:
+                    description:
+                        - List of subelements
+                    type: list
+                    elements: str
         with_nested_properties:
             description:
             - This option transform flatten properties name to nested dictionary.
@@ -187,6 +205,24 @@ EXAMPLES = r'''
     - 'guest.ipAddress'
     - 'config.name'
     - 'config.uuid'
+
+# Gather subproperties such as the parent (mostly cluster) of an ESXi
+    plugin: community.vmware.vmware_vm_inventory
+    strict: false
+    hostname: 10.65.223.31
+    username: administrator@vsphere.local
+    password: Esxi@123$%
+    validate_certs: false
+    properties:
+    - 'name'
+    - 'guest.ipAddress'
+    - 'config.name'
+    - 'config.uuid'
+    subproperties:
+    - property: 'summary.runtime.host'
+      subelements:
+      - 'name'
+      - 'parent.name'
 
 # Create Groups based upon VMware Tools status
     plugin: community.vmware.vmware_vm_inventory
@@ -392,6 +428,7 @@ from ansible.module_utils.six import text_type
 from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
     to_nested_dict,
     to_flatten_dict,
+    parse_vim_property
 )
 
 display = Display()
@@ -724,6 +761,9 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         strict = self.get_option('strict')
 
         vm_properties = self.get_option('properties')
+        vm_subproperties = {e['property']:e['subelements'] for e in self.get_option('subproperties')}
+        vm_properties.extend(vm_subproperties.keys())
+
         if not isinstance(vm_properties, list):
             vm_properties = [vm_properties]
 
@@ -760,7 +800,18 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         for vm_obj in objects:
             properties = dict()
             for vm_obj_property in vm_obj.propSet:
-                properties[vm_obj_property.name] = vm_obj_property.val
+                if vm_obj_property.name in vm_subproperties:
+                    for subproperty in vm_subproperties[vm_obj_property.name]:
+                        subproperty_parts = subproperty.split('.')
+                        
+                        value = vm_obj_property.val
+                        for subproperty_part in subproperty_parts:
+                            value = value.__getattribute__(subproperty_part)
+                        
+                        subproperty_parsed = parse_vim_property(value)
+                        properties[vm_obj_property.name+"."+subproperty] = subproperty_parsed
+                else:   
+                    properties[vm_obj_property.name] = vm_obj_property.val
 
             if (properties.get('runtime.connectionState') or properties['runtime'].connectionState) in ('orphaned', 'inaccessible', 'disconnected'):
                 continue
