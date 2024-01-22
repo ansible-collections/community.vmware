@@ -18,22 +18,6 @@ description:
 author:
 - Dag Wieers (@dagwieers)
 options:
-  host:
-    description:
-    - The vCenter server on which the datastore is available.
-    type: str
-    required: true
-    aliases: [ hostname ]
-  username:
-    description:
-    - The user name to authenticate on the vCenter server.
-    type: str
-    required: true
-  password:
-    description:
-    - The password to authenticate on the vCenter server.
-    type: str
-    required: true
   datacenter:
     description:
     - The datacenter on the vCenter server that holds the datastore.
@@ -50,12 +34,6 @@ options:
     type: str
     required: true
     aliases: [ dest ]
-  validate_certs:
-    description:
-    - If V(false), SSL certificates will not be validated. This should only be
-      set to V(false) when no other option exists.
-    type: bool
-    default: true
   timeout:
     description:
     - The timeout in seconds for the upload to the datastore.
@@ -73,6 +51,8 @@ options:
     default: file
 notes:
 - The vSphere folder API does not allow to remove directory objects.
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = r'''
