@@ -134,6 +134,7 @@ from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible.module_utils.six.moves.urllib.parse import quote, urlencode
 from ansible.module_utils.urls import open_url
 from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 
 
 def vmware_path(datastore, datacenter, path):
@@ -152,22 +153,22 @@ def vmware_path(datastore, datacenter, path):
 
 def main():
 
+    argument_spec = vmware_argument_spec()
+
+    argument_spec.update(dict(
+        datacenter=dict(type='str', required=True),
+        datastore=dict(type='str', required=True),
+        path=dict(type='str', required=True, aliases=['dest']),
+        state=dict(type='str', default='file', choices=['absent', 'directory', 'file', 'touch']),
+        timeout=dict(type='int', default=10),
+    ))
+
     module = AnsibleModule(
-        argument_spec=dict(
-            host=dict(type='str', required=True, aliases=['hostname']),
-            username=dict(type='str', required=True),
-            password=dict(type='str', required=True, no_log=True),
-            datacenter=dict(type='str', required=True),
-            datastore=dict(type='str', required=True),
-            path=dict(type='str', required=True, aliases=['dest']),
-            state=dict(type='str', default='file', choices=['absent', 'directory', 'file', 'touch']),
-            timeout=dict(type='int', default=10),
-            validate_certs=dict(type='bool', default=True),
-        ),
+        argument_spec=argument_spec,
         supports_check_mode=True,
     )
 
-    host = module.params.get('host')
+    host = module.params.get('hostname')
     username = module.params.get('username')
     password = module.params.get('password')
     datacenter = module.params.get('datacenter')

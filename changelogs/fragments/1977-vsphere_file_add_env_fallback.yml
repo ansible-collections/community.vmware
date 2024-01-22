@@ -1,0 +1,3 @@
+minor_changes:
+  - Add standard function vmware_argument_spec() from module_utils for using default env fallback function.
+    https://github.com/ansible-collections/community.vmware/issues/1977
