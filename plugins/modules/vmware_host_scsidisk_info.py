@@ -23,13 +23,13 @@ options:
     description:
     - Name of the host system to work with.
     - SCSI disk information about this ESXi server will be returned.
-    - This parameter is required if I(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
     - SCSI disk information about each ESXi server will be returned for the given cluster.
-    - This parameter is required if I(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

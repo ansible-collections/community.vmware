@@ -1,0 +1,23 @@
+# Test code for the vcenter_root_password_expiration module.
+# Copyright: (c) 2023, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+- name: Set vCenter root password expiration
+  vcenter_root_password_expiration:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    state: present
+    email: "vCenter-Admin@community.vmware.example"
+    max_days_between_password_change: 93
+    min_days_between_password_change: 7
+    warn_days_before_password_expiration: 22
+    validate_certs: false
+  register: pw_expiration
+
+- assert:
+    that:
+      - pw_expiration is changed

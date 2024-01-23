@@ -14,7 +14,7 @@ DOCUMENTATION = r'''
     description:
       - Use VMware tools to run tasks in, or put/fetch files to guest operating systems running in VMware infrastructure.
       - In case of Windows VMs, set C(ansible_shell_type) to C(powershell).
-      - Does not work with 'become'.
+      - Does not work with C(become).
     requirements:
       - requests (Python library)
     options:
@@ -64,7 +64,7 @@ DOCUMENTATION = r'''
       validate_certs:
         description:
           - Verify SSL for the connection.
-          - "Note: This will validate certs for both C(vmware_host) and the ESXi host running the VM."
+          - "Note: This will validate certs for both O(vmware_host) and the ESXi host running the VM."
         env:
           - name: VMWARE_VALIDATE_CERTS
         vars:
@@ -73,10 +73,10 @@ DOCUMENTATION = r'''
         type: bool
       vm_path:
         description:
-          - Mutually exclusive with vm_uuid
+          - Mutually exclusive with O(vm_uuid)
           - VM path absolute to the connection.
-          - "vCenter Example: C(Datacenter/vm/Discovered virtual machine/testVM)."
-          - "ESXi Host Example: C(ha-datacenter/vm/testVM)."
+          - "vCenter Example: V(Datacenter/vm/Discovered virtual machine/testVM)."
+          - "ESXi Host Example: V(ha-datacenter/vm/testVM)."
           - Must include VM name, appended to 'folder' as would be passed to M(community.vmware.vmware_guest).
           - Needs to include I(vm) between the Datacenter and the rest of the VM path.
           - Datacenter default value for ESXi server is C(ha-datacenter).
@@ -86,9 +86,9 @@ DOCUMENTATION = r'''
         required: false
       vm_uuid:
         description:
-          - Mutually exclusive with vm_path
+          - Mutually exclusive with O(vm_path)
           - VM UUID to the connection.
-          - UUID of the virtual machine from property config.uuid of vmware_vm_inventory plugin
+          - UUID of the virtual machine from property config.uuid of P(community.vmware.vmware_vm_inventory#lookup) plugin
         vars:
           - name: ansible_vmware_guest_uuid
         required: false
@@ -118,7 +118,7 @@ DOCUMENTATION = r'''
       file_chunk_size:
         description:
           - File chunk size.
-          - "(Applicable when writing a file to disk, example: using the C(fetch) module.)"
+          - "(Applicable when writing a file to disk, example: using the M(ansible.builtin.fetch) module.)"
         vars:
           - name: ansible_vmware_tools_file_chunk_size
         default: 128

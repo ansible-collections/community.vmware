@@ -7,33 +7,48 @@
   vars:
     setup_attach_host: true
 
-- name: Change acceptance level of given hosts
+- name: Change acceptance level of given host in check mode
   vmware_host_acceptance:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     esxi_hostname: '{{ esxi1 }}'
     validate_certs: false
-    acceptance_level: community
-    state: present
-  register: host_acceptance_info
-- debug: var=host_acceptance_info
-- assert:
-    that:
-      - host_acceptance_info.facts is defined
-
-- name: Change acceptance level of given hosts in check mode
-  vmware_host_acceptance:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    esxi_hostname: '{{ esxi1 }}'
-    validate_certs: false
-    acceptance_level: community
-    state: present
-  register: host_acceptance_info_check_mode
+    state: community
+  register: host_acceptance_community_check_mode
   check_mode: true
-- debug: var=host_acceptance_info_check_mode
+- debug: var=host_acceptance_community_check_mode
 - assert:
     that:
-      - host_acceptance_info_check_mode.facts is defined
+      - host_acceptance_community_check_mode.facts is defined
+      - host_acceptance_community_check_mode.changed
+
+- name: Change acceptance level of given host
+  vmware_host_acceptance:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    state: community
+  register: host_acceptance_community
+- debug: var=host_acceptance_community
+- assert:
+    that:
+      - host_acceptance_community.facts is defined
+      - host_acceptance_community.changed
+
+- name: Change acceptance level of given host again (idempotency)
+  vmware_host_acceptance:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+    state: community
+  register: host_acceptance_community_again
+- debug: var=host_acceptance_community_again
+- assert:
+    that:
+      - host_acceptance_community_again.facts is defined
+      - host_acceptance_community_again.changed is false

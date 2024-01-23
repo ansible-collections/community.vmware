@@ -1,0 +1,3 @@
+bugfixes:
+  - Fix InsecureRequestWarning for modules based on the VmwareRestClient module util when setting ``validate_certs`` to ``False``
+    (https://github.com/ansible-collections/community.vmware/pull/1969).

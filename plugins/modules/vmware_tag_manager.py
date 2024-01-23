@@ -29,16 +29,16 @@ options:
       - List of tag(s) to be managed.
       - User can also specify category name by specifying colon separated value. For example, "category_name:tag_name".
       - User can also specify tag and category as dict, when tag or category contains colon.
-        See example for more information. Added in version 2.10.
+        See example for more information.
       - User can skip category name if you have unique tag names.
       required: true
       type: list
       elements: raw
     state:
       description:
-      - If C(state) is set to C(add) or C(present) will add the tags to the existing tag list of the given object.
-      - If C(state) is set to C(remove) or C(absent) will remove the tags from the existing tag list of the given object.
-      - If C(state) is set to C(set) will replace the tags of the given objects with the user defined list of tags.
+      - If set to V(add) or V(present) will add the tags to the existing tag list of the given object.
+      - If set to V(remove) or V(absent) will remove the tags from the existing tag list of the given object.
+      - If set to V(set) will replace the tags of the given objects with the user defined list of tags.
       default: add
       choices: [ present, absent, add, remove, set ]
       type: str
@@ -62,13 +62,13 @@ options:
       description:
       - Name of the object to work with.
       - For DistributedVirtualPortgroups the format should be "switch_name:portgroup_name"
-      - Required if C(moid) is not set.
+      - Required if O(moid) is not set.
       required: false
       type: str
     moid:
       description:
       - Managed object ID for the given object.
-      - Required if C(object_name) is not set.
+      - Required if O(object_name) is not set.
       required: false
       type: str
 extends_documentation_fragment:

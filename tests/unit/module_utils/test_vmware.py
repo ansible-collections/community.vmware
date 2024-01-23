@@ -10,9 +10,10 @@ import ssl
 import sys
 import pytest
 
+from unittest import mock
+
 pyvmomi = pytest.importorskip('pyVmomi')
 
-from ansible_collections.community.vmware.tests.unit.compat import mock
 from ansible_collections.community.vmware.plugins.module_utils.vmware import option_diff
 
 import ansible_collections.community.vmware.plugins.module_utils.vmware as vmware_module_utils
@@ -110,7 +111,7 @@ def test_lib_loading_failure(monkeypatch, fake_ansible_module, key, libname):
     with pytest.raises(FailJsonException):
         vmware_module_utils.PyVmomi(fake_ansible_module)
     error_str = 'Failed to import the required Python library (%s)' % libname
-    assert fake_ansible_module.fail_json.called_once()
+    fake_ansible_module.fail_json.assert_called_once()
     assert error_str in fake_ansible_module.fail_json.call_args[1]['msg']
 
 
@@ -121,7 +122,7 @@ def test_required_params(request, params, msg, fake_ansible_module):
     fake_ansible_module.params = params
     with pytest.raises(FailJsonException):
         vmware_module_utils.connect_to_api(fake_ansible_module)
-    assert fake_ansible_module.fail_json.called_once()
+    fake_ansible_module.fail_json.assert_called_once()
     # TODO: assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
 
 
@@ -135,7 +136,7 @@ def test_validate_certs(monkeypatch, fake_ansible_module):
         vmware_module_utils.PyVmomi(fake_ansible_module)
     msg = 'pyVim does not support changing verification mode with python < 2.7.9.' \
           ' Either update python or use validate_certs=false.'
-    assert fake_ansible_module.fail_json.called_once()
+    fake_ansible_module.fail_json.assert_called_once()
     assert msg == fake_ansible_module.fail_json.call_args[1]['msg']
 
 
@@ -157,7 +158,7 @@ def test_vmdk_disk_path_split_negative(monkeypatch, fake_ansible_module):
     with pytest.raises(FailJsonException):
         pyv = vmware_module_utils.PyVmomi(fake_ansible_module)
         pyv.vmdk_disk_path_split('[ds1]')
-    assert fake_ansible_module.fail_json.called_once()
+    fake_ansible_module.fail_json.assert_called_once()
     assert 'Bad path' in fake_ansible_module.fail_json.call_args[1]['msg']
 
 

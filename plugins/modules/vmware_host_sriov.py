@@ -24,13 +24,13 @@ options:
   esxi_hostname:
     description:
     - Name of the host system to work with.
-    - This parameter is required if C(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     - User can specify specific host from the cluster.
     type: str
   cluster_name:
     description:
     - Name of the cluster from which all host systems will be used.
-    - This parameter is required if C(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
   vmnic:
     description:
@@ -46,8 +46,8 @@ options:
     required: true
   sriov_on:
     description:
-    - optional parameter, related to C(num_virt_func).
-    - SR-IOV can be enabled only if C(num_virt_func) > 0.
+    - optional parameter, related to O(num_virt_func).
+    - SR-IOV can be enabled only if O(num_virt_func) > 0.
     type: bool
     required: false
 extends_documentation_fragment:

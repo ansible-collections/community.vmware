@@ -22,7 +22,7 @@ options:
    name:
         description:
             - Name of the virtual machine to work with.
-            - 'This is required if C(uuid) or C(moid) is not supplied.'
+            - 'This is required if O(uuid) or O(moid) is not supplied.'
         type: str
    name_match:
         description:
@@ -33,17 +33,17 @@ options:
    uuid:
         description:
             - "UUID of the instance to manage if known, this is VMware's unique identifier."
-            - This is required if C(name) or C(moid) is not supplied.
+            - This is required if O(name) or O(moid) is not supplied.
         type: str
    moid:
         description:
             - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-            - This is required if C(name) or C(uuid) is not supplied.
+            - This is required if O(name) or O(uuid) is not supplied.
         type: str
    folder:
         description:
             - Destination folder, absolute or relative path to find an existing guest.
-            - This is required, if C(name) is supplied.
+            - This is required, if O(name) is supplied.
             - "The folder should include the datacenter. ESX's datacenter is ha-datacenter"
             - 'Examples:'
             - '   folder: /ha-datacenter/vm'
@@ -69,6 +69,12 @@ options:
             - "behaviour of 'guestFamily' detection."
         default: false
         type: bool
+        required: false
+   installer_options:
+        version_added: '4.1.0'
+        description:
+            - Command line options passed to the installer to modify the installation procedure for tools.
+        type: str
         required: false
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -151,8 +157,12 @@ class PyVmomiHelper(PyVmomi):
         elif vm.guest.toolsStatus == "toolsOld":
             try:
                 force = self.module.params.get('force_upgrade')
+                installer_options = self.module.params.get('installer_options')
                 if force or vm.guest.guestFamily in ["linuxGuest", "windowsGuest"]:
-                    task = vm.UpgradeTools()
+                    if installer_options is not None:
+                        task = vm.UpgradeTools(installer_options)
+                    else:
+                        task = vm.UpgradeTools()
                     changed, err_msg = wait_for_task(task)
                     result.update(changed=changed, msg=to_native(err_msg))
                 else:
@@ -182,6 +192,7 @@ def main():
         folder=dict(type='str'),
         datacenter=dict(type='str', required=True),
         force_upgrade=dict(type='bool', default=False),
+        installer_options=dict(type='str'),
     )
     module = AnsibleModule(
         argument_spec=argument_spec,

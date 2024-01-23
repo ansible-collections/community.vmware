@@ -100,7 +100,6 @@ iscsi_properties:
 detected_iscsi_drives:
   description:
     - list of detected iSCSI drive
-    - added from version 1.9.0
   returned: always
   type: list
   sample: >-

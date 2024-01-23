@@ -15,12 +15,9 @@ module: vmware_host_facts
 short_description: Gathers facts about remote ESXi hostsystem
 description:
     - This module can be used to gathers facts like CPU, memory, datastore, network and system etc. about ESXi host system.
-    - Please specify hostname or IP address of ESXi host system as C(hostname).
-    - If hostname or IP address of vCenter is provided as C(hostname) and C(esxi_hostname) is not specified, then the
+    - Please specify hostname or IP address of ESXi host system as O(hostname).
+    - If hostname or IP address of vCenter is provided as O(hostname) and O(esxi_hostname) is not specified, then the
       module will throw an error.
-    - VSAN facts added in 2.7 version.
-    - SYSTEM fact uuid added in 2.10 version.
-    - Connection state fact added in VMware collection 2.6.0.
     - Please note that when ESXi host connection state is not C(connected), facts returned from vCenter might be stale.
       Users are recommended to check connection state value and take appropriate decision in the playbook.
 author:
@@ -34,15 +31,15 @@ options:
     type: str
   show_tag:
     description:
-    - Tags related to Host are shown if set to C(true).
+    - Tags related to Host are shown if set to V(true).
     default: false
     type: bool
     required: false
   schema:
     description:
     - Specify the output schema desired.
-    - The 'summary' output schema is the legacy output from the module
-    - The 'vsphere' output schema is the vSphere API class definition
+    - The V(summary) output schema is the legacy output from the module
+    - The V(vsphere) output schema is the vSphere API class definition
       which requires pyvmomi>6.7.1
     choices: ['summary', 'vsphere']
     default: 'summary'
@@ -59,7 +56,7 @@ options:
       - '      "config.product.apiVersion",'
       - '      "overallStatus"'
       - '   ]'
-      - Only valid when C(schema) is C(vsphere).
+      - Only valid when O(schema=vsphere).
     type: list
     elements: str
     required: false
