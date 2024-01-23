@@ -4,4 +4,4 @@
 
 - import_role:
     name: prepare_vmware_tests
-- include: associable_obj_types.yml
+- include_tasks: associable_obj_types.yml

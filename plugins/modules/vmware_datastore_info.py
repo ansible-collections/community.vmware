@@ -29,7 +29,7 @@ options:
    datacenter:
      description:
      - Datacenter to search for datastores.
-     - This parameter is required, if C(cluster) is not supplied.
+     - This parameter is required, if O(cluster) is not supplied.
      required: false
      aliases: ['datacenter_name']
      type: str
@@ -37,21 +37,21 @@ options:
      description:
      - Cluster to search for datastores.
      - If set, information of datastores belonging this clusters will be returned.
-     - This parameter is required, if C(datacenter) is not supplied.
+     - This parameter is required, if O(datacenter) is not supplied.
      required: false
      type: str
    gather_nfs_mount_info:
     description:
     - Gather mount information of NFS datastores.
     - Disabled per default because this slows down the execution if you have a lot of datastores.
-    - Only valid when C(schema) is C(summary).
+    - Only valid when O(schema=summary).
     type: bool
     default: false
    gather_vmfs_mount_info:
     description:
     - Gather mount information of VMFS datastores.
     - Disabled per default because this slows down the execution if you have a lot of datastores.
-    - Only valid when C(schema) is C(summary).
+    - Only valid when O(schema=summary).
     type: bool
     default: false
    schema:
@@ -65,7 +65,7 @@ options:
      type: str
    show_tag:
      description:
-     - Tags related to Datastore are shown if set to C(true).
+     - Tags related to Datastore are shown if set to V(true).
      default: false
      type: bool
    properties:
@@ -80,7 +80,7 @@ options:
      - '      "capability.vsanSparseSupported",'
      - '      "overallStatus"'
      - '   ]'
-     - Only valid when C(schema) is C(vsphere).
+     - Only valid when O(schema=vsphere).
      type: list
      required: false
      elements: str

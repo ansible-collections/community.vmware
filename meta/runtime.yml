@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.13.0'
+requires_ansible: '>=2.15.0'
 
 action_groups:
   vmware:
@@ -8,6 +8,7 @@ action_groups:
   - vcenter_extension_info
   - vcenter_folder
   - vcenter_license
+  - vcenter_root_password_expiration
   - vcenter_standard_key_provider
   - vmware_about_info
   - vmware_category
@@ -86,6 +87,7 @@ action_groups:
   - vmware_guest_video
   - vmware_host
   - vmware_host_acceptance
+  - vmware_host_acceptance_info
   - vmware_host_active_directory
   - vmware_host_auto_start
   - vmware_host_capability_info
@@ -100,6 +102,7 @@ action_groups:
   - vmware_host_feature_info
   - vmware_host_firewall_info
   - vmware_host_firewall_manager
+  - vmware_host_graphics
   - vmware_host_hyperthreading
   - vmware_host_ipv6
   - vmware_host_iscsi

@@ -46,7 +46,7 @@ options:
     host_power_action_rate:
       description:
       - specify host power action rate
-      - 1 is the lowest and 5 the highest
+      - V(1) is the lowest and V(5) the highest
       type: int
       default: 3
       choices: [1, 2, 3, 4, 5]

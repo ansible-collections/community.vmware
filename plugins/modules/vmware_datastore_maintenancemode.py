@@ -22,25 +22,25 @@ options:
     datastore:
       description:
       - Name of datastore to manage.
-      - If C(datastore_cluster) or C(cluster_name) are not set, this parameter is required.
+      - If O(datastore_cluster) or O(cluster_name) are not set, this parameter is required.
       type: str
     datastore_cluster:
       description:
       - Name of the datastore cluster from all child datastores to be managed.
-      - If C(datastore) or C(cluster_name) are not set, this parameter is required.
+      - If O(datastore) or O(cluster_name) are not set, this parameter is required.
       type: str
     cluster_name:
       description:
       - Name of the cluster where datastore is connected to.
-      - If multiple datastores are connected to the given cluster, then all datastores will be managed by C(state).
-      - If C(datastore) or C(datastore_cluster) are not set, this parameter is required.
+      - If multiple datastores are connected to the given cluster, then all datastores will be managed by O(state).
+      - If O(datastore) or O(datastore_cluster) are not set, this parameter is required.
       type: str
     state:
       description:
-      - If set to C(present), then enter datastore into maintenance mode.
-      - If set to C(present) and datastore is already in maintenance mode, then no action will be taken.
-      - If set to C(absent) and datastore is in maintenance mode, then exit maintenance mode.
-      - If set to C(absent) and datastore is not in maintenance mode, then no action will be taken.
+      - If set to V(present), then enter datastore into maintenance mode.
+      - If set to V(present) and datastore is already in maintenance mode, then no action will be taken.
+      - If set to V(absent) and datastore is in maintenance mode, then exit maintenance mode.
+      - If set to V(absent) and datastore is not in maintenance mode, then no action will be taken.
       choices: [ present, absent ]
       default: present
       required: false

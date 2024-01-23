@@ -90,14 +90,28 @@ dvs_portgroup_info:
     sample: {
         "dvs_0":[
             {
+                "active_uplinks": [
+                    "uplink 1"
+                ],
                 "description": null,
                 "dvswitch_name": "dvs_001",
+                "key": "dvportgroup-1014",
+                "mac_learning": {
+                    "allow_unicast_flooding": null,
+                    "enabled": false,
+                    "limit": null,
+                    "limit_policy": null
+                },
+                "moid": "dvportgroup-1014",
                 "network_policy": {
                     "forged_transmits": false,
                     "mac_changes": false,
                     "promiscuous": false
                 },
                 "num_ports": 8,
+                "port_allocation": "elastic",
+                "port_binding": "static",
+                "standby_uplinks": [],
                 "port_policy": {
                     "block_override": true,
                     "ipfix_override": false,
@@ -264,6 +278,7 @@ class DVSPortgroupInfoManager(PyVmomi):
 
                 dvpg_details = dict(
                     portgroup_name=unquote(dvs_pg.name),
+                    moid=dvs_pg._moId,
                     num_ports=dvs_pg.config.numPorts,
                     dvswitch_name=dvs_pg.config.distributedVirtualSwitch.name,
                     description=dvs_pg.config.description,

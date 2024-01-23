@@ -1,0 +1,22 @@
+# Test code for the vmware_host_acceptance module.
+# Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+
+- name: Gather acceptance level of given host
+  vmware_host_acceptance_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    esxi_hostname: '{{ esxi1 }}'
+    validate_certs: false
+  register: result
+- debug: var=result
+- assert:
+    that:
+      - result.host_acceptance_info is defined
+      - result.changed is false

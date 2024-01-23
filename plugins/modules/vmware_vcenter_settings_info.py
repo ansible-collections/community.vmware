@@ -33,7 +33,7 @@ options:
       - '   properties: ['
       - '      "config.workflow.port"'
       - '   ]'
-      - Only valid when C(schema) is C(vsphere).
+      - Only valid when O(schema=vsphere).
     type: list
     elements: str
 extends_documentation_fragment:

@@ -26,21 +26,21 @@ options:
     cluster:
         description:
             - Name of the cluster to configure the resource pool.
-            - This parameter is required if C(esxi_hostname) or C(parent_resource_pool) is not specified.
-            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
+            - This parameter is required if O(esxi_hostname) or O(parent_resource_pool) is not specified.
+            - The O(cluster), O(esxi_hostname) and O(parent_resource_pool) parameters are mutually exclusive.
         type: str
     esxi_hostname:
         description:
             - Name of the host to configure the resource pool.
             - The host must not be member of a cluster.
-            - This parameter is required if C(cluster) or C(parent_resource_pool) is not specified.
-            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
+            - This parameter is required if O(cluster) or O(parent_resource_pool) is not specified.
+            - The O(cluster), O(esxi_hostname) and O(parent_resource_pool) parameters are mutually exclusive.
         type: str
     parent_resource_pool:
         description:
             - Name of the parent resource pool.
-            - This parameter is required if C(cluster) or C(esxi_hostname) is not specified.
-            - The C(cluster), C(esxi_hostname) and C(parent_resource_pool) parameters are mutually exclusive.
+            - This parameter is required if O(cluster) or O(esxi_hostname) is not specified.
+            - The O(cluster), O(esxi_hostname) and O(parent_resource_pool) parameters are mutually exclusive.
         type: str
     resource_pool:
         description:
@@ -76,7 +76,7 @@ options:
     cpu_allocation_shares:
         description:
             - The number of cpu shares allocated.
-            - This value is only set if I(cpu_shares) is set to C(custom).
+            - This value is only set if O(cpu_shares=custom).
         type: int
         default: 4000
     mem_expandable_reservations:
@@ -108,7 +108,7 @@ options:
     mem_allocation_shares:
         description:
             - The number of memory shares allocated.
-            - This value is only set if I(mem_shares) is set to C(custom).
+            - This value is only set if O(mem_shares=custom).
         type: int
         default: 163840
     state:

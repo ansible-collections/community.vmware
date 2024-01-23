@@ -38,7 +38,7 @@ options:
         type: str
     evacuate:
         description:
-            - If set to C(true), evacuate all powered off VMs.
+            - If set to V(true), evacuate all powered off VMs.
         default: false
         required: false
         type: bool

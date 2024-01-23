@@ -28,36 +28,36 @@ options:
   description:
     description:
     - Description of the storage policy to create or update.
-    - This parameter is ignored when C(state=absent).
+    - This parameter is ignored when O(state=absent).
     type: str
     required: false
   tag_category:
     description:
     - Name of the pre-existing tag category to assign to the storage policy.
-    - This parameter is ignored when C(state=absent).
-    - This parameter is required when C(state=present).
+    - This parameter is ignored when O(state=absent).
+    - This parameter is required when O(state=present).
     required: false
     type: str
   tag_name:
     description:
     - Name of the pre-existing tag to assign to the storage policy.
-    - This parameter is ignored when C(state=absent).
-    - This parameter is required when C(state=present).
+    - This parameter is ignored when O(state=absent).
+    - This parameter is required when O(state=present).
     required: false
     type: str
   tag_affinity:
     description:
-    - If set to C(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement.
-    - If set to C(false), the storage policy enforces that virtual machines require the absence of a tag for datastore placement.
-    - This parameter is ignored when C(state=absent).
+    - If set to V(true), the storage policy enforces that virtual machines require the existence of a tag for datastore placement.
+    - If set to V(false), the storage policy enforces that virtual machines require the absence of a tag for datastore placement.
+    - This parameter is ignored when O(state=absent).
     required: false
     type: bool
     default: true
   state:
     description:
     - State of storage policy.
-    - If set to C(present), the storage policy is created.
-    - If set to C(absent), the storage policy is deleted.
+    - If set to V(present), the storage policy is created.
+    - If set to V(absent), the storage policy is deleted.
     default: present
     choices: [ absent, present ]
     type: str

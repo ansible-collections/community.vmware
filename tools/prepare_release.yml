@@ -20,16 +20,14 @@
         regexp: "^version: "
         line: "version: {{ version }}"
 
-    - name: Update documentation
-      import_tasks: create_documentation_tasks.yml
+    - name: Update changelog
+      block:
+        - name: Install tox
+          ansible.builtin.pip:
+            name: tox
 
-    - name: Refresh the changelog
-      ansible.builtin.shell: 'tox -e antsibull-changelog -- release --verbose --version {{ version }}'
-
-    - name: Clean up the changelog fragments
-      ansible.builtin.file:
-        path: "{{ playbook_dir }}/../changelogs/fragments"
-        state: absent
+        - name: Refresh the changelog
+          ansible.builtin.shell: 'tox -e antsibull-changelog -- release --verbose --version {{ version }}'
 
     - name: Add everything
       ansible.builtin.shell: git add --all

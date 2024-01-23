@@ -28,7 +28,7 @@ options:
         type: str
     fetch_from_cache:
         description:
-            - C(true) to return the result from cache directly instead of running the full health check.
+            - V(true) to return the result from cache directly instead of running the full health check.
         required: false
         default: false
         type: bool

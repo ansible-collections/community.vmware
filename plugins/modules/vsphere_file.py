@@ -52,8 +52,8 @@ options:
     aliases: [ dest ]
   validate_certs:
     description:
-    - If C(false), SSL certificates will not be validated. This should only be
-      set to C(false) when no other option exists.
+    - If V(false), SSL certificates will not be validated. This should only be
+      set to V(false) when no other option exists.
     type: bool
     default: true
   timeout:
@@ -64,10 +64,10 @@ options:
   state:
     description:
     - The state of or the action on the provided path.
-    - If C(absent), the file will be removed.
-    - If C(directory), the directory will be created.
-    - If C(file), more information of the (existing) file will be returned.
-    - If C(touch), an empty file will be created if the path does not exist.
+    - If V(absent), the file will be removed.
+    - If V(directory), the directory will be created.
+    - If V(file), more information of the (existing) file will be returned.
+    - If V(touch), an empty file will be created if the path does not exist.
     type: str
     choices: [ absent, directory, file, touch ]
     default: file

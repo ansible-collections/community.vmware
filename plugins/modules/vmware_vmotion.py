@@ -24,20 +24,19 @@ options:
     vm_name:
       description:
       - Name of the VM to perform a vMotion on.
-      - This is required parameter, if C(vm_uuid) is not set.
-      - Version 2.6 onwards, this parameter is not a required parameter, unlike the previous versions.
+      - This is required parameter, if O(vm_uuid) is not set.
       aliases: ['vm']
       type: str
     vm_uuid:
       description:
       - UUID of the virtual machine to perform a vMotion operation on.
-      - This is a required parameter, if C(vm_name) or C(moid) is not set.
+      - This is a required parameter, if O(vm_name) or O(moid) is not set.
       aliases: ['uuid']
       type: str
     moid:
       description:
       - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(vm_name) or C(vm_uuid) is not supplied.
+      - This is required if O(vm_name) or O(vm_uuid) is not supplied.
       type: str
     use_instance_uuid:
       description:
@@ -51,13 +50,11 @@ options:
       aliases: ['destination']
       type: str
     destination_cluster:
-      version_added: '2.5.0'
       description:
       - Name of the destination cluster the virtual machine should be running on.
       - Only works if drs is enabled for this cluster.
       type: str
     destination_datastore_cluster:
-      version_added: '2.5.0'
       description:
       - Name of the destination datastore cluster (storage pod) the virtual machine's vmdk should be moved on.
       - Only works if drs is enabled for the cluster the vm is running / should run.

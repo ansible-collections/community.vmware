@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - stable-2.x
+      - stable-3.x
   pull_request:
   # Run CI once per day (at 07:12 UTC)
   # This ensures that even if there haven't been commits that we are still testing against latest version of ansible-test for each ansible-base version

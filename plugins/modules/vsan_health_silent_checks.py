@@ -37,8 +37,8 @@ options:
   state:
     description:
       - The state of the health checks.
-      - If set to C(present), all given health checks will be silenced.
-      - If set to C(absent), all given health checks will be removed from the list of silent checks.
+      - If set to V(present), all given health checks will be silenced.
+      - If set to V(absent), all given health checks will be removed from the list of silent checks.
     default: 'present'
     choices: [ 'present', 'absent' ]
     type: str

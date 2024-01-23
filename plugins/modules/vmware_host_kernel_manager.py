@@ -24,13 +24,13 @@ options:
   esxi_hostname:
     description:
     - Name of the ESXi host to work on.
-    - This parameter is required if C(cluster_name) is not specified.
+    - This parameter is required if O(cluster_name) is not specified.
     type: str
   cluster_name:
     description:
     - Name of the VMware cluster to work on.
     - All ESXi hosts in this cluster will be configured.
-    - This parameter is required if C(esxi_hostname) is not specified.
+    - This parameter is required if O(esxi_hostname) is not specified.
     type: str
   kernel_module_name:
     description:

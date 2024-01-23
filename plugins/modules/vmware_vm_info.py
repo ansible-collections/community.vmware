@@ -17,27 +17,23 @@ module: vmware_vm_info
 short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
-- Cluster name as fact is added in version 2.7.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
 - Fedor Vompe (@sumkincpp)
-notes:
-- Fact about C(moid) added in VMware collection 1.4.0.
-- Fact about C(datastore_url) is added in VMware collection 1.18.0.
 options:
     vm_type:
       description:
-      - If set to C(vm), then information are gathered for virtual machines only.
-      - If set to C(template), then information are gathered for virtual machine templates only.
-      - If set to C(all), then information are gathered for all virtual machines and virtual machine templates.
+      - If set to V(vm), then information are gathered for virtual machines only.
+      - If set to V(template), then information are gathered for virtual machine templates only.
+      - If set to V(all), then information are gathered for all virtual machines and virtual machine templates.
       required: false
       default: 'all'
       choices: [ all, vm, template ]
       type: str
     show_attribute:
       description:
-      - Attributes related to VM guest shown in information only when this is set C(true).
+      - Attributes related to VM guest shown in information only when this is set V(true).
       default: false
       type: bool
     folder:
@@ -56,25 +52,25 @@ options:
       type: str
     show_cluster:
       description:
-        - Tags virtual machine's cluster is shown if set to C(true).
+        - Tags virtual machine's cluster is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datacenter:
       description:
-        - Tags virtual machine's datacenter is shown if set to C(true).
+        - Tags virtual machine's datacenter is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_datastore:
       description:
-        - Tags virtual machine's datastore is shown if set to C(true).
+        - Tags virtual machine's datastore is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_esxi_hostname:
       description:
-        - Tags virtual machine's ESXi host is shown if set to C(true).
+        - Tags virtual machine's ESXi host is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
@@ -86,29 +82,28 @@ options:
       type: bool
     show_mac_address:
       description:
-        - Tags virtual machine's mac address is shown if set to C(true).
+        - Tags virtual machine's mac address is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_net:
       description:
-        - Tags virtual machine's network is shown if set to C(true).
+        - Tags virtual machine's network is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_resource_pool:
       description:
-        - Tags virtual machine's resource pool is shown if set to C(true).
+        - Tags virtual machine's resource pool is shown if set to V(true).
       version_added: '3.5.0'
       default: true
       type: bool
     show_tag:
       description:
-        - Tags related to virtual machine are shown if set to C(true).
+        - Tags related to virtual machine are shown if set to V(true).
       default: false
       type: bool
     show_allocated:
-      version_added: '2.5.0'
       description:
         - Allocated storage in byte and memory in MB are shown if it set to True.
       default: false
@@ -254,7 +249,7 @@ virtual_machines:
         "vm_network": {
             "00:50:56:87:a5:9a": {
               "ipv4": [
-                "10.76.33.228"
+                "10.76.33.228/24"
               ],
               "ipv6": []
             }
@@ -357,11 +352,12 @@ class VmwareVmInfo(PyVmomi):
                         net_dict[device.macAddress] = dict()
                         net_dict[device.macAddress]['ipv4'] = []
                         net_dict[device.macAddress]['ipv6'] = []
-                        for ip_addr in device.ipAddress:
-                            if "::" in ip_addr:
-                                net_dict[device.macAddress]['ipv6'].append(ip_addr)
-                            else:
-                                net_dict[device.macAddress]['ipv4'].append(ip_addr)
+                        if device.ipConfig is not None:
+                            for ip_addr in device.ipConfig.ipAddress:
+                                if "::" in ip_addr.ipAddress:
+                                    net_dict[device.macAddress]['ipv6'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
+                                else:
+                                    net_dict[device.macAddress]['ipv4'].append(ip_addr.ipAddress + "/" + str(ip_addr.prefixLength))
 
             esxi_hostname = None
             esxi_parent = None
@@ -421,6 +417,7 @@ class VmwareVmInfo(PyVmomi):
                 "ip_address": _ip_address,  # Kept for backward compatibility
                 "mac_address": _mac_address,  # Kept for backward compatibility
                 "uuid": summary.config.uuid,
+                "instance_uuid": summary.config.instanceUuid,
                 "vm_network": net_dict,
                 "esxi_hostname": esxi_hostname,
                 "datacenter": None if datacenter is None else datacenter.name,

@@ -23,17 +23,17 @@ options:
   name:
     description:
     - Name of the virtual machine to export.
-    - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+    - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
     type: str
   uuid:
     description:
     - Uuid of the virtual machine to export.
-    - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+    - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
     type: str
   moid:
     description:
     - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-    - This is required if C(name) or C(uuid) is not supplied.
+    - This is required if O(name) or O(uuid) is not supplied.
     type: str
   datacenter:
     default: ha-datacenter
@@ -74,7 +74,6 @@ options:
     default: false
     description:
     - All extra configuration options are exported for a virtual machine.
-    version_added: '2.0.0'
   download_timeout:
     description:
     - The user defined timeout in second of exporting file.

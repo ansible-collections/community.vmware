@@ -32,6 +32,7 @@ DOCUMENTATION = r'''
             description:
             - Name of vSphere user.
             - Accepts vault encrypted variable.
+            - Accepts Jinja to template the value
             required: true
             env:
               - name: VMWARE_USER
@@ -40,6 +41,7 @@ DOCUMENTATION = r'''
             description:
             - Password of vSphere user.
             - Accepts vault encrypted variable.
+            - Accepts Jinja to template the value
             required: true
             env:
               - name: VMWARE_PASSWORD
@@ -52,7 +54,7 @@ DOCUMENTATION = r'''
         validate_certs:
             description:
             - Allows connection when SSL certificates are not valid.
-            - Set to C(false) when certificates are not trusted.
+            - Set to V(false) when certificates are not trusted.
             default: true
             type: bool
             env:
@@ -69,7 +71,7 @@ DOCUMENTATION = r'''
             description:
             - A list of templates in order of precedence to compose inventory_hostname.
             - Ignores template if resulted in an empty string or None value.
-            - You can use property specified in I(properties) as variables in the template.
+            - You can use property specified in O(properties) as variables in the template.
             type: list
             elements: string
             default: ['config.name + "_" + config.uuid']
@@ -78,13 +80,13 @@ DOCUMENTATION = r'''
             - Specify the list of VMware schema properties associated with the VM.
             - These properties will be populated in hostvars of the given VM.
             - Each value in the list can be a path to a specific property in VM object or a path to a collection of VM objects.
-            - C(config.name), C(config.uuid) are required properties if C(hostnames) is set to default.
-            - C(config.guestId), C(summary.runtime.powerState) are required if C(keyed_groups) is set to default.
+            - V(config.name), V(config.uuid) are required properties if O(hostnames) is set to default.
+            - V(config.guestId), V(summary.runtime.powerState) are required if O(keyed_groups) is set to default.
             - Please make sure that all the properties that are used in other parameters are included in this options.
             - In addition to VM properties, the following are special values
-            - Use C(customValue) to populate virtual machine's custom attributes. C(customValue) is only supported by vCenter and not by ESXi.
-            - Use C(all) to populate all the properties of the virtual machine.
-              The value C(all) is time consuming operation, do not use unless required absolutely.
+            - Use V(customValue) to populate virtual machine's custom attributes. V(customValue) is only supported by vCenter and not by ESXi.
+            - Use V(all) to populate all the properties of the virtual machine.
+              The value V(all) is time consuming operation, do not use unless required absolutely.
             - Please refer more VMware guest attributes which can be used as properties
               U(https://docs.ansible.com/ansible/latest/collections/community/vmware/docsite/vmware_scenarios/vmware_inventory_vm_attributes.html)
             type: list
@@ -98,7 +100,6 @@ DOCUMENTATION = r'''
         with_nested_properties:
             description:
             - This option transform flatten properties name to nested dictionary.
-            - From 1.10.0 and onwards, default value is set to C(true).
             type: bool
             default: true
         keyed_groups:
@@ -120,7 +121,7 @@ DOCUMENTATION = r'''
             description:
             - A list of resources to limit search scope.
             - Each resource item is represented by exactly one C('vim_type_snake_case):C(list of resource names) pair and optional nested I(resources)
-            - Key name is based on snake case of a vim type name; e.g C(host_system) correspond to C(vim.HostSystem)
+            - Key name is based on snake case of a vim type name; e.g V(host_system) correspond to C(vim.HostSystem)
             - See  L(VIM Types,https://pubs.vmware.com/vi-sdk/visdk250/ReferenceGuide/index-mo_types.html)
             required: false
             type: list
@@ -142,7 +143,6 @@ DOCUMENTATION = r'''
           description:
           - Address of a proxy that will receive all HTTPS requests and relay them.
           - The format is a hostname or a IP.
-          - This feature depends on a version of pyvmomi>=v6.7.1.2018.12.
           type: str
           required: false
           env:
@@ -163,6 +163,15 @@ EXAMPLES = r'''
     hostname: 10.65.223.31
     username: administrator@vsphere.local
     password: Esxi@123$%
+    validate_certs: false
+    with_tags: true
+
+# Sample configuration file for VMware Guest dynamic inventory using Jinja to template the username and password.
+    plugin: community.vmware.vmware_vm_inventory
+    strict: false
+    hostname: 10.65.223.31
+    username: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).username }}'
+    password: '{{ (lookup("file","~/.config/vmware.yaml") | from_yaml).password }}'
     validate_certs: false
     with_tags: true
 
@@ -658,11 +667,15 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         username = self.get_option('username')
         password = self.get_option('password')
 
-        if isinstance(username, AnsibleVaultEncryptedUnicode):
-            username = username.data
-
-        if isinstance(password, AnsibleVaultEncryptedUnicode):
+        if self.templar.is_template(password):
+            password = self.templar.template(variable=password, disable_lookups=False)
+        elif isinstance(password, AnsibleVaultEncryptedUnicode):
             password = password.data
+
+        if self.templar.is_template(username):
+            username = self.templar.template(variable=username, disable_lookups=False)
+        elif isinstance(username, AnsibleVaultEncryptedUnicode):
+            username = username.data
 
         self.pyv = BaseVMwareInventory(
             hostname=self.get_option('hostname'),

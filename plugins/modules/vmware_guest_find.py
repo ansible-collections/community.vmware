@@ -21,12 +21,12 @@ options:
    name:
      description:
      - Name of the VM to work with.
-     - This is required if C(uuid) parameter is not supplied.
+     - This is required if O(uuid) parameter is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to manage if known, this is VMware's BIOS UUID by default.
-     - This is required if C(name) parameter is not supplied.
+     - This is required if O(name) parameter is not supplied.
      type: str
    use_instance_uuid:
      description:

@@ -22,6 +22,8 @@
       type: thin
       datastore: '{{ rw_datastore }}'
     cdrom:
+    - controller_number: 0
+      unit_number: 0
       type: client
   register: vbs_vm
 
@@ -56,6 +58,8 @@
       type: thin
       datastore: '{{ rw_datastore }}'
     cdrom:
+    - controller_number: 0
+      unit_number: 0
       type: client
   register: vbs_vm
 

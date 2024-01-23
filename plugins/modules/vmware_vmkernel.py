@@ -27,21 +27,21 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 notes:
-    - The option C(device) need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
-    - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with C(device) specified.
+    - The option O(device) need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
+    - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with O(device) specified.
     - You can only create the VMKernel adapter on a vDS if authenticated to vCenter and not if authenticated to ESXi.
 options:
     vswitch_name:
       description:
       - The name of the vSwitch where to add the VMKernel interface.
-      - Required parameter only if C(state) is set to C(present).
+      - Required parameter only if O(state=present).
       - Optional parameter from version 2.5 and onwards.
       type: str
       aliases: ['vswitch']
     dvswitch_name:
       description:
       - The name of the vSphere Distributed Switch (vDS) where to add the VMKernel interface.
-      - Required parameter only if C(state) is set to C(present).
+      - Required parameter only if O(state=present).
       - Optional parameter from version 2.8 and onwards.
       type: str
       aliases: ['dvswitch']
@@ -65,12 +65,12 @@ options:
             type: str
             description:
             - Static IP address.
-            - Required if C(type) is set to C(static).
+            - Required if O(network.type=static).
         subnet_mask:
             type: str
             description:
             - Static netmask required.
-            - Required if C(type) is set to C(static).
+            - Required if O(network.type=static).
         default_gateway:
             type: str
             description: Default gateway (Override default gateway for this adapter).
@@ -94,7 +94,7 @@ options:
     device:
       description:
       - Search VMkernel adapter by device name.
-      - The parameter is required only in case of C(type) is set to C(dhcp).
+      - The parameter is required only in case of O(network.type=dhcp).
       type: str
     enable_vsan:
       description:
@@ -141,16 +141,15 @@ options:
       default: false
     state:
       description:
-      - If set to C(present), the VMKernel adapter will be created with the given specifications.
-      - If set to C(absent), the VMKernel adapter will be removed.
-      - If set to C(present) and VMKernel adapter exists, the configurations will be updated.
+      - If set to V(present), the VMKernel adapter will be created with the given specifications.
+      - If set to V(absent), the VMKernel adapter will be removed.
+      - If set to V(present) and VMKernel adapter exists, the configurations will be updated.
       choices: [ present, absent ]
       default: present
       type: str
     esxi_hostname:
       description:
       - Name of ESXi host to which VMKernel is to be managed.
-      - "From version 2.5 onwards, this parameter is required."
       required: true
       type: str
 extends_documentation_fragment:

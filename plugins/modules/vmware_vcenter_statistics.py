@@ -15,7 +15,7 @@ module: vmware_vcenter_statistics
 short_description: Configures statistics on a vCenter server
 description:
 - This module can be used to configure the vCenter server statistics.
-- The remaining settings can be configured with the module C(vmware_vcenter_settings).
+- The remaining settings can be configured with the module M(community.vmware.vmware_vcenter_settings).
 author:
 - Christian Kotte (@ckotte)
 options:

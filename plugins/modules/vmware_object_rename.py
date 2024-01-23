@@ -41,12 +41,12 @@ options:
     object_name:
       description:
       - Name of the object to work with.
-      - Mutually exclusive with C(object_moid).
+      - Mutually exclusive with O(object_moid).
       type: str
     object_moid:
       description:
       - Managed object id of the VMware object to work with.
-      - Mutually exclusive with C(object_name).
+      - Mutually exclusive with O(object_name).
       type: str
     new_name:
       description:

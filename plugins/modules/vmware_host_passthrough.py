@@ -16,20 +16,18 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can be managed PCI device passthrough settings on host.
-notes:
-  - Supports C(check_mode).
 options:
   cluster:
     description:
       - Name of the cluster from which all host systems will be used.
-      - This parameter is required if C(esxi_hostname) is not specified.
+      - This parameter is required if O(esxi_hostname) is not specified.
     aliases:
       - cluster_name
     type: str
   esxi_hostname:
     description:
       - Name of the host system to work with.
-      - This parameter is required if C(cluster_name) is not specified.
+      - This parameter is required if O(cluster_name) is not specified.
       - User can specify specific host from the cluster.
     type: str
   devices:
@@ -48,8 +46,8 @@ options:
     type: list
   state:
     description:
-      - If I(state=present), passthrough of PCI device will be enabled.
-      - If I(state=absent), passthrough of PCI device will be disabled.
+      - If V(state=present), passthrough of PCI device will be enabled.
+      - If V(state=absent), passthrough of PCI device will be disabled.
     choices:
       - present
       - absent
