@@ -119,7 +119,12 @@ options:
       type: bool
     show_notes:
       description:
-        -Tags virtual machine's notes is shown if set to C(true).
+        -Tags virtual machine's notes is shown if set to V(true).
+      default: false
+      type: bool
+    show_notes:
+      description:
+        -Tags virtual machine's notes is shown if set to V(true).
       default: false
       type: bool
     show_allocated:
