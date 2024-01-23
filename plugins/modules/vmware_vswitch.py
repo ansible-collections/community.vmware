@@ -25,14 +25,12 @@ options:
   switch:
     description:
     - vSwitch name to add.
-    - Alias C(switch) is added in version 2.4.
     required: true
     aliases: [ switch_name ]
     type: str
   nics:
     description:
     - A list of vmnic names or vmnic name to attach to vSwitch.
-    - Alias C(nics) is added in version 2.4.
     aliases: [ nic_name ]
     default: []
     type: list
@@ -64,7 +62,6 @@ options:
       portgroup such as promiscuous mode, where guest adapter listens
       to all the packets, MAC address changes and forged transmits.
     - Dict which configures the different security values for portgroup.
-    version_added: '2.4.0'
     suboptions:
       promiscuous_mode:
         type: bool
@@ -81,7 +78,6 @@ options:
   teaming:
     description:
       - Dictionary which configures the different teaming values for portgroup.
-    version_added: '2.4.0'
     suboptions:
       load_balancing:
         type: str
@@ -103,13 +99,13 @@ options:
         type: list
         description:
         - List of active adapters used for load balancing.
-        - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+        - All vmnics are used as active adapters if O(teaming.active_adapters) and O(teaming.standby_adapters) are not defined.
         elements: str
       standby_adapters:
         type: list
         description:
         - List of standby adapters used for failover.
-        - All vmnics are used as active adapters if C(active_adapters) and C(standby_adapters) are not defined.
+        - All vmnics are used as active adapters if O(teaming.active_adapters) and O(teaming.standby_adapters) are not defined.
         elements: str
     required: false
     aliases: [ 'teaming_policy' ]
@@ -117,7 +113,6 @@ options:
   traffic_shaping:
     description:
       - Dictionary which configures traffic shaping for the switch.
-    version_added: '2.4.0'
     suboptions:
       enabled:
         type: bool

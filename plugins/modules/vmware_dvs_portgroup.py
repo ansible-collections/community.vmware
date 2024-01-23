@@ -33,9 +33,9 @@ options:
     vlan_id:
         description:
             - The VLAN ID that should be configured with the portgroup, use 0 for no VLAN.
-            - 'If C(vlan_trunk) is configured to be I(true), this can be a combination of multiple ranges and numbers, example: 1-200, 205, 400-4094.'
-            - The valid C(vlan_id) range is from 0 to 4094. Overlapping ranges are allowed.
-            - 'If C(vlan_private) is configured to be I(true), the corresponding private VLAN should already be configured in the distributed vSwitch.'
+            - 'If O(vlan_trunk=true), this can be a combination of multiple ranges and numbers, example: 1-200, 205, 400-4094.'
+            - The valid range is from 0 to 4094. Overlapping ranges are allowed.
+            - 'If O(vlan_private=true), the corresponding private VLAN should already be configured in the distributed vSwitch.'
         required: true
         type: str
     num_ports:
@@ -54,9 +54,9 @@ options:
     port_allocation:
         description:
             - Elastic port groups automatically increase or decrease the number of ports as needed.
-            - Only valid if I(port_binding) is set to C(static).
-            - Will be C(elastic) if not specified and I(port_binding) is set to C(static).
-            - Will be C(fixed) if not specified and I(port_binding) is set to C(ephemeral).
+            - Only valid if O(port_binding=static).
+            - Will be V(elastic) if not specified and O(port_binding=static).
+            - Will be V(fixed) if not specified and O(port_binding=ephemeral).
         type: str
         choices:
             - 'elastic'
@@ -72,14 +72,14 @@ options:
     vlan_trunk:
         description:
             - Indicates whether this is a VLAN trunk or not.
-            - Mutually exclusive with C(vlan_private) parameter.
+            - Mutually exclusive with O(vlan_private) parameter.
         required: false
         default: false
         type: bool
     vlan_private:
         description:
             - Indicates whether this is for a private VLAN or not.
-            - Mutually exclusive with C(vlan_trunk) parameter.
+            - Mutually exclusive with O(vlan_trunk) parameter.
         required: false
         default: false
         type: bool
@@ -117,13 +117,13 @@ options:
                 required: true
             promiscuous:
                 type: bool
-                description: Indicates whether promiscuous mode is allowed. Ignored if C(inherited) is true.
+                description: Indicates whether promiscuous mode is allowed. Ignored if O(network_policy.inherited=true).
             forged_transmits:
                 type: bool
-                description: Indicates whether forged transmits are allowed. Ignored if C(inherited) is true.
+                description: Indicates whether forged transmits are allowed. Ignored if O(network_policy.inherited=true).
             mac_changes:
                 type: bool
-                description: Indicates whether mac changes are allowed. Ignored if C(inherited) is true.
+                description: Indicates whether mac changes are allowed. Ignored if O(network_policy.inherited=true).
         required: false
         type: dict
     teaming_policy:
@@ -133,7 +133,6 @@ options:
             load_balance_policy:
                 description:
                 - Network adapter teaming policy.
-                - C(loadbalance_loadbased) is available from version 2.6 and onwards.
                 default: 'loadbalance_srcid'
                 type: str
                 choices:
@@ -260,7 +259,6 @@ options:
         - 'off'
         - 'no'
         - 'inherited'
-        version_added: '2.3.0'
     in_traffic_shaping:
         description:
             - Dictionary which configures the ingress traffic shaping settings for the portgroup.
@@ -273,25 +271,24 @@ options:
                 type: bool
                 description:
                 - Indicates whether ingress traffic shaping is activated or not.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(in_traffic_shaping.inherited=true).
             average_bandwidth:
                 type: int
                 description:
                 - Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(in_traffic_shaping.inherited=true).
             burst_size:
                 type: int
                 description:
                 - The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(in_traffic_shaping.inherited=true).
             peak_bandwidth:
                 type: int
                 description:
                 - The maximum number of bytes to allow in a burst.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(in_traffic_shaping.inherited=true).
         required: false
         type: dict
-        version_added: '2.3.0'
     out_traffic_shaping:
         description:
             - Dictionary which configures the egress traffic shaping settings for the portgroup.
@@ -305,25 +302,24 @@ options:
                 type: bool
                 description:
                 - Indicates whether egress traffic shaping is activated or not.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(out_traffic_shaping.inherited=true).
             average_bandwidth:
                 type: int
                 description:
                 - Establishes the number of bits per second to allow across a port, averaged over time, that is, the allowed average load.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(out_traffic_shaping.inherited=true).
             burst_size:
                 type: int
                 description:
                 - The maximum number of bits per second to allow across a port when it is sending/sending or receiving a burst of traffic.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(out_traffic_shaping.inherited=true).
             peak_bandwidth:
                 type: int
                 description:
                 - The maximum number of bytes to allow in a burst.
-                - Ignored if C(inherited) is true.
+                - Ignored if O(out_traffic_shaping.inherited=true).
         required: false
         type: dict
-        version_added: '2.3.0'
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 

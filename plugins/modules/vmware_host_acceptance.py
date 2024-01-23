@@ -23,32 +23,22 @@ options:
     description:
     - Name of the cluster.
     - Acceptance level of all ESXi host system in the given cluster will be managed.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Acceptance level of this ESXi host system will be managed.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   state:
     description:
-    - Set or list acceptance level of the given ESXi host.
-    - 'If set to C(list), then will return current acceptance level of given host system/s.'
-    - If set to C(present), then will set given acceptance level.
-    choices: [ list, present ]
-    required: false
-    default: 'list'
-    type: str
-  acceptance_level:
-    description:
-    - Name of acceptance level.
-    - If set to C(partner), then accept only partner and VMware signed and certified VIBs.
-    - If set to C(vmware_certified), then accept only VIBs that are signed and certified by VMware.
-    - If set to C(vmware_accepted), then accept VIBs that have been accepted by VMware.
-    - If set to C(community), then accept all VIBs, even those that are not signed.
+    - If set to V(partner), then accept only partner and VMware signed and certified VIBs.
+    - If set to V(vmware_certified), then accept only VIBs that are signed and certified by VMware.
+    - If set to V(vmware_accepted), then accept VIBs that have been accepted by VMware.
+    - If set to V(community), then accept all VIBs, even those that are not signed.
     choices: [ community, partner, vmware_accepted, vmware_certified ]
-    required: false
+    required: true
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -62,8 +52,7 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     cluster_name: cluster_name
-    acceptance_level: 'community'
-    state: present
+    state: 'community'
   delegate_to: localhost
   register: cluster_acceptance_level
 
@@ -73,18 +62,7 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     esxi_hostname: '{{ esxi_hostname }}'
-    acceptance_level: 'vmware_accepted'
-    state: present
-  delegate_to: localhost
-  register: host_acceptance_level
-
-- name: Get acceptance level from the given ESXi Host
-  community.vmware.vmware_host_acceptance:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    esxi_hostname: '{{ esxi_hostname }}'
-    state: list
+    state: 'vmware_accepted'
   delegate_to: localhost
   register: host_acceptance_level
 '''
@@ -115,9 +93,9 @@ class VMwareAccpetanceManager(PyVmomi):
         self.hosts = self.get_all_host_objs(cluster_name=cluster_name, esxi_host_name=esxi_host_name)
         self.desired_state = self.params.get('state')
         self.hosts_facts = {}
-        self.acceptance_level = self.params.get('acceptance_level')
 
-    def gather_acceptance_facts(self):
+    def set_acceptance_level(self):
+        change = []
         for host in self.hosts:
             self.hosts_facts[host.name] = dict(level='', error='NA')
             host_image_config_mgr = host.configManager.imageConfigManager
@@ -126,32 +104,20 @@ class VMwareAccpetanceManager(PyVmomi):
                     self.hosts_facts[host.name]['level'] = host_image_config_mgr.HostImageConfigGetAcceptance()
                 except vim.fault.HostConfigFault as e:
                     self.hosts_facts[host.name]['error'] = to_native(e.msg)
-
-    def set_acceptance_level(self):
-        change = []
-        for host in self.hosts:
             host_changed = False
-            if self.hosts_facts[host.name]['level'] != self.acceptance_level:
-                host_image_config_mgr = host.configManager.imageConfigManager
-                if host_image_config_mgr:
-                    try:
-                        if self.module.check_mode:
-                            self.hosts_facts[host.name]['level'] = self.acceptance_level
-                        else:
-                            host_image_config_mgr.UpdateHostImageAcceptanceLevel(newAcceptanceLevel=self.acceptance_level)
-                            self.hosts_facts[host.name]['level'] = host_image_config_mgr.HostImageConfigGetAcceptance()
-                        host_changed = True
-                    except vim.fault.HostConfigFault as e:
-                        self.hosts_facts[host.name]['error'] = to_native(e.msg)
+            if self.hosts_facts[host.name]['level'] != self.desired_state:
+                try:
+                    if self.module.check_mode:
+                        self.hosts_facts[host.name]['level'] = self.desired_state
+                    else:
+                        host_image_config_mgr.UpdateHostImageAcceptanceLevel(newAcceptanceLevel=self.desired_state)
+                        self.hosts_facts[host.name]['level'] = host_image_config_mgr.HostImageConfigGetAcceptance()
+                    host_changed = True
+                except vim.fault.HostConfigFault as e:
+                    self.hosts_facts[host.name]['error'] = to_native(e.msg)
 
             change.append(host_changed)
         self.module.exit_json(changed=any(change), facts=self.hosts_facts)
-
-    def check_acceptance_state(self):
-        self.gather_acceptance_facts()
-        if self.desired_state == 'list':
-            self.module.exit_json(changed=False, facts=self.hosts_facts)
-        self.set_acceptance_level()
 
 
 def main():
@@ -159,12 +125,10 @@ def main():
     argument_spec.update(
         cluster_name=dict(type='str', required=False),
         esxi_hostname=dict(type='str', required=False),
-        acceptance_level=dict(type='str',
-                              choices=['community', 'partner', 'vmware_accepted', 'vmware_certified']
-                              ),
         state=dict(type='str',
-                   choices=['list', 'present'],
-                   default='list'),
+                   choices=['community', 'partner', 'vmware_accepted', 'vmware_certified'],
+                   required=True
+                   ),
     )
 
     module = AnsibleModule(
@@ -172,14 +136,11 @@ def main():
         required_one_of=[
             ['cluster_name', 'esxi_hostname'],
         ],
-        required_if=[
-            ['state', 'present', ['acceptance_level']],
-        ],
         supports_check_mode=True
     )
 
     vmware_host_accept_config = VMwareAccpetanceManager(module)
-    vmware_host_accept_config.check_acceptance_state()
+    vmware_host_accept_config.set_acceptance_level()
 
 
 if __name__ == "__main__":

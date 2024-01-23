@@ -26,8 +26,8 @@ options:
     datacenter_name:
         description:
             - The name of the datacenter that will contain the Distributed Switch.
-            - This parameter is optional, if C(folder) is provided.
-            - Mutually exclusive with C(folder) parameter.
+            - Required if O(folder) is not provided.
+            - Mutually exclusive with O(folder) parameter.
         required: false
         aliases: ['datacenter']
         type: str
@@ -42,22 +42,21 @@ options:
             - The version of the Distributed Switch to create.
             - The version must match the version of the ESXi hosts you want to connect.
             - The version of the vCenter server is used if not specified.
-            - Required only if C(state) is set to C(present).
+            - Required if O(state=present).
         aliases: ['version']
         type: str
     mtu:
         description:
             - The switch maximum transmission unit.
-            - Required parameter for C(state) both C(present) and C(absent), before Ansible 2.6 version.
-            - Required only if C(state) is set to C(present), for Ansible 2.6 and onwards.
+            - Required if O(state=present).
             - Accepts value between 1280 to 9000 (both inclusive).
         type: int
         default: 1500
     multicast_filtering_mode:
         description:
             - The multicast filtering mode.
-            - 'C(basic) mode: multicast traffic for virtual machines is forwarded according to the destination MAC address of the multicast group.'
-            - 'C(snooping) mode: the Distributed Switch provides IGMP and MLD snooping according to RFC 4541.'
+            - 'V(basic) mode: multicast traffic for virtual machines is forwarded according to the destination MAC address of the multicast group.'
+            - 'V(snooping) mode: the Distributed Switch provides IGMP and MLD snooping according to RFC 4541.'
         type: str
         choices: ['basic', 'snooping']
         default: 'basic'
@@ -65,8 +64,7 @@ options:
         description:
             - Quantity of uplink per ESXi host added to the Distributed Switch.
             - The uplink quantity can be increased or decreased, but a decrease will only be successfull if the uplink isn't used by a portgroup.
-            - Required parameter for C(state) both C(present) and C(absent), before Ansible 2.6 version.
-            - Required only if C(state) is set to C(present), for Ansible 2.6 and onwards.
+            - Required if O(state=present).
         type: int
     uplink_prefix:
         description:
@@ -78,11 +76,10 @@ options:
     discovery_proto:
         description:
             - Link discovery protocol between Cisco and Link Layer discovery.
-            - Required parameter for C(state) both C(present) and C(absent), before Ansible 2.6 version.
-            - Required only if C(state) is set to C(present), for Ansible 2.6 and onwards.
-            - 'C(cdp): Use Cisco Discovery Protocol (CDP).'
-            - 'C(lldp): Use Link Layer Discovery Protocol (LLDP).'
-            - 'C(disabled): Do not use a discovery protocol.'
+            - Required if O(state=present).
+            - 'V(cdp): Use Cisco Discovery Protocol (CDP).'
+            - 'V(lldp): Use Link Layer Discovery Protocol (LLDP).'
+            - 'V(disabled): Do not use a discovery protocol.'
         choices: ['cdp', 'lldp', 'disabled']
         default: 'cdp'
         aliases: [ 'discovery_protocol' ]
@@ -90,8 +87,7 @@ options:
     discovery_operation:
         description:
             - Select the discovery operation.
-            - Required parameter for C(state) both C(present) and C(absent), before Ansible 2.6 version.
-            - Required only if C(state) is set to C(present), for Ansible 2.6 and onwards.
+            - Required if O(state=present).
         choices: ['both', 'advertise', 'listen']
         default: 'listen'
         type: str
@@ -162,8 +158,8 @@ options:
         type: dict
     state:
         description:
-            - If set to C(present) and the Distributed Switch does not exist, the Distributed Switch will be created.
-            - If set to C(absent) and the Distributed Switch exists, the Distributed Switch will be deleted.
+            - If set to V(present) and the Distributed Switch does not exist, the Distributed Switch will be created.
+            - If set to V(absent) and the Distributed Switch exists, the Distributed Switch will be deleted.
         default: 'present'
         choices: ['present', 'absent']
         type: str
@@ -172,7 +168,8 @@ options:
             - Destination folder, absolute path to place dvswitch in.
             - The folder should include the datacenter.
             - This parameter is case sensitive.
-            - This parameter is optional, if C(datacenter) is provided.
+            - Required if O(datacenter) is not provided.
+            - Mutually exclusive with O(datacenter) parameter.
             - 'Examples:'
             - '   folder: /datacenter1/network'
             - '   folder: datacenter1/network'
@@ -184,7 +181,6 @@ options:
         required: false
         type: str
     net_flow:
-        version_added: '2.7.0'
         description:
             - Dictionary which configures the Net Flow for the Distributed Switch.
         suboptions:

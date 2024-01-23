@@ -23,12 +23,12 @@ options:
   name:
     description:
       - Name of virtual machine
-      - Required if C(uuid) or C(moid) is not supplied.
+      - Required if O(uuid) or O(moid) is not supplied.
     type: str
   uuid:
     description:
       - vm uuid
-      - Required if C(name) or C(moid) is not supplied.
+      - Required if O(name) or O(moid) is not supplied.
     type: str
   use_instance_uuid:
     description:
@@ -38,7 +38,7 @@ options:
   moid:
     description:
       - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - Required if C(uuid) or C(name) is not supplied.
+      - Required if O(uuid) or O(name) is not supplied.
     type: str
   folder:
     description:
@@ -60,11 +60,11 @@ options:
   mac_address:
     description:
       - MAC address of the NIC that should be altered, if a MAC address is not supplied a new nic will be created.
-      - Required when I(state=absent).
+      - Required when O(state=absent).
     type: str
   label:
     description:
-      - 'Label of the NIC that should be altered. C(mac_address) or C(label) should be set to get the corresponding
+      - 'Label of the NIC that should be altered. O(mac_address) or O(label) should be set to get the corresponding
         device to reconfigure.'
       - Alter the name of the network adapter.
     type: str
@@ -80,12 +80,12 @@ options:
     default: vmxnet3
     description:
       - Type of virtual network device.
-      - 'Valid choices are - C(e1000), C(e1000e), C(pcnet32), C(vmxnet2), C(vmxnet3) (default), C(sriov), C(pvrdma).'
+      - 'Valid choices are - V(e1000), V(e1000e), V(pcnet32), V(vmxnet2), V(vmxnet3) (default), V(sriov), V(pvrdma).'
     type: str
   pvrdma_device_protocol:
     version_added: '3.3.0'
     description:
-      - The PVRDMA device protocol used. Valid choices are - C(rocev1), C(rocev2).
+      - The PVRDMA device protocol used. Valid choices are - V(rocev1), V(rocev2).
       - This parameter is only used on the VM with hardware version >=14 and <= 19.
     type: str
   switch:
@@ -102,8 +102,8 @@ options:
     choices: ['present', 'absent']
     description:
       - NIC state.
-      - When C(state=present), a nic will be added if a mac address or label does not previously exists or is unset.
-      - When C(state=absent), the I(mac_address) parameter has to be set.
+      - When V(present), a nic will be added if a mac address or label does not previously exists or is unset.
+      - When V(absent), the O(mac_address) parameter has to be set.
     type: str
   start_connected:
     default: true
@@ -124,22 +124,19 @@ options:
     default: false
     description:
       - Enable Universal Pass-through (UPT).
-      - Only compatible with the C(vmxnet3) device type.
+      - Only compatible with the O(device_type=vmxnet3).
     type: bool
   physical_function_backing:
-    version_added: '2.3.0'
     type: str
     description:
       - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
       - This option is only compatible for SR-IOV network adapters.
   virtual_function_backing:
-    version_added: '2.3.0'
     type: str
     description:
       - If set, specifies the PCI ID of the physical function to use as backing for a SR-IOV network adapter.
       - This option is only compatible for SR-IOV network adapters.
   allow_guest_os_mtu_change:
-    version_added: '2.3.0'
     default: true
     type: bool
     description:

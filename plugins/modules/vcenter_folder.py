@@ -45,12 +45,12 @@ options:
   folder_type:
     description:
     - This is type of folder.
-    - "If set to C(vm), then 'VM and Template Folder' is created under datacenter."
-    - "If set to C(host), then 'Host and Cluster Folder' is created under datacenter."
-    - "If set to C(datastore), then 'Storage Folder' is created under datacenter."
-    - "If set to C(network), then 'Network Folder' is created under datacenter."
-    - This parameter is required, if C(state) is set to C(present) and parent_folder is absent.
-    - This option is ignored, if C(parent_folder) is set.
+    - "If set to V(vm), then 'VM and Template Folder' is created under datacenter."
+    - "If set to V(host), then 'Host and Cluster Folder' is created under datacenter."
+    - "If set to V(datastore), then 'Storage Folder' is created under datacenter."
+    - "If set to V(network), then 'Network Folder' is created under datacenter."
+    - This parameter is required, if O(state=absent) and O(parent_folder) is not set.
+    - This option is ignored, if O(parent_folder) is set.
     default: vm
     type: str
     required: false
@@ -58,9 +58,9 @@ options:
   state:
     description:
     - State of folder.
-    - If set to C(present) without parent folder parameter, then folder with C(folder_type) is created.
-    - If set to C(present) with parent folder parameter,  then folder in created under parent folder. C(folder_type) is ignored.
-    - If set to C(absent), then folder is unregistered and destroyed.
+    - If set to V(present) without parent folder parameter, then folder with V(folder_type) is created.
+    - If set to V(present) with parent folder parameter,  then folder in created under parent folder. V(folder_type) is ignored.
+    - If set to V(absent), then folder is unregistered and destroyed.
     default: present
     choices: [ present, absent ]
     type: str

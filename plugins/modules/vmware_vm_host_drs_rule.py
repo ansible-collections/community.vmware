@@ -23,15 +23,15 @@ options:
   affinity_rule:
     default: true
     description:
-      - "If set to C(true), the DRS rule will be an Affinity rule."
-      - "If set to C(false), the DRS rule will be an Anti-Affinity rule."
-      - "Effective only if C(state) is set to C(present)."
+      - "If set to V(true), the DRS rule will be an Affinity rule."
+      - "If set to V(false), the DRS rule will be an Anti-Affinity rule."
+      - "Effective only if O(state=present)."
     type: bool
   datacenter:
     aliases:
       - datacenter_name
     description:
-      - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with C(cluster_name)."
+      - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with O(cluster_name)."
     required: false
     type: str
   cluster_name:
@@ -47,19 +47,19 @@ options:
   enabled:
     default: false
     description:
-      - "If set to C(true), the DRS rule will be enabled."
-      - "Effective only if C(state) is set to C(present)."
+      - "If set to V(true), the DRS rule will be enabled."
+      - "Effective only if O(state=present)."
     type: bool
   host_group_name:
     description:
       - "Name of Host group to use with rule."
-      - "Effective only if C(state) is set to C(present)."
+      - "Effective only if O(state=present)."
     type: str
   mandatory:
     default: false
     description:
-      - "If set to C(true), the DRS rule will be mandatory."
-      - "Effective only if C(state) is set to C(present)."
+      - "If set to V(true), the DRS rule will be mandatory."
+      - "Effective only if O(state=present)."
     type: bool
   state:
     choices:
@@ -67,13 +67,13 @@ options:
       - absent
     default: present
     description:
-      - "If set to C(present) and the rule does not exist then the rule will be created."
-      - "If set to C(absent) and the rule exists then the rule will be deleted."
+      - "If set to V(present) and the rule does not exist then the rule will be created."
+      - "If set to V(absent) and the rule exists then the rule will be deleted."
     type: str
   vm_group_name:
     description:
       - "Name of VM group to use with rule."
-      - "Effective only if C(state) is set to C(present)."
+      - "Effective only if O(state=present)."
     type: str
 short_description: "Creates vm/host group in a given cluster"
 

@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 author:
   - "Karsten Kaj Jakobsen (@karstenjakobsen)"
 description:
-  - "This module can be used to create VM/Host groups in a given cluster. Creates a vm group if C(vms) is set. Creates a host group if C(hosts) is set."
+  - "This module can be used to create VM/Host groups in a given cluster. Creates a vm group if O(vms) is set. Creates a host group if O(hosts) is set."
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 
@@ -30,7 +30,7 @@ options:
     aliases:
       - datacenter_name
     description:
-      - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with C(cluster_name)."
+      - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with O(cluster_name)."
     required: false
     type: str
   group_name:
@@ -41,7 +41,8 @@ options:
   hosts:
     description:
       - "List of hosts to create in group."
-      - "Required only if C(vms) is not set."
+      - "Required if O(vms) is not set."
+      - "O(hosts) and O(vms) are mutually exclusive parameters."
     required: false
     type: list
     elements: str
@@ -51,13 +52,14 @@ options:
       - absent
     default: present
     description:
-      - "If set to C(present) and the group doesn't exists then the group will be created."
-      - "If set to C(absent) and the group exists then the group will be deleted."
+      - "If set to V(present) and the group doesn't exists then the group will be created."
+      - "If set to V(absent) and the group exists then the group will be deleted."
     type: str
   vms:
     description:
       - "List of vms to create in group."
-      - "Required only if C(hosts) is not set."
+      - "Required if O(hosts) is not set."
+      - "O(hosts) and O(vms) are mutually exclusive parameters."
     required: false
     type: list
     elements: str

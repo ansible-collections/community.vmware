@@ -22,7 +22,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 options:
   policies:
-    version_added: '2.4.0'
     description:
     - Gather information about Security, Traffic Shaping, as well as Teaming and failover.
     - The property C(ts) stands for Traffic Shaping and C(lb) for Load Balancing.
@@ -32,12 +31,12 @@ options:
     description:
     - Name of the cluster.
     - Info about vswitch belonging to every ESXi host systems under this cluster will be returned.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname to gather information from.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -34,7 +34,7 @@ options:
       - cluster
   evc_mode:
     description:
-    - Required for C(state=present).
+    - Required for O(state=present).
     - The EVC mode to enable or disable on the cluster. (intel-broadwell, intel-nehalem, intel-merom, etc.).
     type: str
   state:

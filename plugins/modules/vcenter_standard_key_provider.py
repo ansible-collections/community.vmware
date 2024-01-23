@@ -27,14 +27,14 @@ options:
     required: true
   mark_default:
     description:
-      - Set specified Key Provider with name C(name) as the default Key Provider.
+      - Set specified Key Provider with name O(name) as the default Key Provider.
       - If new added Key Provider is the only key provider in vCenter, then will mark it as default after adding.
     type: bool
     default: false
   state:
     description:
-      - If set to C(absent), the named Key Provider will be removed from vCenter.
-      - If set to C(present), the named existing Key Provider will be reconfigured or new Key Provider will be added.
+      - If set to V(absent), the named Key Provider will be removed from vCenter.
+      - If set to V(present), the named existing Key Provider will be reconfigured or new Key Provider will be added.
     type: str
     choices:
       - present
@@ -43,9 +43,9 @@ options:
   kms_info:
     description:
       - The information of an external key server (KMS).
-      - C(kms_name), C(kms_ip) are required when adding a Standard Key Provider.
-      - If C(kms_port) is not specified, the default port 5696 will be used.
-      - C(kms_ip), C(kms_port) can be reconfigured for an existing KMS with name C(kms_name).
+      - O(kms_info.kms_name), O(kms_info.kms_ip) are required when adding a Standard Key Provider.
+      - If O(kms_info.kms_port) is not specified, the default port 5696 will be used.
+      - O(kms_info.kms_ip), O(kms_info.kms_port) can be reconfigured for an existing KMS with name O(kms_info.kms_name).
     type: list
     default: []
     elements: dict
@@ -60,7 +60,7 @@ options:
         description: Port of the external KMS.
         type: int
       remove_kms:
-        description: Remove the configured KMS with name C(kms_name) from the KMIP cluster.
+        description: Remove the configured KMS with name O(kms_info.kms_name) from the KMIP cluster.
         type: bool
   proxy_server:
     description: Address of the proxy server to connect to KMS.
@@ -79,10 +79,10 @@ options:
       - After adding the Standard Key Provider to the vCenter Server, you can establish a trusted connection, the
         exact process depends on the certificates that the key provider accepts, and on your company policy.
       - Three methods implemented here,
-        (1) upload client certificate and private key through C(upload_client_cert) and C(upload_client_key) parameters,
-        (2) generate, update, download vCenter self signed certificate through C(download_self_signed_cert) parameter,
-        (3) download generated Certificate Signing Request(CSR) through C(download_client_csr) parameter, send it to
-        KMS then upload the KMS signed CSR through C(upload_kms_signed_client_csr) parameter.
+        (1) upload client certificate and private key through O(make_kms_trust_vc.upload_client_cert) and O(make_kms_trust_vc.upload_client_key) parameters,
+        (2) generate, update, download vCenter self signed certificate through O(make_kms_trust_vc.download_self_signed_cert) parameter,
+        (3) download generated Certificate Signing Request(CSR) through O(make_kms_trust_vc.download_client_csr) parameter, send it to
+        KMS then upload the KMS signed CSR through O(make_kms_trust_vc.upload_kms_signed_client_csr) parameter.
       - This is not set to be mandatory, if not set, please go to vCenter to setup trust connection with KMS manually.
     type: dict
     suboptions:
@@ -93,7 +93,7 @@ options:
           - The certificate might be already trusted by the KMS server.
         type: path
       upload_client_key:
-        description: The absolute file path of client private key to be uploaded together with C(upload_client_cert).
+        description: The absolute file path of client private key to be uploaded together with O(make_kms_trust_vc.upload_client_cert).
         type: path
       download_self_signed_cert:
         description: The absolute path on local machine for keeping vCenter generated self signed client cert.
@@ -101,10 +101,10 @@ options:
       download_client_csr:
         description:
           - The absolute path on local machine for keeping vCenter generated CSR.
-          - Then upload the KMS signed CSR using C(upload_kms_signed_client_csr) to vCenter.
+          - Then upload the KMS signed CSR using O(make_kms_trust_vc.upload_kms_signed_client_csr) to vCenter.
         type: path
       upload_kms_signed_client_csr:
-        description: The absolute file path of KMS signed CSR downloaded from C(download_client_csr).
+        description: The absolute file path of KMS signed CSR downloaded from O(make_kms_trust_vc.download_client_csr).
         type: path
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -23,21 +23,21 @@ options:
    state:
      description:
      - Manage snapshot(s) attached to a specific virtual machine.
-     - If set to C(present) and snapshot absent, then will create a new snapshot with the given name.
-     - If set to C(present) and snapshot present, then no changes are made.
-     - If set to C(absent) and snapshot present, then snapshot with the given name is removed.
-     - If set to C(absent) and snapshot absent, then no changes are made.
-     - If set to C(revert) and snapshot present, then virtual machine state is reverted to the given snapshot.
-     - If set to C(revert) and snapshot absent, then no changes are made.
-     - If set to C(remove_all) and snapshot(s) present, then all snapshot(s) will be removed.
-     - If set to C(remove_all) and snapshot(s) absent, then no changes are made.
+     - If set to V(present) and snapshot absent, then will create a new snapshot with the given name.
+     - If set to V(present) and snapshot present, then no changes are made.
+     - If set to V(absent) and snapshot present, then snapshot with the given name is removed.
+     - If set to V(absent) and snapshot absent, then no changes are made.
+     - If set to V(revert) and snapshot present, then virtual machine state is reverted to the given snapshot.
+     - If set to V(revert) and snapshot absent, then no changes are made.
+     - If set to V(remove_all) and snapshot(s) present, then all snapshot(s) will be removed.
+     - If set to V(remove_all) and snapshot(s) absent, then no changes are made.
      choices: ['present', 'absent', 'revert', 'remove_all']
      default: 'present'
      type: str
    name:
      description:
      - Name of the virtual machine to work with.
-     - This is required parameter, if C(uuid) or C(moid) is not supplied.
+     - This is required parameter, if O(uuid) or O(moid) is not supplied.
      type: str
    name_match:
      description:
@@ -48,12 +48,12 @@ options:
    uuid:
      description:
      - UUID of the instance to manage if known, this is VMware's BIOS UUID by default.
-     - This is required if C(name) or C(moid) parameter is not supplied.
+     - This is required if O(name) or O(moid) parameter is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    use_instance_uuid:
      description:
@@ -63,7 +63,7 @@ options:
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required parameter, if C(name) is supplied.
+     - This is required parameter, if O(name) is supplied.
      - The folder should include the datacenter. ESX's datacenter is ha-datacenter.
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -84,8 +84,14 @@ options:
    snapshot_name:
      description:
      - Sets the snapshot name to manage.
-     - This param is required only if state is not C(remove_all)
+     - This param or O(snapshot_id) is required only if O(state) is not C(remove_all)
      type: str
+   snapshot_id:
+     description:
+     - Sets the snapshot id to manage.
+     - This param is available when O(state=absent).
+     type: int
+     version_added: 3.10.0
    description:
      description:
      - Define an arbitrary description to attach to snapshot.
@@ -93,24 +99,24 @@ options:
      type: str
    quiesce:
      description:
-     - If set to C(true) and virtual machine is powered on, it will quiesce the file system in virtual machine.
+     - If set to V(true) and virtual machine is powered on, it will quiesce the file system in virtual machine.
      - Note that VMware Tools are required for this flag.
-     - If virtual machine is powered off or VMware Tools are not available, then this flag is set to C(false).
-     - If virtual machine does not provide capability to take quiesce snapshot, then this flag is set to C(false).
+     - If virtual machine is powered off or VMware Tools are not available, then this flag is set to V(false).
+     - If virtual machine does not provide capability to take quiesce snapshot, then this flag is set to V(false).
      required: false
      type: bool
      default: false
    memory_dump:
      description:
-     - If set to C(true), memory dump of virtual machine is also included in snapshot.
+     - If set to V(true), memory dump of virtual machine is also included in snapshot.
      - Note that memory snapshots take time and resources, this will take longer time to create.
-     - If virtual machine does not provide capability to take memory snapshot, then this flag is set to C(false).
+     - If virtual machine does not provide capability to take memory snapshot, then this flag is set to V(false).
      required: false
      type: bool
      default: false
    remove_children:
      description:
-     - If set to C(true) and state is set to C(absent), then entire snapshot subtree is set for removal.
+     - If set to V(true) and O(state=absent), then entire snapshot subtree is set for removal.
      required: false
      type: bool
      default: false
@@ -214,6 +220,18 @@ EXAMPLES = r'''
       snapshot_name: snap1
     delegate_to: localhost
 
+  - name: Remove a snapshot with a snapshot id
+    community.vmware.vmware_guest_snapshot:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      folder: "/{{ datacenter_name }}/vm/"
+      name: "{{ guest_name }}"
+      snapshot_id: 10
+      state: absent
+    delegate_to: localhost
+
   - name: Rename a snapshot
     community.vmware.vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
@@ -293,6 +311,16 @@ class PyVmomiHelper(PyVmomi):
                 snap_obj = snap_obj + self.get_snapshots_by_name_recursively(snapshot.childSnapshotList, snapname)
         return snap_obj
 
+    def get_snapshots_by_id_recursively(self, snapshots, snapid):
+        snap_obj = []
+        for snapshot in snapshots:
+            if snapshot.id == snapid:
+                snap_obj.append(snapshot)
+            else:
+                snap_obj = snap_obj + self.get_snapshots_by_id_recursively(snapshot.childSnapshotList, snapid)
+
+        return snap_obj
+
     def snapshot_vm(self, vm):
         memory_dump = False
         quiesce = False
@@ -357,8 +385,13 @@ class PyVmomiHelper(PyVmomi):
             self.module.exit_json(msg="virtual machine - %s doesn't have any"
                                       " snapshots to remove." % vm_name)
 
-        snap_obj = self.get_snapshots_by_name_recursively(vm.snapshot.rootSnapshotList,
-                                                          self.module.params["snapshot_name"])
+        if self.module.params["snapshot_name"]:
+            snap_obj = self.get_snapshots_by_name_recursively(vm.snapshot.rootSnapshotList,
+                                                              self.module.params["snapshot_name"])
+        elif self.module.params["snapshot_id"]:
+            snap_obj = self.get_snapshots_by_id_recursively(vm.snapshot.rootSnapshotList,
+                                                            self.module.params["snapshot_id"])
+
         task = None
         if len(snap_obj) == 1:
             snap_obj = snap_obj[0].snapshot
@@ -414,6 +447,7 @@ def main():
         folder=dict(type='str'),
         datacenter=dict(required=True, type='str'),
         snapshot_name=dict(type='str'),
+        snapshot_id=dict(type='int'),
         description=dict(type='str', default=''),
         quiesce=dict(type='bool', default=False),
         memory_dump=dict(type='bool', default=False),
@@ -429,6 +463,9 @@ def main():
         required_one_of=[
             ['name', 'uuid', 'moid']
         ],
+        mutually_exclusive=[
+            ['snapshot_name', 'snapshot_id']
+        ]
     )
 
     if module.params['folder']:
@@ -444,7 +481,7 @@ def main():
         vm_id = (module.params.get('uuid') or module.params.get('name') or module.params.get('moid'))
         module.fail_json(msg="Unable to manage snapshots for non-existing VM %s" % vm_id)
 
-    if not module.params['snapshot_name'] and module.params['state'] != 'remove_all':
+    if not (module.params['snapshot_name'] or module.params['snapshot_id']) and module.params['state'] != 'remove_all':
         module.fail_json(msg="snapshot_name param is required when state is '%(state)s'" % module.params)
 
     result = pyv.apply_snapshot_op(vm)

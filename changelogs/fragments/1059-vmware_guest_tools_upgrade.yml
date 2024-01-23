@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_guest_tools_upgrade - Add parameter `installer_options` to pass command line options to the installer to modify the installation procedure for tools
+    (https://github.com/ansible-collections/community.vmware/pull/1059).
