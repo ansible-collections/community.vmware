@@ -7,8 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
-
 __metaclass__ = type
+
 
 DOCUMENTATION = r'''
 ---
@@ -336,27 +336,27 @@ class VMwareDatastoreClusterManager(PyVmomi):
                 sdrs_spec.podConfigSpec.enabled = enable_sdrs  # Must be set because automationOverrides not be written otherwise
 
                 if enable_sdrs != currentPodConfig.enabled:
-                    results['result'] += " Changed SDRS to '%s'." % enable_sdrs
+                    results['result'] += results['result'] + " Changed SDRS to '%s'." % enable_sdrs
                     change = True
 
                 if automation_level != currentPodConfig.defaultVmBehavior:
                     sdrs_spec.podConfigSpec.defaultVmBehavior = automation_level
-                    results['result'] += " Changed automation level to '%s'." % automation_level
+                    results['result'] += results['result'] + " Changed automation level to '%s'." % automation_level
                     change = True
 
                 if keep_vmdks_together != currentPodConfig.defaultIntraVmAffinity:
                     sdrs_spec.podConfigSpec.defaultIntraVmAffinity = keep_vmdks_together
-                    results['result'] += " Changed VMDK affinity to '%s'." % keep_vmdks_together
+                    results['result'] += results['result'] +  " Changed VMDK affinity to '%s'." % keep_vmdks_together
                     change = True
 
                 if enable_io_loadbalance != currentPodConfig.ioLoadBalanceEnabled:
                     sdrs_spec.podConfigSpec.ioLoadBalanceEnabled = enable_io_loadbalance
-                    results['result'] += " Changed I/O workload balancing to '%s'." % enable_io_loadbalance
+                    results['result'] += results['result'] + " Changed I/O workload balancing to '%s'." % enable_io_loadbalance
                     change = True
 
                 if loadbalance_interval != currentPodConfig.loadBalanceInterval:
                     sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
-                    results['result'] += " Changed load balance interval to '%s' minutes." % loadbalance_interval
+                    results['result'] += results['result'] +  " Changed load balance interval to '%s' minutes." % loadbalance_interval
                     change = True
 
                 # Automation overrides
