@@ -55,7 +55,7 @@ options:
       - List of the names of the virtual machines to get related configurations information from.
       - Can´t be used if O(regex) is set.
       type: list
-      element: str
+      elements: str
     vm_name:
       description:
       - Name of the virtual machine to get related configurations information from.
