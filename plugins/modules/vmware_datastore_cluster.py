@@ -660,7 +660,7 @@ def main():
                 vm_name=dict(type='str', required=True),
                 keep_vmdks_together=dict(type='bool', default=None),
                 automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none'))
-                              )
+                )
         )
     )
     module = AnsibleModule(
