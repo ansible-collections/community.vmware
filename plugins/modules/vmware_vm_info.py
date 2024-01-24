@@ -131,17 +131,17 @@ options:
       description:
         - If V(vm_name) is used as an Regex Filter.
         - Metacharacters use in the V(vm_name):
-        - []: A set of characters
-        - \: Signals a special sequence (can also be used to escape special characters)
-        - .: Any character (except newline character)
-        - ^: Starts with
-        - $: Ends with
-        - *: Zero or more occurrences
-        - +: One or more occurrences
-        - ?: Zero or one occurrences
-        - {}: Exactly the specified number of occurrences
-        - |: Either or
-        - (): Capture and group
+        - [] -> A set of characters
+        - \ -> Signals a special sequence (can also be used to escape special characters)
+        - . -> Any character (except newline character)
+        - ^ -> Starts with
+        - $ -> Ends with
+        - * -> Zero or more occurrences
+        - + -> One or more occurrences
+        - ? -> Zero or one occurrences
+        - {} -> Exactly the specified number of occurrences
+        - | -> Either or
+        - () -> Capture and group
         - For more: Python RegEx
       type: bool
       default: False
