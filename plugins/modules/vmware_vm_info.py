@@ -10,8 +10,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-import re
-
 DOCUMENTATION = r'''
 ---
 module: vmware_vm_info
@@ -40,7 +38,7 @@ options:
     folder:
       description:
       - Specify a folder location of VMs to gather information from.
-      - Can't be used if V(cluster) is set.
+      - Can't be used if O(cluster) is set.
       - 'Examples:'
       - '   folder: /ha-datacenter/vm'
       - '   folder: ha-datacenter/vm'
@@ -52,18 +50,18 @@ options:
       - '   folder: folder1/datacenter1/vm'
       - '   folder: /folder1/datacenter1/vm/folder2'
       type: str
-    vm_name:
-      description:
-      - Name of the virtual machine to get related configurations information from.
-      - Or if V(regex) is True, it will be used as an Filter for the Names of the virtual machines.
-      - Can´t be used if V(cluster) or V(vm_names) is set.
-      type: str
     vm_names:
       description:
       - List of the names of the virtual machines to get related configurations information from.
-      - Can´t be used if V(regex) is set.
+      - Can´t be used if O(regex) is set.
       type: list
       element: str
+    vm_name:
+      description:
+      - Name of the virtual machine to get related configurations information from.
+      - Or if O(regex) is True, it will be used as an Filter for the Names of the virtual machines.
+      - Can´t be used if O(cluster) or O(vm_names) is set.
+      type: str
     show_cluster:
       description:
         - Tags virtual machine's cluster is shown if set to V(true).
@@ -129,10 +127,10 @@ options:
       type: bool
     regex:
       description:
-        - If V(vm_name) is used as an Regex Filter.
-        - For Metacharacters use in the V(vm_name) show Python RegEx
+        - If O(vm_name) is used as an Regex Filter.
+        - For Metacharacters use in the O(vm_name) show Python RegEx
       type: bool
-      default: False
+      default: false
     cluster:
       description:
       - Name of the cluster to gather information from VMs of this cluster.
@@ -331,6 +329,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, \
     get_all_objs, vmware_argument_spec, _get_vm_prop, get_parent_datacenter, find_vm_by_name, find_cluster_by_name
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+import re
 
 
 class VmwareVmInfo(PyVmomi):
