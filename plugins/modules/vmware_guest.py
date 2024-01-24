@@ -1672,7 +1672,7 @@ class PyVmomiHelper(PyVmomi):
 
         virt_based_security = self.params['hardware']['virt_based_security']
         if virt_based_security is not None:
-            if vm_obj is None or virt_based_security != self.configspec.flags.vbsEnabled:
+            if vm_obj is None or virt_based_security != vm_obj.config.flags.vbsEnabled:
                 self.change_detected = True
                 if self.configspec.flags is None:
                     self.configspec.flags = vim.vm.FlagInfo()
