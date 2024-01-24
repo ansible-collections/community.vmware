@@ -1,3 +1,3 @@
-minor_changes:
+bugfixes:
   - vmware_guest - Fix failure of vm reconfiguration with enabled virt_based_security
     (https://github.com/ansible-collections/community.vmware/pull/1848).
