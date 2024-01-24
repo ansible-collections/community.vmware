@@ -7,8 +7,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import absolute_import, division, print_function
-__metaclass__ = type
 
+__metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
@@ -346,7 +346,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                 if keep_vmdks_together != currentPodConfig.defaultIntraVmAffinity:
                     sdrs_spec.podConfigSpec.defaultIntraVmAffinity = keep_vmdks_together
-                    results['result'] += results['result'] +  " Changed VMDK affinity to '%s'." % keep_vmdks_together
+                    results['result'] += results['result'] + " Changed VMDK affinity to '%s'." % keep_vmdks_together
                     change = True
 
                 if enable_io_loadbalance != currentPodConfig.ioLoadBalanceEnabled:
@@ -356,7 +356,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
                 if loadbalance_interval != currentPodConfig.loadBalanceInterval:
                     sdrs_spec.podConfigSpec.loadBalanceInterval = loadbalance_interval
-                    results['result'] += results['result'] +  " Changed load balance interval to '%s' minutes." % loadbalance_interval
+                    results['result'] += results['result'] + " Changed load balance interval to '%s' minutes." % loadbalance_interval
                     change = True
 
                 # Automation overrides
@@ -660,7 +660,7 @@ def main():
                 vm_name=dict(type='str', required=True),
                 keep_vmdks_together=dict(type='bool', default=None),
                 automation_level=dict(type='str', choices=['none', 'automated', 'manual', 'disabled'], default='none'))
-            )
+                              )
         )
     )
     module = AnsibleModule(
