@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest - Add IPv6 support for VM network interfaces (https://github.com/ansible-collections/community.vmware/pull/1937).

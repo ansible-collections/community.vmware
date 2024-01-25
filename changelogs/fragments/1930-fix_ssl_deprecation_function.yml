@@ -1,3 +1,0 @@
-bugfixes:
-  - module_utils/vmware.py - remove ssl.wrap_socet() function. Replaced for code based on ssl.get_server_certificate
-    (https://github.com/ansible-collections/community.vmware/issues/1930).
