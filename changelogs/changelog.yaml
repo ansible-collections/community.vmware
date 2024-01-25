@@ -58,3 +58,26 @@ releases:
     fragments:
     - 1919-vmware_vm_info.yml
     release_date: '2023-11-28'
+  4.1.0:
+    changes:
+      bugfixes:
+      - Fix InsecureRequestWarning for modules based on the VmwareRestClient module
+        util when setting ``validate_certs`` to ``False`` (https://github.com/ansible-collections/community.vmware/pull/1969).
+      - module_utils/vmware.py - remove ssl.wrap_socet() function. Replaced for code
+        based on ssl.get_server_certificate (https://github.com/ansible-collections/community.vmware/issues/1930).
+      - vmware_guest - Fix failure of vm reconfiguration with enabled virt_based_security
+        (https://github.com/ansible-collections/community.vmware/pull/1848).
+      minor_changes:
+      - vmware_guest - Add IPv6 support for VM network interfaces (https://github.com/ansible-collections/community.vmware/pull/1937).
+      - vmware_guest_sendkey - Add Windows key (https://github.com/ansible-collections/community.vmware/issues/1959).
+      - vmware_guest_tools_upgrade - Add parameter `installer_options` to pass command
+        line options to the installer to modify the installation procedure for tools
+        (https://github.com/ansible-collections/community.vmware/pull/1059).
+    fragments:
+    - 1059-vmware_guest_tools_upgrade.yml
+    - 1848-fix-vm-reconfiguration-with-enabled-vbs.yml
+    - 1930-fix_ssl_deprecation_function.yml
+    - 1937-vmware_guest.yml
+    - 1959-vmware_guest_sendkey.yml
+    - 1969-InsecureRequestWarning.yml
+    release_date: '2024-01-25'

@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_guest_sendkey - Add Windows key (https://github.com/ansible-collections/community.vmware/issues/1959).
