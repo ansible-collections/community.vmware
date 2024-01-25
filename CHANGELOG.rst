@@ -5,6 +5,15 @@ community.vmware Release Notes
 .. contents:: Topics
 
 
+v3.11.2
+=======
+
+Bugfixes
+--------
+
+- Fix InsecureRequestWarning for modules based on the VmwareRestClient module util when setting ``validate_certs`` to ``False`` (https://github.com/ansible-collections/community.vmware/pull/1969).
+- vmware_guest - Fix failure of vm reconfiguration with enabled virt_based_security (https://github.com/ansible-collections/community.vmware/pull/1848).
+
 v3.11.1
 =======
 

@@ -1454,6 +1454,17 @@ releases:
     fragments:
     - 20231031-fix_3.11-release.yml
     release_date: '2023-10-31'
+  3.11.2:
+    changes:
+      bugfixes:
+      - Fix InsecureRequestWarning for modules based on the VmwareRestClient module
+        util when setting ``validate_certs`` to ``False`` (https://github.com/ansible-collections/community.vmware/pull/1969).
+      - vmware_guest - Fix failure of vm reconfiguration with enabled virt_based_security
+        (https://github.com/ansible-collections/community.vmware/pull/1848).
+    fragments:
+    - 1848-fix-vm-reconfiguration-with-enabled-vbs.yml
+    - 1969-InsecureRequestWarning.yml
+    release_date: '2024-01-25'
   3.2.0:
     changes:
       bugfixes:

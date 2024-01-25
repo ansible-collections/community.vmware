@@ -126,7 +126,6 @@ Parameters
                 </td>
                     <td>
                             <div> ini entries:
-                                    <p>[default]<br>fact_caching_prefix = ansible_inventory_</p>
                                     <p>[defaults]<br>fact_caching_prefix = ansible_inventory_</p>
                                     <p>[inventory]<br>cache_prefix = ansible_inventory_</p>
                             </div>
@@ -294,7 +293,7 @@ Parameters
                     </td>
                 <td>
                         <div>The default value when the host variable&#x27;s value is an empty string.</div>
-                        <div>This option is mutually exclusive with <code>trailing_separator</code>.</div>
+                        <div>This option is mutually exclusive with O(keyed_groups[].trailing_separator).</div>
                 </td>
             </tr>
             <tr>
@@ -391,8 +390,8 @@ Parameters
                     <td>
                     </td>
                 <td>
-                        <div>Set this option to <em>False</em> to omit the <code>separator</code> after the host variable when the value is an empty string.</div>
-                        <div>This option is mutually exclusive with <code>default_value</code>.</div>
+                        <div>Set this option to V(False) to omit the O(keyed_groups[].separator) after the host variable when the value is an empty string.</div>
+                        <div>This option is mutually exclusive with O(keyed_groups[].default_value).</div>
                 </td>
             </tr>
 
@@ -563,7 +562,7 @@ Parameters
                     <td>
                     </td>
                 <td>
-                        <div>If <code>yes</code> make invalid entries a fatal error, otherwise skip and continue.</div>
+                        <div>If V(yes) make invalid entries a fatal error, otherwise skip and continue.</div>
                         <div>Since it is possible to use facts in the expressions they might not always be available and we ignore those errors by default.</div>
                 </td>
             </tr>
