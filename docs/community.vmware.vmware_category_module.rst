@@ -93,6 +93,8 @@ Parameters
                 <td>
                         <div>The category cardinality.</div>
                         <div>This parameter is ignored, when updating existing category.</div>
+                        <div>V(single) means an object can only be assigned one of the tags in this category. For example, if a O(category_name=Operating System), then different tags of this category would be &quot;Windows&quot;, &quot;Linux&quot;, and so on. In this case a VM object can be assigned only one of these tags and hence the cardinality of the associated category here is V(single).</div>
+                        <div>V(multiple) means an object can be assigned several of the tags in this category. For example, if a O(category_name=Server), then different tags of this category would be &quot;AppServer&quot;, &quot;DatabaseServer&quot; and so on. In this case a VM object can be assigned more than one of the above tags and hence the cardinality of the associated category here is V(multiple).</div>
                 </td>
             </tr>
             <tr>
