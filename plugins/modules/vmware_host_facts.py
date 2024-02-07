@@ -35,7 +35,7 @@ options:
     default: false
     type: bool
     required: false
-  datacenter_tag:
+  show_datacenter:
     description:
     - Return the related Datacenter if set to V(true).
     default: false
