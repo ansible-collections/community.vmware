@@ -322,6 +322,7 @@ virtual_machines:
 
 try:
     from pyVmomi import vim, vmodl
+    import re
 except ImportError:
     pass
 
