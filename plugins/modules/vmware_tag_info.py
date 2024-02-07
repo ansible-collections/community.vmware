@@ -101,8 +101,7 @@ tag_facts:
             "tag_id": "urn:vmomi:InventoryServiceTag:a141f212-0f82-4f05-8eb3-c49647c904c5:GLOBAL",
             "tag_used_by": [],
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
@@ -114,8 +113,7 @@ tag_facts:
             "tag_id": "urn:vmomi:InventoryServiceTag:7d27d182-3ecd-4200-9d72-410cc6398a8a:GLOBAL",
             "tag_used_by": [],
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
@@ -127,8 +125,7 @@ tag_facts:
             "tag_id": "urn:vmomi:InventoryServiceTag:7f3516d5-a750-4cb9-8610-6747eb39965d:GLOBAL",
             "tag_used_by": [],
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
@@ -147,8 +144,7 @@ tag_info:
             "tag_id": "urn:vmomi:InventoryServiceTag:a141f212-0f82-4f05-8eb3-c49647c904c5:GLOBAL",
             "tag_used_by": [],
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
@@ -160,8 +156,7 @@ tag_info:
             "tag_id": "urn:vmomi:InventoryServiceTag:7d27d182-3ecd-4200-9d72-410cc6398a8a:GLOBAL",
             "tag_used_by": []
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
@@ -173,8 +168,7 @@ tag_info:
             "tag_id": "urn:vmomi:InventoryServiceTag:7f3516d5-a750-4cb9-8610-6747eb39965d:GLOBAL",
             "tag_used_by": []
             "tag_association_objects": [
-                {
-                    "mobid": "vm-2625",
+                {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
                     "name": "testvm"
                 }
