@@ -154,7 +154,7 @@ tag_info:
             "tag_category_id": "urn:vmomi:InventoryServiceCategory:6de17f28-7694-43ec-a783-d09c141819ae:GLOBAL",
             "tag_description": "",
             "tag_id": "urn:vmomi:InventoryServiceTag:7d27d182-3ecd-4200-9d72-410cc6398a8a:GLOBAL",
-            "tag_used_by": []
+            "tag_used_by": [],
             "tag_association_objects": [
                 {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
@@ -166,7 +166,7 @@ tag_info:
             "tag_category_id": "urn:vmomi:InventoryServiceCategory:89573410-29b4-4cac-87a4-127c084f3d50:GLOBAL",
             "tag_description": "",
             "tag_id": "urn:vmomi:InventoryServiceTag:7f3516d5-a750-4cb9-8610-6747eb39965d:GLOBAL",
-            "tag_used_by": []
+            "tag_used_by": [],
             "tag_association_objects": [
                 {   "mobid": "vm-2625",
                     "type": "VirtualMachine",
