@@ -75,18 +75,12 @@ first_class_disks:
   ]
 '''
 
-
-try:
-    from pyVmomi import vim, vmodl
-except ImportError:
-    pass
-
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
 
 class FirstClassDiskInfo(PyVmomi):
     def __init__(self, module):
-        super(FirstClassDisk, self).__init__(module)
+        super(FirstClassDiskInfo, self).__init__(module)
         self.datacenter_name = self.params['datacenter_name']
         self.datastore_name = self.params['datastore_name']
         self.disk_name = self.params['disk_name']
@@ -144,4 +138,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
