@@ -76,8 +76,7 @@ first_class_disks:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
-
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 class FirstClassDiskInfo(PyVmomi):
     def __init__(self, module):
