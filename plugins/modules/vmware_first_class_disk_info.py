@@ -68,9 +68,9 @@ first_class_disks:
       "name": "1GBDisk",
       "datastore_name": "DS0",
       "size_mb": "1024",
-      "consumption_type="disk",
-      "descriptor_version=0,
-      "consumer_ids: []
+      "consumption_type"="disk",
+      "descriptor_version"=0,
+      "consumer_ids": []
     }
   ]
 '''
