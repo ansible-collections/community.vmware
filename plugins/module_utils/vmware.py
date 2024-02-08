@@ -1874,6 +1874,32 @@ class PyVmomi(object):
 
         return None
 
+    def find_first_class_disks(self, datastore_obj):
+        """
+        Get first-class disks managed object
+        Args:
+            datastore_obj: Managed object of datastore
+
+        Returns: First-class disks managed object if found else None
+
+        """
+
+        disks = []
+
+        if self.is_vcenter():
+            for id in self.content.vStorageObjectManager.ListVStorageObject(datastore_obj):
+                disks.append(self.content.vStorageObjectManager.RetrieveVStorageObject(id, datastore_obj))
+
+        else:
+            for id in self.content.vStorageObjectManager.HostListVStorageObject(datastore_obj):
+                disks.append(self.content.vStorageObjectManager.HostRetrieveVStorageObject(id, datastore_obj))
+
+        if disks == []:
+            return None
+        else:
+            return disks
+
+
     #
     # Conversion to JSON
     #
