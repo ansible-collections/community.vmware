@@ -1898,11 +1898,10 @@ class PyVmomi(object):
             return None
         else:
             return disks
-
-
     #
     # Conversion to JSON
     #
+
 
     def _deepmerge(self, d, u):
         """

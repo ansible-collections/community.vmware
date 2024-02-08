@@ -53,7 +53,7 @@ EXAMPLES = r'''
     datastore_name: '{{ datastore_name }}'
   register: disk_info
   delegate_to: localhost
-  
+
 - debug:
     var: disk_info.first_class_disks
 '''
@@ -75,7 +75,7 @@ first_class_disks:
   ]
 '''
 
-import re
+
 try:
     from pyVmomi import vim, vmodl
 except ImportError:
@@ -107,7 +107,6 @@ class FirstClassDiskInfo(PyVmomi):
             self.disks = self.find_first_class_disks(self.datastore_obj)
             if self.disks == []:
                 self.module.fail_json(msg='Failed to find any disk first class disk.')
-
 
         disk_infos = list()
         for disk in self.disks:
@@ -145,3 +144,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
