@@ -1902,7 +1902,6 @@ class PyVmomi(object):
     # Conversion to JSON
     #
 
-
     def _deepmerge(self, d, u):
         """
         Deep merges u into d.
