@@ -65,9 +65,9 @@ first_class_disks:
   type: list
   sample: [
     {
-      "name": "1GBDisk"
-      "datastore_name": "DS0"
-      "size_mb": "1024"
+      "name": "1GBDisk",
+      "datastore_name": "DS0",
+      "size_mb": "1024",
       "consumption_type="disk",
       "descriptor_version=0,
       "consumer_ids: []
