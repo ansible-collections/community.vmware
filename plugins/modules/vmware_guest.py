@@ -1997,15 +1997,13 @@ class PyVmomiHelper(PyVmomi):
                         " permission to access distributed virtual switch in the given portgroup."
                         % pg_obj.name
                     )
-                if nic.device.backing and (
-                    not hasattr(nic.device.backing, "port")
-                    or (
-                        nic.device.backing.port.portgroupKey != pg_obj.key
-                        or nic.device.backing.port.switchUuid
-                        != pg_obj.config.distributedVirtualSwitch.uuid
-                    )
-                ):
-                    nic_change_detected = True
+                if nic.device.backing:
+                    if not hasattr(nic.device.backing, "port"):
+                        # backing is not set to dvs pg yet
+                        nic_change_detected = True
+                    elif nic.device.backing.port.portgroupKey != pg_obj.key:
+                        # backing is set to different dvs pg
+                        nic_change_detected = True
 
                 dvs_port_connection = vim.dvs.PortConnection()
                 dvs_port_connection.portgroupKey = pg_obj.key
