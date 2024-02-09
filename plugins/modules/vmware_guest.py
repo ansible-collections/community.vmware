@@ -1941,8 +1941,10 @@ class PyVmomiHelper(PyVmomi):
                    nic.device.connectable.startConnected != network_devices[key].get("start_connected"):
                     nic.device.connectable.startConnected = network_devices[key].get("start_connected")
                     nic_change_detected = True
+                # Valid only when VM is running
                 if "connected" in network_devices[key] and \
-                   nic.device.connectable.connected != network_devices[key].get("connected"):
+                   nic.device.connectable.connected != network_devices[key].get("connected") and \
+                   vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
                     nic.device.connectable.connected = network_devices[key].get("connected")
                     nic_change_detected = True
                 if "allow_guest_control" in network_devices[key] and \
