@@ -33,7 +33,7 @@ extends_documentation_fragment: vmware.documentation
 
 EXAMPLES = r'''
 - name: Gather info of 1GBDisk
-  community.vmware.vmware_first_class_disk:
+  community.vmware.vmware_first_class_disk_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -46,7 +46,7 @@ EXAMPLES = r'''
     var: disk_info.first_class_disks
 
 - name: Gather info of all first class disks
-  community.vmware.vmware_first_class_disk:
+  community.vmware.vmware_first_class_disk_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
@@ -100,7 +100,7 @@ class FirstClassDiskInfo(PyVmomi):
 
         else:
             self.disks = self.find_first_class_disks(self.datastore_obj)
-            if self.disks == []:
+            if not self.disks:
                 self.module.fail_json(msg='Failed to find any disk first class disk.')
 
         disk_infos = list()
@@ -111,7 +111,7 @@ class FirstClassDiskInfo(PyVmomi):
                 size_mb=disk.config.capacityInMB,
                 consumption_type=disk.config.consumptionType,
                 descriptor_version=disk.config.descriptorVersion,
-                consumer_ids=list(id.id for id in disk.consumerId)
+                consumer_ids=list(id.id for id in disk.config.consumerId)
             )
             disk_infos.append(disk_info)
 
