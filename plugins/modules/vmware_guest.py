@@ -1923,6 +1923,7 @@ class PyVmomiHelper(PyVmomi):
                                       "Removing interfaces is not allowed"
                                       % (len(network_devices), len(current_net_devices)))
 
+        # Loop over requested devices
         for key in range(0, len(network_devices)):
             nic_change_detected = False
             network_name = network_devices[key]['name']
@@ -1974,8 +1975,9 @@ class PyVmomiHelper(PyVmomi):
 
             net_obj = self.cache.get_network(network_name)
             if hasattr(net_obj, 'portKeys'):
-                # VDS switch
+                # network_name matched existing VDS switch portgroup
                 pg_obj = None
+                # if dvswitch_name was also defined we need to make sure we have port_group of that dwswitch
                 if 'dvswitch_name' in network_devices[key]:
                     dvs_name = network_devices[key]['dvswitch_name']
                     dvs_obj = find_dvs_by_name(self.content, dvs_name)
@@ -3585,6 +3587,7 @@ def main():
                                         'powered-off', 'restarted', 'suspended',
                                         'shutdownguest', 'shutdown-guest',
                                         'rebootguest', 'reboot-guest']:
+            # With these states there are no config changes, just power state changes
             if module.check_mode:
                 # Identify if the power state would have changed if not in check mode
                 current_powerstate = vm.summary.runtime.powerState.lower()
