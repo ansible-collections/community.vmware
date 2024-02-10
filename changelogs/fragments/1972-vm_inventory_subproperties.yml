@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_vm_inventory - Add parameter `subproperties` (https://github.com/ansible-collections/community.vmware/pull/1972).
