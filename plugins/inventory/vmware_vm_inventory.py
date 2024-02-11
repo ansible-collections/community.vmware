@@ -98,6 +98,7 @@ DOCUMENTATION = r'''
                        'customValue', 'summary.runtime.powerState', 'config.guestId',
                        ]
         subproperties:
+            version_added: 4.2.0
             description:
             - List of subproperties from an normal property.
             - These subproperties will also populated to the hostvars of the given VM.
