@@ -36,6 +36,7 @@ options:
     type: bool
     required: false
   show_datacenter:
+    version_added: 4.2.0
     description:
     - Return the related Datacenter if set to V(true).
     default: false
