@@ -293,8 +293,14 @@ class VMwareHostFactManager(PyVmomi):
 
     def get_datacenter_facts(self):
         datatacenter_facts = {'datacenter': None}
-        if self.host.parent and isinstance(self.host.parent.parent.parent, vim.Datacenter):
-            datatacenter_facts.update(datacenter=self.host.parent.parent.parent.name)
+
+        parent = self.host.parent
+        while parent:
+            if isinstance(parent, vim.Datacenter):
+                datatacenter_facts.update(datacenter=parent.name)
+                break
+            parent = parent.parent
+
         return datatacenter_facts
 
     def get_vsan_facts(self):
