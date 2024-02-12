@@ -46,6 +46,7 @@ options:
     default: 10
     type: int
   diskformat:
+    version_added: 4.2.0
     description:
       - Optional argument - Set a diskformat for certain uploads like stream optimized vmdks
       - Example "StreamVmdk" needs to be set for stream optimized vmdks that are uploaded to vSAN storage
