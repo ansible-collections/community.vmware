@@ -149,7 +149,7 @@ def main():
         datastore=dict(required=True),
         path=dict(required=True, aliases=['dest'], type='str'),
         timeout=dict(default=10, type='int'),
-        diskformat=dict(required=False, type='str'))
+        diskformat=dict(required=False, type='str', choices=['streamVmdk']))
     )
 
     module = AnsibleModule(
