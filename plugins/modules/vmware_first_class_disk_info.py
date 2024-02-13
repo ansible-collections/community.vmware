@@ -107,6 +107,7 @@ class FirstClassDiskInfo(PyVmomi):
         for disk in self.disks:
             disk_info = dict(
                 name=disk.config.name,
+                id=disk.config.id.id,
                 datastore_name=disk.config.backing.datastore.name,
                 size_mb=disk.config.capacityInMB,
                 consumption_type=disk.config.consumptionType,
