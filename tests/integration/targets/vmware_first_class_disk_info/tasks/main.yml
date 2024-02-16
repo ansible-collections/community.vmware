@@ -86,6 +86,7 @@
     password: "{{ vcenter_password }}"
     datastore_name: "{{ rw_datastore }}"
     disk_name: "firstclassdisk"
+    validate_certs: false
   register: disk_info
   delegate_to: localhost
 
