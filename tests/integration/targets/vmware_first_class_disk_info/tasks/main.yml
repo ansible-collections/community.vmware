@@ -14,6 +14,7 @@
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     datastore_name: "{{ rw_datastore }}"
+    validate_certs: false
   register: disk_info
   delegate_to: localhost
 
