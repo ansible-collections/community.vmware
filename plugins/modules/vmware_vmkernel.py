@@ -141,6 +141,7 @@ options:
       type: bool
       default: false
     enable_backup_nfc:
+      version_added: 4.2.0
       description:
       - Enable vSphere Backup NFC traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
