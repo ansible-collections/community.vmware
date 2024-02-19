@@ -26,6 +26,7 @@ author:
 - Russell Teague (@mtnbikenc)
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
+- Nina Loser (@Nina2244)
 notes:
     - The option O(device) need to be used with DHCP because otherwise it's not possible to check if a VMkernel device is already present
     - You can only change from DHCP to static, and vSS to vDS, or vice versa, in one step, without creating a new device, with O(device) specified.
@@ -136,6 +137,12 @@ options:
     enable_replication_nfc:
       description:
       - Enable vSphere Replication NFC traffic on the VMKernel adapter.
+      - This option is only allowed if the default TCP/IP stack is used.
+      type: bool
+      default: false
+    enable_backup_nfc:
+      description:
+      - Enable vSphere Backup NFC traffic on the VMKernel adapter.
       - This option is only allowed if the default TCP/IP stack is used.
       type: bool
       default: false
@@ -301,6 +308,7 @@ class PyVmomiHelper(PyVmomi):
         self.enable_provisioning = self.params['enable_provisioning']
         self.enable_replication = self.params['enable_replication']
         self.enable_replication_nfc = self.params['enable_replication_nfc']
+        self.enable_backup_nfc = self.params['enable_backup_nfc']
 
         self.vswitch_name = self.params['vswitch_name']
         self.vds_name = self.params['dvswitch_name']
@@ -494,7 +502,7 @@ class PyVmomiHelper(PyVmomi):
         """
         changed = changed_settings = changed_vds = changed_services = \
             changed_service_vmotion = changed_service_mgmt = changed_service_ft = \
-            changed_service_vsan = changed_service_prov = changed_service_rep = changed_service_rep_nfc = False
+            changed_service_vsan = changed_service_prov = changed_service_rep = changed_service_rep_nfc = changed_service_backup_nfc = False
         changed_list = []
         results = dict(changed=False, msg='')
 
@@ -623,6 +631,11 @@ class PyVmomiHelper(PyVmomi):
             if (self.enable_replication_nfc and self.vnic.device not in service_type_vmks['vSphereReplicationNFC']) or \
                     (not self.enable_replication_nfc and self.vnic.device in service_type_vmks['vSphereReplicationNFC']):
                 changed_services = changed_service_rep_nfc = True
+
+            if (self.enable_backup_nfc and self.vnic.device not in service_type_vmks['vSphereBackupNFC']) or \
+                    (not self.enable_backup_nfc and self.vnic.device in service_type_vmks['vSphereBackupNFC']):
+                changed_services = changed_service_backup_nfc = True
+
             if changed_services:
                 changed_list.append("services")
 
@@ -742,6 +755,14 @@ class PyVmomiHelper(PyVmomi):
                     operation = 'select' if self.enable_replication_nfc else 'deselect'
                     self.set_service_type(
                         vnic_manager=vnic_manager, vmk=self.vnic, service_type='vSphereReplicationNFC', operation=operation
+                    )
+
+                if changed_service_backup_nfc:
+                    if self.vnic.device in service_type_vmks['vSphereBackupNFC']:
+                        services_previous.append('Backup_NFC')
+                    operation = 'select' if self.enable_backup_nfc else 'deselect'
+                    self.set_service_type(
+                        vnic_manager=vnic_manager, vmk=self.vnic, service_type='vSphereBackupNFC', operation=operation
                     )
 
                 if changed_service_vsan:
@@ -918,7 +939,7 @@ class PyVmomiHelper(PyVmomi):
                 option is False for option in [self.enable_vsan, self.enable_vmotion,
                                                self.enable_mgmt, self.enable_ft,
                                                self.enable_provisioning, self.enable_replication,
-                                               self.enable_replication_nfc]):
+                                               self.enable_replication_nfc, self.enable_backup_nfc]):
             self.vnic = self.get_vmkernel_by_device(device_name=vmk_device)
 
             # VSAN
@@ -944,6 +965,9 @@ class PyVmomiHelper(PyVmomi):
 
             if self.enable_replication_nfc:
                 self.set_service_type(host_vnic_manager, self.vnic, 'vSphereReplicationNFC')
+
+            if self.enable_backup_nfc:
+                self.set_service_type(host_vnic_manager, self.vnic, 'vSphereBackupNFC')
 
         self.module.exit_json(**results)
 
@@ -984,6 +1008,7 @@ class PyVmomiHelper(PyVmomi):
             vSphereProvisioning=[],
             vSphereReplication=[],
             vSphereReplicationNFC=[],
+            vSphereBackupNFC=[],
         )
 
         for service_type in list(service_type_vmk):
@@ -1037,6 +1062,8 @@ class PyVmomiHelper(PyVmomi):
             services.append('Repl')
         if self.enable_replication_nfc:
             services.append('Repl_NFC')
+        if self.enable_backup_nfc:
+            services.append('Backup_NFC')
         return ', '.join(services)
 
     @staticmethod
@@ -1075,6 +1102,7 @@ def main():
         enable_provisioning=dict(type='bool', default=False),
         enable_replication=dict(type='bool', default=False),
         enable_replication_nfc=dict(type='bool', default=False),
+        enable_backup_nfc=dict(type='bool', default=False),
         vswitch_name=dict(required=False, type='str', aliases=['vswitch']),
         dvswitch_name=dict(required=False, type='str', aliases=['dvswitch']),
         network=dict(
