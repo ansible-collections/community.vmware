@@ -101,7 +101,7 @@ class FirstClassDiskInfo(PyVmomi):
         else:
             self.disks = self.find_first_class_disks(self.datastore_obj)
             if not self.disks:
-                self.module.fail_json(msg='Failed to find any disk first class disk.')
+                return []
 
         disk_infos = list()
         for disk in self.disks:
