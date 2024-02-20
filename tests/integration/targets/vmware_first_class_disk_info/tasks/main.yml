@@ -41,9 +41,6 @@
     <<: *disk_info
   register: disk_info
 
-- debug:
-    var: result_create_vcenter
-
 - name: assert for first-class disk info
   assert:
     that:
@@ -71,9 +68,6 @@
     <<: *disk_info
   register: disk_info
 
-- debug:
-    var: result_create_vcenter
-
 - name: assert for first-class disk info
   assert:
     that:
@@ -89,9 +83,6 @@
     validate_certs: false
   register: disk_info
   delegate_to: localhost
-
-- debug:
-    var: result_create_vcenter
 
 - name: assert for first-class disk info
   assert:
