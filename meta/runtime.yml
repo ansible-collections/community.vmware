@@ -53,6 +53,7 @@ action_groups:
   - vmware_evc_mode
   - vmware_export_ovf
   - vmware_first_class_disk
+  - vmware_first_class_disk_info
   - vmware_folder_info
   - vmware_guest
   - vmware_guest_boot_info
