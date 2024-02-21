@@ -51,7 +51,7 @@ options:
       - Optional argument - Set a diskformat for certain uploads like stream optimized VMDKs
       - There is no official documentation, but it looks like V(StreamVmdk) needs to be set for stream optimized VMDKs that are uploaded to vSAN storage
       - Setting this for non-VMDK files might lead to undefined behavior and is not supported.
-    choices: ["streamVmdk"]
+    choices: ["StreamVmdk"]
     type: str
 
 notes:
@@ -149,7 +149,7 @@ def main():
         datastore=dict(required=True),
         path=dict(required=True, aliases=['dest'], type='str'),
         timeout=dict(default=10, type='int'),
-        diskformat=dict(required=False, type='str', choices=['streamVmdk']))
+        diskformat=dict(required=False, type='str', choices=['StreamVmdk']))
     )
 
     module = AnsibleModule(
