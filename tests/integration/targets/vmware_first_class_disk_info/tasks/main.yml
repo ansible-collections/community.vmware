@@ -90,7 +90,7 @@
       - "(disk_info['first_class_disks'] | length) == 1"
       - "disk_info['first_class_disks'][0]['name'] == 'firstclassdisk'"
       - "disk_info['first_class_disks'][0]['datastore_name'] == rw_datastore"
-      - "disk_info['first_class_disks'][0]['size_mb'] == '1024'"
+      - "disk_info['first_class_disks'][0]['size_mb'] == 1024"
       - "disk_info['first_class_disks'][0]['consumption_type'] is defined"
       - "disk_info['first_class_disks'][0]['descriptor_version'] is defined"
       - "disk_info['first_class_disks'][0]['consumer_ids'] is defined"
