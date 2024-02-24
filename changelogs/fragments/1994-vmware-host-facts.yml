@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_host_facts - Add the possibility to get the related datacenter.
-    (https://github.com/ansible-collections/community.vmware/pull/1994).

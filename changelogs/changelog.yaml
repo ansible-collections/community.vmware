@@ -81,3 +81,24 @@ releases:
     - 1959-vmware_guest_sendkey.yml
     - 1969-InsecureRequestWarning.yml
     release_date: '2024-01-25'
+  4.2.0:
+    changes:
+      minor_changes:
+      - Add standard function vmware_argument_spec() from module_utils for using default
+        env fallback function. https://github.com/ansible-collections/community.vmware/issues/1977
+      - vmware_first_class_disk_info - Add a module to gather informations about first
+        class disks. (https://github.com/ansible-collections/community.vmware/pull/1996).
+        (https://github.com/ansible-collections/community.vmware/issues/1988).
+      - vmware_host_facts - Add the possibility to get the related datacenter. (https://github.com/ansible-collections/community.vmware/pull/1994).
+      - vmware_vm_inventory - Add parameter `subproperties` (https://github.com/ansible-collections/community.vmware/pull/1972).
+      - vmware_vmkernel - Add the function to set the enable_backup_nfc setting (https://github.com/ansible-collections/community.vmware/pull/1978)
+      - vsphere_copy - Add parameter to tell vsphere_copy which diskformat is being
+        uploaded (https://github.com/ansible-collections/community.vmware/pull/1995).
+    fragments:
+    - 1972-vm_inventory_subproperties.yml
+    - 1977-vsphere_file_add_env_fallback.yml
+    - 1978-vmware_vmkernel.yaml
+    - 1994-vmware-host-facts.yml
+    - 1995-vsphere_copy.yml
+    - 1996 - vmware_first_class_disk_info.yml
+    release_date: '2024-02-24'

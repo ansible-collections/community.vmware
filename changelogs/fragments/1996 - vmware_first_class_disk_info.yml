@@ -1,4 +1,0 @@
-minor_changes:
-  - vmware_first_class_disk_info - Add a module to gather informations about first class disks.
-    (https://github.com/ansible-collections/community.vmware/pull/1996).
-    (https://github.com/ansible-collections/community.vmware/issues/1988).
