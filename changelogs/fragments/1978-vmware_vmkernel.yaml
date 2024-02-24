@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_vmkernel - Add the function to set the enable_backup_nfc setting
-    (https://github.com/ansible-collections/community.vmware/pull/1978)
