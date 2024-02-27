@@ -253,6 +253,7 @@ class PyVmomiDeviceHelper(object):
     def create_hard_disk(self, disk_ctl, disk_index=None):
         diskspec = vim.vm.device.VirtualDeviceSpec()
         diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+        diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
         diskspec.device = vim.vm.device.VirtualDisk()
         diskspec.device.key = -randint(20000, 24999)
         diskspec.device.backing = vim.vm.device.VirtualDisk.FlatVer2BackingInfo()
