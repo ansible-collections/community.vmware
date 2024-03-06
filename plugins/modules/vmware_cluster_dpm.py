@@ -17,7 +17,6 @@ module: vmware_cluster_dpm
 short_description: Manage Distributed Power Management (DPM) on VMware vSphere clusters
 description:
     - Manages DPM on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Olivia Luetolf (@olilu)
 options:

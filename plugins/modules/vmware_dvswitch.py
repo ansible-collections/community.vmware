@@ -167,7 +167,6 @@ options:
         description:
             - Destination folder, absolute path to place dvswitch in.
             - The folder should include the datacenter.
-            - This parameter is case sensitive.
             - Required if O(datacenter) is not provided.
             - Mutually exclusive with O(datacenter) parameter.
             - 'Examples:'

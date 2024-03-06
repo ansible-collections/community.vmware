@@ -17,7 +17,6 @@ short_description: Manage association of VMware tags with VMware objects
 description:
 - This module can be used to assign / remove VMware tags from the given VMware objects.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
 - Frederic Van Reet (@GBrawl)

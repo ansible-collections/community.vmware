@@ -26,7 +26,6 @@ options:
   datacenter:
     description:
     - The datacenter name used to get specified cluster or host.
-    - This parameter is case sensitive.
     default: ha-datacenter
     type: str
   cluster_name:

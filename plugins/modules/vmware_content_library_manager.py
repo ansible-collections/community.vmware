@@ -17,7 +17,6 @@ short_description: Create, update and delete VMware content library
 description:
 - Module to manage VMware content Library
 - Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Pavan Bidkar (@pgbidkar)
 requirements:

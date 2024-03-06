@@ -83,7 +83,6 @@ options:
   destination_vm_folder:
     description:
       - Destination folder, absolute path to deploy the cloned vm.
-      - This parameter is case sensitive.
       - 'Examples:'
       - '   folder: vm'
       - '   folder: ha-datacenter/vm'

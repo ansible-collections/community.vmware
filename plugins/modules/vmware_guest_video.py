@@ -16,7 +16,6 @@ module: vmware_guest_video
 short_description: Modify video card configurations of specified virtual machine in given vCenter infrastructure
 description:
     - This module is used to reconfigure video card settings of given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 options:
@@ -55,7 +54,6 @@ options:
      default: ha-datacenter
      description:
      - The datacenter name to which virtual machine belongs to.
-     - This parameter is case sensitive.
      type: str
    gather_video_facts:
      description:

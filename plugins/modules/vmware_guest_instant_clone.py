@@ -18,7 +18,6 @@ short_description: Instant Clone VM
 
 description:
 - This module can be used for Creating a powered-on Instant Clone of a virtual machine.
-- All variables and VMware object names are case sensitive.
 - M(community.vmware.vmware_guest) module is needed for creating a VM with poweredon state which would be used as a parent VM.
 - M(community.vmware.vmware_guest_powerstate) module is also needed to poweroff the instant cloned module.
 - The powered off VM would in turn be deleted by again using M(community.vmware.vmware_guest) module.
@@ -75,7 +74,6 @@ options:
   folder:
     description:
       - Destination folder, absolute path to deploy the cloned vm.
-      - This parameter is case sensitive.
       - 'Examples:'
       - 'folder: ha-datacenter/vm'
       - 'folder: /datacenter1/vm'

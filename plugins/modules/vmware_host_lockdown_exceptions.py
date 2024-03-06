@@ -16,7 +16,6 @@ version_added: '3.1.0'
 short_description: Manage Lockdown Mode Exception Users
 description:
 - This module can be used to manage Lockdown Mode Exception Users.
-- All parameters and VMware objects values are case sensitive.
 - Please specify O(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 author:
 - Mario Lenz (@mariolenz)

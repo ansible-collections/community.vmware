@@ -17,7 +17,6 @@ short_description: Manage VMware tag info
 description:
 - This module can be used to collect information about VMware tags.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
 requirements:

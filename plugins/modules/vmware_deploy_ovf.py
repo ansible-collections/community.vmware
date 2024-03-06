@@ -36,14 +36,12 @@ options:
         - Cluster to deploy to.
         - This is a required parameter, if O(esxi_hostname) is not set and O(hostname) is set to the vCenter server.
         - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
-        - This parameter is case sensitive.
         type: str
     esxi_hostname:
         description:
         - The ESXi hostname where the virtual machine will run.
         - This is a required parameter, if O(cluster) is not set and O(hostname) is set to the vCenter server.
         - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
-        - This parameter is case sensitive.
         type: str
     datastore:
         default: datastore1

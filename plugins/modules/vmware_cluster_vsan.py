@@ -16,7 +16,6 @@ module: vmware_cluster_vsan
 short_description: Manages virtual storage area network (vSAN) configuration on VMware vSphere clusters
 description:
     - Manages vSAN on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)

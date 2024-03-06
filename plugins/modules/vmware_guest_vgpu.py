@@ -16,7 +16,6 @@ module: vmware_guest_vgpu
 short_description: Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to reconfigure vGPU card profile of the given virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - VM must be power off M(community.vmware.vmware_guest_powerstate) module can perform that task.
 author:
     - Mohamed Alibi (@Medalibi)
@@ -57,7 +56,6 @@ options:
      default: ha-datacenter
      description:
        - The datacenter name to which virtual machine belongs to.
-       - This parameter is case sensitive.
      type: str
    state:
      default: present

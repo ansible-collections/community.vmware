@@ -15,7 +15,6 @@ module: vmware_host_dns_info
 short_description: Gathers info about an ESXi host's DNS configuration information
 description:
 - This module can be used to gather information about an ESXi host's DNS configuration information when ESXi hostname or Cluster name is given.
-- All parameters and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
 options:

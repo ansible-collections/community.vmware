@@ -21,7 +21,6 @@ options:
   datacenter:
     description:
       - The datacenter where the VM you'd like to operate the power.
-      - This parameter is case sensitive.
     default: ha-datacenter
     type: str
   state:

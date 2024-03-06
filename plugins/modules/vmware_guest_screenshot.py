@@ -16,7 +16,6 @@ module: vmware_guest_screenshot
 short_description: Create a screenshot of the Virtual Machine console.
 description:
     - This module is used to take screenshot of the given virtual machine when virtual machine is powered on.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 options:

@@ -16,7 +16,6 @@ module: vmware_guest_customization_info
 short_description: Gather info about VM customization specifications
 description:
     - This module can be used to gather information about customization specifications.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde)
 options:

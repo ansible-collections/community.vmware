@@ -52,7 +52,6 @@ options:
   datacenter:
     description:
     - The vCenter datacenter name used to get specified cluster or host.
-    - This parameter is case sensitive.
     type: str
     required: true
   state:

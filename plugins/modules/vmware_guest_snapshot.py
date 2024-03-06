@@ -16,7 +16,6 @@ module: vmware_guest_snapshot
 short_description: Manages virtual machines snapshots in vCenter
 description:
     - This module can be used to create, delete and update snapshot(s) of the given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Loic Blot (@nerzhul) <loic.blot@unix-experience.fr>
 options:

@@ -53,7 +53,6 @@ options:
      elements: str
    boot_hdd_name:
      description:
-     - Name of disk to be set as boot disk, which is case sensitive, e.g., 'Hard disk 1'.
      - This parameter is optional, if not set, will use the first virtual disk found in VM device list.
      type: str
      version_added: '3.2.0'

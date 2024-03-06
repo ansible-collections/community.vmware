@@ -12,6 +12,9 @@ __metaclass__ = type
 class ModuleDocFragment(object):
     # Parameters for VMware REST Client based modules
     DOCUMENTATION = r'''
+notes:
+  - All modules requires API write access and hence is not supported on a free ESXi license.
+  - All variables and VMware object names are case sensitive.
 options:
   hostname:
     description:
