@@ -16,7 +16,6 @@ module: vmware_guest_sendkey
 short_description: Send USB HID codes to the Virtual Machine's keyboard.
 description:
     - This module is used to send keystrokes to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 options:

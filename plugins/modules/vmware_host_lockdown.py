@@ -15,7 +15,6 @@ module: vmware_host_lockdown
 short_description: Manage administrator permission for the local administrative account for the ESXi host
 description:
 - This module can be used to manage administrator permission for the local administrative account for the host when ESXi hostname is given.
-- All parameters and VMware objects values are case sensitive.
 - This module is destructive as administrator permission are managed using APIs used, please read options carefully and proceed.
 - Please specify O(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 author:

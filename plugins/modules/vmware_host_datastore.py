@@ -18,7 +18,6 @@ description:
 - This module can be used to mount/umount datastore on ESXi host.
 - This module only supports NFS (NFS v3 or NFS v4.1) and VMFS datastores.
 - For VMFS datastore, available device must already be connected on ESXi host.
-- All parameters and VMware object names are case sensitive.
 author:
 - Ludovic Rivallain (@lrivallain) <ludovic.rivallain@gmail.com>
 - Christian Kotte (@ckotte) <christian.kotte@gmx.de>

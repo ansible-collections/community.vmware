@@ -30,14 +30,12 @@ options:
   folder_name:
     description:
     - Name of folder to be managed.
-    - This is case sensitive parameter.
     - Folder name should be under 80 characters. This is a VMware restriction.
     required: true
     type: str
   parent_folder:
     description:
     - Name of the parent folder under which new folder needs to be created.
-    - This is case sensitive parameter.
     - "If user wants to create a folder under '/DC0/vm/vm_folder', this value will be 'vm_folder'."
     - "If user wants to create a folder under '/DC0/vm/folder1/folder2', this value will be 'folder1/folder2'."
     required: false

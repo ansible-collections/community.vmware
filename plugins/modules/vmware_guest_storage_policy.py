@@ -69,14 +69,12 @@ options:
    vm_home:
      description:
      - A storage profile policy to set on VM Home.
-     - All values and parameters are case sensitive.
      - At least one of O(disk) or O(vm_home) are required parameters.
      required: false
      type: str
    disk:
      description:
      - A list of disks with storage profile policies to enforce.
-     - All values and parameters are case sensitive.
      - At least one of O(disk) and O(vm_home) are required parameters.
      required: false
      type: list

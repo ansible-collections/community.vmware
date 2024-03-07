@@ -17,7 +17,6 @@ module: vmware_guest_disk_info
 short_description: Gather info about disks of given virtual machine
 description:
     - This module can be used to gather information about disks belonging to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
 options:

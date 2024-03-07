@@ -16,7 +16,6 @@ module: vmware_cluster_info
 short_description: Gather info about clusters available in given vCenter
 description:
     - This module can be used to gather information about clusters in VMWare infrastructure.
-    - All values and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde)
     - Christian Neugum (@digifuchsi)

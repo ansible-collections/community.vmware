@@ -17,7 +17,6 @@ module: vmware_cluster_ha
 short_description: Manage High Availability (HA) on VMware vSphere clusters
 description:
     - Manages HA configuration on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)

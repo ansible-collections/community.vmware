@@ -17,7 +17,6 @@ short_description: Override the default vCLS (vSphere Cluster Services) VM disk 
 description:
     - Override the default vCLS VM disk placement for this cluster.
     - Some datastores cannot be selected for vCLS 'Allowed' as they are blocked by solutions as SRM or vSAN maintenance mode where vCLS cannot be configured.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Nina Loser (@Nina2244)

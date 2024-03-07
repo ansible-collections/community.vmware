@@ -49,7 +49,6 @@ options:
         description:
             - Absolute path to move an existing guest
             - The dest_folder should include the datacenter. ESX's datacenter is ha-datacenter.
-            - This parameter is case sensitive.
             - 'Examples:'
             - '   dest_folder: /ha-datacenter/vm'
             - '   dest_folder: ha-datacenter/vm'

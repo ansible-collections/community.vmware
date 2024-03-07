@@ -64,7 +64,6 @@ options:
       identify uniqueness of the virtual machine.
     - This parameter is required, if O(state=poweredon), O(state=powered-on), O(state=poweredoff), O(state=powered-off),
       O(state=present), O(state=restarted), O(state=suspended) and virtual machine does not exists.
-    - This parameter is case sensitive.
     type: str
   name_match:
     description:
@@ -89,7 +88,6 @@ options:
     - Template or existing virtual machine used to create new virtual machine.
     - If this value is not set, virtual machine is created without using a template.
     - If the virtual machine already exists, this parameter will be ignored.
-    - This parameter is case sensitive.
     - From version 2.8 onwards, absolute path to virtual machine or template can be used.
     aliases: [ 'template_src' ]
     type: str
@@ -107,7 +105,6 @@ options:
     description:
     - Destination folder, absolute path to find an existing guest or create the new guest.
     - "The folder should include the datacenter. ESXi's datacenter is ha-datacenter."
-    - This parameter is case sensitive.
     - 'If multiple machines are found with same name, this parameter is used to identify'
     - 'uniqueness of the virtual machine.'
     - 'Examples:'
@@ -126,7 +123,6 @@ options:
     default: {}
     description:
     - "Manage virtual machine's hardware attributes."
-    - All parameters case sensitive.
     suboptions:
         hotadd_cpu:
             type: bool
@@ -243,7 +239,6 @@ options:
     default: {}
     description:
     - Manage virtual machine encryption settings
-    - All parameters case sensitive.
     version_added: '3.9.0'
     suboptions:
         encrypted_vmotion:
@@ -258,7 +253,6 @@ options:
     type: str
     description:
     - Set the guest ID.
-    - This parameter is case sensitive.
     - This field is required when creating a virtual machine, not required when creating from the template.
     - >
          Valid values are referenced here:
@@ -266,7 +260,6 @@ options:
   disk:
     description:
     - A list of disks to add.
-    - This parameter is case sensitive.
     - Shrinking disks is not supported.
     - Removing existing disks of the virtual machine is not supported.
     - 'Attributes O(disk.controller_type), O(disk.controller_number), O(disk.unit_number) are used to configure multiple types of disk
@@ -419,7 +412,6 @@ options:
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
-    - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
     - When not specified I(Resources) is taken as default value.
     type: str
@@ -459,7 +451,6 @@ options:
   snapshot_src:
     description:
     - Name of the existing snapshot to use to create a clone of a virtual machine.
-    - This parameter is case sensitive.
     - While creating linked clone using O(linked_clone) parameter, this parameter is required.
     type: str
   linked_clone:
@@ -485,7 +476,6 @@ options:
   datacenter:
     description:
     - Destination datacenter for the deploy operation.
-    - This parameter is case sensitive.
     default: ha-datacenter
     type: str
   cluster:
@@ -493,14 +483,12 @@ options:
     - The cluster name where the virtual machine will run.
     - This is a required parameter, if O(esxi_hostname) is not set.
     - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
-    - This parameter is case sensitive.
     type: str
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
     - This is a required parameter, if O(cluster) is not set.
     - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
-    - This parameter is case sensitive.
     type: str
   advanced_settings:
     description:
@@ -527,7 +515,6 @@ options:
     description:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
       They are set by the customization via vmware-tools.
       If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
@@ -648,7 +635,6 @@ options:
     - Not all operating systems are supported for customization with respective vCenter version,
       please check VMware documentation for respective OS customization.
     - For supported customization operating system matrix, (see U(http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf))
-    - All parameters and VMware object names are case sensitive.
     - Linux based OSes requires Perl package to be installed for OS customizations.
     suboptions:
         existing_vm:
@@ -797,7 +783,6 @@ options:
   customization_spec:
     description:
     - Unique name identifying the requested customization specification.
-    - This parameter is case sensitive.
     - If set, then overrides O(customization) parameter values.
     type: str
   datastore:

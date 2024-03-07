@@ -16,7 +16,6 @@ module: vmware_datastore_info
 short_description: Gather info about datastores available in given vCenter
 description:
     - This module can be used to gather information about datastores in VMWare infrastructure.
-    - All values and VMware object names are case sensitive.
 author:
     - Tim Rightnour (@garbled1)
 options:

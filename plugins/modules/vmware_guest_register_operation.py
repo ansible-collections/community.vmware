@@ -20,7 +20,6 @@ options:
   datacenter:
     description:
     - Destination datacenter for the register/unregister operation.
-    - This parameter is case sensitive.
     type: str
     default: ha-datacenter
   cluster:
@@ -31,7 +30,6 @@ options:
     description:
     - Description folder, absolute path of the target folder.
     - The folder should include the datacenter. ESX's datacenter is ha-datacenter.
-    - This parameter is case sensitive.
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
@@ -53,7 +51,6 @@ options:
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
-    - This parameter is case sensitive.
     type: str
   template:
     description:
@@ -70,7 +67,6 @@ options:
   resource_pool:
     description:
     - Specify a resource pool name to register VM.
-    - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
     type: str
   state:

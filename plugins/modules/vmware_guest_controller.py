@@ -16,7 +16,6 @@ module: vmware_guest_controller
 short_description: Manage disk or USB controllers related to virtual machine in given vCenter infrastructure
 description:
     - This module can be used to add, remove disk controllers or USB controllers belonging to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 options:

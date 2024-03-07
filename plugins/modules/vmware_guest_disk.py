@@ -16,7 +16,6 @@ module: vmware_guest_disk
 short_description: Manage disks related to virtual machine in given vCenter infrastructure
 description:
     - This module can be used to add, remove and update disks belonging to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - This module is destructive in nature, please read documentation carefully before proceeding.
     - Be careful while removing disk specified as this may lead to data loss.
 author:
@@ -67,7 +66,6 @@ options:
      description:
      - A list of disks to add or remove.
      - The virtual disk related information is provided using this list.
-     - All values and parameters are case sensitive.
      suboptions:
        size:
          description:

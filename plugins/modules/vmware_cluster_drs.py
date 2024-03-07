@@ -16,7 +16,6 @@ module: vmware_cluster_drs
 short_description: Manage Distributed Resource Scheduler (DRS) on VMware vSphere clusters
 description:
     - Manages DRS on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)

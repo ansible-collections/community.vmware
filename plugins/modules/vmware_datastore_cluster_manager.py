@@ -16,7 +16,6 @@ module: vmware_datastore_cluster_manager
 short_description: Manage VMware vSphere datastore cluster's members
 description:
     - This module can be used to add datastore in the datastore cluster.
-    - All parameters and VMware object values are case sensitive.
 author:
 -  Abhijeet Kasurde (@Akasurde)
 options:

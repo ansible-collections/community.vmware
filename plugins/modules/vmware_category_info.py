@@ -17,7 +17,6 @@ short_description: Gather info about VMware tag categories
 description:
 - This module can be used to gather information about VMware tag categories.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
 requirements:
