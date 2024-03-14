@@ -22,7 +22,7 @@ options:
   filters:
     description:
       - Optional filters to apply to the snapshot data being gathered, you can apply one or more.
-      - Filters are applied based on the variable match_type specified. If match_type exact, filters require exact matches. On the other hand when match_type includes it gets the values that contain that value. 
+      - Filters are applied based on the variable match_type specified. If match_type exact, filters require exact matches. On the other hand when match_type includes it gets the values that contain that value.
       - Available filter options creation_time, description, folder, id, name, quiesced, state, vm_name.
       - Multiple filters can be applied the snapshot must meet all filter criteria to be included in the results.
     required: false
