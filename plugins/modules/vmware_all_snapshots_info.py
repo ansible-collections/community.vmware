@@ -35,11 +35,10 @@ options:
     required: false
     type: str
     choices: ['exact', 'includes']
-    default: 'exact'
+    default: exact
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
 '''
-
 
 EXAMPLES = r'''
   - name: Gather information about all snapshots in VMware vCenter
