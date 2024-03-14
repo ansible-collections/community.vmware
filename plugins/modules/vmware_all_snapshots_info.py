@@ -1,6 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# Copyright: (c) 2018, Ansible Project
+# Copyright: (c) 2024, Fernando Mendieta <fernandomendietaovejero@gmail.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
@@ -10,7 +15,7 @@ DOCUMENTATION = r'''
 module: vmware_all_snapshots_info
 short_description: Gathers information about all snapshots across virtual machines in a specified vmware datacenter
 description:
-- This module collects detailed information of all the snapshots or the ones that the users decide using filtering It utilizes the PyVmomi library for communication with vCenter to retrieve snapshot data
+- This module collects detailed information of all the snapshots of the datacenter, can be used with filter options
 author:
 - Fernando Mendieta (@valkiriaaquatica)
 options:
@@ -22,14 +27,15 @@ options:
   filters:
     description:
       - Optional filters to apply to the snapshot data being gathered, you can apply one or more.
-      - Filters are applied based on the variable match_type specified. If match_type exact, filters require exact matches. On the other hand when match_type includes it gets the values that contain that value.
+      - Filters are applied based on the variable match_type specified. If match_type exact, filters require exact matches.
+      - On the other hand when match_type includes it gets the values that contain that value.
       - Available filter options creation_time, description, folder, id, name, quiesced, state, vm_name.
       - Multiple filters can be applied the snapshot must meet all filter criteria to be included in the results.
     required: false
     type: dict
   match_type:
     description:
-      - Indicates whether the filter match should be exact or includes. An exact match requires the snapshot information to exactly match the filter value. includes will match any snapshot information that includes the filter value, allowing for partial match.
+      - Indicates whether the filter match should be exact or includes.
       - For example when you want to get all the snapshots that contain in their name the word test you place the filter name test and the match_type includes.
       - For example when you want to get all snapshots that are in state poweredOn you skip the match_type default is exact  or you write match_type exact.
     required: false
@@ -49,7 +55,6 @@ EXAMPLES = r'''
       validate_certs: no
       datacenter: '{{ datacenter_name }}'
     delegate_to: localhost
-
   - name: Gather information of a snapshot with filters applied and match_type in exacts.
     vmware_snapshot_info_all:
       hostname: '{{ vcenter_hostname }}'
@@ -61,7 +66,6 @@ EXAMPLES = r'''
         state: "poweredOn"
         vm_name: "you_marchine_name"
     delegate_to: localhost
-
   - name: Gather information of snapshots that in their name contain the "test" in their name.
     vmware_snapshot_info_all:
       hostname: '{{ vcenter_hostname }}'
@@ -119,7 +123,10 @@ vmware_all_snapshots_info:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, list_snapshots_recursively
-from pyVmomi import vim
+try:
+    from pyVmomi import vim
+except ImportError:
+    pass
 
 
 class VMwareSnapshotInfo(PyVmomi):
