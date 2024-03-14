@@ -14,21 +14,21 @@ description:
 author:
 - Fernando Mendieta (@valkiriaaquatica)
 options:
-  datacenter: 
+  datacenter:
     description:
       - The name of the datacenter to gather snapshot information from. You can get it in the vmware UI.
     required: true
     type: str
   filters:
     description:
-      - Optional filters to apply to the snapshot data being gathered, you can apply one or more. 
+      - Optional filters to apply to the snapshot data being gathered, you can apply one or more.
       - Filters are applied based on the variable match_type specified. If match_type exact, filters require exact matches. On the other hand when match_type includes it gets the values that contain that value. 
       - Available filter options creation_time, description, folder, id, name, quiesced, state, vm_name.
       - Multiple filters can be applied the snapshot must meet all filter criteria to be included in the results.
     required: false
     type: dict
   match_type:
-    description: 
+    description:
       - Indicates whether the filter match should be exact or includes. An exact match requires the snapshot information to exactly match the filter value. includes will match any snapshot information that includes the filter value, allowing for partial match.
       - For example when you want to get all the snapshots that contain in their name the word test you place the filter name test and the match_type includes.
       - For example when you want to get all snapshots that are in state poweredOn you skip the match_type default is exact  or you write match_type exact.
@@ -42,17 +42,15 @@ extends_documentation_fragment:
 
 
 EXAMPLES = r'''
----|
   - name: Gather information about all snapshots in VMware vCenter
     vmware_snapshot_info_all:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
-      validate_certs: no 
+      validate_certs: no
       datacenter: '{{ datacenter_name }}'
     delegate_to: localhost
-    register: snapshots_data
-    
+
   - name: Gather information of a snapshot with filters applied and match_type in exacts.
     vmware_snapshot_info_all:
       hostname: '{{ vcenter_hostname }}'
@@ -60,12 +58,11 @@ EXAMPLES = r'''
       password: '{{ vcenter_password }}'
       validate_certs: yes
       datacenter: '{{ datacenter_name }}'
-      filters: 
+      filters:
         state: "poweredOn"
         vm_name: "you_marchine_name"
     delegate_to: localhost
-    register: snapshots_data
-    
+
   - name: Gather information of snapshots that in their name contain the "test" in their name.
     vmware_snapshot_info_all:
       hostname: '{{ vcenter_hostname }}'
@@ -74,10 +71,9 @@ EXAMPLES = r'''
       validate_certs: yes
       datacenter: '{{ datacenter_name }}'
       match_type: "includes"
-      filters: 
+      filters:
         name: "test"
     delegate_to: localhost
-    register: snapshots_data
 '''
 
 RETURN = r'''
@@ -120,6 +116,7 @@ vmware_all_snapshots_info:
       type: bool
       returned: always
 '''
+
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, list_snapshots_recursively
