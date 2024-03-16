@@ -13,6 +13,7 @@ import traceback
 REQUESTS_IMP_ERR = None
 try:
     import requests
+    requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
     HAS_REQUESTS = True
 except ImportError:
     REQUESTS_IMP_ERR = traceback.format_exc()

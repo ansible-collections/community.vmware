@@ -29,6 +29,7 @@ REQUESTS_IMP_ERR = None
 try:
     # requests is required for exception handling of the ConnectionError
     import requests
+    requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
     HAS_REQUESTS = True
 except ImportError:
     REQUESTS_IMP_ERR = traceback.format_exc()
