@@ -143,7 +143,7 @@ class PyVmomiHelper(PyVmomi):
             vm_ipaddress=self.current_vm_obj.summary.guest.ipAddress,
             vm_tools_running_status=self.current_vm_obj.summary.guest.toolsRunningStatus,
             vm_tools_install_status=self.current_vm_obj.summary.guest.toolsStatus,
-            vm_tools_version_status=self.current_vm_obj.summary.guest.toolsVersionStatus,
+            vm_tools_version_status=self.current_vm_obj.summary.guest.toolsVersionStatus2,
             vm_tools_install_type=self.current_vm_obj.config.tools.toolsInstallType,
             vm_tools_version=self.current_vm_obj.config.tools.toolsVersion,
             vm_tools_upgrade_policy=self.current_vm_obj.config.tools.toolsUpgradePolicy,

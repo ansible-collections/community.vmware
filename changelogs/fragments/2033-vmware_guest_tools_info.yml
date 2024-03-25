@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest_tools_info - Use `toolsVersionStatus2` instead of `toolsVersionStatus` (https://github.com/ansible-collections/community.vmware/issues/2033).
