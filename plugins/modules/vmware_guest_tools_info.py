@@ -150,6 +150,11 @@ class PyVmomiHelper(PyVmomi):
             vm_tools_last_install_count=self.current_vm_obj.config.tools.lastInstallInfo.counter,
         )
 
+        self.module.deprecate(
+            msg="The API providing vm_tools_install_status has been deprecated by VMware; use vm_tools_running_status / vm_tools_version_status instead",
+            version="5.0.0",
+            collection_name="community.vmware"
+        )
         return {'changed': False, 'failed': False, 'vmtools_info': vmtools_info}
 
 
