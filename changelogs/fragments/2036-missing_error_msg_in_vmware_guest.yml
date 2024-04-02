@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_guest - Fix a missing error message while setting a template parameter with inconsistency guest_os ID
+    (https://github.com/ansible-collections/community.vmware/pull/2036).
