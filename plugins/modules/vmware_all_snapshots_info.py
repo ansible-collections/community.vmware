@@ -33,6 +33,7 @@ options:
       - Multiple filters can be applied the snapshot must meet all filter criteria to be included in the results.
     required: false
     type: dict
+    default: {}
   match_type:
     description:
       - Indicates whether the filter match should be exact or includes.
@@ -122,7 +123,12 @@ vmware_all_snapshots_info:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, list_snapshots_recursively
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    vmware_argument_spec,
+    list_snapshots_recursively,
+)
+
 try:
     from pyVmomi import vim
 except ImportError:
@@ -134,11 +140,17 @@ class VMwareSnapshotInfo(PyVmomi):
         super(VMwareSnapshotInfo, self).__init__(module)
 
     def list_snapshots(self, vm):
-        return list_snapshots_recursively(vm.snapshot.rootSnapshotList) if vm.snapshot else []
+        return (
+            list_snapshots_recursively(vm.snapshot.rootSnapshotList)
+            if vm.snapshot
+            else []
+        )
 
     def get_all_vms(self):
         content = self.content
-        container = content.viewManager.CreateContainerView(content.rootFolder, [vim.VirtualMachine], True)
+        container = content.viewManager.CreateContainerView(
+            content.rootFolder, [vim.VirtualMachine], True
+        )
         vms = container.view
         container.Destroy()
         return vms
@@ -148,9 +160,9 @@ class VMwareSnapshotInfo(PyVmomi):
         for vm in self.get_all_vms():
             for snapshot in self.list_snapshots(vm):
                 snapshot_info = {
-                    'vm_name': vm.name,
-                    'folder': vm.parent.name,
-                    **snapshot
+                    "vm_name": vm.name,
+                    "folder": vm.parent.name,
+                    **snapshot,
                 }
                 if self.passes_filters(snapshot_info, filters, match_type):
                     snapshot_data.append(snapshot_info)
@@ -163,9 +175,9 @@ class VMwareSnapshotInfo(PyVmomi):
             actual_value = str(snapshot_info[key]).lower()
             desired_value = str(value).lower()
 
-            if match_type == 'exact' and actual_value != desired_value:
+            if match_type == "exact" and actual_value != desired_value:
                 return False
-            elif match_type == 'includes' and desired_value not in actual_value:
+            elif match_type == "includes" and desired_value not in actual_value:
                 return False
         return True
 
@@ -173,18 +185,20 @@ class VMwareSnapshotInfo(PyVmomi):
 def main():
     argument_spec = vmware_argument_spec()
     argument_spec.update(
-        datacenter=dict(required=True, type='str'),
-        filters=dict(required=False, type='dict', default={}),
-        match_type=dict(required=False, type='str', choices=['exact', 'includes'], default='exact')
+        datacenter=dict(required=True, type="str"),
+        filters=dict(required=False, type="dict", default={}),
+        match_type=dict(
+            required=False, type="str", choices=["exact", "includes"], default="exact"
+        ),
     )
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
     vmware_snapshot_info = VMwareSnapshotInfo(module)
-    filters = module.params.get('filters')
-    match_type = module.params.get('match_type')
+    filters = module.params.get("filters")
+    match_type = module.params.get("match_type")
     all_snapshots = vmware_snapshot_info.gather_snapshots_info(filters, match_type)
     module.exit_json(changed=False, vmware_all_snapshots_info=all_snapshots)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
