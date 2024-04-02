@@ -176,3 +176,4 @@ action_groups:
   - vsan_health_silent_checks
   - vsphere_copy
   - vsphere_file
+  - vmware_all_snapshots_info
