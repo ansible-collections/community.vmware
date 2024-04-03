@@ -517,7 +517,7 @@ options:
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
     - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
       They are set by the customization via vmware-tools.
-      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
+      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools (also Perl when Linux).
     type: list
     default: []
     elements: dict
@@ -733,7 +733,7 @@ options:
         orgname:
             type: str
             description:
-            - Organisation name.
+            - Organization name.
             - Specific to Windows customization.
             - If unset, "ACME" will be used as a fall-back.
         password:
