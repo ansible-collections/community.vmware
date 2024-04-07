@@ -2988,6 +2988,14 @@ class PyVmomiHelper(PyVmomi):
             vm_obj = self.get_vm_or_template(template_name=self.params['template'])
             if vm_obj is None:
                 self.module.fail_json(msg="Could not find a template named %(template)s" % self.params)
+            if self.params['guest_id'] is not None and vm_obj.summary.config.guestId is not None and self.params['guest_id'] != vm_obj.summary.config.guestId:
+                details = {
+                    'vm_guest_id': self.params['guest_id'],
+                    'template_guest_id': vm_obj.summary.config.guestId,
+                }
+                self.module.fail_json(msg="Could not create vm from template with different guest_ids",
+                                      details=details)
+
         else:
             vm_obj = None
 
