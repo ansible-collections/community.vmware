@@ -47,7 +47,7 @@ options:
       - '   folder: /folder1/datacenter1/vm'
       - '   folder: folder1/datacenter1/vm'
       - '   folder: /folder1/datacenter1/vm/folder2'
-      - The 'vm_id_type' variable is required to be set to 'inventory_path', otherwise 'folder' will be None
+      - Required if O(vm_id_type=inventory_path)
       type: str
     vm_id:
       description:
