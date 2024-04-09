@@ -11,6 +11,7 @@ action_groups:
   - vcenter_root_password_expiration
   - vcenter_standard_key_provider
   - vmware_about_info
+  - vmware_all_snapshots_info
   - vmware_category
   - vmware_category_info
   - vmware_cfg_backup
