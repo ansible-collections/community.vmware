@@ -2687,7 +2687,7 @@ class PyVmomiHelper(PyVmomi):
 
             # Only create virtual device if not backed by vmdk in original template
             if diskspec.device.backing.fileName == '':
-                    diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+                diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
 
             # which datastore?
             if expected_disk_spec.get('datastore'):
