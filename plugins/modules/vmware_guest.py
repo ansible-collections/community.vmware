@@ -2655,6 +2655,7 @@ class PyVmomiHelper(PyVmomi):
                 diskspec.device = disks[disk_index]
             else:
                 diskspec = self.device_helper.create_hard_disk(scsi_ctl, disk_index)
+                diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 disk_modified = True
 
             # increment index for next disk search
@@ -2683,11 +2684,10 @@ class PyVmomiHelper(PyVmomi):
             if expected_disk_spec['filename']:
                 self.add_existing_vmdk(vm_obj, expected_disk_spec, diskspec, scsi_ctl)
                 continue
-            if vm_obj is None or self.params['template']:
-                # We are creating new VM or from Template
-                # Only create virtual device if not backed by vmdk in original template
-                if diskspec.device.backing.fileName == '':
-                    diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+
+            # Only create virtual device if not backed by vmdk in original template
+            if diskspec.device.backing.fileName == '':
+                diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
 
             # which datastore?
             if expected_disk_spec.get('datastore'):
