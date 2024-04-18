@@ -47,6 +47,7 @@ options:
       - '   folder: /folder1/datacenter1/vm'
       - '   folder: folder1/datacenter1/vm'
       - '   folder: /folder1/datacenter1/vm/folder2'
+      - Required if O(vm_id_type=inventory_path)
       type: str
     vm_id:
       description:
