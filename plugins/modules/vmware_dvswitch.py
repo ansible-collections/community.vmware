@@ -200,6 +200,7 @@ options:
                     - Assign an IP address to see the distributed switch as a single network device in the NetFlow collector.
                     - This is instead of as multiple devices corresponding to each host.
                     - In an IPv6 environment, the ESXi hosts ignore the switch IP address.
+                version_added: '4.3.0'
             active_flow_timeout:
                 type: int
                 description: The time, in seconds, to wait before sending information after the flow is initiated.
