@@ -719,7 +719,7 @@ class VMwareDvSwitch(PyVmomi):
                 changed = changed_internalFlowsOnly = True
                 internalFlowsOnly_previous = current_config.internalFlowsOnly
                 new_config.internalFlowsOnly = self.netFlow_internal_flows_only
-            if current_switchIpAddress != self.netFlow_switch_ip:
+            if self.netFlow_switch_ip is not None and current_switchIpAddress != self.netFlow_switch_ip:
                 changed = changed_switchIpAddress = True
                 switchIpAddress_previous = current_switchIpAddress
                 new_switchIpAddress = self.netFlow_switch_ip
