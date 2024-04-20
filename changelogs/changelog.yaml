@@ -102,3 +102,31 @@ releases:
     - 1995-vsphere_copy.yml
     - 1996 - vmware_first_class_disk_info.yml
     release_date: '2024-02-24'
+  4.3.0:
+    changes:
+      bugfixes:
+      - Use `isinstance()` instead of `type()` for a typecheck (https://github.com/ansible-collections/community.vmware/pull/2011).
+      - vmware_guest - Fix a error while updating the VM by adding a new disk. While
+        adding a disk to an  existing VM, it leaves it in invalid state. (https://github.com/ansible-collections/community.vmware/pull/2044).
+      - vmware_guest - Fix a missing error message while setting a template parameter
+        with inconsistency guest_os ID (https://github.com/ansible-collections/community.vmware/pull/2036).
+      deprecated_features:
+      - vmware_guest_tools_info - `vm_tools_install_status` will be removed from next
+        major version (5.0.0) of the collection since the API call that provides this
+        information has been deprecated by VMware. Use `vm_tools_running_status` /
+        `vm_tools_version_status` instead (https://github.com/ansible-collections/community.vmware/issues/2033).
+      minor_changes:
+      - Document that all parameters and VMware object names are case sensitive (https://github.com/ansible-collections/community.vmware/issues/2019).
+      - Drop the outdated (and actually unmaintained) scenario guides (https://github.com/ansible-collections/community.vmware/pull/2022).
+      - vmware_dvswitch - Add switchIpAddress/switch_ip parameter for netflow config
+      - vmware_guest_tools_info - Use `toolsVersionStatus2` instead of `toolsVersionStatus`
+        (https://github.com/ansible-collections/community.vmware/issues/2033).
+    fragments:
+    - 1949-dvswitch_netflow_switch_ip.yml
+    - 2019-doc_fragments-case-sensitive.yml
+    - 2022-drop_sceanrio_guides.yml
+    - 2024027-fix_ci.yml
+    - 2033-vmware_guest_tools_info.yml
+    - 2036-missing_error_msg_in_vmware_guest.yml
+    - 2044-error_in_adding_disk_to_vm_in_vmware_guest.yml
+    release_date: '2024-04-20'

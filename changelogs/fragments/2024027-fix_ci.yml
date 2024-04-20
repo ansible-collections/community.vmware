@@ -1,2 +1,0 @@
-bugfixes:
-  - Use `isinstance()` instead of `type()` for a typecheck (https://github.com/ansible-collections/community.vmware/pull/2011).

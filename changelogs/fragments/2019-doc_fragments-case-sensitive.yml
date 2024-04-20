@@ -1,2 +1,0 @@
-minor_changes:
-  - Document that all parameters and VMware object names are case sensitive (https://github.com/ansible-collections/community.vmware/issues/2019).
