@@ -1,2 +1,0 @@
-minor_changes:
-  - Drop the outdated (and actually unmaintained) scenario guides (https://github.com/ansible-collections/community.vmware/pull/2022).

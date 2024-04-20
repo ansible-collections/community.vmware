@@ -1,4 +1,0 @@
-bugfixes:
-  - vmware_guest - Fix a error while updating the VM by adding a new disk. 
-    While adding a disk to an  existing VM, it leaves it in invalid state.
-    (https://github.com/ansible-collections/community.vmware/pull/2044).

@@ -4,6 +4,20 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+v3.11.3
+=======
+
+Minor Changes
+-------------
+
+- Drop the outdated (and actually unmaintained) scenario guides (https://github.com/ansible-collections/community.vmware/pull/2022).
+
+Bugfixes
+--------
+
+- Use `isinstance()` instead of `type()` for a typecheck (https://github.com/ansible-collections/community.vmware/pull/2012).
+- vmware_guest - Fix a error while updating the VM by adding a new disk. While adding a disk to an  existing VM, it leaves it in invalid state. (https://github.com/ansible-collections/community.vmware/pull/2044).
+- vmware_guest - Fix a missing error message while setting a template parameter with inconsistency guest_os ID (https://github.com/ansible-collections/community.vmware/pull/2036).
 
 v3.11.2
 =======
