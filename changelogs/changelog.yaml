@@ -1465,6 +1465,22 @@ releases:
     - 1848-fix-vm-reconfiguration-with-enabled-vbs.yml
     - 1969-InsecureRequestWarning.yml
     release_date: '2024-01-25'
+  3.11.3:
+    changes:
+      bugfixes:
+      - Use `isinstance()` instead of `type()` for a typecheck (https://github.com/ansible-collections/community.vmware/pull/2012).
+      - vmware_guest - Fix a error while updating the VM by adding a new disk. While
+        adding a disk to an  existing VM, it leaves it in invalid state. (https://github.com/ansible-collections/community.vmware/pull/2044).
+      - vmware_guest - Fix a missing error message while setting a template parameter
+        with inconsistency guest_os ID (https://github.com/ansible-collections/community.vmware/pull/2036).
+      minor_changes:
+      - Drop the outdated (and actually unmaintained) scenario guides (https://github.com/ansible-collections/community.vmware/pull/2022).
+    fragments:
+    - 2022-drop_sceanrio_guides.yml
+    - 2024027-fix_ci.yml
+    - 2036-missing_error_msg_in_vmware_guest.yml
+    - 2044-error_in_adding_disk_to_vm_in_vmware_guest.yml
+    release_date: '2024-04-20'
   3.2.0:
     changes:
       bugfixes:
