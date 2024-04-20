@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_dvswitch - Add switchIpAddress/switch_ip parameter for netflow config

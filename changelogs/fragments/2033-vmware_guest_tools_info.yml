@@ -1,6 +1,0 @@
-minor_changes:
-  - vmware_guest_tools_info - Use `toolsVersionStatus2` instead of `toolsVersionStatus` (https://github.com/ansible-collections/community.vmware/issues/2033).
-deprecated_features:
-  - vmware_guest_tools_info - `vm_tools_install_status` will be removed from next major version (5.0.0) of the collection
-    since the API call that provides this information has been deprecated by VMware.
-    Use `vm_tools_running_status` / `vm_tools_version_status` instead (https://github.com/ansible-collections/community.vmware/issues/2033).
