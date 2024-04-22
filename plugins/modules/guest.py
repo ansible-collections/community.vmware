@@ -1106,59 +1106,8 @@ class PyVmomiHelper(PyVmomi):
                 if task.info.state == 'error':
                     return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'rename'}
 
-        # add customize existing VM after VM re-configure
-        if self.params['customization']['existing_vm']:
-            if self.current_vm_obj.config.template:
-                self.module.fail_json(msg="VM is template, not support guest OS customization.")
-            if self.current_vm_obj.runtime.powerState != vim.VirtualMachinePowerState.poweredOff and not self.module.check_mode:
-                self.module.fail_json(msg="VM is not in poweroff state, can not do guest OS customization.")
-            # TODO not sure if it is possible to query the current customspec to compare against the one being provided to check in check mode.
-            # Maybe by breaking down the individual fields and querying, but it needs more research.
-            # For now, assume changed...
-            self.tracked_changes['customization'] = True
-            if self.module.check_mode:
-                self.change_applied = True
-            else:
-                cus_result = self.customize_exist_vm()
-                if cus_result['failed']:
-                    return cus_result
-
         vm_facts = self.gather_facts(self.current_vm_obj)
         return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts, 'changes': self.tracked_changes}
-
-    def customize_exist_vm(self):
-        task = None
-        # Find if we need network customizations (find keys in dictionary that requires customizations)
-        network_changes = False
-        for nw in self.params['networks']:
-            for key in nw:
-                # We don't need customizations for these keys
-                if key not in ('device_type', 'mac', 'name', 'vlan', 'type', 'start_connected', 'dvswitch_name'):
-                    network_changes = True
-                    break
-        if any(v is not None for v in self.params['customization'].values()) or network_changes or self.params.get('customization_spec'):
-            self.customize_vm(vm_obj=self.current_vm_obj)
-        try:
-            task = self.current_vm_obj.CustomizeVM_Task(self.customspec)
-        except vim.fault.CustomizationFault as e:
-            self.module.fail_json(msg="Failed to customization virtual machine due to CustomizationFault: %s" % to_native(e.msg))
-        except vim.fault.RuntimeFault as e:
-            self.module.fail_json(msg="failed to customization virtual machine due to RuntimeFault: %s" % to_native(e.msg))
-        except Exception as e:
-            self.module.fail_json(msg="failed to customization virtual machine due to fault: %s" % to_native(e.msg))
-        self.wait_for_task(task)
-        if task.info.state == 'error':
-            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'customize_exist'}
-
-        if self.params['wait_for_customization']:
-            set_vm_power_state(self.content, self.current_vm_obj, 'poweredon', force=False)
-            is_customization_ok = self.wait_for_customization(vm=self.current_vm_obj, timeout=self.params['wait_for_customization_timeout'])
-            if not is_customization_ok:
-                return {'changed': self.change_applied, 'failed': True,
-                        'msg': 'Customization failed. For detailed information see warnings',
-                        'op': 'wait_for_customize_exist'}
-
-        return {'changed': self.change_applied, 'failed': False}
 
     def wait_for_task(self, task, poll_interval=1):
         """
