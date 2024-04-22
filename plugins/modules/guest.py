@@ -945,20 +945,7 @@ class PyVmomiHelper(PyVmomi):
 
         destfolder = f_obj
 
-        if self.params['template']:
-            vm_obj = self.get_vm_or_template(template_name=self.params['template'])
-            if vm_obj is None:
-                self.module.fail_json(msg="Could not find a template named %(template)s" % self.params)
-            if self.params['guest_id'] is not None and vm_obj.summary.config.guestId is not None and self.params['guest_id'] != vm_obj.summary.config.guestId:
-                details = {
-                    'vm_guest_id': self.params['guest_id'],
-                    'template_guest_id': vm_obj.summary.config.guestId,
-                }
-                self.module.fail_json(msg="Could not create vm from template with different guest_ids",
-                                      details=details)
-
-        else:
-            vm_obj = None
+        vm_obj = None
 
         # always get a resource_pool
         resource_pool = self.get_resource_pool()
@@ -1007,60 +994,27 @@ class PyVmomiHelper(PyVmomi):
         clonespec = None
         clone_method = None
         try:
-            if self.params['template']:
-                # Only select specific host when ESXi hostname is provided
-                if self.params['esxi_hostname']:
-                    self.relospec.host = self.select_host()
-                self.relospec.datastore = datastore
+            # ConfigSpec require name for VM creation
+            self.configspec.name = self.params['name']
+            self.configspec.files = vim.vm.FileInfo(logDirectory=None,
+                                                    snapshotDirectory=None,
+                                                    suspendDirectory=None,
+                                                    vmPathName="[" + datastore_name + "]")
+            esx_host = None
+            # Only select specific host when ESXi hostname is provided
+            if self.params['esxi_hostname']:
+                esx_host = self.select_host()
 
-                # https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.vm.RelocateSpec.html
-                # > pool: For a clone operation from a template to a virtual machine, this argument is required.
-                self.relospec.pool = resource_pool
-                linked_clone = self.params.get('linked_clone')
-                snapshot_src = self.params.get('snapshot_src', None)
-                if linked_clone:
-                    if snapshot_src is not None:
-                        self.relospec.diskMoveType = vim.vm.RelocateSpec.DiskMoveOptions.createNewChildDiskBacking
-                    else:
-                        self.module.fail_json(msg="Parameter 'linked_src' and 'snapshot_src' are"
-                                                  " required together for linked clone operation.")
-
-                clonespec = vim.vm.CloneSpec(template=self.params['is_template'], location=self.relospec)
-                if self.customspec:
-                    clonespec.customization = self.customspec
-
-                clonespec.config = self.configspec
-                clone_method = 'Clone'
-                try:
-                    task = vm_obj.Clone(folder=destfolder, name=self.params['name'], spec=clonespec)
-                except vim.fault.NoPermission as e:
-                    self.module.fail_json(msg="Failed to clone virtual machine %s to folder %s "
-                                              "due to permission issue: %s" % (self.params['name'],
-                                                                               destfolder,
-                                                                               to_native(e.msg)))
-                self.change_detected = True
-            else:
-                # ConfigSpec require name for VM creation
-                self.configspec.name = self.params['name']
-                self.configspec.files = vim.vm.FileInfo(logDirectory=None,
-                                                        snapshotDirectory=None,
-                                                        suspendDirectory=None,
-                                                        vmPathName="[" + datastore_name + "]")
-                esx_host = None
-                # Only select specific host when ESXi hostname is provided
-                if self.params['esxi_hostname']:
-                    esx_host = self.select_host()
-
-                clone_method = 'CreateVM_Task'
-                try:
-                    task = destfolder.CreateVM_Task(config=self.configspec, pool=resource_pool, host=esx_host)
-                except vmodl.fault.InvalidRequest as e:
-                    self.module.fail_json(msg="Failed to create virtual machine due to invalid configuration "
-                                              "parameter %s" % to_native(e.msg))
-                except vim.fault.RestrictedVersion as e:
-                    self.module.fail_json(msg="Failed to create virtual machine due to "
-                                              "product versioning restrictions: %s" % to_native(e.msg))
-                self.change_detected = True
+            clone_method = 'CreateVM_Task'
+            try:
+                task = destfolder.CreateVM_Task(config=self.configspec, pool=resource_pool, host=esx_host)
+            except vmodl.fault.InvalidRequest as e:
+                self.module.fail_json(msg="Failed to create virtual machine due to invalid configuration "
+                                          "parameter %s" % to_native(e.msg))
+            except vim.fault.RestrictedVersion as e:
+                self.module.fail_json(msg="Failed to create virtual machine due to "
+                                          "product versioning restrictions: %s" % to_native(e.msg))
+            self.change_detected = True
             self.wait_for_task(task)
         except TypeError as e:
             self.module.fail_json(msg="TypeError was returned, please ensure to give correct inputs. %s" % to_text(e))
