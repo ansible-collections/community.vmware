@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_dvs_portgroup - Fix erroneously reporting a change when `port_binding` is static and `num_ports` not specified
+    (https://github.com/ansible-collections/community.vmware/pull/2053).
