@@ -714,60 +714,36 @@ class PyVmomiHelper(PyVmomi):
         datastore = None
         datastore_name = None
 
-        if self.params['disk']:
-            # TODO: really use the datastore for newly created disks
-            if self.params['disk'][0]['autoselect_datastore']:
-                datastores = []
+        datastores = []
 
-                if self.params['cluster']:
-                    cluster = self.find_cluster_by_name(self.params['cluster'], self.content)
+        if self.params['cluster']:
+            cluster = self.find_cluster_by_name(self.params['cluster'], self.content)
 
-                    for host in cluster.host:
-                        for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
-                            if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
-                                datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
-                elif self.params['esxi_hostname']:
-                    host = self.find_hostsystem_by_name(self.params['esxi_hostname'])
+            for host in cluster.host:
+                for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
+                    if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
+                        datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
+        elif self.params['esxi_hostname']:
+            host = self.find_hostsystem_by_name(self.params['esxi_hostname'])
 
-                    for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
-                        if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
-                            datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
-                else:
-                    datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
-                    datastores = [x for x in datastores if self.cache.get_parent_datacenter(x).name == self.params['datacenter']]
+            for mi in host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo:
+                if mi.volume.type == "VMFS" or mi.volume.type == "NFS":
+                    datastores.append(self.cache.find_obj(self.content, [vim.Datastore], mi.volume.name))
+        else:
+            datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
+            datastores = [x for x in datastores if self.cache.get_parent_datacenter(x).name == self.params['datacenter']]
 
-                datastore_freespace = 0
-                for ds in datastores:
-                    if not self.is_datastore_valid(datastore_obj=ds):
-                        continue
+        datastore_freespace = 0
+        for ds in datastores:
+            if not self.is_datastore_valid(datastore_obj=ds):
+                continue
 
-                    if (ds.summary.freeSpace > datastore_freespace) or (ds.summary.freeSpace == datastore_freespace and not datastore):
-                        # If datastore field is provided, filter destination datastores
-                        if self.params['disk'][0]['datastore'] and ds.name.find(self.params['disk'][0]['datastore']) < 0:
-                            continue
-
-                        datastore = ds
-                        datastore_name = datastore.name
-                        datastore_freespace = ds.summary.freeSpace
-
-            elif self.params['disk'][0]['datastore']:
-                datastore_name = self.params['disk'][0]['datastore']
-                # Check if user has provided datastore cluster first
-                datastore_cluster = self.cache.find_obj(self.content, [vim.StoragePod], datastore_name)
-                if datastore_cluster:
-                    # If user specified datastore cluster so get recommended datastore
-                    datastore_name = self.get_recommended_datastore(datastore_cluster_obj=datastore_cluster)
-                # Check if get_recommended_datastore or user specified datastore exists or not
-                datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
-            else:
-                self.module.fail_json(msg="Either datastore or autoselect_datastore should be provided to select datastore")
+            if (ds.summary.freeSpace > datastore_freespace) or (ds.summary.freeSpace == datastore_freespace and not datastore):
+                datastore = ds
+                datastore_name = datastore.name
+                datastore_freespace = ds.summary.freeSpace
 
         if not datastore:
-            if len(self.params['disk']) != 0 or self.params['template'] is None:
-                self.module.fail_json(msg="Unable to find the datastore with given parameters."
-                                          " This could mean, %s is a non-existent virtual machine and module tried to"
-                                          " deploy it as new virtual machine with no disk. Please specify disks parameter"
-                                          " or specify template to clone from." % self.params['name'])
             self.module.fail_json(msg="Failed to find a matching datastore")
 
         return datastore, datastore_name
@@ -919,7 +895,7 @@ class PyVmomiHelper(PyVmomi):
         # always get a resource_pool
         resource_pool = self.get_resource_pool()
 
-        # set the destination datastore for VM & disks
+        # set the destination datastore for VM
         if self.params['datastore']:
             # Give precedence to datastore value provided by user
             # User may want to deploy VM to specific datastore.
