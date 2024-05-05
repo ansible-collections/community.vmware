@@ -529,7 +529,7 @@ class PyVmomiHelper(PyVmomi):
                 self.change_detected = True
                 self.configspec.numCPUs = num_cpus
         # num_cpu is mandatory for VM creation
-        elif vm_creation and not self.params['template']:
+        elif vm_creation:
             self.module.fail_json(msg="hardware.num_cpus attribute is mandatory for VM creation")
 
         memory_mb = self.params['hardware']['memory_mb']
@@ -546,7 +546,7 @@ class PyVmomiHelper(PyVmomi):
                 self.change_detected = True
                 self.configspec.memoryMB = memory_mb
         # memory_mb is mandatory for VM creation
-        elif vm_creation and not self.params['template']:
+        elif vm_creation:
             self.module.fail_json(msg="hardware.memory_mb attribute is mandatory for VM creation")
 
         hotadd_memory = self.params['hardware']['hotadd_memory']
