@@ -481,13 +481,13 @@ options:
   cluster:
     description:
     - The cluster name where the virtual machine will run.
-    - This is a required parameter, if O(esxi_hostname) is not set.
+    - This is a required parameter if O(esxi_hostname) is not set.
     - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     type: str
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
-    - This is a required parameter, if O(cluster) is not set.
+    - This is a required parameter if O(cluster) is not set.
     - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     type: str
   advanced_settings:
@@ -3539,6 +3539,7 @@ def main():
                            ],
                            required_one_of=[
                                ['name', 'uuid'],
+                               ['cluster', 'esxi_hostname'],
                            ],
                            )
     result = {'failed': False, 'changed': False}
