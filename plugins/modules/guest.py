@@ -710,24 +710,6 @@ class PyVmomiHelper(PyVmomi):
             self.module.fail_json(msg='ESXi "%(esxi_hostname)s" is in invalid state or in maintenance mode.' % self.params)
         return hostsystem
 
-    def autoselect_datastore(self):
-        datastore = None
-        datastores = self.cache.get_all_objs(self.content, [vim.Datastore])
-
-        if datastores is None or len(datastores) == 0:
-            self.module.fail_json(msg="Unable to find a datastore list when autoselecting")
-
-        datastore_freespace = 0
-        for ds in datastores:
-            if not self.is_datastore_valid(datastore_obj=ds):
-                continue
-
-            if ds.summary.freeSpace > datastore_freespace:
-                datastore = ds
-                datastore_freespace = ds.summary.freeSpace
-
-        return datastore
-
     def select_datastore(self, vm_obj=None):
         datastore = None
         datastore_name = None
@@ -779,19 +761,6 @@ class PyVmomiHelper(PyVmomi):
                 datastore = self.cache.find_obj(self.content, [vim.Datastore], datastore_name)
             else:
                 self.module.fail_json(msg="Either datastore or autoselect_datastore should be provided to select datastore")
-
-        if not datastore and self.params['template']:
-            # use the template's existing DS
-            disks = [x for x in vm_obj.config.hardware.device if isinstance(x, vim.vm.device.VirtualDisk)]
-            if disks:
-                datastore = disks[0].backing.datastore
-                datastore_name = datastore.name
-            # validation
-            if datastore:
-                dc = self.cache.get_parent_datacenter(datastore)
-                if dc.name != self.params['datacenter']:
-                    datastore = self.autoselect_datastore()
-                    datastore_name = datastore.name
 
         if not datastore:
             if len(self.params['disk']) != 0 or self.params['template'] is None:
