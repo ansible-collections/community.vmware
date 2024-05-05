@@ -311,7 +311,6 @@ class PyVmomiCache(object):
     def __init__(self, content, dc_name=None):
         self.content = content
         self.dc_name = dc_name
-        self.networks = {}
         self.clusters = {}
         self.esx_hosts = {}
         self.parent_datacenters = {}
@@ -920,21 +919,6 @@ class PyVmomiHelper(PyVmomi):
         self.configure_hardware_params(vm_obj=vm_obj)
         self.configure_encryption_params(vm_obj=vm_obj)
         self.configure_resource_alloc_info(vm_obj=vm_obj)
-
-        # Find if we need network customizations (find keys in dictionary that requires customizations)
-        network_changes = False
-        for nw in self.params['networks']:
-            for key in nw:
-                # We don't need customizations for these keys
-                if key == 'type' and nw['type'] == 'dhcp':
-                    network_changes = True
-                    break
-                if key not in ('device_type', 'mac', 'name', 'vlan', 'type', 'start_connected', 'dvswitch_name'):
-                    network_changes = True
-                    break
-
-        if any(v is not None for v in self.params['customization'].values()) or network_changes or self.params.get('customization_spec') is not None:
-            self.customize_vm(vm_obj=vm_obj)
 
         clonespec = None
         clone_method = None
