@@ -965,19 +965,6 @@ class PyVmomiHelper(PyVmomi):
             }
 
             return kwargs
-        else:
-            # set annotation
-            vm = task.info.result
-            if self.params['annotation']:
-                annotation_spec = vim.vm.ConfigSpec()
-                annotation_spec.annotation = str(self.params['annotation'])
-                task = vm.ReconfigVM_Task(annotation_spec)
-                self.wait_for_task(task)
-                if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'annotation'}
-
-            vm_facts = self.gather_facts(vm)
-            return {'changed': self.change_applied, 'failed': False, 'instance': vm_facts}
 
     def reconfigure_vm(self):
         self.configspec = vim.vm.ConfigSpec()
@@ -990,10 +977,6 @@ class PyVmomiHelper(PyVmomi):
         self.configure_hardware_params(vm_obj=self.current_vm_obj)
         self.configure_encryption_params(vm_obj=self.current_vm_obj)
         self.configure_resource_alloc_info(vm_obj=self.current_vm_obj)
-
-        if self.params['annotation'] and self.current_vm_obj.config.annotation != self.params['annotation']:
-            self.configspec.annotation = str(self.params['annotation'])
-            self.change_detected = True
 
         if self.params['resource_pool']:
             self.relospec.pool = self.get_resource_pool()
