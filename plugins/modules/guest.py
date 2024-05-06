@@ -1119,6 +1119,9 @@ def main():
                            mutually_exclusive=[
                                ['cluster', 'esxi_hostname'],
                            ],
+                           required_one_of=[
+                               ['cluster', 'esxi_hostname'],
+                           ],
                            )
     result = {'failed': False, 'changed': False}
     pyv = PyVmomiHelper(module)

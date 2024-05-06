@@ -12,6 +12,7 @@
     name: test_vm1
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     hardware:
         num_cpus: 1
         num_cpu_cores_per_socket: 1
@@ -59,6 +60,7 @@
     name: test_vm1
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     hardware:
         num_cpus: 2
         memory_mb: 128
@@ -93,6 +95,7 @@
     password: "{{ vcenter_password }}"
     name: test_vm1
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     state: absent
     folder: '{{ f0 }}'
   register: delete_d1_c1_f0

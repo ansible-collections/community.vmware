@@ -11,6 +11,7 @@
     name: invalid_vm
     guest_id: "invalid_guest_id"
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     hardware:
         num_cpus: 1
         memory_mb: 128
@@ -21,7 +22,7 @@
 
 - debug: var=invalid_guest_0001_d1_c1_f0
 
-- name: assert that changes were made
+- name: assert that no changes were made
   assert:
     that:
         - "not (invalid_guest_0001_d1_c1_f0 is changed)"

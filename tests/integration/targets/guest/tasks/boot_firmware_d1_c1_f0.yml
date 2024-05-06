@@ -12,6 +12,7 @@
     name: test_vm1
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     hardware:
         num_cpus: 1
         boot_firmware: "bios"
@@ -48,6 +49,7 @@
     name: test_vm2
     guest_id: centos64Guest
     datacenter: "{{ dc1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     hardware:
         num_cpus: 1
         boot_firmware: "efi"
