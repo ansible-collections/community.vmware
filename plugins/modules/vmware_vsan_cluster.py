@@ -52,12 +52,6 @@ EXAMPLES = r'''
       loop: "{{ groups['esxi'][1:] }}"
 '''
 
-try:
-    from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
-except ImportError:
-    HAS_PYVMOMI = False
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     HAS_PYVMOMI, connect_to_api, get_all_objs, vmware_argument_spec,

@@ -177,12 +177,6 @@ results:
     }
 '''
 
-try:
-    from pyVmomi import vim
-    HAS_PYVMOMI = True
-except ImportError:
-    HAS_PYVMOMI = False
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
 from ansible.module_utils._text import to_native
@@ -573,9 +567,6 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
     )
-
-    if not HAS_PYVMOMI:
-        module.fail_json(msg='pyvmomi required for this module')
 
     host_snmp = VmwareHostSnmp(module)
     host_snmp.ensure()

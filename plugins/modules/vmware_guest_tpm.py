@@ -98,13 +98,6 @@ instance:
     sample: None
 '''
 
-HAS_PYVMOMI = False
-try:
-    from pyVmomi import vim
-    HAS_PYVMOMI = True
-except ImportError:
-    pass
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, wait_for_task

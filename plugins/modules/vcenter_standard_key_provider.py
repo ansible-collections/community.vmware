@@ -178,14 +178,6 @@ key_provider_clusters:
         ]
 '''
 
-HAS_PYVMOMI = False
-try:
-    from pyVmomi import vim
-
-    HAS_PYVMOMI = True
-except ImportError:
-    pass
-
 import os
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native

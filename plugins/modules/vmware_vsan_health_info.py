@@ -105,15 +105,6 @@ vsan_health_info:
 import json
 import traceback
 
-try:
-    from pyVmomi import vmodl, VmomiSupport
-    HAS_PYVMOMI = True
-    HAS_PYVMOMIJSON = hasattr(VmomiSupport, 'VmomiJSONEncoder')
-except ImportError:
-    PYVMOMI_IMP_ERR = traceback.format_exc()
-    HAS_PYVMOMI = False
-    HAS_PYVMOMIJSON = False
-
 VSANPYTHONSDK_IMP_ERR = None
 try:
     import vsanapiutils
@@ -185,9 +176,6 @@ def main():
 
     if not HAS_VSANPYTHONSDK:
         module.fail_json(msg=missing_required_lib('vSAN Management SDK for Python'), exception=VSANPYTHONSDK_IMP_ERR)
-
-    if not HAS_PYVMOMIJSON:
-        module.fail_json(msg='The installed version of pyvmomi lacks JSON output support; need pyvmomi>6.7.1')
 
     vsan_info_manager = VSANInfoManager(module)
     vsan_info_manager.gather_info()

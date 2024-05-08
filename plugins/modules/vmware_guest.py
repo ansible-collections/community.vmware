@@ -1098,13 +1098,6 @@ import re
 import time
 import string
 
-HAS_PYVMOMI = False
-try:
-    from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
-except ImportError:
-    pass
-
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.network import is_mac
 from ansible.module_utils._text import to_text, to_native

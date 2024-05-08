@@ -190,12 +190,6 @@ resource_pool_config:
       }
 '''
 
-try:
-    from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
-except ImportError:
-    HAS_PYVMOMI = False
-
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, vmware_argument_spec, find_datacenter_by_name, \
     find_cluster_by_name, find_object_by_name, wait_for_task, find_resource_pool_by_name, PyVmomi
@@ -478,9 +472,6 @@ def main():
                                ['cluster', 'esxi_hostname', 'parent_resource_pool'],
                            ],
                            supports_check_mode=True)
-
-    if not HAS_PYVMOMI:
-        module.fail_json(msg='pyvmomi is required for this module')
 
     vmware_rp = VMwareResourcePool(module)
     vmware_rp.process_state()
