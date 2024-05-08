@@ -181,7 +181,7 @@ key_provider_clusters:
 import os
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, vim
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
 
 
 class PyVmomiHelper(PyVmomi):
@@ -189,6 +189,7 @@ class PyVmomiHelper(PyVmomi):
         super(PyVmomiHelper, self).__init__(module)
         self.crypto_mgr = self.content.cryptoManager
         self.key_provider_id = None
+        from pyVmomi import vim
 
     def get_key_provider_clusters(self):
         key_provider_clusters = None
