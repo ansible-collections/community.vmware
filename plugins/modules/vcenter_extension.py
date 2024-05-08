@@ -124,7 +124,8 @@ except ImportError:
 import datetime
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware import connect_to_api
 
 
 def main():

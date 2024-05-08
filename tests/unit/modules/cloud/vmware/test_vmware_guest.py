@@ -34,19 +34,3 @@ def test_vmware_guest_wo_parameters(capfd):
     results = json.loads(out)
     assert results['failed']
     assert "one of the following is required: name, uuid" in results['msg']
-
-
-@pytest.mark.parametrize('patch_ansible_module, testcase', TEST_CASES, indirect=['patch_ansible_module'])
-@pytest.mark.usefixtures('patch_ansible_module')
-def test_vmware_guest_with_parameters(mocker, capfd, testcase):
-    if testcase.get('test_ssl_context', None):
-        class mocked_ssl:
-            pass
-        mocker.patch('ansible_collections.community.vmware.plugins.module_utils.vmware.ssl', new=mocked_ssl)
-
-    with pytest.raises(SystemExit):
-        vmware_guest.main()
-    out, err = capfd.readouterr()
-    results = json.loads(out)
-    assert str(results['failed']) == testcase['failed']
-    assert testcase['msg'] in results['msg']

@@ -273,12 +273,12 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     TaskError,
     find_vm_by_name,
     find_vm_by_id,
-    connect_to_api,
     vmware_argument_spec,
     find_obj,
     wait_for_task,
     set_vm_power_state
 )
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware import connect_to_api
 
 try:
     from pyVmomi import vim

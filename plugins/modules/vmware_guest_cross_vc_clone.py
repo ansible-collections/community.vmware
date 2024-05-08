@@ -198,13 +198,13 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_datastore_by_name,
     find_folder_by_name,
     find_vm_by_name,
-    connect_to_api,
     vmware_argument_spec,
     gather_vm_facts,
     find_obj,
     find_resource_pool_by_name,
     wait_for_task,
 )
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware import connect_to_api
 try:
     from pyVmomi import vim
 except ImportError:

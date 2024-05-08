@@ -91,7 +91,8 @@ jobs:
           testing-type: sanity
           # OPTIONAL If your sanity tests require code
           # from other collections, install them like this
-          # test-deps: >-
+          test-deps: >-
+            vmware.vmware
           #   ansible.netcommon
           #   ansible.utils
           # OPTIONAL If set to true, will test only against changed files,
@@ -151,6 +152,7 @@ jobs:
           test-deps: >-
             ansible.netcommon
             ansible.utils
+            vmware.vmware
           # OPTIONAL If set to true, will test only against changed files,
           # which should improve CI performance. See limitations on
           # https://github.com/ansible-community/ansible-test-gh-action#pull-request-change-detection

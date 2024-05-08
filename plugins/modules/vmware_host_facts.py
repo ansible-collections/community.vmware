@@ -242,7 +242,7 @@ try:
 except ImportError:
     pass
 
-from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
 class VMwareHostFactManager(PyVmomi):

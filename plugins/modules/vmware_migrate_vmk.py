@@ -82,7 +82,8 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec, find_dvs_by_name, find_hostsystem_by_name,
-    connect_to_api, find_dvspg_by_name)
+    find_dvspg_by_name)
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware import connect_to_api
 
 
 class VMwareMigrateVmk(object):
