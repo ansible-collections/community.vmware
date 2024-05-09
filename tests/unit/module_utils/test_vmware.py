@@ -6,8 +6,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-import ssl
-import sys
 import pytest
 
 from unittest import mock
@@ -15,8 +13,6 @@ from unittest import mock
 pyvmomi = pytest.importorskip('pyVmomi')
 
 from ansible_collections.community.vmware.plugins.module_utils.vmware import option_diff
-
-import ansible_collections.community.vmware.plugins.module_utils.vmware as vmware_module_utils
 
 
 test_data = [
