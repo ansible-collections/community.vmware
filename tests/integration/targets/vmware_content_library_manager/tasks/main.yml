@@ -144,7 +144,7 @@
     validate_certs: false
     library_name: Sample_Subscribed_Library
     library_description: Update Sample Description
-    subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
+    subscription_url: "https://wp-content.vmware.com/v2/latest/lib.json"
     update_on_demand: true
     library_type: subscribed
     ssl_thumbprint: '{{ _finger_print.stdout.split("=")[1] }}'
