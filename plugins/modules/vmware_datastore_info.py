@@ -176,7 +176,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     get_all_objs,
     find_cluster_by_name,
     get_parent_datacenter)
-from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
 class VMwareHostDatastore(PyVmomi):

@@ -155,8 +155,8 @@ category_results:
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.compat.version import LooseVersion
-from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
-from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware import connect_to_api
+from ansible_collections.vmware.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 try:
     from pyVmomi.VmomiSupport import XMLNS_VMODL_BASE
