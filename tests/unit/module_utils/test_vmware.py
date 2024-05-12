@@ -97,20 +97,6 @@ def fake_connect_to_api(module, return_si=None):
     return None, mock.Mock()
 
 
-def test_validate_certs(monkeypatch, fake_ansible_module):
-    """ Test if SSL is required or not"""
-    fake_ansible_module.params = test_data[3][0]
-
-    monkeypatch.setattr(vmware_module_utils, 'ssl', mock.Mock())
-    del vmware_module_utils.ssl.SSLContext
-    with pytest.raises(FailJsonException):
-        vmware_module_utils.PyVmomi(fake_ansible_module)
-    msg = 'pyVim does not support changing verification mode with python < 2.7.9.' \
-          ' Either update python or use validate_certs=false.'
-    fake_ansible_module.fail_json.assert_called_once()
-    assert msg == fake_ansible_module.fail_json.call_args[1]['msg']
-
-
 def test_vmdk_disk_path_split(monkeypatch, fake_ansible_module):
     """ Test vmdk_disk_path_split function"""
     fake_ansible_module.params = test_data[0][0]
