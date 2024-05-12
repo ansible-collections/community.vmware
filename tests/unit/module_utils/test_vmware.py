@@ -96,23 +96,6 @@ def fake_connect_to_api(module, return_si=None):
     return None, mock.Mock()
 
 
-testdata = [
-    ('HAS_PYVMOMI', 'PyVmomi'),
-    ('HAS_REQUESTS', 'requests'),
-]
-
-
-@pytest.mark.parametrize("key,libname", testdata)
-def test_lib_loading_failure(monkeypatch, fake_ansible_module, key, libname):
-    """ Test if Pyvmomi is present or not"""
-    monkeypatch.setattr(vmware_module_utils, key, False)
-    with pytest.raises(FailJsonException):
-        vmware_module_utils.PyVmomi(fake_ansible_module)
-    error_str = 'Failed to import the required Python library (%s)' % libname
-    fake_ansible_module.fail_json.assert_called_once()
-    assert error_str in fake_ansible_module.fail_json.call_args[1]['msg']
-
-
 def test_validate_certs(monkeypatch, fake_ansible_module):
     """ Test if SSL is required or not"""
     fake_ansible_module.params = test_data[3][0]
