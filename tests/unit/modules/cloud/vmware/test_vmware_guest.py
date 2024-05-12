@@ -42,7 +42,7 @@ def test_vmware_guest_with_parameters(mocker, capfd, testcase):
     if testcase.get('test_ssl_context', None):
         class mocked_ssl:
             pass
-        mocker.patch('ansible_collections.community.vmware.plugins.module_utils.vmware.ssl', new=mocked_ssl)
+        mocker.patch('ansible_collections.vmware.vmware.plugins.module_utils.vmware.ssl', new=mocked_ssl)
 
     with pytest.raises(SystemExit):
         vmware_guest.main()
