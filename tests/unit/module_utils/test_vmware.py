@@ -15,6 +15,7 @@ pyvmomi = pytest.importorskip('pyVmomi')
 from ansible_collections.community.vmware.plugins.module_utils.vmware import option_diff
 
 import ansible_collections.community.vmware.plugins.module_utils.vmware as vmware_module_utils
+import ansible_collections.vmware.vmware.plugins.module_utils.vmware as parent_vmware_module_utils
 
 
 test_data = [
@@ -114,7 +115,7 @@ def test_vmdk_disk_path_split(monkeypatch, fake_ansible_module):
     """ Test vmdk_disk_path_split function"""
     fake_ansible_module.params = test_data[0][0]
 
-    monkeypatch.setattr(vmware_module_utils, 'connect_to_api', fake_connect_to_api)
+    monkeypatch.setattr(parent_vmware_module_utils, 'connect_to_api', fake_connect_to_api)
     pyv = vmware_module_utils.PyVmomi(fake_ansible_module)
     v = pyv.vmdk_disk_path_split('[ds1] VM_0001/VM0001_0.vmdk')
     assert v == ('ds1', 'VM_0001/VM0001_0.vmdk', 'VM0001_0.vmdk', 'VM_0001')
@@ -124,7 +125,7 @@ def test_vmdk_disk_path_split_negative(monkeypatch, fake_ansible_module):
     """ Test vmdk_disk_path_split function"""
     fake_ansible_module.params = test_data[0][0]
 
-    monkeypatch.setattr(vmware_module_utils, 'connect_to_api', fake_connect_to_api)
+    monkeypatch.setattr(parent_vmware_module_utils, 'connect_to_api', fake_connect_to_api)
     with pytest.raises(FailJsonException):
         pyv = vmware_module_utils.PyVmomi(fake_ansible_module)
         pyv.vmdk_disk_path_split('[ds1]')
