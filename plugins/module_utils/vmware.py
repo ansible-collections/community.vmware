@@ -39,11 +39,9 @@ try:
     from pyVim import connect
     from pyVmomi import vim, vmodl, VmomiSupport
     HAS_PYVMOMI = True
-    HAS_PYVMOMIJSON = hasattr(VmomiSupport, 'VmomiJSONEncoder')
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
-    HAS_PYVMOMIJSON = False
 
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
@@ -1972,9 +1970,6 @@ class PyVmomi(object):
         provided then all properties are deeply converted.  The resulting
         JSON is sorted to improve human readability.
 
-        Requires upstream support from pyVmomi > 6.7.1
-        (https://github.com/vmware/pyvmomi/pull/732)
-
         Args:
           - obj (object): vim object
           - properties (list, optional): list of properties following
@@ -1985,9 +1980,6 @@ class PyVmomi(object):
         Return:
           dict
         """
-        if not HAS_PYVMOMIJSON:
-            self.module.fail_json(msg='The installed version of pyvmomi lacks JSON output support; need pyvmomi>6.7.1')
-
         result = dict()
         if properties:
             for prop in properties:
