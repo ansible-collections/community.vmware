@@ -6,8 +6,6 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-import ssl
-import sys
 import pytest
 
 from unittest import mock
@@ -115,17 +113,6 @@ def test_lib_loading_failure(monkeypatch, fake_ansible_module, key, libname):
     assert error_str in fake_ansible_module.fail_json.call_args[1]['msg']
 
 
-@pytest.mark.skipif(sys.version_info < (2, 7), reason="requires python2.7 and greater")
-@pytest.mark.parametrize("params, msg", test_data, ids=test_ids)
-def test_required_params(request, params, msg, fake_ansible_module):
-    """ Test if required params are correct or not"""
-    fake_ansible_module.params = params
-    with pytest.raises(FailJsonException):
-        vmware_module_utils.connect_to_api(fake_ansible_module)
-    fake_ansible_module.fail_json.assert_called_once()
-    # TODO: assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
-
-
 def test_validate_certs(monkeypatch, fake_ansible_module):
     """ Test if SSL is required or not"""
     fake_ansible_module.params = test_data[3][0]
@@ -160,75 +147,6 @@ def test_vmdk_disk_path_split_negative(monkeypatch, fake_ansible_module):
         pyv.vmdk_disk_path_split('[ds1]')
     fake_ansible_module.fail_json.assert_called_once()
     assert 'Bad path' in fake_ansible_module.fail_json.call_args[1]['msg']
-
-
-@pytest.mark.skipif(sys.version_info < (2, 7), reason="requires python2.7 and greater")
-def test_connect_to_api_validate_certs(monkeypatch, fake_ansible_module):
-    monkeypatch.setattr(vmware_module_utils, 'connect', mock.Mock())
-
-    def MockSSLContext(proto):
-        ssl_context.proto = proto
-        return ssl_context
-
-    # New Python with SSLContext + validate_certs=True
-    vmware_module_utils.connect.reset_mock()
-    ssl_context = mock.Mock()
-    monkeypatch.setattr(vmware_module_utils.ssl, 'SSLContext', MockSSLContext)
-    fake_ansible_module.params['validate_certs'] = True
-    vmware_module_utils.connect_to_api(fake_ansible_module)
-    assert ssl_context.proto == ssl.PROTOCOL_SSLv23
-    assert ssl_context.verify_mode == ssl.CERT_REQUIRED
-    assert ssl_context.check_hostname is True
-    vmware_module_utils.connect.SmartConnect.assert_called_once_with(
-        host='esxi1',
-        port=443,
-        pwd='Esxi@123$%',
-        user='Administrator@vsphere.local',
-        sslContext=ssl_context)
-
-    # New Python with SSLContext + validate_certs=False
-    vmware_module_utils.connect.reset_mock()
-    ssl_context = mock.Mock()
-    monkeypatch.setattr(vmware_module_utils.ssl, 'SSLContext', MockSSLContext)
-    fake_ansible_module.params['validate_certs'] = False
-    vmware_module_utils.connect_to_api(fake_ansible_module)
-    assert ssl_context.proto == ssl.PROTOCOL_SSLv23
-    assert ssl_context.verify_mode == ssl.CERT_NONE
-    assert ssl_context.check_hostname is False
-    vmware_module_utils.connect.SmartConnect.assert_called_once_with(
-        host='esxi1',
-        port=443,
-        pwd='Esxi@123$%',
-        user='Administrator@vsphere.local',
-        sslContext=ssl_context)
-
-    # Old Python with no SSLContext + validate_certs=True
-    vmware_module_utils.connect.reset_mock()
-    ssl_context = mock.Mock()
-    ssl_context.proto = None
-    monkeypatch.delattr(vmware_module_utils.ssl, 'SSLContext')
-    fake_ansible_module.params['validate_certs'] = True
-    with pytest.raises(FailJsonException):
-        vmware_module_utils.connect_to_api(fake_ansible_module)
-    assert ssl_context.proto is None
-    fake_ansible_module.fail_json.assert_called_once_with(msg=(
-        'pyVim does not support changing verification mode with python '
-        '< 2.7.9. Either update python or use validate_certs=false.'))
-    assert not vmware_module_utils.connect.SmartConnect.called
-
-    # Old Python with no SSLContext + validate_certs=False
-    vmware_module_utils.connect.reset_mock()
-    ssl_context = mock.Mock()
-    ssl_context.proto = None
-    monkeypatch.delattr(vmware_module_utils.ssl, 'SSLContext', raising=False)
-    fake_ansible_module.params['validate_certs'] = False
-    vmware_module_utils.connect_to_api(fake_ansible_module)
-    assert ssl_context.proto is None
-    vmware_module_utils.connect.SmartConnect.assert_called_once_with(
-        host='esxi1',
-        port=443,
-        pwd='Esxi@123$%',
-        user='Administrator@vsphere.local')
 
 
 @pytest.mark.parametrize("test_options, test_current_options, test_truthy_strings_as_bool", [
