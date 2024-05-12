@@ -43,7 +43,6 @@ options:
         - Specify the output schema desired.
         - The 'summary' output schema is the legacy output from the module
         - The 'vsphere' output schema is the vSphere API class definition
-          which requires pyvmomi>6.7.1
       choices: ['summary', 'vsphere']
       default: 'summary'
       type: str
