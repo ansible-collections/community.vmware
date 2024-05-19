@@ -1,2 +1,0 @@
-bugfixes:
-  - Clarify pyVmomi requirement (https://github.com/ansible-collections/community.vmware/pull/2071).

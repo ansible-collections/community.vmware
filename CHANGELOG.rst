@@ -6,6 +6,21 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.4.0
+======
+
+Minor Changes
+-------------
+
+- vmware_dvs_portgroup - Make `state` default to `present` instead of having it as a required parameter (https://github.com/ansible-collections/community.vmware/pull/2055).
+
+Bugfixes
+--------
+
+- Clarify pyVmomi requirement (https://github.com/ansible-collections/community.vmware/pull/2071).
+- vmware_cluster_dpm - Handle case where DPM config has not been initialized yet and is None (https://github.com/ansible-collections/community.vmware/pull/2057).
+- vmware_dvs_portgroup - Fix erroneously reporting a change when `port_binding` is static and `num_ports` not specified (https://github.com/ansible-collections/community.vmware/pull/2053).
+
 v4.3.0
 ======
 
