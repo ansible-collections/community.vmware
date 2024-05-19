@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_cluster_dpm - Handle case where DPM config has not been initialized yet and is None
-    (https://github.com/ansible-collections/community.vmware/pull/2057).
