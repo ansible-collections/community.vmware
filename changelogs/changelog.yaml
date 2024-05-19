@@ -130,3 +130,20 @@ releases:
     - 2036-missing_error_msg_in_vmware_guest.yml
     - 2044-error_in_adding_disk_to_vm_in_vmware_guest.yml
     release_date: '2024-04-20'
+  4.4.0:
+    changes:
+      bugfixes:
+      - Clarify pyVmomi requirement (https://github.com/ansible-collections/community.vmware/pull/2071).
+      - vmware_cluster_dpm - Handle case where DPM config has not been initialized
+        yet and is None (https://github.com/ansible-collections/community.vmware/pull/2057).
+      - vmware_dvs_portgroup - Fix erroneously reporting a change when `port_binding`
+        is static and `num_ports` not specified (https://github.com/ansible-collections/community.vmware/pull/2053).
+      minor_changes:
+      - vmware_dvs_portgroup - Make `state` default to `present` instead of having
+        it as a required parameter (https://github.com/ansible-collections/community.vmware/pull/2055).
+    fragments:
+    - 2053-vmware_dvs_portgroup.yml
+    - 2055-vmware_dvs_portgroup-status_default.yml
+    - 2057-vmware_cluster_dpm-handle-dpm-none-config.yml
+    - 2071-clarify-pyvmomi-requirement.yml
+    release_date: '2024-05-19'
