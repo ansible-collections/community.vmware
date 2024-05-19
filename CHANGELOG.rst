@@ -4,6 +4,15 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+v3.11.4
+=======
+
+Bugfixes
+--------
+
+- vmware_cluster_dpm - Handle case where DPM config has not been initialized yet and is None (https://github.com/ansible-collections/community.vmware/pull/2057).
+- vmware_dvs_portgroup - Fix erroneously reporting a change when `port_binding` is static and `num_ports` not specified (https://github.com/ansible-collections/community.vmware/pull/2053).
+
 v3.11.3
 =======
 
