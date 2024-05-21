@@ -125,7 +125,6 @@ class VMwareCluster(PyVmomi):
         except AttributeError:
             pass
 
-
         # Get the to add and to remove allowed and not allowed Datastores
         toAddAllowedDatastores = list(set(self.allowedDatastores_names) - set(currentAllowedDatastores))
         toRemoveAllowedDatastores = list(set(currentAllowedDatastores) - set(self.allowedDatastores_names))
