@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - supporting migrate VM if the requested ESXi hostname was updated.
