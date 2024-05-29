@@ -31,7 +31,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
 - name: Checks a datastore cluster for VMs with Storage DRS enabled
-  swisscom.vmware.vmware_sdrs_vm_overrides_info:
+  community.vmware.vmware_sdrs_vm_overrides_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
