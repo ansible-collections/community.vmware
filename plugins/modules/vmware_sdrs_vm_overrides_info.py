@@ -30,7 +30,7 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = r'''
-- name: Create datastore cluster and enable SDRS
+- name: Checks a datastore cluster for VMs with Storage DRS enabled
   swisscom.vmware.vmware_sdrs_vm_overrides_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
