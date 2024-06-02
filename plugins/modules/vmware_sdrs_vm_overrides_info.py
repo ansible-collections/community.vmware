@@ -45,13 +45,13 @@ result:
     returned: always
     type: dict
     sample: {
-        "changed": false, 
+        "changed": false,
         "result": {
             "DSC_1": {
                 "vm_overrides": {
                     "VM_1": {
                         "srds_enabled_status": false, "vm_behavior": null
-                        }, 
+                        },
                      "VM_2": {
                         "srds_enabled_status": false, "vm_behavior": null
                         }
