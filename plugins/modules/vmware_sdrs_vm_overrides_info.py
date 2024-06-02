@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# (c) 2023, Lionel Sutcliffe <sutcliffe.lionel@gmail.com>
-# (c) 2023, Olivia Lütolf <olivia.luetolf@swisscom.com>
+# Copyright: (c) 2023, Lionel Sutcliffe <sutcliffe.lionel@gmail.com>
+# Copyright: (c) 2023, Olivia Lütolf <olivia.luetolf@swisscom.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
