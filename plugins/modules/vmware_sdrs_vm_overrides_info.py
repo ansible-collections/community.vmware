@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 # Copyright: (c) 2023, Lionel Sutcliffe <sutcliffe.lionel@gmail.com>
-# Copyright: (c) 2023, Olivia Lütolf <olivia.luetolf@swisscom.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -31,7 +30,7 @@ extends_documentation_fragment:
 """
 
 EXAMPLES = r"""
-- name: Create datastore cluster and enable SDRS
+- name: Check if SDRS Overrides exist in datastore cluster
   community.vmware.vmware_sdrs_vm_overrides_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
