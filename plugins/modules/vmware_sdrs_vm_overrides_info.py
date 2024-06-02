@@ -45,7 +45,10 @@ result:
     description: information about datastore clusters with VMs with SDRS enabled
     returned: always
     type: str
-    sample:  {"changed": false, "result": {"DSC_1": {"vm_overrides": {"VM_1": {"srds_enabled_status": false, "vm_behavior": null}, "VM_2": {"srds_enabled_status": false, "vm_behavior": null}}}}}
+    sample:  {"changed": false, "result": 
+             {"DSC_1": {"vm_overrides": 
+             {"VM_1": {"srds_enabled_status": false, "vm_behavior": null}, 
+             "VM_2": {"srds_enabled_status": false, "vm_behavior": null}}}}}
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -69,10 +72,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
         """
         results = dict(changed=False, result={})
 
-        vm_configs = [
-            vm_spec
-            for vm_spec in self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.vmConfig
-        ]
+        vm_configs = list(self.datastore_cluster_obj.podStorageDrsEntry.storageDrsConfig.vmConfig)
         vm_overrides = dict()
 
         for vm in vm_configs:
