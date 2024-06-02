@@ -32,7 +32,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r"""
 - name: Create datastore cluster and enable SDRS
-  swisscom.vmware.vmware_sdrs_vm_overrides_info:
+  community.vmware.vmware_sdrs_vm_overrides_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
