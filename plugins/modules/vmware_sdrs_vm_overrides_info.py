@@ -43,11 +43,22 @@ RETURN = r"""
 result:
     description: information about datastore clusters with VMs with SDRS enabled
     returned: always
-    type: str
-    sample:  {"changed": false, "result": 
-             {"DSC_1": {"vm_overrides": 
-             {"VM_1": {"srds_enabled_status": false, "vm_behavior": null}, 
-             "VM_2": {"srds_enabled_status": false, "vm_behavior": null}}}}}
+    type: dict
+    sample: {
+        "changed": false, 
+        "result": {
+            "DSC_1": {
+                "vm_overrides": {
+                    "VM_1": {
+                        "srds_enabled_status": false, "vm_behavior": null
+                        }, 
+                     "VM_2": {
+                        "srds_enabled_status": false, "vm_behavior": null
+                        }
+                    }
+                }
+            }
+        }
 """
 
 from ansible.module_utils.basic import AnsibleModule
