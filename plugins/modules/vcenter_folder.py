@@ -48,7 +48,6 @@ options:
     - "If set to V(datastore), then 'Storage Folder' is created under datacenter."
     - "If set to V(network), then 'Network Folder' is created under datacenter."
     - This parameter is required, if O(state=absent) and O(parent_folder) is not set.
-    - This option is ignored, if O(parent_folder) is set.
     default: vm
     type: str
     required: false
