@@ -209,7 +209,7 @@ class VMwareHostLogbundle(PyVmomi):
 
     def get_logbundle(self):
         self.validate_manifests()
-        url = 'https://' + self.esxi_hostname + '/cgi-bin/vm-support.cgi?manifests=' + '&'.join(self.manifests)
+        url = 'https://' + self.esxi_hostname + '/cgi-bin/vm-support.cgi?manifests=' + '%20'.join(self.manifests)
 
         if self.performance_data:
             duration = self.performance_data.get('duration')
