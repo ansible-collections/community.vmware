@@ -17,7 +17,7 @@ description:
     - This module can be used to check if VM overrides exist in a SDRS enabled datastore cluster in a given VMware environment.
     - All parameters and VMware object values are case sensitive.
 author:
--  Lionel Sutcliffe
+-  Lionel Sutcliffe (@sudo-lupus)
 options:
     datastore_cluster_name:
       description:
