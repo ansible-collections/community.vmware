@@ -49,10 +49,10 @@ result:
         "result": {
             "vm_overrides": {
                 "VM_1": {
-                    "srds_enabled_status": false, "vm_behavior": null
+                    "sdrs_enabled_status": false, "vm_behavior": null
                     },
                  "VM_2": {
-                    "srds_enabled_status": false, "vm_behavior": null
+                    "sdrs_enabled_status": false, "vm_behavior": null
                     }
                 }
             }
@@ -86,7 +86,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
         for vm in vm_configs:
             if vm.enabled is not None or vm.behavior is not None:
                 vm_overrides[vm.vm.name] = {}
-                vm_overrides[vm.vm.name]["srds_enabled_status"] = vm.enabled
+                vm_overrides[vm.vm.name]["sdrs_enabled_status"] = vm.enabled
                 vm_overrides[vm.vm.name]["vm_behavior"] = vm.behavior
 
         if vm_overrides.keys():
