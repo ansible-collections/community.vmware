@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - vcenter_folder - removed documentation that incorrectly said `folder_type` had no effect when `parent_folder` was set
