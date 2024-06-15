@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - >-
+    vmware_cluster_vcls - fixed bug caused by pyvmomi >=7.0.3 returning the vlcs cluster config attribute as None when it was
+    previously undefined. Now if the vCLS config is not initialized on the cluster, the module will initialize it using the
+    user's desired state.
