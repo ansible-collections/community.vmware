@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_disk - round size to int, supporting float values properly
