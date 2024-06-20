@@ -17,6 +17,7 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
   register: fetch_logbundle_result
 
@@ -51,6 +52,7 @@
     password: "{{ esxi_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
   register: fetch_logbundle_result
 
@@ -85,6 +87,7 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
       - System:Base
@@ -122,6 +125,7 @@
     password: "{{ esxi_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
     manifests:
       - System:Base
@@ -159,6 +163,7 @@
     password: "{{ vcenter_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
     performance_data:
       duration: 10
@@ -197,6 +202,7 @@
     password: "{{ esxi_password }}"
     validate_certs: false
     esxi_hostname: "{{ esxi1 }}"
+    download_timeout: 1800
     dest: "{{ logbundle_archive_file_path }}"
     performance_data:
       duration: 10
