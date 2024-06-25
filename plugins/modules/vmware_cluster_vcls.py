@@ -134,6 +134,26 @@ class VMwareCluster(PyVmomi):
 
         return changed, toAddAllowedDatastores, toRemoveAllowedDatastores
 
+    def __add_datastore_to_config_spec(self, ds_name, cluster_config_spec):
+        """
+        Adds a datastore to the potential new vCLS spec. Causes a failure if the datastore does not exist.
+        """
+        specSystemVMsConfigAllowedDatastore = vim.cluster.DatastoreUpdateSpec()
+        specSystemVMsConfigAllowedDatastore.datastore = find_datastore_by_name(self.content, ds_name, self.datacenter)
+        if not specSystemVMsConfigAllowedDatastore.datastore:
+            self.module.fail_json(msg="Failed to add datastore '%s' because it does not exist." % ds_name)
+        specSystemVMsConfigAllowedDatastore.operation = 'add'
+        cluster_config_spec.systemVMsConfig.allowedDatastores.append(specSystemVMsConfigAllowedDatastore)
+
+    def __remove_datastore_from_config_spec(self, ds_name, cluster_config_spec):
+        """
+        Removes a datastore from the potential new vCLS spec
+        """
+        specSystemVMsConfigAllowedDatastore = vim.cluster.DatastoreUpdateSpec()
+        specSystemVMsConfigAllowedDatastore.removeKey = find_datastore_by_name(self.content, ds_name, self.datacenter)
+        specSystemVMsConfigAllowedDatastore.operation = 'remove'
+        cluster_config_spec.systemVMsConfig.allowedDatastores.append(specSystemVMsConfigAllowedDatastore)
+
     def configure_vCLS(self):
         """
         Manage DRS configuration
@@ -151,16 +171,10 @@ class VMwareCluster(PyVmomi):
 
                 # Build the Spec
                 for ds_name in toAddAllowedDatastores:
-                    specSystemVMsConfigAllowedDatastore = vim.cluster.DatastoreUpdateSpec()
-                    specSystemVMsConfigAllowedDatastore.datastore = find_datastore_by_name(self.content, ds_name, self.datacenter)
-                    specSystemVMsConfigAllowedDatastore.operation = 'add'
-                    cluster_config_spec.systemVMsConfig.allowedDatastores.append(specSystemVMsConfigAllowedDatastore)
+                    self.__add_datastore_to_config_spec(ds_name, cluster_config_spec)
 
                 for ds_name in toRemoveAllowedDatastores:
-                    specSystemVMsConfigAllowedDatastore = vim.cluster.DatastoreUpdateSpec()
-                    specSystemVMsConfigAllowedDatastore.removeKey = find_datastore_by_name(self.content, ds_name, self.datacenter)
-                    specSystemVMsConfigAllowedDatastore.operation = 'remove'
-                    cluster_config_spec.systemVMsConfig.allowedDatastores.append(specSystemVMsConfigAllowedDatastore)
+                    self.__remove_datastore_from_config_spec(ds_name, cluster_config_spec)
 
                 try:
                     task = self.cluster.ReconfigureComputeResource_Task(cluster_config_spec, True)
