@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_cluster_vcls - Fail module with descriptive error if an added datastore does not exist in vcenter
