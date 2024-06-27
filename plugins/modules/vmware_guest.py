@@ -295,7 +295,7 @@ options:
             type: str
             description:
             - The name of datastore which will be used for the disk.
-            - If O(disk.autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
+            - If O(disk.autoselect_datastore) is set to True, will select the less used datastore whose name matches this "disk.datastore" pattern.
         filename:
             type: str
             description:
@@ -2768,7 +2768,7 @@ class PyVmomiHelper(PyVmomi):
 
                     if (ds.summary.freeSpace > datastore_freespace) or (ds.summary.freeSpace == datastore_freespace and not datastore):
                         # If datastore field is provided, filter destination datastores
-                        if self.params['disk'][0]['datastore'] and ds.name.find(self.params['disk'][0]['datastore']) < 0:
+                        if self.params['disk'][0]['datastore'] and re.search(self.params['disk'][0]['datastore'], ds.name):
                             continue
 
                         datastore = ds
