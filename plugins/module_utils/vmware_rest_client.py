@@ -28,17 +28,21 @@ except ImportError:
     HAS_PYVMOMI = False
 
 VSPHERE_IMP_ERR = None
-from com.vmware.vapi.std_client import DynamicID
-from vmware.vapi.vsphere.client import create_vsphere_client
-from com.vmware.vapi.std.errors_client import Unauthorized
-from com.vmware.content.library_client import Item
-from com.vmware.vcenter_client import (Folder,
-                                       Datacenter,
-                                       ResourcePool,
-                                       Datastore,
-                                       Cluster,
-                                       Host)
-HAS_VSPHERE = True
+try:
+    from com.vmware.vapi.std_client import DynamicID
+    from vmware.vapi.vsphere.client import create_vsphere_client
+    from com.vmware.vapi.std.errors_client import Unauthorized
+    from com.vmware.content.library_client import Item
+    from com.vmware.vcenter_client import (Folder,
+                                           Datacenter,
+                                           ResourcePool,
+                                           Datastore,
+                                           Cluster,
+                                           Host)
+    HAS_VSPHERE = True
+except ImportError:
+    VSPHERE_IMP_ERR = traceback.format_exc()
+    HAS_VSPHERE = False
 
 try:
     from requests.packages import urllib3
