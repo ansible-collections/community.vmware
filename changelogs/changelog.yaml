@@ -1492,6 +1492,19 @@ releases:
     - 2053-vmware_dvs_portgroup.yml
     - 2057-vmware_cluster_dpm-handle-dpm-none-config.yml
     release_date: '2024-05-19'
+  3.11.5:
+    changes:
+      bugfixes:
+      - vcenter_folder - removed documentation that incorrectly said `folder_type`
+        had no effect when `parent_folder` was set
+      - vmware_cluster_vcls - fixed bug caused by pyvmomi >=7.0.3 returning the vlcs
+        cluster config attribute as None when it was previously undefined. Now if
+        the vCLS config is not initialized on the cluster, the module will initialize
+        it using the user's desired state.
+    fragments:
+    - 2080_bugfix_hadnle_vcls_none_config.yml
+    - 2088_bugfix_correct_vcenter_folder_docs.yml
+    release_date: '2024-07-12'
   3.2.0:
     changes:
       bugfixes:
