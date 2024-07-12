@@ -6,6 +6,21 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.5.0
+======
+
+Minor Changes
+-------------
+
+- vmware_host_logbundle - Add timeout parameter (https://github.com/ansible-collections/community.vmware/pull/2092).
+
+Bugfixes
+--------
+
+- vcenter_folder - removed documentation that incorrectly said `folder_type` had no effect when `parent_folder` was set
+- vmware_cluster_vcls - fixed bug caused by pyvmomi >=7.0.3 returning the vlcs cluster config attribute as None when it was previously undefined. Now if the vCLS config is not initialized on the cluster, the module will initialize it using the user's desired state.
+- vmware_host_logbundle - Manifests previously was separared by "&", thus selecting first manifest. Fix now separates manifests with URL encoded space, thus correctly supplying the manifests.  (https://github.com/ansible-collections/community.vmware/pull/2090).
+
 v4.4.0
 ======
 
