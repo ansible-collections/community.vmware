@@ -92,7 +92,6 @@ Parameters
                         <div>If set to <code>datastore</code>, then &#x27;Storage Folder&#x27; is created under datacenter.</div>
                         <div>If set to <code>network</code>, then &#x27;Network Folder&#x27; is created under datacenter.</div>
                         <div>This parameter is required, if <code>state</code> is set to <code>present</code> and parent_folder is absent.</div>
-                        <div>This option is ignored, if <code>parent_folder</code> is set.</div>
                 </td>
             </tr>
             <tr>
