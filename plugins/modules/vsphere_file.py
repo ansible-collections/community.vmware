@@ -58,7 +58,7 @@ extends_documentation_fragment:
 EXAMPLES = r'''
 - name: Create an empty file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC1 Someplace
@@ -69,7 +69,7 @@ EXAMPLES = r'''
 
 - name: Create a directory on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC2 Someplace
@@ -80,7 +80,7 @@ EXAMPLES = r'''
 
 - name: Query a file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC1 Someplace
@@ -92,7 +92,7 @@ EXAMPLES = r'''
 
 - name: Delete a file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC2 Someplace
