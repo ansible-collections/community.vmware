@@ -371,7 +371,7 @@ def main():
         state=dict(type='str', default='present', choices=['absent', 'present']),
         vms=dict(type='list', elements='str'),
         cluster_name=dict(type='str', required=True),
-        datacenter=dict(type='str', required=False, aliases=['datacenter_name']),
+        datacenter=dict(type='str', required=False),
         drs_rule_name=dict(type='str', required=True),
         enabled=dict(type='bool', default=False),
         mandatory=dict(type='bool', default=False),
