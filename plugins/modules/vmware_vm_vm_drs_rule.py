@@ -19,8 +19,6 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 options:
   datacenter:
-    aliases:
-      - datacenter_name
     description:
       - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with O(cluster_name)."
     required: false
