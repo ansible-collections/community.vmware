@@ -84,9 +84,15 @@ Revert the version in `galaxy.yml` back to `null`:
 
 ## Communication
 
-You can find other people interested in this in the `Ansible VMware` room on [Matrix](https://matrix.to/#/#vmware:ansible.com) / in the `#ansible-vmware` channel on [libera.chat](https://libera.chat/) IRC.
+* Join the Ansible forum:
+    * [Get Help](https://forum.ansible.com/c/help/6): get help or help others.
+    * [Posts tagged with 'vmware'](https://forum.ansible.com/tag/vmware): subscribe to participate in VMware-related conversations.
+    * [Social Spaces](https://forum.ansible.com/c/chat/4): gather and interact with fellow enthusiasts.
+    * [News & Announcements](https://forum.ansible.com/c/news/5): track project-wide announcements including social events.
 
-For general usage question, please also consider the `Get Help` category in the [Ansible Community Forum](https://forum.ansible.com/) and tag it with `vmware`.
+* The Ansible [Bullhorn newsletter](https://docs.ansible.com/ansible/devel/community/communication.html#the-bullhorn): used to announce releases and important changes.
+
+For more information about communication, see the [Ansible communication guide](https://docs.ansible.com/ansible/devel/community/communication.html).
 
 ## License
 
