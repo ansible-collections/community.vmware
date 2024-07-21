@@ -18,6 +18,12 @@ description:
 author:
 - Abhijeet Kasurde (@Akasurde)
 options:
+  datacenter:
+    version_added: '4.6.0'
+    description:
+      - "Datacenter to search for given cluster. If not set, we use first cluster we encounter with O(cluster_name)."
+    required: false
+    type: str
   cluster_name:
     description:
     - Desired cluster name where virtual machines are present for the DRS rule.
@@ -73,6 +79,7 @@ EXAMPLES = r'''
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
+    datacenter: "{{ datacenter }}"
     cluster_name: "{{ cluster_name }}"
     vms:
         - vm1
@@ -88,6 +95,7 @@ EXAMPLES = r'''
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
+    datacenter: "{{ datacenter }}"
     cluster_name: "{{ cluster_name }}"
     enabled: true
     vms:
@@ -103,6 +111,7 @@ EXAMPLES = r'''
     hostname: "{{ esxi_server }}"
     username: "{{ esxi_username }}"
     password: "{{ esxi_password }}"
+    datacenter: "{{ datacenter }}"
     cluster_name: "{{ cluster_name }}"
     drs_rule_name: vm1-vm2-affinity-rule-001
     state: absent
@@ -136,13 +145,15 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi, vmware_argument_spec, wait_for_task,
-    find_vm_by_id, find_cluster_by_name)
+    find_vm_by_id, find_cluster_by_name, find_datacenter_by_name)
 
 
 class VmwareDrs(PyVmomi):
     def __init__(self, module):
         super(VmwareDrs, self).__init__(module)
         self.vm_list = module.params['vms']
+        self.__datacenter_name = module.params.get('datacenter', None)
+        self.__datacenter_obj = None
         self.cluster_name = module.params['cluster_name']
         self.rule_name = module.params['drs_rule_name']
         self.enabled = module.params['enabled']
@@ -150,8 +161,12 @@ class VmwareDrs(PyVmomi):
         self.affinity_rule = module.params['affinity_rule']
         self.state = module.params['state']
 
+        if self.__datacenter_name is not None:
+            self.__datacenter_obj = find_datacenter_by_name(self.content, self.__datacenter_name)
+            if self.__datacenter_obj is None and module.check_mode is False:
+                raise Exception("Datacenter '%s' not found" % self.__datacenter_name)
         # Sanity check for cluster
-        self.cluster_obj = find_cluster_by_name(content=self.content,
+        self.cluster_obj = find_cluster_by_name(content=self.content, datacenter=self.__datacenter_obj,
                                                 cluster_name=self.cluster_name)
         if self.cluster_obj is None:
             self.module.fail_json(msg="Failed to find the cluster %s" % self.cluster_name)
@@ -357,6 +372,7 @@ def main():
         state=dict(type='str', default='present', choices=['absent', 'present']),
         vms=dict(type='list', elements='str'),
         cluster_name=dict(type='str', required=True),
+        datacenter=dict(type='str', required=False),
         drs_rule_name=dict(type='str', required=True),
         enabled=dict(type='bool', default=False),
         mandatory=dict(type='bool', default=False),
