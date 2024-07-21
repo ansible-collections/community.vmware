@@ -1036,7 +1036,7 @@ class PyVmomiHelper(PyVmomi):
                     disk_units = dict(tb=3, gb=2, mb=1, kb=0)
                     unit = unit.lower()
                     if unit in disk_units:
-                        current_disk['size'] = expected * (1024 ** disk_units[unit])
+                        current_disk['size'] = round(expected * (1024 ** disk_units[unit]))
                     else:
                         self.module.fail_json(msg="%s is not a supported unit for disk size for disk index [%s]."
                                                   " Supported units are ['%s']." % (unit, disk_index, "', '".join(disk_units.keys())))
