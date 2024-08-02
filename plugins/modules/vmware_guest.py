@@ -3227,6 +3227,17 @@ class PyVmomiHelper(PyVmomi):
                 if task.info.state == 'error':
                     return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'reconfig'}
 
+        # Migrate VM:
+        current_host = self.current_vm_obj.summary.runtime.host
+        requested_host = self.cache.get_esx_host(self.params['esxi_hostname']) if self.params[
+            'esxi_hostname'] else None
+        if requested_host and current_host != requested_host:
+            task = self.current_vm_obj.MigrateVM_Task(self.get_resource_pool(), requested_host, "defaultPriority")
+            self.wait_for_task(task)
+            if task.info.state == 'error':
+                return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg,
+                        'op': 'reconfig'}
+
         # Rename VM
         if self.params['uuid'] and self.params['name'] and self.params['name'] != self.current_vm_obj.config.name:
             self.tracked_changes['name'] = self.params['name']
