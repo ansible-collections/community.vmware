@@ -1936,8 +1936,15 @@ class PyVmomiHelper(PyVmomi):
                     nic_change_detected = True
 
                 if nic.device.deviceInfo.summary != network_name:
-                    nic.device.deviceInfo.summary = network_name
-                    nic_change_detected = True
+                    if 'DVSwitch' not in nic.device.deviceInfo.summary:
+                        nic.device.deviceInfo.summary = network_name
+                        nic_change_detected = True
+                    else:
+                        pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
+                        if pg is None or nic.device.backing.port.portgroupKey != pg.key:
+                            nic.device.deviceInfo.summary = network_name
+                            nic_change_detected = True
+
                 if 'device_type' in network_devices[key]:
                     device = self.device_helper.nic_device_type.get(network_devices[key]['device_type'])
                     if not isinstance(nic.device, device):
