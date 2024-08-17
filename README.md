@@ -45,7 +45,7 @@ VMware community collection depends on Python 3.8+ and on following third party 
 
 * [`Pyvmomi`](https://github.com/vmware/pyvmomi)
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
-* [`vSAN Management SDK for Python`](https://code.vmware.com/web/sdk/vsan-python)
+* [`vSAN Management SDK for Python`](https://developer.broadcom.com/sdks/vsan-management-sdk-for-python/latest/)
 
 ### Installing required libraries and SDK
 
