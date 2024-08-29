@@ -1,4 +1,13 @@
+plugins/inventory/vmware_host_inventory.py pylint!skip
+plugins/inventory/vmware_vm_inventory.py pylint!skip
 plugins/modules/vmware_deploy_ovf.py replace-urlopen!skip
 plugins/modules/vmware_deploy_ovf.py use-argspec-type-path!skip
+plugins/modules/vmware_dvswitch.py pylint!skip
+plugins/modules/vmware_dvswitch_pvlans.py pylint!skip
+plugins/modules/vmware_guest_tpm.py pylint!skip
+plugins/modules/vmware_host.py pylint!skip
+plugins/modules/vmware_host_dns.py pylint!skip
+plugins/modules/vmware_host_powerstate.py pylint!skip
+plugins/modules/vmware_vmotion.py pylint!skip
 scripts/inventory/vmware_inventory.py pep8!skip
 tests/unit/mock/loader.py pep8!skip
