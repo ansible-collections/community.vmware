@@ -67,8 +67,8 @@ jobs:
           - stable-2.15
           - stable-2.16
           - stable-2.17
-          - devel
-          # - milestone
+          # - devel
+          - milestone
     # Ansible-test on various stable branches does not yet work well with cgroups v2.
     # Since ubuntu-latest now uses Ubuntu 22.04, we need to fall back to the ubuntu-20.04
     # image for these stable branches. The list of branches where this is necessary will
