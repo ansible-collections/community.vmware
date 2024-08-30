@@ -180,6 +180,10 @@ action_groups:
 
 plugin_routing:
   modules:
+    vmware_cluster:
+      deprecation:
+        removal_version: 6.0.0
+        warning_text: Use vmware.vmware.cluster instead.
     vmware_cluster_drs:
       deprecation:
         removal_version: 6.0.0
