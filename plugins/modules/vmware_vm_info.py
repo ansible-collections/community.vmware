@@ -123,10 +123,10 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
-  register: vminfo
+  register: vm_info
 
 - debug:
-    var: vminfo.virtual_machines
+    var: vm_info.virtual_machines
 
 - name: Gather one specific VM
   community.vmware.vmware_vm_info:
