@@ -88,7 +88,7 @@ options:
    snapshot_id:
      description:
      - Sets the snapshot id to manage.
-     - This param is available when O(state=absent).
+     - This param is available when O(state=absent) or O(state=revert).
      type: int
      version_added: 3.10.0
    description:
