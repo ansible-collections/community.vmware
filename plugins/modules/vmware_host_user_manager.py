@@ -15,7 +15,6 @@ author:
   - sky-joker (@sky-joker)
 description:
   - This module can add, update or delete local users on ESXi host.
-version_added: '2.1.0'
 options:
   esxi_hostname:
     description:
@@ -32,7 +31,7 @@ options:
   user_password:
     description:
       - The local user password.
-      - If you'd like to update the password, require the I(override_user_password) is true.
+      - If you'd like to update the password, requires O(override_user_password=true).
     aliases:
       - local_user_password
     type: str
@@ -49,8 +48,8 @@ options:
     type: bool
   state:
     description:
-      - If set to C(present), add a new local user or update information.
-      - If set to C(absent), delete the local user.
+      - If set to V(present), add a new local user or update information.
+      - If set to V(absent), delete the local user.
     default: present
     type: str
     choices:

@@ -22,17 +22,17 @@ options:
    name:
      description:
      - Name of the VM to work with.
-     - This is required if C(uuid) or C(moid) parameter is not supplied.
+     - This is required if O(uuid) or O(moid) parameter is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to manage if known, this is VMware's BIOS UUID by default.
-     - This is required if C(name) or C(moid) parameter is not supplied.
+     - This is required if O(name) or O(moid) parameter is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    use_instance_uuid:
      description:
@@ -53,7 +53,6 @@ options:
      elements: str
    boot_hdd_name:
      description:
-     - Name of disk to be set as boot disk, which is case sensitive, e.g., 'Hard disk 1'.
      - This parameter is optional, if not set, will use the first virtual disk found in VM device list.
      type: str
      version_added: '3.2.0'
@@ -63,18 +62,18 @@ options:
      type: int
    enter_bios_setup:
      description:
-     - If set to C(true), the virtual machine automatically enters BIOS setup the next time it boots.
+     - If set to V(true), the virtual machine automatically enters BIOS setup the next time it boots.
      - The virtual machine resets this flag, so that the machine boots proceeds normally.
      type: 'bool'
    boot_retry_enabled:
      description:
-     - If set to C(true), the virtual machine that fails to boot, will try to boot again after C(boot_retry_delay) is expired.
-     - If set to C(false), the virtual machine waits indefinitely for user intervention.
+     - If set to V(true), the virtual machine that fails to boot, will try to boot again after O(boot_retry_delay) is expired.
+     - If set to V(false), the virtual machine waits indefinitely for user intervention.
      type: 'bool'
    boot_retry_delay:
      description:
      - Specify the time in milliseconds between virtual machine boot failure and subsequent attempt to boot again.
-     - If set, will automatically set C(boot_retry_enabled) to C(true) as this parameter is required.
+     - If set, will automatically set O(boot_retry_enabled=true) as this parameter is required.
      type: int
    boot_firmware:
      description:

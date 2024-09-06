@@ -22,7 +22,7 @@ options:
   custom_attributes:
     description:
       - A list of name and value of custom attributes that needs to be manage.
-      - Value of custom attribute is not required and will be ignored, if C(state) is set to C(absent).
+      - Value of custom attribute is not required and will be ignored if O(state=absent).
     suboptions:
       name:
         description:
@@ -59,8 +59,8 @@ options:
     required: true
   state:
     description:
-      - If set to C(present), the custom attribute is set to the given value.
-      - If set to C(absent), the custom attribute is cleared. The given value is ignored in this case.
+      - If set to V(present), the custom attribute is set to the given value.
+      - If set to V(absent), the custom attribute is cleared. The given value is ignored in this case.
     default: 'present'
     choices: ['present', 'absent']
     type: str

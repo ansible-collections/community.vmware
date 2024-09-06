@@ -26,19 +26,18 @@ options:
   datacenter:
     description:
     - The datacenter name used to get specified cluster or host.
-    - This parameter is case sensitive.
     default: ha-datacenter
     type: str
   cluster_name:
     description:
     - Name of the cluster.
-    - If C(esxi_hostname) is not given, this parameter is required.
+    - If O(esxi_hostname) is not given, this parameter is required.
     type: str
   esxi_hostname:
     description:
     - ESXi hostname.
     - Obtain VM configure options on this ESXi host.
-    - If C(cluster_name) is not given, this parameter is required.
+    - If O(cluster_name) is not given, this parameter is required.
     type: str
   get_hardware_versions:
     description:
@@ -49,25 +48,25 @@ options:
   get_guest_os_ids:
     description:
     - Return the list of guest OS IDs supported on the specified entity.
-    - If C(hardware_version) is set, will return the corresponding guest OS ID list supported, or will return the
+    - If O(hardware_version) is set, will return the corresponding guest OS ID list supported, or will return the
       guest OS ID list for the default hardware version.
     type: bool
     default: false
   get_config_options:
     description:
-    - Return the dict of VM recommended config options for guest ID specified by C(guest_id) with hardware version
-      specified by C(hardware_version) or the default hardware version.
-    - When set to True, C(guest_id) must be set.
+    - Return the dict of VM recommended config options for guest ID specified by O(guest_id) with hardware version
+      specified by O(hardware_version) or the default hardware version.
+    - When set to V(true), O(guest_id) must be set.
     type: bool
     default: false
   guest_id:
     description:
-    - The guest OS ID from the returned list when C(get_guest_os_ids) is set to C(true), e.g., 'rhel8_64Guest'.
-    - This parameter must be set when C(get_config_options) is set to C(true).
+    - The guest OS ID from the returned list when O(get_guest_os_ids=true), e.g., 'rhel8_64Guest'.
+    - This parameter must be set when O(get_config_options=true).
     type: str
   hardware_version:
     description:
-    - The hardware version from the returned list when C(get_hardware_versions) is set to C(true), e.g., 'vmx-19'.
+    - The hardware version from the returned list when O(get_hardware_versions=true), e.g., 'vmx-19'.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

@@ -16,8 +16,7 @@ module: vmware_cluster
 short_description: Manage VMware vSphere clusters
 description:
     - Adds or removes VMware vSphere clusters.
-    - To manage DRS, HA and VSAN related configurations, use the new modules vmware_cluster_drs, vmware_cluster_ha and vmware_cluster_vsan.
-    - All values and VMware object names are case sensitive.
+    - To manage DRS, HA and VSAN related configurations, use the modules vmware_cluster_drs, vmware_cluster_ha and vmware_cluster_vsan.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -35,7 +34,7 @@ options:
       aliases: [ datacenter_name ]
     state:
       description:
-      - Create C(present) or remove C(absent) a VMware vSphere cluster.
+      - Create V(present) or remove V(absent) a VMware vSphere cluster.
       choices: [ absent, present ]
       default: present
       type: str

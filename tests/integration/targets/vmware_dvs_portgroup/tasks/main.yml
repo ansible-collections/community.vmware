@@ -407,7 +407,7 @@
   assert:
     that:
         - not dvs_pg_result_0013.changed
-        - "'vlan_id range 1-4096 specified is incorrect. The valid vlan_id range is from 0 to 4094.' == '{{ dvs_pg_result_0013.msg }}'"
+        - "'vlan_id range 1-4096 specified is incorrect. The valid vlan_id range is from 0 to 4094.' == dvs_pg_result_0013.msg"
 
 - name: Change VLAN on basic VLAN portgroup
   community.vmware.vmware_dvs_portgroup:
@@ -508,7 +508,7 @@
   assert:
     that:
         - not dvs_pg_result_0018.changed
-        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == '{{ dvs_pg_result_0018.msg }}'"
+        - "'No private vlan with id 10 in distributed vSwitch {{ dvswitch1 }}' == dvs_pg_result_0018.msg"
 
 - name: Run tests and clean up
   block:
@@ -805,3 +805,85 @@
     - assert:
         that:
           - delete_test_dvs_port_group_issues_637_idempotency_check_result.changed is sameas true
+
+- name: Create portgroup for num_ports check
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    portgroup_name: "portgroup2053"
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 2053
+    port_binding: static
+  register: create_portgroup2053_result
+
+- assert:
+    that:
+      - create_portgroup2053_result is changed
+
+- name: Check idempotency for unspecified num_ports
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    portgroup_name: "portgroup2053"
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 2053
+    port_binding: static
+  register: portgroup2053_check1_result
+
+- assert:
+    that:
+      - portgroup2053_check1_result is not changed
+
+- name: Update for num_ports
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    portgroup_name: "portgroup2053"
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 2053
+    port_binding: static
+    num_ports: 8
+  register: portgroup2053_check2_result
+
+- assert:
+    that:
+      - portgroup2053_check2_result is changed
+
+- name: Check idempotency for unspecified num_ports
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    portgroup_name: "portgroup2053"
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 2053
+    port_binding: static
+  register: portgroup2053_check3_result
+
+- assert:
+    that:
+      - portgroup2053_check3_result is not changed
+
+- name: Delete num_ports check portgroup
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    portgroup_name: "portgroup2053"
+    switch_name: "{{ dvswitch1 }}"
+    vlan_id: 2053
+    port_binding: static
+    state: absent
+  register: delete_portgroup2053_result
+
+- assert:
+    that:
+      - delete_portgroup2053_result is changed

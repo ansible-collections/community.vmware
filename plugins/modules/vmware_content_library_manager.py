@@ -17,7 +17,6 @@ short_description: Create, update and delete VMware content library
 description:
 - Module to manage VMware content Library
 - Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Pavan Bidkar (@pgbidkar)
 requirements:
@@ -31,16 +30,16 @@ options:
     library_description:
       description:
       - The content library description.
-      - This is required only if I(state) is set to C(present).
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - This is required only if O(state=present).
+      - This parameter is ignored, when O(state=absent).
       - Process of updating content library only allows description change.
       type: str
       required: false
     library_type:
       description:
       - The content library type.
-      - This is required only if I(state) is set to C(present).
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - This is required only if O(state=resent).
+      - This parameter is ignored, when O(state=absent).
       type: str
       required: false
       default: 'local'
@@ -48,8 +47,8 @@ options:
     datastore_name:
       description:
       - Name of the datastore on which backing content library is created.
-      - This is required only if I(state) is set to C(present).
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - This is required if O(state=present).
+      - This parameter is ignored, when O(state=absent).
       - Currently only datastore backing creation is supported.
       type: str
       required: false
@@ -57,16 +56,16 @@ options:
     subscription_url:
       description:
       - The url of the content library to subscribe to.
-      - This is required only if I(library_type) is set to C(subscribed).
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - This is required if O(library_type=subscribed).
+      - This parameter is ignored, when O(state=absent).
       type: str
       default: ''
       required: false
     ssl_thumbprint:
       description:
       - The SHA1 SSL thumbprint of the subscribed content library to subscribe to.
-      - This is required only if I(library_type) is set to C(subscribed) and the library is https.
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - This is required if O(library_type=subscribed) and the library is https.
+      - This parameter is ignored, when O(state=absent).
       - 'The information can be extracted using openssl using the following example:
         C(echo | openssl s_client -connect test-library.com:443 |& openssl x509 -fingerprint -noout)'
       type: str
@@ -75,19 +74,19 @@ options:
     update_on_demand:
       description:
       - Whether to download all content on demand.
-      - If set to C(true), all content will be downloaded on demand.
-      - If set to C(false) content will be downloaded ahead of time.
-      - This is required only if I(library_type) is set to C(subscribed).
-      - This parameter is ignored, when I(state) is set to C(absent).
+      - If set to V(true), all content will be downloaded on demand.
+      - If set to V(false) content will be downloaded ahead of time.
+      - This is required if O(library_type=subscribed).
+      - This parameter is ignored, when O(state=absent).
       type: bool
       default: false
     state:
       description:
       - The state of content library.
-      - If set to C(present) and library does not exists, then content library is created.
-      - If set to C(present) and library exists, then content library is updated.
-      - If set to C(absent) and library exists, then content library is deleted.
-      - If set to C(absent) and library does not exists, no action is taken.
+      - If set to V(present) and library does not exists, then content library is created.
+      - If set to V(present) and library exists, then content library is updated.
+      - If set to V(absent) and library exists, then content library is deleted.
+      - If set to V(absent) and library does not exists, no action is taken.
       type: str
       required: false
       default: 'present'

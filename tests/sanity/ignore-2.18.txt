@@ -1,0 +1,5 @@
+meta/runtime.yml runtime-metadata!skip
+plugins/modules/vmware_deploy_ovf.py replace-urlopen!skip
+plugins/modules/vmware_deploy_ovf.py use-argspec-type-path!skip
+scripts/inventory/vmware_inventory.py pep8!skip
+tests/unit/mock/loader.py pep8!skip

@@ -18,7 +18,6 @@ description:
 - Module to list the content libraries.
 - Module to get information about specific content library.
 - Content Library feature is introduced in vSphere 6.0 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Pavan Bidkar (@pgbidkar)
 requirements:

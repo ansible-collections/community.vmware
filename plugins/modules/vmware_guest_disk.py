@@ -16,7 +16,6 @@ module: vmware_guest_disk
 short_description: Manage disks related to virtual machine in given vCenter infrastructure
 description:
     - This module can be used to add, remove and update disks belonging to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - This module is destructive in nature, please read documentation carefully before proceeding.
     - Be careful while removing disk specified as this may lead to data loss.
 author:
@@ -25,17 +24,17 @@ options:
    name:
      description:
      - Name of the virtual machine.
-     - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-     - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -67,7 +66,6 @@ options:
      description:
      - A list of disks to add or remove.
      - The virtual disk related information is provided using this list.
-     - All values and parameters are case sensitive.
      suboptions:
        size:
          description:
@@ -89,58 +87,55 @@ options:
          type: int
        type:
          description:
-         - The type of disk, if not specified then use C(thick) type for new disk, no eagerzero.
-         - The disk type C(rdm) is added in version 1.13.0.
-         - The disk type C(vpmemdisk) is added in version 2.7.0.
+         - The type of disk, if not specified then use V(thick) type for new disk, no eagerzero.
          type: str
          choices: ['thin', 'eagerzeroedthick', 'thick', 'rdm', 'vpmemdisk']
        disk_mode:
          description:
-           - Type of disk mode. If not specified then use C(persistent) mode for new disk.
-           - If set to 'persistent' mode, changes are immediately and permanently written to the virtual disk.
-           - If set to 'independent_persistent' mode, same as persistent, but not affected by snapshots.
-           - If set to 'independent_nonpersistent' mode, changes to virtual disk are made to a redo log and discarded
+           - Type of disk mode. If not specified then use V(persistent) mode for new disk.
+           - If set to V(persistent) mode, changes are immediately and permanently written to the virtual disk.
+           - If set to V(independent_persistent) mode, same as persistent, but not affected by snapshots.
+           - If set to V('independent_nonpersistent) mode, changes to virtual disk are made to a redo log and discarded
              at power off, but not affected by snapshots.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Not applicable when disk O(disk.type=vpmemdisk).
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
        rdm_path:
          description:
-         - Path of LUN for Raw Device Mapping required for disk type C(rdm).
-         - Only valid if C(type) is set to C(rdm).
+         - Path of LUN for Raw Device Mapping required for O(disk.type=rdm).
+         - Only valid if O(disk.type=rdm).
          type: str
        cluster_disk:
          description:
            - This value allows for the sharing of an RDM between two machines.
-           - The primary machine holding the RDM uses the default C(false).
-           - The secondary machine holding the RDM uses C(true).
+           - The primary machine holding the RDM uses the default V(false).
+           - The secondary machine holding the RDM uses V(true).
          type: bool
          default: false
        compatibility_mode:
-         description: Compatibility mode for raw devices. Required when disk type C(type) is set to C(rdm).
+         description: Compatibility mode for raw devices. Required when O(disk.type=rdm).
          type: str
          choices: ['physicalMode','virtualMode']
        sharing:
          description:
            - The sharing mode of the virtual disk.
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
-           - Sharing can only be set if C(type) is set to C(eagerzeroedthick) or C(rdm).
+           - Sharing can only be set if O(disk.type=eagerzeroedthick) or O(disk.type=rdm).
          type: bool
          default: false
        datastore:
          description:
            - Name of datastore or datastore cluster to be used for the disk.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Not applicable when disk O(disk.type=vpmemdisk).
          type: str
        autoselect_datastore:
          description:
-           - Select the less used datastore. Specify only if C(datastore) is not specified.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Select the less used datastore. Specify only if O(disk.datastore) is not specified.
+           - Not applicable when disk O(disk.type=vpmemdisk).
          type: bool
        scsi_controller:
          description:
            - SCSI controller number. Only 4 SCSI controllers are allowed per VM.
-           - Care should be taken while specifying 'scsi_controller' is 0 and 'unit_number' as 0 as this disk may contain OS.
          type: int
          choices: [0, 1, 2, 3]
        bus_sharing:
@@ -163,24 +158,24 @@ options:
        scsi_type:
          description:
            - Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.
-           - This value is ignored, if SCSI Controller is already present or C(state) is C(absent).
+           - This value is ignored, if SCSI Controller is already present or O(disk.state=absent).
          type: str
          choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']
        destroy:
-         description: If C(state) is C(absent), make sure the disk file is deleted from the datastore. Added in version 2.10.
+         description: If O(disk.state=absent), make sure the disk file is deleted from the datastore.
          type: bool
          default: true
        filename:
          description:
            - Existing disk image to be used. Filename must already exist on the datastore.
-           - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in version 2.10.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Specify filename string in C([datastore_name] path/to/file.vmdk) format.
+           - Not applicable when disk O(disk.type=vpmemdisk).
          type: str
        state:
          description:
            - State of disk.
-           - If set to 'absent', disk will be removed permanently from virtual machine configuration and from VMware storage.
-           - If set to 'present', disk will be added if not present at given Controller and Unit Number.
+           - If set to V(absent), disk will be removed permanently from virtual machine configuration and from VMware storage.
+           - If set to V(present), disk will be added if not present at given Controller and Unit Number.
            - or disk exists with different size, disk size is increased, reducing disk size is not allowed.
          type: str
          choices: ['present', 'absent']
@@ -188,19 +183,19 @@ options:
        controller_type:
          description:
            - This parameter is added for managing disks attaching other types of controllers, e.g., SATA or NVMe.
-           - If either C(controller_type) or C(scsi_type) is not specified, then use C(paravirtual) type.
+           - If either O(disk.controller_type) or O(disk.scsi_type) is not specified, then use V(paravirtual) type.
          type: str
          choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme', 'ide']
        controller_number:
          description:
-           - This parameter is used with C(controller_type) for specifying controller bus number.
-           - For C(ide) controller type, valid value is 0 or 1.
+           - This parameter is used with O(disk.controller_type) for specifying controller bus number.
+           - For O(disk.controller_type=ide), valid value is 0 or 1.
          type: int
          choices: [0, 1, 2, 3]
        iolimit:
          description:
            - Section specifies the shares and limit for storage I/O resource.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Not applicable when O(disk.type=vpmemdisk).
          suboptions:
            limit:
              description: Section specifies values for limit where the utilization of a virtual machine will not exceed, even if there are available resources.
@@ -213,21 +208,21 @@ options:
                  type: str
                  choices: ['low', 'normal', 'high', 'custom']
                level_value:
-                 description: Custom value when C(level) is set as C(custom).
+                 description: Custom value when O(disk.iolimit.shares.level=custom).
                  type: int
              type: dict
          type: dict
        shares:
          description:
            - Section for iolimit section tells about what are all different types of shares user can add for disk.
-           - Not applicable when disk C(type) is set to C(vpmemdisk).
+           - Not applicable when disk O(disk.type=vpmemdisk).
          suboptions:
            level:
              description: Tells about different level for the shares section.
              type: str
              choices: ['low', 'normal', 'high', 'custom']
            level_value:
-             description: Custom value when C(level) is set as C(custom).
+             description: Custom value when O(disk.shares.level=custom).
              type: int
          type: dict
      default: []
@@ -516,7 +511,7 @@ except ImportError:
 from random import randint
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec,\
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, \
     wait_for_task, find_obj, get_all_objs, get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
@@ -1036,7 +1031,7 @@ class PyVmomiHelper(PyVmomi):
                     disk_units = dict(tb=3, gb=2, mb=1, kb=0)
                     unit = unit.lower()
                     if unit in disk_units:
-                        current_disk['size'] = expected * (1024 ** disk_units[unit])
+                        current_disk['size'] = round(expected * (1024 ** disk_units[unit]))
                     else:
                         self.module.fail_json(msg="%s is not a supported unit for disk size for disk index [%s]."
                                                   " Supported units are ['%s']." % (unit, disk_index, "', '".join(disk_units.keys())))

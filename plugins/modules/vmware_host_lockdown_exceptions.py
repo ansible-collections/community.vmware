@@ -16,8 +16,7 @@ version_added: '3.1.0'
 short_description: Manage Lockdown Mode Exception Users
 description:
 - This module can be used to manage Lockdown Mode Exception Users.
-- All parameters and VMware objects values are case sensitive.
-- Please specify C(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
+- Please specify O(hostname) as vCenter IP or hostname only, as lockdown operations are not possible from standalone ESXi server.
 author:
 - Mario Lenz (@mariolenz)
 options:
@@ -25,26 +24,26 @@ options:
     description:
     - Name of cluster.
     - All host systems from given cluster used to manage exception users.
-    - Required parameter, if C(esxi_hostname) is not set.
+    - Required parameter, if O(esxi_hostname) is not set.
     type: str
   esxi_hostname:
     description:
     - List of ESXi hostname to manage exception users.
-    - Required parameter, if C(cluster_name) is not set.
+    - Required parameter, if O(cluster_name) is not set.
     type: list
     elements: str
   state:
     description:
-    - If C(present), make sure the given users are defined as Lockdown Mode Exception Users.
-    - If C(absent), make sure the given users are NO Lockdown Mode Exception Users.
-    - If C(set), will replace Lockdown Mode Exception Users defined list of users.
+    - If V(present), make sure the given users are defined as Lockdown Mode Exception Users.
+    - If V(absent), make sure the given users are NO Lockdown Mode Exception Users.
+    - If V(set), will replace Lockdown Mode Exception Users defined list of users.
     default: present
     choices: [ present, absent , set ]
     type: str
   exception_users:
     description:
     - List of Lockdown Mode Exception Users.
-    - To remove all Exception Users, I(state=set) the empty list.
+    - To remove all Exception Users, O(state=set) the empty list.
     type: list
     elements: str
     required: true

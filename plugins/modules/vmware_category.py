@@ -17,7 +17,6 @@ short_description: Manage VMware categories
 description:
 - This module can be used to create / delete / update VMware categories.
 - Tag feature is introduced in vSphere 6 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Abhijeet Kasurde (@Akasurde)
 requirements:
@@ -31,14 +30,20 @@ options:
     category_description:
       description:
       - The category description.
-      - This is required only if C(state) is set to C(present).
-      - This parameter is ignored, when C(state) is set to C(absent).
+      - This is required if O(state=present).
+      - This parameter is ignored when O(state=absent).
       default: ''
       type: str
     category_cardinality:
       description:
       - The category cardinality.
       - This parameter is ignored, when updating existing category.
+      - V(single) means an object can only be assigned one of the tags in this category.
+        For example, if a O(category_name=Operating System), then different tags of this category would be "Windows", "Linux", and so on.
+        In this case a VM object can be assigned only one of these tags and hence the cardinality of the associated category here is V(single).
+      - V(multiple) means an object can be assigned several of the tags in this category.
+        For example, if a O(category_name=Server), then different tags of this category would be "AppServer", "DatabaseServer" and so on.
+        In this case a VM object can be assigned more than one of the above tags and hence the cardinality of the associated category here is V(multiple).
       choices: ['multiple', 'single']
       default: 'multiple'
       type: str
@@ -50,10 +55,10 @@ options:
     state:
       description:
       - The state of category.
-      - If set to C(present) and category does not exists, then category is created.
-      - If set to C(present) and category exists, then category is updated.
-      - If set to C(absent) and category exists, then category is deleted.
-      - If set to C(absent) and category does not exists, no action is taken.
+      - If set to V(present) and category does not exists, then category is created.
+      - If set to V(present) and category exists, then category is updated.
+      - If set to V(absent) and category exists, then category is deleted.
+      - If set to V(absent) and category does not exists, no action is taken.
       - Process of updating category only allows name, description change.
       default: 'present'
       choices: [ 'present', 'absent' ]
@@ -149,7 +154,7 @@ category_results:
 
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.version import LooseVersion
+from ansible.module_utils.compat.version import LooseVersion
 from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 

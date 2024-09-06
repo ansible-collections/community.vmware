@@ -16,7 +16,6 @@ module: vmware_cluster_info
 short_description: Gather info about clusters available in given vCenter
 description:
     - This module can be used to gather information about clusters in VMWare infrastructure.
-    - All values and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde)
     - Christian Neugum (@digifuchsi)
@@ -24,26 +23,26 @@ options:
    datacenter:
      description:
      - Datacenter to search for cluster/s.
-     - This parameter is required, if C(cluster_name) is not supplied.
+     - This parameter is required, if O(cluster_name) is not supplied.
      required: false
      type: str
    cluster_name:
      description:
      - Name of the cluster.
      - If set, information of this cluster will be returned.
-     - This parameter is required, if C(datacenter) is not supplied.
+     - This parameter is required, if O(datacenter) is not supplied.
      required: false
      type: str
    show_tag:
     description:
-    - Tags related to cluster are shown if set to C(true).
+    - Tags related to cluster are shown if set to V(true).
     default: false
     type: bool
    schema:
      description:
        - Specify the output schema desired.
-       - The 'summary' output schema is the legacy output from the module.
-       - The 'vsphere' output schema is the vSphere API class definition which requires pyvmomi>6.7.1.
+       - The V(summary) output schema is the legacy output from the module.
+       - The V(vsphere) output schema is the vSphere API class definition.
      choices: ['summary', 'vsphere']
      default: 'summary'
      type: str
@@ -56,7 +55,7 @@ options:
        - '      "configuration.dasConfig.enabled",'
        - '      "summary.totalCpu"'
        - '   ]'
-       - Only valid when C(schema) is C(vsphere).
+       - Only valid when O(schema=vsphere).
      type: list
      elements: str
 extends_documentation_fragment:
@@ -112,7 +111,6 @@ RETURN = r'''
 clusters:
     description:
       - metadata about the available clusters
-      - datacenter added in the return values from version 1.6.0
     returned: always
     type: dict
     sample: {
@@ -184,7 +182,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves.urllib.parse import unquote
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name,\
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name, \
     get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 

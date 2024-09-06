@@ -30,13 +30,13 @@ options:
     description:
     - Name of the cluster.
     - Info about all SCSI devices for all host system in the given cluster is returned.
-    - This parameter is required, if C(esxi_hostname) is not provided.
+    - This parameter is required, if O(esxi_hostname) is not provided.
     type: str
   esxi_hostname:
     description:
     - Name of the ESXi host system.
     - Info about all SCSI devices for the given ESXi host system is returned.
-    - This parameter is required, if C(cluster_name) is not provided.
+    - This parameter is required, if O(cluster_name) is not provided.
     type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation

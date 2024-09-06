@@ -16,7 +16,6 @@ module: vmware_guest_vgpu
 short_description: Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to reconfigure vGPU card profile of the given virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - VM must be power off M(community.vmware.vmware_guest_powerstate) module can perform that task.
 author:
     - Mohamed Alibi (@Medalibi)
@@ -25,17 +24,17 @@ options:
    name:
      description:
        - Name of the virtual machine.
-       - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+       - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
        - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-       - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+       - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
        - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-       - This is required if C(name) or C(uuid) is not supplied.
+       - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -57,15 +56,14 @@ options:
      default: ha-datacenter
      description:
        - The datacenter name to which virtual machine belongs to.
-       - This parameter is case sensitive.
      type: str
    state:
      default: present
      choices: [ 'present', 'absent' ]
      description:
        - vGPU profile state.
-       - When C(state=present), the selected vGPU profile will be added if the VM hosted ESXi host NVIDIA GPU offer it.
-       - When C(state=absent), the selected vGPU profile gets removed from the VM.
+       - When V(present), the selected vGPU profile will be added if the VM hosted ESXi host NVIDIA GPU offer it.
+       - When V(absent), the selected vGPU profile gets removed from the VM.
      type: str
    vgpu:
      description:
@@ -91,7 +89,6 @@ options:
      type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-version_added: '2.5.0'
 """
 
 EXAMPLES = r"""

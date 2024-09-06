@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.13.0'
+requires_ansible: '>=2.15.0'
 
 action_groups:
   vmware:
@@ -8,8 +8,10 @@ action_groups:
   - vcenter_extension_info
   - vcenter_folder
   - vcenter_license
+  - vcenter_root_password_expiration
   - vcenter_standard_key_provider
   - vmware_about_info
+  - vmware_all_snapshots_info
   - vmware_category
   - vmware_category_info
   - vmware_cfg_backup
@@ -52,6 +54,7 @@ action_groups:
   - vmware_evc_mode
   - vmware_export_ovf
   - vmware_first_class_disk
+  - vmware_first_class_disk_info
   - vmware_folder_info
   - vmware_guest
   - vmware_guest_boot_info
@@ -86,6 +89,7 @@ action_groups:
   - vmware_guest_video
   - vmware_host
   - vmware_host_acceptance
+  - vmware_host_acceptance_info
   - vmware_host_active_directory
   - vmware_host_auto_start
   - vmware_host_capability_info
@@ -100,6 +104,7 @@ action_groups:
   - vmware_host_feature_info
   - vmware_host_firewall_info
   - vmware_host_firewall_manager
+  - vmware_host_graphics
   - vmware_host_hyperthreading
   - vmware_host_ipv6
   - vmware_host_iscsi
@@ -172,3 +177,10 @@ action_groups:
   - vsan_health_silent_checks
   - vsphere_copy
   - vsphere_file
+
+plugin_routing:
+  modules:
+    vmware_cluster_drs:
+      deprecation:
+        removal_version: 6.0.0
+        warning_text: Use vmware.vmware.cluster_drs instead.

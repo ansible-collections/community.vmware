@@ -27,10 +27,10 @@ options:
     primary_pvlans:
         description:
             - A list of VLAN IDs that should be configured as Primary PVLANs.
-            - If C(primary_pvlans) isn't specified, all PVLANs will be deleted if present.
+            - If not specified, all PVLANs will be deleted if present.
             - Each member of the list requires primary_pvlan_id (int) set.
             - The secondary promiscuous PVLAN will be created automatically.
-            - If C(secondary_pvlans) isn't specified, the primary PVLANs and each secondary promiscuous PVLAN will be created.
+            - If O(secondary_pvlans) isn't specified, the primary PVLANs and each secondary promiscuous PVLAN will be created.
             - Please see examples for more information.
         type: list
         default: []
@@ -38,8 +38,8 @@ options:
     secondary_pvlans:
         description:
             - A list of VLAN IDs that should be configured as Secondary PVLANs.
-            - 'C(primary_pvlans) need to be specified to create any Secondary PVLAN.'
-            - If C(primary_pvlans) isn't specified, all PVLANs will be deleted if present.
+            - 'O(primary_pvlans) need to be specified to create any Secondary PVLAN.'
+            - If O(primary_pvlans) isn't specified, all PVLANs will be deleted if present.
             - Each member of the list requires primary_pvlan_id (int), secondary_pvlan_id (int), and pvlan_type (str) to be set.
             - The type of the secondary PVLAN can be isolated or community. The secondary promiscuous PVLAN will be created automatically.
             - Please see examples for more information.

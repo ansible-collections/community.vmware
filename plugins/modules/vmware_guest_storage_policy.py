@@ -34,19 +34,19 @@ options:
    name:
      description:
      - Name of the virtual machine.
-     - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
+     - One of O(name), O(uuid), or O(moid) are required to define the virtual machine.
      type: str
      required: false
    uuid:
      description:
      - UUID of the virtual machine.
-     - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
+     - One of O(name), O(uuid), or O(moid) are required to define the virtual machine.
      type: str
      required: false
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - One of C(name), C(uuid), or C(moid) are required to define the virtual machine.
+     - One of O(name), O(uuid), or O(moid) are required to define the virtual machine.
      type: str
      required: false
    folder:
@@ -69,15 +69,13 @@ options:
    vm_home:
      description:
      - A storage profile policy to set on VM Home.
-     - All values and parameters are case sensitive.
-     - At least one of C(disk) or C(vm_home) are required parameters.
+     - At least one of O(disk) or O(vm_home) are required parameters.
      required: false
      type: str
    disk:
      description:
      - A list of disks with storage profile policies to enforce.
-     - All values and parameters are case sensitive.
-     - At least one of C(disk) and C(vm_home) are required parameters.
+     - At least one of O(disk) and O(vm_home) are required parameters.
      required: false
      type: list
      elements: dict

@@ -16,24 +16,23 @@ module: vmware_guest_video
 short_description: Modify video card configurations of specified virtual machine in given vCenter infrastructure
 description:
     - This module is used to reconfigure video card settings of given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Diane Wang (@Tomorrow9) <dianew@vmware.com>
 options:
    name:
      description:
      - Name of the virtual machine.
-     - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-     - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -55,18 +54,17 @@ options:
      default: ha-datacenter
      description:
      - The datacenter name to which virtual machine belongs to.
-     - This parameter is case sensitive.
      type: str
    gather_video_facts:
      description:
-     - If set to C(true), return settings of the video card, other attributes are ignored.
-     - If set to C(false), will do reconfiguration and return video card settings.
+     - If set to V(true), return settings of the video card, other attributes are ignored.
+     - If set to V(false), will do reconfiguration and return video card settings.
      type: bool
      default: false
    use_auto_detect:
      description:
-     - 'If set to C(true), applies common video settings to the guest operating system, attributes C(display_number) and C(video_memory_mb) are ignored.'
-     - 'If set to C(false), the number of display and the total video memory will be reconfigured using C(display_number) and C(video_memory_mb).'
+     - 'If set to V(true), applies common video settings to the guest operating system, attributes O(display_number) and O(video_memory_mb) are ignored.'
+     - 'If set to V(false), the number of display and the total video memory will be reconfigured using O(display_number) and O(video_memory_mb).'
      type: bool
    display_number:
      description:
@@ -84,9 +82,9 @@ options:
      type: bool
    renderer_3D:
      description:
-     - 'If set to C(automatic), selects the appropriate option (software or hardware) for this virtual machine automatically.'
-     - 'If set to C(software), uses normal CPU processing for 3D calculations.'
-     - 'If set to C(hardware), requires graphics hardware (GPU) for faster 3D calculations.'
+     - 'If set to V(automatic), selects the appropriate option (software or hardware) for this virtual machine automatically.'
+     - 'If set to V(software), uses normal CPU processing for 3D calculations.'
+     - 'If set to V(hardware), requires graphics hardware (GPU) for faster 3D calculations.'
      choices: [ automatic, software, hardware ]
      type: str
    memory_3D_mb:

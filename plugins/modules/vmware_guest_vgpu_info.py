@@ -17,24 +17,23 @@ version_added: '3.3.0'
 short_description: Gather information about vGPU profiles of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to gather metadata about vGPU profiles of the given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Jared Priddy (@jdptechnc)
 options:
    name:
      description:
        - Name of the virtual machine.
-       - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+       - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
        - UUID of the instance to gather facts if known, this is VMware's unique identifier.
-       - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+       - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
        - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-       - This is required if C(name) or C(uuid) is not supplied.
+       - This is required if O(name) or O(uuid) is not supplied.
      type: str
    folder:
      description:
@@ -56,7 +55,6 @@ options:
      default: ha-datacenter
      description:
        - The datacenter name to which virtual machine belongs to.
-       - This parameter is case sensitive.
      type: str
    use_instance_uuid:
      description:

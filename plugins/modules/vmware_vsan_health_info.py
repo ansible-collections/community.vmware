@@ -28,7 +28,7 @@ options:
         type: str
     fetch_from_cache:
         description:
-            - C(true) to return the result from cache directly instead of running the full health check.
+            - V(true) to return the result from cache directly instead of running the full health check.
         required: false
         default: false
         type: bool
@@ -108,11 +108,9 @@ import traceback
 try:
     from pyVmomi import vmodl, VmomiSupport
     HAS_PYVMOMI = True
-    HAS_PYVMOMIJSON = hasattr(VmomiSupport, 'VmomiJSONEncoder')
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
-    HAS_PYVMOMIJSON = False
 
 VSANPYTHONSDK_IMP_ERR = None
 try:
@@ -185,9 +183,6 @@ def main():
 
     if not HAS_VSANPYTHONSDK:
         module.fail_json(msg=missing_required_lib('vSAN Management SDK for Python'), exception=VSANPYTHONSDK_IMP_ERR)
-
-    if not HAS_PYVMOMIJSON:
-        module.fail_json(msg='The installed version of pyvmomi lacks JSON output support; need pyvmomi>6.7.1')
 
     vsan_info_manager = VSANInfoManager(module)
     vsan_info_manager.gather_info()

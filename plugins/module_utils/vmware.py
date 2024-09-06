@@ -21,7 +21,7 @@ import time
 import traceback
 import datetime
 from collections import OrderedDict
-from ansible_collections.community.vmware.plugins.module_utils.version import StrictVersion
+from ansible.module_utils.compat.version import StrictVersion
 from random import randint
 
 
@@ -39,11 +39,9 @@ try:
     from pyVim import connect
     from pyVmomi import vim, vmodl, VmomiSupport
     HAS_PYVMOMI = True
-    HAS_PYVMOMIJSON = hasattr(VmomiSupport, 'VmomiJSONEncoder')
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
-    HAS_PYVMOMIJSON = False
 
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
@@ -1088,11 +1086,11 @@ def option_diff(options, current_options, truthy_strings_as_bool=True):
     for option_key, option_value in options.items():
         if truthy_strings_as_bool and is_boolean(option_value):
             option_value = VmomiSupport.vmodlTypes['bool'](is_truthy(option_value))
-        elif type(option_value) is int:
+        elif isinstance(option_value, int):
             option_value = VmomiSupport.vmodlTypes['int'](option_value)
-        elif type(option_value) is float:
+        elif isinstance(option_value, float):
             option_value = VmomiSupport.vmodlTypes['float'](option_value)
-        elif type(option_value) is str:
+        elif isinstance(option_value, str):
             option_value = VmomiSupport.vmodlTypes['string'](option_value)
 
         if option_key not in current_options_dict or current_options_dict[option_key] != option_value:
@@ -1174,9 +1172,9 @@ class PyVmomi(object):
         self.module.fail_json(msg='The passed vCenter version: %s is None.' % version)
 
     def get_cert_fingerprint(self, fqdn, port, proxy_host=None, proxy_port=None):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(1)
         if proxy_host:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(1)
             sock.connect((
                 proxy_host,
                 proxy_port))
@@ -1191,17 +1189,16 @@ class PyVmomi(object):
             der_cert_bin = ctx.wrap_socket(sock, server_hostname=fqdn).getpeercert(True)
             sock.close()
         else:
-            wrapped_socket = ssl.wrap_socket(sock)
             try:
-                wrapped_socket.connect((fqdn, port))
-            except socket.error as socket_error:
-                self.module.fail_json(msg="Cannot connect to host : %s" % socket_error)
-            else:
-                der_cert_bin = wrapped_socket.getpeercert(True)
-                wrapped_socket.close()
-
-        string = str(hashlib.sha1(der_cert_bin).hexdigest())
-        return ':'.join(a + b for a, b in zip(string[::2], string[1::2]))
+                pem = ssl.get_server_certificate((fqdn, port))
+            except Exception:
+                self.module.fail_json(msg=f"Cannot connect to host: {fqdn}")
+            der_cert_bin = ssl.PEM_cert_to_DER_cert(pem)
+        if der_cert_bin:
+            string = str(hashlib.sha1(der_cert_bin).hexdigest())
+            return ':'.join(a + b for a, b in zip(string[::2], string[1::2]))
+        else:
+            self.module.fail_json(msg=f"Unable to obtain certificate fingerprint for host: {fqdn}")
 
     def get_managed_objects_properties(self, vim_type, properties=None):
         """
@@ -1875,6 +1872,30 @@ class PyVmomi(object):
 
         return None
 
+    def find_first_class_disks(self, datastore_obj):
+        """
+        Get first-class disks managed object
+        Args:
+            datastore_obj: Managed object of datastore
+
+        Returns: First-class disks managed object if found else None
+
+        """
+
+        disks = []
+
+        if self.is_vcenter():
+            for id in self.content.vStorageObjectManager.ListVStorageObject(datastore_obj):
+                disks.append(self.content.vStorageObjectManager.RetrieveVStorageObject(id, datastore_obj))
+
+        else:
+            for id in self.content.vStorageObjectManager.HostListVStorageObject(datastore_obj):
+                disks.append(self.content.vStorageObjectManager.HostRetrieveVStorageObject(id, datastore_obj))
+
+        if disks == []:
+            return None
+        else:
+            return disks
     #
     # Conversion to JSON
     #
@@ -1949,9 +1970,6 @@ class PyVmomi(object):
         provided then all properties are deeply converted.  The resulting
         JSON is sorted to improve human readability.
 
-        Requires upstream support from pyVmomi > 6.7.1
-        (https://github.com/vmware/pyvmomi/pull/732)
-
         Args:
           - obj (object): vim object
           - properties (list, optional): list of properties following
@@ -1962,9 +1980,6 @@ class PyVmomi(object):
         Return:
           dict
         """
-        if not HAS_PYVMOMIJSON:
-            self.module.fail_json(msg='The installed version of pyvmomi lacks JSON output support; need pyvmomi>6.7.1')
-
         result = dict()
         if properties:
             for prop in properties:

@@ -15,7 +15,6 @@ module: vmware_object_rename
 short_description: Renames VMware objects
 description:
 - This module can be used to rename VMware objects.
-- All variables and VMware object names are case sensitive.
 - Renaming Host and Network is not supported by VMware APIs.
 author:
 - Abhijeet Kasurde (@Akasurde)
@@ -41,12 +40,12 @@ options:
     object_name:
       description:
       - Name of the object to work with.
-      - Mutually exclusive with C(object_moid).
+      - Mutually exclusive with O(object_moid).
       type: str
     object_moid:
       description:
       - Managed object id of the VMware object to work with.
-      - Mutually exclusive with C(object_name).
+      - Mutually exclusive with O(object_name).
       type: str
     new_name:
       description:

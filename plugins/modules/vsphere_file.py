@@ -18,22 +18,6 @@ description:
 author:
 - Dag Wieers (@dagwieers)
 options:
-  host:
-    description:
-    - The vCenter server on which the datastore is available.
-    type: str
-    required: true
-    aliases: [ hostname ]
-  username:
-    description:
-    - The user name to authenticate on the vCenter server.
-    type: str
-    required: true
-  password:
-    description:
-    - The password to authenticate on the vCenter server.
-    type: str
-    required: true
   datacenter:
     description:
     - The datacenter on the vCenter server that holds the datastore.
@@ -50,12 +34,6 @@ options:
     type: str
     required: true
     aliases: [ dest ]
-  validate_certs:
-    description:
-    - If C(false), SSL certificates will not be validated. This should only be
-      set to C(false) when no other option exists.
-    type: bool
-    default: true
   timeout:
     description:
     - The timeout in seconds for the upload to the datastore.
@@ -64,21 +42,23 @@ options:
   state:
     description:
     - The state of or the action on the provided path.
-    - If C(absent), the file will be removed.
-    - If C(directory), the directory will be created.
-    - If C(file), more information of the (existing) file will be returned.
-    - If C(touch), an empty file will be created if the path does not exist.
+    - If V(absent), the file will be removed.
+    - If V(directory), the directory will be created.
+    - If V(file), more information of the (existing) file will be returned.
+    - If V(touch), an empty file will be created if the path does not exist.
     type: str
     choices: [ absent, directory, file, touch ]
     default: file
 notes:
 - The vSphere folder API does not allow to remove directory objects.
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = r'''
 - name: Create an empty file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC1 Someplace
@@ -89,7 +69,7 @@ EXAMPLES = r'''
 
 - name: Create a directory on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC2 Someplace
@@ -100,7 +80,7 @@ EXAMPLES = r'''
 
 - name: Query a file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC1 Someplace
@@ -112,7 +92,7 @@ EXAMPLES = r'''
 
 - name: Delete a file on a datastore
   community.vmware.vsphere_file:
-    host: '{{ vhost }}'
+    hostname: '{{ vhost }}'
     username: '{{ vuser }}'
     password: '{{ vpass }}'
     datacenter: DC2 Someplace
@@ -134,6 +114,7 @@ from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible.module_utils.six.moves.urllib.parse import quote, urlencode
 from ansible.module_utils.urls import open_url
 from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 
 
 def vmware_path(datastore, datacenter, path):
@@ -152,22 +133,22 @@ def vmware_path(datastore, datacenter, path):
 
 def main():
 
+    argument_spec = vmware_argument_spec()
+
+    argument_spec.update(dict(
+        datacenter=dict(type='str', required=True),
+        datastore=dict(type='str', required=True),
+        path=dict(type='str', required=True, aliases=['dest']),
+        state=dict(type='str', default='file', choices=['absent', 'directory', 'file', 'touch']),
+        timeout=dict(type='int', default=10),
+    ))
+
     module = AnsibleModule(
-        argument_spec=dict(
-            host=dict(type='str', required=True, aliases=['hostname']),
-            username=dict(type='str', required=True),
-            password=dict(type='str', required=True, no_log=True),
-            datacenter=dict(type='str', required=True),
-            datastore=dict(type='str', required=True),
-            path=dict(type='str', required=True, aliases=['dest']),
-            state=dict(type='str', default='file', choices=['absent', 'directory', 'file', 'touch']),
-            timeout=dict(type='int', default=10),
-            validate_certs=dict(type='bool', default=True),
-        ),
+        argument_spec=argument_spec,
         supports_check_mode=True,
     )
 
-    host = module.params.get('host')
+    host = module.params.get('hostname')
     username = module.params.get('username')
     password = module.params.get('password')
     datacenter = module.params.get('datacenter')

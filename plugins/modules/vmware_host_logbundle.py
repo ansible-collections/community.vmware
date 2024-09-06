@@ -28,6 +28,12 @@ options:
         - file destination on localhost, path must be exist.
       type: str
       required: true
+    download_timeout:
+      version_added: 4.5.0
+      description:
+        - The user defined timeout in seconds of exporting the log file.
+        - The default of the function this module uses is so low that you have to set this this to a higher value in all probabilty.
+      type: int
     manifests:
       description:
         - Logs to include in the logbundle file.
@@ -170,6 +176,7 @@ class VMwareHostLogbundle(PyVmomi):
         self.dest = self.params['dest']
         self.manifests = self.params['manifests']
         self.performance_data = self.params['performance_data']
+        self.download_timeout = self.params['download_timeout']
 
         if not self.dest.endswith('.tgz'):
             self.dest = self.dest + '.tgz'
@@ -209,7 +216,7 @@ class VMwareHostLogbundle(PyVmomi):
 
     def get_logbundle(self):
         self.validate_manifests()
-        url = 'https://' + self.esxi_hostname + '/cgi-bin/vm-support.cgi?manifests=' + '&'.join(self.manifests)
+        url = 'https://' + self.esxi_hostname + '/cgi-bin/vm-support.cgi?manifests=' + '%20'.join(self.manifests)
 
         if self.performance_data:
             duration = self.performance_data.get('duration')
@@ -219,7 +226,10 @@ class VMwareHostLogbundle(PyVmomi):
         headers = self.generate_req_headers(url)
 
         try:
-            resp, info = fetch_url(self.module, method='GET', headers=headers, url=url)
+            if self.download_timeout is not None:
+                resp, info = fetch_url(self.module, method='GET', headers=headers, url=url, timeout=self.download_timeout)
+            else:
+                resp, info = fetch_url(self.module, method='GET', headers=headers, url=url)
             if info['status'] != 200:
                 self.module.fail_json(msg="failed to fetch logbundle from %s: %s" % (url, info['msg']))
             with open(self.dest, 'wb') as local_file:
@@ -236,6 +246,7 @@ def main():
     argument_spec.update(
         esxi_hostname=dict(type='str', required=True),
         dest=dict(type='str', required=True),
+        download_timeout=dict(type='int'),
         manifests=dict(type='list', elements='str',
                        default=['System:Base', 'System:CoreDumps', 'System:EsxImage', 'System:IOFilter',
                                 'System:LoadESX', 'System:Modules', 'System:RDMA', 'System:ResourceGroups',

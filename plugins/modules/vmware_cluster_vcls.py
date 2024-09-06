@@ -17,7 +17,6 @@ short_description: Override the default vCLS (vSphere Cluster Services) VM disk 
 description:
     - Override the default vCLS VM disk placement for this cluster.
     - Some datastores cannot be selected for vCLS 'Allowed' as they are blocked by solutions as SRM or vSAN maintenance mode where vCLS cannot be configured.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Nina Loser (@Nina2244)
@@ -112,16 +111,19 @@ class VMwareCluster(PyVmomi):
         Returns: True and all to add and to remove allowed and not allowed Datastores if there is diff, else False
 
         """
-        if hasattr(self.cluster.configurationEx, 'systemVMsConfig'):
-            vCLS_config = self.cluster.configurationEx.systemVMsConfig
-        else:
+        if not hasattr(self.cluster.configurationEx, 'systemVMsConfig'):
             return False, self.allowedDatastores_names, None
+
+        currentAllowedDatastores = []
         changed = False
 
         # Get List currently of allowed Datastore Names
-        currentAllowedDatastores = []
-        for ds in vCLS_config.allowedDatastores:
-            currentAllowedDatastores.append(ds.name)
+        vCLS_config = self.cluster.configurationEx.systemVMsConfig
+        try:
+            for ds in vCLS_config.allowedDatastores:
+                currentAllowedDatastores.append(ds.name)
+        except AttributeError:
+            pass
 
         # Get the to add and to remove allowed and not allowed Datastores
         toAddAllowedDatastores = list(set(self.allowedDatastores_names) - set(currentAllowedDatastores))

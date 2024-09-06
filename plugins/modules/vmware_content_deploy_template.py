@@ -19,7 +19,6 @@ description:
 - Content Library feature is introduced in vSphere 6.0 version.
 - vmtx templates feature is introduced in vSphere 67U1 and APIs for clone template from content library in 67U2.
 - This module does not work with vSphere version older than 67U2.
-- All variables and VMware object names are case sensitive.
 author:
 - Pavan Bidkar (@pgbidkar)
 requirements:
@@ -58,7 +57,7 @@ options:
     datastore:
       description:
       - Name of the datastore to store deployed VM and disk.
-      - Required if I(datastore_cluster) is not provided.
+      - Required if O(datastore_cluster) is not provided.
       type: str
       required: false
     datastore_cluster:
@@ -66,7 +65,7 @@ options:
       - Name of the datastore cluster to store deployed VM and disk.
       - Please make sure Storage DRS is active for recommended datastore from the given datastore cluster.
       - If Storage DRS is not enabled, datastore with largest free storage space is selected.
-      - Required if I(datastore) is not provided.
+      - Required if O(datastore) is not provided.
       type: str
       required: false
     folder:
@@ -78,31 +77,31 @@ options:
       description:
       - Name of the ESX Host in datacenter in which to place deployed VM.
       - The host has to be a member of the cluster that contains the resource pool.
-      - Required with I(resource_pool) to find resource pool details. This will be used as additional
+      - Required with O(resource_pool) to find resource pool details. This will be used as additional
         information when there are resource pools with same name.
       type: str
       required: false
     resource_pool:
       description:
       - Name of the resource pool in datacenter in which to place deployed VM.
-      - Required if I(cluster) is not specified.
-      - For default or non-unique resource pool names, specify I(host) and I(cluster).
+      - Required if O(cluster) is not specified.
+      - For default or non-unique resource pool names, specify O(host) and O(cluster).
       - C(Resources) is the default name of resource pool.
       type: str
       required: false
     cluster:
       description:
       - Name of the cluster in datacenter in which to place deployed VM.
-      - Required if I(resource_pool) is not specified.
+      - Required if O(resource_pool) is not specified.
       type: str
       required: false
     state:
       description:
       - The state of Virtual Machine deployed from template in content library.
-      - If set to C(present) and VM does not exists, then VM is created.
-      - If set to C(present) and VM exists, no action is taken.
-      - If set to C(poweredon) and VM does not exists, then VM is created with powered on state.
-      - If set to C(poweredon) and VM exists, no action is taken.
+      - If set to V(present) and VM does not exists, then VM is created.
+      - If set to V(present) and VM exists, no action is taken.
+      - If set to V(poweredon) and VM does not exists, then VM is created with powered on state.
+      - If set to V(poweredon) and VM exists, no action is taken.
       type: str
       required: false
       default: 'present'

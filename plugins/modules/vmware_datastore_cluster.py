@@ -16,15 +16,14 @@ module: vmware_datastore_cluster
 short_description: Manage VMware vSphere datastore clusters
 description:
     - This module can be used to add and delete datastore cluster in given VMware environment.
-    - All parameters and VMware object values are case sensitive.
 author:
 -  Abhijeet Kasurde (@Akasurde)
 options:
     datacenter_name:
       description:
       - The name of the datacenter.
-      - You must specify either a C(datacenter_name) or a C(folder).
-      - Mutually exclusive with C(folder) parameter.
+      - You must specify either a O(datacenter_name) or a O(folder).
+      - Mutually exclusive with O(folder) parameter.
       required: false
       aliases: [ datacenter ]
       type: str
@@ -43,8 +42,7 @@ options:
       description:
       - Destination folder, absolute path to place datastore cluster in.
       - The folder should include the datacenter.
-      - This parameter is case sensitive.
-      - You must specify either a C(folder) or a C(datacenter_name).
+      - You must specify either a O(folder) or a O(datacenter_name).
       - 'Examples:'
       - '   folder: /datacenter1/datastore'
       - '   folder: datacenter1/datastore'

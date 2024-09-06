@@ -1,0 +1,96 @@
+# Test code for the vmware_first_class_disk_info module.
+# Copyright: (c) 2021, Mario Lenz <m@riolenz.de>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+
+- name: Gather Info if no first-class disk exists
+  vmware_first_class_disk_info: &disk_info
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datastore_name: "{{ rw_datastore }}"
+    validate_certs: false
+  register: disk_info
+  delegate_to: localhost
+
+- debug:
+    var: disk_info
+
+- assert:
+    that:
+      - "disk_info['first_class_disks'] == []"
+
+- name: Create first-class disk through vCenter
+  vmware_first_class_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    disk_name: "firstclassdisk"
+    size: 1GB
+    datastore_name: "{{ rw_datastore }}"
+    state: present
+    validate_certs: false
+
+- name: Gather Info of the generated first-class disk
+  vmware_first_class_disk_info:
+    <<: *disk_info
+  register: disk_info
+
+- name: assert for first-class disk info
+  assert:
+    that:
+      - "(disk_info['first_class_disks'] | length) == 1"
+      - "disk_info['first_class_disks'][0]['name'] == 'firstclassdisk'"
+      - "disk_info['first_class_disks'][0]['datastore_name'] == rw_datastore"
+      - "disk_info['first_class_disks'][0]['size_mb'] == 1024"
+      - "disk_info['first_class_disks'][0]['consumption_type'] is defined"
+      - "disk_info['first_class_disks'][0]['descriptor_version'] is defined"
+      - "disk_info['first_class_disks'][0]['consumer_ids'] is defined"
+
+- name: Create a second first-class disk through vCenter
+  vmware_first_class_disk:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    disk_name: "secondclassdisk"
+    size: 1GB
+    datastore_name: "{{ rw_datastore }}"
+    state: present
+    validate_certs: false
+
+- name: Gather Info of the two generated first-class disk
+  vmware_first_class_disk_info:
+    <<: *disk_info
+  register: disk_info
+
+- name: assert for first-class disk info
+  assert:
+    that:
+      - "(disk_info['first_class_disks'] | length) == 2"
+
+- name: Gather Info of first-class disk 'firstclassdisk'
+  vmware_first_class_disk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datastore_name: "{{ rw_datastore }}"
+    disk_name: "firstclassdisk"
+    validate_certs: false
+  register: disk_info
+  delegate_to: localhost
+
+- name: assert for first-class disk info
+  assert:
+    that:
+      - "(disk_info['first_class_disks'] | length) == 1"
+      - "disk_info['first_class_disks'][0]['name'] == 'firstclassdisk'"
+      - "disk_info['first_class_disks'][0]['datastore_name'] == rw_datastore"
+      - "disk_info['first_class_disks'][0]['size_mb'] == 1024"
+      - "disk_info['first_class_disks'][0]['consumption_type'] is defined"
+      - "disk_info['first_class_disks'][0]['descriptor_version'] is defined"
+      - "disk_info['first_class_disks'][0]['consumer_ids'] is defined"

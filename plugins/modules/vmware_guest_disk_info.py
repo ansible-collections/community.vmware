@@ -17,24 +17,23 @@ module: vmware_guest_disk_info
 short_description: Gather info about disks of given virtual machine
 description:
     - This module can be used to gather information about disks belonging to given virtual machine.
-    - All parameters and VMware object names are case sensitive.
 author:
     - Abhijeet Kasurde (@Akasurde) <akasurde@redhat.com>
 options:
    name:
      description:
      - Name of the virtual machine.
-     - This is required parameter, if parameter C(uuid) or C(moid) is not supplied.
+     - This is required parameter, if parameter O(uuid) or O(moid) is not supplied.
      type: str
    uuid:
      description:
      - UUID of the instance to gather information if known, this is VMware's unique identifier.
-     - This is required parameter, if parameter C(name) or C(moid) is not supplied.
+     - This is required parameter, if parameter O(name) or O(moid) is not supplied.
      type: str
    moid:
      description:
      - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-     - This is required if C(name) or C(uuid) is not supplied.
+     - This is required if O(name) or O(uuid) is not supplied.
      type: str
    use_instance_uuid:
      description:

@@ -44,6 +44,16 @@ except ImportError:
     VSPHERE_IMP_ERR = traceback.format_exc()
     HAS_VSPHERE = False
 
+try:
+    from requests.packages import urllib3
+    HAS_URLLIB3 = True
+except ImportError:
+    try:
+        import urllib3
+        HAS_URLLIB3 = True
+    except ImportError:
+        HAS_URLLIB3 = False
+
 from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils._text import to_native
 
@@ -131,13 +141,17 @@ class VmwareRestClient(object):
         username = self.params.get('username')
         password = self.params.get('password')
         hostname = self.params.get('hostname')
+        validate_certs = self.params.get('validate_certs')
         port = self.params.get('port')
         session = requests.Session()
-        session.verify = self.params.get('validate_certs')
+        session.verify = validate_certs
         protocol = self.params.get('protocol')
         proxy_host = self.params.get('proxy_host')
         proxy_port = self.params.get('proxy_port')
 
+        if validate_certs is False:
+            if HAS_URLLIB3:
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         if all([protocol, proxy_host, proxy_port]):
             proxies = {protocol: "{0}://{1}:{2}".format(protocol, proxy_host, proxy_port)}
             session.proxies.update(proxies)
@@ -539,36 +553,3 @@ class VmwareRestClient(object):
                 category_id = category_obj.id
 
         return self.get_tag_by_category_id(tag_name=tag_name, category_id=category_id)
-
-    def get_tag_by_category(self, tag_name=None, category_name=None, category_id=None):
-        """
-        Return tag object by name and category name specified
-        Args:
-            tag_name: Name of tag
-            category_name: Name of category (mutually exclusive with 'category_id')
-            category_id: Id of category, if known in advance (mutually exclusive with 'category_name')
-        Returns: Tag object if found else None
-        """
-        message = "The method 'get_tag_by_category' is deprecated and scheduled for removal. "\
-                  "Please update your code and use 'get_tag_by_category_id' or 'get_tag_by_category_name' instead"
-        self.module.deprecate(message, version='4.0.0', collection_name='community.vmware')
-
-        if not tag_name:
-            return None
-
-        if category_id or category_name:
-            if not category_id:
-                category_obj = self.get_category_by_name(category_name=category_name)
-
-                if not category_obj:
-                    return None
-
-                category_id = category_obj.id
-
-            for tag_object in self.api_client.tagging.Tag.list_tags_for_category(category_id):
-                tag_obj = self.api_client.tagging.Tag.get(tag_object)
-
-                if tag_obj.name == tag_name:
-                    return tag_obj
-        else:
-            return self.search_svc_object_by_name(service=self.api_client.tagging.Tag, svc_obj_name=tag_name)

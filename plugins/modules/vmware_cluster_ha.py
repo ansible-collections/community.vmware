@@ -17,7 +17,6 @@ module: vmware_cluster_ha
 short_description: Manage High Availability (HA) on VMware vSphere clusters
 description:
     - Manages HA configuration on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -41,35 +40,35 @@ options:
     ha_host_monitoring:
       description:
       - Whether HA restarts virtual machines after a host fails.
-      - If set to C(enabled), HA restarts virtual machines after a host fails.
-      - If set to C(disabled), HA does not restart virtual machines after a host fails.
-      - If C(enable) is set to C(false), then this value is ignored.
+      - If set to V(enabled), HA restarts virtual machines after a host fails.
+      - If set to V(disabled), HA does not restart virtual machines after a host fails.
+      - If O(enable=false), this value is ignored.
       type: str
       choices: [ 'enabled', 'disabled' ]
       default: 'enabled'
     ha_vm_monitoring:
       description:
       - State of virtual machine health monitoring service.
-      - If set to C(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
-      - If set to C(vmMonitoringDisabled), virtual machine health monitoring is disabled.
-      - If set to C(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
-      - If C(enable) is set to C(false), then this value is ignored.
+      - If set to V(vmAndAppMonitoring), HA response to both virtual machine and application heartbeat failure.
+      - If set to V(vmMonitoringDisabled), virtual machine health monitoring is disabled.
+      - If set to V(vmMonitoringOnly), HA response to virtual machine heartbeat failure.
+      - If O(enable=false), then this value is ignored.
       type: str
       choices: ['vmAndAppMonitoring', 'vmMonitoringOnly', 'vmMonitoringDisabled']
       default: 'vmMonitoringDisabled'
     host_isolation_response:
       description:
       - Indicates whether or VMs should be powered off if a host determines that it is isolated from the rest of the compute resource.
-      - If set to C(none), do not power off VMs in the event of a host network isolation.
-      - If set to C(powerOff), power off VMs in the event of a host network isolation.
-      - If set to C(shutdown), shut down VMs guest operating system in the event of a host network isolation.
+      - If set to V(none), do not power off VMs in the event of a host network isolation.
+      - If set to V(powerOff), power off VMs in the event of a host network isolation.
+      - If set to V(shutdown), shut down VMs guest operating system in the event of a host network isolation.
       type: str
       choices: ['none', 'powerOff', 'shutdown']
       default: 'none'
     slot_based_admission_control:
       description:
       - Configure slot based admission control policy.
-      - C(slot_based_admission_control), C(reservation_based_admission_control) and C(failover_host_admission_control) are mutually exclusive.
+      - O(slot_based_admission_control), O(reservation_based_admission_control) and O(failover_host_admission_control) are mutually exclusive.
       suboptions:
         failover_level:
           description:
@@ -80,7 +79,7 @@ options:
     reservation_based_admission_control:
       description:
       - Configure reservation based admission control policy.
-      - C(slot_based_admission_control), C(reservation_based_admission_control) and C(failover_host_admission_control) are mutually exclusive.
+      - O(slot_based_admission_control), O(reservation_based_admission_control) and O(failover_host_admission_control) are mutually exclusive.
       suboptions:
         failover_level:
           description:
@@ -89,27 +88,29 @@ options:
           required: true
         auto_compute_percentages:
           description:
-            - By default, C(failover_level) is used to calculate C(cpu_failover_resources_percent) and C(memory_failover_resources_percent).
+            - By default, O(reservation_based_admission_control.failover_level) is used to calculate
+              O(reservation_based_admission_control.cpu_failover_resources_percent)
+              and O(reservation_based_admission_control.memory_failover_resources_percent).
               If a user wants to override the percentage values, he has to set this field to false.
           type: bool
           default: true
         cpu_failover_resources_percent:
           description:
           - Percentage of CPU resources in the cluster to reserve for failover.
-            Ignored if C(auto_compute_percentages) is not set to false.
+            Ignored if O(reservation_based_admission_control.auto_compute_percentages) is not set to false.
           type: int
           default: 50
         memory_failover_resources_percent:
           description:
           - Percentage of memory resources in the cluster to reserve for failover.
-            Ignored if C(auto_compute_percentages) is not set to false.
+            Ignored if O(reservation_based_admission_control.auto_compute_percentages) is not set to false.
           type: int
           default: 50
       type: dict
     failover_host_admission_control:
       description:
       - Configure dedicated failover hosts.
-      - C(slot_based_admission_control), C(reservation_based_admission_control) and C(failover_host_admission_control) are mutually exclusive.
+      - O(slot_based_admission_control), O(reservation_based_admission_control) and O(failover_host_admission_control) are mutually exclusive.
       suboptions:
         failover_hosts:
           description:
@@ -122,7 +123,7 @@ options:
       description:
       - The number of seconds after which virtual machine is declared as failed
         if no heartbeat has been received.
-      - This setting is only valid if C(ha_vm_monitoring) is set to, either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
+      - This setting is only valid if O(ha_vm_monitoring=vmAndAppMonitoring) or O(ha_vm_monitoring=vmMonitoringOnly).
       - Unit is seconds.
       type: int
       default: 30
@@ -130,22 +131,22 @@ options:
       description:
       - The number of seconds for the virtual machine's heartbeats to stabilize after
         the virtual machine has been powered on.
-      - Valid only when I(ha_vm_monitoring) is set to either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
+      - Valid only when O(ha_vm_monitoring=vmAndAppMonitoring) or O(ha_vm_monitoring=vmMonitoringOnly).
       - Unit is seconds.
       type: int
       default: 120
     ha_vm_max_failures:
       description:
       - Maximum number of failures and automated resets allowed during the time
-       that C(ha_vm_max_failure_window) specifies.
-      - Valid only when I(ha_vm_monitoring) is set to either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
+       that O(ha_vm_max_failure_window) specifies.
+      - Valid only when O(ha_vm_monitoring=vmAndAppMonitoring) or O(ha_vm_monitoring=vmMonitoringOnly).
       type: int
       default: 3
     ha_vm_max_failure_window:
       description:
-      - The number of seconds for the window during which up to C(ha_vm_max_failures) resets
+      - The number of seconds for the window during which up to O(ha_vm_max_failures) resets
         can occur before automated responses stop.
-      - Valid only when I(ha_vm_monitoring) is set to either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
+      - Valid only when O(ha_vm_monitoring=vmAndAppMonitoring) or O(ha_vm_monitoring=vmMonitoringOnly).
       - Unit is seconds.
       - Default specifies no failure window.
       type: int
@@ -154,13 +155,13 @@ options:
       description:
       - Priority HA gives to a virtual machine if sufficient capacity is not available
         to power on all failed virtual machines.
-      - Valid only if I(ha_vm_monitoring) is set to either C(vmAndAppMonitoring) or C(vmMonitoringOnly).
-      - If set to C(disabled), then HA is disabled for this virtual machine.
-      - If set to C(high), then virtual machine with this priority have a higher chance of powering on after a failure,
+      - Valid only when O(ha_vm_monitoring=vmAndAppMonitoring) or O(ha_vm_monitoring=vmMonitoringOnly).
+      - If set to V(disabled), then HA is disabled for this virtual machine.
+      - If set to V(high), then virtual machine with this priority have a higher chance of powering on after a failure,
         when there is insufficient capacity on hosts to meet all virtual machine needs.
-      - If set to C(medium), then virtual machine with this priority have an intermediate chance of powering on after a failure,
+      - If set to V(medium), then virtual machine with this priority have an intermediate chance of powering on after a failure,
         when there is insufficient capacity on hosts to meet all virtual machine needs.
-      - If set to C(low), then virtual machine with this priority have a lower chance of powering on after a failure,
+      - If set to V(low), then virtual machine with this priority have a lower chance of powering on after a failure,
         when there is insufficient capacity on hosts to meet all virtual machine needs.
       type: str
       default: 'medium'
@@ -179,18 +180,16 @@ options:
     apd_delay:
       description:
       - The response recovery delay time in sec for storage failures categorized as All Paths Down (APD).
-      - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
+      - Only set if O(apd_response=restartConservative) or O(apd_response=restartAggressive).
       type: int
       default: 180
-      version_added: '2.9.0'
     apd_reaction:
       description:
       - VM response recovery reaction for storage failures categorized as All Paths Down (APD).
-      - Only set if C(apd_response) is C(restartConservative) or C(restartAggressive).
+      - Only set if O(apd_response=restartConservative) or O(apd_response=restartAggressive).
       type: str
       default: 'reset'
       choices: [ 'reset', 'none' ]
-      version_added: '2.9.0'
     pdl_response:
       description:
       - VM storage protection setting for storage failures categorized as Permenant Device Loss (PDL).

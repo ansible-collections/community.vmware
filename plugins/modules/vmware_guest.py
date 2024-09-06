@@ -35,37 +35,35 @@ notes:
     - Use SCSI disks instead of IDE when you want to expand online disks by specifying a SCSI controller.
     - Uses SysPrep for Windows VM (depends on 'guest_id' parameter match 'win') with PyVmomi.
     - In order to change the VM's parameters (e.g. number of CPUs), the VM must be powered off unless the hot-add
-      support is enabled and the C(state=present) must be used to apply the changes.
+      support is enabled and the O(state=present) must be used to apply the changes.
     - "For additional information please visit Ansible VMware community wiki - U(https://github.com/ansible/community/wiki/VMware)."
 options:
   state:
     description:
     - Specify the state the virtual machine should be in.
-    - If C(state) is set to C(present) and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.
-    - If C(state) is set to C(absent) and virtual machine exists, then the specified virtual machine is removed with it's associated components.
-    - If C(state) is set to one of the following C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
-      C(present), C(restarted), C(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.
-    - If C(state) is set to C(poweredon) or C(powered-on) and virtual machine exists with powerstate other than powered on,
+    - If V(present) and virtual machine exists, ensure the virtual machine configurations conforms to task arguments.
+    - If V(absent) and virtual machine exists, then the specified virtual machine is removed with it's associated components.
+    - If set to one of V(poweredon), V(powered-on), V(poweredoff), V(powered-off),
+      V(present), V(restarted), V(suspended) and virtual machine does not exists, virtual machine is deployed with the given parameters.
+    - If set to V(poweredon) or V(powered-on) and virtual machine exists with powerstate other than powered on,
       then the specified virtual machine is powered on.
-    - If C(state) is set to C(poweredoff) or C(powered-off) and virtual machine exists with powerstate other than powered off,
+    - If set to V(poweredoff) or V(powered-off) and virtual machine exists with powerstate other than powered off,
       then the specified virtual machine is powered off.
-    - If C(state) is set to C(restarted) and virtual machine exists, then the virtual machine is restarted.
-    - If C(state) is set to C(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.
-    - If C(state) is set to C(shutdownguest) or C(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.
-    - If C(state) is set to C(rebootguest) or C(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.
-    - Powerstate C(powered-on) and C(powered-off) is added in version 2.10.
+    - If set to V(restarted) and virtual machine exists, then the virtual machine is restarted.
+    - If set to V(suspended) and virtual machine exists, then the virtual machine is set to suspended mode.
+    - If set to V(shutdownguest) or V(shutdown-guest) and virtual machine exists, then the virtual machine is shutdown.
+    - If set to V(rebootguest) or V(reboot-guest) and virtual machine exists, then the virtual machine is rebooted.
     default: present
     type: str
     choices: [ absent, poweredon, powered-on, poweredoff, powered-off, present, rebootguest, reboot-guest, restarted, suspended, shutdownguest, shutdown-guest]
   name:
     description:
     - Name of the virtual machine to work with.
-    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see C(name_match).
-    - If multiple virtual machines with same name exists, then C(folder) is required parameter to
+    - Virtual machine names in vCenter are not necessarily unique, which may be problematic, see O(name_match).
+    - If multiple virtual machines with same name exists, then O(folder) is required parameter to
       identify uniqueness of the virtual machine.
-    - This parameter is required, if C(state) is set to C(poweredon), C(powered-on), C(poweredoff), C(powered-off),
-      C(present), C(restarted), C(suspended) and virtual machine does not exists.
-    - This parameter is case sensitive.
+    - This parameter is required, if O(state=poweredon), O(state=powered-on), O(state=poweredoff), O(state=powered-off),
+      O(state=present), O(state=restarted), O(state=suspended) and virtual machine does not exists.
     type: str
   name_match:
     description:
@@ -76,7 +74,7 @@ options:
   uuid:
     description:
     - UUID of the virtual machine to manage if known, this is VMware's unique identifier.
-    - This is required if C(name) is not supplied.
+    - This is required if O(name) is not supplied.
     - If virtual machine does not exists, then this parameter is ignored.
     - Please note that a supplied UUID will be ignored on virtual machine creation, as VMware creates the UUID internally.
     type: str
@@ -90,7 +88,6 @@ options:
     - Template or existing virtual machine used to create new virtual machine.
     - If this value is not set, virtual machine is created without using a template.
     - If the virtual machine already exists, this parameter will be ignored.
-    - This parameter is case sensitive.
     - From version 2.8 onwards, absolute path to virtual machine or template can be used.
     aliases: [ 'template_src' ]
     type: str
@@ -108,9 +105,8 @@ options:
     description:
     - Destination folder, absolute path to find an existing guest or create the new guest.
     - "The folder should include the datacenter. ESXi's datacenter is ha-datacenter."
-    - This parameter is case sensitive.
     - 'If multiple machines are found with same name, this parameter is used to identify'
-    - 'uniqueness of the virtual machine. Added in Ansible 2.5.'
+    - 'uniqueness of the virtual machine.'
     - 'Examples:'
     - '   folder: /ha-datacenter/vm'
     - '   folder: ha-datacenter/vm'
@@ -127,7 +123,6 @@ options:
     default: {}
     description:
     - "Manage virtual machine's hardware attributes."
-    - All parameters case sensitive.
     suboptions:
         hotadd_cpu:
             type: bool
@@ -145,8 +140,8 @@ options:
             type: int
             description:
             - Number of CPUs.
-            - C(num_cpus) must be a multiple of C(num_cpu_cores_per_socket).
-            - For example, to create a VM with 2 sockets of 4 cores, specify C(num_cpus) as 8 and C(num_cpu_cores_per_socket) as 4.
+            - Must be a multiple of O(hardware.num_cpu_cores_per_socket).
+            - For example, to create a VM with 2 sockets of 4 cores, specify O(hardware.num_cpus) as 8 and O(hardware.num_cpu_cores_per_socket) as 4.
         num_cpu_cores_per_socket:
             type: int
             description: Number of Cores Per Socket.
@@ -155,7 +150,6 @@ options:
             choices: [ 'low', 'normal', 'high', 'custom' ]
             description:
             - The allocation level of CPU resources for the virtual machine.
-            - Valid Values are C(low), C(normal), C(high) and C(custom).
             version_added: '3.2.0'
         cpu_shares:
             type: int
@@ -170,8 +164,8 @@ options:
         scsi:
             type: str
             description:
-            - Valid values are C(buslogic), C(lsilogic), C(lsilogicsas) and C(paravirtual).
-            - C(paravirtual) is default.
+            - Valid values are V(buslogic), V(lsilogic), V(lsilogicsas) and V(paravirtual).
+            - V(paravirtual) is default.
             choices: [ 'buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual' ]
         secure_boot:
             type: bool
@@ -179,7 +173,7 @@ options:
         memory_reservation_lock:
             type: bool
             description:
-            - If set C(true), memory resource reservation for the virtual machine.
+            - If set V(true), memory resource reservation for the virtual machine.
         max_connections:
             type: int
             description:
@@ -197,7 +191,6 @@ options:
             type: str
             description:
             - The allocation level of memory resources for the virtual machine.
-            - Valid Values are C(low), C(normal), C(high) and C(custom).
             choices: [ 'low', 'normal', 'high', 'custom' ]
             version_added: '3.2.0'
         mem_shares:
@@ -219,8 +212,7 @@ options:
             description:
             - The Virtual machine hardware versions.
             - Default is 10 (ESXi 5.5 and onwards).
-            - If set to C(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
-            - C(latest) is added in Ansible 2.10.
+            - If set to V(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - Please check VMware documentation for correct virtual machine hardware version.
             - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
         boot_firmware:
@@ -242,14 +234,25 @@ options:
         iommu:
             type: bool
             description: Flag to specify if I/O MMU is enabled for this virtual machine.
+  encryption:
+    type: dict
+    default: {}
+    description:
+    - Manage virtual machine encryption settings
+    version_added: '3.9.0'
+    suboptions:
+        encrypted_vmotion:
+            type: str
+            description: Controls encryption for live migrations with vmotion
+            choices: ['disabled', 'opportunistic', 'required']
+        encrypted_ft:
+            type: str
+            description: Controls encryption for fault tolerance replication
+            choices: ['disabled', 'opportunistic', 'required']
   guest_id:
     type: str
     description:
     - Set the guest ID.
-    - This parameter is case sensitive.
-    - C(rhel7_64Guest) for virtual machine with RHEL7 64 bit.
-    - C(centos64Guest) for virtual machine with CentOS 64 bit.
-    - C(ubuntu64Guest) for virtual machine with Ubuntu 64 bit.
     - This field is required when creating a virtual machine, not required when creating from the template.
     - >
          Valid values are referenced here:
@@ -257,11 +260,10 @@ options:
   disk:
     description:
     - A list of disks to add.
-    - This parameter is case sensitive.
     - Shrinking disks is not supported.
     - Removing existing disks of the virtual machine is not supported.
-    - 'Attributes C(controller_type), C(controller_number), C(unit_number) are used to configure multiple types of disk
-      controllers and disks for creating or reconfiguring virtual machine. Added in Ansible 2.10.'
+    - 'Attributes O(disk.controller_type), O(disk.controller_number), O(disk.unit_number) are used to configure multiple types of disk
+      controllers and disks for creating or reconfiguring virtual machine.'
     type: list
     default: []
     elements: dict
@@ -286,8 +288,6 @@ options:
         type:
             description:
             - Type of disk.
-            - If C(thin) specified, disk type is set to thin disk.
-            - If C(eagerzeroedthick) specified, disk type is set to eagerzeroedthick disk. Added Ansible 2.5.
             - If not specified, disk type is inherited from the source VM or template when cloned and thick disk, no eagerzero otherwise.
             type: str
             choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
@@ -295,37 +295,35 @@ options:
             type: str
             description:
             - The name of datastore which will be used for the disk.
-            - If C(autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
+            - If O(disk.autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
         filename:
             type: str
             description:
             - Existing disk image to be used.
             - Filename must already exist on the datastore.
-            - Specify filename string in C([datastore_name] path/to/file.vmdk) format. Added in Ansible 2.8.
+            - Specify filename string in C([datastore_name] path/to/file.vmdk) format.
         autoselect_datastore:
             type: bool
             description:
             - Select the less used datastore.
-            - C(disk.datastore) and C(disk.autoselect_datastore) will not be used if C(datastore) is specified outside this C(disk) configuration.
+            - O(disk.datastore) and O(disk.autoselect_datastore) will not be used if O(datastore) is specified outside this O(disk) configuration.
         disk_mode:
             type: str
             choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
             description:
             - Type of disk mode.
-            - Added in Ansible 2.6.
-            - If C(persistent) specified, changes are immediately and permanently written to the virtual disk. This is default.
-            - If C(independent_persistent) specified, same as persistent, but not affected by snapshots.
-            - If C(independent_nonpersistent) specified, changes to virtual disk are made to a redo log and discarded at power off,
+            - If V(persistent) specified, changes are immediately and permanently written to the virtual disk. This is default.
+            - If V(independent_persistent) specified, same as persistent, but not affected by snapshots.
+            - If V(independent_nonpersistent) specified, changes to virtual disk are made to a redo log and discarded at power off,
               but not affected by snapshots.
         controller_type:
             type: str
             choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme']
             description:
             - Type of disk controller.
-            - C(nvme) controller type support starts on ESXi 6.5 with VM hardware version C(version) 13.
               Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.
-            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA CDROMs.
-            - If set to C(sata) type, please make sure C(controller_number) and C(unit_number) are set correctly when C(cdrom) also set to C(sata) type.
+            - When set to V(sata), please make sure O(disk.unit_number) is correct and not used by SATA CDROMs.
+            - If set to V(sata) type, please make sure O(disk.controller_number) and O(disk.unit_number) are set correctly when O(cdrom=sata).
         controller_number:
             type: int
             choices: [0, 1, 2, 3]
@@ -339,9 +337,9 @@ options:
             - Valid value range from 0 to 15 for SCSI controller, except 7.
             - Valid value range from 0 to 14 for NVME controller.
             - Valid value range from 0 to 29 for SATA controller.
-            - C(controller_type), C(controller_number) and C(unit_number) are required when creating or reconfiguring VMs
+            - O(disk.controller_type), O(disk.controller_number) and O(disk.unit_number) are required when creating or reconfiguring VMs
               with multiple types of disk controllers and disks.
-            - When creating new VM, the first configured disk in the C(disk) list will be "Hard Disk 1".
+            - When creating new VM, the first configured disk in the O(disk) list will be "Hard Disk 1".
   nvdimm:
     description:
     - Add or remove a virtual NVDIMM device to the virtual machine.
@@ -356,8 +354,7 @@ options:
         state:
              type: str
              description:
-             - Valid value is C(present) or C(absent).
-             - If set to C(absent), then the NVDIMM device with specified C(label) will be removed.
+             - If set to V(absent), then the NVDIMM device with specified O(nvdimm.label) will be removed.
              choices: ['present', 'absent']
         size_mb:
             type: int
@@ -367,57 +364,54 @@ options:
              type: str
              description:
              - The label of the virtual NVDIMM device to be removed or configured, e.g., "NVDIMM 1".
-             - 'This parameter is required when C(state) is set to C(absent), or C(present) to reconfigure NVDIMM device
-               size. When add a new device, please do not set C(label).'
+             - 'This parameter is required when O(nvdimm.state=absent), or O(nvdimm.state=present) to reconfigure NVDIMM device
+               size. When add a new device, please do not set.'
   cdrom:
     description:
-    - A list of CD-ROM configurations for the virtual machine. Added in version 2.9.
-    - Providing CD-ROM configuration as dict is deprecated and will be removed VMware collection 4.0.0.
-      Please use a list instead.
-    - 'Parameters C(controller_type), C(controller_number), C(unit_number), C(state) are added for a list of CD-ROMs
-      configuration support.'
-    - For C(ide) controller, hot-add or hot-remove CD-ROM is not supported.
-    type: raw
+    - A list of CD-ROM configurations for the virtual machine.
+    - For V(ide) controller, hot-add or hot-remove CD-ROM is not supported.
+    type: list
     default: []
+    elements: dict
     suboptions:
         type:
             type: str
             description:
-            - The type of CD-ROM, valid options are C(none), C(client) or C(iso).
-            - With C(none) the CD-ROM will be disconnected but present.
-            - The default value is C(client).
+            - The type of CD-ROM.
+            - With V(none) the CD-ROM will be disconnected but present.
+            choices: [ 'none', 'client', 'iso' ]
+            default: client
         iso_path:
             type: str
             description:
             - The datastore path to the ISO file to use, in the form of C([datastore1] path/to/file.iso).
-            - Required if type is set C(iso).
+            - Required if type is set V(iso).
         controller_type:
             type: str
             description:
-            - Valid options are C(ide) and C(sata).
-            - Default value is C(ide).
-            - When set to C(sata), please make sure C(unit_number) is correct and not used by SATA disks.
+            - When set to V(sata), please make sure O(cdrom.unit_number) is correct and not used by SATA disks.
+            choices: [ 'ide', 'sata' ]
+            default: ide
         controller_number:
             type: int
             description:
-            - For C(ide) controller, valid value is 0 or 1.
-            - For C(sata) controller, valid value is 0 to 3.
+            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom.controller_type=sata), valid value is 0 to 3.
         unit_number:
             type: int
             description:
-            - For CD-ROM device attach to C(ide) controller, valid value is 0 or 1.
-            - For CD-ROM device attach to C(sata) controller, valid value is 0 to 29.
-            - C(controller_number) and C(unit_number) are mandatory attributes.
+            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom.controller_type=sata), valid value is 0 to 29.
+            - O(cdrom.controller_number) and O(cdrom.unit_number) are mandatory attributes.
         state:
             type: str
             description:
-            - Valid value is C(present) or C(absent).
-            - Default is C(present).
-            - If set to C(absent), then the specified CD-ROM will be removed.
+            - If set to V(absent), then the specified CD-ROM will be removed.
+            choices: [ 'present', 'absent' ]
+            default: present
   resource_pool:
     description:
     - Use the given resource pool for virtual machine operation.
-    - This parameter is case sensitive.
     - Resource pool should be child of the selected host parent.
     - When not specified I(Resources) is taken as default value.
     type: str
@@ -444,12 +438,12 @@ options:
     - Wait until vCenter detects all guest customizations as successfully completed.
     - When enabled, the VM will automatically be powered on.
     - "If vCenter does not detect guest customization start or succeed, failed events after time
-      C(wait_for_customization_timeout) parameter specified, warning message will be printed and task result is fail."
+      O(wait_for_customization_timeout) parameter specified, warning message will be printed and task result is fail."
     default: false
     type: bool
   state_change_timeout:
     description:
-    - If the C(state) is set to C(shutdownguest), by default the module will return immediately after sending the shutdown signal.
+    - If the O(state=shutdownguest), by default the module will return immediately after sending the shutdown signal.
     - If this argument is set to a positive integer, the module will instead wait for the virtual machine to reach the poweredoff state.
     - The value sets a timeout in seconds for the module to wait for the state change.
     default: 0
@@ -457,13 +451,12 @@ options:
   snapshot_src:
     description:
     - Name of the existing snapshot to use to create a clone of a virtual machine.
-    - This parameter is case sensitive.
-    - While creating linked clone using C(linked_clone) parameter, this parameter is required.
+    - While creating linked clone using O(linked_clone) parameter, this parameter is required.
     type: str
   linked_clone:
     description:
     - Whether to create a linked clone from the snapshot specified.
-    - If specified, then C(snapshot_src) is required parameter.
+    - If specified, then O(snapshot_src) is required parameter.
     default: false
     type: bool
   force:
@@ -472,7 +465,7 @@ options:
     - This parameter is useful while removing virtual machine which is powered on state.
     - 'This module reflects the VMware vCenter API and UI workflow, as such, in some cases the `force` flag will
        be mandatory to perform the action to ensure you are certain the action has to be taken, no matter what the consequence.
-       This is specifically the case for removing a powered on the virtual machine when C(state) is set to C(absent).'
+       This is specifically the case for removing a powered on the virtual machine when O(state=absent).'
     default: false
     type: bool
   delete_from_inventory:
@@ -483,27 +476,24 @@ options:
   datacenter:
     description:
     - Destination datacenter for the deploy operation.
-    - This parameter is case sensitive.
     default: ha-datacenter
     type: str
   cluster:
     description:
     - The cluster name where the virtual machine will run.
-    - This is a required parameter, if C(esxi_hostname) is not set.
-    - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
-    - This parameter is case sensitive.
+    - This is a required parameter, if O(esxi_hostname) is not set.
+    - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     type: str
   esxi_hostname:
     description:
     - The ESXi hostname where the virtual machine will run.
-    - This is a required parameter, if C(cluster) is not set.
-    - C(esxi_hostname) and C(cluster) are mutually exclusive parameters.
-    - This parameter is case sensitive.
+    - This is a required parameter, if O(cluster) is not set.
+    - O(esxi_hostname) and O(cluster) are mutually exclusive parameters.
     type: str
   advanced_settings:
     description:
     - Define a list of advanced settings to be added to the VMX config.
-    - An advanced settings object takes two fields C(key) and C(value).
+    - An advanced settings object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
@@ -516,7 +506,7 @@ options:
   customvalues:
     description:
     - Define a list of custom values to set on virtual machine.
-    - A custom value object takes two fields C(key) and C(value).
+    - A custom value object takes the two fields C(key) and C(value).
     - Incorrect key and values will be ignored.
     elements: dict
     type: list
@@ -525,10 +515,9 @@ options:
     description:
     - A list of networks (in the order of the NICs).
     - Removing NICs is not allowed, while reconfiguring the virtual machine.
-    - All parameters and VMware object names are case sensitive.
     - The I(type), I(ip), I(netmask), I(gateway), I(domain), I(dns_servers) options don't set to a guest when creating a blank new virtual machine.
       They are set by the customization via vmware-tools.
-      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools(also Perl when Linux).
+      If you want to set the value of the options to a guest, you need to clone from a template with installed OS and vmware-tools (also Perl when Linux).
     type: list
     default: []
     elements: dict
@@ -538,7 +527,7 @@ options:
             description:
             - Name of the portgroup or distributed virtual portgroup for this interface.
             - Required per entry.
-            - When specifying distributed virtual portgroup make sure given C(esxi_hostname) or C(cluster) is associated with it.
+            - When specifying distributed virtual portgroup make sure given O(esxi_hostname) or O(cluster) is associated with it.
         vlan:
             type: int
             description:
@@ -590,6 +579,36 @@ options:
             - Static gateway.
             - Optional per entry.
             - Used for OS customization.
+        typev6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Type of IP assignment.
+            - Valid values are one of C(dhcp), C(static).
+            - C(dhcp) is default.
+            - Optional per entry.
+            - Used for OS customization.
+        ipv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static IP address. Implies C(type=static).
+            - Optional per entry.
+            - Used for OS customization.
+        netmaskv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static netmask required for C(ip).
+            - Optional per entry.
+            - Used for OS customization.
+        gatewayv6:
+            version_added: '4.1.0'
+            type: str
+            description:
+            - Static gateway.
+            - Optional per entry.
+            - Used for OS customization.
         dns_servers:
             type: str
             description:
@@ -616,13 +635,12 @@ options:
     - Not all operating systems are supported for customization with respective vCenter version,
       please check VMware documentation for respective OS customization.
     - For supported customization operating system matrix, (see U(http://partnerweb.vmware.com/programs/guestOS/guest-os-customization-matrix.pdf))
-    - All parameters and VMware object names are case sensitive.
     - Linux based OSes requires Perl package to be installed for OS customizations.
     suboptions:
         existing_vm:
             type: bool
             description:
-            - If set to C(true), do OS customization on the specified virtual machine directly.
+            - If set to V(true), do OS customization on the specified virtual machine directly.
             - Common for Linux and Windows customization.
         dns_servers:
             type: list
@@ -646,7 +664,7 @@ options:
             type: str
             description:
             - Computer hostname.
-            - Default is shortened C(name) parameter.
+            - Default is shortened O(name) parameter.
             - Allowed characters are alphanumeric (uppercase and lowercase) and minus, rest of the characters are dropped as per RFC 952.
             - Common for Linux and Windows customization.
         timezone:
@@ -679,19 +697,19 @@ options:
             description:
             - Number of autologon after reboot.
             - Specific to Windows customization.
-            - Ignored if C(autologon) is unset or set to C(false).
+            - Ignored if O(customization.autologon) is unset or set to O(customization.autologon=false).
             - If unset, 1 will be used.
         domainadmin:
             type: str
             description:
             - User used to join in AD domain.
-            - Required if C(joindomain) specified.
+            - Required if O(customization.joindomain) specified.
             - Specific to Windows customization.
         domainadminpassword:
             type: str
             description:
             - Password used to join in AD domain.
-            - Required if C(joindomain) specified.
+            - Required if O(customization.joindomain) specified.
             - Specific to Windows customization.
         fullname:
             type: str
@@ -703,19 +721,19 @@ options:
             type: str
             description:
             - AD domain to join.
-            - Not compatible with C(joinworkgroup).
+            - Not compatible with O(customization.joinworkgroup).
             - Specific to Windows customization.
         joinworkgroup:
             type: str
             description:
             - Workgroup to join.
-            - Not compatible with C(joindomain).
+            - Not compatible with O(customization.joindomain).
             - Specific to Windows customization.
             - If unset, "WORKGROUP" will be used as a fall-back.
         orgname:
             type: str
             description:
-            - Organisation name.
+            - Organization name.
             - Specific to Windows customization.
             - If unset, "ACME" will be used as a fall-back.
         password:
@@ -765,13 +783,12 @@ options:
   customization_spec:
     description:
     - Unique name identifying the requested customization specification.
-    - This parameter is case sensitive.
-    - If set, then overrides C(customization) parameter values.
+    - If set, then overrides O(customization) parameter values.
     type: str
   datastore:
     description:
     - Specify datastore or datastore cluster to provision virtual machine.
-    - This parameter takes precedence over C(disk.datastore) parameter.
+    - This parameter takes precedence over O(disk.datastore) parameter.
     - This parameter can be used to override datastore or datastore cluster setting
       of the virtual machine when deployed from the template.
     - Please see example for more usage.
@@ -1425,36 +1442,21 @@ class PyVmomiHelper(PyVmomi):
         expected_cdrom_spec = self.params.get('cdrom')
         if expected_cdrom_spec:
             for cdrom_spec in expected_cdrom_spec:
-                # set CDROM controller type is 'ide' by default
-                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type', 'ide').lower()
-                if cdrom_spec['controller_type'] not in ['ide', 'sata']:
-                    self.module.fail_json(msg="Invalid cdrom.controller_type: %s, valid value is 'ide' or 'sata'."
-                                              % cdrom_spec['controller_type'])
-
-                # set CDROM state is 'present' by default
-                cdrom_spec['state'] = cdrom_spec.get('state', 'present').lower()
-                if cdrom_spec['state'] not in ['present', 'absent']:
-                    self.module.fail_json(msg="Invalid cdrom.state: %s, valid value is 'present', 'absent'."
-                                              % cdrom_spec['state'])
+                cdrom_spec['controller_type'] = cdrom_spec.get('controller_type')
+                cdrom_spec['state'] = cdrom_spec.get('state')
 
                 if cdrom_spec['state'] == 'present':
                     # set CDROM type is 'client' by default
-                    cdrom_spec['type'] = cdrom_spec.get('type', 'client').lower()
-                    if cdrom_spec['type'] not in ['none', 'client', 'iso']:
-                        self.module.fail_json(msg="Invalid cdrom.type: %s, valid value is 'none', 'client' or 'iso'."
-                                                  % cdrom_spec.get('type'))
+                    cdrom_spec['type'] = cdrom_spec.get('type')
                     if cdrom_spec['type'] == 'iso' and not cdrom_spec.get('iso_path'):
                         self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
 
                 if 'controller_number' not in cdrom_spec or 'unit_number' not in cdrom_spec:
                     self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' are required"
                                               " parameters when configure CDROM list.")
-                try:
-                    cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
-                    cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
-                except ValueError:
-                    self.module.fail_json(msg="'cdrom.controller_number' and 'cdrom.unit_number' attributes should be "
-                                              "integer values.")
+
+                cdrom_ctl_num = int(cdrom_spec.get('controller_number'))
+                cdrom_ctl_unit_num = int(cdrom_spec.get('unit_number'))
 
                 if cdrom_spec['controller_type'] == 'ide' and (cdrom_ctl_num not in [0, 1] or cdrom_ctl_unit_num not in [0, 1]):
                     self.module.fail_json(msg="Invalid cdrom.controller_number: %s or cdrom.unit_number: %s, valid"
@@ -1494,55 +1496,7 @@ class PyVmomiHelper(PyVmomi):
                 # Changing CD-ROM settings on a template is not supported
                 return
 
-            if isinstance(self.params.get('cdrom'), dict):
-                self.configure_cdrom_dict(vm_obj)
-            elif isinstance(self.params.get('cdrom'), list):
-                self.configure_cdrom_list(vm_obj)
-
-    def configure_cdrom_dict(self, vm_obj):
-        self.module.deprecate(
-            msg="Specifying CD-ROM configuration as dict is deprecated, Please use list to specify CD-ROM configuration.",
-            version="4.0.0",
-            collection_name="community.vmware"
-        )
-        if self.params["cdrom"].get('type') not in ['none', 'client', 'iso']:
-            self.module.fail_json(msg="cdrom.type is mandatory. Options are 'none', 'client', and 'iso'.")
-        if self.params["cdrom"]['type'] == 'iso' and not self.params["cdrom"].get('iso_path'):
-            self.module.fail_json(msg="cdrom.iso_path is mandatory when cdrom.type is set to iso.")
-
-        cdrom_spec = None
-        cdrom_devices = self.get_vm_cdrom_devices(vm=vm_obj)
-        iso_path = self.params["cdrom"].get("iso_path")
-        if len(cdrom_devices) == 0:
-            # Creating new CD-ROM
-            ide_devices = self.get_vm_ide_devices(vm=vm_obj)
-            if len(ide_devices) == 0:
-                # Creating new IDE device
-                ide_ctl = self.device_helper.create_ide_controller()
-                ide_device = ide_ctl.device
-                self.change_detected = True
-                self.configspec.deviceChange.append(ide_ctl)
-            else:
-                ide_device = ide_devices[0]
-                if len(ide_device.device) > 3:
-                    self.module.fail_json(msg="hardware.cdrom specified for a VM or template which already has 4"
-                                              " IDE devices of which none are a cdrom")
-
-            cdrom_spec = self.device_helper.create_cdrom(ctl_device=ide_device, cdrom_type=self.params["cdrom"]["type"],
-                                                         iso_path=iso_path)
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
-                cdrom_spec.device.connectable.connected = (self.params["cdrom"]["type"] != "none")
-
-        elif not self.device_helper.is_equal_cdrom(vm_obj=vm_obj, cdrom_device=cdrom_devices[0],
-                                                   cdrom_type=self.params["cdrom"]["type"], iso_path=iso_path):
-            self.device_helper.update_cdrom_config(vm_obj, self.params["cdrom"], cdrom_devices[0], iso_path=iso_path)
-            cdrom_spec = vim.vm.device.VirtualDeviceSpec()
-            cdrom_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
-            cdrom_spec.device = cdrom_devices[0]
-
-        if cdrom_spec:
-            self.change_detected = True
-            self.configspec.deviceChange.append(cdrom_spec)
+            self.configure_cdrom_list(vm_obj)
 
     def configure_cdrom_list(self, vm_obj):
         configured_cdroms = self.sanitize_cdrom_params()
@@ -1703,11 +1657,31 @@ class PyVmomiHelper(PyVmomi):
 
         virt_based_security = self.params['hardware']['virt_based_security']
         if virt_based_security is not None:
-            if vm_obj is None or virt_based_security != self.configspec.flags.vbsEnabled:
+            if vm_obj is None or virt_based_security != vm_obj.config.flags.vbsEnabled:
                 self.change_detected = True
                 if self.configspec.flags is None:
                     self.configspec.flags = vim.vm.FlagInfo()
                 self.configspec.flags.vbsEnabled = virt_based_security
+
+    def configure_encryption_params(self, vm_obj):
+
+        encrypted_vmotion = self.params['encryption']['encrypted_vmotion']
+        if encrypted_vmotion is not None:
+            if vm_obj is None or encrypted_vmotion != vm_obj.config.migrateEncryption:
+                self.change_detected = True
+                self.configspec.migrateEncryption = encrypted_vmotion
+
+        encrypted_ft = self.params['encryption']['encrypted_ft']
+        if encrypted_ft is not None:
+            if encrypted_ft == "disabled":
+                encrypted_ft_cfg = "ftEncryptionDisabled"
+            elif encrypted_ft == "opportunistic":
+                encrypted_ft_cfg = "ftEncryptionOpportunistic"
+            elif encrypted_ft == "required":
+                encrypted_ft_cfg = "ftEncryptionRequired"
+            if vm_obj is None or encrypted_ft_cfg != vm_obj.config.ftEncryptionMode:
+                self.change_detected = True
+                self.configspec.ftEncryptionMode = encrypted_ft_cfg
 
     def get_device_by_type(self, vm=None, type=None):
         device_list = []
@@ -1881,6 +1855,30 @@ class PyVmomiHelper(PyVmomi):
                                               " specified under VM network list.")
                 if 'ip' not in network and 'netmask' in network:
                     self.module.fail_json(msg="'ip' is required if 'netmask' is"
+                                              " specified under VM network list.")
+
+            if 'typev6' in network:
+                if network['typev6'] not in ['dhcp', 'static']:
+                    self.module.fail_json(msg="Network type '%(typev6)s' for IPv6 is not a valid parameter."
+                                              " Valid parameters are ['dhcp', 'static']." % network)
+                    if network['typev6'] != 'static' and ('ipv6' in network or 'netmaskv6' in network):
+                        self.module.fail_json(msg='Static IPv6 information provided for network "%(name)s",'
+                                                  ' but "typev6" is set to "%(typev6)s".' % network)
+            else:
+                # Type is optional parameter, if user provided IP or Subnet assume
+                # network type as 'static'
+                if 'ipv6' in network or 'netmaskv6' in network:
+                    network['typev6'] = 'static'
+                else:
+                    # User wants network type as 'dhcp'
+                    network['typev6'] = 'dhcp'
+
+            if network.get('typev6') == 'static':
+                if 'ipv6' in network and 'netmaskv6' not in network:
+                    self.module.fail_json(msg="'netmaskv6' is required if 'ipv6' is"
+                                              " specified under VM network list.")
+                if 'ipv6' not in network and 'netmaskv6' in network:
+                    self.module.fail_json(msg="'ipv6' is required if 'netmaskv6' is"
                                               " specified under VM network list.")
 
             if 'device_type' in network and network['device_type'] not in self.device_helper.nic_device_type.keys():
@@ -2239,8 +2237,20 @@ class PyVmomiHelper(PyVmomi):
             elif 'type' in network and network['type'] == 'dhcp':
                 guest_map.adapter.ip = vim.vm.customization.DhcpIpGenerator()
 
+            if "ipv6" in network and 'netmaskv6' in network:
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.FixedIpV6()]
+                guest_map.adapter.ipV6Spec.ip[0].ipAddress = str(network['ipv6'])
+                guest_map.adapter.ipV6Spec.ip[0].subnetMask = int(network['netmaskv6'])
+            elif 'typev6' in network and network['typev6'] == 'dhcp':
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.DhcpIpV6Generator()]
+
             if 'gateway' in network:
                 guest_map.adapter.gateway = network['gateway']
+
+            if "gatewayv6" in network:
+                guest_map.adapter.ipV6Spec.gateway = network['gatewayv6']
 
             # On Windows, DNS domain and DNS servers can be set by network interface
             # https://pubs.vmware.com/vi3/sdk/ReferenceGuide/vim.vm.customization.IPSettings.html
@@ -2645,6 +2655,7 @@ class PyVmomiHelper(PyVmomi):
                 diskspec.device = disks[disk_index]
             else:
                 diskspec = self.device_helper.create_hard_disk(scsi_ctl, disk_index)
+                diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 disk_modified = True
 
             # increment index for next disk search
@@ -2673,11 +2684,10 @@ class PyVmomiHelper(PyVmomi):
             if expected_disk_spec['filename']:
                 self.add_existing_vmdk(vm_obj, expected_disk_spec, diskspec, scsi_ctl)
                 continue
-            if vm_obj is None or self.params['template']:
-                # We are creating new VM or from Template
-                # Only create virtual device if not backed by vmdk in original template
-                if diskspec.device.backing.fileName == '':
-                    diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
+
+            # Only create virtual device if not backed by vmdk in original template
+            if diskspec.device.backing.fileName == '':
+                diskspec.fileOperation = vim.vm.device.VirtualDeviceSpec.FileOperation.create
 
             # which datastore?
             if expected_disk_spec.get('datastore'):
@@ -2952,6 +2962,14 @@ class PyVmomiHelper(PyVmomi):
             vm_obj = self.get_vm_or_template(template_name=self.params['template'])
             if vm_obj is None:
                 self.module.fail_json(msg="Could not find a template named %(template)s" % self.params)
+            if self.params['guest_id'] is not None and vm_obj.summary.config.guestId is not None and self.params['guest_id'] != vm_obj.summary.config.guestId:
+                details = {
+                    'vm_guest_id': self.params['guest_id'],
+                    'template_guest_id': vm_obj.summary.config.guestId,
+                }
+                self.module.fail_json(msg="Could not create vm from template with different guest_ids",
+                                      details=details)
+
         else:
             vm_obj = None
 
@@ -2981,6 +2999,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_guestid(vm_obj=vm_obj, vm_creation=True)
         self.configure_cpu_and_memory(vm_obj=vm_obj, vm_creation=True)
         self.configure_hardware_params(vm_obj=vm_obj)
+        self.configure_encryption_params(vm_obj=vm_obj)
         self.configure_resource_alloc_info(vm_obj=vm_obj)
         self.configure_vapp_properties(vm_obj=vm_obj)
         self.configure_disks(vm_obj=vm_obj)
@@ -3165,6 +3184,7 @@ class PyVmomiHelper(PyVmomi):
         self.configure_guestid(vm_obj=self.current_vm_obj)
         self.configure_cpu_and_memory(vm_obj=self.current_vm_obj)
         self.configure_hardware_params(vm_obj=self.current_vm_obj)
+        self.configure_encryption_params(vm_obj=self.current_vm_obj)
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
         self.configure_cdrom(vm_obj=self.current_vm_obj)
@@ -3419,7 +3439,19 @@ def main():
                 size_mb=dict(type='int', default=1024),
             )
         ),
-        cdrom=dict(type='raw', default=[]),
+        cdrom=dict(
+            type='list',
+            default=[],
+            elements='dict',
+            options=dict(
+                type=dict(type='str', choices=['none', 'client', 'iso'], default='client'),
+                iso_path=dict(type='str'),
+                controller_type=dict(type='str', choices=['ide', 'sata'], default='ide'),
+                controller_number=dict(type='int'),
+                unit_number=dict(type='int'),
+                state=dict(type='str', choices=['present', 'absent'], default='present'),
+            )
+        ),
         hardware=dict(
             type='dict',
             default={},
@@ -3448,6 +3480,13 @@ def main():
                 version=dict(type='str'),
                 virt_based_security=dict(type='bool'),
                 iommu=dict(type='bool')
+            )),
+        encryption=dict(
+            type='dict',
+            default={},
+            options=dict(
+                encrypted_vmotion=dict(type='str', choices=['disabled', 'opportunistic', 'required']),
+                encrypted_ft=dict(type='str', choices=['disabled', 'opportunistic', 'required'])
             )),
         force=dict(type='bool', default=False),
         datacenter=dict(type='str', default='ha-datacenter'),

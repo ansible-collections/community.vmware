@@ -17,7 +17,6 @@ short_description: List and Export VMware vCenter infra profile configs.
 description:
 - Module to manage VMware vCenter infra profile configs.
 - vCenter infra profile Library feature is introduced in vSphere 7.0 version, so this module is not supported in the earlier versions of vSphere.
-- All variables and VMware object names are case sensitive.
 author:
 - Naveenkumar G P (@ngp)
 requirements:
@@ -42,13 +41,13 @@ options:
     config_path:
       description:
       - Config file path which contains infra profile config JSON data, supports both relative and absolute path.
-      - This parameter is required only when C(import),C(validate) APIs are being used.
+      - This parameter is required only when V(import),V(validate) APIs are being used.
       type: str
       required: false
     profiles:
       description:
       - A list of profile names to be exported, imported, and validated.
-      - This parameter is not required while running for List API, not for C(export),C(import) and C(validate).
+      - This parameter is not required while running for List API, not for V(export),V(import) and V(validate).
       type: str
       required: false
     description:
@@ -147,7 +146,7 @@ import_profile:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.version import LooseVersion
+from ansible.module_utils.compat.version import LooseVersion
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 import json

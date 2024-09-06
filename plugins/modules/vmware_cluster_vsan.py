@@ -16,7 +16,6 @@ module: vmware_cluster_vsan
 short_description: Manages virtual storage area network (vSAN) configuration on VMware vSphere clusters
 description:
     - Manages vSAN on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -57,7 +56,7 @@ options:
         disable_site_read_locality:
           description:
             - For vSAN stretched clusters, reads to vSAN objects occur on the site the VM resides on.
-            - Setting to C(true) will force reads across all mirrors.
+            - Setting to V(true) will force reads across all mirrors.
           type: bool
         large_cluster_support:
           description:
@@ -69,7 +68,7 @@ options:
           type: int
         thin_swap:
           description:
-            - When C(enabled), swap objects would not reserve 100% space of their size on vSAN datastore.
+            - When V(true), swap objects would not reserve 100% space of their size on vSAN datastore.
           type: bool
       type: dict
 extends_documentation_fragment:

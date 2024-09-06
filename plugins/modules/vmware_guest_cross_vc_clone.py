@@ -22,17 +22,17 @@ options:
   name:
     description:
       - Name of the virtual machine or template.
-      - This is a required parameter, if parameter C(uuid) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(uuid) or O(moid) is not supplied.
     type: str
   uuid:
     description:
       - UUID of the vm/template instance to clone from, this is VMware's unique identifier.
-      - This is a required parameter, if parameter C(name) or C(moid) is not supplied.
+      - This is a required parameter, if parameter O(name) or O(moid) is not supplied.
     type: str
   moid:
     description:
       - Managed Object ID of the vm/template instance to manage if known, this is a unique identifier only within a single vCenter instance.
-      - This is required if C(name) or C(uuid) is not supplied.
+      - This is required if O(name) or O(uuid) is not supplied.
     type: str
   use_instance_uuid:
     description:
@@ -83,7 +83,6 @@ options:
   destination_vm_folder:
     description:
       - Destination folder, absolute path to deploy the cloned vm.
-      - This parameter is case sensitive.
       - 'Examples:'
       - '   folder: vm'
       - '   folder: ha-datacenter/vm'
@@ -103,10 +102,10 @@ options:
   state:
     description:
       - The state of Virtual Machine deployed.
-      - If set to C(present) and VM does not exists, then VM is created.
-      - If set to C(present) and VM exists, no action is taken.
-      - If set to C(poweredon) and VM does not exists, then VM is created with powered on state.
-      - If set to C(poweredon) and VM exists, no action is taken.
+      - If set to V(present) and VM does not exists, then VM is created.
+      - If set to V(present) and VM exists, no action is taken.
+      - If set to V(poweredon) and VM does not exists, then VM is created with powered on state.
+      - If set to V(poweredon) and VM exists, no action is taken.
     type: str
     required: false
     default: 'present'

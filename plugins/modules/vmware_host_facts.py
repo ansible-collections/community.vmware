@@ -15,12 +15,9 @@ module: vmware_host_facts
 short_description: Gathers facts about remote ESXi hostsystem
 description:
     - This module can be used to gathers facts like CPU, memory, datastore, network and system etc. about ESXi host system.
-    - Please specify hostname or IP address of ESXi host system as C(hostname).
-    - If hostname or IP address of vCenter is provided as C(hostname) and C(esxi_hostname) is not specified, then the
+    - Please specify hostname or IP address of ESXi host system as O(hostname).
+    - If hostname or IP address of vCenter is provided as O(hostname) and O(esxi_hostname) is not specified, then the
       module will throw an error.
-    - VSAN facts added in 2.7 version.
-    - SYSTEM fact uuid added in 2.10 version.
-    - Connection state fact added in VMware collection 2.6.0.
     - Please note that when ESXi host connection state is not C(connected), facts returned from vCenter might be stale.
       Users are recommended to check connection state value and take appropriate decision in the playbook.
 author:
@@ -34,16 +31,22 @@ options:
     type: str
   show_tag:
     description:
-    - Tags related to Host are shown if set to C(true).
+    - Tags related to Host are shown if set to V(true).
+    default: false
+    type: bool
+    required: false
+  show_datacenter:
+    version_added: 4.2.0
+    description:
+    - Return the related Datacenter if set to V(true).
     default: false
     type: bool
     required: false
   schema:
     description:
     - Specify the output schema desired.
-    - The 'summary' output schema is the legacy output from the module
-    - The 'vsphere' output schema is the vSphere API class definition
-      which requires pyvmomi>6.7.1
+    - The V(summary) output schema is the legacy output from the module
+    - The V(vsphere) output schema is the vSphere API class definition
     choices: ['summary', 'vsphere']
     default: 'summary'
     type: str
@@ -59,7 +62,7 @@ options:
       - '      "config.product.apiVersion",'
       - '      "overallStatus"'
       - '   ]'
-      - Only valid when C(schema) is C(vsphere).
+      - Only valid when O(schema=vsphere).
     type: list
     elements: str
     required: false
@@ -270,6 +273,8 @@ class VMwareHostFactManager(PyVmomi):
         ansible_facts.update(self.get_vsan_facts())
         ansible_facts.update(self.get_cluster_facts())
         ansible_facts.update({'host_date_time': ansible_date_time_facts(self.esxi_time)})
+        if self.params.get('show_datacenter'):
+            ansible_facts.update(self.get_datacenter_facts())
         if self.params.get('show_tag'):
             vmware_client = VmwareRestClient(self.module)
             tag_info = {
@@ -284,6 +289,18 @@ class VMwareHostFactManager(PyVmomi):
         if self.host.parent and isinstance(self.host.parent, vim.ClusterComputeResource):
             cluster_facts.update(cluster=self.host.parent.name)
         return cluster_facts
+
+    def get_datacenter_facts(self):
+        datatacenter_facts = {'datacenter': None}
+
+        parent = self.host.parent
+        while parent:
+            if isinstance(parent, vim.Datacenter):
+                datatacenter_facts.update(datacenter=parent.name)
+                break
+            parent = parent.parent
+
+        return datatacenter_facts
 
     def get_vsan_facts(self):
         config_mgr = self.host.configManager.vsanSystem
@@ -404,6 +421,7 @@ def main():
     argument_spec.update(
         esxi_hostname=dict(type='str', required=False),
         show_tag=dict(type='bool', default=False),
+        show_datacenter=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
         properties=dict(type='list', elements='str')
     )

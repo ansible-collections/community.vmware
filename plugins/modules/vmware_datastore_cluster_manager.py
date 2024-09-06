@@ -16,7 +16,6 @@ module: vmware_datastore_cluster_manager
 short_description: Manage VMware vSphere datastore cluster's members
 description:
     - This module can be used to add datastore in the datastore cluster.
-    - All parameters and VMware object values are case sensitive.
 author:
 -  Abhijeet Kasurde (@Akasurde)
 options:
@@ -34,8 +33,8 @@ options:
       aliases: [ datastore_cluster ]
     state:
       description:
-      - If set to I(present), datastores specified by I(datastores) will be added to the given datastore cluster.
-      - If set to I(absent), datastores specified by I(datastores) will be moved from the given datastore cluster to datstore folder of the parent datacenter.
+      - If set to V(present), datastores specified by O(datastores) will be added to the given datastore cluster.
+      - If set to V(absent), datastores specified by O(datastores) will be moved from the given datastore cluster to datstore folder of the parent datacenter.
       choices: [ present, absent ]
       default: present
       type: str

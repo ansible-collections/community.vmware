@@ -45,6 +45,14 @@ options:
       - The timeout in seconds for the upload to the datastore.
     default: 10
     type: int
+  diskformat:
+    version_added: 4.2.0
+    description:
+      - Optional argument - Set a diskformat for certain uploads like stream optimized VMDKs
+      - There is no official documentation, but it looks like V(StreamVmdk) needs to be set for stream optimized VMDKs that are uploaded to vSAN storage
+      - Setting this for non-VMDK files might lead to undefined behavior and is not supported.
+    choices: ["StreamVmdk"]
+    type: str
 
 notes:
   - "This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer.
@@ -87,6 +95,19 @@ EXAMPLES = r'''
     datastore: datastore2
     path: other/remote/file
   delegate_to: other_system
+
+- name: Copy file to datastore using other_system
+  community.vmware.vsphere_copy:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    src: /other/local/streamOptimized.vmdk
+    datacenter: DC2 Someplace
+    datastore: datastore2
+    path: disk_imports/streamOptimized.vmdk
+    timeout: 360
+    diskformat: StreamVmdk
+  delegate_to: other_system
 '''
 
 import atexit
@@ -103,7 +124,7 @@ from ansible.module_utils.urls import open_url
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
 
 
-def vmware_path(datastore, datacenter, path):
+def vmware_path(datastore, datacenter, path, diskformat):
     ''' Constructs a URL path that vSphere accepts reliably '''
     path = "/folder/%s" % quote(path.lstrip("/"))
     # Due to a software bug in vSphere, it fails to handle ampersand in datacenter names
@@ -114,6 +135,8 @@ def vmware_path(datastore, datacenter, path):
     if datacenter:
         datacenter = datacenter.replace('&', '%26')
         params["dcPath"] = datacenter
+    if diskformat:
+        params["diskFormat"] = diskformat
     params = urlencode(params)
     return "%s?%s" % (path, params)
 
@@ -125,7 +148,8 @@ def main():
         datacenter=dict(required=False),
         datastore=dict(required=True),
         path=dict(required=True, aliases=['dest'], type='str'),
-        timeout=dict(default=10, type='int'))
+        timeout=dict(default=10, type='int'),
+        diskformat=dict(required=False, type='str', choices=['StreamVmdk']))
     )
 
     module = AnsibleModule(
@@ -141,6 +165,7 @@ def main():
     datacenter = module.params.get('datacenter')
     datastore = module.params.get('datastore')
     path = module.params.get('path')
+    diskformat = module.params.get('diskformat')
     validate_certs = module.params.get('validate_certs')
     timeout = module.params.get('timeout')
 
@@ -156,7 +181,7 @@ def main():
         data = mmap.mmap(fd.fileno(), 0, access=mmap.ACCESS_READ)
         atexit.register(data.close)
 
-    remote_path = vmware_path(datastore, datacenter, path)
+    remote_path = vmware_path(datastore, datacenter, path, diskformat)
 
     if not all([hostname, username, password]):
         module.fail_json(msg="One of following parameter is missing - hostname, username, password")

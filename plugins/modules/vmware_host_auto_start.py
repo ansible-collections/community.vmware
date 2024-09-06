@@ -30,7 +30,7 @@ options:
   uuid:
     description:
     - VM uuid to set auto power on or off, this is VMware's unique identifier.
-    - This is required if C(name) is not supplied.
+    - This is required if O(name) is not supplied.
     - This is not necessary if change only system default VM settings for autoStart config.
     type: str
   use_instance_uuid:
@@ -41,7 +41,7 @@ options:
   moid:
     description:
     - Managed Object ID of the instance to manage if known, this is a unique identifier only within a single vCenter instance.
-    - This is required if C(name) or C(uuid) is not supplied.
+    - This is required if O(name) or O(uuid) is not supplied.
     type: str
   system_defaults:
     description:

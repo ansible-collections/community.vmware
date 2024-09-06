@@ -16,10 +16,13 @@ module: vmware_cluster_drs
 short_description: Manage Distributed Resource Scheduler (DRS) on VMware vSphere clusters
 description:
     - Manages DRS on VMware vSphere clusters.
-    - All values and VMware object names are case sensitive.
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
+deprecated:
+  removed_in: 6.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  alternative: Use M(vmware.vmware.cluster_drs) instead.
 options:
     cluster_name:
       description:
@@ -40,24 +43,24 @@ options:
     drs_enable_vm_behavior_overrides:
       description:
       - Whether DRS Behavior overrides for individual virtual machines are enabled.
-      - If set to C(true), overrides C(drs_default_vm_behavior).
+      - If set to V(true), overrides O(drs_default_vm_behavior).
       type: bool
       default: true
     drs_default_vm_behavior:
       description:
       - Specifies the cluster-wide default DRS behavior for virtual machines.
-      - If set to C(partiallyAutomated), vCenter generates recommendations for virtual machine migration and
+      - If set to V(partiallyAutomated), vCenter generates recommendations for virtual machine migration and
         for the placement with a host, then automatically implements placement recommendations at power on.
-      - If set to C(manual), then vCenter generates recommendations for virtual machine migration and
+      - If set to V(manual), then vCenter generates recommendations for virtual machine migration and
         for the placement with a host, but does not implement the recommendations automatically.
-      - If set to C(fullyAutomated), then vCenter automates both the migration of virtual machines
+      - If set to V(fullyAutomated), then vCenter automates both the migration of virtual machines
         and their placement with a host at power on.
       type: str
       default: fullyAutomated
       choices: [ fullyAutomated, manual, partiallyAutomated ]
     drs_vmotion_rate:
       description:
-      - Threshold for generated ClusterRecommendations ranging from 1 (lowest) to 5 (highest).
+      - Threshold for generated ClusterRecommendations ranging from V(1) (lowest) to V(5) (highest).
       type: int
       default: 3
       choices: [ 1, 2, 3, 4, 5 ]

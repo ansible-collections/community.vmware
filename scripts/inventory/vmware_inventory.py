@@ -283,7 +283,7 @@ class VMWareInventory(object):
         self.maxlevel = int(config.get('vmware', 'max_object_level'))
         self.debugl('max object level is %s' % self.maxlevel)
         self.lowerkeys = config.get('vmware', 'lower_var_keys')
-        if type(self.lowerkeys) != bool:
+        if not isinstance(self.lowerkeys, bool):
             if str(self.lowerkeys).lower() in ['yes', 'true', '1']:
                 self.lowerkeys = True
             else:
