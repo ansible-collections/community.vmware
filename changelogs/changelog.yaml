@@ -1505,6 +1505,15 @@ releases:
     - 2080_bugfix_hadnle_vcls_none_config.yml
     - 2088_bugfix_correct_vcenter_folder_docs.yml
     release_date: '2024-07-12'
+  3.11.6:
+    changes:
+      bugfixes:
+      - Document dependency on requests (https://github.com/ansible-collections/community.vmware/issues/2127).
+      - vmware_guest_disk - round size to int, supporting float values properly (https://github.com/ansible-collections/community.vmware/issues/123).
+    fragments:
+    - 2095_bugfix_vmware_guest_disk_round_size_to_int.yml
+    - 2127-require-requests.yml
+    release_date: '2024-09-06'
   3.2.0:
     changes:
       bugfixes:

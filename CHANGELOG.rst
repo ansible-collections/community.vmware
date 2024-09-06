@@ -4,6 +4,15 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+v3.11.6
+=======
+
+Bugfixes
+--------
+
+- Document dependency on requests (https://github.com/ansible-collections/community.vmware/issues/2127).
+- vmware_guest_disk - round size to int, supporting float values properly (https://github.com/ansible-collections/community.vmware/issues/123).
+
 v3.11.5
 =======
 
