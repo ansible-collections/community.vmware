@@ -1,2 +1,0 @@
-minor_changes:
-  - vsphere_file - Fix examples in documentation (https://github.com/ansible-collections/community.vmware/issues/2110).

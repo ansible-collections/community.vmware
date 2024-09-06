@@ -6,6 +6,27 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.6.0
+======
+
+Minor Changes
+-------------
+
+- vmware_vm_vm_drs_rule - added datacenter argument to correctly deal with multiple clusters with same name(https://github.com/ansible-collections/community.vmware/issues/2101).
+- vsphere_file - Fix examples in documentation (https://github.com/ansible-collections/community.vmware/issues/2110).
+
+Deprecated Features
+-------------------
+
+- vmware_cluster_drs - the module has been deprecated and will be removed in community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2136).
+
+Bugfixes
+--------
+
+- Document dependency on requests (https://github.com/ansible-collections/community.vmware/issues/2127).
+- vmware_guest_disk - round size to int, supporting float values properly (https://github.com/ansible-collections/community.vmware/issues/123).
+- vmware_guest_snapshot - Update documentation regarding snapshot_id parameter (https://github.com/ansible-collections/community.vmware/issues/2145).
+
 v4.5.0
 ======
 
