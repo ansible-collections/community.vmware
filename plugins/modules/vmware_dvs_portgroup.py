@@ -206,7 +206,6 @@ options:
                 description:
                 - Indicates if the security policy can be changed per port.
                 default: false
-                aliases: ['security_override']
                 type: bool
             shaping_override:
                 description:
@@ -554,7 +553,6 @@ class VMwareDvsPortgroup(PyVmomi):
         config.policy.macManagementOverrideAllowed = self.module.params['port_policy']['mac_management_override']
         config.policy.networkResourcePoolOverrideAllowed = self.module.params['port_policy']['network_rp_override']
         config.policy.portConfigResetAtDisconnect = self.module.params['port_policy']['port_config_reset_at_disconnect']
-        config.policy.securityPolicyOverrideAllowed = self.module.params['port_policy']['mac_management_override']
         config.policy.shapingOverrideAllowed = self.module.params['port_policy']['shaping_override']
         config.policy.trafficFilterOverrideAllowed = self.module.params['port_policy']['traffic_filter_override']
         config.policy.uplinkTeamingOverrideAllowed = self.module.params['port_policy']['uplink_teaming_override']
@@ -860,7 +858,6 @@ class VMwareDvsPortgroup(PyVmomi):
                 policy.macManagementOverrideAllowed != self.module.params['port_policy']['mac_management_override'] or \
                 policy.networkResourcePoolOverrideAllowed != self.module.params['port_policy']['network_rp_override'] or \
                 policy.portConfigResetAtDisconnect != self.module.params['port_policy']['port_config_reset_at_disconnect'] or \
-                policy.securityPolicyOverrideAllowed != self.module.params['port_policy']['mac_management_override'] or \
                 policy.shapingOverrideAllowed != self.module.params['port_policy']['shaping_override'] or \
                 policy.trafficFilterOverrideAllowed != self.module.params['port_policy']['traffic_filter_override'] or \
                 policy.uplinkTeamingOverrideAllowed != self.module.params['port_policy']['uplink_teaming_override'] or \
@@ -980,7 +977,7 @@ def main():
                     live_port_move=dict(type='bool', default=False),
                     network_rp_override=dict(type='bool', default=False),
                     port_config_reset_at_disconnect=dict(type='bool', default=True),
-                    mac_management_override=dict(type='bool', default=False, aliases=['security_override']),
+                    mac_management_override=dict(type='bool', default=False),
                     shaping_override=dict(type='bool', default=False),
                     traffic_filter_override=dict(type='bool', default=False),
                     uplink_teaming_override=dict(type='bool', default=False),
