@@ -206,7 +206,7 @@
       live_port_move: true
       network_rp_override: true
       port_config_reset_at_disconnect: true
-      security_override: true
+      mac_management_override: true
       shaping_override: true
       traffic_filter_override: true
       uplink_teaming_override: true
