@@ -189,3 +189,14 @@ releases:
     - 2127-require-requests.yml
     - 2136-deprecate-vmware_cluster_drs.yml
     release_date: '2024-09-06'
+  4.7.0:
+    changes:
+      deprecated_features:
+      - vmware_cluster - the module has been deprecated and will be removed in community.vmware
+        6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2143).
+      - vmware_cluster_vcls - the module has been deprecated and will be removed in
+        community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2156).
+    fragments:
+    - 2143-deprecate-vmware_cluster.yml
+    - 2156-deprecate-vmware_cluster_vcls.yml
+    release_date: '2024-09-08'
