@@ -6,6 +6,15 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.7.0
+======
+
+Deprecated Features
+-------------------
+
+- vmware_cluster - the module has been deprecated and will be removed in community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2143).
+- vmware_cluster_vcls - the module has been deprecated and will be removed in community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2156).
+
 v4.6.0
 ======
 
