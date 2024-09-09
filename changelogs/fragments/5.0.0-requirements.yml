@@ -1,0 +1,5 @@
+breaking_changes:
+  - Dropping support for pyVmomi < 8.0.3.0.1 (https://github.com/ansible-collections/community.vmware/pull/2163).
+  - Depending on ``vmware-vcenter`` and ``vmware-vapi-common-client`` instead of
+    ``https://github.com/vmware/vsphere-automation-sdk-python.git``
+    (https://github.com/ansible-collections/community.vmware/pull/2163).
