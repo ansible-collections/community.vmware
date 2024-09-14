@@ -146,18 +146,20 @@ class VMwareSnapshotInfo(PyVmomi):
             else []
         )
 
-    def get_all_vms(self):
+    def get_all_vms(self, datacenter):
         content = self.content
+
+        datacenter_obj = self.find_datacenter_by_name(datacenter)
         container = content.viewManager.CreateContainerView(
-            content.rootFolder, [vim.VirtualMachine], True
+            datacenter_obj, [vim.VirtualMachine], True
         )
         vms = container.view
         container.Destroy()
         return vms
 
-    def gather_snapshots_info(self, filters, match_type):
+    def gather_snapshots_info(self, filters, match_type, datacenter=None):
         snapshot_data = []
-        for vm in self.get_all_vms():
+        for vm in self.get_all_vms(datacenter):
             for snapshot in self.list_snapshots(vm):
                 snapshot_info = {
                     "vm_name": vm.name,
@@ -194,9 +196,10 @@ def main():
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
     vmware_snapshot_info = VMwareSnapshotInfo(module)
+    datacenter = module.params.get("datacenter")
     filters = module.params.get("filters")
     match_type = module.params.get("match_type")
-    all_snapshots = vmware_snapshot_info.gather_snapshots_info(filters, match_type)
+    all_snapshots = vmware_snapshot_info.gather_snapshots_info(filters, match_type, datacenter)
     module.exit_json(changed=False, vmware_all_snapshots_info=all_snapshots)
 
 
