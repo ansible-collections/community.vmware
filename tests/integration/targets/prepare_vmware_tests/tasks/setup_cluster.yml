@@ -1,10 +1,18 @@
 - name: Create Cluster
-  vmware_cluster:
+  vmware.vmware.cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
     datacenter_name: '{{ dc1 }}'
     cluster_name: '{{ ccr1 }}'
 
 - name: Enable DRS on Cluster
-  vmware_cluster_drs:
+  vmware.vmware.cluster_drs:
+    hostname: "{{ vcenter_hostname }}"
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
     datacenter_name: '{{ dc1 }}'
     cluster_name: '{{ ccr1 }}'
     enable: true

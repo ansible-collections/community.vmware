@@ -7,7 +7,7 @@
 
 # Setup: Create test cluster
 - name: Create test cluster
-  vmware_cluster:
+  vmware.vmware.cluster:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -52,7 +52,7 @@
 
 # Delete test cluster
 - name: Delete test cluster
-  vmware_cluster:
+  vmware.vmware.cluster:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"

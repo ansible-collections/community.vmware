@@ -8,7 +8,7 @@
     setup_datacenter: true
 
 - name: add cluster
-  vmware_cluster:
+  vmware.vmware.cluster:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
