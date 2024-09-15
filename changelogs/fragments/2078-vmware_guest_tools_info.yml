@@ -1,0 +1,3 @@
+breaking_changes:
+  - vmware_guest_tools_info - Removed deprecated ``vm_tools_install_status`` from the result
+    (https://github.com/ansible-collections/community.vmware/issues/2078).
