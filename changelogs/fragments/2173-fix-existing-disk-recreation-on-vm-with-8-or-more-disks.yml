@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_guest - Fix existing disk erroneously being re-created when modifying vm with 8 or more disks.
+    (https://github.com/ansible-collections/community.vmware/pull/2173).
