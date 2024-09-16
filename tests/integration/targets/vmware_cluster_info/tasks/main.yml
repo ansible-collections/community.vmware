@@ -165,7 +165,7 @@
 #      - cluster_info.clusters[ccr1].tags is defined
 
 - name: "Prepare a cluster name with character to be URL-encoded"
-  vmware_cluster:
+  vmware.vmware.cluster:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
