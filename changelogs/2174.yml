@@ -1,0 +1,5 @@
+major_changes:
+  - vmware_vm_shell - Subsitute the deprecated ``guest.toolsStatus`` collection
+    (https://github.com/ansible-collections/community.vmware/pull/2174).
+  - vmware_guest_tools_upgrade - Subsitute the deprecated ``guest.toolsStatus`` collection
+    (https://github.com/ansible-collections/community.vmware/pull/2174).
