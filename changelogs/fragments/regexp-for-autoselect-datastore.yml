@@ -1,0 +1,2 @@
+minor_changes:
+  - "Support for regular expression when using `autoselect_datastore: True`."
