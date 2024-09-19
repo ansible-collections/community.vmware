@@ -160,7 +160,7 @@ class PyVmomiHelper(PyVmomi):
 
         # If vmware tools is out of date, check major OS family
         # Upgrade tools on Linux and Windows guests
-        elif vm.guest.guestToolsTooOld == "guestToolsTooOld":
+        elif vm.guest.toolsVersionStatus2 == "guestToolsTooOld":
             try:
                 force = self.module.params.get('force_upgrade')
                 installer_options = self.module.params.get('installer_options')
