@@ -1,3 +1,0 @@
-breaking_changes:
-  - Adding a dependency on the ``vmware.vmware`` collection
-    (https://github.com/ansible-collections/community.vmware/pull/2159).
