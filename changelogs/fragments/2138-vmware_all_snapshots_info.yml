@@ -1,2 +1,0 @@
-bugfixes:
-  - vmware_all_snapshots_info - fixed the datacenter parameter was ignored(https://github.com/ansible-collections/community.vmware/pull/2165).

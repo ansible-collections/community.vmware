@@ -1,3 +1,0 @@
-breaking_changes:
-  - Module utils - Removed ``vmware.run_command_in_guest()``
-    (https://github.com/ansible-collections/community.vmware/pull/2175).

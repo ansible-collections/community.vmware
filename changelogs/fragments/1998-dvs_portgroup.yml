@@ -1,6 +1,0 @@
-breaking_changes:
-  - vmware_dvs_portgroup - Removed ``security_override`` alias for ``mac_management_override``
-    and support for ``securityPolicyOverrideAllowed`` which has been deprected in the vSphere API
-    (https://github.com/ansible-collections/community.vmware/issues/1998).
-  - vmware_dvs_portgroup_info - Removed ``security_override`` because it's deprecated in the vSphere API
-    (https://github.com/ansible-collections/community.vmware/issues/1998).
