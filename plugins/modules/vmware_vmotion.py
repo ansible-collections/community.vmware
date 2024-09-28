@@ -493,6 +493,7 @@ class VmotionManager(PyVmomi):
 
         """
         vms = []
+        vm_obj = None
         if self.vm_uuid:
             if not self.use_instance_uuid:
                 vm_obj = find_vm_by_id(self.content, vm_id=self.params['vm_uuid'], vm_id_type="uuid")

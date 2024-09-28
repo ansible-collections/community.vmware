@@ -137,6 +137,7 @@ class PyVmomiHelper(PyVmomi):
         return vtpm_info
 
     def vtpm_operation(self, vm_obj=None):
+        vtpm_device_spec = None
         results = {'failed': False, 'changed': False}
         if not self.is_vcenter():
             self.module.fail_json(msg="Please connect to vCenter Server to configure vTPM device of virtual machine.")

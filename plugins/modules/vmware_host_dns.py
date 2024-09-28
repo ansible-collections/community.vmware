@@ -193,6 +193,7 @@ class VmwareHostDNS(PyVmomi):
             initial_name = host.name
             changed = False
             changed_list = []
+            dns_servers_verbose_message = None
             host_result = {'changed': '', 'msg': '', 'host_name': host.name}
 
             host_netstack_config = host.config.network.netStackInstance
