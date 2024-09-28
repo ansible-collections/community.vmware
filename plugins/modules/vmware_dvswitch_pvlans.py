@@ -484,6 +484,7 @@ class VMwareDvSwitchPvlans(PyVmomi):
 
     def build_change_message(self, operation, changed_list):
         """Build the changed message"""
+        message = None
         if operation == 'add':
             changed_operation = 'added'
         elif operation == 'remove':
