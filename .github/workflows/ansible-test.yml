@@ -1,17 +1,35 @@
+---
 # README FIRST
-# 1. If you don't have unit tests, remove that section.
-# 2. If your collection depends on other collections ensure they are installed,
+# 1. Subscribe to https://github.com/ansible-collections/news-for-maintainers
+#    (click the Watch button on the homepage > Custom > Issues)
+#    and keep this matrix up to date in accordance to related announcements.
+#    Timely add new ansible-core versions and consider dropping support
+#    and testing against its EOL versions.
+# 2. If your collection repository is under the ansible-collections org,
+#    please keep in mind that the number of GHA jobs is limited
+#    and shared across all the collections in the org.
+#    So, focusing on good test coverage of your collection,
+#    please avoid testing against unnecessary entities such as
+#    ansible-core EOL versions your collection does not support
+#    or ansible-core versions that are not EOL yet but not supported by the collection.
+# 3. If you don't have unit or integration tests, remove corresponding sections.
+# 4. If your collection depends on other collections ensure they are installed,
 #    add them to the "test-deps" input.
-# 3. For the comprehensive list of the inputs supported by the
+# 5. For the comprehensive list of the inputs supported by the
 #    ansible-community/ansible-test-gh-action GitHub Action, see
 #    https://github.com/marketplace/actions/ansible-test.
-# 4. If you want to prevent merging PRs that do not pass all tests,
+# 6. If you want to prevent merging PRs that do not pass all tests,
 #    make sure to add the "check" job to your repository branch
 #    protection once this workflow is added.
 #    It is also possible to tweak which jobs are allowed to fail. See
 #    https://github.com/marketplace/actions/alls-green#gotchas for more detail.
-# 5. If you need help please ask in #ansible-community on the Libera.chat IRC
-#    network.
+# 7. If you need help please ask in #community:ansible.com on Matrix
+#    or in bridged #ansible-community on the Libera.Chat IRC channel.
+#    See https://docs.ansible.com/ansible/devel/community/communication.html
+#    for details.
+# 8. If your collection is [going to get] included in the Ansible package,
+#    it has to adhere to Python compatibility and CI testing requirements described in
+#    https://docs.ansible.com/ansible/latest/community/collection_contributors/collection_requirements.html.
 
 name: CI
 on:
@@ -56,18 +74,14 @@ jobs:
           # around creation of a new stable branch, this might cause a problem
           # that two different versions of ansible-test use the same sanity test
           # ignore.txt file.
-          # The commented branches below are EOL,
-          # do you really need your collection to support them if it still does?
-          # - stable-2.9 # Only if your collection supports Ansible 2.9
-          # - stable-2.10 # Only if your collection supports ansible-base 2.10
-          # - stable-2.11 # Only if your collection supports ansible-core 2.11
-          # - stable-2.12
-          # - stable-2.13
-          # - stable-2.14
+          # Add new versions announced in
+          # https://github.com/ansible-collections/news-for-maintainers in a timely manner,
+          # consider dropping testing against EOL versions and versions you don't support.
           - stable-2.15
           - stable-2.16
           - stable-2.17
-          # - devel
+          - stable-2.18
+        # - devel
           - milestone
     # Ansible-test on various stable branches does not yet work well with cgroups v2.
     # Since ubuntu-latest now uses Ubuntu 22.04, we need to fall back to the ubuntu-20.04
@@ -123,18 +137,14 @@ jobs:
       fail-fast: true
       matrix:
         ansible:
-          # The commented branches below are EOL,
-          # do you really need your collection to support them if it still does?
-          # - stable-2.9 # Only if your collection supports Ansible 2.9
-          # - stable-2.10 # Only if your collection supports ansible-base 2.10
-          # - stable-2.11 # Only if your collection supports ansible-core 2.11
-          # - stable-2.12
-          # - stable-2.13
-          # - stable-2.14
+          # Add new versions announced in
+          # https://github.com/ansible-collections/news-for-maintainers in a timely manner,
+          # consider dropping testing against EOL versions and versions you don't support.
           - stable-2.15
           - stable-2.16
           - stable-2.17
-          # - devel
+          - stable-2.18
+        # - devel
           - milestone
 
     steps:

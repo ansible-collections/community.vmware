@@ -130,6 +130,7 @@ class VmwareHostPowerManager(PyVmomi):
         host_change_list = []
         for host in self.hosts:
             changed = False
+            task = None
             if not host.runtime.inMaintenanceMode and not force:
                 self.module.fail_json(msg="Current host system '%s' is not in maintenance mode,"
                                           " please specify 'force' as True to proceed." % host.name)
