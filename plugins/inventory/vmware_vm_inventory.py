@@ -695,6 +695,8 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         """
         super(InventoryModule, self).parse(inventory, loader, path, cache=cache)
 
+        cacheable_results = None
+
         cache_key = self.get_cache_key(path)
 
         config_data = self._read_config_data(path)

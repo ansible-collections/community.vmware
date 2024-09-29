@@ -906,6 +906,7 @@ class VMwareDvSwitch(PyVmomi):
                 config_spec.defaultPortConfig.macManagementPolicy = policy
 
         # Check switch version
+        spec_product = None
         if self.switch_version:
             results['version'] = self.switch_version
             if self.dvs.config.productInfo.version != self.switch_version:
