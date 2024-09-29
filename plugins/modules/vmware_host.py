@@ -658,6 +658,7 @@ class VMwareHost(PyVmomi):
                 if reconnect or self.state == 'add_or_reconnect' or self.state == 'reconnect':
                     self.reconnect_host(self.host_update)
                 try:
+                    task = None
                     try:
                         if parent_type == 'folder':
                             # Move ESXi host from folder to folder
