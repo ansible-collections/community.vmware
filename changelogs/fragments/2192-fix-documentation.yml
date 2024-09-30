@@ -1,0 +1,3 @@
+bugfixes:
+  - vcenter_standard_key_provider - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
