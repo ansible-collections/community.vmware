@@ -69,8 +69,8 @@ options:
      suboptions:
        controller_number:
          description:
-         - Disk controller bus number. When O(controllers.state=absent), this parameter is required.
-         - When O(controllers.type=usb2) or O(controllers.type=usb3), this parameter is not required.
+         - Disk controller bus number. When O(controllers[].state=absent), this parameter is required.
+         - When O(controllers[].type=usb2) or O(controllers[].type=usb3), this parameter is not required.
          type: int
          choices:
            - 0
