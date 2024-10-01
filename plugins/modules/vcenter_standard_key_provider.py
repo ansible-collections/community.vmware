@@ -43,9 +43,9 @@ options:
   kms_info:
     description:
       - The information of an external key server (KMS).
-      - O(kms_info.kms_name), O(kms_info.kms_ip) are required when adding a Standard Key Provider.
-      - If O(kms_info.kms_port) is not specified, the default port 5696 will be used.
-      - O(kms_info.kms_ip), O(kms_info.kms_port) can be reconfigured for an existing KMS with name O(kms_info.kms_name).
+      - O(kms_info[].kms_name), O(kms_info[].kms_ip) are required when adding a Standard Key Provider.
+      - If O(kms_info[].kms_port) is not specified, the default port 5696 will be used.
+      - O(kms_info[].kms_ip), O(kms_info[].kms_port) can be reconfigured for an existing KMS with name O(kms_info[].kms_name).
     type: list
     default: []
     elements: dict
@@ -60,7 +60,7 @@ options:
         description: Port of the external KMS.
         type: int
       remove_kms:
-        description: Remove the configured KMS with name O(kms_info.kms_name) from the KMIP cluster.
+        description: Remove the configured KMS with name O(kms_info[].kms_name) from the KMIP cluster.
         type: bool
   proxy_server:
     description: Address of the proxy server to connect to KMS.

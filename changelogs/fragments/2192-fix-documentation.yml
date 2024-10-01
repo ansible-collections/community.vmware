@@ -1,0 +1,15 @@
+bugfixes:
+  - vcenter_standard_key_provider - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_dvswitch_nioc - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_guest - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_guest_controller - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_guest_disk - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_guest_serial_port - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_tools - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).

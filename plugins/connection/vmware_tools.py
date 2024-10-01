@@ -88,7 +88,7 @@ DOCUMENTATION = r'''
         description:
           - Mutually exclusive with O(vm_path)
           - VM UUID to the connection.
-          - UUID of the virtual machine from property config.uuid of P(community.vmware.vmware_vm_inventory#lookup) plugin
+          - UUID of the virtual machine from property config.uuid of P(community.vmware.vmware_vm_inventory#inventory) plugin
         vars:
           - name: ansible_vmware_guest_uuid
         required: false
