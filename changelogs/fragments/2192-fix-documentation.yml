@@ -3,3 +3,5 @@ bugfixes:
     (https://github.com/ansible-collections/community.vmware/pull/2192).
   - vmware_dvswitch_nioc - Fix documentation
     (https://github.com/ansible-collections/community.vmware/pull/2192).
+  - vmware_guest - Fix documentation
+    (https://github.com/ansible-collections/community.vmware/pull/2192).
