@@ -97,13 +97,13 @@ options:
            - If set to V(independent_persistent) mode, same as persistent, but not affected by snapshots.
            - If set to V('independent_nonpersistent) mode, changes to virtual disk are made to a redo log and discarded
              at power off, but not affected by snapshots.
-           - Not applicable when disk O(disk.type=vpmemdisk).
+           - Not applicable when disk O(disk[].type=vpmemdisk).
          type: str
          choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
        rdm_path:
          description:
-         - Path of LUN for Raw Device Mapping required for O(disk.type=rdm).
-         - Only valid if O(disk.type=rdm).
+         - Path of LUN for Raw Device Mapping required for O(disk[].type=rdm).
+         - Only valid if O(disk[].type=rdm).
          type: str
        cluster_disk:
          description:
@@ -113,25 +113,25 @@ options:
          type: bool
          default: false
        compatibility_mode:
-         description: Compatibility mode for raw devices. Required when O(disk.type=rdm).
+         description: Compatibility mode for raw devices. Required when O(disk[].type=rdm).
          type: str
          choices: ['physicalMode','virtualMode']
        sharing:
          description:
            - The sharing mode of the virtual disk.
            - Setting sharing means that multiple virtual machines can write to the virtual disk.
-           - Sharing can only be set if O(disk.type=eagerzeroedthick) or O(disk.type=rdm).
+           - Sharing can only be set if O(disk[].type=eagerzeroedthick) or O(disk[].type=rdm).
          type: bool
          default: false
        datastore:
          description:
            - Name of datastore or datastore cluster to be used for the disk.
-           - Not applicable when disk O(disk.type=vpmemdisk).
+           - Not applicable when disk O(disk[].type=vpmemdisk).
          type: str
        autoselect_datastore:
          description:
-           - Select the less used datastore. Specify only if O(disk.datastore) is not specified.
-           - Not applicable when disk O(disk.type=vpmemdisk).
+           - Select the less used datastore. Specify only if O(disk[].datastore) is not specified.
+           - Not applicable when disk O(disk[].type=vpmemdisk).
          type: bool
        scsi_controller:
          description:
@@ -158,18 +158,18 @@ options:
        scsi_type:
          description:
            - Type of SCSI controller. This value is required only for the first occurrence of SCSI Controller.
-           - This value is ignored, if SCSI Controller is already present or O(disk.state=absent).
+           - This value is ignored, if SCSI Controller is already present or O(disk[].state=absent).
          type: str
          choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']
        destroy:
-         description: If O(disk.state=absent), make sure the disk file is deleted from the datastore.
+         description: If O(disk[].state=absent), make sure the disk file is deleted from the datastore.
          type: bool
          default: true
        filename:
          description:
            - Existing disk image to be used. Filename must already exist on the datastore.
            - Specify filename string in C([datastore_name] path/to/file.vmdk) format.
-           - Not applicable when disk O(disk.type=vpmemdisk).
+           - Not applicable when disk O(disk[].type=vpmemdisk).
          type: str
        state:
          description:
@@ -183,19 +183,19 @@ options:
        controller_type:
          description:
            - This parameter is added for managing disks attaching other types of controllers, e.g., SATA or NVMe.
-           - If either O(disk.controller_type) or O(disk.scsi_type) is not specified, then use V(paravirtual) type.
+           - If either O(disk[].controller_type) or O(disk[].scsi_type) is not specified, then use V(paravirtual) type.
          type: str
          choices: ['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual', 'sata', 'nvme', 'ide']
        controller_number:
          description:
-           - This parameter is used with O(disk.controller_type) for specifying controller bus number.
-           - For O(disk.controller_type=ide), valid value is 0 or 1.
+           - This parameter is used with O(disk[].controller_type) for specifying controller bus number.
+           - For O(disk[].controller_type=ide), valid value is 0 or 1.
          type: int
          choices: [0, 1, 2, 3]
        iolimit:
          description:
            - Section specifies the shares and limit for storage I/O resource.
-           - Not applicable when O(disk.type=vpmemdisk).
+           - Not applicable when O(disk[].type=vpmemdisk).
          suboptions:
            limit:
              description: Section specifies values for limit where the utilization of a virtual machine will not exceed, even if there are available resources.
@@ -208,21 +208,21 @@ options:
                  type: str
                  choices: ['low', 'normal', 'high', 'custom']
                level_value:
-                 description: Custom value when O(disk.iolimit.shares.level=custom).
+                 description: Custom value when O(disk[].iolimit.shares.level=custom).
                  type: int
              type: dict
          type: dict
        shares:
          description:
            - Section for iolimit section tells about what are all different types of shares user can add for disk.
-           - Not applicable when disk O(disk.type=vpmemdisk).
+           - Not applicable when disk O(disk[].type=vpmemdisk).
          suboptions:
            level:
              description: Tells about different level for the shares section.
              type: str
              choices: ['low', 'normal', 'high', 'custom']
            level_value:
-             description: Custom value when O(disk.shares.level=custom).
+             description: Custom value when O(disk[].shares.level=custom).
              type: int
          type: dict
      default: []
