@@ -262,7 +262,7 @@ options:
     - A list of disks to add.
     - Shrinking disks is not supported.
     - Removing existing disks of the virtual machine is not supported.
-    - 'Attributes O(disk.controller_type), O(disk.controller_number), O(disk.unit_number) are used to configure multiple types of disk
+    - 'Attributes O(disk[].controller_type), O(disk[].controller_number), O(disk[].unit_number) are used to configure multiple types of disk
       controllers and disks for creating or reconfiguring virtual machine.'
     type: list
     default: []
@@ -295,7 +295,7 @@ options:
             type: str
             description:
             - The name of datastore which will be used for the disk.
-            - If O(disk.autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
+            - If O(disk[].autoselect_datastore) is set to True, will select the less used datastore whose name contains this "disk.datastore" string.
         filename:
             type: str
             description:
@@ -306,7 +306,7 @@ options:
             type: bool
             description:
             - Select the less used datastore.
-            - O(disk.datastore) and O(disk.autoselect_datastore) will not be used if O(datastore) is specified outside this O(disk) configuration.
+            - O(disk[].datastore) and O(disk[].autoselect_datastore) will not be used if O(datastore) is specified outside this O(disk[]) configuration.
         disk_mode:
             type: str
             choices: ['persistent', 'independent_persistent', 'independent_nonpersistent']
@@ -322,8 +322,8 @@ options:
             description:
             - Type of disk controller.
               Set this type on not supported ESXi or VM hardware version will lead to failure in deployment.
-            - When set to V(sata), please make sure O(disk.unit_number) is correct and not used by SATA CDROMs.
-            - If set to V(sata) type, please make sure O(disk.controller_number) and O(disk.unit_number) are set correctly when O(cdrom=sata).
+            - When set to V(sata), please make sure O(disk[].unit_number) is correct and not used by SATA CDROMs.
+            - If set to V(sata) type, please make sure O(disk[].controller_number) and O(disk[].unit_number) are set correctly when O(cdrom=sata).
         controller_number:
             type: int
             choices: [0, 1, 2, 3]
@@ -337,9 +337,9 @@ options:
             - Valid value range from 0 to 15 for SCSI controller, except 7.
             - Valid value range from 0 to 14 for NVME controller.
             - Valid value range from 0 to 29 for SATA controller.
-            - O(disk.controller_type), O(disk.controller_number) and O(disk.unit_number) are required when creating or reconfiguring VMs
+            - O(disk[].controller_type), O(disk[].controller_number) and O(disk[].unit_number) are required when creating or reconfiguring VMs
               with multiple types of disk controllers and disks.
-            - When creating new VM, the first configured disk in the O(disk) list will be "Hard Disk 1".
+            - When creating new VM, the first configured disk in the O(disk[]) list will be "Hard Disk 1".
   nvdimm:
     description:
     - Add or remove a virtual NVDIMM device to the virtual machine.
@@ -389,20 +389,20 @@ options:
         controller_type:
             type: str
             description:
-            - When set to V(sata), please make sure O(cdrom.unit_number) is correct and not used by SATA disks.
+            - When set to V(sata), please make sure O(cdrom[].unit_number) is correct and not used by SATA disks.
             choices: [ 'ide', 'sata' ]
             default: ide
         controller_number:
             type: int
             description:
-            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
-            - For O(cdrom.controller_type=sata), valid value is 0 to 3.
+            - For O(cdrom[].controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom[].controller_type=sata), valid value is 0 to 3.
         unit_number:
             type: int
             description:
-            - For O(cdrom.controller_type=ide), valid value is 0 or 1.
-            - For O(cdrom.controller_type=sata), valid value is 0 to 29.
-            - O(cdrom.controller_number) and O(cdrom.unit_number) are mandatory attributes.
+            - For O(cdrom[].controller_type=ide), valid value is 0 or 1.
+            - For O(cdrom[].controller_type=sata), valid value is 0 to 29.
+            - O(cdrom[].controller_number) and O(cdrom[].unit_number) are mandatory attributes.
         state:
             type: str
             description:
@@ -788,7 +788,7 @@ options:
   datastore:
     description:
     - Specify datastore or datastore cluster to provision virtual machine.
-    - This parameter takes precedence over O(disk.datastore) parameter.
+    - This parameter takes precedence over O(disk[].datastore) parameter.
     - This parameter can be used to override datastore or datastore cluster setting
       of the virtual machine when deployed from the template.
     - Please see example for more usage.
