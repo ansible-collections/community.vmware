@@ -2645,6 +2645,7 @@ class PyVmomiHelper(PyVmomi):
                                       "the target object (%d vs %d)" % (len(self.params.get('disk')), len(disks)))
 
         disk_index = 0
+        disk_index_scsi = 0
         for expected_disk_spec in self.params.get('disk'):
             disk_modified = False
             # If we are manipulating and existing objects which has disks and disk_index is in disks
@@ -2654,15 +2655,16 @@ class PyVmomiHelper(PyVmomi):
                 diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
                 diskspec.device = disks[disk_index]
             else:
-                diskspec = self.device_helper.create_hard_disk(scsi_ctl, disk_index)
+                diskspec = self.device_helper.create_hard_disk(scsi_ctl, disk_index_scsi)
                 diskspec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
                 disk_modified = True
 
             # increment index for next disk search
             disk_index += 1
+            disk_index_scsi += 1
             # index 7 is reserved to SCSI controller
-            if disk_index == 7:
-                disk_index += 1
+            if disk_index_scsi == 7:
+                disk_index_scsi += 1
 
             if expected_disk_spec['disk_mode']:
                 disk_mode = expected_disk_spec.get('disk_mode', 'persistent')
