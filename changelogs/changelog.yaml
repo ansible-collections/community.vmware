@@ -200,3 +200,28 @@ releases:
     - 2143-deprecate-vmware_cluster.yml
     - 2156-deprecate-vmware_cluster_vcls.yml
     release_date: '2024-09-08'
+  4.7.1:
+    changes:
+      bugfixes:
+      - vcenter_standard_key_provider - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_all_snapshots_info - fixed the datacenter parameter was ignored(https://github.com/ansible-collections/community.vmware/pull/2165).
+      - vmware_dvswitch - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_dvswitch_nioc - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_dvswitch_pvlans - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_guest - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_guest_controller - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_guest_disk - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_guest_serial_port - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_guest_tpm - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_dns - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_powerstate - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_tools - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+      - vmware_vm_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_vmotion - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+    fragments:
+    - 2138-vmware_all_snapshots_info.yml
+    - 2186-fix-sanity-tests.yml
+    - 2192-fix-documentation.yml
+    release_date: '2024-10-05'
