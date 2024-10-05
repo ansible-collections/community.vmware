@@ -1514,6 +1514,21 @@ releases:
     - 2095_bugfix_vmware_guest_disk_round_size_to_int.yml
     - 2127-require-requests.yml
     release_date: '2024-09-06'
+  3.11.7:
+    changes:
+      bugfixes:
+      - vmware_dvswitch - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_dvswitch_pvlans - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_guest_tpm - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_dns - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_host_powerstate - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_vm_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+      - vmware_vmotion - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+    fragments:
+    - 2186-fix-sanity-tests.yml
+    release_date: '2024-10-05'
   3.2.0:
     changes:
       bugfixes:
