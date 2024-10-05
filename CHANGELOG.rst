@@ -6,6 +6,29 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.0.1
+======
+
+Bugfixes
+--------
+
+- vcenter_standard_key_provider - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_dvswitch - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_dvswitch_nioc - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_dvswitch_pvlans - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_guest - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_guest_controller - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_guest_disk - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_guest_serial_port - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_guest_tpm - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_host - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_host_dns - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_host_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_host_powerstate - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_tools - Fix documentation (https://github.com/ansible-collections/community.vmware/pull/2192).
+- vmware_vm_inventory - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+- vmware_vmotion - Fix Pylint issue (https://github.com/ansible-collections/community.vmware/pull/2186).
+
 v5.0.0
 ======
 
