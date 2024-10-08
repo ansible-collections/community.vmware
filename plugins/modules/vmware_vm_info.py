@@ -303,8 +303,14 @@ class VmwareVmInfo(PyVmomi):
         return self.vmware_client.get_tags_for_vm(vm_mid=vm_dynamic_obj._moId)
 
     def get_vm_attributes(self, vm):
-        return dict((x.name, v.value) for x in self.custom_field_mgr
-                    for v in vm.customValue if x.key == v.key)
+        custom_field_values = vm.customValue
+        custom_field_mgr = self.custom_field_mgr
+        vm_attributes = {}
+        for custom_field in custom_field_mgr:
+            for custom_value in custom_field_values:
+                if custom_field.key == custom_value.key:
+                    vm_attributes[custom_field.name] = custom_value.value
+        return vm_attributes
 
     # https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/getallvms.py
     def get_virtual_machines(self):
