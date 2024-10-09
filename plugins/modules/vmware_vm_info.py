@@ -138,7 +138,7 @@ EXAMPLES = r'''
   register: vm_info
 
 - debug:
-    var: vminfo.virtual_machines
+    var: vm_info.virtual_machines
 
 - name: Gather only registered virtual machine templates
   community.vmware.vmware_vm_info:
