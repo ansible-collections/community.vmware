@@ -481,6 +481,10 @@ class VmotionManager(PyVmomi):
                                                    relocateSpec=relocate_spec)
         placement = self.cluster_object.PlaceVm(placement_spec)
 
+        if not placement.recommendations:
+            self.module.fail_json(
+                msg='No placement recommendation from vSphere.')
+
         if self.host_object is None:
             self.host_object = placement.recommendations[0].action[0].targetHost
         if self.datastore_object is None:
