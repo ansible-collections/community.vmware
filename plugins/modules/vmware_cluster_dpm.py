@@ -19,6 +19,10 @@ description:
     - Manages DPM on VMware vSphere clusters.
 author:
 - Olivia Luetolf (@olilu)
+deprecated:
+  removed_in: 6.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.cluster_dpm) instead.
 options:
     cluster_name:
       description:

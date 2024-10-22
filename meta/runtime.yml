@@ -184,6 +184,10 @@ plugin_routing:
       deprecation:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster instead.
+    vmware_cluster_dpm:
+      deprecation:
+        removal_version: 6.0.0
+        warning_text: Use vmware.vmware.cluster_dpm instead.
     vmware_cluster_drs:
       deprecation:
         removal_version: 6.0.0
