@@ -18,6 +18,10 @@ description:
     - Apply DRS Recommendations for Cluster.
 author:
 - Nina Loser (@Nina2244)
+deprecated:
+  removed_in: 6.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  alternative: Use M(vmware.vmware.cluster_drs_recommendations) instead.
 options:
     cluster_name:
       description:
