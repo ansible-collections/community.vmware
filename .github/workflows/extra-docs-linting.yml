@@ -26,10 +26,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.13'
 
       - name: Install antsibull-docs
         run: pip install antsibull-docs --disable-pip-version-check
+
+      - name: Install dependent collections
+        run: >
+          ansible-galaxy collection install
+          vmware.vmware
 
       - name: Run collection docs linter
         run: antsibull-docs lint-collection-docs . --plugin-docs --skip-rstcheck
