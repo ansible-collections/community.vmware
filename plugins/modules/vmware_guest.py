@@ -2067,13 +2067,14 @@ class PyVmomiHelper(PyVmomi):
         if vm_obj:
             # VM exists
             orig_spec = vm_obj.config.vAppConfig
+            orig_properties = orig_spec.property if orig_spec is not None else []
 
-            vapp_properties_current = dict((x.id, x) for x in orig_spec.property)
+            vapp_properties_current = dict((x.id, x) for x in orig_properties)
             vapp_properties_to_change = dict((x['id'], x) for x in self.params['vapp_properties'])
 
             # each property must have a unique key
             # init key counter with max value + 1
-            all_keys = [x.key for x in orig_spec.property]
+            all_keys = [x.key for x in orig_properties]
             new_property_index = max(all_keys) + 1 if all_keys else 0
 
             for property_id, property_spec in vapp_properties_to_change.items():
