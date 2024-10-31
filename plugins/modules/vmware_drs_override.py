@@ -46,7 +46,7 @@ options:
         default: 'manual'
         type: str
 author:
-    - Your Name (@your_github_username)
+    - Sergey Goncharov (@svg1007)
 '''
 
 EXAMPLES = '''
@@ -75,7 +75,6 @@ msg:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    connect_to_api,
     vmware_argument_spec,
 )
 from pyVmomi import vim, vmodl
@@ -84,26 +83,18 @@ from pyVmomi import vim, vmodl
 class VmwareDrsOverride(PyVmomi):
     def __init__(self, module):
         super(VmwareDrsOverride, self).__init__(module)
-        self.module = module
-        self.vm_name = module.params['vm_name']
+        self.vm_name = self.params.get('vm_name', None)
         self.drs_behavior = module.params['drs_behavior']
-        self.content = self.si.RetrieveContent()
-
-    def get_vm_by_name(self):
-        obj_view = self.content.viewManager.CreateContainerView(self.content.rootFolder, [vim.VirtualMachine], True)
-        for vm in obj_view.view:
-            if vm.name == self.vm_name:
-                obj_view.Destroy()
-                return vm
-        obj_view.Destroy()
-        self.module.fail_json(msg="VM '%s' not found." % self.vm_name)
+        self.params['name'] = self.vm_name
+        self.vm = self.get_vm()
+        if not self.vm:
+            self.module.fail_json(msg="VM '%s' not found." % self.vm_name)
 
     def set_drs_override(self):
-        vm = self.get_vm_by_name()
-        cluster = vm.runtime.host.parent
+        cluster = self.vm.runtime.host.parent
 
         # Check current DRS settings
-        existing_config = next((config for config in cluster.configuration.drsVmConfig if config.key == vm), None)
+        existing_config = next((config for config in cluster.configuration.drsVmConfig if config.key == self.vm), None)
         if existing_config and existing_config.behavior == self.drs_behavior:
             self.module.exit_json(changed=False, msg="DRS behavior is already set to the desired state.")
 
@@ -111,7 +102,7 @@ class VmwareDrsOverride(PyVmomi):
         drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
             operation='add',
             info=vim.cluster.DrsVmConfigInfo(
-                key=vm,
+                key=self.vm,
                 enabled=True,
                 behavior=self.drs_behavior
             )
@@ -121,7 +112,7 @@ class VmwareDrsOverride(PyVmomi):
         cluster_config_spec = vim.cluster.ConfigSpec()
         cluster_config_spec.drsVmConfigSpec = [drs_vm_config_spec]
         try:
-            task = cluster.ReconfigureCluster_Task(spec=cluster_config_spec)
+            task = cluster.ReconfigureCluster_Task(spec=cluster_config_spec, modify=True)
             self.wait_for_task(task)
             self.module.exit_json(changed=True, msg="DRS override applied successfully.")
         except vmodl.MethodFault as error:
