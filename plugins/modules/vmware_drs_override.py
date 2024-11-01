@@ -90,6 +90,9 @@ class VmwareDrsOverride(PyVmomi):
         if not self.vm:
             self.module.fail_json(msg="VM '%s' not found." % self.vm_name)
 
+        if not self.is_vcenter():
+            self.module.fail_json(msg="DRS configuration is only supported in vCenter environments.")
+        
     def set_drs_override(self):
         cluster = self.vm.runtime.host.parent
 
