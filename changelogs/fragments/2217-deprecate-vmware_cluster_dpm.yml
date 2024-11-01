@@ -1,3 +1,0 @@
-deprecated_features:
-  - vmware_cluster_dpm - the module has been deprecated and will be removed in community.vmware 6.0.0
-    (https://github.com/ansible-collections/community.vmware/pull/2217).
