@@ -225,3 +225,25 @@ releases:
     - 2186-fix-sanity-tests.yml
     - 2192-fix-documentation.yml
     release_date: '2024-10-05'
+  4.8.0:
+    changes:
+      bugfixes:
+      - vmware_guest - Fix existing disk erroneously being re-created when modifying
+        vm with 8 or more disks. (https://github.com/ansible-collections/community.vmware/pull/2173).
+      - vmware_vmotion - Fix a `list index out of range` error when vSphere doesn't
+        provide a placement recommendation (https://github.com/ansible-collections/community.vmware/pull/2208).
+      deprecated_features:
+      - vmware_cluster_dpm - the module has been deprecated and will be removed in
+        community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2217).
+      - vmware_cluster_drs_recommendations - the module has been deprecated and will
+        be removed in community.vmware 6.0.0 (https://github.com/ansible-collections/community.vmware/pull/2218).
+      minor_changes:
+      - vmware_vm_info - Improve performance when parsing custom attributes information
+        (https://github.com/ansible-collections/community.vmware/pull/2194)
+    fragments:
+    - 2173-fix-existing-disk-recreation-on-vm-with-8-or-more-disks.yml
+    - 2194-vmware_vm_info.yml
+    - 2208-vmware_vmotion.yml
+    - 2217-deprecate-vmware_cluster_dpm.yml
+    - 2218-deprecate-vmware_cluster_drs_recommendations.yml
+    release_date: '2024-11-01'

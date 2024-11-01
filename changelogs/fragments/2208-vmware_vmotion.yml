@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_vmotion - Fix a `list index out of range` error when vSphere doesn't provide a placement recommendation
-    (https://github.com/ansible-collections/community.vmware/pull/2208).
