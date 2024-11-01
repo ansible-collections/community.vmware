@@ -4,6 +4,15 @@ community.vmware Release Notes
 
 .. contents:: Topics
 
+v3.11.8
+=======
+
+Bugfixes
+--------
+
+- vmware_guest - Fix existing disk erroneously being re-created when modifying vm with 8 or more disks. (https://github.com/ansible-collections/community.vmware/pull/2173).
+- vmware_vmotion - Fix a `list index out of range` error when vSphere doesn't provide a placement recommendation (https://github.com/ansible-collections/community.vmware/pull/2208).
+
 v3.11.7
 =======
 
