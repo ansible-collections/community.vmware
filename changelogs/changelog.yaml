@@ -1529,6 +1529,17 @@ releases:
     fragments:
     - 2186-fix-sanity-tests.yml
     release_date: '2024-10-05'
+  3.11.8:
+    changes:
+      bugfixes:
+      - vmware_guest - Fix existing disk erroneously being re-created when modifying
+        vm with 8 or more disks. (https://github.com/ansible-collections/community.vmware/pull/2173).
+      - vmware_vmotion - Fix a `list index out of range` error when vSphere doesn't
+        provide a placement recommendation (https://github.com/ansible-collections/community.vmware/pull/2208).
+    fragments:
+    - 2173-fix-existing-disk-recreation-on-vm-with-8-or-more-disks.yml
+    - 2208-vmware_vmotion.yml
+    release_date: '2024-11-01'
   3.2.0:
     changes:
       bugfixes:
