@@ -31,10 +31,5 @@ jobs:
       - name: Install antsibull-docs
         run: pip install antsibull-docs --disable-pip-version-check
 
-      - name: Install dependent collections
-        run: >
-          ansible-galaxy collection install
-          'vmware.vmware>=1.6.0'
-
       - name: Run collection docs linter
         run: antsibull-docs lint-collection-docs . --plugin-docs --skip-rstcheck
