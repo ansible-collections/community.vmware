@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 DOCUMENTATION = '''
 ---
 module: vmware_drs_override
@@ -8,32 +11,6 @@ short_description: Configure DRS behavior for a specific VM in vSphere
 description:
     - This module allows setting a DRS behavior override for individual VMs within a DRS-enabled VMware vSphere cluster.
 options:
-    hostname:
-        description:
-            - The hostname or IP address of the vCenter server.
-        required: true
-        type: str
-    username:
-        description:
-            - The username for vCenter authentication.
-        required: true
-        type: str
-    password:
-        description:
-            - The password for vCenter authentication.
-        required: true
-        type: str
-    port:
-        description:
-            - The port number for the vCenter server.
-        required: false
-        type: int
-        default: 443
-    validate_certs:
-        description:
-            - If C(false), SSL certificates will not be validated.
-        type: bool
-        default: False
     vm_name:
         description:
             - Name of the VM for which the DRS override is set.
@@ -45,6 +22,8 @@ options:
         choices: ['manual', 'partiallyAutomated', 'fullyAutomated']
         default: 'manual'
         type: str
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 author:
     - Sergey Goncharov (@svg1007)
 '''
@@ -72,13 +51,13 @@ msg:
     returned: always
 '''
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi,
-    vmware_argument_spec,
-)
-from pyVmomi import vim, vmodl
+try:
+    from pyVmomi import vim
+except ImportError:
+    pass
 
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
 
 class VmwareDrsOverride(PyVmomi):
     def __init__(self, module):
