@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_guest_info - `datacenter` property is now optional as it only required in cases where the VM is not uniquely identified by `name`.
+  - vmware.py - Add logic for handling the case where the `datacenter` property is not provided.
