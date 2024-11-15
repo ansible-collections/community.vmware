@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_guest - Fix errors occuring during hardware version upgrade not being reported.
+    (https://github.com/ansible-collections/community.vmware/pull/2010).
