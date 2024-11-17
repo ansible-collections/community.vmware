@@ -128,11 +128,16 @@ class PyVmomiHelper(PyVmomi):
 
     def upgrade_tools(self, vm):
         result = {'failed': False, 'changed': False, 'msg': ''}
+
         # Exit if VMware tools is already up to date
         if vm.guest.toolsVersionStatus2 == "guestToolsCurrent":
             result.update(
-                changed=False,
-                msg="VMware tools is already up to date",
+                msg="VMwareTools are already up to date",
+            )
+            return result
+        elif vm.guest.toolsVersionStatus2 == "guestToolsSupportedNew" or vm.guest.toolsVersionStatus2 == "guestToolsTooNew":
+            result.update(
+                msg="VMwareTools are already newer than the version available on the host",
             )
             return result
 
@@ -144,23 +149,31 @@ class PyVmomiHelper(PyVmomi):
             )
             return result
 
-        # Fail if VMware tools is either not running or not installed
+        # Fail if VMware tools is either not installed or not running
         elif vm.guest.toolsVersionStatus2 == 'guestToolsNotInstalled':
             result.update(
                 failed=True,
-                msg="The VMwareTools are not installed."
+                msg="VMwareTools are not installed."
             )
             return result
         elif vm.guest.toolsRunningStatus != 'guestToolsRunning':
             result.update(
                 failed=True,
-                msg="The VMwareTools are not running."
+                msg="VMwareTools are not running."
+            )
+            return result
+
+        # Fail if VMware tools are unmanaged
+        elif vm.guest.toolsVersionStatus2 == "guestToolsUnmanaged":
+            result.update(
+                failed=True,
+                msg="VMwareTools not managed by VMware",
             )
             return result
 
         # If vmware tools is out of date, check major OS family
         # Upgrade tools on Linux and Windows guests
-        elif vm.guest.toolsVersionStatus2 == "guestToolsTooOld":
+        elif vm.guest.toolsVersionStatus2 in ["guestToolsBlacklisted", "guestToolsNeedUpgrade", "guestToolsSupportedOld", "guestToolsTooOld"]:
             try:
                 force = self.module.params.get('force_upgrade')
                 installer_options = self.module.params.get('installer_options')
@@ -177,13 +190,13 @@ class PyVmomiHelper(PyVmomi):
             except Exception as exc:
                 result.update(
                     failed=True,
-                    msg='Error while upgrading VMware tools %s' % to_native(exc),
+                    msg='Error while upgrading VMwareTools %s' % to_native(exc),
                 )
                 return result
         else:
             result.update(
                 failed=True,
-                msg="VMware tools could not be upgraded",
+                msg="This shouldn't happen, looks like a problem in the module",
             )
             return result
 
