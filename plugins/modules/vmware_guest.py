@@ -1908,6 +1908,7 @@ class PyVmomiHelper(PyVmomi):
                                       "Removing interfaces is not allowed"
                                       % (len(network_devices), len(current_net_devices)))
 
+        # Loop over requested devices
         for key in range(0, len(network_devices)):
             nic_change_detected = False
             network_name = network_devices[key]['name']
@@ -1926,8 +1927,10 @@ class PyVmomiHelper(PyVmomi):
                    nic.device.connectable.startConnected != network_devices[key].get("start_connected"):
                     nic.device.connectable.startConnected = network_devices[key].get("start_connected")
                     nic_change_detected = True
+                # Valid only when VM is running
                 if "connected" in network_devices[key] and \
-                   nic.device.connectable.connected != network_devices[key].get("connected"):
+                   nic.device.connectable.connected != network_devices[key].get("connected") and \
+                   vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
                     nic.device.connectable.connected = network_devices[key].get("connected")
                     nic_change_detected = True
                 if "allow_guest_control" in network_devices[key] and \
@@ -1935,9 +1938,6 @@ class PyVmomiHelper(PyVmomi):
                     nic.device.connectable.allowGuestControl = network_devices[key].get("allow_guest_control")
                     nic_change_detected = True
 
-                if nic.device.deviceInfo.summary != network_name:
-                    nic.device.deviceInfo.summary = network_name
-                    nic_change_detected = True
                 if 'device_type' in network_devices[key]:
                     device = self.device_helper.nic_device_type.get(network_devices[key]['device_type'])
                     if not isinstance(nic.device, device):
@@ -1960,8 +1960,9 @@ class PyVmomiHelper(PyVmomi):
 
             net_obj = self.cache.get_network(network_name)
             if hasattr(net_obj, 'portKeys'):
-                # VDS switch
+                # network_name matched existing VDS switch portgroup
                 pg_obj = None
+                # if dvswitch_name was also defined we need to make sure we have port_group of that dwswitch
                 if 'dvswitch_name' in network_devices[key]:
                     dvs_name = network_devices[key]['dvswitch_name']
                     dvs_obj = find_dvs_by_name(self.content, dvs_name)
@@ -1983,15 +1984,13 @@ class PyVmomiHelper(PyVmomi):
                         " permission to access distributed virtual switch in the given portgroup."
                         % pg_obj.name
                     )
-                if nic.device.backing and (
-                    not hasattr(nic.device.backing, "port")
-                    or (
-                        nic.device.backing.port.portgroupKey != pg_obj.key
-                        or nic.device.backing.port.switchUuid
-                        != pg_obj.config.distributedVirtualSwitch.uuid
-                    )
-                ):
-                    nic_change_detected = True
+                if nic.device.backing:
+                    if not hasattr(nic.device.backing, "port"):
+                        # backing is not set to dvs pg yet
+                        nic_change_detected = True
+                    elif nic.device.backing.port.portgroupKey != pg_obj.key:
+                        # backing is set to different dvs pg
+                        nic_change_detected = True
 
                 dvs_port_connection = vim.dvs.PortConnection()
                 dvs_port_connection.portgroupKey = pg_obj.key
@@ -3585,6 +3584,7 @@ def main():
                                         'powered-off', 'restarted', 'suspended',
                                         'shutdownguest', 'shutdown-guest',
                                         'rebootguest', 'reboot-guest']:
+            # With these states there are no config changes, just power state changes
             if module.check_mode:
                 # Identify if the power state would have changed if not in check mode
                 current_powerstate = vm.summary.runtime.powerState.lower()
