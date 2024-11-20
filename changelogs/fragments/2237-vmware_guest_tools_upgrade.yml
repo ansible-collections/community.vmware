@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_tools_upgrade - Account for all possible tools status (https://github.com/ansible-collections/community.vmware/issues/2237).

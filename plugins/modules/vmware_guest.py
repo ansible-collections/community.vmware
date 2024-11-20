@@ -3185,7 +3185,9 @@ class PyVmomiHelper(PyVmomi):
         self.relospec.deviceChange = []
         self.configure_guestid(vm_obj=self.current_vm_obj)
         self.configure_cpu_and_memory(vm_obj=self.current_vm_obj)
-        self.configure_hardware_params(vm_obj=self.current_vm_obj)
+        err = self.configure_hardware_params(vm_obj=self.current_vm_obj)
+        if err is not None:
+            return err
         self.configure_encryption_params(vm_obj=self.current_vm_obj)
         self.configure_disks(vm_obj=self.current_vm_obj)
         self.configure_network(vm_obj=self.current_vm_obj)
