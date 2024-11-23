@@ -190,19 +190,22 @@
           - "'tag_category' in test_host.value"
 
 
-    - name: Inventory 'resources' option
-      include_tasks: build_inventory.yml
-      vars:
-        content: |-
-          plugin: community.vmware.vmware_host_inventory
-          strict: false
-          resources:
-            - datacenter:
-                - DC0
-              resources:
-                - compute_resource:
-                    - DC0_C0_NOT_EXIST
-    - name: Test 'resources' options with 'DC0_C0_NOT_EXIST'
-      assert:
-        that:
-          - hostvars | length == 0
+# TODO enable again
+# https://forum.ansible.com/t/11073
+# https://github.com/ansible-collections/community.vmware/issues/2257
+#     - name: Inventory 'resources' option
+#       include_tasks: build_inventory.yml
+#       vars:
+#         content: |-
+#           plugin: community.vmware.vmware_host_inventory
+#           strict: false
+#           resources:
+#             - datacenter:
+#                 - DC0
+#               resources:
+#                 - compute_resource:
+#                     - DC0_C0_NOT_EXIST
+#     - name: Test 'resources' options with 'DC0_C0_NOT_EXIST'
+#       assert:
+#         that:
+#           - hostvars | length == 0
