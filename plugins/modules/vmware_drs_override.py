@@ -58,7 +58,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, wait_for_task, PyVmomi
 
 
 class VmwareDrsOverride(PyVmomi):
@@ -97,18 +97,10 @@ class VmwareDrsOverride(PyVmomi):
         cluster_config_spec.drsVmConfigSpec = [drs_vm_config_spec]
         try:
             task = cluster.ReconfigureCluster_Task(spec=cluster_config_spec, modify=True)
-            self.wait_for_task(task)
+            wait_for_task(task)
             self.module.exit_json(changed=True, msg="DRS override applied successfully.")
         except vmodl.MethodFault as error:
             self.module.fail_json(msg="Failed to set DRS override: %s" % error.msg)
-
-    def wait_for_task(self, task):
-        while task.info.state == vim.TaskInfo.State.running:
-            pass
-        if task.info.state == vim.TaskInfo.State.success:
-            return task.info.result
-        else:
-            raise Exception("Task failed: %s" % task.info.error.localizedMessage)
 
 
 def main():
