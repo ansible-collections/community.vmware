@@ -7,6 +7,7 @@
 DOCUMENTATION = '''
 ---
 module: vmware_drs_override
+version_added: '5.2.0'
 short_description: Configure DRS behavior for a specific VM in vSphere
 description:
     - This module allows setting a DRS behavior override for individual VMs within a DRS-enabled VMware vSphere cluster.
