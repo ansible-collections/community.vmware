@@ -1,0 +1,79 @@
+# Test code for the vmware_drs_override module
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_virtualmachines: true
+
+# Gather information about available VMs
+- name: Get info about available VMs
+  vmware_vm_info:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+  register: vm_info
+
+- name: Set fact for the first VM name
+  set_fact:
+    first_vm_name: "{{ vm_info.virtual_machines[0].guest_name }}"
+
+# Test case: Add DRS Override - DRS enabled
+- name: Add DRS override 'manual' for a VM in a DRS-enabled cluster
+  vmware_drs_override:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    vm_name: "{{ first_vm_name }}"
+    drs_behavior: "manual"
+  register: drs_override_result
+  when: drs_enabled is defined and drs_enabled
+
+- name: Assert DRS override applied successfully
+  assert:
+    that:
+      - drs_override_result.changed == true
+      - "'DRS override applied successfully' in drs_override_result.msg"
+  when: drs_enabled is defined and drs_enabled
+
+# Test case: Ensure proper error for standalone ESXi without DRS
+- name: Attempt to add DRS override for VM in a non-DRS environment
+  vmware_drs_override:
+    validate_certs: false
+    hostname: "{{ standalone_esxi_hostname }}"
+    username: "{{ esxi_username }}"
+    password: "{{ esxi_password }}"
+    vm_name: "{{ first_vm_name }}"
+    drs_behavior: "manual"
+  register: drs_override_non_drs_result
+  ignore_errors: true
+  when: standalone_esxi_hostname is defined
+
+- name: Assert error for non-DRS environment
+  assert:
+    that:
+      - drs_override_non_drs_result.failed == true
+      - "'DRS configuration is only supported in vCenter environments' in drs_override_non_drs_result.msg"
+  when: standalone_esxi_hostname is defined
+
+# Test case: Check behavior for a vCenter cluster with DRS disabled
+- name: Attempt to add DRS override for VM in a vCenter cluster with DRS disabled
+  vmware_drs_override:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    vm_name: "{{ first_vm_name }}"
+    drs_behavior: "manual"
+  register: drs_override_drs_disabled_result
+  ignore_errors: true
+  when: drs_disabled is defined and drs_disabled
+
+- name: Assert error for DRS-disabled cluster
+  assert:
+    that:
+      - drs_override_drs_disabled_result.failed == true
+      - "'DRS is not enabled on the cluster' in drs_override_drs_disabled_result.msg"
+  when: drs_disabled is defined and drs_disabled
