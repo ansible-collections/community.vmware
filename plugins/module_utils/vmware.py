@@ -1226,9 +1226,9 @@ class PyVmomi(object):
             # following code tries to find user desired one depending upon the folder specified.
             if len(vms) > 1:
                 # We have found multiple virtual machines, decide depending upon folder value
-                if self.params['folder'] is None:
+                if self.params['folder'] is None or self.params['datacenter'] is None:
                     self.module.fail_json(msg="Multiple virtual machines with same name [%s] found, "
-                                          "Folder value is a required parameter to find uniqueness "
+                                          "try to specify folder and / or datacenter to ensure uniqueness "
                                           "of the virtual machine" % self.params['name'],
                                           details="Please see documentation of the vmware_guest module "
                                           "for folder parameter.")

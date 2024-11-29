@@ -48,7 +48,7 @@ options:
    folder:
      description:
      - Destination folder, absolute or relative path to find an existing guest.
-     - This is required if O(name) is supplied.
+     - This is required if O(name) is supplied and not unique.
      - The folder should include the datacenter. ESX's datacenter is ha-datacenter
      - 'Examples:'
      - '   folder: /ha-datacenter/vm'
@@ -64,7 +64,8 @@ options:
    datacenter:
      description:
      - Destination datacenter for the deploy operation
-     required: true
+     - This is required if O(name) is supplied and not unique.
+     required: false
      type: str
    tags:
      description:
@@ -262,7 +263,7 @@ def main():
         use_instance_uuid=dict(type='bool', default=False),
         moid=dict(type='str'),
         folder=dict(type='str'),
-        datacenter=dict(type='str', required=True),
+        datacenter=dict(type='str'),
         tags=dict(type='bool', default=False),
         schema=dict(type='str', choices=['summary', 'vsphere'], default='summary'),
         properties=dict(type='list', elements='str'),

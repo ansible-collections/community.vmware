@@ -17,30 +17,30 @@
     esxi_password: '{{ esxi_password }}'
     folder: '/DC0/host'
     state: present
-  with_items: "{{ esxi_hosts }}"
+  with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
   vmware_maintenancemode:
     esxi_hostname: '{{ item }}'
     state: absent
-  with_items: "{{ esxi_hosts }}"
+  with_items: '{{ esxi_hosts }}'
 
 - name: Create VM
   vmware_guest:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    datacenter: '{{ dc1 }}'
     validate_certs: false
     name: test_vm1
     folder: vm
-    esxi_hostname: "{{ esxi1 }}"
+    esxi_hostname: '{{ esxi1 }}'
     state: present
     guest_id: debian8_64Guest
     disk:
-    - size_gb: 1
-      type: thin
-      datastore: '{{ rw_datastore }}'
+      - size_gb: 1
+        type: thin
+        datastore: '{{ rw_datastore }}'
     hardware:
       version: 11
       memory_mb: 1024
@@ -62,8 +62,7 @@
 
 - assert:
     that:
-        - vm_vmotion.msg == "Failed to find the virtual machine with not_a_thing"
-
+      - vm_vmotion.msg == "Failed to find the virtual machine with not_a_thing"
 
 - name: Perform vMotion of virtual machine
   vmware_vmotion:
@@ -79,8 +78,7 @@
 - name: assert that changes were made
   assert:
     that:
-        - vm_vmotion is changed
-
+      - vm_vmotion is changed
 
 - name: Add ESXi Hosts to a cluster
   vmware_host:
@@ -90,13 +88,13 @@
     esxi_username: '{{ esxi_user }}'
     esxi_password: '{{ esxi_password }}'
     state: present
-  with_items: "{{ esxi_hosts }}"
+  with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
   vmware_maintenancemode:
     esxi_hostname: '{{ item }}'
     state: absent
-  with_items: "{{ esxi_hosts }}"
+  with_items: '{{ esxi_hosts }}'
 
 - name: Perform vMotion of virtual machine to resource_pool
   vmware_vmotion:
@@ -112,7 +110,7 @@
 - name: assert that changes were made
   assert:
     that:
-        - vm_vmotion_to_rp is changed
+      - vm_vmotion_to_rp is changed
 
 - name: Perform storage vMotion of virtual machine
   vmware_vmotion:
@@ -128,4 +126,4 @@
 - name: assert that changes were made
   assert:
     that:
-        - vm_vmotion_to_datastore is changed
+      - vm_vmotion_to_datastore is changed
