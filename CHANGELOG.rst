@@ -6,6 +6,28 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.2.0
+======
+
+Minor Changes
+-------------
+
+- vmware.py - Add logic for handling the case where the `datacenter` property is not provided.
+- vmware_guest_info - `datacenter` property is now optional as it only required in cases where the VM is not uniquely identified by `name`.
+
+Bugfixes
+--------
+
+- vm_device_helper - Fix 'invalid configuration for device' error caused by missing fileoperation parameter. (https://github.com/ansible-collections/community.vmware/pull/2009).
+- vmware_guest - Fix errors occuring during hardware version upgrade not being reported. (https://github.com/ansible-collections/community.vmware/pull/2010).
+- vmware_guest - Fix vmware_guest always reporting change when using dvswitch. (https://github.com/ansible-collections/community.vmware/pull/2000).
+- vmware_guest_tools_upgrade - Account for all possible tools status (https://github.com/ansible-collections/community.vmware/issues/2237).
+
+New Modules
+-----------
+
+- vmware_drs_override - Configure DRS behavior for a specific VM in vSphere
+
 v5.1.0
 ======
 
