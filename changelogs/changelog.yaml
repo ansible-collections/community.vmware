@@ -77,3 +77,29 @@ releases:
     - 2217-deprecate-vmware_cluster_dpm.yml
     - 2218-deprecate-vmware_cluster_drs_recommendations.yml
     release_date: '2024-11-01'
+  5.2.0:
+    changes:
+      bugfixes:
+      - vm_device_helper - Fix 'invalid configuration for device' error caused by
+        missing fileoperation parameter. (https://github.com/ansible-collections/community.vmware/pull/2009).
+      - vmware_guest - Fix errors occuring during hardware version upgrade not being
+        reported. (https://github.com/ansible-collections/community.vmware/pull/2010).
+      - vmware_guest - Fix vmware_guest always reporting change when using dvswitch.
+        (https://github.com/ansible-collections/community.vmware/pull/2000).
+      - vmware_guest_tools_upgrade - Account for all possible tools status (https://github.com/ansible-collections/community.vmware/issues/2237).
+      minor_changes:
+      - vmware.py - Add logic for handling the case where the `datacenter` property
+        is not provided.
+      - vmware_guest_info - `datacenter` property is now optional as it only required
+        in cases where the VM is not uniquely identified by `name`.
+    fragments:
+    - 2000-fix-vmware-guest-idempotency-with-dvswitch.yml
+    - 2009-fix-disk-add-failing-with-invalid-configuration-for-device.yml
+    - 2010-fix-vm-hardware-version-upgrade-error-not-being-reported.yml
+    - 2237-vmware_guest_tools_upgrade.yml
+    - 2241-vmware_guest_info-make-datacenter-property-optional.yaml
+    modules:
+    - description: Configure DRS behavior for a specific VM in vSphere
+      name: vmware_drs_override
+      namespace: ''
+    release_date: '2024-11-30'
