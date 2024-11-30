@@ -247,3 +247,17 @@ releases:
     - 2217-deprecate-vmware_cluster_dpm.yml
     - 2218-deprecate-vmware_cluster_drs_recommendations.yml
     release_date: '2024-11-01'
+  4.8.1:
+    changes:
+      bugfixes:
+      - vm_device_helper - Fix 'invalid configuration for device' error caused by
+        missing fileoperation parameter. (https://github.com/ansible-collections/community.vmware/pull/2009).
+      - vmware_guest - Fix errors occuring during hardware version upgrade not being
+        reported. (https://github.com/ansible-collections/community.vmware/pull/2010).
+      - vmware_guest - Fix vmware_guest always reporting change when using dvswitch.
+        (https://github.com/ansible-collections/community.vmware/pull/2000).
+    fragments:
+    - 2000-fix-vmware-guest-idempotency-with-dvswitch.yml
+    - 2009-fix-disk-add-failing-with-invalid-configuration-for-device.yml
+    - 2010-fix-vm-hardware-version-upgrade-error-not-being-reported.yml
+    release_date: '2024-11-30'

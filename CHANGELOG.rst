@@ -6,6 +6,16 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.8.1
+======
+
+Bugfixes
+--------
+
+- vm_device_helper - Fix 'invalid configuration for device' error caused by missing fileoperation parameter. (https://github.com/ansible-collections/community.vmware/pull/2009).
+- vmware_guest - Fix errors occuring during hardware version upgrade not being reported. (https://github.com/ansible-collections/community.vmware/pull/2010).
+- vmware_guest - Fix vmware_guest always reporting change when using dvswitch. (https://github.com/ansible-collections/community.vmware/pull/2000).
+
 v4.8.0
 ======
 
