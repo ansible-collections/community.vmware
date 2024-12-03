@@ -389,6 +389,9 @@ def main():
         ]
     )
 
+    if module.params['folder']:
+        module.params['folder'] = module.params['folder'].rstrip('/')
+
     pyv = PyVmomiHelper(module)
     vm = pyv.get_vm()
     if not vm:

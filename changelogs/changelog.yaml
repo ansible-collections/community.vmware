@@ -103,3 +103,11 @@ releases:
       name: vmware_drs_override
       namespace: ''
     release_date: '2024-11-30'
+  5.3.0:
+    changes:
+      deprecated_features:
+      - vmware_cluster_info - the module has been deprecated and will be removed in
+        community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2260).
+    fragments:
+    - 2260-deprecate-vmware_cluster_info.yml
+    release_date: '2024-12-03'

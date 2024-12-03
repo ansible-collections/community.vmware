@@ -6,6 +6,14 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.3.0
+======
+
+Deprecated Features
+-------------------
+
+- vmware_cluster_info - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2260).
+
 v5.2.0
 ======
 
