@@ -82,7 +82,7 @@
       assert:
         that:
           - "'path' in test_host.value"
-          - "'my_center' in test_host.value.group_names"
+          - "'my_center' in test_host.value.path"
 
     - name: Inventory 'with_nested_properties' option
       include_tasks: build_inventory.yml

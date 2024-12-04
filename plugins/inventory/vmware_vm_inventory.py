@@ -425,7 +425,6 @@ from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
 from ansible.utils.display import Display
-from ansible.module_utils.six import text_type
 from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
     to_nested_dict,
     to_flatten_dict,
@@ -928,26 +927,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         self._add_host_to_composed_groups(self.get_option('groups'), host_properties, host, strict=strict)
         # Create groups based on variable values and add the corresponding hosts to it
         self._add_host_to_keyed_groups(self.get_option('keyed_groups'), host_properties, host, strict=strict)
-
-        with_path = self.get_option('with_path')
-        if with_path:
-            parents = host_properties['path'].split('/')
-            if parents:
-                if isinstance(with_path, text_type):
-                    parents = [with_path] + parents
-
-                c_name = self._sanitize_group_name('/'.join(parents))
-                c_group = self.inventory.add_group(c_name)
-                self.inventory.add_host(host, c_group)
-                parents.pop()
-
-                while len(parents) > 0:
-                    p_name = self._sanitize_group_name('/'.join(parents))
-                    p_group = self.inventory.add_group(p_name)
-
-                    self.inventory.add_child(p_group, c_group)
-                    c_group = p_group
-                    parents.pop()
 
         can_sanitize = self.get_option('with_sanitized_property_name')
 
