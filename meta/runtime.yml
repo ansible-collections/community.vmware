@@ -40,6 +40,7 @@ action_groups:
   - vmware_drs_group
   - vmware_drs_group_info
   - vmware_drs_group_manager
+  - vmware_drs_override
   - vmware_drs_rule_info
   - vmware_dvs_host
   - vmware_dvs_portgroup
@@ -196,6 +197,10 @@ plugin_routing:
       deprecation:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs_recommendations instead.
+    vmware_cluster_info:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.cluster_info instead.
     vmware_cluster_vcls:
       deprecation:
         removal_version: 6.0.0
