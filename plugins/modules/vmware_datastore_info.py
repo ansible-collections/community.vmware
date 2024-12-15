@@ -83,7 +83,7 @@ options:
      required: false
      elements: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -171,10 +171,10 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
     get_all_objs,
     find_cluster_by_name,
     get_parent_datacenter)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -309,7 +309,7 @@ class PyVmomiHelper(PyVmomi):
 
 def main():
     """ Main """
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
         datacenter=dict(type='str', aliases=['datacenter_name']),

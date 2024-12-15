@@ -124,7 +124,7 @@ options:
           - Required when O(backings[].backing_type=file).
         type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 author:
   - Anusha Hegde (@anusha94)
 '''
@@ -213,7 +213,8 @@ serial_port_data:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 try:
     from pyVmomi import vim
@@ -515,7 +516,7 @@ def main():
     """
     Main method
     """
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
         uuid=dict(type='str'),

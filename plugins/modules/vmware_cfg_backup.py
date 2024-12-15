@@ -46,7 +46,7 @@ options:
         type: str
         required: true
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -85,7 +85,8 @@ try:
 except ImportError:
     pass
 
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, get_all_objs, wait_for_task, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, wait_for_task, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.six.moves.urllib.error import HTTPError
@@ -213,7 +214,7 @@ class VMwareConfigurationBackup(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(dest=dict(required=False, type='path'),
                               esxi_hostname=dict(required=False, type='str'),
                               src=dict(required=False, type='path'),

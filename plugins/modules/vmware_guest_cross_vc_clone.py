@@ -117,7 +117,7 @@ options:
     default: 3600
     version_added: '3.5.0'
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 
 author:
@@ -199,12 +199,12 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_folder_by_name,
     find_vm_by_name,
     connect_to_api,
-    vmware_argument_spec,
     gather_vm_facts,
     find_obj,
     find_resource_pool_by_name,
     wait_for_task,
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 try:
     from pyVmomi import vim
 except ImportError:
@@ -344,7 +344,7 @@ def main():
     """
     Main method
     """
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
         uuid=dict(type='str'),

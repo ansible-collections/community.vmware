@@ -62,7 +62,7 @@ options:
      default: false
      type: bool
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 """
 
 EXAMPLES = r"""
@@ -103,8 +103,8 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class PyVmomiHelper(PyVmomi):
@@ -134,7 +134,7 @@ class PyVmomiHelper(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type="str"),
         uuid=dict(type="str"),

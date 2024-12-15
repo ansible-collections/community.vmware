@@ -24,7 +24,7 @@ options:
         required: false
         type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -60,8 +60,9 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    HAS_PYVMOMI, connect_to_api, get_all_objs, vmware_argument_spec,
+    HAS_PYVMOMI, connect_to_api, get_all_objs,
     wait_for_task)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 def create_vsan_cluster(host_system, new_cluster_uuid):
@@ -89,7 +90,7 @@ def create_vsan_cluster(host_system, new_cluster_uuid):
 
 def main():
 
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(cluster_uuid=dict(required=False, type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)

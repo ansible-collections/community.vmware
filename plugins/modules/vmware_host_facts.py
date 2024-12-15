@@ -67,7 +67,7 @@ options:
     elements: str
     required: false
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -231,10 +231,10 @@ from ansible.module_utils._text import to_native
 from ansible.module_utils.common.text.formatters import bytes_to_human
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
     find_obj,
     ansible_date_time_facts
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim, vmodl
@@ -417,7 +417,7 @@ class VMwareHostFactManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         esxi_hostname=dict(type='str', required=False),
         show_tag=dict(type='bool', default=False),

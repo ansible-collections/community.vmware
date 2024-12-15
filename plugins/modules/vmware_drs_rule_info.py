@@ -32,7 +32,7 @@ options:
     - This is required parameter if O(cluster_name) parameter is not provided.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -107,7 +107,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, find_datacenter_by_name, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_datacenter_by_name, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VmwareDrsInfoManager(PyVmomi):
@@ -232,7 +233,7 @@ class VmwareDrsInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str', required=False),
         cluster_name=dict(type='str', required=False),

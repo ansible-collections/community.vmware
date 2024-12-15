@@ -799,7 +799,7 @@ options:
     choices: [ 'thin', 'thick', 'eagerzeroedthick' ]
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -1114,7 +1114,6 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     get_all_objs,
     compile_folder_path_for_object,
     serialize_spec,
-    vmware_argument_spec,
     set_vm_power_state,
     PyVmomi,
     find_dvs_by_name,
@@ -1122,6 +1121,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_vm_ip,
     quote_obj_name,
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
@@ -3403,7 +3403,7 @@ class PyVmomiHelper(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         state=dict(type='str', default='present',
                    choices=['absent', 'poweredoff', 'powered-off',

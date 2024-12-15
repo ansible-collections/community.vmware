@@ -72,7 +72,7 @@ options:
           type: bool
       type: dict
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -134,8 +134,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     TaskError,
     find_datacenter_by_name,
-    vmware_argument_spec,
     wait_for_task)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -249,7 +249,7 @@ class VMwareCluster(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         cluster_name=dict(type='str', required=True),
         datacenter=dict(type='str', required=True, aliases=['datacenter_name']),

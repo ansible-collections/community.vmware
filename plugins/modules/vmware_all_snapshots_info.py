@@ -44,7 +44,7 @@ options:
     choices: ['exact', 'includes']
     default: exact
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -125,9 +125,9 @@ vmware_all_snapshots_info:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
     list_snapshots_recursively,
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim
@@ -185,7 +185,7 @@ class VMwareSnapshotInfo(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         datacenter=dict(required=True, type="str"),
         filters=dict(required=False, type="dict", default={}),

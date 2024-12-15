@@ -153,7 +153,7 @@ options:
     aliases:
       - nsx_overlay
 extends_documentation_fragment:
-  - community.vmware.vmware.documentation
+  - community.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -292,7 +292,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_text
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VmwareHostTcpipStack(PyVmomi):
@@ -573,7 +574,7 @@ class VmwareHostTcpipStack(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         esxi_hostname=dict(type='str', required=True),
         default=dict(type='dict',

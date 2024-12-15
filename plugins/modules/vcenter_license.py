@@ -121,7 +121,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_hostsystem_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_hostsystem_by_name
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VcenterLicenseMgr(PyVmomi):
@@ -145,7 +146,7 @@ class VcenterLicenseMgr(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         labels=dict(type='dict', default=dict(source='ansible')),
         license=dict(type='str', required=True),

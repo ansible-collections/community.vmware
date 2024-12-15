@@ -21,7 +21,7 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -66,7 +66,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -142,7 +143,7 @@ class VMwareUserInfoManager(PyVmomi):
 
 def main():
     """Main"""
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
 

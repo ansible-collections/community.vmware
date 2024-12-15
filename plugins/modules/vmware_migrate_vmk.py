@@ -55,7 +55,7 @@ options:
             - Will be ignored when migrating from VSS to VDS
         type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -81,8 +81,9 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    vmware_argument_spec, find_dvs_by_name, find_hostsystem_by_name,
+    find_dvs_by_name, find_hostsystem_by_name,
     connect_to_api, find_dvspg_by_name)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VMwareMigrateVmk(object):
@@ -207,7 +208,7 @@ class VMwareMigrateVmk(object):
 
 def main():
 
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(esxi_hostname=dict(required=True, type='str'),
                               device=dict(required=True, type='str'),
                               current_switch_name=dict(required=True, type='str'),

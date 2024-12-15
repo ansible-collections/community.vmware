@@ -58,7 +58,7 @@ notes:
   - "This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer.
     It can be the normal remote target or you can change it either by using C(transport: local) or using C(delegate_to)."
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -121,7 +121,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves.urllib.parse import urlencode, quote
 from ansible.module_utils._text import to_native
 from ansible.module_utils.urls import open_url
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 def vmware_path(datastore, datacenter, path, diskformat):
@@ -142,7 +142,7 @@ def vmware_path(datastore, datacenter, path, diskformat):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         src=dict(required=True, aliases=['name']),
         datacenter=dict(required=False),

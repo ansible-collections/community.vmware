@@ -43,7 +43,7 @@ options:
         type: int
         required: false
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -68,7 +68,7 @@ EXAMPLES = r'''
   delegate_to: localhost
 '''
 
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
@@ -126,7 +126,7 @@ class VcRootPasswordExpiration(VmwareRestClient):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dict(
             state=dict(default='present',

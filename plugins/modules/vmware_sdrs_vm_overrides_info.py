@@ -25,7 +25,7 @@ options:
       required: true
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 """
 
@@ -62,8 +62,8 @@ result:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
 )
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VMwareDatastoreClusterManager(PyVmomi):
@@ -98,7 +98,7 @@ class VMwareDatastoreClusterManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dict(
             datastore_cluster_name=dict(type="str", required=True),

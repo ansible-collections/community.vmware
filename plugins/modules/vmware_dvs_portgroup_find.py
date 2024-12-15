@@ -40,7 +40,7 @@ options:
     type: bool
     default: false
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -85,8 +85,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    vmware_argument_spec,
     PyVmomi)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils.six.moves.urllib.parse import unquote
 
 
@@ -181,7 +181,7 @@ class DVSPortgroupFindManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dvswitch=dict(type='str', required=False),
         vlanid=dict(type='int', required=False),

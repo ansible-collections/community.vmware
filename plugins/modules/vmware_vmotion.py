@@ -84,7 +84,7 @@ options:
       default: 3600
       version_added: '3.4.0'
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -177,7 +177,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_resource_pool_by_name,
     find_datacenter_by_name,
     find_cluster_by_name, get_all_objs,
-    vmware_argument_spec, wait_for_task, TaskError)
+    wait_for_task, TaskError)
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 
 
 class VmotionManager(PyVmomi):
@@ -523,7 +524,7 @@ class VmotionManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dict(
             vm_name=dict(aliases=['vm']),

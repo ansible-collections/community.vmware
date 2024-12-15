@@ -58,7 +58,7 @@ options:
         required: false
         type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -100,7 +100,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -172,7 +173,7 @@ class VmwareMaintenanceMgr(PyVmomi):
 
 
 def main():
-    spec = vmware_argument_spec()
+    spec = base_argument_spec()
     spec.update(dict(esxi_hostname=dict(type='str', required=True),
                      vsan=dict(type='str',
                                choices=['ensureObjectAccessibility',

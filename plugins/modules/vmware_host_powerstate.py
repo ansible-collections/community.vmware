@@ -55,7 +55,7 @@ options:
     default: 600
     type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- community.vmware.base_options
 
 '''
 
@@ -105,7 +105,8 @@ result:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, wait_for_task, TaskError
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task, TaskError
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -193,7 +194,7 @@ class VmwareHostPowerManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         state=dict(type='str', default='shutdown-host',
                    choices=['power-down-to-standby', 'power-up-from-standby', 'shutdown-host', 'reboot-host']),
