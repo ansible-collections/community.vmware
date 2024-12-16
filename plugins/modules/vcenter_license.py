@@ -59,7 +59,7 @@ notes:
 - If O(esxi_hostname) is not specified, then will just register the O(license) key to
   vCenter inventory without assigning it to an ESXi host.
 extends_documentation_fragment:
-- community.vmware.vmware.vcenter_documentation
+- community.vmware.base_options
 
 '''
 
