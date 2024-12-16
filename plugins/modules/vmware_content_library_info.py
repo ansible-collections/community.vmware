@@ -29,7 +29,8 @@ options:
       type: str
       required: false
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 
 '''
 
@@ -85,6 +86,7 @@ content_libs:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 
 
 class VmwareContentLibInfo(VmwareRestClient):
@@ -149,7 +151,7 @@ class VmwareContentLibInfo(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         library_id=dict(type='str', required=False),
     )

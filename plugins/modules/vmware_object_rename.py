@@ -54,7 +54,8 @@ options:
       aliases: ['object_new_name']
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 '''
 
 EXAMPLES = r'''
@@ -124,6 +125,7 @@ rename_status:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task
 try:
     from pyVmomi import vim
@@ -307,7 +309,7 @@ class VmwareObjectRename(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         object_name=dict(),
         object_moid=dict(),

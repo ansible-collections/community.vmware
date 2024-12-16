@@ -87,7 +87,9 @@ options:
       type: str
       default: 'thin'
       choices: [ thin, thick, eagerZeroedThick, eagerzeroedthick ]
-extends_documentation_fragment: community.vmware.vmware_rest_client.documentation
+extends_documentation_fragment:
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 '''
 
 EXAMPLES = r'''
@@ -133,6 +135,7 @@ vm_deploy_info:
 from ansible.module_utils.basic import AnsibleModule, env_fallback
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 
 HAS_VAUTOMATION = False
@@ -337,7 +340,7 @@ class VmwareContentDeployOvfTemplate(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         log_level=dict(
             type='str',

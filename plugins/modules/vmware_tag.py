@@ -65,7 +65,8 @@ options:
       choices: [ 'present', 'absent' ]
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 
 '''
 
@@ -114,6 +115,7 @@ tag_status:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 try:
     from com.vmware.vapi.std.errors_client import Error
 except ImportError:
@@ -239,7 +241,7 @@ class VmwareTag(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         tag_name=dict(type='str', aliases=['tag', 'name'], required=True),
         tag_description=dict(type='str', aliases=['description'], default='', required=False),

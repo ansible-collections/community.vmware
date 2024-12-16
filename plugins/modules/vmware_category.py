@@ -87,7 +87,8 @@ options:
       type: list
       elements: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 
 '''
 
@@ -157,6 +158,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.compat.version import LooseVersion
 from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 
 try:
     from pyVmomi.VmomiSupport import XMLNS_VMODL_BASE
@@ -354,7 +356,7 @@ class VmwareCategory(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         category_name=dict(type='str', required=True),
         category_description=dict(type='str', default='', required=False),

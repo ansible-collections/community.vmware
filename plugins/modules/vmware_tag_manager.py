@@ -71,7 +71,8 @@ options:
       required: false
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- community.vmware.base_options
+- community.vmware.additional_rest_options
 
 '''
 
@@ -187,6 +188,7 @@ tag_status:
 '''
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils.vmware_argument_spec import rest_compatible_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (PyVmomi, find_dvs_by_name, find_dvspg_by_name)
 try:
     from com.vmware.vapi.std_client import DynamicID
@@ -394,7 +396,7 @@ class VmwareTagManager(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         tag_names=dict(type='list', required=True, elements='raw'),
         state=dict(type='str', choices=['absent', 'add', 'present', 'remove', 'set'], default='add'),
