@@ -753,7 +753,7 @@ options:
             description:
             - List of commands to run at first user logon.
             - Specific to Windows customization.
-	domain_ou:
+        domain_ou:
             type: str
             description:
             - The full LDAP path name of the OU to which the computer belongs.
@@ -2365,8 +2365,8 @@ class PyVmomiHelper(PyVmomi):
                 ident.identification.domainAdminPassword.value = self.params['customization']['domainadminpassword']
                 ident.identification.domainAdminPassword.plainText = True
 
-		# Add new spec param for vSphere 8.0U2+
-		ident.identification.domainOU = self.params['customization']['domain_ou']
+                # Add new spec param for vSphere 8.0U2
+                ident.identification.domainOU = self.params['customization']['domain_ou']
 
             elif self.params['customization']['joinworkgroup'] is not None:
                 ident.identification.joinWorkgroup = self.params['customization']['joinworkgroup']
