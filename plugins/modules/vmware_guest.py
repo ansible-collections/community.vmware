@@ -3530,6 +3530,7 @@ def main():
                 domain=dict(type='str'),
                 domainadmin=dict(type='str'),
                 domainadminpassword=dict(type='str', no_log=True),
+                domain_ou=dict(type='str'),
                 existing_vm=dict(type='bool'),
                 fullname=dict(type='str'),
                 hostname=dict(type='str'),
