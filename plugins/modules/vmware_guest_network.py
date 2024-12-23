@@ -75,7 +75,7 @@ options:
   network_name:
     description:
       - Name of network in vSphere.
-      - Work faster then o(vlan_id) for big infrastructure with many networks. 
+      - Work faster then o(vlan_id) for big infrastructure with many networks.
     type: str
   device_type:
     default: vmxnet3
