@@ -336,6 +336,8 @@ class PyVmomiHelper(PyVmomi):
                 if isinstance(network, vim.dvs.DistributedVirtualPortgroup):
                     dvs = network.config.distributedVirtualSwitch
                     if (switch_name and dvs.config.name == switch_name) or not switch_name:
+                        if network.config.name == network_name:
+                            return network
                         if hasattr(network.config.defaultPortConfig.vlan, 'vlanId') and \
                            network.config.defaultPortConfig.vlan.vlanId == vlan_id:
                             return network
@@ -343,6 +345,8 @@ class PyVmomiHelper(PyVmomi):
                            network.config.defaultPortConfig.vlan.pvlanId == vlan_id:
                             return network
                 elif isinstance(network, vim.Network):
+                    if network_name and network_name == network.name:
+                        return network
                     if vlan_id:
                         for k in pg_lookup.keys():
                             if vlan_id == pg_lookup[k]['vlan_id']:
