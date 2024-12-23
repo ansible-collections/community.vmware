@@ -321,7 +321,7 @@ class PyVmomiHelper(PyVmomi):
             pg_lookup[pg.spec.name] = {'switch': pg.spec.vswitchName, 'vlan_id': pg.spec.vlanId}
 
         if network_name:
-            networks = self.find_network_by_name(network_name) 
+            networks = self.find_network_by_name(network_name)
             for network in networks:
                 if network in compute_resource.network:
                     dvs = network.config.distributedVirtualSwitch
