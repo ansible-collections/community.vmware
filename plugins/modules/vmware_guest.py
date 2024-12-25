@@ -1940,7 +1940,12 @@ class PyVmomiHelper(PyVmomi):
                         nic.device.deviceInfo.summary = network_name
                         nic_change_detected = True
                     else:
-                        pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
+                        pgs = self.find_network_by_name(network_name)
+                        if len(pgs) == 1:
+                            pg = pgs[0]
+                        else:
+                            pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
+
                         if pg is None or nic.device.backing.port.portgroupKey != pg.key:
                             nic.device.deviceInfo.summary = network_name
                             nic_change_detected = True
