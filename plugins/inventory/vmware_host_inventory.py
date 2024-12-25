@@ -13,7 +13,7 @@ DOCUMENTATION = r"""
     deprecated:
       removed_in: 7.0.0
       why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
-      alternative: Use P(vmware.vmware.esxi_hosts) instead.
+      alternative: Use P(vmware.vmware.esxi_hosts#inventory) instead.
     short_description: VMware ESXi hostsystem inventory source
     author:
       - Abhijeet Kasurde (@Akasurde)
