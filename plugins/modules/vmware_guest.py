@@ -526,13 +526,13 @@ options:
             type: str
             description:
             - Name of the portgroup or distributed virtual portgroup for this interface.
-            - Required per entry.
+            - Optional per entry.
             - When specifying distributed virtual portgroup make sure given O(esxi_hostname) or O(cluster) is associated with it.
         vlan:
             type: int
             description:
             - VLAN number for this interface.
-            - Required per entry.
+            - Optional per entry.
         device_type:
             type: str
             description:
