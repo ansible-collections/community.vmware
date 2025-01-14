@@ -35,6 +35,12 @@ options:
         type: list
         default: []
         elements: dict
+        suboptions:
+            primary_pvlan_id:
+                description:
+                    - The primary VLAN ID.
+                    - The VLAN IDs of 0 and 4095 are reserved and cannot be used in this option.
+                type: int
     secondary_pvlans:
         description:
             - A list of VLAN IDs that should be configured as Secondary PVLANs.
@@ -46,9 +52,26 @@ options:
         type: list
         default: []
         elements: dict
+        suboptions:
+            primary_pvlan_id:
+                description:
+                    - The primary VLAN ID.
+                    - The VLAN IDs of 0 and 4095 are reserved and cannot be used in this option.
+                type: int
+            secondary_pvlan_id:
+                description:
+                    - The type of PVLAN.
+                type: int
+            pvlan_type:
+                description:
+                    - The secondary VLAN ID.
+                    - The VLAN IDs of 0 and 4095 are reserved and cannot be used in this option.
+                choices:
+                    - community
+                    - isolated
+                type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
-
 '''
 
 EXAMPLES = r'''
@@ -509,8 +532,16 @@ def main():
     argument_spec.update(
         dict(
             switch=dict(required=True, aliases=['dvswitch']),
-            primary_pvlans=dict(type='list', default=list(), elements='dict'),
-            secondary_pvlans=dict(type='list', default=list(), elements='dict'),
+            primary_pvlans=dict(type='list', default=list(), elements='dict',
+                                options=dict(
+                                    primary_pvlan_id=dict(type='int')
+            )),
+            secondary_pvlans=dict(type='list', default=list(), elements='dict',
+                                  options=dict(
+                                      primary_pvlan_id=dict(type='int'),
+                                      secondary_pvlan_id=dict(type='int'),
+                                      pvlan_type=dict(type='str', choices=['community', 'isolated'])
+            )),
         )
     )
 
