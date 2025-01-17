@@ -532,7 +532,7 @@ options:
             type: int
             description:
             - VLAN number for this interface.
-            - Optional per entry.
+            - This is required if C(name) isn't defined.
         device_type:
             type: str
             description:
