@@ -526,7 +526,7 @@ options:
             type: str
             description:
             - Name of the portgroup or distributed virtual portgroup for this interface.
-            - Optional per entry.
+            - This is required if C(vlan) isn't defined.
             - When specifying distributed virtual portgroup make sure given O(esxi_hostname) or O(cluster) is associated with it.
         vlan:
             type: int
