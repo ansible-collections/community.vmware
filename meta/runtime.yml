@@ -196,6 +196,10 @@ plugin_routing:
       deprecation:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs_recommendations instead.
+    vmware_cluster_info:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.cluster_info instead.
     vmware_cluster_vcls:
       deprecation:
         removal_version: 6.0.0
