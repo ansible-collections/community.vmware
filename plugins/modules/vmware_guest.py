@@ -1132,7 +1132,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper 
 from ansible_collections.community.vmware.plugins.module_utils.vmware_spbm import SPBM
 
 
-class PyVmomiCache(object):
+class PyVmomiCache(PyVmomi):
     """ This class caches references to objects which are requested multiples times but not modified """
 
     def __init__(self, content, dc_name=None):
@@ -1172,13 +1172,17 @@ class PyVmomiCache(object):
 
         return objects
 
-    def get_network(self, network):
-        network = quote_obj_name(network)
+    def get_network(self, network_name):
+        network_name = quote_obj_name(network_name)
 
-        if network not in self.networks:
-            self.networks[network] = self.find_obj(self.content, [vim.Network], network)
+        if network_name not in self.networks:
+            networks = self.find_network_by_name(network_name)
+            if len(networks) == 1:
+                self.networks[network_name] = networks[0]
+            else:
+                self.networks[network_name] = self.find_obj(self.content, [vim.Network], network_name)
 
-        return self.networks[network]
+        return self.networks[network_name]
 
     def get_cluster(self, cluster):
         if cluster not in self.clusters:
@@ -1946,7 +1950,11 @@ class PyVmomiHelper(PyVmomi):
                         nic.device.deviceInfo.summary = network_name
                         nic_change_detected = True
                     else:
-                        pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
+                        pgs = self.find_network_by_name(network_name)
+                        if len(pgs) == 1:
+                            pg = pgs[0]
+                        else:
+                            pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
                         if pg is None or nic.device.backing.port.portgroupKey != pg.key:
                             nic.device.deviceInfo.summary = network_name
                             nic_change_detected = True
@@ -1984,7 +1992,11 @@ class PyVmomiHelper(PyVmomi):
                     if pg_obj is None:
                         self.module.fail_json(msg="Unable to find distributed port group %s" % network_name)
                 else:
-                    pg_obj = self.cache.find_obj(self.content, [vim.dvs.DistributedVirtualPortgroup], network_name)
+                    networks = self.find_network_by_name(network_name)
+                    if len(networks) == 1:
+                        pg_obj = networks[0]
+                    else:
+                        pg_obj = self.cache.find_obj(self.content, [vim.dvs.DistributedVirtualPortgroup], network_name)
 
                 # TODO: (akasurde) There is no way to find association between resource pool and distributed virtual portgroup
                 # For now, check if we are able to find distributed virtual switch
