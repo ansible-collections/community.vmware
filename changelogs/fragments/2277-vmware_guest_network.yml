@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_guest_network - Speedup network search
+    (https://github.com/ansible-collections/community.vmware/pull/2277).
