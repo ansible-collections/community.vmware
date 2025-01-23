@@ -261,3 +261,11 @@ releases:
     - 2009-fix-disk-add-failing-with-invalid-configuration-for-device.yml
     - 2010-fix-vm-hardware-version-upgrade-error-not-being-reported.yml
     release_date: '2024-11-30'
+  4.8.2:
+    changes:
+      deprecated_features:
+      - vmware_cluster_info - the module has been deprecated and will be removed in
+        community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2260).
+    fragments:
+    - 2260-deprecate-vmware_cluster_info.yml
+    release_date: '2025-01-23'
