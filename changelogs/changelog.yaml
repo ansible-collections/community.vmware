@@ -103,3 +103,27 @@ releases:
       name: vmware_drs_override
       namespace: ''
     release_date: '2024-11-30'
+  5.3.0:
+    changes:
+      bugfixes:
+      - vmware_guest - setting vApp properties on virtual machines without vApp options
+        raised an AttributeError. Fix now gracefully handles a `None` value for vApp
+        options when retrieving current vApp properties (https://github.com/ansible-collections/community.vmware/pull/2220).
+      deprecated_features:
+      - vmware_cluster_info - the module has been deprecated and will be removed in
+        community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2260).
+      major_changes:
+      - vmware_dvswitch_pvlans - The VLAN ID type has been updated to be handled as
+        an integer (https://github.com/ansible-collections/community.vmware/pull/2267).
+      minor_changes:
+      - vmware_guest - Add new cutomization spec param `domainOU`. (https://github.com/ansible-collections/community.vmware/issues/2275)
+      - vmware_guest - Speedup network search (https://github.com/ansible-collections/community.vmware/pull/2278).
+      - vmware_guest_network - Speedup network search (https://github.com/ansible-collections/community.vmware/pull/2277).
+    fragments:
+    - 2216-vmware_dvswitch_pvlans.yml
+    - 2220-vmware_guest.yml
+    - 2260-deprecate-vmware_cluster_info.yml
+    - 2275-vm-ou-customization.yml
+    - 2277-vmware_guest_network.yml
+    - 2278-vmware_guest.yml
+    release_date: '2025-01-23'

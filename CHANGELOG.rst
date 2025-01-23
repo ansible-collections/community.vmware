@@ -6,6 +6,31 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.3.0
+======
+
+Major Changes
+-------------
+
+- vmware_dvswitch_pvlans - The VLAN ID type has been updated to be handled as an integer (https://github.com/ansible-collections/community.vmware/pull/2267).
+
+Minor Changes
+-------------
+
+- vmware_guest - Add new cutomization spec param `domainOU`. (https://github.com/ansible-collections/community.vmware/issues/2275)
+- vmware_guest - Speedup network search (https://github.com/ansible-collections/community.vmware/pull/2278).
+- vmware_guest_network - Speedup network search (https://github.com/ansible-collections/community.vmware/pull/2277).
+
+Deprecated Features
+-------------------
+
+- vmware_cluster_info - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2260).
+
+Bugfixes
+--------
+
+- vmware_guest - setting vApp properties on virtual machines without vApp options raised an AttributeError. Fix now gracefully handles a `None` value for vApp options when retrieving current vApp properties (https://github.com/ansible-collections/community.vmware/pull/2220).
+
 v5.2.0
 ======
 
