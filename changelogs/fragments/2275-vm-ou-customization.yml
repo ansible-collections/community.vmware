@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_guest - Add new cutomization spec param `domainOU`.
-    (https://github.com/ansible-collections/community.vmware/issues/2275)

@@ -1,3 +1,0 @@
-major_changes:
-  - vmware_dvswitch_pvlans - The VLAN ID type has been updated to be handled as an integer
-    (https://github.com/ansible-collections/community.vmware/pull/2267).
