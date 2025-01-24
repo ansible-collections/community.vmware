@@ -180,6 +180,15 @@ action_groups:
   - vsphere_file
 
 plugin_routing:
+  inventory:
+    vmware_host_inventory:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.esxi_hosts instead.
+    vmware_vm_inventory:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.vms instead.
   modules:
     vmware_cluster:
       deprecation:
