@@ -1,12 +1,12 @@
 ---
 - name: Enter maintenance mode
-  vmware_maintenancemode:
+  vmware.vmware.esxi_maintenance_mode:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    esxi_hostname: "{{ item }}"
-    state: present
+    esxi_host_name: "{{ item }}"
+    enable_maintenance_mode: true
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true
 
@@ -24,12 +24,12 @@
   ignore_errors: true
 
 - name: Exit maintenance mode
-  vmware_maintenancemode:
+  vmware.vmware.esxi_maintenance_mode:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    esxi_hostname: "{{ item }}"
-    state: absent
+    esxi_host_name: "{{ item }}"
+    enable_maintenance_mode: false
   with_items: "{{ esxi_hosts }}"
   ignore_errors: true

@@ -20,8 +20,12 @@
   with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
-  vmware_maintenancemode:
-    esxi_hostname: '{{ item }}'
+  vmware.vmware.esxi_maintenance_mode:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_host_name: '{{ item }}'
     state: absent
   with_items: '{{ esxi_hosts }}'
 
@@ -91,9 +95,13 @@
   with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
-  vmware_maintenancemode:
-    esxi_hostname: '{{ item }}'
-    state: absent
+  vmware.vmware.esxi_maintenance_mode:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    esxi_host_name: '{{ item }}'
+    enable_maintenance_mode: false
   with_items: '{{ esxi_hosts }}'
 
 - name: Perform vMotion of virtual machine to resource_pool
