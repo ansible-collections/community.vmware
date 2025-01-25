@@ -13,9 +13,13 @@
   with_items: "{{ esxi_hosts }}"
 
 - name: Disable the Maintenance Mode
-  vmware_maintenancemode:
-    esxi_hostname: '{{ item }}'
-    state: absent
+  vmware.vmware.esxi_maintenance_mode:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    esxi_host_name: '{{ item }}'
+    enable_maintenance_mode: false
   with_items: "{{ esxi_hosts }}"
 
 # A bit of explanation here. Our test VMs will produce some ARP traffic,
