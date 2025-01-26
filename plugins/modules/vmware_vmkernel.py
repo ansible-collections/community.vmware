@@ -65,22 +65,35 @@ options:
         ip_address:
             type: str
             description:
-            - Static IP address.
+            - Static IPv4 address.
             - Required if O(network.type=static).
         subnet_mask:
             type: str
             description:
-            - Static netmask required.
+            - Static IPv4 netmask.
             - Required if O(network.type=static).
         default_gateway:
             type: str
-            description: Default gateway (Override default gateway for this adapter).
+            description: Default IPv4 gateway (Override default gateway for this adapter).
         tcpip_stack:
             type: str
             description:
             - The TCP/IP stack for the VMKernel interface.
             choices: [ 'default', 'provisioning', 'vmotion', 'vxlan' ]
             default: 'default'
+        ipv6_address:
+            type: str
+            description:
+            - Static IPv6 address.
+            - Required if O(network.ipv6_subnet_mask) is set.
+        ipv6_subnet_mask:
+            type: str
+            description:
+            - Static IPv6 netmask.
+            - Required if O(network.ipv6_address) is set.
+        ipv6_default_gateway:
+            type: str
+            description: Default IPv6 gateway (Override default gateway for this adapter).
       type: dict
       default: {
           type: 'static',
@@ -323,14 +336,6 @@ class PyVmomiHelper(PyVmomi):
             self.module.fail_json(
                 msg="Failed to get details of ESXi server. Please specify esxi_hostname."
             )
-
-        if self.network_type == 'static':
-            if self.module.params['state'] == 'absent':
-                pass
-            elif not self.ip_address:
-                module.fail_json(msg="ip_address is a required parameter when network type is set to 'static'")
-            elif not self.subnet_mask:
-                module.fail_json(msg="subnet_mask is a required parameter when network type is set to 'static'")
 
         # find Port Group
         if self.vswitch_name:
@@ -1113,12 +1118,21 @@ def main():
                 ip_address=dict(type='str'),
                 subnet_mask=dict(type='str'),
                 default_gateway=dict(type='str'),
+                ipv6_address=dict(type='str'),
+                ipv6_subnet_mask=dict(type='str'),
+                ipv6_default_gateway=dict(type='str'),
                 tcpip_stack=dict(type='str', default='default', choices=['default', 'provisioning', 'vmotion', 'vxlan']),
             ),
             default=dict(
                 type='static',
                 tcpip_stack='default',
             ),
+            required_if=[
+                ('type', 'static', ('ip_address', 'subnet_mask'))
+            ],
+            required_together=[
+                ['ipv6_address', 'ipv6_subnet_mask']
+            ],
         ),
         state=dict(
             type='str',
