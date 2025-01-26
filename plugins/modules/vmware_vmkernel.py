@@ -65,16 +65,16 @@ options:
         ip_address:
             type: str
             description:
-            - Static IP address.
+            - Static IPv4 address.
             - Required if O(network.type=static).
         subnet_mask:
             type: str
             description:
-            - Static netmask required.
+            - Static IPv4 netmask.
             - Required if O(network.type=static).
         default_gateway:
             type: str
-            description: Default gateway (Override default gateway for this adapter).
+            description: Default IPv4 gateway (Override default gateway for this adapter).
         tcpip_stack:
             type: str
             description:
@@ -323,14 +323,6 @@ class PyVmomiHelper(PyVmomi):
             self.module.fail_json(
                 msg="Failed to get details of ESXi server. Please specify esxi_hostname."
             )
-
-        if self.network_type == 'static':
-            if self.module.params['state'] == 'absent':
-                pass
-            elif not self.ip_address:
-                module.fail_json(msg="ip_address is a required parameter when network type is set to 'static'")
-            elif not self.subnet_mask:
-                module.fail_json(msg="subnet_mask is a required parameter when network type is set to 'static'")
 
         # find Port Group
         if self.vswitch_name:
@@ -1119,6 +1111,9 @@ def main():
                 type='static',
                 tcpip_stack='default',
             ),
+            required_if=[
+                ('type', 'static', ('ip_address', 'subnet_mask'))
+            ],
         ),
         state=dict(
             type='str',
