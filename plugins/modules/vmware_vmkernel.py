@@ -65,16 +65,16 @@ options:
         ip_address:
             type: str
             description:
-            - Static IP address.
-            - Required if O(network.type=static).
+            - Static IPv4 address.
+            - Required if O(network.type=static) and O(state=present).
         subnet_mask:
             type: str
             description:
-            - Static netmask required.
-            - Required if O(network.type=static).
+            - Static IPv4 netmask.
+            - Required if O(network.type=static) and O(state=present).
         default_gateway:
             type: str
-            description: Default gateway (Override default gateway for this adapter).
+            description: Default IPv4 gateway (Override default gateway for this adapter).
         tcpip_stack:
             type: str
             description:
