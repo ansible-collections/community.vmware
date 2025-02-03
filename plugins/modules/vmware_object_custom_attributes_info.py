@@ -135,7 +135,8 @@ class VmwareCustomAttributesInfo(PyVmomi):
         result = {'changed': False}
 
         if self.object_name:
-            obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
+            #including ServiceInstance (self.si) so a direct search code path using the moid is used
+            obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name, si=self.si)
         elif self.moid:
             obj = self.find_obj_by_moid(self.object_type, self.moid)
         if not obj:
