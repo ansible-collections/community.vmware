@@ -174,20 +174,145 @@ def wait_for_vm_ip(content, vm, timeout=300):
     return facts
 
 
-def find_obj(content, vimtype, name, first=True, folder=None):
-    container = content.viewManager.CreateContainerView(folder or content.rootFolder, recursive=True, type=vimtype)
-    # Get all objects matching type (and name if given)
-    obj_list = [obj for obj in container.view if not name or to_text(unquote(obj.name)) == to_text(unquote(name))]
-    container.Destroy()
+def find_obj(content, vimtype, name, first=True, folder=None, si=None):
+    """
+    Optional 'si' argument for faster MOID-based lookups.
+    If 'si' is None, fallback to the old container iteration approach.
+    """
+    # 1) If name is missing, return per the original logic
+    if not name:
+        return None if first else []
 
-    # Return first match or None
-    if first:
-        if obj_list:
-            return obj_list[0]
-        return None
+    # 2) Single type assumption
+    object_class = vimtype[0]
 
-    # Return all matching objects or empty list
-    return obj_list
+    # 3) Convert the name
+    target_name = to_text(unquote(name))
+
+    stub = getattr(si, '_stub', None)
+  
+    # 4) If we have an 'si', we can attempt the MOID-based approach
+    if si and getattr(si, '_stub', None):
+        # Use the fast approach
+        logging.debug("Using _find_obj_fast_by_moid")
+        return _find_obj_fast_by_moid(
+            content=content,
+            object_class=object_class,
+            target_name=target_name,
+            first=first,
+            folder=folder,
+            si=si
+        )
+    else:
+        # Fallback to the old approach if si is None or has no _stub
+        logging.debug("Using _find_obj_naive")
+        return _find_obj_naive(
+            content=content,
+            object_class=object_class,
+            target_name=target_name,
+            first=first,
+            folder=folder
+        )
+
+
+def _find_obj_fast_by_moid(content, object_class, target_name, first, folder, si):
+    """
+    Fast approach: Use the Property Collector to filter by 'name' only, 
+    then build the object via the MOID and the ServiceInstance stub.
+    Requieres ServiceInstance (self.si)
+    """
+    container_view = content.viewManager.CreateContainerView(
+        folder or content.rootFolder,
+        [object_class],
+        True
+    )
+    pc = content.propertyCollector
+    stub = si._stub
+
+    # Build property specs
+    prop_spec = vim.PropertyCollector.PropertySpec(
+        type=object_class,
+        pathSet=["name"],
+        all=False
+    )
+    obj_spec = vim.PropertyCollector.ObjectSpec(
+        obj=container_view,
+        skip=True,
+        selectSet=[vim.PropertyCollector.TraversalSpec(
+            type=vim.view.ContainerView,  # Must be ContainerView
+            path="view",
+            skip=False
+        )]
+    )
+    filter_spec = vim.PropertyCollector.FilterSpec(
+        propSet=[prop_spec],
+        objectSet=[obj_spec],
+        reportMissingObjectsInResults=False
+    )
+
+    retrieve_result = pc.RetrieveContents([filter_spec])
+    container_view.Destroy()
+
+    # Collect the MORs with matching names
+    matching_mors = []
+    for obj_content in retrieve_result:
+        mor = obj_content.obj
+        for dp in obj_content.propSet:
+            if dp.name == "name" and dp.val == target_name:
+                matching_mors.append(mor)
+                if first:
+                    break
+        if first and matching_mors:
+            break
+
+    # If no matches
+    if not matching_mors:
+        return None if first else []
+
+    # Construct the actual objects by MOID
+    results = []
+    for mor in matching_mors:
+        moid = mor._moId
+        obj_ref = object_class(moid, stub)
+        try:
+            # Force a property fetch to confirm validity
+            _ = obj_ref.name
+        except vmodl.fault.ManagedObjectNotFound:
+            obj_ref = None
+
+        if obj_ref:
+            results.append(obj_ref)
+            if first:
+                return results[0]
+
+    return results
+
+
+def _find_obj_naive(content, object_class, target_name, first, folder):
+    """
+    Improved but slow original approach: create a container view and 
+    iterate over objects, matching their names directly.
+    Break as soon as we find a match if first=True saves a random amount of time depending on the position of the VM on the list but 
+    avoids always looping all elemets
+    """
+    container_view = content.viewManager.CreateContainerView(
+        folder or content.rootFolder,
+        [object_class],
+        True
+    )
+    matched_objs = []
+    for obj in container_view.view:
+        obj_name = to_text(unquote(obj.name))
+        if obj_name == target_name:
+            matched_objs.append(obj)
+            if first:
+                break
+    container_view.Destroy()
+
+    if not matched_objs:
+        return None if first else []
+
+    return matched_objs[0] if first else matched_objs
 
 
 def find_dvspg_by_name(dv_switch, portgroup_name):
