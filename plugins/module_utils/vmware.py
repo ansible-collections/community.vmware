@@ -194,7 +194,6 @@ def find_obj(content, vimtype, name, first=True, folder=None, si=None):
     # 4) If we have an 'si', we can attempt the MOID-based approach
     if si and getattr(si, '_stub', None):
         # Use the fast approach
-        logging.debug("Using _find_obj_fast_by_moid")
         return _find_obj_fast_by_moid(
             content=content,
             object_class=object_class,
@@ -205,7 +204,6 @@ def find_obj(content, vimtype, name, first=True, folder=None, si=None):
         )
     else:
         # Fallback to the old approach if si is None or has no _stub
-        logging.debug("Using _find_obj_naive")
         return _find_obj_naive(
             content=content,
             object_class=object_class,
