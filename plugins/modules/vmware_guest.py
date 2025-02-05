@@ -1246,9 +1246,9 @@ class PyVmomiHelper(PyVmomi):
             return {'changed': self.change_applied, 'failed': False}
         # Delete VM from Disk
         task = vm.Destroy()
-        self.wait_for_task(task)
+        error_msg = self.wait_for_task(task)
         if task.info.state == 'error':
-            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'destroy'}
+            return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'destroy'}
         else:
             return {'changed': self.change_applied, 'failed': False}
 
@@ -1645,9 +1645,9 @@ class PyVmomiHelper(PyVmomi):
                     # Only perform the upgrade if not in check mode.
                     if not self.module.check_mode:
                         task = vm_obj.UpgradeVM_Task(new_version)
-                        self.wait_for_task(task)
+                        error_msg = self.wait_for_task(task)
                         if task.info.state == 'error':
-                            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'upgrade'}
+                            return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'upgrade'}
                         self.change_applied = True
 
         secure_boot = self.params['hardware']['secure_boot']
@@ -3137,7 +3137,7 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="Failed to create virtual machine due to "
                                               "product versioning restrictions: %s" % to_native(e.msg))
                 self.change_detected = True
-            self.wait_for_task(task)
+            error_msg = self.wait_for_task(task)
         except TypeError as e:
             self.module.fail_json(msg="TypeError was returned, please ensure to give correct inputs. %s" % to_text(e))
 
@@ -3151,7 +3151,7 @@ class PyVmomiHelper(PyVmomi):
             kwargs = {
                 'changed': self.change_applied,
                 'failed': True,
-                'msg': task.info.error.msg,
+                'msg': error_msg,
                 'clonespec': clonespec_json,
                 'configspec': configspec_json,
                 'clone_method': clone_method
@@ -3165,17 +3165,17 @@ class PyVmomiHelper(PyVmomi):
                 annotation_spec = vim.vm.ConfigSpec()
                 annotation_spec.annotation = str(self.params['annotation'])
                 task = vm.ReconfigVM_Task(annotation_spec)
-                self.wait_for_task(task)
+                error_msg = self.wait_for_task(task)
                 if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'annotation'}
+                    return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'annotation'}
 
             if self.params['advanced_settings']:
                 vm_custom_spec = vim.vm.ConfigSpec()
                 self.customize_advanced_settings(vm_obj=vm, config_spec=vm_custom_spec)
                 task = vm.ReconfigVM_Task(vm_custom_spec)
-                self.wait_for_task(task)
+                error_msg = self.wait_for_task(task)
                 if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'advanced_settings'}
+                    return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'advanced_settings'}
 
             if self.params['customvalues']:
                 self.customize_customvalues(vm_obj=vm)
@@ -3240,9 +3240,9 @@ class PyVmomiHelper(PyVmomi):
                     self.change_applied = True
                 else:
                     task = self.current_vm_obj.RelocateVM_Task(spec=self.relospec)
-                    self.wait_for_task(task)
+                    error_msg = self.wait_for_task(task)
                     if task.info.state == 'error':
-                        return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'relocate'}
+                        return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'relocate'}
 
         # Only send VMware task if we see a modification
         if self.change_detected:
@@ -3256,9 +3256,9 @@ class PyVmomiHelper(PyVmomi):
                 except vim.fault.RestrictedVersion as e:
                     self.module.fail_json(msg="Failed to reconfigure virtual machine due to"
                                               " product versioning restrictions: %s" % to_native(e.msg))
-                self.wait_for_task(task)
+                error_msg = self.wait_for_task(task)
                 if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'reconfig'}
+                    return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'reconfig'}
 
         # Rename VM
         if self.params['uuid'] and self.params['name'] and self.params['name'] != self.current_vm_obj.config.name:
@@ -3267,9 +3267,9 @@ class PyVmomiHelper(PyVmomi):
                 self.change_applied = True
             else:
                 task = self.current_vm_obj.Rename_Task(self.params['name'])
-                self.wait_for_task(task)
+                error_msg = self.wait_for_task(task)
                 if task.info.state == 'error':
-                    return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'rename'}
+                    return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'rename'}
 
         # Mark VM as Template
         if self.params['is_template'] and not self.current_vm_obj.config.template:
@@ -3354,9 +3354,9 @@ class PyVmomiHelper(PyVmomi):
             self.module.fail_json(msg="failed to customization virtual machine due to RuntimeFault: %s" % to_native(e.msg))
         except Exception as e:
             self.module.fail_json(msg="failed to customization virtual machine due to fault: %s" % to_native(e.msg))
-        self.wait_for_task(task)
+        error_msg = self.wait_for_task(task)
         if task.info.state == 'error':
-            return {'changed': self.change_applied, 'failed': True, 'msg': task.info.error.msg, 'op': 'customize_exist'}
+            return {'changed': self.change_applied, 'failed': True, 'msg': error_msg, 'op': 'customize_exist'}
 
         if self.params['wait_for_customization']:
             set_vm_power_state(self.content, self.current_vm_obj, 'poweredon', force=False)
@@ -3382,9 +3382,19 @@ class PyVmomiHelper(PyVmomi):
         # https://www.vmware.com/support/developer/vc-sdk/visdk25pubs/ReferenceGuide/vim.Task.html
         # https://www.vmware.com/support/developer/vc-sdk/visdk25pubs/ReferenceGuide/vim.TaskInfo.html
         # https://github.com/virtdevninja/pyvmomi-community-samples/blob/master/samples/tools/tasks.py
+        error_msg = ''
         while task.info.state not in ['error', 'success']:
             time.sleep(poll_interval)
+
+        if task.info.state == 'error':
+            error_msg = task.info.error.msg
+            if hasattr(task.info.error, 'faultMessage'):
+                for fault in task.info.error.faultMessage:
+                    if hasattr(fault, 'message') and fault.message:
+                        error_msg += fault.message + ';'
+                error_msg = error_msg.rstrip(';')
         self.change_applied = self.change_applied or task.info.state == 'success'
+        return error_msg
 
     def get_vm_events(self, vm, eventTypeIdList):
         byEntity = vim.event.EventFilterSpec.ByEntity(entity=vm, recursion="self")
