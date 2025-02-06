@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_guest - Print details about the error message when the returned task result contains (https://github.com/ansible-collections/community.vmware/pull/2301).
