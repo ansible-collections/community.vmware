@@ -13,7 +13,6 @@ import atexit
 import ansible.module_utils.common._collections_compat as collections_compat
 import json
 import os
-import re
 import socket
 import ssl
 import hashlib
@@ -43,7 +42,7 @@ except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
 
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils._text import to_text
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import env_fallback, missing_required_lib
 from ansible.module_utils.six.moves.urllib.parse import unquote
@@ -387,14 +386,6 @@ def find_vm_by_id(content, vm_id, vm_id_type="vm_name", datacenter=None,
 
 def find_vm_by_name(content, vm_name, folder=None, recurse=True):
     return find_object_by_name(content, vm_name, [vim.VirtualMachine], folder=folder, recurse=recurse)
-
-
-def find_host_portgroup_by_name(host, portgroup_name):
-
-    for portgroup in host.config.network.portgroup:
-        if portgroup.spec.name == portgroup_name:
-            return portgroup
-    return None
 
 
 def compile_folder_path_for_object(vobj):
@@ -1472,23 +1463,6 @@ class PyVmomi(object):
             self.module.fail_json(msg='Unable to get the ESXi host from vm: %s, or hostname %s,'
                                       'or the passed ESXi version: %s is None.' % (vm_obj, host_name, version))
 
-    # Network related functions
-    @staticmethod
-    def find_host_portgroup_by_name(host, portgroup_name):
-        """
-        Find Portgroup on given host
-        Args:
-            host: Host config object
-            portgroup_name: Name of portgroup
-
-        Returns: True if found else False
-
-        """
-        for portgroup in host.config.network.portgroup:
-            if portgroup.spec.name == portgroup_name:
-                return portgroup
-        return False
-
     def get_all_port_groups_by_host(self, host_system):
         """
         Get all Port Group by host
@@ -1525,20 +1499,6 @@ class PyVmomi(object):
                     networks.append(temp_vm_object.obj)
                     break
         return networks
-
-    def network_exists_by_name(self, network_name=None):
-        """
-        Check if network with a specified name exists or not
-        Args:
-            network_name: Name of network
-
-        Returns: True if network exists else False
-        """
-        ret = False
-        if not network_name:
-            return ret
-        ret = True if self.find_network_by_name(network_name=network_name) else False
-        return ret
 
     # Datacenter
     def find_datacenter_by_name(self, datacenter_name):
@@ -1716,84 +1676,6 @@ class PyVmomi(object):
             desired_rp = cluster.resourcePool
 
         return desired_rp
-
-    # VMDK stuff
-    def vmdk_disk_path_split(self, vmdk_path):
-        """
-        Takes a string in the format
-
-            [datastore_name] path/to/vm_name.vmdk
-
-        Returns a tuple with multiple strings:
-
-        1. datastore_name: The name of the datastore (without brackets)
-        2. vmdk_fullpath: The "path/to/vm_name.vmdk" portion
-        3. vmdk_filename: The "vm_name.vmdk" portion of the string (os.path.basename equivalent)
-        4. vmdk_folder: The "path/to/" portion of the string (os.path.dirname equivalent)
-        """
-        try:
-            datastore_name = re.match(r'^\[(.*?)\]', vmdk_path, re.DOTALL).groups()[0]
-            vmdk_fullpath = re.match(r'\[.*?\] (.*)$', vmdk_path).groups()[0]
-            vmdk_filename = os.path.basename(vmdk_fullpath)
-            vmdk_folder = os.path.dirname(vmdk_fullpath)
-            return datastore_name, vmdk_fullpath, vmdk_filename, vmdk_folder
-        except (IndexError, AttributeError) as e:
-            self.module.fail_json(msg="Bad path '%s' for filename disk vmdk image: %s" % (vmdk_path, to_native(e)))
-
-    def find_vmdk_file(self, datastore_obj, vmdk_fullpath, vmdk_filename, vmdk_folder):
-        """
-        Return vSphere file object or fail_json
-        Args:
-            datastore_obj: Managed object of datastore
-            vmdk_fullpath: Path of VMDK file e.g., path/to/vm/vmdk_filename.vmdk
-            vmdk_filename: Name of vmdk e.g., VM0001_1.vmdk
-            vmdk_folder: Base dir of VMDK e.g, path/to/vm
-
-        """
-
-        browser = datastore_obj.browser
-        datastore_name = datastore_obj.name
-        datastore_name_sq = "[" + datastore_name + "]"
-        if browser is None:
-            self.module.fail_json(msg="Unable to access browser for datastore %s" % datastore_name)
-
-        detail_query = vim.host.DatastoreBrowser.FileInfo.Details(
-            fileOwner=True,
-            fileSize=True,
-            fileType=True,
-            modification=True
-        )
-        search_spec = vim.host.DatastoreBrowser.SearchSpec(
-            details=detail_query,
-            matchPattern=[vmdk_filename],
-            searchCaseInsensitive=True,
-        )
-        search_res = browser.SearchSubFolders(
-            datastorePath=datastore_name_sq,
-            searchSpec=search_spec
-        )
-
-        changed = False
-        vmdk_path = datastore_name_sq + " " + vmdk_fullpath
-        try:
-            changed, result = wait_for_task(search_res)
-        except TaskError as task_e:
-            self.module.fail_json(msg=to_native(task_e))
-
-        if not changed:
-            self.module.fail_json(msg="No valid disk vmdk image found for path %s" % vmdk_path)
-
-        target_folder_paths = [
-            datastore_name_sq + " " + vmdk_folder + '/',
-            datastore_name_sq + " " + vmdk_folder,
-        ]
-
-        for file_result in search_res.info.result:
-            for f in getattr(file_result, 'file'):
-                if f.path == vmdk_filename and file_result.folderPath in target_folder_paths:
-                    return f
-
-        self.module.fail_json(msg="No vmdk file found for path specified [%s]" % vmdk_path)
 
     def find_first_class_disk_by_name(self, disk_name, datastore_obj):
         """

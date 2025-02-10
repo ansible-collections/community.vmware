@@ -33,8 +33,7 @@ try:
     from vmware.vapi.vsphere.client import create_vsphere_client
     from com.vmware.vapi.std.errors_client import Unauthorized
     from com.vmware.content.library_client import Item
-    from com.vmware.vcenter_client import (Folder,
-                                           Datacenter,
+    from com.vmware.vcenter_client import (Datacenter,
                                            ResourcePool,
                                            Datastore,
                                            Cluster,
@@ -382,21 +381,6 @@ class VmwareRestClient(object):
         datacenter_summaries = self.api_client.vcenter.Datacenter.list(filter_spec)
         datacenter = datacenter_summaries[0].datacenter if len(datacenter_summaries) > 0 else None
         return datacenter
-
-    def get_folder_by_name(self, datacenter_name, folder_name):
-        """
-        Returns the identifier of a folder
-        with the mentioned names.
-        """
-        datacenter = self.get_datacenter_by_name(datacenter_name)
-        if not datacenter:
-            return None
-        filter_spec = Folder.FilterSpec(type=Folder.Type.VIRTUAL_MACHINE,
-                                        names=set([folder_name]),
-                                        datacenters=set([datacenter]))
-        folder_summaries = self.api_client.vcenter.Folder.list(filter_spec)
-        folder = folder_summaries[0].folder if len(folder_summaries) > 0 else None
-        return folder
 
     def get_resource_pool_by_name(self, datacenter_name, resourcepool_name, cluster_name=None, host_name=None):
         """
