@@ -99,7 +99,6 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     vmware_argument_spec,
-    find_obj,
 )
 
 
@@ -211,8 +210,7 @@ class VMwareObjectRolePermission(PyVmomi):
                 self.params["object_type"],
             )
         elif "object_name" in self.params and self.params["object_name"]:
-            self.current_obj = find_obj(
-                content=self.content,
+            self.current_obj = self.find_obj(
                 vimtype=[vim_type],
                 name=self.params["object_name"],
             )
