@@ -105,7 +105,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 
 class VmwareCustomAttributesInfo(PyVmomi):
@@ -135,7 +135,7 @@ class VmwareCustomAttributesInfo(PyVmomi):
         result = {'changed': False}
 
         if self.object_name:
-            obj = find_obj(self.content, [self.valid_object_types[self.object_type]], self.object_name)
+            obj = self.find_obj([self.valid_object_types[self.object_type]], self.object_name)
         elif self.moid:
             obj = self.find_obj_by_moid(self.object_type, self.moid)
         if not obj:
