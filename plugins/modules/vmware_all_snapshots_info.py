@@ -49,7 +49,7 @@ extends_documentation_fragment:
 
 EXAMPLES = r'''
   - name: Gather information about all snapshots in VMware vCenter
-    vmware_snapshot_info_all:
+    vmware_all_snapshots_info:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -57,7 +57,7 @@ EXAMPLES = r'''
       datacenter: '{{ datacenter_name }}'
     delegate_to: localhost
   - name: Gather information of a snapshot with filters applied and match_type in exacts.
-    vmware_snapshot_info_all:
+    vmware_all_snapshots_info:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
@@ -68,7 +68,7 @@ EXAMPLES = r'''
         vm_name: "you_marchine_name"
     delegate_to: localhost
   - name: Gather information of snapshots that in their name contain the "test" in their name.
-    vmware_snapshot_info_all:
+    vmware_all_snapshots_info:
       hostname: '{{ vcenter_hostname }}'
       username: '{{ vcenter_username }}'
       password: '{{ vcenter_password }}'
