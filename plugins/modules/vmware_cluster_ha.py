@@ -14,6 +14,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_cluster_ha
+deprecated:
+  removed_in: 7.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  alternative: Use M(vmware.vmware.cluster_ha) instead.
 short_description: Manage High Availability (HA) on VMware vSphere clusters
 description:
     - Manages HA configuration on VMware vSphere clusters.
