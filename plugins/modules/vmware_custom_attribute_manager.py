@@ -121,7 +121,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 
 class CustomAttributeManager(PyVmomi):
@@ -146,7 +146,7 @@ class CustomAttributeManager(PyVmomi):
         self.object_type = object_types_map[self.params['object_type']]
 
         self.object_name = self.params['object_name']
-        self.obj = find_obj(self.content, [self.object_type], self.params['object_name'])
+        self.obj = self.find_obj([self.object_type], self.params['object_name'])
         if self.obj is None:
             module.fail_json(msg="Unable to manage custom attributes for non-existing"
                                  " object %s." % self.object_name)
