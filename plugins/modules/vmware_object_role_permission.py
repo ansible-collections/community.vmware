@@ -283,7 +283,7 @@ class VMwareObjectRolePermission(PyVmomi):
         except AttributeError:
             self.module.fail_json(msg="Object type %s is not valid." % self.params['object_type'])
         self.current_obj = self.find_obj(vimtype=[getattr(vim, self.params['object_type'])],
-                                    name=self.params['object_name'])
+                                         name=self.params['object_name'])
 
         if self.current_obj is None:
             self.module.fail_json(
