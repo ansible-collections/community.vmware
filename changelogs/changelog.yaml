@@ -127,3 +127,44 @@ releases:
     - 2277-vmware_guest_network.yml
     - 2278-vmware_guest.yml
     release_date: '2025-01-23'
+  5.4.0:
+    changes:
+      deprecated_features:
+      - module_utils.vmware - host_version_at_least is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2303).
+      - plugin_utils.inventory - this plugin util is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2304).
+      - plugins.httpapi - this is deprecated and will be removed in community.vmware
+        7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2306).
+      - vm_device_helper.py - is_nvdimm_controller is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vm_device_helper.py - is_nvdimm_device is deprecated and will be removed in
+        community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware - find_host_portgroup_by_name is deprecated and will be removed in
+        community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware - find_vmdk_file is deprecated and will be removed in community.vmware
+        7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware - network_exists_by_name is deprecated and will be removed in community.vmware
+        7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware - vmdk_disk_path_split is deprecated and will be removed in community.vmware
+        7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware_host_inventory - the inventory plugin is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2283).
+      - vmware_maintenancemode - the module has been deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2293).
+      - vmware_rest_client - get_folder_by_name is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2311).
+      - vmware_vm_inventory - the inventory plugin is deprecated and will be removed
+        in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2283).
+      minor_changes:
+      - vmware_guest - Print details about the error message when the returned task
+        result contains (https://github.com/ansible-collections/community.vmware/pull/2301).
+    fragments:
+    - 2283-deprecate-inventory-plugins.yml
+    - 2293-deprecate-vmware_maintenancemode.yml
+    - 2301-vmware_guest.yml
+    - 2303-deprecate-host_version_at_least.yml
+    - 2304-deprecate-plugin_utils.yml
+    - 2306-deprecate-plugins.httpapi.yml
+    - 2311-deprecate-unsed-methods-and-functions.yml
+    release_date: '2025-02-18'

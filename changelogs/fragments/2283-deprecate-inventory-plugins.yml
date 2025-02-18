@@ -1,5 +1,0 @@
-deprecated_features:
-  - vmware_host_inventory - the inventory plugin is deprecated and will be removed in community.vmware 7.0.0
-    (https://github.com/ansible-collections/community.vmware/pull/2283).
-  - vmware_vm_inventory - the inventory plugin is deprecated and will be removed in community.vmware 7.0.0
-    (https://github.com/ansible-collections/community.vmware/pull/2283).
