@@ -111,7 +111,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import find_obj, vmware_argument_spec, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
@@ -237,17 +237,17 @@ class VmConfigOption(PyVmomi):
                                       " to get the VM recommended config option for specific guest OS.")
 
         # Get the datacenter object
-        datacenter = find_obj(self.content, [vim.Datacenter], datacenter_name)
+        datacenter = self.find_obj([vim.Datacenter], datacenter_name)
         if not datacenter:
             self.module.fail_json(msg='Unable to find datacenter "%s"' % datacenter_name)
         # Get the cluster object
         if cluster_name:
-            cluster = find_obj(self.content, [vim.ComputeResource], cluster_name, folder=datacenter)
+            cluster = self.find_obj([vim.ComputeResource], cluster_name, folder=datacenter)
             if not cluster:
                 self.module.fail_json(msg='Unable to find cluster "%s"' % cluster_name)
         # If host is given, get the cluster object using the host
         elif esxi_host_name:
-            host = find_obj(self.content, [vim.HostSystem], esxi_host_name, folder=datacenter)
+            host = self.find_obj([vim.HostSystem], esxi_host_name, folder=datacenter)
             if not host:
                 self.module.fail_json(msg='Unable to find host "%s"' % esxi_host_name)
             self.target_host = host
