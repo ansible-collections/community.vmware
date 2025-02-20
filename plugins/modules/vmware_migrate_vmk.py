@@ -82,13 +82,13 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     vmware_argument_spec, find_dvs_by_name, find_hostsystem_by_name,
-    connect_to_api, find_dvspg_by_name)
+    PyVmomi, find_dvspg_by_name)
 
 
-class VMwareMigrateVmk(object):
+class VMwareMigrateVmk(PyVmomi):
 
     def __init__(self, module):
-        self.module = module
+        super(VMwareMigrateVmk, self).__init__(module)
         self.host_system = None
         self.migrate_switch_name = self.module.params['migrate_switch_name']
         self.migrate_portgroup_name = self.module.params['migrate_portgroup_name']
@@ -97,7 +97,6 @@ class VMwareMigrateVmk(object):
         self.esxi_hostname = self.module.params['esxi_hostname']
         self.current_portgroup_name = self.module.params['current_portgroup_name']
         self.current_switch_name = self.module.params['current_switch_name']
-        self.content = connect_to_api(module)
 
     def process_state(self):
         try:
