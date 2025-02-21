@@ -46,20 +46,16 @@ EXAMPLES = r'''
 
 try:
     from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
 except ImportError:
-    HAS_PYVMOMI = False
+    pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    HAS_PYVMOMI, connect_to_api, get_all_objs,
-    vmware_argument_spec, wait_for_task)
+    PyVmomi, get_all_objs, vmware_argument_spec, wait_for_task)
 
 
-class VMwareVmVssDvsMigrate(object):
+class VMwareVmVssDvsMigrate(PyVmomi):
     def __init__(self, module):
-        self.module = module
-        self.content = connect_to_api(module)
         self.vm = None
         self.vm_name = module.params['vm_name']
         self.dvportgroup_name = module.params['dvportgroup_name']
@@ -140,8 +136,6 @@ def main():
                               dvportgroup_name=dict(required=True, type='str')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
-    if not HAS_PYVMOMI:
-        module.fail_json(msg='pyvmomi is required for this module')
 
     vmware_vmnic_migrate = VMwareVmVssDvsMigrate(module)
     vmware_vmnic_migrate.process_state()
