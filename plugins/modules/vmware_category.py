@@ -154,8 +154,6 @@ category_results:
 
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.compat.version import LooseVersion
-from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 try:
@@ -177,7 +175,6 @@ class VmwareCategory(VmwareRestClient):
         self.global_categories = dict()
         self.category_name = self.params.get('category_name')
         self.get_all_categories()
-        self.content = connect_to_api(self.module, return_si=False)
 
     def ensure_state(self):
         """Manage internal states of categories. """
@@ -236,9 +233,6 @@ class VmwareCategory(VmwareRestClient):
             for obj_type in associable_object_types:
                 lower_obj_type = obj_type.lower()
                 if lower_obj_type == 'all objects':
-                    if LooseVersion(self.content.about.version) < LooseVersion('7'):
-                        break
-
                     for category in list(associable_data.values()):
                         if isinstance(category, list):
                             obj_types_set.extend(category)
