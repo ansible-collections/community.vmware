@@ -102,10 +102,8 @@ instance:
     sample: None
 '''
 
-HAS_PYVMOMI = False
 try:
     from pyVmomi import vim
-    HAS_PYVMOMI = True
 except ImportError:
     pass
 
