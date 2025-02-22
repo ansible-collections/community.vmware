@@ -107,10 +107,8 @@ import traceback
 
 try:
     from pyVmomi import vmodl, VmomiSupport
-    HAS_PYVMOMI = True
 except ImportError:
-    PYVMOMI_IMP_ERR = traceback.format_exc()
-    HAS_PYVMOMI = False
+    pass
 
 VSANPYTHONSDK_IMP_ERR = None
 try:

@@ -1104,10 +1104,8 @@ import re
 import time
 import string
 
-HAS_PYVMOMI = False
 try:
     from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
 except ImportError:
     pass
 
