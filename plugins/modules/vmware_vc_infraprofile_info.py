@@ -146,20 +146,9 @@ import_profile:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.compat.version import LooseVersion
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 import json
 import time
-
-
-class VcVersionChecker(PyVmomi):
-    def __init__(self, module):
-        super(VcVersionChecker, self).__init__(module)
-
-    def check_vc_version(self):
-        if LooseVersion(self.content.about.version) < LooseVersion('7'):
-            self.module.fail_json(msg="vCenter version is less than 7.0.0 Please specify vCenter with version greater than or equal to 7.0.0")
 
 
 class VcenterProfile(VmwareRestClient):
@@ -244,8 +233,6 @@ def main():
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
     result = {'failed': False, 'changed': False}
     vmware_vc_infra_profile = VcenterProfile(module)
-    vmware_vc_version = VcVersionChecker(module)
-    vmware_vc_version.check_vc_version()
 
     if module.params['api'].lower() == "list":
         if module.check_mode:
