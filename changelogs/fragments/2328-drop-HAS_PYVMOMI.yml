@@ -1,0 +1,2 @@
+minor_changes:
+  - vmware_vsan_health_info - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
