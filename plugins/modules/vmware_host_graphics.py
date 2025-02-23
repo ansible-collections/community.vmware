@@ -85,9 +85,8 @@ results:
 
 try:
     from pyVmomi import vim
-    HAS_PYVMOMI = True
 except ImportError:
-    HAS_PYVMOMI = False
+    pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
@@ -178,9 +177,6 @@ def main():
             ['cluster_name', 'esxi_hostname'],
         ],
     )
-
-    if not HAS_PYVMOMI:
-        module.fail_json(msg='pyvmomi required for this module')
 
     vmware_host_graphics = VMwareHostGraphicSettings(module)
     vmware_host_graphics.ensure()
