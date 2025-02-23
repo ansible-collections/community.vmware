@@ -151,7 +151,6 @@ changed_policies:
     }
 '''
 
-import traceback
 PYVMOMI_IMP_ERR = None
 try:
     from pyVmomi import pbm, vim
