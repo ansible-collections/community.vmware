@@ -152,7 +152,6 @@ changed_policies:
 '''
 
 import traceback
-from ansible.module_utils.basic import missing_required_lib
 PYVMOMI_IMP_ERR = None
 try:
     from pyVmomi import pbm, vim
