@@ -75,9 +75,8 @@ EXAMPLES = r'''
 '''
 try:
     from pyVmomi import vim, vmodl
-    HAS_PYVMOMI = True
 except ImportError:
-    HAS_PYVMOMI = False
+    pass
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
@@ -216,9 +215,6 @@ def main():
                               migrate_vlan_id=dict(required=False, type='int')))
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=False)
-
-    if not HAS_PYVMOMI:
-        module.fail_json(msg='pyvmomi required for this module')
 
     vmware_migrate_vmk = VMwareMigrateVmk(module)
     vmware_migrate_vmk.process_state()
