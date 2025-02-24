@@ -56,6 +56,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
 
 class VMwareVmVssDvsMigrate(PyVmomi):
     def __init__(self, module):
+        super(VMwareVmVssDvsMigrate, self).__init__(module)
         self.vm = None
         self.vm_name = module.params['vm_name']
         self.dvportgroup_name = module.params['dvportgroup_name']
