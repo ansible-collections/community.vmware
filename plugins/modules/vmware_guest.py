@@ -3535,7 +3535,7 @@ def main():
                 nested_virt=dict(type='bool'),
                 num_cpu_cores_per_socket=dict(type='int'),
                 num_cpus=dict(type='int'),
-                cpu_affinity_set=dict(type='list',default=[],elements='int',aliases=['cpu_affinity']),
+                cpu_affinity_set=dict(type='list', default=[], elements='int', aliases=['cpu_affinity']),
                 scsi=dict(type='str', choices=['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']),
                 secure_boot=dict(type='bool'),
                 version=dict(type='str'),
