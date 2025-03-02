@@ -239,16 +239,28 @@
         esxi_host_name: "{{ esxi2 }}"
         enable_maintenance_mode: true
 
-    - name: Move ESXi out of Cluster
-      vmware_host:
+    - name: Remove ESXi
+      vmware.vmware.esxi_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        esxi_host_name: "{{ esxi2 }}"
+        state: absent
+
+    - name: Re-add ESXi outside of cluster
+      vmware.vmware.esxi_host:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
         datacenter: "{{ dc1 }}"
         folder: "{{ dc1 }}/host"
-        esxi_hostname: "{{ esxi2 }}"
-        state: reconnect
+        esxi_host_name: "{{ esxi2 }}"
+        esxi_username: '{{ esxi_user }}'
+        esxi_password: '{{ esxi_password }}'
+        state: present
 
     - name: Exit maintenance mode
       vmware.vmware.esxi_maintenance_mode:
