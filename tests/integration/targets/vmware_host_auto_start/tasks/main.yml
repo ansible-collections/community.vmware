@@ -11,12 +11,16 @@
         setup_datastore: true
 
     - name: Move the ESXi hosts out of the cluster
-      vmware_host:
-        datacenter_name: '{{ dc1 }}'
-        esxi_hostname: '{{ item }}'
+      vmware.vmware.esxi_host:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: false
+        datacenter: "{{ dc1 }}"
+        folder: '/DC0/host'
+        esxi_host_name: "{{ item }}"
         esxi_username: '{{ esxi_user }}'
         esxi_password: '{{ esxi_password }}'
-        folder: '/DC0/host'
         state: present
       with_items: "{{ esxi_hosts }}"
 
@@ -26,7 +30,7 @@
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
-        esxi_host_name: '{{ item }}'
+        esxi_host_name: "{{ item }}"
         enable_maintenance_mode: false
       with_items: "{{ esxi_hosts }}"
 
