@@ -39,14 +39,13 @@
 - name: Get info from an ESXi host that is offline / disconnected / shut down
   block:
   - name: Disconnect ESXi host
-    community.vmware.vmware_host:
+    vmware.vmware.esxi_connection:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      datacenter_name: '{{ dc1 }}'
-      cluster_name: '{{ ccr1 }}'
-      esxi_hostname: "{{ esxi1 }}"
+      datacenter: '{{ dc1 }}'
+      esxi_host_name: "{{ esxi1 }}"
       state: disconnected
 
   - name: Give the ESXi host time to disconnect
@@ -83,12 +82,11 @@
         - host_vmnics_extended_disconnected.hosts_vmnics_info is defined
   always:
   - name: Reconnect ESXi host
-    community.vmware.vmware_host:
+    vmware.vmware.esxi_connection:
       validate_certs: false
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
-      datacenter_name: '{{ dc1 }}'
-      cluster_name: '{{ ccr1 }}'
-      esxi_hostname: "{{ esxi1 }}"
-      state: reconnect
+      datacenter: '{{ dc1 }}'
+      esxi_host_name: "{{ esxi1 }}"
+      state: connected

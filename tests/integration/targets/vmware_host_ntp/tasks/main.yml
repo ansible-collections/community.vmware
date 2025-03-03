@@ -193,14 +193,13 @@
 - name: The integration tests when ESXi disconnected
   block:
     - name: Disconnect ESXi
-      community.vmware.vmware_host:
+      vmware.vmware.esxi_connection:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
         datacenter: "{{ dc1 }}"
-        cluster: "{{ ccr1 }}"
-        esxi_hostname: '{{ esxi1 }}'
+        esxi_host_name: '{{ esxi1 }}'
         state: disconnected
       register: disconnect_esxi_result
 
@@ -245,15 +244,14 @@
           - add_ntp_server_disconnected_esxi_result.changed is sameas false
 
     - name: Reconnect ESXi
-      community.vmware.vmware_host:
+      vmware.vmware.esxi_connection:
         hostname: "{{ vcenter_hostname }}"
         username: "{{ vcenter_username }}"
         password: "{{ vcenter_password }}"
         validate_certs: false
         datacenter: "{{ dc1 }}"
-        cluster: "{{ ccr1 }}"
-        esxi_hostname: '{{ esxi1 }}'
-        state: reconnect
+        esxi_host_name: '{{ esxi1 }}'
+        state: connected
       register: reconnect_esxi_result
 
     - name: Make sure if ESXi host reconnected

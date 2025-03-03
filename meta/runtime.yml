@@ -226,6 +226,10 @@ plugin_routing:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_template instead.
+    vmware_host:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead.
     vmware_maintenancemode:
       deprecation:
         removal_version: 7.0.0
