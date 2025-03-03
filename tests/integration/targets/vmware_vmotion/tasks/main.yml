@@ -10,13 +10,17 @@
     setup_resource_pool: true
 
 - name: Add ESXi Hosts to vCenter
-  vmware_host:
-    datacenter_name: '{{ dc1 }}'
-    esxi_hostname: '{{ item }}'
+  vmware.vmware.esxi_host:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: '{{ dc1 }}'
+    esxi_host_name: '{{ item }}'
     esxi_username: '{{ esxi_user }}'
     esxi_password: '{{ esxi_password }}'
     folder: '/DC0/host'
     state: present
+    validate_certs: false
   with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
@@ -85,13 +89,17 @@
       - vm_vmotion is changed
 
 - name: Add ESXi Hosts to a cluster
-  vmware_host:
-    datacenter_name: '{{ dc1 }}'
-    cluster_name: '{{ ccr1 }}'
-    esxi_hostname: '{{ item }}'
+  vmware.vmware.esxi_host:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: '{{ dc1 }}'
+    esxi_host_name: '{{ item }}'
     esxi_username: '{{ esxi_user }}'
     esxi_password: '{{ esxi_password }}'
+    cluster_name: '{{ ccr1 }}'
     state: present
+    validate_certs: false
   with_items: '{{ esxi_hosts }}'
 
 - name: Disable the Maintenance Mode
