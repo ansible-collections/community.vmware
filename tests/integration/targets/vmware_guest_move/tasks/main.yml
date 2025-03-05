@@ -9,16 +9,15 @@
     setup_virtualmachines: true
 
 - name: Create a VM folder on given Datacenter
-  vcenter_folder:
+  vmware.vmware.folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
-    folder_name: 'f1'
+    relative_path: 'f1'
     folder_type: vm
     state: present
     validate_certs: false
-  register: dest_folder
 
 # Testcase 0001: Move vm and get changed status
 - name: Move VM (Changed)
@@ -30,7 +29,7 @@
     datacenter: '{{ dc1 }}'
     name: '{{ virtual_machines[0].name }}'
     # Depends-On: https://github.com/ansible/ansible/pull/55237
-    dest_folder: '{{ dest_folder.result.path }}'
+    dest_folder: '/{{ dc1 }}/vm/f1'
   register: vm_info_0001
 
 
@@ -44,7 +43,7 @@
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
     name: '{{ virtual_machines[0].name }}'
-    dest_folder: '{{ dest_folder.result.path }}'
+    dest_folder: '/{{ dc1 }}/vm/f1'
   register: vm_info_0002
 
 - debug:
@@ -70,12 +69,12 @@
     - vm_move_0003.changed
 
 - name: Delete the f1 VM folder
-  vcenter_folder:
+  vmware.vmware.folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
-    folder_name: 'f1'
+    relative_path: 'f1'
     folder_type: vm
     state: absent
     validate_certs: false
