@@ -51,7 +51,7 @@ options:
     datacenter:
       description:
       - The datacenter name to which virtual machine belongs to.
-     type: str
+      type: str
     drs_behavior:
         description:
             - Desired DRS behavior for the VM.
