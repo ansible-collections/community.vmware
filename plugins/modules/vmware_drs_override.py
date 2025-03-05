@@ -55,9 +55,19 @@ options:
     drs_behavior:
         description:
             - Desired DRS behavior for the VM.
-            - Use 'absent' to remove the DRS override.
-        choices: ['absent', 'manual', 'partiallyAutomated', 'fullyAutomated']
+            - manual: DRS generates both power-on placement recommendation, and migration recommendation for VM. Recommendations need to be manually applied or ignored.
+            - partiallyAutomated: DRS automatically place VM onto host at VM power-on. Migration recommendations need to be manually applied or ignored.
+            - fullyAutomated: DRS automatically place VM onto host at VM power-on, and VM is automatically migrated from one host to another to optimize resource utilization.
+        choices: ['manual', 'partiallyAutomated', 'fullyAutomated']
         default: 'manual'
+        type: str
+    state:
+        description:
+            - State of the override setting.
+            - disabled: You will disable DRS automation completely for this VM.
+            - absent: You will remove the DRS override.
+        choices: ['absent', 'disabled', 'enabled']
+        default: 'enabled'
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -84,7 +94,7 @@ EXAMPLES = '''
     username: "administrator@vsphere.local"
     password: "yourpassword"
     moid: vm-42
-    drs_behavior: "absent"
+    state: absent
   delegate_to: localhost
 '''
 
@@ -113,67 +123,78 @@ class VmwareDrsOverride(PyVmomi):
     def __init__(self, module):
         super(VmwareDrsOverride, self).__init__(module)
         self.drs_behavior = module.params['drs_behavior']
+        self.drs_state = module.params['state']
+        self.drs_enabled = self.drs_state == 'enabled'
+        self.drs_vm_config_spec = None
+        self.msg = "Unexpected exit."
         self.vm = self.get_vm()
         if not self.vm:
             self.module.fail_json(msg=f"VM '{self.params['name']}' not found.")
         if not self.is_vcenter():
             self.module.fail_json(msg="DRS configuration is only supported in vCenter environments.")
-
-    def set_drs_override(self):
-        cluster = self.vm.runtime.host.parent
-        if not cluster:
+        self.cluster = self.vm.runtime.host.parent
+        if not self.cluster:
             self.module.fail_json(msg="VM is not in a Cluster.")
 
+    def set_drs_override(self):
         # Check current DRS settings
-        existing_config = next((config for config in cluster.configuration.drsVmConfig if config.key == self.vm), None)
+        existing_config = next((config for config in self.cluster.configuration.drsVmConfig if config.key == self.vm), None)
         if existing_config:
-            if existing_config.behavior == self.drs_behavior:
+            if self.drs_state == 'absent':
+                # Remove the DRS override
+                self.drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
+                        operation=vim.option.ArrayUpdateSpec.Operation.remove,
+                        removeKey=self.vm,
+                    )
+                self.msg = "DRS override removed successfully."
+                self.execute()
+            if existing_config.behavior == self.drs_behavior and existing_config.enabled == self.drs_enabled:
                 # Nothing to do
                 self.module.exit_json(changed=False, msg="DRS behavior is already set to the desired state.")
-            if self.drs_behavior == 'absent':
-                # Remove the DRS override
-                drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
-                    operation=vim.option.ArrayUpdateSpec.Operation.remove,
-                    removeKey=self.vm,
-                )
-                msg = "DRS override removed successfully."
             else:
                 # Update the DRS override
-                drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
-                    operation=vim.option.ArrayUpdateSpec.Operation.edit,
-                    info=vim.cluster.DrsVmConfigInfo(
-                        key=self.vm,
-                        enabled=True,
-                        behavior=self.drs_behavior,
-                    ),
-                )
-                msg = "DRS override updated successfully."
+                self.drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
+                        operation=vim.option.ArrayUpdateSpec.Operation.edit,
+                        info=vim.cluster.DrsVmConfigInfo(
+                            key=self.vm,
+                            enabled=self.drs_enabled,
+                            behavior=self.drs_behavior,
+                        ),
+                    )
+                self.msg = "DRS override updated successfully."
+                self.execute()
         else:
-            if self.drs_behavior == 'absent':
+            if self.drs_state == 'absent':
                 # Nothing to do
                 self.module.exit_json(changed=False, msg="DRS override is already absent.")
             # Define the DRS override as it does not exist
-            drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
+            self.drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
                 operation=vim.option.ArrayUpdateSpec.Operation.add,
                 info=vim.cluster.DrsVmConfigInfo(
                     key=self.vm,
-                    enabled=True,
+                    enabled=self.drs_enabled,
                     behavior=self.drs_behavior,
                 ),
             )
-            msg = "DRS override applied successfully."
+            self.msg = "DRS override applied successfully."
 
-        if not self.module.check_mode:
-            # Apply the cluster reconfiguration if not in check mode
-            cluster_config_spec = vim.cluster.ConfigSpec()
-            cluster_config_spec.drsVmConfigSpec = [drs_vm_config_spec]
-            try:
-                task = cluster.ReconfigureCluster_Task(spec=cluster_config_spec, modify=True)
-                wait_for_task(task)
-            except vmodl.MethodFault as error:
-                self.module.fail_json(msg=f"Failed to set DRS override: {error.msg}")
+        self.execute()
 
-        self.module.exit_json(changed=True, msg=msg)
+    def execute(self):
+        if self.module.check_mode:
+            # Exit if in check mode
+            self.module.exit_json(changed=True, msg=self.msg)
+
+        # Apply the cluster reconfiguration
+        cluster_config_spec = vim.cluster.ConfigSpec()
+        cluster_config_spec.drsVmConfigSpec = [self.drs_vm_config_spec]
+        try:
+            task = self.cluster.ReconfigureCluster_Task(spec=cluster_config_spec, modify=True)
+            wait_for_task(task)
+        except vmodl.MethodFault as error:
+            self.module.fail_json(msg=f"Failed to set DRS override: {error.msg}")
+
+        self.module.exit_json(changed=True, msg=self.msg)
 
 
 def main():
@@ -185,7 +206,8 @@ def main():
         'use_instance_uuid': {'type': 'bool', 'default': False},
         'folder': {'type': 'str'},
         'datacenter': {'type': 'str'},
-        'drs_behavior': {'type': 'str', 'choices': ['absent', 'manual', 'partiallyAutomated', 'fullyAutomated'], 'default': 'manual'},
+        'drs_behavior': {'type': 'str', 'choices': ['manual', 'partiallyAutomated', 'fullyAutomated'], 'default': 'manual'},
+        'state': {'type': 'str', 'choices': ['absent', 'disabled', 'enabled'], 'default': 'enabled'},
     })
 
     module = AnsibleModule(
