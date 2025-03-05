@@ -143,9 +143,9 @@ class VmwareDrsOverride(PyVmomi):
             if self.drs_state == 'absent':
                 # Remove the DRS override
                 self.drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
-                        operation=vim.option.ArrayUpdateSpec.Operation.remove,
-                        removeKey=self.vm,
-                    )
+                    operation=vim.option.ArrayUpdateSpec.Operation.remove,
+                    removeKey=self.vm,
+                )
                 self.msg = "DRS override removed successfully."
                 self.execute()
             if existing_config.behavior == self.drs_behavior and existing_config.enabled == self.drs_enabled:
@@ -154,13 +154,13 @@ class VmwareDrsOverride(PyVmomi):
             else:
                 # Update the DRS override
                 self.drs_vm_config_spec = vim.cluster.DrsVmConfigSpec(
-                        operation=vim.option.ArrayUpdateSpec.Operation.edit,
-                        info=vim.cluster.DrsVmConfigInfo(
-                            key=self.vm,
-                            enabled=self.drs_enabled,
-                            behavior=self.drs_behavior,
-                        ),
-                    )
+                    operation=vim.option.ArrayUpdateSpec.Operation.edit,
+                    info=vim.cluster.DrsVmConfigInfo(
+                        key=self.vm,
+                        enabled=self.drs_enabled,
+                        behavior=self.drs_behavior,
+                    ),
+                )
                 self.msg = "DRS override updated successfully."
                 self.execute()
         else:
