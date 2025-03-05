@@ -72,12 +72,12 @@
      - not enable_sdrs_again.changed
 
 - name: Create a datastore folder on given Datacenter
-  vcenter_folder:
+  vmware.vmware.folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
-    folder_name: 'my_datastore_folder'
+    relative_path: 'my_datastore_folder'
     folder_type: datastore
     state: present
     validate_certs: false
@@ -89,7 +89,7 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    folder: "{{ my_datastore_folder.result.path }}"
+    folder: '/{{ dc1 }}/datastore/my_datastore_folder'
     datastore_cluster_name: DSC2
     state: present
   register: add_dsc_folder_check
@@ -136,12 +136,12 @@
     - DSC2
 
 - name: Delete the datastore folder
-  vcenter_folder:
+  vmware.vmware.folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
-    folder_name: 'my_datastore_folder'
+    relative_path: 'my_datastore_folder'
     folder_type: datastore
     state: absent
     validate_certs: false

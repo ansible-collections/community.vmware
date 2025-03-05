@@ -190,6 +190,10 @@ plugin_routing:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.vms instead.
   modules:
+    vcenter_folder:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.folder instead.
     vmware_cluster:
       deprecation:
         removal_version: 6.0.0
