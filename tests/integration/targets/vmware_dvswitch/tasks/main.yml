@@ -32,17 +32,15 @@
       - dvs_result_0001.changed
 
 - name: Create a network folder on given Datacenter
-  vcenter_folder:
+  vmware.vmware.folder:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     datacenter: '{{ dc1 }}'
-    folder_name: network_folder
+    relative_path: network_folder
     folder_type: network
     state: present
     validate_certs: false
-  register:
-    network_folder_result
 
 - name: Add distributed vSwitch using folder
   vmware_dvswitch:
@@ -50,7 +48,7 @@
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
-    folder: "{{ network_folder_result.result.path }}"
+    folder: "/{{ dc1 }}/network/network_folder"
     state: present
     switch_name: dvswitch_0002
     mtu: 9000
