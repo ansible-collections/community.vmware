@@ -230,6 +230,10 @@ plugin_routing:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_template instead.
+    vmware_content_library_manager:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead.
     vmware_host:
       deprecation:
         removal_version: 7.0.0
