@@ -6,7 +6,6 @@
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import atexit
@@ -22,6 +21,7 @@ import traceback
 import datetime
 from collections import OrderedDict
 from ansible.module_utils.compat.version import StrictVersion
+from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient, ApiAccessError
 from random import randint
 
 
@@ -52,11 +52,6 @@ from ansible.module_utils.six.moves.urllib.parse import unquote
 class TaskError(Exception):
     def __init__(self, *args, **kwargs):
         super(TaskError, self).__init__(*args, **kwargs)
-
-
-class ApiAccessError(Exception):
-    def __init__(self, *args, **kwargs):
-        super(ApiAccessError, self).__init__(*args, **kwargs)
 
 
 def check_answer_question_status(vm):
@@ -1067,11 +1062,9 @@ def quote_obj_name(object_name=None):
     return object_name
 
 
-class PyVmomi(object):
+class PyVmomi(PyvmomiClient):
     def __init__(self, module):
-        """
-        Constructor
-        """
+        self.module = module
         if not HAS_REQUESTS:
             module.fail_json(msg=missing_required_lib('requests'),
                              exception=REQUESTS_IMP_ERR)
@@ -1080,10 +1073,16 @@ class PyVmomi(object):
             module.fail_json(msg=missing_required_lib('PyVmomi'),
                              exception=PYVMOMI_IMP_ERR)
 
-        self.module = module
+        try:
+            super().__init__(module.params['hostname'], module.params['username'],
+                             module.params['password'], module.params['port'],
+                             module.params['validate_certs'],
+                             module.params['proxy_host'],
+                             module.params['proxy_port'])
+        except ApiAccessError as aae:
+            module.fail_json(msg=str(aae))
         self.params = module.params
         self.current_vm_obj = None
-        self.si, self.content = connect_to_api(self.module, return_si=True)
         self.custom_field_mgr = []
         if self.content.customFieldsManager:  # not an ESXi
             self.custom_field_mgr = self.content.customFieldsManager.field
