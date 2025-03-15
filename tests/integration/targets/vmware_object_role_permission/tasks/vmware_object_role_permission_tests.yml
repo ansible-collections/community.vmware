@@ -151,7 +151,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       check_mode: true
@@ -166,7 +166,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       register: assing_user_vm_result
@@ -180,7 +180,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       register: assing_user_vm_idempotency_result
@@ -194,7 +194,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       check_mode: true
@@ -209,7 +209,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       register: unassing_user_vm_result
@@ -223,7 +223,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       register: unassing_user_vm_idempotency_result
