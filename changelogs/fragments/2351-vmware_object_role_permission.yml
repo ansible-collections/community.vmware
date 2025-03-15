@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_object_role_permission - The module ignores changing ``recursive``
+    (https://github.com/ansible-collections/community.vmware/pull/2350).
