@@ -1074,11 +1074,13 @@ class PyVmomi(PyvmomiClient):
                              exception=PYVMOMI_IMP_ERR)
 
         try:
-            super().__init__(module.params['hostname'], module.params['username'],
-                             module.params['password'], module.params['port'],
-                             module.params['validate_certs'],
-                             module.params['proxy_host'],
-                             module.params['proxy_port'])
+            super().__init__(hostname=module.params['hostname'],
+                             username=module.params['username'],
+                             password=module.params['password'],
+                             port=module.params['port'],
+                             validate_certs=module.params['validate_certs'],
+                             http_proxy_host=module.params['proxy_host'],
+                             http_proxy_port=module.params['proxy_port'])
         except ApiAccessError as aae:
             module.fail_json(msg=str(aae))
         self.params = module.params
