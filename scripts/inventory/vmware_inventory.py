@@ -428,7 +428,7 @@ class VMWareInventory(object):
 
         return instance_tuples
 
-    def instances_to_inventory(self, instances):  # noqa  # pylint: disable=too-complex
+    def instances_to_inventory(self, instances):
         ''' Convert a list of vm objects into a json compliant inventory '''
         self.debugl('re-indexing instances based on ini settings')
         inventory = VMWareInventory._empty_inventory()
@@ -564,7 +564,7 @@ class VMWareInventory(object):
             mapping[k] = newkey
         return mapping
 
-    def facts_from_proplist(self, vm):  # noqa  # pylint: disable=too-complex
+    def facts_from_proplist(self, vm):
         '''Get specific properties instead of serializing everything'''
 
         rdata = {}
@@ -687,7 +687,7 @@ class VMWareInventory(object):
 
         return rdata
 
-    def _process_object_types(self, vobj, thisvm=None, inkey='', level=0):  # noqa  # pylint: disable=too-complex
+    def _process_object_types(self, vobj, thisvm=None, inkey='', level=0):
         ''' Serialize an object '''
         rdata = {}
 
