@@ -179,7 +179,20 @@ action_groups:
   - vsphere_file
 
 plugin_routing:
+  inventory:
+    vmware_host_inventory:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.esxi_hosts instead.
+    vmware_vm_inventory:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.vms instead.
   modules:
+    vcenter_folder:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.folder instead.
     vmware_cluster:
       deprecation:
         removal_version: 6.0.0
@@ -200,7 +213,31 @@ plugin_routing:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.cluster_info instead.
+    vmware_cluster_ha:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.cluster_ha instead.
     vmware_cluster_vcls:
       deprecation:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_vcls instead.
+    vmware_content_deploy_ovf_template:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.deploy_content_library_ovf instead.
+    vmware_content_deploy_template:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.deploy_content_library_template instead.
+    vmware_content_library_manager:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead.
+    vmware_host:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead.
+    vmware_maintenancemode:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.esxi_maintenance_mode instead.
