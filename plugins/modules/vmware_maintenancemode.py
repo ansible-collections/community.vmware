@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_maintenancemode
+deprecated:
+  removed_in: 7.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  alternative: Use M(vmware.vmware.esxi_maintenance_mode) instead.
 short_description: Place a host into maintenance mode
 description:
     - This module can be used for placing a ESXi host into maintenance mode.

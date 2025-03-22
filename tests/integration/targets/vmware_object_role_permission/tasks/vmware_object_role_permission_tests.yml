@@ -54,12 +54,59 @@
         that:
           - assing_user_vm_folder_idempotency_result.changed is sameas false
 
+    - name: Change recursive to false with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        recursive: false
+        state: present
+      check_mode: true
+      register: set_recursive_false_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - set_recursive_false_check_mode_result.changed is sameas true
+
+    - name: Change recursive to false
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        recursive: false
+        state: present
+      register: set_recursive_false_result
+
+    - name: Make sure that recursive / propagate is unset
+      assert:
+        that:
+          - set_recursive_false_result.changed is sameas true
+
+    - name: Change recursive to false (idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "{{ f0 }}"
+        object_type: Folder
+        recursive: false
+        state: present
+      register: set_recursive_false_idempotency_result
+
+    - name: Make sure there is no change if recursive / propagate is already false
+      assert:
+        that:
+          - set_recursive_false_idempotency_result.changed is sameas false
+
     - name: Unassign user from VM folder with check_mode
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
         object_name: "{{ f0 }}"
         object_type: Folder
+        recursive: false
         state: absent
       check_mode: true
       register: unassing_user_vm_folder_check_mode_result
@@ -75,6 +122,7 @@
         principal: "{{ principal }}"
         object_name: "{{ f0 }}"
         object_type: Folder
+        recursive: false
         state: absent
       register: unassing_user_vm_folder_result
 
@@ -89,6 +137,7 @@
         principal: "{{ principal }}"
         object_name: "{{ f0 }}"
         object_type: Folder
+        recursive: false
         state: absent
       register: unassing_user_vm_folder_idempotency_result
 
@@ -102,7 +151,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       check_mode: true
@@ -117,7 +166,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       register: assing_user_vm_result
@@ -131,7 +180,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: present
       register: assing_user_vm_idempotency_result
@@ -145,7 +194,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       check_mode: true
@@ -160,7 +209,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       register: unassing_user_vm_result
@@ -174,7 +223,7 @@
       vmware_object_role_permission:
         role: Admin
         principal: "{{ principal }}"
-        object_name: "{{ virtual_machines.0 }}"
+        object_name: "{{ virtual_machines[0].name }}"
         object_type: VirtualMachine
         state: absent
       register: unassing_user_vm_idempotency_result

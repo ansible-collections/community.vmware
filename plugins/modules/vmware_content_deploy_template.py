@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_content_deploy_template
+deprecated:
+  removed_in: 7.0.0
+  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  alternative: Use M(vmware.vmware.deploy_content_library_template) instead.
 short_description: Deploy Virtual Machine from template stored in content library.
 description:
 - Module to deploy virtual machine from template in content library.
