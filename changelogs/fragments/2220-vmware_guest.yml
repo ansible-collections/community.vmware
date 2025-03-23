@@ -1,4 +1,0 @@
-bugfixes:
-  - vmware_guest - setting vApp properties on virtual machines without vApp options raised an AttributeError.
-    Fix now gracefully handles a `None` value for vApp options when retrieving current vApp properties
-    (https://github.com/ansible-collections/community.vmware/pull/2220).
