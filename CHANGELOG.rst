@@ -6,6 +6,44 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.5.0
+======
+
+Minor Changes
+-------------
+
+- vcenter_standard_key_provider - Drop unused HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2327).
+- vmware_category - Don't test for vSphere < 7 anymore (https://github.com/ansible-collections/community.vmware/pull/2326).
+- vmware_guest - Drop unused HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2327).
+- vmware_guest_storage_policy - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_guest_tpm - Drop unused HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2327).
+- vmware_host_graphics - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_host_lockdown - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_host_lockdown_exceptions - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_host_snmp - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_migrate_vmk - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_migrate_vmk - Inherit from / sub-class PyVmomi (https://github.com/ansible-collections/community.vmware/pull/2324).
+- vmware_resource_pool - Drop unnecessary HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2328).
+- vmware_vc_infraprofile_info - Don't test for vSphere < 7 anymore (https://github.com/ansible-collections/community.vmware/pull/2326).
+- vmware_vm_config_option - Drop unused HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2327).
+- vmware_vm_vss_dvs_migrate - Inherit from / sub-class PyVmomi (https://github.com/ansible-collections/community.vmware/pull/2325).
+- vmware_vsan_health_info - Drop unused HAS_PYVMOMI (https://github.com/ansible-collections/community.vmware/pull/2327).
+
+Deprecated Features
+-------------------
+
+- vcenter_folder - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2340).
+- vmware_cluster_ha - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2321).
+- vmware_content_deploy_ovf_template - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2332).
+- vmware_content_deploy_template - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2332).
+- vmware_content_library_manager - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2345).
+- vmware_host - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2337).
+
+Bugfixes
+--------
+
+- vmware_object_role_permission - The module ignores changing ``recursive`` (https://github.com/ansible-collections/community.vmware/pull/2350).
+
 v5.4.0
 ======
 
