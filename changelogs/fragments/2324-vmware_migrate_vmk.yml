@@ -1,2 +1,0 @@
-minor_changes:
-  - vmware_migrate_vmk - Inherit from / sub-class PyVmomi (https://github.com/ansible-collections/community.vmware/pull/2324).
