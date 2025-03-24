@@ -83,6 +83,7 @@ jobs:
           - stable-2.18
         # - devel
           - milestone
+          - refs/pull/84621/head
     runs-on: ubuntu-latest
 
     steps:
@@ -132,6 +133,7 @@ jobs:
           - stable-2.18
         # - devel
           - milestone
+          - refs/pull/84621/head
 
     steps:
       - name: >-
