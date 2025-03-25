@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_dvs_portgroup - Fix idempotency issue with ``mac_learning``
+    (https://github.com/ansible-collections/community.vmware/issues/1873).
