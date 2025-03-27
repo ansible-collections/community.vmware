@@ -88,6 +88,7 @@ options:
         description:
             - Dictionary which configures MAC learning for portgroup.
             - Ignored if O(network_policy.inherited=true).
+            - Beware that setting this to enabled will disable the inheritance of promiscuous mode and so on!
         suboptions:
             allow_unicast_flooding:
                 type: bool
@@ -115,7 +116,9 @@ options:
         suboptions:
             inherited:
                 type: bool
-                description: Inherit the settings from the switch or not.
+                description:
+                    - Inherit the settings from the switch or not.
+                    - Beware that setting this to enabled will also inherit MAC learning configuration (O(mac_learning)) from the switch!
                 required: true
             promiscuous:
                 type: bool
