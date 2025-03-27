@@ -21,7 +21,8 @@ import traceback
 import datetime
 from collections import OrderedDict
 from ansible.module_utils.compat.version import StrictVersion
-from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient, ApiAccessError
+from ansible_collections.vmware.vmware.plugins.module_utils.clients._pyvmomi import PyvmomiClient
+from ansible_collections.vmware.vmware.plugins.module_utils.clients._errors import ApiAccessError
 from random import randint
 
 
