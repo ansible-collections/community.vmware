@@ -88,7 +88,7 @@ options:
        - The ESXi hostname where the virtual machine is running.
      type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 """
 
 EXAMPLES = r"""

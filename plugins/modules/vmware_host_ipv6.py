@@ -37,7 +37,7 @@ options:
     - This is required parameter if O(esxi_hostname) is not specified.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

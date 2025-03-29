@@ -139,7 +139,7 @@ options:
     type: int
     default: 300
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 author:
 - Anant Chopra (@Anant99-sys)

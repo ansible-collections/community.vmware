@@ -92,7 +92,7 @@ options:
      - The value of 3D Memory must be power of 2 and valid value is from 32 MB to 2048 MB.
      type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

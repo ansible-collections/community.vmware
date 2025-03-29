@@ -47,7 +47,7 @@ seealso:
 - module: community.vmware.vmware_cluster_ha
 - module: community.vmware.vmware_cluster_vsan
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

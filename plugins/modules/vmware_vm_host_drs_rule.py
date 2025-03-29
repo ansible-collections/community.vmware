@@ -16,7 +16,7 @@ author:
 description:
   - "This module can be used to create VM-Host rules in a given cluster."
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 module: vmware_vm_host_drs_rule
 options:

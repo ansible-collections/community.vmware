@@ -156,7 +156,7 @@ options:
       - Return information about current guest network adapters.
     type: bool
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''

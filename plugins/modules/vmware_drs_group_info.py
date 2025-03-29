@@ -17,7 +17,7 @@ author:
 description:
   - "This module can be used to gather information about DRS VM/HOST groups from the given cluster."
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 module: vmware_drs_group_info
 options:

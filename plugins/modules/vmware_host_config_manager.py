@@ -38,7 +38,7 @@ options:
     default: {}
     type: dict
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

@@ -96,7 +96,8 @@ options:
       default: 'present'
       choices: [ 'present', 'absent' ]
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- vmware.vmware.base_options
+- vmware.vmware.additional_rest_options
 
 '''
 EXAMPLES = r'''

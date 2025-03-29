@@ -20,7 +20,7 @@ short_description: Manage VMs and Hosts in DRS group.
 description:
   - The module can be used to add VMs / Hosts to or remove them from a DRS group.
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 options:
   cluster:
     description:

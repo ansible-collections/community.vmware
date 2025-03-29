@@ -85,7 +85,7 @@ options:
      - Choose if EFI secure boot should be enabled.  EFI secure boot can only be enabled with boot_firmware = efi
      type: 'bool'
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

@@ -35,7 +35,7 @@ options:
 requirements:
     - VMware vSAN Python's SDK
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 author:
     - Erwan Quelin (@equelin)
 '''

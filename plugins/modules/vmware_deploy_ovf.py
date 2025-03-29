@@ -151,7 +151,7 @@ options:
         - This requires vmware-tools (vmtoolsd) to properly work after creation.
         type: bool
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

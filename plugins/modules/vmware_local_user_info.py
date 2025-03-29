@@ -21,7 +21,7 @@ author:
 - Abhijeet Kasurde (@Akasurde)
 - Christian Kotte (@ckotte)
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

@@ -54,7 +54,7 @@ options:
       default: 3
       choices: [1, 2, 3, 4, 5]
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

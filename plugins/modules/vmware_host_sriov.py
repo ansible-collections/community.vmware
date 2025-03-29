@@ -51,7 +51,7 @@ options:
     type: bool
     required: false
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''

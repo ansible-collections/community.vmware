@@ -107,7 +107,7 @@ options:
         description: The absolute file path of KMS signed CSR downloaded from O(make_kms_trust_vc.download_client_csr).
         type: path
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''

@@ -71,7 +71,7 @@ options:
      - The datacenter to search for a virtual machine.
      type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

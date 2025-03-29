@@ -79,7 +79,7 @@ options:
     default: 30
     type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

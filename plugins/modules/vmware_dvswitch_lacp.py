@@ -82,7 +82,7 @@ options:
         type: list
         default: []
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 
