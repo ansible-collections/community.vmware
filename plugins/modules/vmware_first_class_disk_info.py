@@ -28,7 +28,8 @@ options:
     disk_name:
       description: The name of the disk. If not set return all found.
       type: str
-extends_documentation_fragment: vmware.documentation
+extends_documentation_fragment:
+- community.vmware.vmware.documentation
 '''
 
 EXAMPLES = r'''
