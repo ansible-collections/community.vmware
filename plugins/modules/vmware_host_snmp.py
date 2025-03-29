@@ -94,7 +94,7 @@ options:
         - System location.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

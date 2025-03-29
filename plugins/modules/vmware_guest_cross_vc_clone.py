@@ -117,7 +117,7 @@ options:
     default: 3600
     version_added: '3.5.0'
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 
 author:

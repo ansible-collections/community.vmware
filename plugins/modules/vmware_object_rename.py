@@ -54,7 +54,9 @@ options:
       aliases: ['object_new_name']
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- vmware.vmware.base_options
+- vmware.vmware.additional_rest_options
+
 '''
 
 EXAMPLES = r'''

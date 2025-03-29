@@ -128,7 +128,7 @@ options:
      - Value to change the description of an existing snapshot to.
      type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

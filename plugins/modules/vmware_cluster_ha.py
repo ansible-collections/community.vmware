@@ -201,7 +201,7 @@ options:
       default: 'warning'
       choices: [ 'disabled', 'warning', 'restartAggressive' ]
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

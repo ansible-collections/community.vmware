@@ -103,7 +103,7 @@ options:
       default: 3600
       type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

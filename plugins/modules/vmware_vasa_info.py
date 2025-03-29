@@ -20,7 +20,7 @@ description:
 author:
 - Eugenio Grosso (@genegr) <eugenio.grosso@purestorage.com>
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

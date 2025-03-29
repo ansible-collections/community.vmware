@@ -124,7 +124,7 @@ options:
           - Required when O(backings[].backing_type=file).
         type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 author:
   - Anusha Hegde (@anusha94)
 '''

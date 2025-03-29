@@ -55,7 +55,7 @@ options:
             - Will be ignored when migrating from VSS to VDS
         type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

@@ -66,7 +66,7 @@ options:
     choices: [ present, absent ]
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

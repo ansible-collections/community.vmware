@@ -113,7 +113,7 @@ options:
         - Name of the virtual machine to get related configurations information from.
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''

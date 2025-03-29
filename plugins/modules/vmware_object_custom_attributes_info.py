@@ -46,7 +46,7 @@ options:
       - This is required if O(object_name) is not supplied.
     type: str
 extends_documentation_fragment:
-  - community.vmware.vmware.documentation
+  - vmware.vmware.base_options
 """
 
 EXAMPLES = r"""

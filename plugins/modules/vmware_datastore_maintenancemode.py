@@ -46,7 +46,7 @@ options:
       required: false
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

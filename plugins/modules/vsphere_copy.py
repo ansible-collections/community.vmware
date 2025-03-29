@@ -58,7 +58,7 @@ notes:
   - "This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer.
     It can be the normal remote target or you can change it either by using C(transport: local) or using C(delegate_to)."
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

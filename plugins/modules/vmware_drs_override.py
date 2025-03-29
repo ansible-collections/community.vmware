@@ -24,7 +24,7 @@ options:
         default: 'manual'
         type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 author:
     - Sergey Goncharov (@svg1007)
 '''

@@ -71,7 +71,7 @@ options:
     - Cannot be used when you connect directly to an ESXi host.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

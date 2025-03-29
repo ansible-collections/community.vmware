@@ -69,7 +69,7 @@ options:
     - The hardware version from the returned list when O(get_hardware_versions=true), e.g., 'vmx-19'.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

@@ -39,7 +39,7 @@ options:
     - If O(cluster_name) is not given, this parameter is required.
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

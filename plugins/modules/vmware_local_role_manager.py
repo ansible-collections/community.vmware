@@ -56,7 +56,7 @@ options:
     choices: [ add, remove, set ]
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 

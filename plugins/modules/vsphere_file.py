@@ -52,7 +52,7 @@ options:
 notes:
 - The vSphere folder API does not allow to remove directory objects.
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''
