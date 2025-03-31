@@ -437,6 +437,8 @@ class VMwareDvsPortgroup(PyVmomi):
         self.dvs_portgroup = None
         self.dv_switch = None
 
+        self.networkPolicy = self.module.params['network_policy']
+
         self.port_allocation = self.module.params['port_allocation']
         if self.port_allocation is None:
             if self.module.params['port_binding'] == 'ephemeral':
@@ -509,16 +511,15 @@ class VMwareDvsPortgroup(PyVmomi):
 
         config.defaultPortConfig.vlan.inherited = False
 
-        networkPolicy = self.module.params['network_policy']
-        if networkPolicy is not None:
+        if self.networkPolicy is not None:
             config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
-            config.defaultPortConfig.macManagementPolicy.inherited = networkPolicy['inherited']
-            if not networkPolicy['inherited']:
-                config.defaultPortConfig.macManagementPolicy.allowPromiscuous = networkPolicy['promiscuous']
-                config.defaultPortConfig.macManagementPolicy.forgedTransmits = networkPolicy['forged_transmits']
-                config.defaultPortConfig.macManagementPolicy.macChanges = networkPolicy['mac_changes']
+            config.defaultPortConfig.macManagementPolicy.inherited = self.networkPolicy['inherited']
+            if not self.networkPolicy['inherited']:
+                config.defaultPortConfig.macManagementPolicy.allowPromiscuous = self.networkPolicy['promiscuous']
+                config.defaultPortConfig.macManagementPolicy.forgedTransmits = self.networkPolicy['forged_transmits']
+                config.defaultPortConfig.macManagementPolicy.macChanges = self.networkPolicy['mac_changes']
 
-        if not networkPolicy or not networkPolicy['inherited']:
+        if not self.networkPolicy or not self.networkPolicy['inherited']:
             macLearning = self.module.params['mac_learning']
             if macLearning:
                 if config.defaultPortConfig.macManagementPolicy is None:
@@ -760,17 +761,16 @@ class VMwareDvsPortgroup(PyVmomi):
             if defaultPortConfig.vlan.vlanId != int(self.module.params['vlan_id']):
                 return 'update'
 
-        networkPolicy = self.module.params['network_policy']
-        if networkPolicy is not None:
-            if defaultPortConfig.macManagementPolicy.inherited != networkPolicy['inherited']:
+        if self.networkPolicy is not None:
+            if defaultPortConfig.macManagementPolicy.inherited != self.networkPolicy['inherited']:
                 return 'update'
-            if not networkPolicy['inherited']:
-                if defaultPortConfig.macManagementPolicy.allowPromiscuous != networkPolicy['promiscuous'] or \
-                        defaultPortConfig.macManagementPolicy.forgedTransmits != networkPolicy['forged_transmits'] or \
-                        defaultPortConfig.macManagementPolicy.macChanges != networkPolicy['mac_changes']:
+            if not self.networkPolicy['inherited']:
+                if defaultPortConfig.macManagementPolicy.allowPromiscuous != self.networkPolicy['promiscuous'] or \
+                        defaultPortConfig.macManagementPolicy.forgedTransmits != self.networkPolicy['forged_transmits'] or \
+                        defaultPortConfig.macManagementPolicy.macChanges != self.networkPolicy['mac_changes']:
                     return 'update'
 
-        if not networkPolicy or not networkPolicy['inherited']:
+        if not self.networkPolicy or not self.networkPolicy['inherited']:
             macLearning = self.module.params['mac_learning']
             if macLearning:
                 macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
