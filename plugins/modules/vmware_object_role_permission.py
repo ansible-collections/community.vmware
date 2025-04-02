@@ -144,7 +144,7 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_obj
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
 
 
 class VMwareObjectRolePermission(PyVmomi):
@@ -283,9 +283,8 @@ class VMwareObjectRolePermission(PyVmomi):
             getattr(vim, self.params['object_type'])
         except AttributeError:
             self.module.fail_json(msg="Object type %s is not valid." % self.params['object_type'])
-        self.current_obj = find_obj(content=self.content,
-                                    vimtype=[getattr(vim, self.params['object_type'])],
-                                    name=self.params['object_name'])
+        self.current_obj = self.find_obj(vimtype=[getattr(vim, self.params['object_type'])],
+                                         name=self.params['object_name'])
 
         if self.current_obj is None:
             self.module.fail_json(
