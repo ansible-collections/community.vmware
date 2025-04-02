@@ -93,7 +93,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware_sms import
     SMS,
     TaskError,
     wait_for_sms_task)
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
@@ -232,7 +232,7 @@ class VMwareVASA(SMS):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         vasa_name=dict(type='str', required=True),
         vasa_url=dict(type='str', required=True),

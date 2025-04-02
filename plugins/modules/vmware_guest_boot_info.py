@@ -91,7 +91,8 @@ vm_boot_info:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_vm_by_id
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_vm_by_id
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim, VmomiSupport
@@ -172,7 +173,7 @@ class VmBootInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
         uuid=dict(type='str'),

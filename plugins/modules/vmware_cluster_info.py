@@ -186,8 +186,8 @@ except ImportError:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves.urllib.parse import unquote
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec, find_datacenter_by_name, find_cluster_by_name, \
-    get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_datacenter_by_name, find_cluster_by_name, get_parent_datacenter
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 
 
@@ -322,7 +322,7 @@ class VmwreClusterInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str'),
         cluster_name=dict(type='str'),

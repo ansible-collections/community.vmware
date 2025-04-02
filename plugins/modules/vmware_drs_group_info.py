@@ -111,7 +111,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, find_datacenter_by_name, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_datacenter_by_name, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VmwareDrsGroupInfoManager(PyVmomi):
@@ -234,7 +235,7 @@ class VmwareDrsGroupInfoManager(PyVmomi):
 
 def main():
 
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
 
     argument_spec.update(
         datacenter=dict(type='str', required=False, aliases=['datacenter_name']),

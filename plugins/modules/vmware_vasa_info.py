@@ -63,7 +63,7 @@ vasa_providers:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_sms import SMS
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class SMSClient(SMS):
@@ -104,7 +104,7 @@ class SMSClient(SMS):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
 
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 

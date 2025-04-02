@@ -214,13 +214,14 @@ except ImportError:
 from random import randint
 from datetime import datetime
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, set_vm_power_state, vmware_argument_spec, \
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, set_vm_power_state, \
     check_answer_question_status, make_answer_response, answer_question, gather_vm_facts
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         datacenter=dict(type='str', default='ha-datacenter'),
         state=dict(type='str', default='present',

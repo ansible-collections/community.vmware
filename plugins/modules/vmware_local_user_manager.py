@@ -66,7 +66,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VMwareLocalUserManager(PyVmomi):
@@ -163,7 +164,7 @@ class VMwareLocalUserManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(local_user_name=dict(required=True, type='str'),
                               local_user_password=dict(type='str', no_log=True),
                               local_user_description=dict(type='str'),

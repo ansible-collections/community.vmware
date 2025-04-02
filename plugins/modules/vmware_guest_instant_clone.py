@@ -274,11 +274,11 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_vm_by_name,
     find_vm_by_id,
     connect_to_api,
-    vmware_argument_spec,
     find_obj,
     wait_for_task,
     set_vm_power_state
 )
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim
@@ -517,7 +517,7 @@ class VmwareGuestInstantClone(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str', required=True, aliases=['vm_name']),
         uuid=dict(type='str'),
