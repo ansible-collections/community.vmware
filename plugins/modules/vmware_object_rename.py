@@ -125,6 +125,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
 try:
     from pyVmomi import vim
 except ImportError:
@@ -307,7 +308,7 @@ class VmwareObjectRename(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         object_name=dict(),
         object_moid=dict(),
