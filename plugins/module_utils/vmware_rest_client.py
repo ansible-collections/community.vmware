@@ -56,6 +56,7 @@ except ImportError:
 
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils._text import to_native
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
 
 
 class VmwareRestClient(object):
@@ -101,6 +102,10 @@ class VmwareRestClient(object):
                 msg=missing_required_lib('vSphere Automation SDK',
                                          url='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'),
                 exception=VSPHERE_IMP_ERR)
+
+    @staticmethod
+    def vmware_client_argument_spec():
+        return rest_compatible_argument_spec()
 
     def connect_to_vsphere_client(self):
         """
