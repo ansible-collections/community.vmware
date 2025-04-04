@@ -196,8 +196,9 @@ except ImportError:
     pass
 
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, vmware_argument_spec, find_datacenter_by_name, \
+from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, find_datacenter_by_name, \
     find_cluster_by_name, find_object_by_name, wait_for_task, find_resource_pool_by_name, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -443,7 +444,7 @@ class VMwareResourcePool(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(datacenter=dict(required=True, type='str'),
                               cluster=dict(type='str', required=False),
                               esxi_hostname=dict(type='str', required=False),

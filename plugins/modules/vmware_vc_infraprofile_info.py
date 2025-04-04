@@ -147,6 +147,7 @@ import_profile:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
 import json
 import time
 
@@ -221,7 +222,7 @@ class VcenterProfile(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     argument_spec.update(
         encryption_key=dict(type='str', required=False, no_log=True),
         description=dict(type='str', required=False),

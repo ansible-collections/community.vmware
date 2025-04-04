@@ -199,7 +199,8 @@ except ImportError:
         pass
 
 from ansible.module_utils._text import to_native
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -333,7 +334,7 @@ class VMwareHostAutoStartManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(esxi_hostname=dict(type='str', required=True),
                          name=dict(type='str'),
                          uuid=dict(type='str'),

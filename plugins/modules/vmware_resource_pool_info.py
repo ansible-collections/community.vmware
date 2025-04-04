@@ -76,7 +76,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, get_all_objs
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class ResourcePoolInfoManager(PyVmomi):
@@ -122,7 +123,7 @@ class ResourcePoolInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
 
     vmware_rp_mgr = ResourcePoolInfoManager(module)

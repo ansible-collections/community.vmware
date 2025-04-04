@@ -230,10 +230,10 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_vm_by_name,
     PyVmomi,
     gather_vm_facts,
-    vmware_argument_spec,
     wait_for_task,
     wait_for_vm_ip,
     set_vm_power_state)
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 try:
     from ansible_collections.community.vmware.plugins.module_utils.vmware import vim
     from pyVmomi import vmodl
@@ -812,7 +812,7 @@ class VMwareDeployOvf(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update({
         'name': {},
         'datastore': {

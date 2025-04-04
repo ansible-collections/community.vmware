@@ -119,7 +119,8 @@ except ImportError:
     HAS_VSANPYTHONSDK = False
 
 from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VSANInfoManager(PyVmomi):
@@ -167,7 +168,7 @@ class VSANInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         datacenter=dict(required=False, type='str', aliases=['datacenter_name']),
         cluster_name=dict(required=True, type='str'),
