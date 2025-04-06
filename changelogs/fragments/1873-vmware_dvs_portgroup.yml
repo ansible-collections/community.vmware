@@ -1,3 +1,9 @@
 bugfixes:
   - vmware_dvs_portgroup - Fix idempotency issue with ``mac_learning``
     (https://github.com/ansible-collections/community.vmware/issues/1873).
+minor_changes:
+  - vmware_dvs_portgroup - New option ``network_policy.mac_learning`` to replace ``mac_learning``
+    (https://github.com/ansible-collections/community.vmware/issues/1873).
+deprecated_features:
+  - vmware_dvs_portgroup - ``mac_learning`` is deprecated in favour of ``network_policy.mac_learning``
+    (https://github.com/ansible-collections/community.vmware/issues/1873).
