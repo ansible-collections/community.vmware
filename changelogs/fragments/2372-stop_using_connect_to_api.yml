@@ -2,4 +2,5 @@ minor_changes:
   - vmware_guest_cross_vc_clone - Stop using ``connect_to_api``
     (https://github.com/ansible-collections/community.vmware/pull/2372).
   - vmware_guest_instant_clone - Stop using ``connect_to_api``
+  - vcenter_extension - Stop using ``connect_to_api``
     (https://github.com/ansible-collections/community.vmware/pull/2372).
