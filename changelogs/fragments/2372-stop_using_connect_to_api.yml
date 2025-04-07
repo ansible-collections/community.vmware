@@ -3,6 +3,8 @@ minor_changes:
     (https://github.com/ansible-collections/community.vmware/pull/2372).
   - vmware_guest_instant_clone - Stop using ``connect_to_api``
     (https://github.com/ansible-collections/community.vmware/pull/2372).
+  - vmware_vm_inventory - Stop using ``connect_to_api``
+    (https://github.com/ansible-collections/community.vmware/pull/2372).
   - vmware_vsan_cluster - Stop using ``connect_to_api``
     (https://github.com/ansible-collections/community.vmware/pull/2372).
   - vcenter_extension - Stop using ``connect_to_api``
