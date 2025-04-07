@@ -1,0 +1,18 @@
+---
+- name: Prepare VMware folders for testing dynamic inventory folder support
+  hosts: localhost
+  gather_facts: false
+  module_defaults:
+    group/vmware:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      port: "{{ vcenter_port|default('443') }}"
+      validate_certs: "{{ vmware_validate_certs|default('no') }}"
+  tasks:
+    - import_role:
+        name: ../prepare_vmware_tests
+      vars:
+        setup_attach_host: true
+        setup_datastore: true
+        setup_virtualmachines: true
