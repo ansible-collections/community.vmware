@@ -529,8 +529,8 @@ class BaseVMwareInventory:
             username=self.username,
             password=self.password,
             port=self.port, validate_certs=self.validate_certs,
-            httpProxyHost=self.proxy_host,
-            httpProxyPort=self.proxy_port)
+            http_proxy_host=self.proxy_host,
+            http_proxy_port=self.proxy_port)
 
         return pyvmomi_client.si, pyvmomi_client.content
 
