@@ -6,6 +6,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
+import sys
 import pytest
 
 from unittest import mock
@@ -101,8 +102,13 @@ def fake_ansible_module():
     return ret
 
 
+def fake_connect_to_api(module, return_si=None):
+    return None, mock.Mock()
+
+
 testdata = [
     ('HAS_PYVMOMI', 'PyVmomi'),
+    ('HAS_REQUESTS', 'requests'),
 ]
 
 
@@ -115,6 +121,17 @@ def test_lib_loading_failure(monkeypatch, fake_ansible_module, key, libname):
     error_str = 'Failed to import the required Python library (%s)' % libname
     fake_ansible_module.fail_json.assert_called_once()
     assert error_str in fake_ansible_module.fail_json.call_args[1]['msg']
+
+
+@pytest.mark.skipif(sys.version_info < (2, 7), reason="requires python2.7 and greater")
+@pytest.mark.parametrize("params, msg", test_data, ids=test_ids)
+def test_required_params(request, params, msg, fake_ansible_module):
+    """ Test if required params are correct or not"""
+    fake_ansible_module.params = params
+    with pytest.raises(FailJsonException):
+        vmware_module_utils.connect_to_api(fake_ansible_module)
+    fake_ansible_module.fail_json.assert_called_once()
+    # TODO: assert msg in fake_ansible_module.fail_json.call_args[1]['msg']
 
 
 @pytest.mark.parametrize("test_options, test_current_options, test_truthy_strings_as_bool", [
