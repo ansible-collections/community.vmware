@@ -9,3 +9,6 @@ minor_changes:
     (https://github.com/ansible-collections/community.vmware/pull/2372).
   - vcenter_extension - Stop using ``connect_to_api``
     (https://github.com/ansible-collections/community.vmware/pull/2372).
+deprecated_features:
+  - module_utils.vmware - Deprecate ``connect_to_api``
+    (https://github.com/ansible-collections/community.vmware/pull/2372).
