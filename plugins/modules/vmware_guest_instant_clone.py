@@ -273,12 +273,12 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     TaskError,
     find_vm_by_name,
     find_vm_by_id,
-    connect_to_api,
     find_obj,
     wait_for_task,
     set_vm_power_state
 )
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
 
 try:
     from pyVmomi import vim
@@ -330,7 +330,7 @@ class VmwareGuestInstantClone(PyVmomi):
         return info
 
     def Instant_clone(self):
-        # clone the vm on  VC
+        # clone the vm on VC
         if self.vm_obj is None:
             vm_id = self.parent_vm or self.uuid or self.moid
             self.module.fail_json(msg="Failed to find the VM/template with %s" % vm_id)
@@ -342,13 +342,14 @@ class VmwareGuestInstantClone(PyVmomi):
         except TaskError as task_e:
             self.module.fail_json(msg=to_native(task_e))
 
-        self.destination_content = connect_to_api(
-            self.module,
+        pyvmomi_client = PyvmomiClient(
             hostname=self.hostname,
             username=self.username,
             password=self.password,
             port=self.port,
             validate_certs=self.validate_certs)
+
+        self.destination_content = pyvmomi_client.content
 
         vm_IC = find_vm_by_name(content=self.destination_content, vm_name=self.params['name'])
         if vm_IC and self.params.get('guestinfo_vars'):
@@ -420,13 +421,14 @@ class VmwareGuestInstantClone(PyVmomi):
         Verify user-provided parameters
         '''
         # connect to host/VC
-        self.destination_content = connect_to_api(
-            self.module,
+        pyvmomi_client = PyvmomiClient(
             hostname=self.hostname,
             username=self.username,
             password=self.password,
             port=self.port,
             validate_certs=self.validate_certs)
+
+        self.destination_content = pyvmomi_client.content
 
         use_instance_uuid = self.params.get('use_instance_uuid') or False
 
