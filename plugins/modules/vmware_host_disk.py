@@ -120,21 +120,20 @@ class VMwareHostDisk(SMS):
           :return: Current attachment state of the disk: "attached" or "detached"
           :rtype: string
         """
-        storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
+        storage_system = self.esxi.configManager.storageSystem  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
 
-        for disk in storage_system.storageDeviceInfo.scsiLun: # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.ScsiLun.html 
+        for disk in storage_system.storageDeviceInfo.scsiLun:  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.ScsiLun.html
             if disk.uuid == self.uuid:
-                if "ok" in disk.operationalState: # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.ScsiLun.State.html 
+                if "ok" in disk.operationalState:  # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.ScsiLun.State.html
                     return "attached"
                 elif "off" in disk.operationalState:
                     return "detached"
                 self.module.fail_json(msg='Disk is in an unexpected state !{} ' % disk.operationalState)
-                
+
         self.module.fail_json(msg='Disk with uuid %s was not found !' % self.uuid)
-    
 
     def detach_disk_from_host(self):
-        if self.module.check_mode is False:       
+        if self.module.check_mode is False:
             try:
                 self.esxi.configManager.storageSystem.DetachScsiLun(self.uuid)
                 self.module.exit_json(changed=True, result="Disk with uuid %s was successfully detached." % self.uuid)
@@ -145,15 +144,15 @@ class VMwareHostDisk(SMS):
                 self.module.fail_json(msg='Disk with uuid {} can\'t be detached because of an unexpected error ! {}' % self.uuid % e)
         self.module.exit_json(changed=True, result="CHECK MODE: Disk with uuid %s would be successfully detached." % self.uuid)
 
-
     def attach_disk_to_host(self):
         if self.module.check_mode is False:
             try:
-                self.esxi.configManager.storageSystem.AttachScsiLun(self.uuid) 
+                self.esxi.configManager.storageSystem.AttachScsiLun(self.uuid)
                 self.module.exit_json(changed=True, result="Disk with uuid %s was successfully attached." % self.uuid)
             except vim.fault.VimFault as e:
                 self.module.fail_json(msg='Disk with uuid {} can\'t be attached because of an unexpected error ! {}' % self.uuid % e)
         self.module.exit_json(changed=True, result="CHECK MODE: disk with uuid %s would be successfully attached." % self.uuid)
+
 
 def main():
     argument_spec = vmware_argument_spec()
