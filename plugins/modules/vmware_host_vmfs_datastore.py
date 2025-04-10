@@ -141,88 +141,85 @@ class VMwareHostVmfsDatastore(SMS):
           :return: Current mount state of the datastore : "mounted" or "unmounted"
           :rtype: string
         """
-        storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
-        host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
+        storage_system = self.esxi.configManager.storageSystem   # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
+        host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo   # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
         for host_mount_info in host_file_sys_vol_mount_info:
-                if host_mount_info.volume.name == self.datastore_name:
-                    if host_mount_info.mountInfo.mounted: 
-                        return "mounted" # Detects if the datastore is mounted, works for both original and snapshot
-                    else: 
-                        return "unmounted" # This seems to work only for orignal datastores
+            if host_mount_info.volume.name == self.datastore_name:
+                if host_mount_info.mountInfo.mounted:
+                    return "mounted"   # Detects if the datastore is mounted, works for both original and snapshot
+                else:
+                    return "unmounted"   # This seems to work only for orignal datastores
 
         # Unmounted snapshot datastores may not appear in the host_file_sys_vol_mount_info list from above
         # which is why we need to do the following
-        if self.is_unmounted_snapshot_datastore(): 
+        if self.is_unmounted_snapshot_datastore():
             return "unmounted"
         self.module.fail_json(msg='Datastore %s was not found ! ' % self.datastore_name)
-    
+
     def is_unmounted_snapshot_datastore(self):
         """If a datastore is unmounted, this returns whether the datastore is original or not
         to be able to use which method must be used for mounting.
         """
-        storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
-        unresolved_vmfs_volumes = storage_system.QueryUnresolvedVmfsVolume() #  VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#queryUnresolvedVmfsVolume
+        storage_system = self.esxi.configManager.storageSystem  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
+        unresolved_vmfs_volumes = storage_system.QueryUnresolvedVmfsVolume()  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#queryUnresolvedVmfsVolume
         # Snapshot datastores that are not mounted are considered as "unresolved" vmfs volumes unlike unmounted original datastores.
         for vol in unresolved_vmfs_volumes:
-            if vol.vmfsLabel == self.datastore_name: 
+            if vol.vmfsLabel == self.datastore_name:
                 return True
         return False
 
-
     def unmount_vmfs_datastore_from_host(self):
         if self.module.check_mode is False:
-            storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
-            host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
-    
+            storage_system = self.esxi.configManager.storageSystem  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
+            host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo  # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
+
             for host_mount_info in host_file_sys_vol_mount_info:
                 if host_mount_info.volume.name == self.datastore_name:
                     error_message_umount = "Cannot umount datastore %s from host %s" % (self.datastore_name, self.esxi.name)
                     try:
-                        storage_system.UnmountVmfsVolume(host_mount_info.volume.uuid) # VMware docs : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.StorageSystem.html#unmountVmfsVolume 
+                        storage_system.UnmountVmfsVolume(host_mount_info.volume.uuid)  # VMware docs : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.StorageSystem.html#unmountVmfsVolume
                         self.module.exit_json(changed=True, result="Datastore %s on host %s successfully unmounted." % (self.datastore_name, self.esxi.name))
                     except (vim.fault.NotFound, vim.fault.HostConfigFault, vim.fault.ResourceInUse) as fault:
                         self.module.fail_json(msg="%s: %s" % (error_message_umount, to_native(fault.msg)))
                     except Exception as e:
                         self.module.fail_json(msg="%s: %s" % (error_message_umount, to_native(e)))
-        
+
         self.module.exit_json(changed=True, result="CHECK MODE: Datastore %s on host %s would be successfully unmounted." % (self.datastore_name, self.esxi.name))
 
     def mount_vmfs_datastore_on_host(self):
-       # API calls are different depending on if the datastore is original  
+        # API calls are different depending on if the datastore is original
         if self.is_unmounted_snapshot_datastore():
             self.mount_snapshot_vmfs_datastore_on_host()
         self.mount_original_vmfs_datastore_on_host()
-        
 
     def mount_original_vmfs_datastore_on_host(self):
         if self.module.check_mode is False:
-            storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
-            host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
-            
-            for host_mount_info in host_file_sys_vol_mount_info:
-                    if host_mount_info.volume.name == self.datastore_name:
-                        error_message_umount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
-                        try:
-                            storage_system.MountVmfsVolume(host_mount_info.volume.uuid)
-                            self.module.exit_json(changed=True, result="Datastore %s on host %s successfully mounted." % (self.datastore_name, self.esxi.name))
-                        except Exception as e:
-                            self.module.fail_json(msg="%s: %s" % (error_message_umount, to_native(e)))
-            
-        self.module.exit_json(changed=True, result="CHECK MODE: Datastore %s on host %s would be successfully mounted." % (self.datastore_name, self.esxi.name))
+            storage_system = self.esxi.configManager.storageSystem  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
+            host_file_sys_vol_mount_info = storage_system.fileSystemVolumeInfo.mountInfo  # Array of : https://vdc-download.vmware.com/vmwb-repository/dcr-public/b50dcbbf-051d-4204-a3e7-e1b618c1e384/538cf2ec-b34f-4bae-a332-3820ef9e7773/vim.host.FileSystemMountInfo.html
 
+            for host_mount_info in host_file_sys_vol_mount_info:
+                if host_mount_info.volume.name == self.datastore_name:
+                    error_message_umount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
+                    try:
+                        storage_system.MountVmfsVolume(host_mount_info.volume.uuid)
+                        self.module.exit_json(changed=True, result="Datastore %s on host %s successfully mounted." % (self.datastore_name, self.esxi.name))
+                    except Exception as e:
+                        self.module.fail_json(msg="%s: %s" % (error_message_umount, to_native(e)))
+
+        self.module.exit_json(changed=True, result="CHECK MODE: Datastore %s on host %s would be successfully mounted." % (self.datastore_name, self.esxi.name))
 
     def mount_snapshot_vmfs_datastore_on_host(self):
         if self.module.check_mode is False:
-            storage_system = self.esxi.configManager.storageSystem # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html 
-            unresolved_vmfs_volumes = storage_system.QueryUnresolvedVmfsVolume() #  VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#queryUnresolvedVmfsVolume
+            storage_system = self.esxi.configManager.storageSystem  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html
+            unresolved_vmfs_volumes = storage_system.QueryUnresolvedVmfsVolume()  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#queryUnresolvedVmfsVolume
             error_message_mount = "Cannot mount datastore %s on host %s" % (self.datastore_name, self.esxi.name)
             for vol in unresolved_vmfs_volumes:
                 if vol.vmfsLabel == self.datastore_name:
                     try:
-                        resolution_spec = vim.host.UnresolvedVmfsResolutionSpec() # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/fa5d1ee7-fad5-4ebf-b150-bdcef1d38d35/a5e46da1-9b96-4f0c-a1d0-7b8f3ebfd4f5/doc/vim.host.UnresolvedVmfsResolutionSpec.html 
-                        resolution_spec.uuidResolution = 'forceMount' # This is to prevent resignature of the VMFS volume  
-                        resolution_spec.extentDevicePath = [vol.extent[0].devicePath] 
-                        storage_system.ResolveMultipleUnresolvedVmfsVolumes([resolution_spec]) # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#resolveMultipleUnresolvedVmfsVolumes 
+                        resolution_spec = vim.host.UnresolvedVmfsResolutionSpec()  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/fa5d1ee7-fad5-4ebf-b150-bdcef1d38d35/a5e46da1-9b96-4f0c-a1d0-7b8f3ebfd4f5/doc/vim.host.UnresolvedVmfsResolutionSpec.html
+                        resolution_spec.uuidResolution = 'forceMount'  # This is to prevent resignature of the VMFS volume
+                        resolution_spec.extentDevicePath = [vol.extent[0].devicePath]
+                        storage_system.ResolveMultipleUnresolvedVmfsVolumes([resolution_spec])  # VMware docs : https://vdc-repo.vmware.com/vmwb-repository/dcr-public/1ef6c336-7bef-477d-b9bb-caa1767d7e30/82521f49-9d9a-42b7-b19b-9e6cd9b30db1/vim.host.StorageSystem.html#resolveMultipleUnresolvedVmfsVolumes
                         self.module.exit_json(changed=True, result="Datastore %s on host %s successfully mounted." % (self.datastore_name, self.esxi.name))
                     except Exception as e:
                         self.module.fail_json(msg="%s : %s" % (error_message_mount, to_native(e)))
