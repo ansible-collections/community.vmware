@@ -1,0 +1,62 @@
+# Test code for the vmware_cluster module.
+# Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+# Setup: Create test cluster
+- name: Create test cluster
+  vmware.vmware.cluster:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_dpm
+    state: present
+
+# Testcase 0001: Enable DPM
+- name: Enable DPM
+  vmware_cluster_dpm:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_dpm
+    enable_dpm: true
+  register: cluster_dpm_result_0001
+
+- name: Ensure DPM is enabled
+  assert:
+    that:
+        - "{{ cluster_dpm_result_0001.changed == true }}"
+
+# Testcase 0002: Disable DPM
+- name: Disable DPM
+  vmware_cluster_dpm:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_dpm
+    enable_dpm: false
+  register: cluster_dpm_result_0002
+
+- name: Ensure DPM is disabled
+  assert:
+    that:
+        - "{{ cluster_dpm_result_0002.changed == true }}"
+
+# Delete test cluster
+- name: Delete test cluster
+  vmware.vmware.cluster:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_dpm
+    state: absent
