@@ -88,6 +88,7 @@ options:
         description:
             - Dictionary which configures MAC learning for portgroup.
             - Ignored if O(network_policy.inherited=true).
+            - Ignored if O(network_policy.mac_learning) is defined.
             - Beware that setting this to enabled might disable the inheritance of promiscuous mode and so on!
         suboptions:
             allow_unicast_flooding:
