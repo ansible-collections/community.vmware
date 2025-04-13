@@ -815,7 +815,7 @@ class VMwareDvsPortgroup(PyVmomi):
                     if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
                         return 'update'
 
-        if not self.networkPolicy or (not self.networkPolicy['inherited'] and self.networkPolicy['mac_learning']):
+        if not self.networkPolicy or (not self.networkPolicy['inherited'] and not self.networkPolicy['mac_learning']):
             macLearning = self.module.params['mac_learning']
             if macLearning:
                 macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
