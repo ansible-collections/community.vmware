@@ -290,7 +290,8 @@ except ImportError:
 import copy
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, vmware_argument_spec, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, TaskError, wait_for_task
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible_collections.community.vmware.plugins.module_utils.vm_device_helper import PyVmomiDeviceHelper
 
 
@@ -769,7 +770,7 @@ class PyVmomiHelper(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         name=dict(type='str'),
         uuid=dict(type='str'),

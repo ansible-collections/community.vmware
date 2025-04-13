@@ -423,8 +423,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_dvspg_by_name,
     is_boolean,
     is_truthy,
-    vmware_argument_spec,
     wait_for_task)
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VMwareDvsPortgroup(PyVmomi):
@@ -882,7 +882,7 @@ class VMwareDvsPortgroup(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dict(
             portgroup_name=dict(required=True, type='str'),

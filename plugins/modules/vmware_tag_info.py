@@ -113,6 +113,7 @@ tag_info:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
 
 
 class VmTagInfoManager(VmwareRestClient):
@@ -152,7 +153,7 @@ class VmTagInfoManager(VmwareRestClient):
 
 
 def main():
-    argument_spec = VmwareRestClient.vmware_client_argument_spec()
+    argument_spec = rest_compatible_argument_spec()
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
 

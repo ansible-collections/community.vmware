@@ -104,7 +104,8 @@ scsi_tgt_info:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, vmware_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class ScsiTargetInfoManager(PyVmomi):
@@ -152,7 +153,7 @@ class ScsiTargetInfoManager(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         dict(
             target_id=dict(required=False, type='int'),

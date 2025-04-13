@@ -58,7 +58,8 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import vmware_argument_spec, wait_for_task, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils.vmware import wait_for_task, PyVmomi
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VmwareDrsOverride(PyVmomi):
@@ -104,7 +105,7 @@ class VmwareDrsOverride(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         vm_name=dict(type='str', required=True),
         drs_behavior=dict(type='str', choices=['manual', 'partiallyAutomated', 'fullyAutomated'], default='manual')

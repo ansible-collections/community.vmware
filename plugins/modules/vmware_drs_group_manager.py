@@ -156,9 +156,9 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
-    vmware_argument_spec,
     wait_for_task,
     find_vm_by_id)
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VmwareDrsGroupMemberManager(PyVmomi):
@@ -480,7 +480,7 @@ def main():
     Main function
     """
 
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         state=dict(type='str', default='present', choices=['present', 'absent']),
         datacenter=dict(type='str', required=False, aliases=['datacenter_name']),

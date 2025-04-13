@@ -144,8 +144,9 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi, vmware_argument_spec, wait_for_task,
+    PyVmomi, wait_for_task,
     find_vm_by_id, find_cluster_by_name, find_datacenter_by_name)
+from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 
 class VmwareDrs(PyVmomi):
@@ -367,7 +368,7 @@ class VmwareDrs(PyVmomi):
 
 
 def main():
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(dict(
         state=dict(type='str', default='present', choices=['absent', 'present']),
         vms=dict(type='list', elements='str'),
