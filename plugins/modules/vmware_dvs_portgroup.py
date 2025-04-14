@@ -86,6 +86,7 @@ options:
         type: bool
     mac_learning:
         description:
+            - This option is deprecated in favour of O(network_policy.mac_learning) and will be removed in 7.0.0.
             - Dictionary which configures MAC learning for portgroup.
             - Ignored if O(network_policy.inherited=true).
             - Ignored if O(network_policy.mac_learning) is defined.
@@ -135,6 +136,7 @@ options:
                     - Configure MAC learning for portgroup.
                     - Ignored if O(network_policy.inherited=true).
                 type: dict
+                version_added: 5.6.0
                 suboptions:
                     allow_unicast_flooding:
                         type: bool
@@ -1062,6 +1064,8 @@ def main():
             ),
             mac_learning=dict(
                 type='dict',
+                removed_in_version='7.0.0',
+                removed_from_collection='community.vmware',
                 options=dict(
                     allow_unicast_flooding=dict(type='bool'),
                     enabled=dict(type='bool'),
