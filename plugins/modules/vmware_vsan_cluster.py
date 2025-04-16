@@ -59,10 +59,9 @@ except ImportError:
     HAS_PYVMOMI = False
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    HAS_PYVMOMI, connect_to_api, get_all_objs,
-    wait_for_task)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (get_all_objs, wait_for_task)
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
 
 
 def create_vsan_cluster(host_system, new_cluster_uuid):
@@ -101,7 +100,14 @@ def main():
     new_cluster_uuid = module.params['cluster_uuid']
 
     try:
-        content = connect_to_api(module, False)
+        pyvmomi_client = PyvmomiClient(
+            hostname=module.params.get('hostname'),
+            username=module.params.get('username'),
+            password=module.params.get('password'),
+            port=module.params.get('port'),
+            validate_certs=module.params.get('validate_certs')
+        )
+        content = pyvmomi_client.content
         host = get_all_objs(content, [vim.HostSystem])
         if not host:
             module.fail_json(msg="Unable to locate Physical Host.")

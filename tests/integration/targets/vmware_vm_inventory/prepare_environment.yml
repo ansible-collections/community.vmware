@@ -1,0 +1,57 @@
+---
+- hosts: localhost
+  module_defaults:
+    group/vmware:
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      port: "{{ vcenter_port|default('443') }}"
+      validate_certs: "{{ vmware_validate_certs|default('no') }}"
+  tasks:
+    - import_role:
+        name: prepare_vmware_tests
+      vars:
+        setup_attach_host: true
+        setup_datastore: true
+
+    - name: Create VM
+      vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc1 }}"
+        validate_certs: false
+        name: test_vm1
+        folder: vm
+        esxi_hostname: "{{ esxi1 }}"
+        state: powered-on
+        guest_id: debian8_64Guest
+        disk:
+        - size_gb: 1
+          type: thin
+          datastore: local
+        cdrom:
+        - controller_number: 0
+          unit_number: 0
+          type: iso
+          iso_path: "[{{ ro_datastore }}] fedora.iso"
+        hardware:
+          # vmware_guest_disk need vmx-13 to reconfigure the disks
+          version: 13
+          memory_mb: 1024
+          num_cpus: 1
+          scsi: paravirtual
+      register: vm_create
+
+    - copy:
+        dest: vmware.yaml
+        content: |
+          plugin: community.vmware.vmware_vm_inventory
+          strict: false
+          hostname: {{ vcenter_hostname }}
+          username: {{ vcenter_username }}
+          password: "{{ vcenter_password }}"
+          validate_certs: false
+          with_tags: true
+          hostnames:
+            - config.name
