@@ -29,101 +29,173 @@
     that:
         - dvs_pg_result_0001.changed
 
-- name: enable MAC learning
-  community.vmware.vmware_dvs_portgroup:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
-    vlan_id: 0
-    num_ports: 32
-    port_binding: static
-    mac_learning:
-      enabled: true
-    state: present
-  register: enable_mac_learning_result
+- name: Test PR 2360
+  block:
+    - name: enable MAC learning
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: true
+        state: present
+      register: enable_mac_learning_result
 
-- debug:
-    var: enable_mac_learning_result
+    - debug:
+        var: enable_mac_learning_result
 
-- name: ensure MAC learning is enabled
-  assert:
-    that:
-        - enable_mac_learning_result.changed
+    - name: ensure MAC learning is enabled
+      assert:
+        that:
+            - enable_mac_learning_result.changed
 
-- name: enable MAC learning again (idempotency)
-  community.vmware.vmware_dvs_portgroup:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
-    vlan_id: 0
-    num_ports: 32
-    port_binding: static
-    mac_learning:
-      enabled: true
-    state: present
-  register: enable_mac_learning_again_result
+    - name: enable MAC learning again (idempotency)
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: true
+        state: present
+      register: enable_mac_learning_again_result
 
-- debug:
-    var: enable_mac_learning_again_result
+    - debug:
+        var: enable_mac_learning_again_result
 
-- name: ensure MAC learning is not enabled again
-  assert:
-    that:
-        - not enable_mac_learning_again_result.changed
+    - name: ensure MAC learning is not enabled again
+      assert:
+        that:
+            - not enable_mac_learning_again_result.changed
 
-- name: disable MAC learning
-  community.vmware.vmware_dvs_portgroup:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
-    vlan_id: 0
-    num_ports: 32
-    port_binding: static
-    mac_learning:
-      enabled: false
-    state: present
-  register: disable_mac_learning_result
+    - name: disable MAC learning
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: false
+        state: present
+      register: disable_mac_learning_result
 
-- debug:
-    var: disable_mac_learning_result
+    - debug:
+        var: disable_mac_learning_result
 
-- name: ensure MAC learning is disabled
-  assert:
-    that:
-        - disable_mac_learning_result.changed
+    - name: ensure MAC learning is disabled
+      assert:
+        that:
+            - disable_mac_learning_result.changed
 
-- name: disable MAC learning again (idempotency)
-  community.vmware.vmware_dvs_portgroup:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    switch_name: "{{ dvswitch1 }}"
-    portgroup_name: "basic"
-    vlan_id: 0
-    num_ports: 32
-    port_binding: static
-    mac_learning:
-      enabled: false
-    state: present
-  register: disable_mac_learning_again_result
+    - name: disable MAC learning again (idempotency)
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        mac_learning:
+          enabled: false
+        state: present
+      register: disable_mac_learning_again_result
 
-- debug:
-    var: disable_mac_learning_again_result
+    - debug:
+        var: disable_mac_learning_again_result
 
-- name: ensure MAC learning is not disabled again
-  assert:
-    that:
-        - not disable_mac_learning_again_result.changed
+    - name: ensure MAC learning is not disabled again
+      assert:
+        that:
+            - not disable_mac_learning_again_result.changed
+
+    # Issue 1873
+    - name: Inherit network policy
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        network_policy:
+          inherited: true
+
+    - name: enable MAC learning + inheriting network policy
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        network_policy:
+          inherited: true
+        mac_learning:
+          enabled: true
+          allow_unicast_flooding: true
+          limit: 4096
+          limit_policy: allow
+        state: present
+      register: enable_mac_learning_result
+
+    - debug:
+        var: enable_mac_learning_result
+
+    - name: ensure MAC learning is not enabled
+      assert:
+        that:
+            - not enable_mac_learning_result.changed
+
+    - name: disable MAC learning + inheriting network policy
+      community.vmware.vmware_dvs_portgroup:
+        validate_certs: false
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        switch_name: "{{ dvswitch1 }}"
+        portgroup_name: "basic"
+        vlan_id: 0
+        num_ports: 32
+        port_binding: static
+        network_policy:
+          inherited: true
+        mac_learning:
+          enabled: false
+        state: present
+      register: disable_mac_learning_result
+
+    - debug:
+        var: disable_mac_learning_result
+
+    - name: ensure MAC learning is not disabled
+      assert:
+        that:
+            - not disable_mac_learning_result.changed
 
 - name: create basic VLAN portgroup
   community.vmware.vmware_dvs_portgroup:
@@ -270,6 +342,92 @@
   assert:
     that:
         - dvs_pg_result_0007.changed
+
+- name: Enable MAC learning
+  community.vmware.vmware_dvs_portgroup:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    switch_name: "{{ dvswitch1 }}"
+    portgroup_name: "basic-some-enabled"
+    vlan_id: 0
+    num_ports: 32
+    port_binding: static
+    state: present
+    network_policy:
+      inherited: false
+      promiscuous: true
+      forged_transmits: false
+      mac_changes: false
+      mac_learning:
+        enabled: true
+    port_policy:
+      vlan_override: true
+  register: enable_mac_learning_result
+
+- name: ensure MAC learning is changed
+  assert:
+    that:
+        - enable_mac_learning_result.changed
+
+- name: Enable MAC learning again (idempotency)
+  community.vmware.vmware_dvs_portgroup:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    switch_name: "{{ dvswitch1 }}"
+    portgroup_name: "basic-some-enabled"
+    vlan_id: 0
+    num_ports: 32
+    port_binding: static
+    state: present
+    network_policy:
+      inherited: false
+      promiscuous: true
+      forged_transmits: false
+      mac_changes: false
+      mac_learning:
+        enabled: true
+    port_policy:
+      vlan_override: true
+  register: enable_mac_learning_result
+
+- name: ensure MAC learning is unchanged
+  assert:
+    that:
+        - not enable_mac_learning_result.changed
+
+- name: Test mac_learning and network_policy.mac_learning together
+  community.vmware.vmware_dvs_portgroup:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    switch_name: "{{ dvswitch1 }}"
+    portgroup_name: "basic-some-enabled"
+    vlan_id: 0
+    num_ports: 32
+    port_binding: static
+    state: present
+    network_policy:
+      inherited: false
+      promiscuous: true
+      forged_transmits: false
+      mac_changes: false
+      mac_learning:
+        enabled: true
+    mac_learning:
+      enabled: false
+    port_policy:
+      vlan_override: true
+  register: mac_learning_result
+
+- name: ensure MAC learning is unchanged
+  assert:
+    that:
+        - not mac_learning_result.changed
 
 - name: Change vlan_override to no
   community.vmware.vmware_dvs_portgroup:
