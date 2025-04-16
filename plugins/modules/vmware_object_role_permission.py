@@ -21,7 +21,7 @@ author:
 - Joseph Andreatta (@vmwjoseph)
 notes:
     - The login user must have the appropriate rights to administer permissions.
-    - To set permissions on vCenter (not global!) level use O(object_type) "Folder" and O(object_name) "rootFolder".
+    - To set permissions on vCenter (not global!) level use O(object_type=Folder) and O(object_name=rootFolder).
     - Permissions for a distributed switch must be defined and managed on either the datacenter or a folder containing the switch.
 options:
   role:
