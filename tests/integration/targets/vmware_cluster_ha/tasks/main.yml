@@ -1,0 +1,303 @@
+# Test code for the vmware_cluster module.
+# Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+
+# Setup: Create test cluster
+- name: Create test cluster
+  vmware.vmware.cluster:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    state: present
+
+- name: Enable HA
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+  register: enable_ha_result
+
+- name: Ensure HA is enabled
+  assert:
+    that:
+      - enable_ha_result.changed
+
+- name: Disable HA
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: false
+  register: disable_ha_result
+
+- name: Ensure HA is disabled
+  assert:
+    that:
+      - disable_ha_result.changed
+
+- name: Change APD response to "restartAggressive" (check-mode)
+  vmware_cluster_ha: &change_apd_response
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    apd_response: 'restartAggressive'
+  check_mode: true
+  register: change_apd_response_check
+
+- assert:
+    that:
+      - change_apd_response_check.changed
+
+- name: Change APD response to "restartAggressive"
+  vmware_cluster_ha: *change_apd_response
+  register: change_apd_response
+
+- assert:
+    that:
+      - change_apd_response.changed
+
+- name: Change APD response to "restartAggressive" again (idempotency)
+  vmware_cluster_ha: *change_apd_response
+  register: change_apd_response_again
+
+- assert:
+    that:
+      - not change_apd_response_again.changed
+
+- name: Change APD response back to default
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+
+- name: Change PDL response to "restartAggressive" (check-mode)
+  vmware_cluster_ha: &change_pdl_response
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    pdl_response: 'restartAggressive'
+  check_mode: true
+  register: change_pdl_response_check
+
+- assert:
+    that:
+      - change_pdl_response_check.changed
+
+- name: Change PDL response to "restartAggressive"
+  vmware_cluster_ha: *change_pdl_response
+  register: change_pdl_response
+
+- assert:
+    that:
+      - change_pdl_response.changed
+
+- name: Change PDL response to "restartAggressive" again
+  vmware_cluster_ha: *change_pdl_response
+  register: change_pdl_response_again
+
+- assert:
+    that:
+      - not change_pdl_response_again.changed
+
+- name: Change PDL response back to default
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+
+- name: Enable Slot based Admission Control
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    slot_based_admission_control:
+      failover_level: 1
+  register: enable_slot_based_admission_control_result
+
+- name: Ensure Admission Cotrol is enabled
+  assert:
+    that:
+      - enable_slot_based_admission_control_result.changed
+
+- name: Enable Cluster resource Percentage based Admission Control
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    reservation_based_admission_control:
+      auto_compute_percentages: false
+      failover_level: 1
+      cpu_failover_resources_percent: 33
+      memory_failover_resources_percent: 33
+  register: enable_percentage_based_admission_control_result
+
+- name: Ensure Admission Cotrol is enabled
+  assert:
+    that:
+      - enable_percentage_based_admission_control_result.changed
+
+- name: Set Isolation Response to powerOff
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    host_isolation_response: 'powerOff'
+  register: isolation_response_poweroff_result
+
+- name: Ensure Isolation Response is enabled
+  assert:
+    that:
+      - isolation_response_poweroff_result.changed
+
+- name: Set Isolation Response to shutdown
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    host_isolation_response: 'shutdown'
+  register: isolation_response_shutdown_result
+
+- name: Ensure Isolation Response is enabled
+  assert:
+    that:
+      - isolation_response_shutdown_result.changed
+
+- name: Change advanced setting "number of heartbeat datastores" (check-mode)
+  vmware_cluster_ha: &change_num_heartbeat_ds
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    advanced_settings:
+        'das.heartbeatDsPerHost': '4'
+  check_mode: true
+  register: change_num_heartbeat_ds_check
+
+- assert:
+    that:
+      - change_num_heartbeat_ds_check.changed
+
+- name: Change advanced setting "number of heartbeat datastores"
+  vmware_cluster_ha: *change_num_heartbeat_ds
+  register: change_num_heartbeat_ds
+
+- assert:
+    that:
+      - change_num_heartbeat_ds.changed
+
+- name: Change advanced setting "number of heartbeat datastores" again
+  vmware_cluster_ha: *change_num_heartbeat_ds
+  register: change_num_heartbeat_ds_again
+
+- assert:
+    that:
+      - not change_num_heartbeat_ds_again.changed
+
+- name: Change advanced setting "das.includeFTcomplianceChecks" (check-mode)
+  vmware_cluster_ha: &change_includeFTcomplianceChecks
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: true
+    advanced_settings:
+        'das.includeFTcomplianceChecks': 'False'
+  check_mode: true
+  register: change_includeFTcomplianceChecks_check
+
+- assert:
+    that:
+      - change_includeFTcomplianceChecks_check.changed
+
+- name: Change advanced setting "das.includeFTcomplianceChecks"
+  vmware_cluster_ha: *change_includeFTcomplianceChecks
+  register: change_includeFTcomplianceChecks
+
+- assert:
+    that:
+      - change_includeFTcomplianceChecks.changed
+
+- name: Change advanced setting "das.includeFTcomplianceChecks" again
+  vmware_cluster_ha: *change_includeFTcomplianceChecks
+  register: change_includeFTcomplianceChecks_again
+
+- assert:
+    that:
+      - not change_includeFTcomplianceChecks_again.changed
+
+- name: Disable HA
+  vmware_cluster_ha:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    enable: false
+  register: disable_ha_result
+
+- name: Ensure HA is disabled
+  assert:
+    that:
+      - disable_ha_result.changed
+
+# Delete test cluster
+- name: Delete test cluster
+  vmware.vmware.cluster:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    cluster_name: test_cluster_ha
+    state: absent
