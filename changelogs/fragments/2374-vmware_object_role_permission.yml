@@ -1,3 +1,0 @@
-minor_changes:
-  - vmware_object_role_permission - Document setting permissions on vCenter level
-    (https://github.com/ansible-collections/community.vmware/pull/2374).

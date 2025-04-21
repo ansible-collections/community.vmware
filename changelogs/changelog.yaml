@@ -216,3 +216,23 @@ releases:
     - 2345-deprecate.vmware_content_library_manager.yml
     - 2351-vmware_object_role_permission.yml
     release_date: '2025-03-23'
+  5.6.0:
+    changes:
+      bugfixes:
+      - vmware_dvs_portgroup - Fix idempotency issue with ``mac_learning`` (https://github.com/ansible-collections/community.vmware/issues/1873).
+      deprecated_features:
+      - vmware_dvs_portgroup - ``mac_learning`` is deprecated in favour of ``network_policy.mac_learning``
+        (https://github.com/ansible-collections/community.vmware/pull/2360).
+      minor_changes:
+      - module_utils.vmware - Move ``vmware_argument_spec`` to a dedicated file (https://github.com/ansible-collections/community.vmware/pull/2370).
+      - module_utils.vmware_rest_client - Move ``vmware_client_argument_spec`` to
+        a dedicated file (https://github.com/ansible-collections/community.vmware/pull/2370).
+      - vmware_dvs_portgroup - New option ``network_policy.mac_learning`` to replace
+        ``mac_learning`` (https://github.com/ansible-collections/community.vmware/pull/2360).
+      - vmware_object_role_permission - Document setting permissions on vCenter level
+        (https://github.com/ansible-collections/community.vmware/pull/2374).
+    fragments:
+    - 1873-vmware_dvs_portgroup.yml
+    - 2370-argument_spec.yml
+    - 2374-vmware_object_role_permission.yml
+    release_date: '2025-04-21'
