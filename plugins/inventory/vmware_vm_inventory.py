@@ -461,7 +461,7 @@ except ImportError:
 
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
-from ansible_collections.community.vmware.plugins.module_utils.vmware import connect_to_api
+from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
 
 
 class BaseVMwareInventory:
@@ -524,10 +524,15 @@ class BaseVMwareInventory:
         Returns: connection object
 
         """
-        return connect_to_api(module=None, disconnect_atexit=True, return_si=True,
-                              hostname=self.hostname, username=self.username, password=self.password,
-                              port=self.port, validate_certs=self.validate_certs, httpProxyHost=self.proxy_host,
-                              httpProxyPort=self.proxy_port)
+        pyvmomi_client = PyvmomiClient(
+            hostname=self.hostname,
+            username=self.username,
+            password=self.password,
+            port=self.port, validate_certs=self.validate_certs,
+            http_proxy_host=self.proxy_host,
+            http_proxy_port=self.proxy_port)
+
+        return pyvmomi_client.si, pyvmomi_client.content
 
     def check_requirements(self):
         """ Check all requirements for this inventory are satisfied"""

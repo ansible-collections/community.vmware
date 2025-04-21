@@ -198,13 +198,13 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_datastore_by_name,
     find_folder_by_name,
     find_vm_by_name,
-    connect_to_api,
     gather_vm_facts,
     find_obj,
     find_resource_pool_by_name,
     wait_for_task,
 )
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
 try:
     from pyVmomi import vim
 except ImportError:
@@ -231,13 +231,13 @@ class CrossVCCloneManager(PyVmomi):
         # query for the vm in destination vc
         # get the host and datastore info
         # get the power status of the newly cloned vm
-        self.destination_content = connect_to_api(
-            self.module,
+        pyvmomi_client = PyvmomiClient(
             hostname=self.destination_vcenter,
             username=self.destination_vcenter_username,
             password=self.destination_vcenter_password,
             port=self.destination_vcenter_port,
             validate_certs=self.destination_vcenter_validate_certs)
+        self.destination_content = pyvmomi_client.content
         info = {}
         vm_obj = find_vm_by_name(content=self.destination_content, vm_name=vm)
         if vm_obj is None:
@@ -277,13 +277,13 @@ class CrossVCCloneManager(PyVmomi):
             self.module.fail_json(msg="Failed to find the VM/template with %s" % vm_id)
 
         # connect to destination VC
-        self.destination_content = connect_to_api(
-            self.module,
+        pyvmomi_client = PyvmomiClient(
             hostname=self.destination_vcenter,
             username=self.destination_vcenter_username,
             password=self.destination_vcenter_password,
             port=self.destination_vcenter_port,
             validate_certs=self.destination_vcenter_validate_certs)
+        self.destination_content = pyvmomi_client.content
 
         # Check if vm name already exists in the destination VC
         vm = find_vm_by_name(content=self.destination_content, vm_name=self.params['destination_vm_name'])

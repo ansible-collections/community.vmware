@@ -1,0 +1,10 @@
+# Test code for the vmware guest dynamic plugin module
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+---
+- hosts: localhost
+  tasks:
+    - assert:
+        that:
+            - "{{ groups['debian8_64Guest'] | length }} == 1"
+            - hostvars['test_vm1'] is defined
