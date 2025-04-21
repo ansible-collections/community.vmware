@@ -6,6 +6,27 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.6.0
+======
+
+Minor Changes
+-------------
+
+- module_utils.vmware - Move ``vmware_argument_spec`` to a dedicated file (https://github.com/ansible-collections/community.vmware/pull/2370).
+- module_utils.vmware_rest_client - Move ``vmware_client_argument_spec`` to a dedicated file (https://github.com/ansible-collections/community.vmware/pull/2370).
+- vmware_dvs_portgroup - New option ``network_policy.mac_learning`` to replace ``mac_learning`` (https://github.com/ansible-collections/community.vmware/pull/2360).
+- vmware_object_role_permission - Document setting permissions on vCenter level (https://github.com/ansible-collections/community.vmware/pull/2374).
+
+Deprecated Features
+-------------------
+
+- vmware_dvs_portgroup - ``mac_learning`` is deprecated in favour of ``network_policy.mac_learning`` (https://github.com/ansible-collections/community.vmware/pull/2360).
+
+Bugfixes
+--------
+
+- vmware_dvs_portgroup - Fix idempotency issue with ``mac_learning`` (https://github.com/ansible-collections/community.vmware/issues/1873).
+
 v5.5.0
 ======
 

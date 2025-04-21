@@ -1,5 +1,0 @@
-minor_changes:
-  - module_utils.vmware - Move ``vmware_argument_spec`` to a dedicated file
-    (https://github.com/ansible-collections/community.vmware/pull/2370).
-  - module_utils.vmware_rest_client - Move ``vmware_client_argument_spec`` to a dedicated file
-    (https://github.com/ansible-collections/community.vmware/pull/2370).
