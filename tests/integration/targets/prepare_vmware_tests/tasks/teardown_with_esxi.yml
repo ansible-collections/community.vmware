@@ -12,14 +12,14 @@
   until: existing_vms is not failed
 
 - name: Turn off the VM
-  vmware.vmware_rest.vcenter_vm_power:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    state: stop
-    vm: '{{ item.vm }}'
-  with_items: "{{ existing_vms.value }}"
+  vmware.vmware.vm_powerstate:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    state: powered-off
+    moid: '{{ item.moid }}'
+  with_items: "{{ existing_vms.guests }}"
   ignore_errors: true
 
 - name: Delete the VMs
