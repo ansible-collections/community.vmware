@@ -12,6 +12,20 @@
   register: existing_vms
   until: existing_vms is not failed
 
+- name: Turn off the VM
+  community.vmware.vmware_guest_powerstate:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    uuid: '{{ item.config.instanceUuid }}'
+    state: powered-off
+    force: true
+    use_instance_uuid: true
+  with_items: "{{ existing_vms.guests }}"
+  when:
+    - not item.name.startswith("vCLS")
+
 - name: Delete the VMs
   community.vmware.vmware_guest:
     hostname: '{{ vcenter_hostname }}'
