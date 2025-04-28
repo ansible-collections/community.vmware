@@ -430,7 +430,7 @@ class PyVmomiDeviceHelper(object):
         for controller in vm_obj.config.hardware.device:
             for name, type in self.disk_ctl_device_type.items():
                 if isinstance(controller, type):
-                    controller_info[controller_index] = dict(
+                    controller_info[str(controller_index)] = dict(
                         key=controller.key,
                         controller_type=name,
                         bus_number=controller.busNumber,
@@ -448,7 +448,7 @@ class PyVmomiDeviceHelper(object):
                 if disk.shares is None:
                     disk.shares = vim.SharesInfo()
 
-                disks_info[disk_index] = dict(
+                disks_info[str(disk_index)] = dict(
                     key=disk.key,
                     label=disk.deviceInfo.label,
                     summary=disk.deviceInfo.summary,
@@ -470,48 +470,48 @@ class PyVmomiDeviceHelper(object):
                     capacity_in_bytes=disk.capacityInBytes,
                 )
                 if isinstance(disk.backing, vim.vm.device.VirtualDisk.FlatVer1BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'FlatVer1'
+                    disks_info[str(disk_index)]['backing_type'] = 'FlatVer1'
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.FlatVer2BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'FlatVer2'
-                    disks_info[disk_index]['backing_thinprovisioned'] = disk.backing.thinProvisioned
-                    disks_info[disk_index]['backing_eagerlyscrub'] = disk.backing.eagerlyScrub
+                    disks_info[str(disk_index)]['backing_type'] = 'FlatVer2'
+                    disks_info[str(disk_index)]['backing_thinprovisioned'] = disk.backing.thinProvisioned
+                    disks_info[str(disk_index)]['backing_eagerlyscrub'] = disk.backing.eagerlyScrub
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.LocalPMemBackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'LocalPMem'
-                    disks_info[disk_index]['backing_volumeuuid'] = disk.backing.volumeUUID
+                    disks_info[str(disk_index)]['backing_type'] = 'LocalPMem'
+                    disks_info[str(disk_index)]['backing_volumeuuid'] = disk.backing.volumeUUID
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.PartitionedRawDiskVer2BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'PartitionedRawDiskVer2'
-                    disks_info[disk_index]['backing_descriptorfilename'] = disk.backing.descriptorFileName
+                    disks_info[str(disk_index)]['backing_type'] = 'PartitionedRawDiskVer2'
+                    disks_info[str(disk_index)]['backing_descriptorfilename'] = disk.backing.descriptorFileName
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskMappingVer1BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'RawDiskMappingVer1'
-                    disks_info[disk_index]['backing_devicename'] = disk.backing.deviceName
-                    disks_info[disk_index]['backing_lunuuid'] = disk.backing.lunUuid
-                    disks_info[disk_index]['backing_compatibility_mode'] = disk.backing.compatibilityMode
+                    disks_info[str(disk_index)]['backing_type'] = 'RawDiskMappingVer1'
+                    disks_info[str(disk_index)]['backing_devicename'] = disk.backing.deviceName
+                    disks_info[str(disk_index)]['backing_lunuuid'] = disk.backing.lunUuid
+                    disks_info[str(disk_index)]['backing_compatibility_mode'] = disk.backing.compatibilityMode
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.RawDiskVer2BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'RawDiskVer2'
-                    disks_info[disk_index]['backing_descriptorfilename'] = disk.backing.descriptorFileName
+                    disks_info[str(disk_index)]['backing_type'] = 'RawDiskVer2'
+                    disks_info[str(disk_index)]['backing_descriptorfilename'] = disk.backing.descriptorFileName
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.SeSparseBackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'SeSparse'
+                    disks_info[str(disk_index)]['backing_type'] = 'SeSparse'
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.SparseVer1BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'SparseVer1'
-                    disks_info[disk_index]['backing_spaceusedinkb'] = disk.backing.spaceUsedInKB
-                    disks_info[disk_index]['backing_split'] = disk.backing.split
+                    disks_info[str(disk_index)]['backing_type'] = 'SparseVer1'
+                    disks_info[str(disk_index)]['backing_spaceusedinkb'] = disk.backing.spaceUsedInKB
+                    disks_info[str(disk_index)]['backing_split'] = disk.backing.split
 
                 elif isinstance(disk.backing, vim.vm.device.VirtualDisk.SparseVer2BackingInfo):
-                    disks_info[disk_index]['backing_type'] = 'SparseVer2'
-                    disks_info[disk_index]['backing_spaceusedinkb'] = disk.backing.spaceUsedInKB
-                    disks_info[disk_index]['backing_split'] = disk.backing.split
+                    disks_info[str(disk_index)]['backing_type'] = 'SparseVer2'
+                    disks_info[str(disk_index)]['backing_spaceusedinkb'] = disk.backing.spaceUsedInKB
+                    disks_info[str(disk_index)]['backing_split'] = disk.backing.split
 
                 for controller_index in range(len(controller_info)):
-                    if controller_info[controller_index]['key'] == disks_info[disk_index]['controller_key']:
-                        disks_info[disk_index]['controller_bus_number'] = controller_info[controller_index]['bus_number']
-                        disks_info[disk_index]['controller_type'] = controller_info[controller_index]['controller_type']
+                    if controller_info[str(controller_index)]['key'] == disks_info[str(disk_index)]['controller_key']:
+                        disks_info[str(disk_index)]['controller_bus_number'] = controller_info[str(controller_index)]['bus_number']
+                        disks_info[str(disk_index)]['controller_type'] = controller_info[str(controller_index)]['controller_type']
 
                 disk_index += 1
         return disks_info
