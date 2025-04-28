@@ -20,7 +20,7 @@
 - name: Ensure SCSI disks info are gathered for all hosts in given cluster
   assert:
     that:
-      - all_hosts_disk_result.hosts_scsidisk_info
+      - all_hosts_disk_result.hosts_scsidisk_info is truthy
       - not all_hosts_disk_result.changed
 
 - name: Gather SCSI disks info about host system
@@ -35,7 +35,7 @@
 - name: Ensure SCSI disks info are gathered about host system
   assert:
     that:
-      - all_hosts_disk_result.hosts_scsidisk_info
+      - all_hosts_disk_result.hosts_scsidisk_info is truthy
       - not all_hosts_disk_result.changed
 
 - name: Gather SCSI disks info about all hosts in given cluster in check mode
@@ -51,7 +51,7 @@
 - name: Ensure SCSI disks info are gathered for all hosts in given cluster
   assert:
     that:
-      - all_hosts_disk_result_check_mode.hosts_scsidisk_info
+      - all_hosts_disk_result_check_mode.hosts_scsidisk_info is truthy
       - not all_hosts_disk_result_check_mode.changed
 
 - name: Ensure SCSI disks info about host system in check mode
@@ -67,5 +67,5 @@
 - name: Ensure SCSI disks info are gathered about host system
   assert:
     that:
-      - all_hosts_disk_result_check_mode.hosts_scsidisk_info
+      - all_hosts_disk_result_check_mode.hosts_scsidisk_info is truthy
       - not all_hosts_disk_result_check_mode.changed

@@ -1,0 +1,9 @@
+bugfixes:
+  - vm_device_helper - Fix an issue with ansible-core 2.19
+    (https://github.com/ansible-collections/community.vmware/pull/2391).
+  - vmware_guest_controller - Fix an issue with ansible-core 2.19
+    (https://github.com/ansible-collections/community.vmware/pull/2391).
+  - vmware_guest_disk - Fix an issue with ansible-core 2.19
+    (https://github.com/ansible-collections/community.vmware/pull/2391).
+  - vmware_target_canonical_info - Fix an issue with ansible-core 2.19
+    (https://github.com/ansible-collections/community.vmware/pull/2391).
