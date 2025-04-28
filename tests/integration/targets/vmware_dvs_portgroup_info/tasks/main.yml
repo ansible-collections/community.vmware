@@ -64,7 +64,7 @@
       assert:
         that:
           - >-
-           dvs_results.dvs_portgroup_info.{{ dvswitch1 }}
+           dvs_results.dvs_portgroup_info['{{ dvswitch1 }}']
            | map(attribute='portgroup_name')
            | select('==', 'dvportgroup\/%')
            | list
@@ -107,4 +107,4 @@
 - assert:
     that:
       - "dvs_results_0002['dvs_portgroup_info']['DVS0'] is defined"
-      - dvs_results_0002['dvs_portgroup_info']['DVS0'][0].key
+      - dvs_results_0002['dvs_portgroup_info']['DVS0'][0].key is truthy
