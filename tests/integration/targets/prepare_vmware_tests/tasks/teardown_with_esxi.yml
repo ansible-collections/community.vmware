@@ -41,44 +41,43 @@
   when:
     - not item.name.startswith("vCLS")
 
-- name: Build a list of local libraries
-  vmware.vmware_rest.content_locallibrary_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+- name: Build a list of libraries
+  community.vmware.vmware_content_library_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
   register: result
   retries: 100
   delay: 3
   until: result is not failed
 
-- name: Delete all the local libraries
-  vmware.vmware_rest.content_locallibrary:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    library_id: "{{ item.id }}"
-    state: absent
-  with_items: "{{ result.value }}"
+- debug:
+    var: result
 
-- name: Build a list of subscribed libraries
-  vmware.vmware_rest.content_subscribedlibrary_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-  register: result
+- name: Delete all libraries
+  block:
+    - name: Get library details
+      community.vmware.vmware_content_library_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        library_id: "{{ item }}"
+      register: lib_result
 
-- name: Delete all the subscribed libraries
-  vmware.vmware_rest.content_subscribedlibrary:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    library_id: "{{ item.id }}"
-    state: absent
-  with_items: "{{ result.value }}"
+    - debug:
+        var: item
+
+    - name: Delete library
+      community.vmware.vmware_content_library_manager:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: false
+        library_name: "{{ lib_result.library_name }}"
+        state: absent
+  with_items: "{{ result }}"
 
 - name: Get a list of all the datacenters
   community.vmware.vmware_datacenter_info:
