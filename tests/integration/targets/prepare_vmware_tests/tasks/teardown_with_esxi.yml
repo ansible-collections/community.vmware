@@ -36,6 +36,7 @@
     state: absent
     force: true
     delete_from_inventory: true
+    use_instance_uuid: true
   with_items: "{{ existing_vms.guests }}"
   when:
     - not item.name.startswith("vCLS")
