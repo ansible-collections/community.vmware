@@ -66,8 +66,8 @@ options:
             - State of the override setting.
             - disabled: You will disable DRS automation completely for this VM.
             - absent: You will remove the DRS override.
-        choices: ['absent', 'disabled', 'enabled']
-        default: 'enabled'
+        choices: ['present', 'absent', 'disabled']
+        default: 'present'
         type: str
 extends_documentation_fragment:
 - community.vmware.vmware.documentation
@@ -124,7 +124,7 @@ class VmwareDrsOverride(PyVmomi):
         super(VmwareDrsOverride, self).__init__(module)
         self.drs_behavior = module.params['drs_behavior']
         self.drs_state = module.params['state']
-        self.drs_enabled = self.drs_state == 'enabled'
+        self.drs_enabled = self.drs_state == 'present'
         self.drs_vm_config_spec = None
         self.msg = "Unexpected exit."
         self.vm = self.get_vm()
@@ -207,7 +207,7 @@ def main():
         'folder': {'type': 'str'},
         'datacenter': {'type': 'str'},
         'drs_behavior': {'type': 'str', 'choices': ['manual', 'partiallyAutomated', 'fullyAutomated'], 'default': 'manual'},
-        'state': {'type': 'str', 'choices': ['absent', 'disabled', 'enabled'], 'default': 'enabled'},
+        'state': {'type': 'str', 'choices': ['present', 'absent', 'disabled'], 'default': 'present'},
     })
 
     module = AnsibleModule(

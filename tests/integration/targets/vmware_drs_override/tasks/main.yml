@@ -38,6 +38,25 @@
       - "'DRS override applied successfully' in drs_override_result.msg"
   when: drs_enabled is defined and drs_enabled
 
+# Test case: Remove DRS Override - DRS enabled
+- name: Remove DRS override for a VM in a DRS-enabled cluster
+  vmware_drs_override:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    name: "{{ first_vm_name }}"
+    state: "absent"
+  register: drs_override_remove_result
+  when: drs_enabled is defined and drs_enabled
+
+- name: Assert DRS override removed successfully
+  assert:
+    that:
+      - drs_override_remove_result.changed == true
+      - "'DRS override removed successfully' in drs_override_remove_result.msg"
+  when: drs_enabled is defined and drs_enabled
+
 # Test case: Ensure proper error for standalone ESXi without DRS
 - name: Attempt to add DRS override for VM in a non-DRS environment
   vmware_drs_override:
