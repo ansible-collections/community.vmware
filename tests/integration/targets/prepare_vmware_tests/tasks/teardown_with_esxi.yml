@@ -77,7 +77,6 @@
         validate_certs: false
         library_name: "{{ lib_result.library_name }}"
         state: absent
-  with_items: "{{ result }}"
 
 - name: Get a list of all the datacenters
   community.vmware.vmware_datacenter_info:
