@@ -55,28 +55,15 @@
 - debug:
     var: result
 
-- name: Delete all libraries
-  block:
-    - name: Get library details
-      community.vmware.vmware_content_library_info:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_id: "{{ item }}"
-      register: lib_result
-
-    - debug:
-        var: item
-
-    - name: Delete library
-      community.vmware.vmware_content_library_manager:
-        hostname: '{{ vcenter_hostname }}'
-        username: '{{ vcenter_username }}'
-        password: '{{ vcenter_password }}'
-        validate_certs: false
-        library_name: "{{ lib_result.library_name }}"
-        state: absent
+- name: Delete library
+  community.vmware.vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: "{{ lib_result.library_name }}"
+    state: absent
+  with_items: "{{ result.content_libs }}"
 
 - name: Get a list of all the datacenters
   community.vmware.vmware_datacenter_info:
