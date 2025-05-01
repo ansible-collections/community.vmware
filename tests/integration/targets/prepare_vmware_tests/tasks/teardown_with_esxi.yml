@@ -41,7 +41,7 @@
   when:
     - not item.name.startswith("vCLS")
 
-- name: Build a list of libraries
+- name: Get a list of libraries
   community.vmware.vmware_content_library_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
@@ -52,18 +52,27 @@
   delay: 3
   until: result is not failed
 
-- debug:
-    var: result
+- name: Build a list of libraries
+  community.vmware.vmware_content_library_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_id: '{{ item }}'
+  register: content_libs
+  delay: 3
+  with_items: '{{ result.content_libs }}'
 
-- name: Delete library
+- name: Delete libraries
   community.vmware.vmware_content_library_manager:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     validate_certs: false
-    library_name: "{{ lib_result.library_name }}"
+    library_name: "{{ item.content_lib_details[0].library_name }}"
     state: absent
-  with_items: "{{ result.content_libs }}"
+  with_items: "{{ content_libs.results }}"
+  when: content_libs.results is truthy
 
 - name: Get a list of all the datacenters
   community.vmware.vmware_datacenter_info:
