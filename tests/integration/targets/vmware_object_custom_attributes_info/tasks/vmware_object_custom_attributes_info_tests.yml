@@ -44,13 +44,13 @@
   assert:
     that:
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01') is truthy
-      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01') is truthy
-       | selectattr('type', 'equalto', 'HostSystem')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example01')
+       | selectattr('type', 'equalto', 'HostSystem') is truthy
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test1') is truthy
 
       - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02') is truthy
-      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02') is truthy
-       | selectattr('type', 'equalto', 'HostSystem')
+      - esxi_custom_attributes_result.custom_attributes | selectattr('attribute', 'equalto', 'esxi_example02')
+       | selectattr('type', 'equalto', 'HostSystem') is truthy
       - esxi_custom_attributes_result.custom_attributes | selectattr('value', 'equalto', 'test2') is truthy
 
 - name: Gather custom attributes of a virtual machine with moid
