@@ -52,6 +52,7 @@
           username: {{ vcenter_username }}
           password: "{{ vcenter_password }}"
           validate_certs: false
+          enable_backward_compatibility: false
           with_tags: true
           hostnames:
             - config.name
