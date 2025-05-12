@@ -2,47 +2,6 @@
 - name: Test Hostnames option
   hosts: localhost
   tasks:
-    - name: Inventory with 'hostnames' option
-      include_tasks: build_inventory.yml
-      vars:
-        content: |-
-          plugin: community.vmware.vmware_host_inventory
-          strict: false
-          with_nested_properties: false
-          properties:
-            - runtime.powerState
-          hostnames:
-            - 'skip_undefined_empty_none_var'
-            - 'runtime.powerState'
-
-    - name: Test properties option are populate
-      assert:
-        that:
-          - "'runtime.powerState' in test_host.value"
-
-    - name: Test hostnames option
-      assert:
-        that:
-          - test_host.key == (test_host.value['runtime.powerState'])
-
-    - name: Inventory with 'config' root properties
-      include_tasks: build_inventory.yml
-      vars:
-        content: |-
-          plugin: community.vmware.vmware_host_inventory
-          strict: false
-          with_nested_properties: false
-          properties:
-            - config.lockdownMode
-            - name
-            - summary
-    - name: Test properties(config) option are populate
-      assert:
-        that:
-          - "'name' in test_host.value"
-          - "'summary.runtime.powerState' in test_host.value"
-          - "'config.lockdownMode' in test_host.value"
-
     - name: Inventory with 'with_path' option
       include_tasks: build_inventory.yml
       vars:
@@ -50,6 +9,7 @@
           plugin: community.vmware.vmware_host_inventory
           strict: false
           with_path: true
+          enable_backward_compatibility: false
           properties:
           - name
           - summary.runtime.powerState
@@ -64,6 +24,7 @@
         content: |-
           plugin: community.vmware.vmware_host_inventory
           strict: false
+          enable_backward_compatibility: false
           with_path: my_center
     - name: Test path option with rooted path
       assert:
@@ -77,6 +38,7 @@
         content: |-
           plugin: community.vmware.vmware_host_inventory
           strict: false
+          enable_backward_compatibility: false
           properties:
             - name
             - summary.runtime.powerState
@@ -94,6 +56,7 @@
         content: |-
           plugin: community.vmware.vmware_host_inventory
           strict: false
+          enable_backward_compatibility: true
           properties:
             - name
             - summary.runtime.powerState

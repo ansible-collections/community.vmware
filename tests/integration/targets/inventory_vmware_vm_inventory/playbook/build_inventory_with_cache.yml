@@ -9,3 +9,4 @@
           strict: false
           cache: true
           properties: [all]
+          enable_backward_compatibility: false
