@@ -19,7 +19,7 @@
 - name: Ensure datacenter is present
   assert:
     that:
-        - dc_result.datacenter_info
+        - dc_result.datacenter_info | length > 0
 
 - name: Gather information about all datacenter in check mode
   vmware_datacenter_info:
@@ -36,7 +36,7 @@
 - name: Ensure datacenter is present
   assert:
     that:
-        - dc_result.datacenter_info
+        - dc_result.datacenter_info | length > 0
 
 - name: Gather information about particular datacenter
   vmware_datacenter_info:
@@ -53,7 +53,7 @@
 - name: Ensure datacenter is present
   assert:
     that:
-        - dc_result.datacenter_info
+        - dc_result.datacenter_info | length > 0
 
 - name: Gather information about particular datacenter in check mode
   vmware_datacenter_info:
@@ -71,4 +71,4 @@
 - name: Ensure datacenter is present
   assert:
     that:
-        - dc_result.datacenter_info
+        - dc_result.datacenter_info | length > 0
