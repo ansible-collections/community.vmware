@@ -20,3 +20,4 @@
   - name: Refresh test_host
     set_fact:
       test_host: "{{ hostvars | dict2items | first }}"
+    when: hostvars | length >= 1
