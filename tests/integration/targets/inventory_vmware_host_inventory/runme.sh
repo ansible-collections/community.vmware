@@ -35,8 +35,6 @@ trap cleanup INT TERM EXIT
 # Prepare tests
 ansible-playbook playbook/prepare_vmware.yml "$@"
 
-[ -f /home/zuul/.ansible/collections/ansible_collections/community/vmware/tests/integration/targets/inventory_vmware_host_inventory/_test/hosts/tmp.vmware.yml ] && tail /home/zuul/.ansible/collections/ansible_collections/community/vmware/tests/integration/targets/inventory_vmware_host_inventory/_test/hosts/tmp.vmware.yml
-
 # Test Cache
 # Cache requires jsonfile
 # ansible-playbook playbook/build_inventory_with_cache.yml "$@"
