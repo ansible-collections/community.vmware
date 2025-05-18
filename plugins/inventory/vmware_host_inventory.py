@@ -202,7 +202,6 @@ from ansible.module_utils.common.dict_transformations import camel_dict_to_snake
 from ansible.module_utils.six import text_type
 from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
     to_nested_dict,
-    to_flatten_dict,
 )
 from ansible_collections.community.vmware.plugins.inventory.vmware_vm_inventory import BaseVMwareInventory
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
@@ -525,9 +524,3 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             for k, v in host_properties.items():
                 k = self._sanitize_group_name(k) if can_sanitize else k
                 self.inventory.set_variable(host, k, v)
-
-        # For backward compatability
-        host_properties = to_flatten_dict(host_properties)
-        for k, v in host_properties.items():
-            k = self._sanitize_group_name(k) if can_sanitize else k
-            self.inventory.set_variable(host, k, v)
