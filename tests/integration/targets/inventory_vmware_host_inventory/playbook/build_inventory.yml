@@ -12,10 +12,6 @@
     changed_when: false
     check_mode: false
 
-  - name: Debug tmp.vmware.yml
-    debug:
-       msg: "{{ lookup('file', '/home/zuul/.ansible/collections/ansible_collections/community/vmware/tests/integration/targets/inventory_vmware_host_inventory/_test/hosts/tmp.vmware.yml') }}"
-
   - meta: refresh_inventory
 
   - debug:
