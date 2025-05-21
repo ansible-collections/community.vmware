@@ -33,7 +33,8 @@
     - name: VM Network
 
 - name: set state to poweron the first VM
-  vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
+    datacenter: "{{ dc1 }}"
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
