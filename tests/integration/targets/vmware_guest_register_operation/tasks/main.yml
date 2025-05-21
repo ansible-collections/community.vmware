@@ -26,12 +26,12 @@
   set_fact: vm_vmx_file_path="{{ vm_facts.instance.hw_files[0] }}"
 
 - name: Powered off the vm
-  vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
+    datacenter: "{{ dc1 }}"
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     validate_certs: false
-    folder: /vm
     name: "{{ virtual_machines[0].name }}"
     state: powered-off
 

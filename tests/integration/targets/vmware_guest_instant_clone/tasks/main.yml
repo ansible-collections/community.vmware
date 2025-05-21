@@ -74,12 +74,13 @@
         - instant_clone_from_vm_when_cluster_is_specified is changed
 
 - name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "cloned_vm_from_vm_cluster"
+    datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_when_cluster
@@ -120,11 +121,12 @@
         - instant_clone_from_vm_optional_arguments is changed
 
 - name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
+    datacenter: "{{ dc1 }}"
     name: "cloned_vm_from_vm_optional"
     state: powered-off
   register: poweroff_instant_clone_from_vm_optional_arguments
@@ -167,12 +169,13 @@
         - instant_clone_from_vm_moid is changed
 
 - name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "Instant_cloned_test"
+    datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_moid
@@ -216,12 +219,13 @@
         - instant_clone_from_vm_instance_uuid is changed
 
 - name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "Instant_cloned_instance_uuid"
+    datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_instance_uuid
@@ -264,12 +268,13 @@
         - instant_clone_from_vm_uuid is changed
 
 - name: set state to poweroff the VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: Instant_cloned_uuid
+    datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_uuid
@@ -329,13 +334,14 @@
     var: idempotency_check
 
 - name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "cloned_vm_from_vm"
     folder: "{{ f0 }}"
+    datacenter: "{{ dc1 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_parent
 
@@ -357,12 +363,13 @@
 - debug: var=delete_instant_clone_from_vm_parent
 
 - name: set state to poweroff the parent VM
-  community.vmware.vmware_guest_powerstate:
+  vmware.vmware.vm_powerstate:
     validate_certs: false
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
     password: "{{ vcenter_password }}"
     name: "test_vm1"
+    datacenter: "{{ dc1 }}"
     folder: "{{ f0 }}"
     state: powered-off
   register: poweroff_instant_clone_from_vm_parent
