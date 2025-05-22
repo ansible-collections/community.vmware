@@ -1,0 +1,4 @@
+bugfixes:
+  - name: Fix detection of HTTP range support in `WebHandle` to support HTTP/2 endpoints like Nexus that do not return `accept-ranges` header.
+    modules:
+      - vmware_deploy_ovf
