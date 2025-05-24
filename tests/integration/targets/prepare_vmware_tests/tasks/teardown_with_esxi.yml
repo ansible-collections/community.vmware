@@ -1,93 +1,96 @@
 ---
 - name: Collect the list of the existing VM
-  vmware.vmware_rest.vcenter_vm_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+  vmware.vmware.guest_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    schema: vsphere
+    properties:
+      - config.instanceUuid
+      - name
   register: existing_vms
   until: existing_vms is not failed
 
 - name: Turn off the VM
-  vmware.vmware_rest.vcenter_vm_power:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    state: stop
-    vm: '{{ item.vm }}'
-  with_items: "{{ existing_vms.value }}"
-  ignore_errors: true
-
-- name: Delete the VMs
-  vmware.vmware_rest.vcenter_vm:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    state: absent
-    vm: '{{ item.vm }}'
-  with_items: "{{ existing_vms.value }}"
+  community.vmware.vmware_guest_powerstate:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    uuid: '{{ item.config.instanceUuid }}'
+    state: powered-off
+    force: true
+    use_instance_uuid: true
+  with_items: "{{ existing_vms.guests }}"
   when:
     - not item.name.startswith("vCLS")
 
+- name: Delete the VMs
+  community.vmware.vmware_guest:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    uuid: '{{ item.config.instanceUuid }}'
+    state: absent
+    force: true
+    delete_from_inventory: true
+    use_instance_uuid: true
+  with_items: "{{ existing_vms.guests }}"
+  when:
+    - not item.name.startswith("vCLS")
 
-- name: Build a list of local libraries
-  vmware.vmware_rest.content_locallibrary_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+- name: Get a list of libraries
+  community.vmware.vmware_content_library_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
   register: result
   retries: 100
   delay: 3
   until: result is not failed
 
-- name: Delete all the local libraries
-  vmware.vmware_rest.content_locallibrary:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    library_id: "{{ item.id }}"
-    state: absent
-  with_items: "{{ result.value }}"
+- name: Build a list of libraries
+  community.vmware.vmware_content_library_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_id: '{{ item }}'
+  register: content_libs
+  delay: 3
+  with_items: '{{ result.content_libs }}'
 
-- name: Build a list of subscribed libraries
-  vmware.vmware_rest.content_subscribedlibrary_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-  register: result
-
-- name: Delete all the subscribed libraries
-  vmware.vmware_rest.content_subscribedlibrary:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
-    library_id: "{{ item.id }}"
+- name: Delete libraries
+  community.vmware.vmware_content_library_manager:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    library_name: "{{ item.content_lib_details[0].library_name }}"
     state: absent
-  with_items: "{{ result.value }}"
+  with_items: "{{ content_libs.results }}"
+  when: content_libs.results is truthy
 
 - name: Get a list of all the datacenters
-  vmware.vmware_rest.vcenter_datacenter_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+  community.vmware.vmware_datacenter_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
   register: existing_datacenters
+
 - name: Force delete the existing DC
-  vmware.vmware_rest.vcenter_datacenter:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+  community.vmware.vmware_datacenter:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: '{{ item.name }}'
     state: absent
-    datacenter: '{{ item.datacenter }}'
-    force: true
-  with_items: "{{ existing_datacenters.value }}"
+  with_items: "{{ existing_datacenters.datacenter_info }}"
   until: _result is succeeded
   retries: 10
   delay: 1
