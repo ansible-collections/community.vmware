@@ -306,7 +306,7 @@ class VMwareInventory(object):
                 group_children.append(child_group)
         inv.setdefault(child_group, [])
 
-    def get_inventory(self, meta_hostvars=True):  # noqa  # pylint: disable=too-complex
+    def get_inventory(self, meta_hostvars=True):
         '''
         Reads the inventory from cache or VMware API via pSphere.
         '''
