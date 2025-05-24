@@ -21,7 +21,7 @@
 - name: ensure info are gathered for all hosts
   assert:
     that:
-        - all_hosts_result.hosts_info
+        - all_hosts_result.hosts_info is truthy
 
 - name: gather info about all hosts in given cluster in check mode
   vmware_host_config_info:
@@ -36,7 +36,7 @@
 - name: ensure info are gathered for all hosts
   assert:
     that:
-        - all_hosts_result_check_mode.hosts_info
+        - all_hosts_result_check_mode.hosts_info is truthy
 
 - name: gather info about a given host in check mode
   vmware_host_config_info:
@@ -50,7 +50,7 @@
 - name: ensure info are gathered for all hosts
   assert:
     that:
-        - single_hosts_result_check_mode.hosts_info
+        - single_hosts_result_check_mode.hosts_info is truthy
 
 - name: gather info about a given host
   vmware_host_config_info:
@@ -63,4 +63,4 @@
 - name: ensure info are gathered for all hosts
   assert:
     that:
-        - single_hosts_result.hosts_info
+        - single_hosts_result.hosts_info is truthy

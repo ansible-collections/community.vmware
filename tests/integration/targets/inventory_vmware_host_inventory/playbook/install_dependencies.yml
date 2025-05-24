@@ -4,4 +4,6 @@
   gather_facts: false
   tasks:
     - pip:
-        name: toml
+        name:
+          - toml
+          - tomli-w
