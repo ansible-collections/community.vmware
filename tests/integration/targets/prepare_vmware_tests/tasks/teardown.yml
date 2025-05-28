@@ -1,21 +1,21 @@
 ---
 - name: Get a list of all the datacenters
-  vmware.vmware_rest.vcenter_datacenter_info:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+  community.vmware.vmware_datacenter_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
   register: existing_datacenters
+
 - name: Force delete the existing DC
-  vmware.vmware_rest.vcenter_datacenter:
-    vcenter_hostname: '{{ vcenter_hostname }}'
-    vcenter_username: '{{ vcenter_username }}'
-    vcenter_password: '{{ vcenter_password }}'
-    vcenter_validate_certs: false
+  community.vmware.vmware_datacenter:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: false
+    datacenter_name: '{{ item.name }}'
     state: absent
-    datacenter: '{{ item.datacenter }}'
-    force: true
-  with_items: "{{ existing_datacenters.value }}"
+  with_items: "{{ existing_datacenters.datacenter_info }}"
   until: _result is succeeded
   retries: 10
   delay: 1
