@@ -1,5 +1,8 @@
 ---
 
+- name: install vmware.vmware
+  shell: "ansible-galaxy collection install 'vmware.vmware<2.0.0'"
+
 - name: load vmware common vars
   include_vars:
     file: common.yml
