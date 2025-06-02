@@ -19,7 +19,7 @@
   name: ensure info are gathered for all clusters
   assert:
     that:
-        - all_cluster_result.clusters
+        - all_cluster_result.clusters | length > 0
         - not all_cluster_result.changed
 
 - name: ensure info are all defined
@@ -72,7 +72,7 @@
   name: Ensure info are gathered for the given cluster
   assert:
     that:
-        - cluster_result.clusters
+        - cluster_result.clusters | length > 0
         - not cluster_result.changed
 
 - <<: *vc_cluster_data
@@ -99,7 +99,7 @@
 - name: Ensure info are gathered for all clusters with properteis
   assert:
     that:
-      - all_cluster_result.clusters
+      - all_cluster_result.clusters | length > 0
       - all_cluster_result.clusters[item].name == item
       - all_cluster_result.clusters[item].configuration.dasConfig.enabled is defined
       - all_cluster_result.clusters[item].summary.totalCpu is defined
@@ -123,7 +123,7 @@
 - name: Ensure info are gathered for the given cluster with properties
   assert:
     that:
-      - cluster_result.clusters
+      - cluster_result.clusters | length > 0
       - cluster_result.clusters[item].name == item
       - cluster_result.clusters[item].configuration.dasConfig.enabled is defined
       - cluster_result.clusters[item].summary.totalCpu is defined
@@ -191,4 +191,4 @@
 - name: "Ensure URL-encoded cluster name"
   assert:
     that:
-      - all_cluster_result.clusters['Cluster/\%']
+      - all_cluster_result.clusters['Cluster/\%'] is truthy

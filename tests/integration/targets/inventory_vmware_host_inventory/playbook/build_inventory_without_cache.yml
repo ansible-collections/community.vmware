@@ -8,6 +8,7 @@
           plugin: community.vmware.vmware_host_inventory
           strict: true
           cache: false
+          enable_backward_compatibility: false
           properties:
             - name
             - summary.runtime.powerState

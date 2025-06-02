@@ -750,7 +750,7 @@ class PyVmomiHelper(PyVmomi):
                                 if disk_change:
                                     self.config_spec.deviceChange.append(disk_spec)
                                     disk_change_list.append(disk_change)
-                                    results['disk_changes'][disk['disk_index']] = "Disk reconfigured."
+                                    results['disk_changes'][str(disk['disk_index'])] = "Disk reconfigured."
 
                             elif disk['state'] == 'absent':
                                 # Disk already exists, deleting
@@ -762,7 +762,7 @@ class PyVmomiHelper(PyVmomi):
                                 self.config_spec.deviceChange.append(disk_spec)
                                 disk_change = True
                                 disk_change_list.append(disk_change)
-                                results['disk_changes'][disk['disk_index']] = "Disk deleted."
+                                results['disk_changes'][str(disk['disk_index'])] = "Disk deleted."
                             break
 
                     if disk_found:
@@ -804,7 +804,7 @@ class PyVmomiHelper(PyVmomi):
                         self.config_spec.deviceChange.append(disk_spec)
                         disk_change = True
                         disk_change_list.append(disk_change)
-                        results['disk_changes'][disk['disk_index']] = "Disk created."
+                        results['disk_changes'][str(disk['disk_index'])] = "Disk created."
                         break
             if disk_change:
                 # Adding multiple disks in a single attempt raises weird errors
