@@ -6,6 +6,34 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.7.0
+======
+
+Minor Changes
+-------------
+
+- vcenter_extension - Stop using ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+- vmware_guest_cross_vc_clone - Stop using ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+- vmware_guest_instant_clone - Stop using ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+- vmware_vm_inventory - Stop using ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+- vmware_vsan_cluster - Stop using ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+
+Deprecated Features
+-------------------
+
+- module_utils.vmware - Deprecate ``connect_to_api`` (https://github.com/ansible-collections/community.vmware/pull/2372).
+- vmware_guest_powerstate - the module has been deprecated and will be removed in community.vmware 7.0.0 (https://github.com/ansible-collections/community.vmware/pull/2398).
+
+Bugfixes
+--------
+
+- vm_device_helper - Fix an issue with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+- vmware_guest_controller - Fix an issue with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+- vmware_guest_disk - Fix an issue with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+- vmware_host_inventory - New option ``enable_backward_compatability`` that can be set to ``false`` to work with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+- vmware_target_canonical_info - Fix an issue with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+- vmware_vm_inventory - New option ``enable_backward_compatability`` that can be set to ``false`` to work with ansible-core 2.19 (https://github.com/ansible-collections/community.vmware/pull/2391).
+
 v5.6.0
 ======
 
