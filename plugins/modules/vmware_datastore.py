@@ -12,6 +12,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
+# Test
 module: vmware_datastore
 short_description: Configure Datastores
 version_added: '3.0.0'
