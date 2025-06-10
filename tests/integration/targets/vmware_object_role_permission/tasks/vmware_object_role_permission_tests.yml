@@ -233,6 +233,93 @@
         that:
           - unassing_user_vm_idempotency_result.changed is sameas false
 
+    # Here start to VM with path test
+    - name: Assign user to VM in subfolder with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      check_mode: true
+      register: assing_user_vm_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - assing_user_vm_check_mode_result.changed is sameas true
+
+    - name: Assign user to VM in subfolder
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      register: assing_user_vm_result
+
+    - name: Make sure if a user assigned to an object
+      assert:
+        that:
+          - assing_user_vm_result.changed is sameas true
+
+    - name: Assign user to VM in subfolder (idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: present
+      register: assing_user_vm_idempotency_result
+
+    - name: Make sure if a user assigned of an object doesn't change
+      assert:
+        that:
+          - assing_user_vm_idempotency_result.changed is sameas false
+
+    - name: Unassign user from VM in subfolder with check_mode
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      check_mode: true
+      register: unassing_user_vm_check_mode_result
+
+    - name: Make sure if changed occurs
+      assert:
+        that:
+          - unassing_user_vm_check_mode_result.changed is sameas true
+
+    - name: Unassign user from VM in subfolder
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      register: unassing_user_vm_result
+
+    - name: Make sure if unassing a user from an object
+      assert:
+        that:
+          - unassing_user_vm_result.changed is sameas true
+
+    - name: Unassign user from VM in subfolder (idempotency check)
+      vmware_object_role_permission:
+        role: Admin
+        principal: "{{ principal }}"
+        object_name: "/vm/{{ f0 }}/{{ virtual_machines.0 }}"
+        object_type: VirtualMachine
+        state: absent
+      register: unassing_user_vm_idempotency_result
+
+    - name: Make sure if unassing a user from an object doesn't change
+      assert:
+        that:
+          - unassing_user_vm_idempotency_result.changed is sameas false
+
     # Here start to Datacenter test
     - name: Assign user to Datacenter with check_mode
       vmware_object_role_permission:
