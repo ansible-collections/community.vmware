@@ -42,7 +42,7 @@ collections:
 VMware community collection depends on Python 3.9+ and on following third party libraries:
 
 * [`requests`](https://github.com/psf/requests)
-* [`Pyvmomi`](https://github.com/vmware/pyvmomi)
+* [`Pyvmomi`](https://github.com/vmware/pyvmomi) <9.0
 * [`vSphere Automation SDK for Python`](https://github.com/vmware/vsphere-automation-sdk-python/)
 * [`vSAN Management SDK for Python`](https://developer.broadcom.com/sdks/vsan-management-sdk-for-python/latest/)
 
