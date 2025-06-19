@@ -1,1 +1,1 @@
-pyvmomi
+pyVmomi>=8.0.3.0.1,<9.0
