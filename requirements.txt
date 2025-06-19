@@ -1,3 +1,3 @@
-pyVmomi>=8.0.3.0.1
+pyVmomi>=8.0.3.0.1,<9.0
 vmware-vcenter
 vmware-vapi-common-client
