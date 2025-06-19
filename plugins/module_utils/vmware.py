@@ -37,7 +37,7 @@ except ImportError:
 PYVMOMI_IMP_ERR = None
 try:
     from pyVim import connect
-    from pyVmomi import vim, vmodl, VmomiSupport
+    from pyVmomi import vim, vmodl, VmomiSupport, VmomiJSONEncoder
     HAS_PYVMOMI = True
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
@@ -449,7 +449,7 @@ def gather_vm_facts(content, vm):
         'instance_uuid': vm.config.instanceUuid,
         'guest_tools_status': _get_vm_prop(vm, ('guest', 'toolsRunningStatus')),
         'guest_tools_version': _get_vm_prop(vm, ('guest', 'toolsVersion')),
-        'guest_question': json.loads(json.dumps(vm.summary.runtime.question, cls=VmomiSupport.VmomiJSONEncoder,
+        'guest_question': json.loads(json.dumps(vm.summary.runtime.question, cls=VmomiJSONEncoder.VmomiJSONEncoder,
                                                 sort_keys=True, strip_dynamic=True)),
         'guest_consolidation_needed': vm.summary.runtime.consolidationNeeded,
         'ipv4': None,
@@ -1879,7 +1879,7 @@ class PyVmomi(PyvmomiClient):
         Return:
           dict
         """
-        return json.loads(json.dumps(obj, cls=VmomiSupport.VmomiJSONEncoder,
+        return json.loads(json.dumps(obj, cls=VmomiJSONEncoder.VmomiJSONEncoder,
                                      sort_keys=True, strip_dynamic=True))
 
     def to_json(self, obj, properties=None):
