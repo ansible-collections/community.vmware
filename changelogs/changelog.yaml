@@ -315,3 +315,13 @@ releases:
     fragments:
     - 2391-core-2.19.compatibility.yml
     release_date: '2025-06-04'
+  4.8.5:
+    changes:
+      bugfixes:
+      - Restrict pyvmomi to compatible versions (https://github.com/ansible-collections/community.vmware/pull/2415).
+      - vmware_vmotion - Fix issue with same resource pool name on different clusters
+        (https://github.com/ansible-collections/community.vmware/issues/1719).
+    fragments:
+    - 1719-vmotion-same_resource_pool_name.yml
+    - 2415-restrict-pyvmomi.yml
+    release_date: '2025-06-19'
