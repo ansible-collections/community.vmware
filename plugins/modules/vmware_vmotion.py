@@ -165,7 +165,7 @@ datastore:
 '''
 
 try:
-    from pyVmomi import vim, VmomiSupport
+    from pyVmomi import vim, VmomiJSONEncoder
 except ImportError:
     pass
 
@@ -511,7 +511,7 @@ class VmotionManager(PyVmomi):
                     vms.append(temp_vm_object.obj)
                     break
         elif self.moid:
-            vm_obj = VmomiSupport.templateOf('VirtualMachine')(self.moid, self.si._stub)
+            vm_obj = VmomiJSONEncoder.templateOf('VirtualMachine')(self.moid, self.si._stub)
             if vm_obj:
                 vms.append(vm_obj)
 

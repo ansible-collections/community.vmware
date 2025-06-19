@@ -1253,7 +1253,7 @@ class PyVmomi(PyvmomiClient):
                 elif self.params['folder'] in actual_vm_folder_path:
                     vm_obj = vms[0]
         elif 'moid' in self.params and self.params['moid']:
-            vm_obj = VmomiSupport.templateOf('VirtualMachine')(self.params['moid'], self.si._stub)
+            vm_obj = VmomiJSONEncoder.templateOf('VirtualMachine')(self.params['moid'], self.si._stub)
             try:
                 getattr(vm_obj, 'name')
             except vmodl.fault.ManagedObjectNotFound:
@@ -1946,7 +1946,7 @@ class PyVmomi(PyvmomiClient):
         :return: Managed Object if it exists else None
         """
 
-        obj = VmomiSupport.templateOf(object_type)(moid, self.si._stub)
+        obj = VmomiJSONEncoder.templateOf(object_type)(moid, self.si._stub)
         try:
             getattr(obj, 'name')
         except vmodl.fault.ManagedObjectNotFound:
