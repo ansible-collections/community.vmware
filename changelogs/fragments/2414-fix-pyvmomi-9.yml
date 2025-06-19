@@ -1,0 +1,3 @@
+bugfixes:
+  - Fix issues with pyvmomi 9.0.0.0
+    (https://github.com/ansible-collections/community.vmware/issues/2414).
