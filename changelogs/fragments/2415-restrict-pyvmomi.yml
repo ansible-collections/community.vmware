@@ -1,3 +1,0 @@
-bugfixes:
-  - Restrict pyvmomi to compatible versions
-    (https://github.com/ansible-collections/community.vmware/pull/2415).
