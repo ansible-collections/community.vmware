@@ -106,7 +106,7 @@ import json
 import traceback
 
 try:
-    from pyVmomi import vmodl, VmomiSupport
+    from pyVmomi import vmodl, VmomiJSONEncoder
 except ImportError:
     pass
 
@@ -162,7 +162,7 @@ class VSANInfoManager(PyVmomi):
         except vmodl.fault.RuntimeFault as runtime_fault:
             self.module.fail_json(msg=runtime_fault.msg)
 
-        health = json.dumps(cluster_health, cls=VmomiSupport.VmomiJSONEncoder, sort_keys=True, strip_dynamic=True)
+        health = json.dumps(cluster_health, cls=VmomiJSONEncoder.VmomiJSONEncoder, sort_keys=True, strip_dynamic=True)
 
         self.module.exit_json(changed=False, vsan_health_info=json.loads(health))
 
