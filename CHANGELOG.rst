@@ -6,6 +6,15 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.7.1
+======
+
+Bugfixes
+--------
+
+- Fix issues with pyvmomi 9.0.0.0 (https://github.com/ansible-collections/community.vmware/issues/2414).
+- vmware_vmotion - Fix issue with same resource pool name on different clusters (https://github.com/ansible-collections/community.vmware/issues/1719).
+
 v5.7.0
 ======
 
