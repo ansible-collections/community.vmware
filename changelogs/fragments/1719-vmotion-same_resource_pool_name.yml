@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_vmotion - Fix issue with same resource pool name on different clusters
-    (https://github.com/ansible-collections/community.vmware/issues/1719).

@@ -262,3 +262,13 @@ releases:
     - 2391-core-2.19.compatibility.yml
     - 2398-deprecate-vmware_guest_powerstate.yml
     release_date: '2025-06-03'
+  5.7.1:
+    changes:
+      bugfixes:
+      - Fix issues with pyvmomi 9.0.0.0 (https://github.com/ansible-collections/community.vmware/issues/2414).
+      - vmware_vmotion - Fix issue with same resource pool name on different clusters
+        (https://github.com/ansible-collections/community.vmware/issues/1719).
+    fragments:
+    - 1719-vmotion-same_resource_pool_name.yml
+    - 2414-fix-pyvmomi-9.yml
+    release_date: '2025-06-23'
