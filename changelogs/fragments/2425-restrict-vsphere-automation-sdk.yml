@@ -1,0 +1,3 @@
+bugfixes:
+  - Restrict vSphere Automation SDK to the last version known to be compatible with this collection
+    (https://github.com/ansible-collections/community.vmware/pull/2425).
