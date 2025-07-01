@@ -193,7 +193,7 @@
     validate_certs: false
     library_name: Sample_Subscribed_Library
     library_description: Update Sample Description
-    subscription_url: https://download3.vmware.com/software/vmw-tools/lib.json
+    subscription_url: "https://wp-content.broadcom.com/v2/latest/lib.json"
     update_on_demand: true
     library_type: subscribed
     ssl_thumbprint: aa:bb:cc:d9:ad:d4:53:b5:86:5a:5d:70:36:cf:89:93:d1:6c:f9:63
