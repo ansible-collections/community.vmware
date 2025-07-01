@@ -325,3 +325,11 @@ releases:
     - 1719-vmotion-same_resource_pool_name.yml
     - 2415-restrict-pyvmomi.yml
     release_date: '2025-06-19'
+  4.8.6:
+    changes:
+      bugfixes:
+      - Restrict vSphere Automation SDK to the last version known to be compatible
+        with this collection (https://github.com/ansible-collections/community.vmware/pull/2425).
+    fragments:
+    - 2425-restrict-vsphere-automation-sdk.yml
+    release_date: '2025-07-01'
