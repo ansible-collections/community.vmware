@@ -6,6 +6,14 @@ community.vmware Release Notes
 
 This changelog describes changes after version 3.9.0.
 
+v4.8.6
+======
+
+Bugfixes
+--------
+
+- Restrict vSphere Automation SDK to the last version known to be compatible with this collection (https://github.com/ansible-collections/community.vmware/pull/2425).
+
 v4.8.5
 ======
 
