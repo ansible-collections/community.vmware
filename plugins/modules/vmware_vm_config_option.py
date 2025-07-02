@@ -204,7 +204,8 @@ class VmConfigOption(PyVmomi):
                 'support_disk_controller': support_disk_controller,
                 'support_ethernet_card': support_ethernet_card,
                 'support_cpu_hotadd': guest_os_desc[0].supportsCpuHotAdd,
-                'support_memory_hotadd': guest_os_desc[0].supportsMemoryHotAdd
+                'support_memory_hotadd': guest_os_desc[0].supportsMemoryHotAdd,
+                'support_for_create': guest_os_desc[0].supportedForCreate
             }
 
         return guest_os_option_dict
