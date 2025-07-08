@@ -249,6 +249,7 @@ def path_exists(value):
         raise ValueError(f"'{value}' is not a valid path")
     return value
 
+
 class WebHandle(object):
     def __init__(self, url):
         self.url = url
