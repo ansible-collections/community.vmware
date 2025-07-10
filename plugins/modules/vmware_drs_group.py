@@ -17,7 +17,7 @@ author:
 description:
   - "This module can be used to create VM/Host groups in a given cluster. Creates a vm group if O(vms) is set. Creates a host group if O(hosts) is set."
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 module: vmware_drs_group
 options:
@@ -147,7 +147,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_cluster_by_name,
     find_vm_by_id,
     find_datacenter_by_name)
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class VmwareDrsGroupManager(PyVmomi):

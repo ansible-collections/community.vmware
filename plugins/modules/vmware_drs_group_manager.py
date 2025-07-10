@@ -20,7 +20,7 @@ short_description: Manage VMs and Hosts in DRS group.
 description:
   - The module can be used to add VMs / Hosts to or remove them from a DRS group.
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 options:
   cluster:
     description:
@@ -158,7 +158,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     wait_for_task,
     find_vm_by_id)
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class VmwareDrsGroupMemberManager(PyVmomi):

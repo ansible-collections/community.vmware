@@ -44,7 +44,7 @@ options:
     choices: ['exact', 'includes']
     default: exact
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -124,7 +124,7 @@ vmware_all_snapshots_info:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, list_snapshots_recursively
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim
