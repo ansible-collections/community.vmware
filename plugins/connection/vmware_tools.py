@@ -457,8 +457,9 @@ class Connection(ConnectionBase):
         Fix url if connection is a host.
 
         The host part of the URL is returned as '*' if the hostname to be used is the name of the server to which the call was made. For example, if the call is
-        made to esx-svr-1.domain1.com and port 443, and the file is available for download from http://esx-svr-1.domain1.com:443/guestFile?id=1&token=1234, the URL returned may
-        be http://*:443/guestFile?id=1&token=1234. The client replaces the asterisk with the server name on which it invoked the call and 443 with the port number.
+        made to esx-svr-1.domain1.com and port 443, and the file is available for download from http://esx-svr-1.domain1.com:443/guestFile?id=1&token=1234,
+        the URL returned may be http://*:443/guestFile?id=1&token=1234.
+        The client replaces the asterisk with the server name on which it invoked the call and 443 with the port number.
 
         https://code.vmware.com/apis/358/vsphere#/doc/vim.vm.guest.FileManager.FileTransferInformation.html
         """
