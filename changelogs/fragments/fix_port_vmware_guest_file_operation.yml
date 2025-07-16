@@ -1,0 +1,3 @@
+bugfixes:
+  - vmware_guest_file_operation - Fix to use custom port provided to the module
+    (https://github.com/ansible-collections/community.vmware/pull/2397).
