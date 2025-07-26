@@ -56,7 +56,8 @@ options:
       type: str
       required: false
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- vmware.vmware.base_options
+- vmware.vmware.additional_rest_options
 '''
 
 EXAMPLES = r'''
@@ -147,7 +148,7 @@ import_profile:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import rest_compatible_argument_spec
 import json
 import time
 

@@ -151,7 +151,7 @@ options:
         - This requires vmware-tools (vmtoolsd) to properly work after creation.
         type: bool
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 
@@ -233,7 +233,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_task,
     wait_for_vm_ip,
     set_vm_power_state)
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 try:
     from ansible_collections.community.vmware.plugins.module_utils.vmware import vim
     from pyVmomi import vmodl

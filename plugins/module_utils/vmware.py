@@ -21,7 +21,8 @@ import traceback
 import datetime
 from collections import OrderedDict
 from ansible.module_utils.compat.version import StrictVersion
-from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient, ApiAccessError
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.errors import ApiAccessError
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import PyvmomiClient
 from random import randint
 
 
@@ -47,7 +48,7 @@ from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.six.moves.urllib.parse import unquote
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class TaskError(Exception):

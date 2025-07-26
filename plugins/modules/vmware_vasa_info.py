@@ -20,7 +20,7 @@ description:
 author:
 - Eugenio Grosso (@genegr) <eugenio.grosso@purestorage.com>
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 
@@ -63,7 +63,7 @@ vasa_providers:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_sms import SMS
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class SMSClient(SMS):
