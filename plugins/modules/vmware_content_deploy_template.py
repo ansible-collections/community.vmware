@@ -111,7 +111,8 @@ options:
       default: 'present'
       choices: [ 'present', 'poweredon' ]
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- vmware.vmware.base_options
+- vmware.vmware.additional_rest_options
 
 '''
 
@@ -160,7 +161,7 @@ vm_deploy_info:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import rest_compatible_argument_spec
 from ansible.module_utils._text import to_native
 
 HAS_VAUTOMATION_PYTHON_SDK = False

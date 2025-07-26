@@ -78,7 +78,7 @@ options:
     choices: [ present, absent ]
     type: str
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 
@@ -140,7 +140,7 @@ RETURN = r'''
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_resource_pool_by_name, \
     wait_for_task, compile_folder_path_for_object, find_cluster_by_name
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 
