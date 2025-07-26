@@ -195,19 +195,19 @@ plugin_routing:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.folder instead.
     vmware_cluster:
-      deprecation:
+      tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster instead.
     vmware_cluster_dpm:
-      deprecation:
+      tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_dpm instead.
     vmware_cluster_drs:
-      deprecation:
+      tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs instead.
     vmware_cluster_drs_recommendations:
-      deprecation:
+      tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs_recommendations instead.
     vmware_cluster_info:
@@ -219,7 +219,7 @@ plugin_routing:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.cluster_ha instead.
     vmware_cluster_vcls:
-      deprecation:
+      tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_vcls instead.
     vmware_content_deploy_ovf_template:

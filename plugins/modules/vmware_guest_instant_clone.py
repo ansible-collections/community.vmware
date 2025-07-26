@@ -139,7 +139,7 @@ options:
     type: int
     default: 300
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 author:
 - Anant Chopra (@Anant99-sys)
@@ -277,8 +277,8 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     wait_for_task,
     set_vm_power_state
 )
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
-from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import PyvmomiClient
 
 try:
     from pyVmomi import vim
