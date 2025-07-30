@@ -404,7 +404,7 @@ class VMwareHostiScsiManager(PyVmomi):
     def get_iscsi_config(self):
         self.existing_system_iscsi_config = {}
         for hba in self.host_obj.config.storageDevice.hostBusAdapter:
-            if isinstance(hba, vim.host.InternetScsiHba):
+            if isinstance(hba, vim.host.InternetScsiHba) and hba.device == self.vmhba_name:
                 self.existing_system_iscsi_config.update(
                     {
                         'vmhba_name': hba.device,
