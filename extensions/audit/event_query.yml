@@ -1,0 +1,17 @@
+---
+community.vmware.vmware_guest:
+  query: >-
+    .instance | {
+      name: .moid,
+      canonical_facts: {
+        instance_uuid: .instance_uuid,
+        bios_uuid: .hw_product_uuid,
+        moid: .moid,
+        esxi: .hw_esxi_host
+      },
+      facts: {
+        infra_type: "PrivateCloud",
+        infra_bucket: "Compute",
+        device_type: "VM"
+      }
+    }
