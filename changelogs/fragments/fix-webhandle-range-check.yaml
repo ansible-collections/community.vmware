@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_deploy_ovf - Fix detection of HTTP range support in `WebHandle` to support HTTP/2 endpoints like Nexus that do not return `accept-ranges` header
-    (https://github.com/ansible-collections/community.vmware/pull/2399).

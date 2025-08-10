@@ -6,6 +6,16 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.7.2
+======
+
+Bugfixes
+--------
+
+- vmware_deploy_ovf - Fix detection of HTTP range support in `WebHandle` to support HTTP/2 endpoints like Nexus that do not return `accept-ranges` header (https://github.com/ansible-collections/community.vmware/pull/2399).
+- vmware_guest_file_operation - Fix to use custom port provided to the module (https://github.com/ansible-collections/community.vmware/pull/2397).
+- vmware_vm_config_option - change to use 'disk_ctl_device_type' defined in 'device_helper' and add 'support_cpu_hotadd', 'support_memory_hotadd', 'support_for_create' in output. (https://github.com/ansible-collections/community.vmware/pull/2428)
+
 v5.7.1
 ======
 
