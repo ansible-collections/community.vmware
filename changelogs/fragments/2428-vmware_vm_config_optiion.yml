@@ -1,4 +1,0 @@
-bugfixes:
-  - vmware_vm_config_option - change to use 'disk_ctl_device_type' defined in 'device_helper' and add 'support_cpu_hotadd',
-    'support_memory_hotadd', 'support_for_create' in output.
-    (https://github.com/ansible-collections/community.vmware/pull/2428) 
