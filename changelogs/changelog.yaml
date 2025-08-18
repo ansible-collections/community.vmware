@@ -262,3 +262,29 @@ releases:
     - 2391-core-2.19.compatibility.yml
     - 2398-deprecate-vmware_guest_powerstate.yml
     release_date: '2025-06-03'
+  5.7.1:
+    changes:
+      bugfixes:
+      - Fix issues with pyvmomi 9.0.0.0 (https://github.com/ansible-collections/community.vmware/issues/2414).
+      - vmware_vmotion - Fix issue with same resource pool name on different clusters
+        (https://github.com/ansible-collections/community.vmware/issues/1719).
+    fragments:
+    - 1719-vmotion-same_resource_pool_name.yml
+    - 2414-fix-pyvmomi-9.yml
+    release_date: '2025-06-23'
+  5.7.2:
+    changes:
+      bugfixes:
+      - vmware_deploy_ovf - Fix detection of HTTP range support in `WebHandle` to
+        support HTTP/2 endpoints like Nexus that do not return `accept-ranges` header
+        (https://github.com/ansible-collections/community.vmware/pull/2399).
+      - vmware_guest_file_operation - Fix to use custom port provided to the module
+        (https://github.com/ansible-collections/community.vmware/pull/2397).
+      - vmware_vm_config_option - change to use 'disk_ctl_device_type' defined in
+        'device_helper' and add 'support_cpu_hotadd', 'support_memory_hotadd', 'support_for_create'
+        in output. (https://github.com/ansible-collections/community.vmware/pull/2428)
+    fragments:
+    - 2428-vmware_vm_config_optiion.yml
+    - fix-webhandle-range-check.yaml
+    - fix_port_vmware_guest_file_operation.yml
+    release_date: '2025-08-10'

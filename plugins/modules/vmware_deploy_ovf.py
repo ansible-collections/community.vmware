@@ -257,7 +257,6 @@ class WebHandle(object):
         self.ssl_context = None
 
         self.parsed_url = self._parse_url(url)
-
         self.https = self.parsed_url.group('scheme') == 'https://'
 
         if self.https:
@@ -267,16 +266,35 @@ class WebHandle(object):
 
             self.thumbprint = self._get_thumbprint(
                 self.parsed_url.group('hostname'))
-            r = urlopen(url=url, context=self.ssl_context)
+            r = urlopen(Request(url, method="HEAD"), context=self.ssl_context)
         else:
-            r = urlopen(url)
+            r = urlopen(Request(url, method="HEAD"))
+
         if r.code != 200:
             raise FileNotFoundError(url)
         self.headers = self._headers_to_dict(r)
-        if 'accept-ranges' not in self.headers:
-            raise Exception("Site does not accept ranges")
+
+        if 'content-length' not in self.headers:
+            raise Exception("Missing content-length in response")
         self.st_size = int(self.headers['content-length'])
+
+        # Perform a real range test instead of checking 'accept-ranges'
+        if not self._supports_range_request():
+            raise Exception("Site does not support range requests (no valid response to Range header)")
+
         self.offset = 0
+
+    def _supports_range_request(self):
+        req = Request(self.url)
+        req.add_header('Range', 'bytes=0-0')
+        try:
+            if self.ssl_context:
+                r = urlopen(req, context=self.ssl_context)
+            else:
+                r = urlopen(req)
+            return r.status == 206  # Partial Content
+        except Exception:
+            return False
 
     def _parse_url(self, url):
         HTTP_SCHEMA_PATTERN = (
@@ -288,10 +306,8 @@ class WebHandle(object):
 
     def _get_thumbprint(self, hostname):
         pem = ssl.get_server_certificate((hostname, 443))
-        sha1 = hashlib.sha1(
-            ssl.PEM_cert_to_DER_cert(pem)).hexdigest().upper()
+        sha1 = hashlib.sha1(ssl.PEM_cert_to_DER_cert(pem)).hexdigest().upper()
         colon_notion = ':'.join(sha1[i:i + 2] for i in range(0, len(sha1), 2))
-
         return None if sha1 is None else colon_notion
 
     def _headers_to_dict(self, r):

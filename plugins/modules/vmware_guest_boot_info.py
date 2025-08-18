@@ -95,7 +95,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import PyV
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 
 try:
-    from pyVmomi import vim, VmomiSupport
+    from pyVmomi import vim, VmomiJSONEncoder
 except ImportError:
     pass
 
@@ -128,7 +128,7 @@ class VmBootInfoManager(PyVmomi):
                     vms.append(temp_vm_object.obj)
 
         elif self.moid:
-            vm_obj = VmomiSupport.templateOf('VirtualMachine')(self.module.params['moid'], self.si._stub)
+            vm_obj = VmomiJSONEncoder.templateOf('VirtualMachine')(self.module.params['moid'], self.si._stub)
             if vm_obj:
                 vms.append(vm_obj)
 

@@ -1,4 +1,5 @@
-- hosts: localhost
+- name: Unset version
+  hosts: localhost
   tasks:
     - name: Get version
       block:

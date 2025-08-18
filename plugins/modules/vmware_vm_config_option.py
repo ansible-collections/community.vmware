@@ -118,10 +118,7 @@ class VmConfigOption(PyVmomi):
     def __init__(self, module):
         super(VmConfigOption, self).__init__(module)
         self.device_helper = PyVmomiDeviceHelper(self.module)
-        self.ctl_device_type = self.device_helper.scsi_device_type.copy()
-        self.ctl_device_type.update({'sata': self.device_helper.sata_device_type,
-                                     'nvme': self.device_helper.nvme_device_type}
-                                    )
+        self.ctl_device_type = self.device_helper.disk_ctl_device_type.copy()
         self.ctl_device_type.update(self.device_helper.usb_device_type)
         self.ctl_device_type.update(self.device_helper.nic_device_type)
         self.target_host = None
@@ -205,7 +202,10 @@ class VmConfigOption(PyVmomi):
                 'rec_vram_kb': guest_os_desc[0].vRAMSizeInKB.defaultValue,
                 'support_usb_controller': support_usb_controller,
                 'support_disk_controller': support_disk_controller,
-                'support_ethernet_card': support_ethernet_card
+                'support_ethernet_card': support_ethernet_card,
+                'support_cpu_hotadd': guest_os_desc[0].supportsCpuHotAdd,
+                'support_memory_hotadd': guest_os_desc[0].supportsMemoryHotAdd,
+                'support_for_create': guest_os_desc[0].supportedForCreate
             }
 
         return guest_os_option_dict
