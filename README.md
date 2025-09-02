@@ -41,9 +41,7 @@ collections:
 
 VMware community collection depends on Python 3.9+ and on following third party libraries:
 
-* [`pyvmomi`](https://pypi.org/project/pyvmomi/) >=8.0.3.0.1
-* [`vmware-vcenter`](https://pypi.org/project/vmware-vcenter/)
-* [`vmware-vapi-common-client`](https://pypi.org/project/vmware-vapi-common-client/)
+* [`vcf-sdk`](https://pypi.org/project/vcf-sdk) >=9.0.0.0
 
 ### Installing required libraries and SDK
 
