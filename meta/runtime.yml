@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.17.0'
+requires_ansible: '>=2.19.0'
 
 action_groups:
   vmware:

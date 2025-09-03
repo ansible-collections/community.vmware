@@ -16,7 +16,7 @@ The collection includes the VMware modules and plugins supported by Ansible VMwa
 
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.17.0**.
+This collection has been tested against following Ansible versions: **>=2.19.0**.
 
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
