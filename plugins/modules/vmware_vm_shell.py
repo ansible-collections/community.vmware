@@ -103,7 +103,7 @@ options:
       default: 3600
       type: int
 extends_documentation_fragment:
-- community.vmware.vmware.documentation
+- vmware.vmware.base_options
 
 '''
 
@@ -200,7 +200,7 @@ from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi, find_cluster_by_name, find_datacenter_by_name, find_vm_by_id)
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class VMwareShellManager(PyVmomi):
