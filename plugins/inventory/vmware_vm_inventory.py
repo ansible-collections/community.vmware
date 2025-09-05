@@ -466,7 +466,7 @@ except ImportError:
 
 from ansible.plugins.inventory import BaseInventoryPlugin, Constructable, Cacheable
 from ansible.parsing.yaml.objects import AnsibleVaultEncryptedUnicode
-from ansible_collections.community.vmware.plugins.module_utils.clients._vmware import PyvmomiClient
+from ansible_collections.vmware.vmware.plugins.module_utils.clients.pyvmomi import PyvmomiClient
 
 
 class BaseVMwareInventory:

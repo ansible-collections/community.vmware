@@ -54,7 +54,8 @@ options:
       aliases: ['object_new_name']
       type: str
 extends_documentation_fragment:
-- community.vmware.vmware_rest_client.documentation
+- vmware.vmware.base_options
+- vmware.vmware.additional_rest_options
 '''
 
 EXAMPLES = r'''
@@ -125,7 +126,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils._text import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import rest_compatible_argument_spec
 try:
     from pyVmomi import vim
 except ImportError:

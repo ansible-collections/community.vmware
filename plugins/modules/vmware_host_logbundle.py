@@ -113,7 +113,7 @@ options:
           type: int
           default: 5
 extends_documentation_fragment:
-    - community.vmware.vmware.documentation
+    - vmware.vmware.base_options
 '''
 
 EXAMPLES = r'''
@@ -165,7 +165,7 @@ except ImportError:
 import xml.etree.ElementTree as ET
 
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
-from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import fetch_url
 
