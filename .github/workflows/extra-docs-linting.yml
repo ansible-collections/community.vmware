@@ -34,7 +34,7 @@ jobs:
       - name: Install dependent collections
         run: >
           ansible-galaxy collection install
-          'vmware.vmware>=1.10.0'
+          'vmware.vmware>=2.0.0'
 
       - name: Run collection docs linter
         run: antsibull-docs lint-collection-docs . --plugin-docs --skip-rstcheck
