@@ -233,6 +233,10 @@ plugin_routing:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.vm_powerstate instead.
+    vmware_guest_snapshot:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.vm_snapshot instead.
     vmware_host:
       deprecation:
         removal_version: 7.0.0

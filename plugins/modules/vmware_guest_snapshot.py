@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_guest_snapshot
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://github.com/ansible-collections/vmware.vmware/pull/126)
+  alternative: Use M(vmware.vmware.vm_snapshot) instead.
 short_description: Manages virtual machines snapshots in vCenter
 description:
     - This module can be used to create, delete and update snapshot(s) of the given virtual machine.
