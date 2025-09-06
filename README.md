@@ -8,6 +8,7 @@ The collection includes the VMware modules and plugins supported by Ansible VMwa
 
 | Release | Status                      | End of life |
 | ------: | --------------------------: | ----------: |
+|       6 | Maintained                  |    Nov 2027 |
 |       5 | Maintained                  |    Nov 2026 |
 |       4 | Maintained (bug fixes only) |    Nov 2025 |
 |       3 | Unmaintained                |    Nov 2024 |
