@@ -1,2 +1,0 @@
-minor_changes:
-  - vcenter_license - Add support for VCF license keys. (https://github.com/ansible-collections/community.vmware/pull/2451)
