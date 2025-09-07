@@ -288,3 +288,10 @@ releases:
     - fix-webhandle-range-check.yaml
     - fix_port_vmware_guest_file_operation.yml
     release_date: '2025-08-10'
+  5.8.0:
+    changes:
+      minor_changes:
+      - vcenter_license - Add support for VCF license keys. (https://github.com/ansible-collections/community.vmware/pull/2451)
+    fragments:
+    - 2451-vcenter_license_vcf_support.yml
+    release_date: '2025-09-07'

@@ -6,6 +6,14 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.8.0
+======
+
+Minor Changes
+-------------
+
+- vcenter_license - Add support for VCF license keys. (https://github.com/ansible-collections/community.vmware/pull/2451)
+
 v5.7.2
 ======
 
