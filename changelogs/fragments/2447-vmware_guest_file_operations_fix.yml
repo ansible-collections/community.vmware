@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_file_operation - fix replace() error. After replacing the argument_spec() function with a function from vmware.vmware, the port variable is of type int and not str as before.
