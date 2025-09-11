@@ -368,7 +368,7 @@ class VmwareGuestFileManager(PyVmomi):
             fileTransferInfo = file_manager.InitiateFileTransferFromGuest(vm=self.vm, auth=creds,
                                                                           guestFilePath=src)
             url = fileTransferInfo.url
-            url = url.replace("*", hostname).replace("443", port)
+            url = url.replace("*", hostname).replace("443", str(port))
             resp, info = urls.fetch_url(self.module, url, method="GET", timeout=self.timeout)
             if info.get('status') != 200 or not resp:
                 self.module.fail_json(msg="Failed to fetch file : %s" % info.get('msg', ''), body=info.get('body', ''))
@@ -427,7 +427,7 @@ class VmwareGuestFileManager(PyVmomi):
             url = file_manager.InitiateFileTransferToGuest(vm=self.vm, auth=creds, guestFilePath=dest,
                                                            fileAttributes=file_attributes, overwrite=overwrite,
                                                            fileSize=file_size)
-            url = url.replace("*", hostname).replace("443", port)
+            url = url.replace("*", hostname).replace("443", str(port))
             resp, info = urls.fetch_url(self.module, url, data=data, method="PUT", timeout=self.timeout)
 
             status_code = info["status"]
