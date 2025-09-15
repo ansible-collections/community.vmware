@@ -1,2 +1,5 @@
 bugfixes:
-  - vmware_guest_file_operation - fix replace() error. After replacing the argument_spec() function with a function from vmware.vmware, the port variable is of type int and not str as before.
+  - vmware_guest_file_operation - fix ``replace() argument 2 must be str, not int`` error
+    (https://github.com/ansible-collections/community.vmware/issues/2447).
+  - vmware_tools - fix ``replace() argument 2 must be str, not int`` error
+    (https://github.com/ansible-collections/community.vmware/issues/2447).
