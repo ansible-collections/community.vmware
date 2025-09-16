@@ -463,7 +463,7 @@ class Connection(ConnectionBase):
 
         https://code.vmware.com/apis/358/vsphere#/doc/vim.vm.guest.FileManager.FileTransferInformation.html
         """
-        return url.replace("*", self.vmware_host).replace("443", self.get_option("vmware_port"))
+        return url.replace("*", self.vmware_host).replace("443", str(self.get_option("vmware_port")))
 
     def _fetch_file_from_vm(self, guestFilePath):
         try:
