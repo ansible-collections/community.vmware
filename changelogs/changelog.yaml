@@ -1,2 +1,42 @@
 ancestor: 5.7.2
 releases:
+  6.0.0:
+    changes:
+      breaking_changes:
+      - Removed support for ansible-core < 2.19.0.
+      - Removed support for vmware.vmware < 2.0.0.
+      - Replace the dependencies on ``pyvmomi``, ``vmware-vcenter`` and ``vmware-vapi-common-client``
+        with ``vcf-sdk`` (https://github.com/ansible-collections/community.vmware/pull/2457).
+      bugfixes:
+      - vmware_guest_file_operation - fix ``replace() argument 2 must be str, not
+        int`` error (https://github.com/ansible-collections/community.vmware/issues/2447).
+      - vmware_tools - fix ``replace() argument 2 must be str, not int`` error (https://github.com/ansible-collections/community.vmware/issues/2447).
+      deprecated_features:
+      - vmware_guest_snapshot - the module has been deprecated and will be removed
+        in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2467).
+      major_changes:
+      - Re-use code from ``vmware.vmware`` (https://github.com/ansible-collections/community.vmware/pull/2459).
+      minor_changes:
+      - vcenter_license - Add support for VCF license keys. (https://github.com/ansible-collections/community.vmware/pull/2451)
+      - vsphere_file - Remove ``ansible.module_utils.six.PY2`` (https://github.com/ansible-collections/community.vmware/pull/2475).
+      removed_features:
+      - vmware_cluster - The deprecated module has been removed. Use ``vmware.vmware.cluster``
+        instead (https://github.com/ansible-collections/community.vmware/pull/2455).
+      - vmware_cluster_dpm - The deprecated module has been removed. Use ``vmware.vmware.cluster_dpm``
+        instead (https://github.com/ansible-collections/community.vmware/pull/2455).
+      - vmware_cluster_drs - The deprecated module has been removed. Use ``vmware.vmware.cluster_drs``
+        instead (https://github.com/ansible-collections/community.vmware/pull/2455).
+      - vmware_cluster_drs_recommendations - The deprecated module has been removed.
+        Use ``vmware.vmware.cluster_drs_recommendations`` instead (https://github.com/ansible-collections/community.vmware/pull/2455).
+      - vmware_cluster_vcls - The deprecated module has been removed. Use ``vmware.vmware.cluster_vcls``
+        instead (https://github.com/ansible-collections/community.vmware/pull/2455).
+    fragments:
+    - 2447-vmware_guest_file_operations_fix.yml
+    - 2451-vcenter_license_vcf_support.yml
+    - 2455-remove-deprecated-modules.yml
+    - 2467-deprecate-vmware_guest_snapshot.yml
+    - 2475-remove-ansible.module_utils.six.PY2.yml
+    - 6.0.0-requirements.yml
+    - 6.0.0-reuse-vmware.vmware.yml
+    - 6.0.0_ansible-core_vmware.vmware-requirements.yml
+    release_date: '2025-09-17'

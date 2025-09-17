@@ -1,3 +1,0 @@
-major_changes:
-  - Re-use code from ``vmware.vmware``
-    (https://github.com/ansible-collections/community.vmware/pull/2459).
