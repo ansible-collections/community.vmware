@@ -1,4 +1,15 @@
+plugins/inventory/vmware_host_inventory.py pylint:ansible-bad-import-from
+plugins/inventory/vmware_vm_inventory.py pylint:ansible-bad-import-from
+plugins/modules/vmware_deploy_ovf.py pylint:ansible-bad-import-from
 plugins/modules/vmware_deploy_ovf.py replace-urlopen!skip
 plugins/modules/vmware_deploy_ovf.py use-argspec-type-path!skip
+plugins/modules/vmware_host_config_manager.py pylint:ansible-bad-import-from
+plugins/module_utils/vmware.py pylint:ansible-bad-import-from
 scripts/inventory/vmware_inventory.py pep8!skip
+scripts/inventory/vmware_inventory.py pylint:ansible-bad-import-from
+scripts/inventory/vmware.py pylint:ansible-bad-import-from
 tests/unit/mock/loader.py pep8!skip
+tests/unit/mock/procenv.py pylint:ansible-bad-import-from
+tests/unit/mock/yaml_helper.py pylint:ansible-bad-import-from
+tests/unit/modules/conftest.py pylint:ansible-bad-import-from
+tests/unit/module_utils/conftest.py pylint:ansible-bad-import-from
