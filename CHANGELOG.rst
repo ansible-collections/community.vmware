@@ -6,6 +6,20 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.9.0
+======
+
+Minor Changes
+-------------
+
+- vsphere_file - Remove ``ansible.module_utils.six.PY2`` (https://github.com/ansible-collections/community.vmware/pull/2476).
+
+Bugfixes
+--------
+
+- vmware_guest_file_operation - fix ``replace() argument 2 must be str, not int`` error (https://github.com/ansible-collections/community.vmware/issues/2447).
+- vmware_tools - fix ``replace() argument 2 must be str, not int`` error (https://github.com/ansible-collections/community.vmware/issues/2447).
+
 v5.8.0
 ======
 
