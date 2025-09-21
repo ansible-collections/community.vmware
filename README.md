@@ -77,6 +77,7 @@ Push the release:
 - After the PR has been merged, make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
 - Tag the release: `git tag -s $VERSION`
 - Push the tag: `git push upstream $VERSION`
+- Manually `Create release from tag` on GitHub. Copy the changes from the tag instead of generating the release notes.
 
 Revert the version in `galaxy.yml` back to `null`:
 - Make sure your fork is up to date: `git checkout main && git pull && git fetch upstream && git merge upstream/main`.
