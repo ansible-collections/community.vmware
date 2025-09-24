@@ -781,11 +781,11 @@ class VMwareDvsPortgroup(PyVmomi):
 
         if self.dvs_portgroup is None:
             return 'absent'
-        
+
         # description property in DVPortgroupConfigInfo stored in config property
         if self.dvs_portgroup.config.description != self.module.params['portgroup_description']:
             return 'update'
-        
+
         # Check config
         if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
             if self.module.params['num_ports'] is not None and self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
