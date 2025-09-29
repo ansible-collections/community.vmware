@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-DOCUMENTATION = r'''
+DOCUMENTATION = r"""
 ---
 module: vmware_dvs_portgroup
 short_description: Create or remove a Distributed vSwitch portgroup.
@@ -25,6 +25,12 @@ options:
             - The name of the portgroup that is to be created or deleted.
         required: true
         type: str
+    portgroup_description:
+        description:
+            - Description of the portgroup
+        required: false
+        type: str
+        aliases: ['description']
     switch_name:
         description:
             - The name of the distributed vSwitch the port group should be created on.
@@ -355,7 +361,7 @@ options:
 extends_documentation_fragment:
 - vmware.vmware.base_options
 
-'''
+"""
 
 EXAMPLES = r'''
 - name: Create vlan portgroup
@@ -377,6 +383,7 @@ EXAMPLES = r'''
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     portgroup_name: vlan-trunk-portrgoup
+    portgroup_description: 'Trunk 1-1000, 1005, 1100-1200'
     switch_name: dvSwitch
     vlan_id: 1-1000, 1005, 1100-1200
     vlan_trunk: true
@@ -514,6 +521,7 @@ class VMwareDvsPortgroup(PyVmomi):
 
         # Basic config
         config.name = self.module.params['portgroup_name']
+        config.description = self.module.params['portgroup_description']
 
         if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
             config.numPorts = self.module.params['num_ports']
@@ -774,6 +782,10 @@ class VMwareDvsPortgroup(PyVmomi):
         if self.dvs_portgroup is None:
             return 'absent'
 
+        # description property in DVPortgroupConfigInfo stored in config property
+        if self.module.params['portgroup_description'] is not None and self.dvs_portgroup.config.description != self.module.params['portgroup_description']:
+            return 'update'
+
         # Check config
         if self.module.params['port_allocation'] != 'elastic' and self.module.params['port_binding'] != 'ephemeral':
             if self.module.params['num_ports'] is not None and self.dvs_portgroup.config.numPorts != self.module.params['num_ports']:
@@ -941,6 +953,7 @@ def main():
     argument_spec.update(
         dict(
             portgroup_name=dict(required=True, type='str'),
+            portgroup_description=dict(required=False, type='str', aliases=['description']),
             switch_name=dict(required=True, type='str'),
             vlan_id=dict(required=True, type='str'),
             num_ports=dict(type='int'),
