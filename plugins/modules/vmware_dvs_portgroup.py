@@ -783,7 +783,7 @@ class VMwareDvsPortgroup(PyVmomi):
             return 'absent'
 
         # description property in DVPortgroupConfigInfo stored in config property
-        if self.dvs_portgroup.config.description != self.module.params['portgroup_description']:
+        if self.module.params['portgroup_description'] is not None and self.dvs_portgroup.config.description != self.module.params['portgroup_description']:
             return 'update'
 
         # Check config
