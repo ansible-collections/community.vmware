@@ -1663,11 +1663,11 @@ class PyVmomi(PyvmomiClient):
                 return rp
         return None
 
-    def find_resource_pool_by_cluster(self, resource_pool_name='Resources', cluster=None):
+   def find_resource_pool_by_cluster(self, resource_pool_name='Resources', cluster=None):
         """
         Get resource pool managed object by cluster object
         Args:
-            resource_pool_name: Name of resource pool
+            resource_pool_name: Name of resource pool or path (e.g., 'parent/child' or '/cluster/parent/child')
             cluster: Managed object of cluster
 
         Returns: Resource pool managed object if found else None
@@ -1677,18 +1677,83 @@ class PyVmomi(PyvmomiClient):
         if not cluster:
             return desired_rp
 
-        if resource_pool_name != 'Resources':
-            # Resource pool name is different than default 'Resources'
-            resource_pools = cluster.resourcePool.resourcePool
-            if resource_pools:
-                for rp in resource_pools:
-                    if rp.name == resource_pool_name:
-                        desired_rp = rp
-                        break
-        else:
+        if resource_pool_name == 'Resources':
+            # Return the default root resource pool
             desired_rp = cluster.resourcePool
+        else:
+            # Check if path is provided (contains '/')
+            if '/' in resource_pool_name:
+                # Handle path-based resource pool search
+                desired_rp = self._find_resource_pool_by_path(cluster.resourcePool, resource_pool_name, cluster)
+            else:
+                desired_rp = self._find_resource_pool_recursive(cluster.resourcePool, resource_pool_name)
 
         return desired_rp
+
+    def _find_resource_pool_by_path(self, root_rp, resource_pool_path, cluster):
+        """
+        Find resource pool by hierarchical path
+        Args:
+            root_rp: Root resource pool to start search from
+            resource_pool_path: Path like '/cluster/parent/child' or 'parent/child'
+            cluster: Cluster object for validation
+
+        Returns: Resource pool managed object if found else None
+        """
+        # Clean the path and split into components
+        path = resource_pool_path.strip('/')
+        path_parts = [part for part in path.split('/') if part]
+        
+        # If path starts with cluster name, remove it from path_parts
+        if path_parts and cluster and hasattr(cluster, 'name') and path_parts[0] == cluster.name:
+            path_parts = path_parts[1:]
+        
+        # Start from the root resource pool of the cluster
+        current_rp = root_rp
+        
+        # Traverse the path step by step
+        for part in path_parts:
+            found_rp = None
+            
+            # Look for the next part in current resource pool's children
+            if hasattr(current_rp, 'resourcePool'):
+                for child_rp in current_rp.resourcePool:
+                    if child_rp.name == part:
+                        found_rp = child_rp
+                        break
+            
+            if not found_rp:
+                # Path component not found
+                return None
+            
+            current_rp = found_rp
+        
+        return current_rp
+
+    def _find_resource_pool_recursive(self, parent_rp, target_name):
+        """
+        Recursively search for a resource pool by name
+        Args:
+            parent_rp: Parent resource pool to search in
+            target_name: Name of the target resource pool
+
+        Returns: Resource pool managed object if found else None
+        """
+        if not parent_rp or not hasattr(parent_rp, 'resourcePool'):
+            return None
+
+        # Check immediate children first
+        for child_rp in parent_rp.resourcePool:
+            if child_rp.name == target_name:
+                return child_rp
+
+        # Recursively search in child resource pools
+        for child_rp in parent_rp.resourcePool:
+            result = self._find_resource_pool_recursive(child_rp, target_name)
+            if result:
+                return result
+
+        return None
 
     # VMDK stuff
     def vmdk_disk_path_split(self, vmdk_path):
