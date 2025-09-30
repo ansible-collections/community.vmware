@@ -1663,7 +1663,7 @@ class PyVmomi(PyvmomiClient):
                 return rp
         return None
 
-   def find_resource_pool_by_cluster(self, resource_pool_name='Resources', cluster=None):
+    def find_resource_pool_by_cluster(self, resource_pool_name='Resources', cluster=None):
         """
         Get resource pool managed object by cluster object
         Args:
