@@ -1,0 +1,3 @@
+minor_changes:
+  - vmware_dvs_portgroup - add ``portgroup_description`` parameter
+    (https://github.com/ansible-collections/community.vmware/issues/2487).
