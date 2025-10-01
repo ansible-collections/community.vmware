@@ -1707,27 +1707,27 @@ class PyVmomi(PyvmomiClient):
         # If path starts with cluster name, remove it from path_parts
         if path_parts and cluster and hasattr(cluster, 'name') and path_parts[0] == cluster.name:
             path_parts = path_parts[1:]
-        
+
         # Start from the root resource pool of the cluster
         current_rp = root_rp
-        
+
         # Traverse the path step by step
         for part in path_parts:
             found_rp = None
-            
+
             # Look for the next part in current resource pool's children
             if hasattr(current_rp, 'resourcePool'):
                 for child_rp in current_rp.resourcePool:
                     if child_rp.name == part:
                         found_rp = child_rp
                         break
-            
+
             if not found_rp:
                 # Path component not found
                 return None
-            
+
             current_rp = found_rp
-        
+
         return current_rp
 
     def _find_resource_pool_recursive(self, parent_rp, target_name):
