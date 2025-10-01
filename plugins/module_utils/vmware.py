@@ -1703,7 +1703,7 @@ class PyVmomi(PyvmomiClient):
         # Clean the path and split into components
         path = resource_pool_path.strip('/')
         path_parts = [part for part in path.split('/') if part]
-        
+
         # If path starts with cluster name, remove it from path_parts
         if path_parts and cluster and hasattr(cluster, 'name') and path_parts[0] == cluster.name:
             path_parts = path_parts[1:]
