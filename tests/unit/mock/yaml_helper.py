@@ -7,7 +7,6 @@ __metaclass__ = type
 import io
 import yaml
 
-from ansible.module_utils.six import PY3
 from ansible.parsing.yaml.loader import AnsibleLoader
 from ansible.parsing.yaml.dumper import AnsibleDumper
 
@@ -21,18 +20,10 @@ class YamlTestUtils(object):
         return AnsibleLoader(stream)
 
     def _dump_stream(self, obj, stream, dumper=None):
-        """Dump to a py2-unicode or py3-string stream."""
-        if PY3:
-            return yaml.dump(obj, stream, Dumper=dumper)
-        else:
-            return yaml.dump(obj, stream, Dumper=dumper, encoding=None)
+        return yaml.dump(obj, stream, Dumper=dumper)
 
     def _dump_string(self, obj, dumper=None):
-        """Dump to a py2-unicode or py3-string"""
-        if PY3:
-            return yaml.dump(obj, Dumper=dumper)
-        else:
-            return yaml.dump(obj, Dumper=dumper, encoding=None)
+        return yaml.dump(obj, Dumper=dumper)
 
     def _dump_load_cycle(self, obj):
         # Each pass though a dump or load revs the 'generation'
@@ -90,12 +81,8 @@ class YamlTestUtils(object):
         stream_obj_from_stream = io.StringIO()
         stream_obj_from_string = io.StringIO()
 
-        if PY3:
-            yaml.dump(obj_from_stream, stream_obj_from_stream, Dumper=AnsibleDumper)
-            yaml.dump(obj_from_stream, stream_obj_from_string, Dumper=AnsibleDumper)
-        else:
-            yaml.dump(obj_from_stream, stream_obj_from_stream, Dumper=AnsibleDumper, encoding=None)
-            yaml.dump(obj_from_stream, stream_obj_from_string, Dumper=AnsibleDumper, encoding=None)
+        yaml.dump(obj_from_stream, stream_obj_from_stream, Dumper=AnsibleDumper)
+        yaml.dump(obj_from_stream, stream_obj_from_string, Dumper=AnsibleDumper)
 
         yaml_string_stream_obj_from_stream = stream_obj_from_stream.getvalue()
         yaml_string_stream_obj_from_string = stream_obj_from_string.getvalue()
@@ -103,12 +90,8 @@ class YamlTestUtils(object):
         stream_obj_from_stream.seek(0)
         stream_obj_from_string.seek(0)
 
-        if PY3:
-            yaml_string_obj_from_stream = yaml.dump(obj_from_stream, Dumper=AnsibleDumper)
-            yaml_string_obj_from_string = yaml.dump(obj_from_string, Dumper=AnsibleDumper)
-        else:
-            yaml_string_obj_from_stream = yaml.dump(obj_from_stream, Dumper=AnsibleDumper, encoding=None)
-            yaml_string_obj_from_string = yaml.dump(obj_from_string, Dumper=AnsibleDumper, encoding=None)
+        yaml_string_obj_from_stream = yaml.dump(obj_from_stream, Dumper=AnsibleDumper)
+        yaml_string_obj_from_string = yaml.dump(obj_from_string, Dumper=AnsibleDumper)
 
         assert yaml_string == yaml_string_obj_from_stream
         assert yaml_string == yaml_string_obj_from_stream == yaml_string_obj_from_string
