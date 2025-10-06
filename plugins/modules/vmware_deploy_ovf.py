@@ -223,7 +223,7 @@ from threading import Thread
 from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six import string_types
-from ansible.module_utils.six.moves.urllib.request import Request, urlopen
+from urllib.request import Request, urlopen
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     find_all_networks_by_name,
