@@ -42,7 +42,7 @@ from time import time
 
 from jinja2 import Environment
 
-from ansible.module_utils.six import integer_types, PY3
+from ansible.module_utils.six import integer_types
 from ansible.module_utils.six.moves import configparser
 
 try:
@@ -237,10 +237,7 @@ class VMWareInventory(object):
             'groupby_custom_field': False}
         }
 
-        if PY3:
-            config = configparser.ConfigParser()
-        else:
-            config = configparser.ConfigParser()
+        config = configparser.ConfigParser()
 
         # where is the config?
         vmware_ini_path = os.environ.get('VMWARE_INI_PATH', defaults['vmware']['ini_path'])

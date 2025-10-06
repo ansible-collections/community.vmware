@@ -11,7 +11,7 @@ from io import BytesIO
 import pytest
 
 import ansible.module_utils.basic
-from ansible.module_utils.six import PY3, string_types
+from ansible.module_utils.six import string_types
 from ansible.module_utils._text import to_bytes
 from ansible.module_utils.common._collections_compat import MutableMapping
 
@@ -37,11 +37,8 @@ def stdin(mocker, request):
         raise Exception('Malformed data to the stdin pytest fixture')
 
     fake_stdin = BytesIO(to_bytes(args, errors='surrogate_or_strict'))
-    if PY3:
-        mocker.patch('ansible.module_utils.basic.sys.stdin', mocker.MagicMock())
-        mocker.patch('ansible.module_utils.basic.sys.stdin.buffer', fake_stdin)
-    else:
-        mocker.patch('ansible.module_utils.basic.sys.stdin', fake_stdin)
+    mocker.patch('ansible.module_utils.basic.sys.stdin', mocker.MagicMock())
+    mocker.patch('ansible.module_utils.basic.sys.stdin.buffer', fake_stdin)
 
     yield fake_stdin
 
