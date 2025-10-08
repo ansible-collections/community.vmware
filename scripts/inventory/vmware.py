@@ -42,7 +42,7 @@ import sys
 import time
 
 from ansible.module_utils.common._collections_compat import MutableMapping
-from ansible.module_utils.six import text_type, string_types
+from ansible.module_utils.six import text_type
 from ansible.module_utils.six.moves import configparser
 
 # Disable logging message trigged by pSphere/suds.
@@ -165,7 +165,7 @@ class VMwareInventory(object):
             if isinstance(v, MutableMapping):
                 items.extend(self._flatten_dict(v, new_key, sep).items())
             elif isinstance(v, (list, tuple)):
-                if all((isinstance(x, string_types) for x in v)):
+                if all((isinstance(x, str) for x in v)):
                     items.append((new_key, v))
             else:
                 items.append((new_key, v))
