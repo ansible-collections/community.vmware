@@ -88,7 +88,6 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, is_boolean, is_integer, is_truthy
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
-from ansible.module_utils.six import integer_types
 
 
 class VmwareConfigManager(PyVmomi):
@@ -121,10 +120,10 @@ class VmwareConfigManager(PyVmomi):
                     option_type = host_facts[option_key]['option_type']
                     if is_boolean(option_value) and isinstance(option_type, vim.option.BoolOption):
                         option_value = is_truthy(option_value)
-                    elif (isinstance(option_value, integer_types) or is_integer(option_value))\
+                    elif (isinstance(option_value, int) or is_integer(option_value))\
                             and isinstance(option_type, vim.option.IntOption):
                         option_value = VmomiSupport.vmodlTypes['int'](option_value)
-                    elif (isinstance(option_value, integer_types) or is_integer(option_value, 'long'))\
+                    elif (isinstance(option_value, int) or is_integer(option_value, 'long'))\
                             and isinstance(option_type, vim.option.LongOption):
                         option_value = VmomiSupport.vmodlTypes['long'](option_value)
                     elif isinstance(option_value, float) and isinstance(option_type, vim.option.FloatOption):

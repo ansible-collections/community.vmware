@@ -42,7 +42,7 @@ import sys
 import time
 
 from ansible.module_utils.common._collections_compat import MutableMapping
-from ansible.module_utils.six import integer_types, text_type, string_types
+from ansible.module_utils.six import text_type, string_types
 from ansible.module_utils.six.moves import configparser
 
 # Disable logging message trigged by pSphere/suds.
@@ -213,7 +213,7 @@ class VMwareInventory(object):
                 if obj_info != ():
                     l.append(obj_info)
             return l
-        elif isinstance(obj, (type(None), bool, float) + string_types + integer_types):
+        elif isinstance(obj, (type(None), bool, float, str, int):
             return obj
         else:
             return ()

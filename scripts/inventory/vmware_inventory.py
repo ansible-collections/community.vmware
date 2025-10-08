@@ -42,7 +42,6 @@ from time import time
 
 from jinja2 import Environment
 
-from ansible.module_utils.six import integer_types
 from ansible.module_utils.six.moves import configparser
 
 try:
@@ -103,7 +102,7 @@ class VMWareInventory(object):
     groupby_patterns = []
     groupby_custom_field_excludes = []
 
-    safe_types = [bool, str, float, None] + list(integer_types)
+    safe_types = [bool, str, float, None] + list(int)
     iter_types = [dict, list]
 
     bad_types = ['Array', 'disabledMethod', 'declaredAlarmState']
@@ -708,7 +707,7 @@ class VMWareInventory(object):
                 rdata = vobj.encode('utf-8').decode('utf-8')
         elif issubclass(type(vobj), bool) or isinstance(vobj, bool):
             rdata = vobj
-        elif issubclass(type(vobj), integer_types) or isinstance(vobj, integer_types):
+        elif issubclass(type(vobj), int) or isinstance(vobj, int):
             rdata = vobj
         elif issubclass(type(vobj), float) or isinstance(vobj, float):
             rdata = vobj
