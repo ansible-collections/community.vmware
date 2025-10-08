@@ -42,7 +42,6 @@ import sys
 import time
 
 from ansible.module_utils.common._collections_compat import MutableMapping
-from ansible.module_utils.six import text_type
 from ansible.module_utils.six.moves import configparser
 
 # Disable logging message trigged by pSphere/suds.
@@ -179,7 +178,7 @@ class VMwareInventory(object):
         seen = seen or set()
         if isinstance(obj, ManagedObject):
             try:
-                obj_unicode = text_type(getattr(obj, 'name'))
+                obj_unicode = str(getattr(obj, 'name'))
             except AttributeError:
                 obj_unicode = ()
             if obj in seen:
