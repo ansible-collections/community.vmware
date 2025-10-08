@@ -1,0 +1,2 @@
+major_changes:
+  - Replace ``ansible.module_utils.six`` (https://github.com/ansible-collections/community.vmware/pull/2495).

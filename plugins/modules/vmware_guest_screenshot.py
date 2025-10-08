@@ -128,7 +128,7 @@ except ImportError:
     pass
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six.moves.urllib.parse import urlencode, quote
+from urllib.parse import urlencode, quote
 from ansible.module_utils._text import to_native
 from ansible.module_utils.urls import open_url
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task, get_parent_datacenter
