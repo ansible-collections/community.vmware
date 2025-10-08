@@ -89,7 +89,7 @@ from ansible_collections.community.vmware.plugins.module_utils.vmware import get
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.urls import open_url
-from ansible.module_utils.six.moves.urllib.error import HTTPError
+from urllib.error import HTTPError
 from ansible.module_utils._text import to_native
 
 

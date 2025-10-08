@@ -204,7 +204,6 @@ except ImportError:
 from ansible.errors import AnsibleError
 from ansible.module_utils._text import to_text, to_native
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
-from ansible.module_utils.six import text_type
 from ansible_collections.community.vmware.plugins.plugin_utils.inventory import (
     to_nested_dict,
     to_flatten_dict,
@@ -503,7 +502,7 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         if with_path:
             parents = host_properties["path"].split("/")
             if parents:
-                if isinstance(with_path, text_type):
+                if isinstance(with_path, str):
                     parents = [with_path] + parents
 
                 c_name = self._sanitize_group_name("/".join(parents))
