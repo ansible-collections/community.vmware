@@ -11,7 +11,6 @@ from io import BytesIO
 import pytest
 
 import ansible.module_utils.basic
-from ansible.module_utils.six import string_types
 from ansible.module_utils._text import to_bytes
 from ansible.module_utils.common._collections_compat import MutableMapping
 
@@ -23,7 +22,7 @@ def stdin(mocker, request):
     old_argv = sys.argv
     sys.argv = ['ansible_unittest']
 
-    if isinstance(request.param, string_types):
+    if isinstance(request.param, str):
         args = request.param
     elif isinstance(request.param, MutableMapping):
         if 'ANSIBLE_MODULE_ARGS' not in request.param:
