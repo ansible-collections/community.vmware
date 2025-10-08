@@ -213,7 +213,7 @@ class VMwareInventory(object):
                 if obj_info != ():
                     l.append(obj_info)
             return l
-        elif isinstance(obj, (type(None), bool, float, str, int):
+        elif isinstance(obj, (type(None), bool, float, str, int)):
             return obj
         else:
             return ()
