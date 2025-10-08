@@ -88,7 +88,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, is_boolean, is_integer, is_truthy
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 from ansible.module_utils._text import to_native
-from ansible.module_utils.six import integer_types, string_types
+from ansible.module_utils.six import integer_types
 
 
 class VmwareConfigManager(PyVmomi):
@@ -129,7 +129,7 @@ class VmwareConfigManager(PyVmomi):
                         option_value = VmomiSupport.vmodlTypes['long'](option_value)
                     elif isinstance(option_value, float) and isinstance(option_type, vim.option.FloatOption):
                         pass
-                    elif isinstance(option_value, string_types) and isinstance(option_type, (vim.option.StringOption, vim.option.ChoiceOption)):
+                    elif isinstance(option_value, str) and isinstance(option_type, (vim.option.StringOption, vim.option.ChoiceOption)):
                         pass
                     else:
                         self.module.fail_json(msg="Provided value is of type %s."

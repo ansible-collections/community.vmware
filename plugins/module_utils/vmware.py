@@ -45,7 +45,7 @@ except ImportError:
     HAS_PYVMOMI = False
 
 from ansible.module_utils._text import to_text, to_native
-from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
+from ansible.module_utils.six import integer_types, iteritems, raise_from
 from ansible.module_utils.basic import missing_required_lib
 from urllib.parse import unquote
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
@@ -826,7 +826,7 @@ def serialize_spec(clonespec):
             data[x] = []
             for xe in xo:
                 data[x].append(serialize_spec(xe))
-        elif issubclass(xt, string_types + integer_types + (float, bool)):
+        elif issubclass(xt, str + integer_types + (float, bool)):
             if issubclass(xt, integer_types):
                 data[x] = int(xo)
             else:
