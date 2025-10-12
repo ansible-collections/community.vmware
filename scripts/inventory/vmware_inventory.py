@@ -42,7 +42,7 @@ from time import time
 
 from jinja2 import Environment
 
-from ansible.module_utils.six.moves import configparser
+import configparser
 
 try:
     import argparse
