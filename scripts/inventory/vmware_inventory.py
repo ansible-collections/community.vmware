@@ -102,7 +102,7 @@ class VMWareInventory(object):
     groupby_patterns = []
     groupby_custom_field_excludes = []
 
-    safe_types = [bool, str, float, None] + list(int)
+    safe_types = [bool, str, float, int, None]
     iter_types = [dict, list]
 
     bad_types = ['Array', 'disabledMethod', 'declaredAlarmState']
