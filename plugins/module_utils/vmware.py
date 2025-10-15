@@ -45,9 +45,8 @@ except ImportError:
     HAS_PYVMOMI = False
 
 from ansible.module_utils._text import to_text, to_native
-from ansible.module_utils.six import integer_types, iteritems, string_types, raise_from
 from ansible.module_utils.basic import missing_required_lib
-from ansible.module_utils.six.moves.urllib.parse import unquote
+from urllib.parse import unquote
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
@@ -150,7 +149,7 @@ def wait_for_task(task, max_backoff=64, timeout=3600, vm=None, answers=None):
             except AttributeError:
                 pass
             finally:
-                raise_from(TaskError(error_msg, host_thumbprint), task.info.error)
+                raise TaskError(error_msg, host_thumbprint) from task.info.error
         if task.info.state in [vim.TaskInfo.State.running, vim.TaskInfo.State.queued]:
             sleep_time = min(2 ** failure_counter + randint(1, 1000) / 1000, max_backoff)
             time.sleep(sleep_time)
@@ -826,8 +825,8 @@ def serialize_spec(clonespec):
             data[x] = []
             for xe in xo:
                 data[x].append(serialize_spec(xe))
-        elif issubclass(xt, string_types + integer_types + (float, bool)):
-            if issubclass(xt, integer_types):
+        elif issubclass(xt, (str, int, float, bool)):
+            if issubclass(xt, int):
                 data[x] = int(xo)
             else:
                 data[x] = to_text(xo)
@@ -1838,7 +1837,7 @@ class PyVmomi(PyvmomiClient):
         Returns:
           dict, with u merged into d
         """
-        for k, v in iteritems(u):
+        for k, v in u.items():
             if isinstance(v, collections_compat.Mapping):
                 d[k] = self._deepmerge(d.get(k, {}), v)
             else:
