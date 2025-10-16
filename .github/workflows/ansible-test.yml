@@ -83,7 +83,7 @@ jobs:
         # - stable-2.18
           - stable-2.19
           - stable-2.20
-        # - devel
+          - devel
           - milestone
     runs-on: ubuntu-latest
 
@@ -134,7 +134,7 @@ jobs:
         # - stable-2.18
           - stable-2.19
           - stable-2.20
-        # - devel
+          - devel
           - milestone
 
     steps:
