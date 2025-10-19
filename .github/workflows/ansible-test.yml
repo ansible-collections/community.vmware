@@ -37,8 +37,8 @@ on:
   push:
     branches:
       - main
-      - stable-3.x
       - stable-4.x
+      - stable-5.x
   pull_request:
   # Run CI once per day (at 07:12 UTC)
   # This ensures that even if there haven't been commits that we are still
