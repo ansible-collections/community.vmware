@@ -1050,8 +1050,8 @@ class PyVmomi(PyvmomiClient):
                              password=module.params['password'],
                              port=module.params['port'],
                              validate_certs=module.params['validate_certs'],
-                             http_proxy_host=module.params['proxy_host'],
-                             http_proxy_port=module.params['proxy_port'])
+                             proxy_host=module.params['proxy_host'],
+                             proxy_port=module.params['proxy_port'])
         except ApiAccessError as aae:
             module.fail_json(msg=str(aae))
         self.params = module.params
