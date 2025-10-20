@@ -111,7 +111,7 @@ from ansible.module_utils.basic import AnsibleModule
 from urllib.error import HTTPError
 from urllib.parse import quote, urlencode
 from ansible.module_utils.urls import open_url
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 

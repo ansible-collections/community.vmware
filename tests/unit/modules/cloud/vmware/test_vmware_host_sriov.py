@@ -7,7 +7,7 @@ import unittest
 from unittest import mock
 
 from ansible.module_utils import basic
-from ansible.module_utils._text import to_bytes
+from ansible.module_utils.common.text.converters import to_bytes
 
 from ansible_collections.community.vmware.plugins.modules import vmware_host_sriov
 
