@@ -43,7 +43,7 @@ except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
 
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils.common.text.converters import to_text, to_native
 from ansible.module_utils.basic import missing_required_lib
 from urllib.parse import unquote
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec

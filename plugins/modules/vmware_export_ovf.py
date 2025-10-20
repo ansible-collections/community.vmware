@@ -108,7 +108,7 @@ from time import sleep
 from threading import Thread
 from ansible.module_utils.urls import open_url
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_text, to_bytes
+from ansible.module_utils.common.text.converters import to_text, to_bytes
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
 try:

@@ -195,7 +195,7 @@ try:
 except ImportError:
     pass
 
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import get_all_objs, find_datacenter_by_name, \
     find_cluster_by_name, find_object_by_name, wait_for_task, find_resource_pool_by_name, PyVmomi
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec

@@ -510,7 +510,7 @@ except ImportError:
 
 from random import randint
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, \
     wait_for_task, find_obj, get_all_objs, get_parent_datacenter
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
