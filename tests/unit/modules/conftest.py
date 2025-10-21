@@ -9,7 +9,7 @@ import json
 import pytest
 
 from ansible.module_utils.common.text.converters import to_bytes
-from ansible.module_utils.common._collections_compat import MutableMapping
+from collections.abc import MutableMapping
 
 
 @pytest.fixture

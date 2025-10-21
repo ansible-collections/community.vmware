@@ -9,7 +9,7 @@
 __metaclass__ = type
 
 import atexit
-import ansible.module_utils.common._collections_compat as collections_compat
+from collections.abc import Mapping
 import json
 import os
 import re
@@ -1827,8 +1827,6 @@ class PyVmomi(PyvmomiClient):
           https://bit.ly/2EDOs1B (stackoverflow question 3232943)
         License:
           cc-by-sa 3.0 (https://creativecommons.org/licenses/by-sa/3.0/)
-        Changes:
-          using collections_compat for compatibility
 
         Args:
           - d (dict): dict to merge into
@@ -1838,7 +1836,7 @@ class PyVmomi(PyvmomiClient):
           dict, with u merged into d
         """
         for k, v in u.items():
-            if isinstance(v, collections_compat.Mapping):
+            if isinstance(v, Mapping):
                 d[k] = self._deepmerge(d.get(k, {}), v)
             else:
                 d[k] = v
