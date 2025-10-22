@@ -114,7 +114,7 @@ class BaseVMwareInventory:
 
         ssl_context = None
         if not self.validate_certs and hasattr(ssl, "SSLContext"):
-            ssl_context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             ssl_context.verify_mode = ssl.CERT_NONE
 
         service_instance = None
