@@ -343,7 +343,7 @@ class VMWareInventory(object):
                   'port': int(self.port)}
 
         if self.validate_certs and hasattr(ssl, 'SSLContext'):
-            context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             context.verify_mode = ssl.CERT_REQUIRED
             context.check_hostname = True  # noqa  # pylint: disable=assigning-non-slot
             kwargs['sslContext'] = context
@@ -351,7 +351,7 @@ class VMWareInventory(object):
             sys.exit('pyVim does not support changing verification mode with python < 2.7.9. Either update '
                      'python or use validate_certs=false.')
         elif not self.validate_certs and hasattr(ssl, 'SSLContext'):
-            context = ssl.SSLContext(ssl.PROTOCOL_SSLv23)
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
             context.verify_mode = ssl.CERT_NONE
             context.check_hostname = False  # noqa  # pylint: disable=assigning-non-slot
             kwargs['sslContext'] = context
