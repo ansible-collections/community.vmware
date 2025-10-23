@@ -232,7 +232,7 @@ except ImportError:
         HAS_URLLIB3 = False
 
 from ansible.errors import AnsibleError, AnsibleFileNotFound, AnsibleConnectionFailure
-from ansible.module_utils._text import to_bytes, to_native
+from ansible.module_utils.common.text.converters import to_bytes, to_native
 from ansible.plugins.connection import ConnectionBase
 from ansible.module_utils.basic import missing_required_lib
 

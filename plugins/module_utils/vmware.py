@@ -9,7 +9,7 @@
 __metaclass__ = type
 
 import atexit
-import ansible.module_utils.common._collections_compat as collections_compat
+from collections.abc import Mapping
 import json
 import os
 import re
@@ -44,7 +44,7 @@ except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
     HAS_PYVMOMI = False
 
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils.common.text.converters import to_text, to_native
 from ansible.module_utils.basic import missing_required_lib
 from urllib.parse import unquote
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
@@ -1827,8 +1827,6 @@ class PyVmomi(PyvmomiClient):
           https://bit.ly/2EDOs1B (stackoverflow question 3232943)
         License:
           cc-by-sa 3.0 (https://creativecommons.org/licenses/by-sa/3.0/)
-        Changes:
-          using collections_compat for compatibility
 
         Args:
           - d (dict): dict to merge into
@@ -1838,7 +1836,7 @@ class PyVmomi(PyvmomiClient):
           dict, with u merged into d
         """
         for k, v in u.items():
-            if isinstance(v, collections_compat.Mapping):
+            if isinstance(v, Mapping):
                 d[k] = self._deepmerge(d.get(k, {}), v)
             else:
                 d[k] = v

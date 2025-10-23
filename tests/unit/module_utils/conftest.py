@@ -11,8 +11,8 @@ from io import BytesIO
 import pytest
 
 import ansible.module_utils.basic
-from ansible.module_utils._text import to_bytes
-from ansible.module_utils.common._collections_compat import MutableMapping
+from ansible.module_utils.common.text.converters import to_bytes
+from collections.abc import MutableMapping
 
 
 @pytest.fixture

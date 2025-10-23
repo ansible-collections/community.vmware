@@ -107,7 +107,7 @@ result:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, wait_for_task, TaskError
 from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 
 
 class VmwareHostPowerManager(PyVmomi):

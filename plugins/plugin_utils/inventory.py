@@ -40,7 +40,7 @@ except ImportError:
 
 from ansible.errors import AnsibleError, AnsibleParserError
 from ansible.module_utils.common.dict_transformations import _snake_to_camel
-from ansible.module_utils._text import to_text, to_native
+from ansible.module_utils.common.text.converters import to_text, to_native
 
 
 class BaseVMwareInventory:
