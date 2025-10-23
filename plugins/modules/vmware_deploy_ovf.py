@@ -220,7 +220,7 @@ import xml.etree.ElementTree as ET
 
 from threading import Thread
 
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible.module_utils.basic import AnsibleModule
 from urllib.request import Request, urlopen
 from ansible.module_utils.urls import generic_urlparse, open_url, urlparse, urlunparse

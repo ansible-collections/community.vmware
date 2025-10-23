@@ -41,7 +41,7 @@ import ssl
 import sys
 import time
 
-from ansible.module_utils.common._collections_compat import MutableMapping
+from collections.abc import MutableMapping
 import configparser
 
 # Disable logging message trigged by pSphere/suds.

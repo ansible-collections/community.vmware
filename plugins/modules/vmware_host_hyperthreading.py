@@ -94,7 +94,7 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import base_argument_spec
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 
 
 class VmwareHostHyperthreading(PyVmomi):

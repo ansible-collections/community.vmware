@@ -136,7 +136,7 @@ vm_deploy_info:
 '''
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback
-from ansible.module_utils._text import to_native
+from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware_rest_client import VmwareRestClient
 from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
 from ansible_collections.community.vmware.plugins.module_utils._argument_spec import rest_compatible_argument_spec
