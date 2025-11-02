@@ -6,6 +6,21 @@ community.vmware Release Notes
 
 This changelog describes changes after version 4.7.0.
 
+v5.10.0
+=======
+
+Major Changes
+-------------
+
+- Replace ``ansible.module_utils._text`` (https://github.com/ansible-collections/community.vmware/issues/2497).
+- Replace ``ansible.module_utils.common._collections_compat`` (https://github.com/ansible-collections/community.vmware/issues/2497).
+- Replace ``ansible.module_utils.six`` (https://github.com/ansible-collections/community.vmware/pull/2495).
+
+Minor Changes
+-------------
+
+- vmware_dvs_portgroup - add ``portgroup_description`` parameter (https://github.com/ansible-collections/community.vmware/issues/2487).
+
 v5.9.0
 ======
 
