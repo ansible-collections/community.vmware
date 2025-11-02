@@ -1,3 +1,0 @@
-major_changes:
-  - Replace ``ansible.module_utils._text``
-    (https://github.com/ansible-collections/community.vmware/issues/2497).

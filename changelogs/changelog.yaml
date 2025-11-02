@@ -40,3 +40,17 @@ releases:
     - 6.0.0-reuse-vmware.vmware.yml
     - 6.0.0_ansible-core_vmware.vmware-requirements.yml
     release_date: '2025-09-17'
+  6.1.0:
+    changes:
+      major_changes:
+      - Replace ``ansible.module_utils._text`` (https://github.com/ansible-collections/community.vmware/issues/2497).
+      - Replace ``ansible.module_utils.common._collections_compat`` (https://github.com/ansible-collections/community.vmware/issues/2497).
+      - Replace ``ansible.module_utils.six`` (https://github.com/ansible-collections/community.vmware/pull/2495).
+      minor_changes:
+      - vmware_dvs_portgroup - add ``portgroup_description`` parameter (https://github.com/ansible-collections/community.vmware/issues/2487).
+    fragments:
+    - 2487-vmware_dvs_portgroup_feature.yaml
+    - 2495-drop_ansible.module_utils.six.yml
+    - 2504-replace-ansible.module_utils.common._collections_compat.yml
+    - 2504-replace_ansible.module_utils._text.yml
+    release_date: '2025-11-02'
