@@ -1,0 +1,59 @@
+---
+# Test code for the vmware_datastore_cluster_sdrs_info module.
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- name: Import preperation role
+  ansible.builtin.import_role:
+    name: prepare_vmware_tests
+
+- name: Add a datastore cluster
+  community.vmware.vmware_datastore_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: "DSCS1"
+    enable_sdrs: true
+    state: present
+
+- name: Get SDRS information from a datastore cluster
+  community.vmware.vmware_datastore_cluster_sdrs_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: "DSCS1"
+    register: output
+
+- name: Print SDRS output
+  ansible.builtin.debug:
+    msg: "{{ output }}"
+
+- name: Assert SDRS information
+  ansible.builtin.assert:
+    that:
+      - output.sdrs._vimtype == "vim.storageDrs.PodConfigInfo"
+      - output.sdrs.automationOverrides._vimtype == "vim.storageDrs.AutomationConfig"
+      - output.sdrs.defaultIntraVmAffinity is boolean
+      - output.sdrs.defaultVmBehavior == "automated" or output.sdrs.defaultVmBehavior == "manual"
+      - output.sdrs.enabled is boolean
+      - output.sdrs.ioLoadBalanceConfig._vimtype == "vim.storageDrs.IoLoadBalanceConfig"
+      - output.sdrs.ioLoadBalanceConfig.ioLatencyThreshold is integer
+      - output.sdrs.ioLoadBalanceConfig.reservablePercentThreshold is integer
+      - output.sdrs.ioLoadBalanceConfig.reservableThresholdMode == "automated"
+      - output.sdrs.ioLoadBalanceEnabled is boolean
+      - output.sdrs.loadBalanceInterval is integer
+      - output.sdrs.spaceLoadBalanceConfig._vimtype == "vim.storageDrs.SpaceLoadBalanceConfig"
+      - output.sdrs.spaceLoadBalanceConfig.spaceThresholdMode == "utilization"
+      - output.sdrs.spaceLoadBalanceConfig.spaceUtilizationThreshold is integer
+
+- name: Remove datastore cluster
+  community.vmware.vmware_datastore_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter_name: "{{ dc1 }}"
+    datastore_cluster_name: "DSCS1"
+    state: absent
