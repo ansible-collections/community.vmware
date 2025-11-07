@@ -39,7 +39,7 @@ PYVMOMI_IMP_ERR = None
 try:
     from pyVim import connect
     from pyVmomi import vim, vmodl, VmomiSupport
-    from pyVmomi iport VmomiJSONEncoder
+    from pyVmomi.VmomiJSONEncoder import VmomiJSONEncoder
     HAS_PYVMOMI = True
 except ImportError:
     PYVMOMI_IMP_ERR = traceback.format_exc()
