@@ -639,6 +639,10 @@ class PyVmomiHelper(PyVmomi):
     def _get_nic_info(self):
         rv = {'network_info': []}
         vm_obj = self.get_vm()
+
+        if not vm_obj:
+            self.module.fail_json(msg='could not find vm: {0}'.format(self.params['name']))
+
         nic_info, nic_obj_lst = self._get_nics_from_vm(vm_obj)
 
         rv['network_info'] = nic_info
