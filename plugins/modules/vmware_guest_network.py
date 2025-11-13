@@ -42,7 +42,7 @@ options:
     type: str
   folder:
     description:
-      - Folder location of given VM, this is only required when there's multiple VM's with the same name.
+      - Folder location of given VM, this is only required when there's multiple VM's with the same name. Only works when O(datacenter) set correctly.
     type: str
   datacenter:
     default: ha-datacenter
