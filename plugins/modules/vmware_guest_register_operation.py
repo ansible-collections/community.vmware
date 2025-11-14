@@ -209,8 +209,8 @@ class VMwareGuestRegisterOperation(PyVmomi):
                 if not cluster_obj:
                     self.module.fail_json(msg="Cannot find the specified cluster name: %s" % self.cluster)
 
-                resource_pool_obj = cluster_obj.resourcePool
-            elif self.resource_pool:
+                resource_pool_obj = cluster_obj.resourcePool # default cluster resource pool
+            if self.resource_pool: # If a resource pool is specified, use it rather than the default cluster resource pool as it is more specific
                 resource_pool_obj = find_resource_pool_by_name(self.content, self.resource_pool)
                 if not resource_pool_obj:
                     self.module.fail_json(msg="Cannot find the specified resource pool: %s" % self.resource_pool)
@@ -268,7 +268,7 @@ def main():
                            ],
                            required_one_of=[
                                ['name', 'uuid'],
-                               ['cluster', 'esxi_hostname']
+                               ['cluster', 'esxi_hostname', 'resource_pool']
                            ],
                            supports_check_mode=True)
 
