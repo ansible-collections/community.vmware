@@ -12,17 +12,8 @@ inventory object (e.g. a VirtualMachine, Host, Datastore, Network, or Folder) to
 destination folder within the appropriate inventory branch.
 """
 
-from typing import cast
-
-from ansible.module_utils._text import to_native
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi,
-    find_datacenter_by_name,
-    vmware_argument_spec,
-    wait_for_task,
-)
-from pyVmomi import vim
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
@@ -31,11 +22,11 @@ short_description: Moves an inventory object to a specified destination folder i
 description:
   - Moves an inventory object (e.g. a VirtualMachine, Host, Datastore, Network or Folder) to a specified destination folder within the appropriate inventory branch.
   - The destination folder is specified as a slash-separated path relative to the datacenter's base folder.
-  - Supported object types:
-      - C(vm): Virtual Machines, vApps and Folders under the VM folder.
-      - C(host): Hosts and Folders under the Host folder.
-      - C(datastore): Datastores and Folders under the Datastore folder.
-      - C(network): Networks and Folders under the Network folder.
+  - >-
+    Supported object types are C(vm) for Virtual Machines, vApps and Folders under the VM folder,
+    C(host) for Hosts and Folders under the Host folder,
+    C(datastore) for Datastores and Folders under the Datastore folder,
+    and C(network) for Networks and Folders under the Network folder.
   - If the object is already located in the target folder, no action is taken (idempotence).
 author:
   - Simon Bärlocher (@sbaerlocher)
@@ -63,7 +54,7 @@ options:
   destination_folder:
     description:
       - Destination folder path relative to the base folder of the chosen object_type.
-      - Example: C(NewFolder) or C(folder1/subfolder2)
+      - For example C(NewFolder) or C(folder1/subfolder2).
     required: true
     type: str
   state:
@@ -75,7 +66,7 @@ options:
     default: present
     choices: [ present ]
 extends_documentation_fragment:
-  - community.vmware.vmware.documentation
+  - vmware.vmware.base_options
 """
 
 EXAMPLES = r"""
@@ -112,6 +103,18 @@ msg:
   type: str
   returned: always
 """
+
+from typing import cast
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.text.converters import to_native
+from ansible_collections.community.vmware.plugins.module_utils.vmware import (
+    PyVmomi,
+    find_datacenter_by_name,
+    wait_for_task,
+)
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
+from pyVmomi import vim
 
 BASE_FOLDER_MAPPING = {
     "vm": {
@@ -298,7 +301,7 @@ def main():
     Main entry point for the module. Validates parameters,
     performs the move operation, and exits with the result.
     """
-    argument_spec = vmware_argument_spec()
+    argument_spec = base_argument_spec()
     argument_spec.update(
         {
             "datacenter": {
