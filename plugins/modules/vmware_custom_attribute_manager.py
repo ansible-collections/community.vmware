@@ -12,13 +12,13 @@ This module manages custom attributes on vCenter/vSphere objects.
 It supports creating/updating custom attributes (state=present) and clearing them (state=absent).
 """
 
-from ansible.module_utils._text import to_native
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.text.converters import to_native
 from ansible_collections.community.vmware.plugins.module_utils.vmware import (
     PyVmomi,
     find_obj,
-    vmware_argument_spec,
 )
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 from pyVmomi import vim, vmodl
 
 if hasattr(vmodl.fault, "MethodFault"):
@@ -89,7 +89,8 @@ options:
     choices: ['present', 'absent']
     type: str
 extends_documentation_fragment:
-- vmware.vmware.base_options
+  - vmware.vmware.base_options
+"""
 
 EXAMPLES = r"""
 
@@ -155,9 +156,8 @@ details:
 """
 
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi, find_obj
-from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
+class CustomAttributeManager(PyVmomi):
+    """Manages custom attributes on a vCenter/vSphere object."""
 
     def __init__(self, module):
         super().__init__(module)
