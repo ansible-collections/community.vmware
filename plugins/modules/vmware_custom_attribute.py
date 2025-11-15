@@ -11,10 +11,8 @@ from types import ModuleType
 from typing import Any, Dict, Optional
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import (
-    PyVmomi,
-    vmware_argument_spec,
-)
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 try:
     from pyVmomi import vim as _vim  # type: ignore
@@ -71,7 +69,7 @@ options:
     choices: ['present', 'absent']
     type: str
 extends_documentation_fragment:
-  - community.vmware.vmware.documentation
+  - vmware.vmware.base_options
 """
 
 EXAMPLES = r"""
@@ -236,7 +234,7 @@ def manage_custom_attribute_definition(module: AnsibleModule) -> None:
 
 def main() -> None:
     """Main entry point for the module."""
-    argument_specification = vmware_argument_spec()
+    argument_specification = base_argument_spec()
     argument_specification.update(
         custom_attribute={"type": "str", "no_log": False, "required": True},
         object_type={
