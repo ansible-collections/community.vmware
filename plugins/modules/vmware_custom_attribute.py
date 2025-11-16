@@ -3,23 +3,10 @@
 # Copyright: (c) 2022, Ansible Project
 # GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""
-Module for managing VMware custom attribute definitions.
-"""
 
-from types import ModuleType
-from typing import Any, Dict, Optional
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
-from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
-
-try:
-    from pyVmomi import vim as _vim  # type: ignore
-except ImportError:
-    _vim = None  # type: ignore
-
-vim: Optional[ModuleType] = _vim
 
 DOCUMENTATION = r"""
 ---
@@ -111,10 +98,26 @@ RETURN = r"""
 changed:
     description: Indicates if any change was made.
     type: bool
+    returned: always
 failed:
     description: Indicates if the operation failed.
     type: bool
+    returned: always
 """
+
+from types import ModuleType
+from typing import Any, Dict, Optional
+
+from ansible.module_utils.basic import AnsibleModule
+from ansible_collections.community.vmware.plugins.module_utils.vmware import PyVmomi
+from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
+
+try:
+    from pyVmomi import vim as _vim  # type: ignore
+except ImportError:
+    _vim = None  # type: ignore
+
+vim: Optional[ModuleType] = _vim
 
 
 def get_object_type_mapping() -> Dict[str, Any]:
