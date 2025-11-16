@@ -36,7 +36,9 @@ module: vmware_custom_attribute_manager
 version_added: "3.2.0"
 short_description: "Manage custom attributes on VMware vSphere objects"
 description:
-  - "This module allows you to add, update, or clear custom attributes on VMware vSphere objects. When state is set to C(present), custom attributes are created or updated. When state is set to C(absent), custom attributes are cleared. The provided value is ignored in that case."
+  - "This module allows you to add, update, or clear custom attributes on VMware vSphere objects."
+  - "When state is set to C(present), custom attributes are created or updated."
+  - "When state is set to C(absent), custom attributes are cleared. The provided value is ignored in that case."
 author:
   - "Mario Lenz (@mariolenz)"
   - "Simon Bärlocher (@sbaerlocher)"
@@ -44,7 +46,8 @@ author:
 options:
   custom_attributes:
     description:
-      - "A list of dictionaries, each containing the name and value of a custom attribute to be managed. When state is C(absent), the value provided is ignored."
+      - "A list of dictionaries, each containing the name and value of a custom attribute to be managed."
+      - "When state is C(absent), the value provided is ignored."
     required: true
     type: list
     elements: dict
