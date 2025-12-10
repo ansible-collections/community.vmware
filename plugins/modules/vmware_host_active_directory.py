@@ -69,6 +69,18 @@ EXAMPLES = r'''
     ad_state: present
   delegate_to: localhost
 
+- name: Join an AD domain in a specific OU
+  community.vmware.vmware_host_active_directory:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    esxi_hostname: '{{ esxi_hostname }}'
+    ad_domain: "example.local/Some-OU/Some-SubOU/"
+    ad_user: adjoin
+    ad_password: Password123$
+    ad_state: present
+  delegate_to: localhost
+
 - name: Leave AD domain
   community.vmware.vmware_host_active_directory:
     hostname: '{{ vcenter_hostname }}'
