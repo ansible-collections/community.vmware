@@ -1,5 +1,6 @@
 - name: Prepare release
   hosts: localhost
+  gather_facts: false
   tasks:
     - name: Generate version
       when: version is not defined

@@ -1,5 +1,6 @@
 - name: Unset version
   hosts: localhost
+  gather_facts: false
   tasks:
     - name: Get version
       block:
