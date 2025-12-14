@@ -186,6 +186,8 @@ class SPBM_helper(SPBM):
         if len(profileIds) > 0:
             storageProfiles = profileManager.PbmRetrieveContent(
                 profileIds=profileIds)
+        else:
+            return None
 
         for storageProfile in storageProfiles:
             if storageProfile.name == name:
