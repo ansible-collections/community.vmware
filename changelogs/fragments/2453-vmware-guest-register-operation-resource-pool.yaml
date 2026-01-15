@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_register_operation - Fix module not handling the ``resource_pool`` argument correctly when registering a VM (https://github.com/ansible-collections/community.vmware/pull/2453).
