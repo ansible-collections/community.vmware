@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - vmware_guest_storage_policy - Fix storage policy search to return None if no policies are found, instead of causing an exception.
+    fixes https://github.com/ansible-collections/community.vmware/issues/2527
