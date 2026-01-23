@@ -1,3 +1,0 @@
-major_changes:
-  - Bump required ``vmware.vmware`` collection version to 2.5.0
-    (https://github.com/ansible-collections/community.vmware/pull/2503).

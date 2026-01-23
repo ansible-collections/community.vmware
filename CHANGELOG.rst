@@ -6,6 +6,19 @@ community.vmware Release Notes
 
 This changelog describes changes after version 5.7.2.
 
+v6.2.0
+======
+
+Major Changes
+-------------
+
+- Bump required ``vmware.vmware`` collection version to 2.5.0 (https://github.com/ansible-collections/community.vmware/pull/2503).
+
+Bugfixes
+--------
+
+- vmware_guest_storage_policy - Fix storage policy search to return None if no policies are found, instead of causing an exception. fixes https://github.com/ansible-collections/community.vmware/issues/2527
+
 v6.1.0
 ======
 
