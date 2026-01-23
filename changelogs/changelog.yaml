@@ -54,3 +54,14 @@ releases:
     - 2504-replace-ansible.module_utils.common._collections_compat.yml
     - 2504-replace_ansible.module_utils._text.yml
     release_date: '2025-11-02'
+  6.2.0:
+    changes:
+      bugfixes:
+      - vmware_guest_storage_policy - Fix storage policy search to return None if
+        no policies are found, instead of causing an exception. fixes https://github.com/ansible-collections/community.vmware/issues/2527
+      major_changes:
+      - Bump required ``vmware.vmware`` collection version to 2.5.0 (https://github.com/ansible-collections/community.vmware/pull/2503).
+    fragments:
+    - 2503-vmware.vmware-2.5.0.yml
+    - 2532-fix-storage-policy-search.yml
+    release_date: '2026-01-23'
