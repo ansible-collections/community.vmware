@@ -211,10 +211,10 @@ options:
             type: str
             description:
             - The Virtual machine hardware versions.
-            - If unset when creating a VM, vCenter / ESX host will decide what version to use.
+            - If unset when creating a VM, vCenter / ESX host will use its configured default version.
+            - If unset when cloning, the version of the VM / template being cloned will be kept.
             - If set to V(latest), the specified virtual machine will be upgraded to the most current hardware version supported on the host.
             - Please check VMware documentation for correct virtual machine hardware version.
-            - Incorrect hardware version may lead to failure in deployment. If hardware version is already equal to the given.
         boot_firmware:
             type: str
             description: Choose which firmware should be used to boot the virtual machine.
