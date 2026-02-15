@@ -6,7 +6,6 @@ action_groups:
   - vcenter_domain_user_group_info
   - vcenter_extension
   - vcenter_extension_info
-  - vcenter_folder
   - vcenter_license
   - vcenter_root_password_expiration
   - vcenter_standard_key_provider
@@ -15,13 +14,8 @@ action_groups:
   - vmware_category
   - vmware_category_info
   - vmware_cfg_backup
-  - vmware_cluster_ha
-  - vmware_cluster_info
   - vmware_cluster_vsan
-  - vmware_content_deploy_ovf_template
-  - vmware_content_deploy_template
   - vmware_content_library_info
-  - vmware_content_library_manager
   - vmware_custom_attribute
   - vmware_custom_attribute_manager
   - vmware_datacenter
@@ -68,7 +62,6 @@ action_groups:
   - vmware_guest_instant_clone
   - vmware_guest_move
   - vmware_guest_network
-  - vmware_guest_powerstate
   - vmware_guest_register_operation
   - vmware_guest_screenshot
   - vmware_guest_sendkey
@@ -83,7 +76,6 @@ action_groups:
   - vmware_guest_vgpu
   - vmware_guest_vgpu_info
   - vmware_guest_video
-  - vmware_host
   - vmware_host_acceptance
   - vmware_host_acceptance_info
   - vmware_host_active_directory
@@ -131,7 +123,6 @@ action_groups:
   - vmware_local_role_manager
   - vmware_local_user_info
   - vmware_local_user_manager
-  - vmware_maintenancemode
   - vmware_migrate_vmk
   - vmware_object_custom_attributes_info
   - vmware_object_rename
@@ -177,7 +168,7 @@ action_groups:
 plugin_routing:
   inventory:
     vmware_host_inventory:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_hosts instead.
     vmware_vm_inventory:
@@ -186,7 +177,7 @@ plugin_routing:
         warning_text: Use vmware.vmware.vms instead.
   modules:
     vcenter_folder:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.folder instead.
     vmware_cluster:
@@ -206,11 +197,11 @@ plugin_routing:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs_recommendations instead.
     vmware_cluster_ha:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.cluster_ha instead.
     vmware_cluster_info:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.cluster_info instead.
     vmware_cluster_vcls:
@@ -218,19 +209,19 @@ plugin_routing:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_vcls instead.
     vmware_content_deploy_ovf_template:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_ovf instead.
     vmware_content_deploy_template:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_template instead.
     vmware_content_library_manager:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead.
     vmware_guest_powerstate:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.vm_powerstate instead.
     vmware_guest_snapshot:
@@ -238,10 +229,10 @@ plugin_routing:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.vm_snapshot instead.
     vmware_host:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead.
     vmware_maintenancemode:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_maintenance_mode instead.
