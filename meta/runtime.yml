@@ -205,14 +205,14 @@ plugin_routing:
       tombstone:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_drs_recommendations instead.
-    vmware_cluster_info:
-      deprecation:
-        removal_version: 7.0.0
-        warning_text: Use vmware.vmware.cluster_info instead.
     vmware_cluster_ha:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.cluster_ha instead.
+    vmware_cluster_info:
+      deprecation:
+        removal_version: 7.0.0
+        warning_text: Use vmware.vmware.cluster_info instead.
     vmware_cluster_vcls:
       tombstone:
         removal_version: 6.0.0
