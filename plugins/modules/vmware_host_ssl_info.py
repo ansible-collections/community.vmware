@@ -56,18 +56,6 @@ EXAMPLES = r'''
     ssl_thumbprint: "{{ ssl_info['host_ssl_info'][esxi_hostname]['ssl_thumbprints'][0] }}"
 - debug:
     msg: "{{ ssl_thumbprint }}"
-- name: Add ESXi Host to vCenter
-  vmware_host:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-    datacenter_name: '{{ datacenter_name }}'
-    cluster_name: '{{ cluster_name }}'
-    esxi_hostname: '{{ esxi_hostname }}'
-    esxi_username: '{{ esxi_username }}'
-    esxi_password: '{{ esxi_password }}'
-    esxi_ssl_thumbprint: '{{ ssl_thumbprint }}'
-    state: present
 '''
 
 RETURN = r'''
