@@ -246,7 +246,7 @@ class PyVmomiHelper(PyVmomi):
         if vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOff:
             return True
         self.module.fail_json(msg="A serial device cannot be added to a VM in the current state(" + vm_obj.runtime.powerState + "). "
-                                  "Please use the vmware_guest_powerstate module to power off the VM")
+                                  "Please power off the VM.")
 
     def get_serial_port_config_spec(self, vm_obj):
         """

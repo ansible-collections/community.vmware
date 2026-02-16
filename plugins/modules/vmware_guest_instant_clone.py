@@ -19,7 +19,7 @@ short_description: Instant Clone VM
 description:
 - This module can be used for Creating a powered-on Instant Clone of a virtual machine.
 - M(community.vmware.vmware_guest) module is needed for creating a VM with poweredon state which would be used as a parent VM.
-- M(community.vmware.vmware_guest_powerstate) module is also needed to poweroff the instant cloned module.
+- M(vmware.vmware.vm_powerstate) module is also needed to poweroff the instant cloned module.
 - The powered off VM would in turn be deleted by again using M(community.vmware.vmware_guest) module.
 - Thus M(community.vmware.vmware_guest) module is necessary for removing Instant Cloned VM when VMs being created in testing environment.
 - Also GuestOS Customization has now been added with guestinfo_vars parameter.
@@ -161,31 +161,6 @@ EXAMPLES = r'''
     parent_vm: "{{ testvm_1 }}"
     resource_pool: "{{ test_resource_001 }}"
   register: vm_clone
-  delegate_to: localhost
-
-- name: set state to poweroff the Cloned VM
-  community.vmware.vmware_guest_powerstate:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    name: "cloned_vm_from_vm_cluster"
-    folder: "{{ f0 }}"
-    state: powered-off
-  register: poweroff_instant_clone_from_vm_when_cluster
-  delegate_to: localhost
-
-- name: Clean VM
-  community.vmware.vmware_guest:
-    validate_certs: false
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    name: "cloned_vm_from_vm_cluster"
-    datacenter: "{{ dc1 }}"
-    state: absent
-  register: delete_instant_clone_from_vm_when_cluster
-  ignore_errors: true
   delegate_to: localhost
 
 - name: Instant Clone a VM with guest_customization

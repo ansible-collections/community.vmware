@@ -16,7 +16,7 @@ module: vmware_guest_vgpu
 short_description: Modify vGPU video card profile of the specified virtual machine in the given vCenter infrastructure
 description:
     - This module is used to reconfigure vGPU card profile of the given virtual machine.
-    - VM must be power off M(community.vmware.vmware_guest_powerstate) module can perform that task.
+    - VM must be power off to reconfigure vGPU card profile.
 author:
     - Mohamed Alibi (@Medalibi)
     - Unknown (@matancarmeli7)
