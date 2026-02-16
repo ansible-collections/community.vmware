@@ -16,8 +16,7 @@ short_description: Module to upgrade VMTools
 description:
     - This module upgrades the VMware Tools on Windows and Linux guests and reboots them.
 notes:
-    - "In order to upgrade VMTools, please power on virtual machine before hand - either 'manually' or
-      using module M(community.vmware.vmware_guest_powerstate)."
+    - "In order to upgrade VMTools, please power on virtual machine before hand."
 options:
    name:
         description:
