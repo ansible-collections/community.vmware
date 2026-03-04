@@ -60,6 +60,8 @@ options:
   mac_address:
     description:
       - MAC address of the NIC that should be altered, if a MAC address is not supplied a new nic will be created.
+      - Matching is case-sensitive; use the same MAC address case as reported by VMware to target an existing NIC.
+      - If the case does not match, the module can treat the adapter as missing and attempt to create a new NIC.
       - Required when O(state=absent).
     type: str
   label:
