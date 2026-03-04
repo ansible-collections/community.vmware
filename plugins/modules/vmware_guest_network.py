@@ -412,6 +412,7 @@ class PyVmomiHelper(PyVmomi):
                     if hasattr(portgroup, 'key') and portgroup.key == key:
                         d_item['network_name'] = portgroup.name
                         d_item['switch'] = portgroup.config.distributedVirtualSwitch.name
+                        d_item['vlan_id'] = self._get_vlanid_from_network(portgroup)
                         break
             # If an NSX-T port group specified
             elif isinstance(nic.backing, vim.vm.device.VirtualEthernetCard.OpaqueNetworkBackingInfo):
