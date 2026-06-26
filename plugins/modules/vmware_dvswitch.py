@@ -49,7 +49,8 @@ options:
         description:
             - The switch maximum transmission unit.
             - Required if O(state=present).
-            - Accepts value between 1280 to 9000 (both inclusive).
+            - Accepts value between 1280 to 9000 (both inclusive) if Distributed Switch version is <7.0.3.
+            - Accepts value between 1280 to 9190 (both inclusive) if Distributed Switch version is >=7.0.3.
         type: int
         default: 1500
     multicast_filtering_mode:
@@ -372,11 +373,16 @@ class VMwareDvSwitch(PyVmomi):
             self.folder_obj = datacenter_obj.networkFolder
 
         self.mtu = self.module.params['mtu']
-        # MTU sanity check
-        if not 1280 <= self.mtu <= 9000:
-            self.module.fail_json(
-                msg="MTU value should be between 1280 and 9000 (both inclusive), provided %d." % self.mtu
-            )
+        # vSphere version and MTU sanity check
+        if not 1280 <= self.mtu <= 9190:
+            if int(self.switch_version[0]) <= 7 and int(self.switch_version[4]) < 3 and self.mtu > 9000:
+                self.module.fail_json(
+                    msg="MTU value should be between 1280 and 9000 (both inclusive), provided %d." % self.mtu
+                )
+            else:
+                self.module.fail_json(
+                    msg="MTU value should be between 1280 and 9190 (both inclusive), provided %d." % self.mtu
+                )
         self.multicast_filtering_mode = self.module.params['multicast_filtering_mode']
         self.uplink_quantity = self.module.params['uplink_quantity']
         self.uplink_prefix = self.module.params['uplink_prefix']
