@@ -374,15 +374,22 @@ class VMwareDvSwitch(PyVmomi):
 
         self.mtu = self.module.params['mtu']
         # vSphere version and MTU sanity check
-        if not 1280 <= self.mtu <= 9190:
-            if int(self.switch_version[0]) <= 7 and int(self.switch_version[4]) < 3 and self.mtu > 9000:
+        if not 1280 <= self.mtu <= 9000:
+            if not self.vcenter_version_at_least((7, 0, 3)):
                 self.module.fail_json(
-                    msg="MTU value should be between 1280 and 9000 (both inclusive), provided %d." % self.mtu
+                    msg="MTU value should be between 1280 and 9000 (both inclusive) for Distributed Switch versions below 7.0.3, provided %d." % self.mtu
                 )
             else:
-                self.module.fail_json(
-                    msg="MTU value should be between 1280 and 9190 (both inclusive), provided %d." % self.mtu
-                )
+                if self.switch_version is not None and int(self.switch_version[0]) <= 7 and int(self.switch_version[-1]) < 3:
+                    self.module.fail_json(
+                        msg="MTU value should be between 1280 and 9000 (both inclusive) for Distributed Switch versions below 7.0.3, provided %d." % self.mtu
+                    )
+                elif self.mtu > 9190:
+                    self.module.fail_json(
+                        msg="MTU value should be between 1280 and 9190 (both inclusive) for Distributed Switch versions 7.0.3 and above, provided %d." % self.mtu
+                    )
+                else:
+                    pass
         self.multicast_filtering_mode = self.module.params['multicast_filtering_mode']
         self.uplink_quantity = self.module.params['uplink_quantity']
         self.uplink_prefix = self.module.params['uplink_prefix']
