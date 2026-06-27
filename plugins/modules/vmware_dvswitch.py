@@ -375,7 +375,7 @@ class VMwareDvSwitch(PyVmomi):
         self.mtu = self.module.params['mtu']
         # vSphere version and MTU sanity check
         if not 1280 <= self.mtu <= 9000:
-            if not self.vcenter_version_at_least((7, 0, 3)) or (self.switch_version is not None and self.vcenter_version_at_least( self.switch_version[0], self.switch_version[2], self.switch_version[4])):
+            if not self.vcenter_version_at_least((7, 0, 3)) or (self.switch_version is not None and int(self.switch_version[0]) <= 7 and int(self.switch_version[-1]) < 3):
                 self.module.fail_json(
                     msg="MTU value should be between 1280 and 9000 (both inclusive), provided %d." % self.mtu
                 )
