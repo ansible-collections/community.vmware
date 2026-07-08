@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_network - populate ``vlan_id`` in gathered NIC data for Distributed Virtual Portgroup backings so check mode diff does not report a false change when the NIC is already on the requested network.
