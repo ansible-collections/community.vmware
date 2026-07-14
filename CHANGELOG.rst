@@ -6,6 +6,14 @@ community.vmware Release Notes
 
 This changelog describes changes after version 5.7.2.
 
+v6.2.1
+======
+
+Bugfixes
+--------
+
+- vmware_guest_network - populate ``vlan_id`` in gathered NIC data for Distributed Virtual Portgroup backings so check mode diff does not report a false change when the NIC is already on the requested network.
+
 v6.2.0
 ======
 
