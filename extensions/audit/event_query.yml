@@ -10,8 +10,8 @@ community.vmware.vmware_guest:
         esxi: .hw_esxi_host
       },
       facts: {
-        infra_type: "PrivateCloud",
-        infra_bucket: "Compute",
-        device_type: "VM"
+        infra_type: "private_cloud",
+        infra_bucket: "compute",
+        device_type: "virtual_machine"
       }
     }
