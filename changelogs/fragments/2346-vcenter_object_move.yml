@@ -1,0 +1,3 @@
+minor_changes:
+  - vcenter_object_move - New module to move vCenter inventory objects to specified destination folder
+    (https://github.com/ansible-collections/community.vmware/pull/2346).
