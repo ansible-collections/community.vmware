@@ -42,60 +42,67 @@ iscsi_properties:
   type: dict
   sample: >-
     {
-      "iscsi_alias": "",
-      "iscsi_authentication_properties": {
-        "_vimtype": "vim.host.InternetScsiHba.AuthenticationProperties",
-        "chapAuthEnabled": false,
-        "chapAuthenticationType": "chapProhibited",
-        "chapInherited": null,
-        "chapName": "",
-        "chapSecret": "XXXXXXXXX",
-        "mutualChapAuthenticationType": "chapProhibited",
-        "mutualChapInherited": null,
-        "mutualChapName": "",
-        "mutualChapSecret": "XXXXXXXXX"
-      },
       "iscsi_enabled": true,
-      "iscsi_name": "iqn.1998-01.com.vmware:esxi-033f58ee",
-      "iscsi_send_targets": [
+      "iscsi_devices": [
         {
-          "address": "192.168.0.1",
-          "authenticationProperties": {
+          "iscsi_alias": "",
+          "iscsi_authentication_properties": {
             "_vimtype": "vim.host.InternetScsiHba.AuthenticationProperties",
             "chapAuthEnabled": false,
             "chapAuthenticationType": "chapProhibited",
-            "chapInherited": true,
+            "chapInherited": null,
             "chapName": "",
             "chapSecret": "XXXXXXXXX",
             "mutualChapAuthenticationType": "chapProhibited",
-            "mutualChapInherited": true,
+            "mutualChapInherited": null,
             "mutualChapName": "",
             "mutualChapSecret": "XXXXXXXXX"
           },
-          "port": 3260
+
+          "iscsi_name": "iqn.1998-01.com.vmware:esxi-033f58ee",
+          "iscsi_send_targets": [
+              {
+                "address": "192.168.0.1",
+                "authenticationProperties": {
+                  "_vimtype": "vim.host.InternetScsiHba.AuthenticationProperties",
+                  "chapAuthEnabled": false,
+                  "chapAuthenticationType": "chapProhibited",
+                  "chapInherited": true,
+                  "chapName": "",
+                  "chapSecret": "XXXXXXXXX",
+                  "mutualChapAuthenticationType": "chapProhibited",
+                  "mutualChapInherited": true,
+                  "mutualChapName": "",
+                  "mutualChapSecret": "XXXXXXXXX"
+                },
+                "port": 3260
+              }
+          ],
+          "iscsi_static_targets": [
+              {
+                "address": "192.168.0.1",
+                "authenticationProperties": {
+                  "_vimtype": "vim.host.InternetScsiHba.AuthenticationProperties",
+                  "chapAuthEnabled": false,
+                  "chapAuthenticationType": "chapProhibited",
+                  "chapInherited": true,
+                  "chapName": "",
+                  "chapSecret": "XXXXXXXXX",
+                  "mutualChapAuthenticationType": "chapProhibited",
+                  "mutualChapInherited": true,
+                  "mutualChapName": "",
+                  "mutualChapSecret": "XXXXXXXXX"
+                },
+                "iscsi_name": "iqn.2004-04.com.qnap:tvs-673:iscsi.vm3.2c580e",
+                "port": 3260
+              }
+          ],
+          "model": "QLogic 57810 10 Gigabit Ethernet Adapter",
+          "port_bind": [],
+          "status": "online",
+          "vmhba_name": "vmhba65"
         }
-      ],
-      "iscsi_static_targets": [
-        {
-          "address": "192.168.0.1",
-          "authenticationProperties": {
-            "_vimtype": "vim.host.InternetScsiHba.AuthenticationProperties",
-            "chapAuthEnabled": false,
-            "chapAuthenticationType": "chapProhibited",
-            "chapInherited": true,
-            "chapName": "",
-            "chapSecret": "XXXXXXXXX",
-            "mutualChapAuthenticationType": "chapProhibited",
-            "mutualChapInherited": true,
-            "mutualChapName": "",
-            "mutualChapSecret": "XXXXXXXXX"
-          },
-          "iscsi_name": "iqn.2004-04.com.qnap:tvs-673:iscsi.vm3.2c580e",
-          "port": 3260
-        }
-      ],
-      "port_bind": [],
-      "vmhba_name": "vmhba65"
+      ]
     }
 detected_iscsi_drives:
   description:
@@ -109,7 +116,8 @@ detected_iscsi_drives:
                 "192.168.0.57:3260"
             ],
             "canonical_name": "naa.60014055f198fb3d0cb4bd7ae1f802e1",
-            "iscsi_name": "iqn.2021-03.local.iscsi-target:iscsi-storage.target0"
+            "iscsi_name": "iqn.2021-03.local.iscsi-target:iscsi-storage.target0",
+            "vmhba_name": "vmhba65"
         }
     ]
 '''
@@ -133,20 +141,30 @@ class VMwareHostiScsiInfo(PyVmomi):
     def get_iscsi_config(self):
         iscsi_enabled = self.host_obj.config.storageDevice.softwareInternetScsiEnabled
         self.existing_system_iscsi_config = {
-            'iscsi_enabled': iscsi_enabled
+            'iscsi_enabled': iscsi_enabled,
+            'iscsi_devices': []
         }
         self.detected_iscsi_drives = []
         if iscsi_enabled is True:
+            detected_iscsi_drives_information = []
+            for lun in self.host_obj.config.storageDevice.scsiLun:
+                if isinstance(lun, vim.host.ScsiDisk):
+                    detected_iscsi_drives_information.append({
+                        'key': lun.key,
+                        'canonical_name': lun.canonicalName
+                    })
+
             for hba in self.host_obj.config.storageDevice.hostBusAdapter:
                 if isinstance(hba, vim.host.InternetScsiHba):
-                    self.existing_system_iscsi_config.update(
-                        {
-                            'vmhba_name': hba.device,
-                            'iscsi_name': hba.iScsiName,
-                            'iscsi_alias': hba.iScsiAlias,
-                            'iscsi_authentication_properties': self.to_json(hba.authenticationProperties)
-                        }
-                    )
+                    this_hba = {
+                        'vmhba_name': hba.device,
+                        'iscsi_name': hba.iScsiName,
+                        'iscsi_alias': hba.iScsiAlias,
+                        'model': hba.model,
+                        'status': hba.status,
+                        'iscsi_authentication_properties': self.to_json(hba.authenticationProperties)
+                    }
+                    self.existing_system_iscsi_config["iscsi_devices"].append(this_hba)
 
                     iscsi_send_targets = []
                     for iscsi_send_target in self.to_json(hba.configuredSendTarget):
@@ -155,7 +173,7 @@ class VMwareHostiScsiInfo(PyVmomi):
                             'authenticationProperties': iscsi_send_target['authenticationProperties'],
                             'port': iscsi_send_target['port']
                         })
-                    self.existing_system_iscsi_config['iscsi_send_targets'] = iscsi_send_targets
+                    this_hba['iscsi_send_targets'] = iscsi_send_targets
 
                     iscsi_static_targets = []
                     for iscsi_static_target in self.to_json(hba.configuredStaticTarget):
@@ -165,33 +183,26 @@ class VMwareHostiScsiInfo(PyVmomi):
                             'authenticationProperties': iscsi_static_target['authenticationProperties'],
                             'port': iscsi_static_target['port']
                         })
-                    self.existing_system_iscsi_config['iscsi_static_targets'] = iscsi_static_targets
+                    this_hba['iscsi_static_targets'] = iscsi_static_targets
 
-            detected_iscsi_drives_information = []
-            for lun in self.host_obj.config.storageDevice.scsiLun:
-                if isinstance(lun, vim.host.ScsiDisk):
-                    detected_iscsi_drives_information.append({
-                        'key': lun.key,
-                        'canonical_name': lun.canonicalName
-                    })
+                    vnic_devices = []
+                    for vnic in self.host_obj.configManager.iscsiManager.QueryBoundVnics(iScsiHbaName=hba.device):
+                        vnic_devices.append(vnic.vnicDevice)
+                    this_hba['port_bind'] = vnic_devices
 
-            for scsi_adapter in self.host_obj.config.storageDevice.scsiTopology.adapter:
-                if isinstance(scsi_adapter, vim.host.ScsiTopology.Interface):
-                    if re.search(self.existing_system_iscsi_config['vmhba_name'], scsi_adapter.key):
-                        for target in scsi_adapter.target:
-                            scsi_lun = target.lun[0].scsiLun
-                            for scsi_info in detected_iscsi_drives_information:
-                                if scsi_info['key'] == scsi_lun:
-                                    self.detected_iscsi_drives.append({
-                                        'iscsi_name': target.transport.iScsiName,
-                                        'canonical_name': scsi_info['canonical_name'],
-                                        'address': target.transport.address
-                                    })
-
-            vnic_devices = []
-            for vnic in self.host_obj.configManager.iscsiManager.QueryBoundVnics(iScsiHbaName=self.existing_system_iscsi_config['vmhba_name']):
-                vnic_devices.append(vnic.vnicDevice)
-            self.existing_system_iscsi_config['port_bind'] = vnic_devices
+                    for scsi_adapter in self.host_obj.config.storageDevice.scsiTopology.adapter:
+                        if isinstance(scsi_adapter, vim.host.ScsiTopology.Interface):
+                            if re.search(hba.device, scsi_adapter.key):
+                                for target in scsi_adapter.target:
+                                    scsi_lun = target.lun[0].scsiLun
+                                    for scsi_info in detected_iscsi_drives_information:
+                                        if scsi_info['key'] == scsi_lun:
+                                            self.detected_iscsi_drives.append({
+                                                'iscsi_name': target.transport.iScsiName,
+                                                'canonical_name': scsi_info['canonical_name'],
+                                                'address': target.transport.address,
+                                                'vmhba_name': hba.device,
+                                            })
 
     def execute(self):
         self.host_obj = self.find_hostsystem_by_name(self.esxi_hostname)
