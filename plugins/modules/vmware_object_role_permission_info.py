@@ -213,7 +213,7 @@ class VMwareObjectRolePermission(PyVmomi):
                 vimtype=[vim_type],
                 name=self.params["object_name"],
             )
-            msg = "%s of type %s" % (
+            msg = "%s of type %s " % (
                 self.params["object_name"],
                 self.params["object_type"],
             )
