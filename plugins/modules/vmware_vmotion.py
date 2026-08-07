@@ -145,6 +145,15 @@ EXAMPLES = r'''
     destination_cluster: 'destination_cluster_as_per_vcenter'
     destination_datastore_cluster: 'destination_datastore_cluster_as_per_vcenter'
   delegate_to: localhost
+
+- name: Move virtual machine to a different resource pool only
+	community.vmware.vmware_vmotion:
+	hostname: '{{ vcenter_hostname }}'
+	username: '{{ vcenter_username }}'
+	password: '{{ vcenter_password }}'
+	vm_name: 'vm_name_as_per_vcenter'
+    destination_resourcepool: 'target_resource_pool_as_per_vcenter'
+  delegate_to: localhost
 '''
 
 RETURN = r'''
@@ -232,6 +241,16 @@ class VmotionManager(PyVmomi):
             else:
                 self.module.fail_json(msg="Unable to find destination cluster %s" % dest_cluster_name)
 
+        dest_resourcepool = self.params.get('destination_resourcepool', None)
+        self.resourcepool_object = None
+        if dest_resourcepool:
+            self.resourcepool_object = find_resource_pool_by_cluster(content=self.content,
+                                                                     resource_pool_name=dest_resourcepool)
+            if self.resourcepool_object is None:
+                self.module.fail_json(msg="Unable to find destination resource pool object for %s" % dest_resourcepool)
+        elif not dest_resourcepool and self.host_object:
+            self.resourcepool_object = self.host_object.parent.resourcePool
+
         # Get Destination Datastore or Datastore Cluster if specified by user
         dest_datastore = self.params.get('destination_datastore', None)
         dest_datastore_cluster = self.params.get('destination_datastore_cluster', None)
@@ -253,10 +272,11 @@ class VmotionManager(PyVmomi):
                 if dsc.name == dest_datastore_cluster:
                     self.datastore_cluster_object = dsc
 
-        # At-least one of datastore, datastore cluster, host system or cluster is required to migrate
-        if self.datastore_object is None and self.datastore_cluster_object is None and self.host_object is None and self.cluster_object is None:
+        # At-least one of datastore, datastore cluster, host system, cluster, or resource pool is required to migrate
+        if (self.datastore_object is None and self.datastore_cluster_object is None and 
+            self.host_object is None and self.cluster_object is None and self.resourcepool_object is None):
             self.module.fail_json(msg="Unable to find destination datastore, destination datastore cluster,"
-                                      " destination host system or destination cluster.")
+                                      " destination host system, destination cluster, or destination resource pool.")
 
         # Check if datastore is required, this check is required if destination
         # and source host system does not share same datastore.
@@ -385,19 +405,18 @@ class VmotionManager(PyVmomi):
                 # VM is already located on a datastore in the datastore cluster
                 change_required = False
 
+        # Get Destination resourcepool
+        if dest_resourcepool and self.resourcepool_object:
+            # Compare current resource pool with destination
+            if self.vm.resourcePool != self.resourcepool_object:
+                change_required = True
+            elif (not self.host_object and not self.cluster_object and 
+                  not self.datastore_object and not self.datastore_cluster_object):
+                # Only resource pool was specified, and it matches - no change needed
+                change_required = False
+
         if self.cluster_object or self.datastore_cluster_object:
             self.set_placement()
-
-        # Get Destination resourcepool
-        dest_resourcepool = self.params.get('destination_resourcepool', None)
-        self.resourcepool_object = None
-        if dest_resourcepool:
-            self.resourcepool_object = find_resource_pool_by_cluster(content=self.content,
-                                                                     resource_pool_name=dest_resourcepool)
-            if self.resourcepool_object is None:
-                self.module.fail_json(msg="Unable to find destination resource pool object for %s" % dest_resourcepool)
-        elif not dest_resourcepool and self.host_object:
-            self.resourcepool_object = self.host_object.parent.resourcePool
 
         if module.check_mode:
             if self.host_object:
