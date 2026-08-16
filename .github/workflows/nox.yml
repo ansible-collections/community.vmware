@@ -1,0 +1,23 @@
+---
+name: nox
+'on':
+  push:
+    branches:
+      - main
+      - stable-*
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  nox:
+    runs-on: ubuntu-latest
+    name: "Run nox"
+    steps:
+      - name: Check out collection
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Run nox
+        uses: ansible-community/antsibull-nox@7044c40f1bb87a96758c4840d1dd55c995be7d1d

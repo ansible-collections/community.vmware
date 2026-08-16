@@ -1,0 +1,6 @@
+version = 1
+
+[sessions]
+
+[sessions.build_import_check]
+run_galaxy_importer = true
