@@ -253,6 +253,8 @@ from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import
 from ansible.module_utils.common.text.converters import to_native
 
 
+# Meaningless diff with no code changes to trigger CI
+
 class VMwareHostVirtualSwitch(PyVmomi):
     def __init__(self, module):
         super(VMwareHostVirtualSwitch, self).__init__(module)
