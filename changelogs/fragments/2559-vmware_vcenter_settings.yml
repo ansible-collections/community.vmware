@@ -1,0 +1,3 @@
+deprecated_features:
+  - vmware_vcenter_settings - The defaults are deprecated and will be removed where possible in community.vmware 8.0.0
+    (https://github.com/ansible-collections/community.vmware/issues/2559).
