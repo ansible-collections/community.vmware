@@ -237,10 +237,22 @@ plugin_routing:
       deprecation:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.vm_snapshot instead.
+    vmware_guest_snapshot_info:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.vm_snapshot_info instead.
     vmware_host:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead.
+    vmware_host_service_info:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.esxi_service_info instead.
+    vmware_host_service_manager:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.esxi_service instead.
     vmware_maintenancemode:
       deprecation:
         removal_version: 7.0.0
