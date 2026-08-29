@@ -1,4 +1,6 @@
 deprecated_features:
+  - vcenter_standard_key_provider - the module has been deprecated and will be removed in community.vmware 8.0.0
+    (https://github.com/ansible-collections/community.vmware/pull/2568).
   - vmware_guest_snapshot_info - the module has been deprecated and will be removed in community.vmware 8.0.0
     (https://github.com/ansible-collections/community.vmware/pull/2568).
   - vmware_host_service_info - the module has been deprecated and will be removed in community.vmware 8.0.0

@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vcenter_standard_key_provider
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.key_provider_standard) instead.
 short_description: Add, reconfigure or remove Standard Key Provider on vCenter server
 description: >
   This module is used for adding, reconfiguring or removing Standard Key Provider on vCenter server.

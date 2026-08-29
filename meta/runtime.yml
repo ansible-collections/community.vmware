@@ -189,6 +189,10 @@ plugin_routing:
       deprecation:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.folder instead.
+    vcenter_standard_key_provider:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.key_provider_standard instead.
     vmware_cluster:
       tombstone:
         removal_version: 6.0.0
