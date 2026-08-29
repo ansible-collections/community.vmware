@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 module: vmware_content_library_manager
 deprecated:
   removed_in: 7.0.0
-  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
   alternative: Use M(vmware.vmware.local_content_library) and M(vmware.vmware.subscribed_content_library) instead.
 short_description: Create, update and delete VMware content library
 description:

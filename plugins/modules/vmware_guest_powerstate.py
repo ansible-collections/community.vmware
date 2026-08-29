@@ -14,7 +14,7 @@ DOCUMENTATION = r"""
 module: vmware_guest_powerstate
 deprecated:
   removed_in: 7.0.0
-  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
   alternative: Use M(vmware.vmware.vm_powerstate) instead.
 short_description: Manages power states of virtual machines in vCenter
 description:

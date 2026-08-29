@@ -14,7 +14,7 @@ DOCUMENTATION = r'''
 module: vmware_content_deploy_ovf_template
 deprecated:
   removed_in: 7.0.0
-  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
   alternative: Use M(vmware.vmware.deploy_content_library_ovf) instead.
 short_description: Deploy Virtual Machine from ovf template stored in content library.
 description:

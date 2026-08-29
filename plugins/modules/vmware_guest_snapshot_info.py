@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 module: vmware_guest_snapshot_info
 deprecated:
   removed_in: 8.0.0
-  why: This module has been L(moved to vmware.vmware,https://github.com/ansible-collections/vmware.vmware/pull/397).
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
   alternative: Use M(vmware.vmware.vm_snapshot_info) instead.
 short_description: Gather info about virtual machine's snapshots in vCenter
 description:

@@ -16,7 +16,7 @@ DOCUMENTATION = r'''
 module: vmware_host
 deprecated:
   removed_in: 7.0.0
-  why: This module has been moved to the L(new vmware.vmware collection,https://forum.ansible.com/t/5880)
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
   alternative: Use M(vmware.vmware.esxi_host) and M(vmware.vmware.esxi_connection) instead.
 short_description: Add, remove, or move an ESXi host to, from, or within vCenter
 description:
