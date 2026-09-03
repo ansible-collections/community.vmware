@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_tag_manager
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.tag_associations) instead.
 short_description: Manage association of VMware tags with VMware objects
 description:
 - This module can be used to assign / remove VMware tags from the given VMware objects.

@@ -265,3 +265,7 @@ plugin_routing:
       deprecation:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.tags instead.
+    vmware_tag_manager:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.tag_associations instead.
