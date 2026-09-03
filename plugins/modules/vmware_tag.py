@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_tag
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.tags) instead.
 short_description: Manage VMware tags
 description:
 - This module can be used to create / delete / update VMware tags.
