@@ -12,6 +12,8 @@ deprecated_features:
     (https://github.com/ansible-collections/community.vmware/pull/2568).
   - vmware_host_facts - the module has been deprecated and will be removed in community.vmware 8.0.0
     (https://github.com/ansible-collections/community.vmware/pull/2568).
+  - vmware_host_powerstate - the module has been deprecated and will be removed in community.vmware 8.0.0
+    (https://github.com/ansible-collections/community.vmware/pull/2568).
 major_changes:
   - Bump required ``vmware.vmware`` collection version to 2.10.0
     (https://github.com/ansible-collections/community.vmware/pull/2568).

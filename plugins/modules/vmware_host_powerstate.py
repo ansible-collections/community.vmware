@@ -13,6 +13,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_host_powerstate
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.esxi_powerstate) instead.
 short_description: Manages power states of host systems in vCenter
 description:
 - This module can be used to manage power states of host systems in given vCenter infrastructure.

@@ -253,6 +253,10 @@ plugin_routing:
       deprecation:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.esxi_info instead.
+    vmware_host_powerstate:
+      deprecation:
+        removal_version: 8.0.0
+        warning_text: Use vmware.vmware.esxi_powerstate instead.
     vmware_host_service_info:
       deprecation:
         removal_version: 8.0.0
