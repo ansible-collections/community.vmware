@@ -12,6 +12,10 @@ __metaclass__ = type
 DOCUMENTATION = r'''
 ---
 module: vmware_host_facts
+deprecated:
+  removed_in: 8.0.0
+  why: This module has been L(moved to vmware.vmware,https://forum.ansible.com/t/5880).
+  alternative: Use M(vmware.vmware.esxi_info) instead.
 short_description: Gathers facts about remote ESXi hostsystem
 description:
     - This module can be used to gathers facts like CPU, memory, datastore, network and system etc. about ESXi host system.
