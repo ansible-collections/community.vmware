@@ -6,6 +6,32 @@ community.vmware Release Notes
 
 This changelog describes changes after version 5.7.2.
 
+v6.3.0
+======
+
+Major Changes
+-------------
+
+- Bump required ``vmware.vmware`` collection version to 2.10.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+
+Deprecated Features
+-------------------
+
+- vcenter_standard_key_provider - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_guest_snapshot_info - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_host_facts - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_host_powerstate - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_host_service_info - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_host_service_manager - the module has been deprecated and will be removed in community.vmware 8.0.0
+- vmware_tag - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_tag_manager - the module has been deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2568).
+- vmware_vcenter_settings - The defaults are deprecated and will be removed where possible in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/issues/2559).
+
+Bugfixes
+--------
+
+- vmware_guest_network - Fix an issue with trunked / PVLAN portgroups (https://github.com/ansible-collections/community.vmware/issues/2567).
+
 v6.2.1
 ======
 

@@ -1,3 +1,0 @@
-bugfixes:
-  - vmware_guest_network - Fix an issue with trunked / PVLAN portgroups
-    (https://github.com/ansible-collections/community.vmware/issues/2567).
