@@ -1,0 +1,3 @@
+removed_features:
+  - vmware_cluster_info - The deprecated module has been removed. Use vmware.vmware.cluster_info instead
+    (https://github.com/ansible-collections/community.vmware/issues/2261).
