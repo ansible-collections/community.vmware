@@ -246,8 +246,7 @@ class VMwareExportVmOvf(PyVmomi):
                             if export_with_iso:
                                 file_download = True
                         elif deviceUrl.url.split('/')[-1].split('.')[-1] == 'nvram':
-                            if self.host_version_at_least(version=(6, 7, 0), vm_obj=vm_obj):
-                                file_download = True
+                            file_download = True
                         else:
                             continue
                         device_file_name = deviceUrl.url.split('/')[-1]
