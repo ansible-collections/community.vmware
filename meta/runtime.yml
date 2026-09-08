@@ -130,7 +130,6 @@ action_groups:
   - vmware_local_role_manager
   - vmware_local_user_info
   - vmware_local_user_manager
-  - vmware_maintenancemode
   - vmware_migrate_vmk
   - vmware_object_custom_attributes_info
   - vmware_object_rename
@@ -265,7 +264,7 @@ plugin_routing:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.esxi_service instead.
     vmware_maintenancemode:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_maintenance_mode instead.
     vmware_tag:
