@@ -1,0 +1,4 @@
+removed_features:
+  - vmware_host - The deprecated module has been removed.
+    Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead
+    (https://github.com/ansible-collections/community.vmware/issues/2341).

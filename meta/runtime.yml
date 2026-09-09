@@ -81,7 +81,6 @@ action_groups:
   - vmware_guest_vgpu
   - vmware_guest_vgpu_info
   - vmware_guest_video
-  - vmware_host
   - vmware_host_acceptance
   - vmware_host_acceptance_info
   - vmware_host_active_directory
@@ -243,7 +242,7 @@ plugin_routing:
         removal_version: 8.0.0
         warning_text: Use vmware.vmware.vm_snapshot_info instead.
     vmware_host:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.esxi_host and vmware.vmware.esxi_connection instead.
     vmware_host_facts:
