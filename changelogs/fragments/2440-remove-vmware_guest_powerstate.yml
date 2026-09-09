@@ -1,0 +1,3 @@
+removed_features:
+  - vmware_guest_powerstate - The deprecated module has been removed. Use vmware.vmware.vm_powerstate instead
+    (https://github.com/ansible-collections/community.vmware/issues/2440).
