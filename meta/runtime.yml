@@ -6,7 +6,6 @@ action_groups:
   - vcenter_domain_user_group_info
   - vcenter_extension
   - vcenter_extension_info
-  - vcenter_folder
   - vcenter_license
   - vcenter_root_password_expiration
   - vcenter_standard_key_provider
@@ -182,7 +181,7 @@ plugin_routing:
         warning_text: Use vmware.vmware.vms instead.
   modules:
     vcenter_folder:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.folder instead.
     vcenter_standard_key_provider:
