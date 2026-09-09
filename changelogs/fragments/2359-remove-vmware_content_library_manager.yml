@@ -1,0 +1,4 @@
+removed_features:
+  - vmware_content_library_manager - The deprecated module has been removed.
+    Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead
+    (https://github.com/ansible-collections/community.vmware/issues/2359).
