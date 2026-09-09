@@ -18,7 +18,6 @@ action_groups:
   - vmware_content_deploy_ovf_template
   - vmware_content_deploy_template
   - vmware_content_library_info
-  - vmware_content_library_manager
   - vmware_custom_attribute
   - vmware_custom_attribute_manager
   - vmware_datacenter
@@ -224,7 +223,7 @@ plugin_routing:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_template instead.
     vmware_content_library_manager:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead.
     vmware_guest_powerstate:
