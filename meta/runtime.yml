@@ -65,7 +65,6 @@ action_groups:
   - vmware_guest_instant_clone
   - vmware_guest_move
   - vmware_guest_network
-  - vmware_guest_powerstate
   - vmware_guest_register_operation
   - vmware_guest_screenshot
   - vmware_guest_sendkey
@@ -229,7 +228,7 @@ plugin_routing:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.local_content_library and vmware.vmware.subscribed_content_library instead.
     vmware_guest_powerstate:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.vm_powerstate instead.
     vmware_guest_snapshot:

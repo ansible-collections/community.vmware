@@ -14,7 +14,7 @@
       register: existing_vms
       until: existing_vms is not failed
     - name: Turn off the VM
-      community.vmware.vmware_guest_powerstate:
+      vmware.vmware.vm_powerstate:
         hostname: '{{ vcenter_hostname }}'
         username: '{{ vcenter_username }}'
         password: '{{ vcenter_password }}'
