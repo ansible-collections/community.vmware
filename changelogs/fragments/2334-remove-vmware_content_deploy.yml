@@ -1,0 +1,5 @@
+removed_features:
+  - vmware_content_deploy_ovf_template - The deprecated module has been removed. Use vmware.vmware.deploy_content_library_ovf
+    (https://github.com/ansible-collections/community.vmware/issues/2334).
+  - vmware_content_deploy_template - The deprecated module has been removed. Use vmware.vmware.deploy_content_library_template
+    (https://github.com/ansible-collections/community.vmware/issues/2334).
