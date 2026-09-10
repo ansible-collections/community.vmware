@@ -1,0 +1,4 @@
+minor_changes:
+  - vmware_custom_attribute - added support for Network and VirtualApp object types.
+  - vmware_custom_attribute - refactored code to improve maintainability with type hints and enhanced validations
+    (https://github.com/ansible-collections/community.vmware/pull/2343).
