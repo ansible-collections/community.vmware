@@ -15,8 +15,6 @@ action_groups:
   - vmware_category_info
   - vmware_cfg_backup
   - vmware_cluster_vsan
-  - vmware_content_deploy_ovf_template
-  - vmware_content_deploy_template
   - vmware_content_library_info
   - vmware_custom_attribute
   - vmware_custom_attribute_manager
@@ -215,11 +213,11 @@ plugin_routing:
         removal_version: 6.0.0
         warning_text: Use vmware.vmware.cluster_vcls instead.
     vmware_content_deploy_ovf_template:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_ovf instead.
     vmware_content_deploy_template:
-      deprecation:
+      tombstone:
         removal_version: 7.0.0
         warning_text: Use vmware.vmware.deploy_content_library_template instead.
     vmware_content_library_manager:
