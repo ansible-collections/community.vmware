@@ -1,0 +1,15 @@
+removed_features:
+  - module_utils.vmware_rest_client - The deprecated ``get_folder_by_name()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vm_device_helper - The deprecated ``is_nvdimm_controller()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vm_device_helper - The deprecated ``is_nvdimm_device()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vmware - The deprecated ``find_host_portgroup_by_name()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vmware - The deprecated ``network_exists_by_name()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vmware - The deprecated ``vmdk_disk_path_split()`` has been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).
+  - module_utils.vmware - The deprecated ``find_vmdk_file has()`` been removed
+    (https://github.com/ansible-collections/community.vmware/pull/2314).

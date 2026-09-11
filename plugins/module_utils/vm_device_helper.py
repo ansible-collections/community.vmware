@@ -347,10 +347,6 @@ class PyVmomiDeviceHelper(object):
 
         return nvdimm_ctl
 
-    @staticmethod
-    def is_nvdimm_controller(device):
-        return isinstance(device, vim.vm.device.VirtualNVDIMMController)
-
     def create_nvdimm_device(self, nvdimm_ctl_dev_key, pmem_profile_id, nvdimm_dev_size_mb=1024):
         nvdimm_dev_spec = vim.vm.device.VirtualDeviceSpec()
         nvdimm_dev_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
@@ -367,10 +363,6 @@ class PyVmomiDeviceHelper(object):
             nvdimm_dev_spec.profile = [profile]
 
         return nvdimm_dev_spec
-
-    @staticmethod
-    def is_nvdimm_device(device):
-        return isinstance(device, vim.vm.device.VirtualNVDIMM)
 
     def find_nvdimm_by_label(self, nvdimm_label, nvdimm_devices):
         nvdimm_dev = None
