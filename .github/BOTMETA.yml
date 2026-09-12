@@ -32,24 +32,6 @@ files:
     maintainers: $team_vmware_httpapi
   $modules/vmware_vm_shell.py:
     maintainers: chrrrles
-  scripts/inventory/vmware.py:
-    keywords:
-    - vmware inventory
-    - vmware dynamic inventory script
-    labels:
-    - cloud
-    - inventory
-    maintainers: $team_vmware
-    migrated_to: community.vmware
-  scripts/inventory/vmware_inventory.py:
-    keywords:
-    - vmware inventory
-    - vmware dynamic inventory script
-    labels:
-    - cloud
-    - vmware
-    - inventory
-    maintainers: $team_vmware
   $module_utils/vmware:
   $module_utils/vmware_httpapi:
   $connection/vmware_tools.py:
@@ -58,15 +40,6 @@ files:
     labels:
     - vmware
     - cloud
-  $inventory/vmware_vm_inventory.py:
-    labels:
-    - vmware
-    - cloud
-    maintainers: $team_vmware
-    keywords:
-    - vmware inventory
-    - vmware dynamic inventory plugin
-    ignored: cigamit jcpowermac mtnbikenc tchernomax ckotte lparkes
   tests/:
     labels: tests
   tests/integration/:
