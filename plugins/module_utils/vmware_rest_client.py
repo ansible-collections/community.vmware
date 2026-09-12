@@ -32,12 +32,7 @@ try:
     from com.vmware.vapi.std_client import DynamicID
     from vmware.vapi.vsphere.client import create_vsphere_client
     from com.vmware.vapi.std.errors_client import Unauthorized
-    from com.vmware.content.library_client import Item
-    from com.vmware.vcenter_client import (Datacenter,
-                                           ResourcePool,
-                                           Datastore,
-                                           Cluster,
-                                           Host)
+    from com.vmware.vcenter_client import (Datacenter, Cluster, Host)
     HAS_VSPHERE = True
 except ImportError:
     VSPHERE_IMP_ERR = traceback.format_exc()
@@ -55,7 +50,6 @@ except ImportError:
 
 from ansible.module_utils.basic import missing_required_lib
 from ansible.module_utils.common.text.converters import to_native
-from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import rest_compatible_argument_spec
 
 
 class VmwareRestClient(object):
@@ -101,10 +95,6 @@ class VmwareRestClient(object):
                 msg=missing_required_lib('vSphere Automation SDK',
                                          url='https://code.vmware.com/web/sdk/7.0/vsphere-automation-python'),
                 exception=VSPHERE_IMP_ERR)
-
-    @staticmethod
-    def vmware_client_argument_spec():
-        return rest_compatible_argument_spec()
 
     def connect_to_vsphere_client(self):
         """
@@ -246,18 +236,6 @@ class VmwareRestClient(object):
         dobj = DynamicID(type="Datastore", id=datastore_mid)
         return self.get_tags_for_dynamic_obj(dobj=dobj)
 
-    def get_tags_for_cluster(self, cluster_mid=None):
-        """
-        Return list of tag object associated with cluster
-        Args:
-            cluster_mid: Dynamic object for cluster
-
-        Returns: List of tag object associated with the given cluster
-
-        """
-        dobj = DynamicID(type='ClusterComputeResource', id=cluster_mid)
-        return self.get_tags_for_dynamic_obj(dobj=dobj)
-
     def get_tags_for_hostsystem(self, hostsystem_mid=None):
         """
         Return list of tag object associated with host system
@@ -310,42 +288,6 @@ class VmwareRestClient(object):
 
         return tags
 
-    def get_library_item_by_name(self, name):
-        """
-        Returns the identifier of the library item with the given name.
-
-        Args:
-            name (str): The name of item to look for
-
-        Returns:
-            str: The item ID or None if the item is not found
-        """
-        find_spec = Item.FindSpec(name=name)
-        item_ids = self.api_client.content.library.Item.find(find_spec)
-        item_id = item_ids[0] if item_ids else None
-        return item_id
-
-    def get_library_item_from_content_library_name(self, name, content_library_name):
-        """
-        Returns the identifier of the library item with the given name in the specified
-        content library.
-        Args:
-            name (str): The name of item to look for
-            content_library_name (str): The name of the content library to search in
-        Returns:
-            str: The item ID or None if the item is not found
-        """
-        cl_find_spec = self.api_client.content.Library.FindSpec(name=content_library_name)
-        cl_item_ids = self.api_client.content.Library.find(cl_find_spec)
-        cl_item_id = cl_item_ids[0] if cl_item_ids else None
-        if cl_item_id:
-            find_spec = Item.FindSpec(name=name, library_id=cl_item_id)
-            item_ids = self.api_client.content.library.Item.find(find_spec)
-            item_id = item_ids[0] if item_ids else None
-            return item_id
-        else:
-            return None
-
     def get_datacenter_by_name(self, datacenter_name):
         """
         Returns the identifier of a datacenter
@@ -355,47 +297,6 @@ class VmwareRestClient(object):
         datacenter_summaries = self.api_client.vcenter.Datacenter.list(filter_spec)
         datacenter = datacenter_summaries[0].datacenter if len(datacenter_summaries) > 0 else None
         return datacenter
-
-    def get_resource_pool_by_name(self, datacenter_name, resourcepool_name, cluster_name=None, host_name=None):
-        """
-        Returns the identifier of a resource pool
-        with the mentioned names.
-        """
-        datacenter = self.get_datacenter_by_name(datacenter_name)
-        if not datacenter:
-            return None
-        clusters = None
-        if cluster_name:
-            clusters = self.get_cluster_by_name(datacenter_name, cluster_name)
-            if clusters:
-                clusters = set([clusters])
-        hosts = None
-        if host_name:
-            hosts = self.get_host_by_name(datacenter_name, host_name)
-            if hosts:
-                hosts = set([hosts])
-        names = set([resourcepool_name]) if resourcepool_name else None
-        filter_spec = ResourcePool.FilterSpec(datacenters=set([datacenter]),
-                                              names=names,
-                                              clusters=clusters)
-        resource_pool_summaries = self.api_client.vcenter.ResourcePool.list(filter_spec)
-        resource_pool = resource_pool_summaries[0].resource_pool if len(resource_pool_summaries) > 0 else None
-        return resource_pool
-
-    def get_datastore_by_name(self, datacenter_name, datastore_name):
-        """
-        Returns the identifier of a datastore
-        with the mentioned names.
-        """
-        datacenter = self.get_datacenter_by_name(datacenter_name)
-        if not datacenter:
-            return None
-        names = set([datastore_name]) if datastore_name else None
-        filter_spec = Datastore.FilterSpec(datacenters=set([datacenter]),
-                                           names=names)
-        datastore_summaries = self.api_client.vcenter.Datastore.list(filter_spec)
-        datastore = datastore_summaries[0].datastore if len(datastore_summaries) > 0 else None
-        return datastore
 
     def get_cluster_by_name(self, datacenter_name, cluster_name):
         """

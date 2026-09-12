@@ -35,7 +35,6 @@ except ImportError:
 from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.basic import missing_required_lib
 from urllib.parse import unquote
-from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class TaskError(Exception):
@@ -647,10 +646,6 @@ def get_vnc_extraconfig(vm):
             if opts.key.lower() == "remotedisplay.vnc." + optkeyname:
                 result[optkeyname] = opts.value
     return result
-
-
-def vmware_argument_spec():
-    return base_argument_spec()
 
 
 def get_all_objs(content, vimtype, folder=None, recurse=True):
