@@ -19,17 +19,6 @@ files:
     notified:
   $modules/vmware_deploy_ovf.py:
     ignored: sivel
-  $httpapi:
-    keywords:
-    - esx
-    - vcenter
-    - vcsa
-    - vcsim
-    - vsphere
-    labels:
-    - cloud
-    - vmware_httpapi
-    maintainers: $team_vmware_httpapi
   $modules/vmware_vm_shell.py:
     maintainers: chrrrles
   $module_utils/vmware:
@@ -51,10 +40,8 @@ macros:
   callback: plugins/callback
   connection: plugins/connection
   doc_fragments: plugins/doc_fragments
-  httpapi: plugins/httpapi
   inventory: plugins/inventory
   lookup: plugins/lookup
   module_utils: plugins/module_utils
   modules: plugins/modules
   team_vmware: Akasurde warthog9 Tomorrow9 goneri pgbidkar
-  team_vmware_httpapi: Akasurde warthog9 Tomorrow9 goneri pgbidkar n3pjk

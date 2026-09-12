@@ -1,0 +1,3 @@
+removed_features:
+  - plugins.httpapi - The deprecated ``plugins.httpapi`` has been removed
+    (https://github.com/ansible-collections/community.vmware/issues/2310).
