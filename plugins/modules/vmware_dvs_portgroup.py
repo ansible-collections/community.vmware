@@ -90,34 +90,6 @@ options:
         required: false
         default: false
         type: bool
-    mac_learning:
-        description:
-            - This option is deprecated in favour of O(network_policy.mac_learning) and will be removed in 7.0.0.
-            - Dictionary which configures MAC learning for portgroup.
-            - Ignored if O(network_policy.inherited=true).
-            - Ignored if O(network_policy.mac_learning) is defined.
-            - Beware that setting this to enabled might disable the inheritance of promiscuous mode and so on!
-        suboptions:
-            allow_unicast_flooding:
-                type: bool
-                description: The flag to allow flooding of unlearned MAC for ingress traffic.
-                required: false
-            enabled:
-                type: bool
-                description: The flag to indicate if source MAC address learning is allowed.
-                required: false
-            limit:
-                type: int
-                description: The maximum number of MAC addresses that can be learned.
-                required: false
-            limit_policy:
-                type: str
-                description: The default switching policy after MAC limit is exceeded.
-                required: false
-                choices:
-                    - 'allow'
-                    - 'drop'
-        type: dict
     network_policy:
         description:
             - Dictionary which configures the different security values for portgroup.
@@ -126,7 +98,6 @@ options:
                 type: bool
                 description:
                     - Inherit the settings from the switch or not.
-                    - Beware that setting this to enabled will also inherit MAC learning configuration (O(mac_learning)) from the switch!
                 required: true
             promiscuous:
                 type: bool
@@ -563,22 +534,6 @@ class VMwareDvsPortgroup(PyVmomi):
                     macLearningPolicy.limitPolicy = macLearning['limit_policy']
                     config.defaultPortConfig.macManagementPolicy.macLearningPolicy = macLearningPolicy
 
-        if not self.networkPolicy or (not self.networkPolicy['inherited'] and not self.networkPolicy['mac_learning']):
-            macLearning = self.module.params['mac_learning']
-            if macLearning:
-                if config.defaultPortConfig.macManagementPolicy is None:
-                    config.defaultPortConfig.macManagementPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacManagementPolicy()
-                macLearningPolicy = vim.dvs.VmwareDistributedVirtualSwitch.MacLearningPolicy()
-                if macLearning['allow_unicast_flooding'] is not None:
-                    macLearningPolicy.allowUnicastFlooding = macLearning['allow_unicast_flooding']
-                if macLearning['enabled'] is not None:
-                    macLearningPolicy.enabled = macLearning['enabled']
-                if macLearning['limit'] is not None:
-                    macLearningPolicy.limit = macLearning['limit']
-                if macLearning['limit_policy']:
-                    macLearningPolicy.limitPolicy = macLearning['limit_policy']
-                config.defaultPortConfig.macManagementPolicy.macLearningPolicy = macLearningPolicy
-
         # Teaming Policy
         teamingPolicy = vim.dvs.VmwareDistributedVirtualSwitch.UplinkPortTeamingPolicy()
         teamingPolicy.policy = vim.StringPolicy(value=self.module.params['teaming_policy']['load_balance_policy'])
@@ -829,19 +784,6 @@ class VMwareDvsPortgroup(PyVmomi):
                     if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
                         return 'update'
 
-        if not self.networkPolicy or (not self.networkPolicy['inherited'] and not self.networkPolicy['mac_learning']):
-            macLearning = self.module.params['mac_learning']
-            if macLearning:
-                macLearningPolicy = defaultPortConfig.macManagementPolicy.macLearningPolicy
-                if macLearning['allow_unicast_flooding'] is not None and macLearningPolicy.allowUnicastFlooding != macLearning['allow_unicast_flooding']:
-                    return 'update'
-                if macLearning['enabled'] is not None and macLearningPolicy.enabled != macLearning['enabled']:
-                    return 'update'
-                if macLearning['limit'] is not None and macLearningPolicy.limit != macLearning['limit']:
-                    return 'update'
-                if macLearning['limit_policy'] and macLearningPolicy.limitPolicy != macLearning['limit_policy']:
-                    return 'update'
-
         # Teaming Policy
         teamingPolicy = self.dvs_portgroup.config.defaultPortConfig.uplinkTeamingPolicy
 
@@ -1075,17 +1017,6 @@ def main():
                     vlan_override=False
                 ),
             ),
-            mac_learning=dict(
-                type='dict',
-                removed_in_version='7.0.0',
-                removed_from_collection='community.vmware',
-                options=dict(
-                    allow_unicast_flooding=dict(type='bool'),
-                    enabled=dict(type='bool'),
-                    limit=dict(type='int'),
-                    limit_policy=dict(type='str', choices=['allow', 'drop']),
-                ),
-            )
         )
     )
 
