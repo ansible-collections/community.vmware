@@ -1,0 +1,4 @@
+removed_features:
+  - vmware_dvs_portgroup - The deprecated option ``mac_learning`` has been removed.
+    Use ``network_policy.mac_learning`` instead
+    (https://github.com/ansible-collections/community.vmware/issues/2466).
