@@ -35,7 +35,6 @@ except ImportError:
 from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.basic import missing_required_lib
 from urllib.parse import unquote
-from ansible_collections.vmware.vmware.plugins.module_utils.argument_spec import base_argument_spec
 
 
 class TaskError(Exception):
@@ -649,10 +648,6 @@ def get_vnc_extraconfig(vm):
     return result
 
 
-def vmware_argument_spec():
-    return base_argument_spec()
-
-
 def get_all_objs(content, vimtype, folder=None, recurse=True):
     if not folder:
         folder = content.rootFolder
@@ -718,21 +713,6 @@ def serialize_spec(clonespec):
             data[x] = str(xt)
 
     return data
-
-
-def find_host_by_cluster_datacenter(module, content, datacenter_name, cluster_name, host_name):
-    dc = find_datacenter_by_name(content, datacenter_name)
-    if dc is None:
-        module.fail_json(msg="Unable to find datacenter with name %s" % datacenter_name)
-    cluster = find_cluster_by_name(content, cluster_name, datacenter=dc)
-    if cluster is None:
-        module.fail_json(msg="Unable to find cluster with name %s" % cluster_name)
-
-    for host in cluster.host:
-        if host.name == host_name:
-            return host, cluster
-
-    return None, cluster
 
 
 def set_vm_power_state(content, vm, state, force, timeout=0, answers=None):
@@ -1231,21 +1211,6 @@ class PyVmomi(PyvmomiClient):
         """
         return find_cluster_by_name(self.content, cluster_name, datacenter=datacenter_name)
 
-    def get_all_hosts_by_cluster(self, cluster_name):
-        """
-        Get all hosts from cluster by cluster name
-        Args:
-            cluster_name: Name of cluster
-
-        Returns: List of hosts
-
-        """
-        cluster_obj = self.find_cluster_by_name(cluster_name=cluster_name)
-        if cluster_obj:
-            return list(cluster_obj.host)
-        else:
-            return []
-
     # Hosts related functions
     def find_hostsystem_by_name(self, host_name, datacenter=None):
         """
@@ -1662,15 +1627,6 @@ class PyVmomi(PyvmomiClient):
         else:
             result = self._jsonify(obj)
         return result
-
-    def get_folder_path(self, cur):
-        full_path = '/' + cur.name
-        while hasattr(cur, 'parent') and cur.parent:
-            if cur.parent == self.content.rootFolder:
-                break
-            cur = cur.parent
-            full_path = '/' + cur.name + full_path
-        return full_path
 
     def find_obj_by_moid(self, object_type, moid):
         """
