@@ -6,6 +6,27 @@ community.vmware Release Notes
 
 This changelog describes changes after version 5.7.2.
 
+v6.4.0
+======
+
+Deprecated Features
+-------------------
+
+- plugins.module_utils.vmware - The function ``find_host_by_cluster_datacenter`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware - The function ``vmware_argument_spec`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware - The method ``PyVmomi.get_all_hosts_by_cluster`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware - The method ``PyVmomi.get_folder_path`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware - The method ``PyVmomi.vcenter_version_at_least`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_cluster_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_datacenter_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_datastore_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_host_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_library_item_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_library_item_from_content_library_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_resource_pool_by_name`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.get_tags_for_cluster`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+- plugins.module_utils.vmware_rest_client - The method ``VMwareRestClient.vmware_client_argument_spec`` is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2599).
+
 v6.3.0
 ======
 
