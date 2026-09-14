@@ -1,0 +1,1 @@
+grep -r 'def ' plugins/module_utils/ | cut -d ':' -f 2 | while read DEF NAME; do echo $NAME; done | cut -d '(' -f 1 | grep -v __init__ | while read FUNC; do if ! grep -r $FUNC plugins/ | grep -q -v "def $FUNC("; then echo $FUNC; fi; done
