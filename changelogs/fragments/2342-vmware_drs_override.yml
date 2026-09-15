@@ -1,0 +1,4 @@
+minor_changes:
+  - vmware_drs_override - Add new state attribute with present, absent, disabled options.
+    You can now remove existing DRS override or set DRS Override to disabled.
+    Add option to chose VM with name, uuid or moid (https://github.com/ansible-collections/community.vmware/pull/2342).
