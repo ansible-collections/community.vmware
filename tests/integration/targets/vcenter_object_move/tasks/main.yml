@@ -1,0 +1,44 @@
+# Copyright: (c) 2025, Simon Bärlocher (@sbaerlocher) <s.baerlocher@sbaerlocher.ch>
+# Copyright: (c) 2025, whatwedo GmbH (https://whatwedo.ch)
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+    setup_dvswitch: true
+    setup_resource_pool: true
+    setup_virtualmachines: true
+    setup_switch: true
+    setup_dvs_portgroup: true
+
+- name: Create new network folder
+  vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    folder_name: "{{ vcenter_object_move_new_vm_folder }}"
+    folder_type: vm
+    state: present
+  register: folder_result
+
+- name: Move the port group into the new network folder
+  vcenter_object_move:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    datacenter: "{{ dc1 }}"
+    object_name: "{{ virtual_machines[0].name }}"
+    object_type: vm
+    destination_folder: "{{ vcenter_object_move_new_vm_folder }}"
+    state: present
+  register: move_result
+
+- name: Assert that the port group was successfully moved or already in the folder
+  assert:
+    that:
+      - "'successfully moved' in move_result.msg or 'already in the destination folder' in move_result.msg"
