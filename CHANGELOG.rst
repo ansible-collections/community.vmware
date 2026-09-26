@@ -6,6 +6,21 @@ community.vmware Release Notes
 
 This changelog describes changes after version 5.7.2.
 
+v6.5.0
+======
+
+Minor Changes
+-------------
+
+- vmware_host_kernel_manager - Remove the deprecated ``community.vmware.vmware_host_powerstate`` module from the documentation (https://github.com/ansible-collections/community.vmware/pull/2607).
+
+Deprecated Features
+-------------------
+
+- module_utils.vmware - The ``ansible_date_time_facts`` funtion is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2607).
+- module_utils.vmware_rest_client - The ``VmwareRestClient.get_tag_by_name`` method is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2607).
+- module_utils.vmware_rest_client - The ``VmwareRestClient.get_tags_for_hostsystem`` method is deprecated and will be removed in community.vmware 8.0.0 (https://github.com/ansible-collections/community.vmware/pull/2607).
+
 v6.4.0
 ======
 
