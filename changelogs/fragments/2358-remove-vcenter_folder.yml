@@ -1,3 +1,0 @@
-removed_features:
-  - vcenter_folder - The deprecated module has been removed. Use ``vmware.vmware.folder`` instead
-    (https://github.com/ansible-collections/community.vmware/issues/2358).
