@@ -300,7 +300,7 @@ class VmotionManager(PyVmomi):
                                                                        dest_host_name,
                                                                        "', '".join([ds.name for ds in self.host_object.datastore])))
 
-            if self.vm.runtime.host.name == dest_host_name and dest_datastore in [ds.name for ds in self.vm.datastore]:
+            if self.vm.runtime.host.name == dest_host_name and vm_ds_name == self.datastore_object.name:
                 change_required = False
 
         elif self.host_object and self.datastore_cluster_object:
@@ -335,7 +335,7 @@ class VmotionManager(PyVmomi):
                                                                                     self.cluster_object.datastore])))
 
             if self.vm.runtime.host.name in [host.name for host in self.cluster_hosts] and \
-                    dest_datastore in [ds.name for ds in self.vm.datastore]:
+                    vm_ds_name == self.datastore_object.name:
                 change_required = False
 
         elif self.cluster_object and self.datastore_cluster_object:
@@ -370,7 +370,7 @@ class VmotionManager(PyVmomi):
 
         elif (self.datastore_object and self.host_object is None) or (
                 self.datastore_object and self.cluster_object is None):
-            if self.datastore_object in self.vm.datastore:
+            if vm_ds_name == self.datastore_object.name:
                 # VM is already located on same datastore
                 change_required = False
 
