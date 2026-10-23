@@ -1,0 +1,96 @@
+# Format conversion and RDM tests of vmware_vmdk_clone, on a direct connection to an ESXi host.
+# Copyright: (c) 2026, Everpure Inc.
+# Copyright: (c) 2026, Eugenio Grosso <eugenio.grosso@everpuredata.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+- name: Test on the ESXi host
+  module_defaults:
+    community.vmware.vmware_vmdk_clone: &esxi
+      hostname: "{{ vmdk_clone_esxi_hostname }}"
+      username: "{{ vmdk_clone_esxi_username }}"
+      password: "{{ vmdk_clone_esxi_password }}"
+      validate_certs: false
+    community.vmware.vsphere_file: *esxi
+  vars:
+    vmdk_thick: "{{ vmdk_dir }}/thick.vmdk"
+    vmdk_rdm: "{{ vmdk_dir }}/rdm.vmdk"
+  block:
+    - name: Convert the disk to eager zeroed thick
+      community.vmware.vmware_vmdk_clone: &thick
+        source: "{{ vmdk_source }}"
+        destination: "{{ vmdk_thick }}"
+        disk_format: eagerzeroedthick
+      register: _thick
+
+    - name: Convert the disk to eager zeroed thick - idempotence
+      community.vmware.vmware_vmdk_clone: *thick
+      register: _thick_idempotence
+
+    - name: Gather information about the thick copy
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_thick }}"
+      register: _thick_info
+
+    - name: Check the thick copy
+      assert:
+        that:
+          - _thick is changed
+          - _thick_idempotence is not changed
+          - _thick_info.vmdk.exists
+          - not _thick_info.vmdk.thin
+          - _thick_info.vmdk.capacity_bytes == _source_info.vmdk.capacity_bytes
+
+    - name: Copy the disk onto the LUN as an RDM
+      when: vmdk_clone_rdm_device is defined
+      block:
+        - name: Copy the disk onto the LUN as an RDM - check mode
+          community.vmware.vmware_vmdk_clone: &rdm
+            source: "{{ vmdk_source }}"
+            destination: "{{ vmdk_rdm }}"
+            disk_format: rdm
+            device: "{{ vmdk_clone_rdm_device }}"
+          check_mode: true
+          register: _rdm_check
+
+        - name: Gather information about the RDM after check mode
+          community.vmware.vmware_vmdk_info:
+            path: "{{ vmdk_rdm }}"
+          register: _rdm_check_info
+
+        - name: Copy the disk onto the LUN as an RDM
+          community.vmware.vmware_vmdk_clone: *rdm
+          register: _rdm
+
+        - name: Copy the disk onto the LUN as an RDM - idempotence
+          community.vmware.vmware_vmdk_clone: *rdm
+          register: _rdm_idempotence
+
+        - name: Gather information about the RDM
+          community.vmware.vmware_vmdk_info:
+            path: "{{ vmdk_rdm }}"
+          register: _rdm_info
+
+        - name: Check the RDM
+          assert:
+            that:
+              - _rdm_check is changed
+              - not _rdm_check_info.vmdk.exists
+              - _rdm is changed
+              - _rdm_idempotence is not changed
+              - _rdm_info.vmdk.exists
+              - _rdm_info.vmdk.provisioning == 'rdm'
+              - "'RawDiskMapping' in _rdm_info.vmdk.backing_type"
+              - _rdm_info.vmdk.capacity_bytes >= _source_info.vmdk.capacity_bytes
+
+  always:
+    # vCenter refuses .vmdk file operations through its file service; the ESXi host accepts them
+    - name: Remove the files created on the ESXi host
+      community.vmware.vsphere_file:
+        datacenter: ha-datacenter
+        datastore: "{{ vmdk_datastore }}"
+        path: "{{ vmdk_test_vm }}/{{ item }}"
+        state: absent
+      loop:
+        - thick.vmdk
+        - thick-flat.vmdk
+        - rdm.vmdk
+        - rdm-rdm.vmdk

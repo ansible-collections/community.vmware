@@ -1,0 +1,208 @@
+# Test code for the vmware_vmdk_clone and vmware_vmdk_info modules.
+# Copyright: (c) 2026, Everpure Inc.
+# Copyright: (c) 2026, Eugenio Grosso <eugenio.grosso@everpuredata.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+# Variables:
+#   vmdk_datacenter, vmdk_cluster, vmdk_datastore   where the test VM and its disks are created
+#   vmdk_vm_name (optional)                          name of the test VM, default vmdk-clone-test
+# The ESXi tests (format conversion, copy onto an RDM) run only when these are defined:
+#   vmdk_clone_esxi_hostname, vmdk_clone_esxi_username, vmdk_clone_esxi_password
+#   vmdk_clone_rdm_device (optional)                 an unused LUN of at least 1 GB that the host sees
+- name: Set the test paths
+  set_fact:
+    vmdk_test_vm: "{{ vmdk_vm_name | default('vmdk-clone-test') }}"
+    vmdk_dir: "[{{ vmdk_datastore }}] {{ vmdk_vm_name | default('vmdk-clone-test') }}"
+
+- name: Set the test disks
+  set_fact:
+    vmdk_source: "{{ vmdk_dir }}/{{ vmdk_test_vm }}.vmdk"
+    vmdk_copy: "{{ vmdk_dir }}/copy.vmdk"
+
+- name: Test vmware_vmdk_clone and vmware_vmdk_info
+  module_defaults: &defaults
+    group/community.vmware.vmware: &connection
+      hostname: '{{ vcenter_hostname }}'
+      username: '{{ vcenter_username }}'
+      password: '{{ vcenter_password }}'
+      validate_certs: false
+    group/vmware.vmware.vmware: *connection
+  block:
+    - name: Create a VM with a disk to copy
+      vmware.vmware.vm:
+        name: "{{ vmdk_test_vm }}"
+        datacenter: "{{ vmdk_datacenter }}"
+        cluster: "{{ vmdk_cluster }}"
+        datastore: "{{ vmdk_datastore }}"
+        guest_id: otherLinux64Guest
+        cpu:
+          cores: 1
+        memory:
+          size_mb: 256
+        disks:
+          - size: 1gb
+            provisioning: thin
+            device_node: SCSI(0:0)
+        scsi_controllers:
+          - bus_number: 0
+            controller_type: lsilogic
+      register: _vm
+
+    # ---- vmware_vmdk_info ------------------------------------------------------------------------------
+    - name: Gather information about the VM disk
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_source }}"
+      register: _source_info
+
+    - name: Gather information about the VM disk using an ESXi style path, in check mode
+      community.vmware.vmware_vmdk_info:
+        path: "/vmfs/volumes/{{ vmdk_datastore }}/{{ vmdk_test_vm }}/{{ vmdk_test_vm }}.vmdk"
+      check_mode: true
+      register: _source_info_vmfs_path
+
+    - name: Gather information about a disk that does not exist
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_dir }}/missing.vmdk"
+      register: _missing_info
+
+    - name: Check vmware_vmdk_info results
+      assert:
+        that:
+          - _source_info is not changed
+          - _source_info.vmdk.exists
+          - _source_info.vmdk.path == vmdk_source
+          - _source_info.vmdk.datastore.name == vmdk_datastore
+          - _source_info.vmdk.provisioning == 'thin'
+          - _source_info.vmdk.capacity_bytes == 1073741824
+          - _source_info.vmdk.uuid | length > 0
+          - _source_info.vmdk.attached_to | length == 1
+          - _source_info.vmdk.attached_to[0].vm.moid == _vm.vm.moid
+          - _source_info_vmfs_path is not changed
+          - _source_info_vmfs_path.vmdk.path == vmdk_source
+          - _missing_info is not changed
+          - not _missing_info.vmdk.exists
+
+    # ---- vmware_vmdk_clone through vCenter --------------------------------------------------------------
+    - name: Copy the disk - check mode
+      community.vmware.vmware_vmdk_clone: &copy
+        source: "{{ vmdk_source }}"
+        destination: "{{ vmdk_copy }}"
+      check_mode: true
+      register: _copy_check
+
+    - name: Gather information about the copy after check mode
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_copy }}"
+      register: _copy_check_info
+
+    - name: Check that check mode did not copy the disk
+      assert:
+        that:
+          - _copy_check is changed
+          - not _copy_check_info.vmdk.exists
+
+    - name: Copy the disk
+      community.vmware.vmware_vmdk_clone: *copy
+      register: _copy
+
+    - name: Gather information about the copy
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_copy }}"
+      register: _copy_info
+
+    - name: Copy the disk - idempotence
+      community.vmware.vmware_vmdk_clone: *copy
+      register: _copy_idempotence
+
+    - name: Check the copy
+      assert:
+        that:
+          - _copy is changed
+          - _copy.source.path == vmdk_source
+          - _copy.destination.exists
+          - _copy_info.vmdk.exists
+          - _copy_info.vmdk.provisioning == 'thin'
+          - _copy_info.vmdk.capacity_bytes == _source_info.vmdk.capacity_bytes
+          - _copy_info.vmdk.attached_to | length == 0
+          - _copy_idempotence is not changed
+
+    - name: Replace the copy
+      community.vmware.vmware_vmdk_clone:
+        <<: *copy
+        force: true
+      register: _copy_force
+
+    - name: Gather information about the replaced copy
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_copy }}"
+      register: _copy_force_info
+
+    - name: Check the replaced copy
+      assert:
+        that:
+          - _copy_force is changed
+          - _copy_force_info.vmdk.exists
+          - _copy_force_info.vmdk.uuid != _copy_info.vmdk.uuid
+
+    - name: Convert the format through vCenter
+      community.vmware.vmware_vmdk_clone:
+        source: "{{ vmdk_source }}"
+        destination: "{{ vmdk_dir }}/converted.vmdk"
+        disk_format: eagerzeroedthick
+      register: _convert
+      ignore_errors: true
+
+    - name: Copy into a folder that does not exist
+      community.vmware.vmware_vmdk_clone:
+        source: "{{ vmdk_source }}"
+        destination: "{{ vmdk_dir }}/missing/copy.vmdk"
+      register: _missing_folder
+      ignore_errors: true
+
+    - name: Gather information about the files that must not exist
+      community.vmware.vmware_vmdk_info:
+        path: "{{ item }}"
+      loop:
+        - "{{ vmdk_dir }}/converted.vmdk"
+        - "{{ vmdk_dir }}/missing/copy.vmdk"
+      register: _not_created
+
+    - name: Check the refused copies
+      assert:
+        that:
+          - _convert is failed
+          - "'needs a connection to an ESXi host' in _convert.msg"
+          - _missing_folder is failed
+          - "'create_folders' in _missing_folder.msg"
+          - _not_created.results | map(attribute='vmdk.exists') | select | length == 0
+
+    - name: Test format conversions on an ESXi host
+      include_tasks: esxi.yml
+      when: vmdk_clone_esxi_hostname is defined
+
+  always:
+    # Destroying the VM deletes every disk attached to it, so attach the copy first.
+    - name: Look up the copy
+      community.vmware.vmware_vmdk_info:
+        path: "{{ vmdk_copy }}"
+      register: _cleanup_copy
+      ignore_errors: true
+
+    - name: Attach the copy to the VM so that it is deleted with it
+      community.vmware.vmware_guest_disk:
+        datacenter: "{{ vmdk_datacenter }}"
+        name: "{{ vmdk_test_vm }}"
+        disk:
+          - filename: "{{ vmdk_copy }}"
+            scsi_controller: 0
+            scsi_type: lsilogic
+            unit_number: 1
+            state: present
+      when: _cleanup_copy.vmdk.exists | default(false)
+      ignore_errors: true
+
+    - name: Destroy the VM
+      vmware.vmware.vm:
+        name: "{{ vmdk_test_vm }}"
+        datacenter: "{{ vmdk_datacenter }}"
+        state: absent

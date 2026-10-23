@@ -1,0 +1,16 @@
+# Test code for the vmware_vmdk_clone and vmware_vmdk_info modules.
+# Copyright: (c) 2026, Everpure Inc.
+# Copyright: (c) 2026, Eugenio Grosso <eugenio.grosso@everpuredata.com>
+# GNU General Public License v3.0+ (see LICENSES/GPL-3.0-or-later.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+- import_role:
+    name: prepare_vmware_tests
+  vars:
+    setup_attach_host: true
+    setup_datastore: true
+
+- name: Run the vmware_vmdk_clone and vmware_vmdk_info tests
+  include_tasks: vmdk.yml
+  vars:
+    vmdk_datacenter: '{{ dc1 }}'
+    vmdk_cluster: '{{ ccr1 }}'
+    vmdk_datastore: '{{ rw_datastore }}'

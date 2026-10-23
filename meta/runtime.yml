@@ -146,6 +146,8 @@ action_groups:
   - vmware_vm_config_option
   - vmware_vm_host_drs_rule
   - vmware_vm_info
+  - vmware_vmdk_clone
+  - vmware_vmdk_info
   - vmware_vmkernel
   - vmware_vmkernel_info
   - vmware_vmotion
