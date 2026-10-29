@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest_network - read the VLAN ID of a distributed port group from its own configuration only, instead of also scanning the standard port groups of every ESXi host attached to it (https://github.com/ansible-collections/community.vmware/issues/2622).

@@ -371,7 +371,7 @@ class PyVmomiHelper(PyVmomi):
             if isinstance(vlan, vim.dvs.VmwareDistributedVirtualSwitch.VlanIdSpec):
                 vlan_id = vlan.vlanId
 
-        if isinstance(network, vim.Network) and hasattr(network, 'host'):
+        elif isinstance(network, vim.Network) and hasattr(network, 'host'):
             for host in network.host:
                 for pg in host.config.network.portgroup:
                     if pg.spec.name == network.name:
