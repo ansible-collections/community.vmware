@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_guest - fix ``AttributeError`` when cloning a template whose network adapter is on a distributed port group to a standard vSwitch port group (https://github.com/ansible-collections/community.vmware/issues/2621).

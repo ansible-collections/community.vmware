@@ -1953,7 +1953,9 @@ class PyVmomiHelper(PyVmomi):
                             pg = pgs[0]
                         else:
                             pg = find_obj(self.content, [vim.DistributedVirtualPortgroup], network_name)
-                        if pg is None or nic.device.backing.port.portgroupKey != pg.key:
+                        # A standard (vim.Network) or NSX-T port group has no 'key';
+                        # treat it as a change so the backing is replaced below.
+                        if pg is None or not hasattr(pg, 'key') or nic.device.backing.port.portgroupKey != pg.key:
                             nic.device.deviceInfo.summary = network_name
                             nic_change_detected = True
 
