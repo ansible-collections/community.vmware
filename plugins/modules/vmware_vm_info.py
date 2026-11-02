@@ -17,6 +17,7 @@ module: vmware_vm_info
 short_description: Return basic info pertaining to a VMware machine guest
 description:
 - Return basic information pertaining to a vSphere or ESXi virtual machine guest.
+- Virtual machines that disappear while their information is being read are skipped with a warning and reported in RV(skipped_virtual_machines).
 author:
 - Joseph Callen (@jcpowermac)
 - Abhijeet Kasurde (@Akasurde)
@@ -228,6 +229,14 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
+skipped_virtual_machines:
+  description:
+    - Managed object IDs of virtual machines skipped because they disappeared while their information was being read.
+    - Names are not included because they may no longer be readable.
+  returned: success
+  type: list
+  elements: str
+  sample: ['vm-17185294']
 virtual_machines:
   description: list of dictionary of virtual machines and their information
   returned: success
@@ -283,7 +292,7 @@ virtual_machines:
 '''
 
 try:
-    from pyVmomi import vim
+    from pyVmomi import vim, vmodl
 except ImportError:
     pass
 
@@ -318,6 +327,7 @@ class VmwareVmInfo(PyVmomi):
         """
         Get one/all virtual machines and related configurations information.
         """
+        self.skipped_virtual_machines = []
         folder = self.params.get('folder')
         folder_obj = None
         if folder:
@@ -336,7 +346,7 @@ class VmwareVmInfo(PyVmomi):
             virtual_machines = get_all_objs(self.content, [vim.VirtualMachine], folder=folder_obj)
         _virtual_machines = []
 
-        for vm in virtual_machines:
+        def get_virtual_machine_info(vm):
             _ip_address = ""
             summary = vm.summary
             if summary.guest is not None:
@@ -446,6 +456,15 @@ class VmwareVmInfo(PyVmomi):
                 _virtual_machines.append(virtual_machine)
             elif vm_type == 'all':
                 _virtual_machines.append(virtual_machine)
+
+        for vm in virtual_machines:
+            try:
+                get_virtual_machine_info(vm)
+            except vmodl.fault.ManagedObjectNotFound as exc:
+                if exc.obj != vm:
+                    raise
+                self.skipped_virtual_machines.append(vm._moId)
+                self.module.warn("Skipping virtual machine %s because it disappeared while gathering information." % vm._moId)
         return _virtual_machines
 
 
@@ -476,7 +495,8 @@ def main():
     vmware_vm_info = VmwareVmInfo(module)
     _virtual_machines = vmware_vm_info.get_virtual_machines()
 
-    module.exit_json(changed=False, virtual_machines=_virtual_machines)
+    module.exit_json(changed=False, virtual_machines=_virtual_machines,
+                     skipped_virtual_machines=vmware_vm_info.skipped_virtual_machines)
 
 
 if __name__ == '__main__':
