@@ -1,0 +1,2 @@
+bugfixes:
+  - vmware_vm_info - skip virtual machines that disappear while gathering their information instead of failing the entire inventory, and report their managed object IDs in skipped_virtual_machines with warnings.
