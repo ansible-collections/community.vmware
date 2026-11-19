@@ -207,6 +207,9 @@ options:
         cpu_reservation:
             type: int
             description: The amount of CPU resource that is guaranteed available to the virtual machine.
+        cpu_affinity_set:
+            type: list
+            description: A List of CPU cores that the VM should use.
         version:
             type: str
             description:
@@ -1104,8 +1107,10 @@ import re
 import time
 import string
 
+HAS_PYVMOMI = False
 try:
     from pyVmomi import vim, vmodl
+    HAS_PYVMOMI = True
 except ImportError:
     pass
 
@@ -1273,6 +1278,7 @@ class PyVmomiHelper(PyVmomi):
         rai_change_detected = False
         memory_allocation = vim.ResourceAllocationInfo()
         cpu_allocation = vim.ResourceAllocationInfo()
+        cpu_affinity = vim.vm.AffinityInfo()
 
         memory_shares_info = vim.SharesInfo()
         cpu_shares_info = vim.SharesInfo()
@@ -1284,6 +1290,13 @@ class PyVmomiHelper(PyVmomi):
 
             if vm_obj is None or \
                     memory_allocation.shares.level != vm_obj.config.memoryAllocation.shares.level:
+                rai_change_detected = True
+
+        cpu_affinity_set = self.params['hardware']['cpu_affinity_set']
+        if cpu_affinity_set is not None:
+            cpu_affinity.affinitySet = cpu_affinity_set
+            if vm_obj is None or \
+                    cpu_affinity.affinitySet != self.get_vm_cpu_affinity_set(vm_obj):
                 rai_change_detected = True
 
         cpu_shares_level = self.params['hardware']['cpu_shares_level']
@@ -1343,6 +1356,7 @@ class PyVmomiHelper(PyVmomi):
         if rai_change_detected:
             self.configspec.memoryAllocation = memory_allocation
             self.configspec.cpuAllocation = cpu_allocation
+            self.configspec.cpuAffinity = cpu_affinity
             self.change_detected = True
 
     def configure_cpu_and_memory(self, vm_obj, vm_creation=False):
@@ -1715,6 +1729,11 @@ class PyVmomiHelper(PyVmomi):
 
     def get_vm_nvdimm_devices(self, vm=None):
         return self.get_device_by_type(vm=vm, type=vim.vm.device.VirtualNVDIMM)
+
+    def get_vm_cpu_affinity_set(self, vm_obj):
+        if vm_obj.config.__dict__.get('cpuAffinity') is None:
+            return []
+        return vm_obj.config.cpuAffinity.affinitySet
 
     def configure_nvdimm(self, vm_obj):
         """
@@ -3516,6 +3535,7 @@ def main():
                 nested_virt=dict(type='bool'),
                 num_cpu_cores_per_socket=dict(type='int'),
                 num_cpus=dict(type='int'),
+                cpu_affinity_set=dict(type='list', default=[], elements='int', aliases=['cpu_affinity']),
                 scsi=dict(type='str', choices=['buslogic', 'lsilogic', 'lsilogicsas', 'paravirtual']),
                 secure_boot=dict(type='bool'),
                 version=dict(type='str'),
