@@ -18,6 +18,21 @@
 - name: Set fact for the first VM name
   set_fact:
     first_vm_name: "{{ vm_info.virtual_machines[0].guest_name }}"
+    first_vm_moid: "{{ vm_info.virtual_machines[0].moid }}"
+    first_vm_cluster: "{{ vm_info.virtual_machines[0].cluster }}"
+
+- name: Gather info about the first vm cluster
+  vmware_cluster_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: false
+    cluster_name: "{{ first_vm_cluster }}"
+  register: cluster_result
+
+- name: Set fact for the DRS
+  set_fact:
+    drs_enabled: "{{ cluster_result['clusters'][first_vm_cluster].enabled_drs }}"
 
 # Test case: Add DRS Override - DRS enabled
 - name: Add DRS override 'manual' for a VM in a DRS-enabled cluster
@@ -36,6 +51,25 @@
     that:
       - drs_override_result.changed == true
       - "'DRS override applied successfully' in drs_override_result.msg"
+  when: drs_enabled is defined and drs_enabled
+
+# Test case: Remove DRS Override - DRS enabled
+- name: Remove DRS override for a VM in a DRS-enabled cluster
+  vmware_drs_override:
+    validate_certs: false
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    moid: "{{ first_vm_moid }}"
+    state: "absent"
+  register: drs_override_remove_result
+  when: drs_enabled is defined and drs_enabled
+
+- name: Assert DRS override removed successfully
+  assert:
+    that:
+      - drs_override_remove_result.changed == true
+      - "'DRS override removed successfully' in drs_override_remove_result.msg"
   when: drs_enabled is defined and drs_enabled
 
 # Test case: Ensure proper error for standalone ESXi without DRS
@@ -69,11 +103,11 @@
     drs_behavior: "manual"
   register: drs_override_drs_disabled_result
   ignore_errors: true
-  when: drs_disabled is defined and drs_disabled
+  when: drs_enabled is defined and drs_enabled == false
 
 - name: Assert error for DRS-disabled cluster
   assert:
     that:
       - drs_override_drs_disabled_result.failed == true
       - "'DRS is not enabled on the cluster' in drs_override_drs_disabled_result.msg"
-  when: drs_disabled is defined and drs_disabled
+  when: drs_enabled is defined and drs_enabled == false
