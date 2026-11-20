@@ -147,6 +147,8 @@ class VMwareSnapshotInfo(PyVmomi):
         content = self.content
 
         datacenter_obj = self.find_datacenter_by_name(datacenter)
+        if datacenter_obj is None:
+            self.module.fail_json(msg='Unable to find datacenter "%s"' % datacenter)
         container = content.viewManager.CreateContainerView(
             datacenter_obj, [vim.VirtualMachine], True
         )

@@ -1,0 +1,4 @@
+bugfixes:
+  - vmware_all_snapshots_info - Fail with a clear message instead of a TypeError
+    traceback when the given datacenter does not exist
+    (https://github.com/ansible-collections/community.vmware/issues/2411).
