@@ -1351,7 +1351,8 @@ class PyVmomiHelper(PyVmomi):
         if num_cpus is not None:
             # check VM power state and cpu hot-add/hot-remove state before re-config VM
             # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and not self.module.check_mode:
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and not self.module.check_mode:
                 if not vm_obj.config.cpuHotRemoveEnabled and num_cpus < vm_obj.config.hardware.numCPU:
                     self.module.fail_json(msg="Configured cpu number is less than the cpu number of the VM, "
                                               "cpuHotRemove is not enabled")
@@ -1377,7 +1378,8 @@ class PyVmomiHelper(PyVmomi):
         memory_mb = self.params['hardware']['memory_mb']
         if memory_mb is not None:
             # check VM power state and memory hotadd state before re-config VM
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn:
                 if vm_obj.config.memoryHotAddEnabled and memory_mb < vm_obj.config.hardware.memoryMB:
                     self.module.fail_json(msg="Configured memory is less than memory size of the VM, "
                                               "operation is not supported")
@@ -1394,7 +1396,8 @@ class PyVmomiHelper(PyVmomi):
         hotadd_memory = self.params['hardware']['hotadd_memory']
         if hotadd_memory is not None:
             # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.memoryHotAddEnabled != hotadd_memory and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd memory operation is not supported when VM is power on")
             if vm_obj is None or hotadd_memory != vm_obj.config.memoryHotAddEnabled:
@@ -1404,7 +1407,8 @@ class PyVmomiHelper(PyVmomi):
         hotadd_cpu = self.params['hardware']['hotadd_cpu']
         if hotadd_cpu is not None:
             # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.cpuHotAddEnabled != hotadd_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotadd cpu operation is not supported when VM is power on")
             if vm_obj is None or hotadd_cpu != vm_obj.config.cpuHotAddEnabled:
@@ -1414,7 +1418,8 @@ class PyVmomiHelper(PyVmomi):
         hotremove_cpu = self.params['hardware']['hotremove_cpu']
         if hotremove_cpu is not None:
             # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.cpuHotRemoveEnabled != hotremove_cpu and not self.module.check_mode:
                 self.module.fail_json(msg="Configure hotremove cpu operation is not supported when VM is power on")
             if vm_obj is None or hotremove_cpu != vm_obj.config.cpuHotRemoveEnabled:
@@ -1430,7 +1435,8 @@ class PyVmomiHelper(PyVmomi):
         vpmc_enabled = self.params['hardware']['vpmc_enabled']
         if vpmc_enabled is not None:
             # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-            if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+            if vm_obj and not self.params['template'] and \
+                    vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                     vm_obj.config.vPMCEnabled != vpmc_enabled and not self.module.check_mode:
                 self.module.fail_json(msg="Configure vPMC cpu operation is not supported when VM is power on")
             if vm_obj is None or vpmc_enabled != vm_obj.config.vPMCEnabled:
@@ -1550,7 +1556,8 @@ class PyVmomiHelper(PyVmomi):
                 # create new CD-ROM
                 if not cdrom_device and cdrom.get('state') != 'absent':
                     # Allow VM to be powered on during this check when in check mode, when no changes will actually be made
-                    if vm_obj and vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
+                    if vm_obj and not self.params['template'] and \
+                            vm_obj.runtime.powerState == vim.VirtualMachinePowerState.poweredOn and \
                             isinstance(ctl_device, vim.vm.device.VirtualIDEController) and not self.module.check_mode:
                         self.module.fail_json(msg='CD-ROM attach to IDE controller not support hot-add.')
                     if len(ctl_device.device) == 2 and isinstance(ctl_device, vim.vm.device.VirtualIDEController):
